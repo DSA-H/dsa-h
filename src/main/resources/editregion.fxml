@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<top><GridPane BorderPane.alignment="CENTER">
+  <columnConstraints>
+<ColumnConstraints hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="18.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="150.0" />
+<ColumnConstraints hgrow="SOMETIMES" maxWidth="201.0" minWidth="10.0" prefWidth="65.0" />
+<ColumnConstraints hgrow="SOMETIMES" maxWidth="201.0" minWidth="10.0" prefWidth="143.0" />
+<ColumnConstraints hgrow="SOMETIMES" maxWidth="201.0" minWidth="10.0" prefWidth="26.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="5.0" prefWidth="81.0" />
+<ColumnConstraints hgrow="SOMETIMES" maxWidth="210.0" minWidth="10.0" prefWidth="70.0" />
+<ColumnConstraints hgrow="SOMETIMES" maxWidth="121.0" minWidth="10.0" prefWidth="96.0" />
+<ColumnConstraints hgrow="SOMETIMES" maxWidth="67.0" minWidth="10.0" prefWidth="24.0" />
+  </columnConstraints>
+  <rowConstraints>
+<RowConstraints maxHeight="37.0" minHeight="9.0" prefHeight="9.0" vgrow="SOMETIMES" />
+<RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES" />
+<RowConstraints maxHeight="46.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+<RowConstraints maxHeight="66.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+<RowConstraints maxHeight="66.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+<RowConstraints maxHeight="119.0" minHeight="10.0" prefHeight="91.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="79.0" minHeight="10.0" prefHeight="63.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="104.0" minHeight="10.0" prefHeight="88.0" vgrow="SOMETIMES" />
+<RowConstraints maxHeight="78.0" minHeight="0.0" prefHeight="16.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+<children><Button mnemonicParsing="false" text="Speichern" GridPane.columnIndex="6" GridPane.rowIndex="8" /><Label text="Gebiet" GridPane.columnIndex="1" GridPane.rowIndex="1" /><Label text="durchschnittliche Temperatur" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" /><Label text="Farbe" GridPane.columnIndex="5" GridPane.rowIndex="1" /><Label text="Regenwahrscheinlichkeit" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="2" /><Label text="Kommentar" GridPane.columnIndex="1" GridPane.rowIndex="3" /><TextField GridPane.columnIndex="3" GridPane.rowIndex="1" /><TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="3" /><ChoiceBox prefWidth="150.0" GridPane.columnIndex="7" GridPane.rowIndex="2" /><ChoiceBox prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="2" /><ColorPicker GridPane.columnIndex="7" GridPane.rowIndex="1" /><TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="7" GridPane.rowIndex="6" GridPane.rowSpan="2">
+  <columns>
+    <TableColumn prefWidth="249.0" text="Grenzen" />
+    <TableColumn minWidth="0.0" prefWidth="200.0" text="Grenzkosten" />
+  </columns>
+</TableView><Button mnemonicParsing="false" text="Entfernen" GridPane.columnIndex="7" GridPane.rowIndex="5" /><Label text="Grenzen" GridPane.columnIndex="1" GridPane.rowIndex="5" /><ChoiceBox prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="5" /><Button mnemonicParsing="false" text="Hinzufügen" GridPane.columnIndex="6" GridPane.rowIndex="5" /><Button mnemonicParsing="false" text="Löschen" GridPane.columnIndex="7" GridPane.rowIndex="8" /><Button mnemonicParsing="false" text="Abbrechen" GridPane.columnIndex="2" GridPane.rowIndex="8" /><TextField prefHeight="25.0" prefWidth="81.0" GridPane.columnIndex="5" GridPane.rowIndex="5" /><Label text="Grenzkosten" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+</children>
+</GridPane>
+</top></BorderPane>
