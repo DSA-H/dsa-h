@@ -30,11 +30,11 @@
     </bean>
 
 
-    <bean id="regionDao" class="sepm.dsa.model.sepm.dsa.dao.RegionDaoHbmImpl">
+    <bean id="regionDao" class="sepm.dsa.dao.RegionDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="regionService" class="sepm.dsa.model.sepm.dsa.service.RegionServiceImpl">
+    <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
     </bean>
 
