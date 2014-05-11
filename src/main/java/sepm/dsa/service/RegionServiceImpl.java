@@ -7,6 +7,7 @@ import sepm.dsa.model.Region;
 import sepm.dsa.dao.RegionDao;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 @Service("RegionService")
@@ -28,7 +29,22 @@ public class RegionServiceImpl implements RegionService, Serializable {
 		return regionDao.add(r);
 	}
 
-	public void setRegionDao(RegionDao regionDao) {
+    @Override
+    public void update(Region r) {
+        regionDao.update(r);
+    }
+
+    @Override
+    public void remove(Region r) {
+        regionDao.remove(r);
+    }
+
+    @Override
+    public List<Region> getAll() {
+        return regionDao.getAll();
+    }
+
+    public void setRegionDao(RegionDao regionDao) {
 		this.regionDao = regionDao;
 	}
 }
