@@ -30,11 +30,13 @@ public class RegionServiceImpl implements RegionService, Serializable {
 	}
 
     @Override
+    @Transactional(readOnly = false)
     public void update(Region r) {
         regionDao.update(r);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void remove(Region r) {
         regionDao.remove(r);
     }

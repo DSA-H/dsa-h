@@ -33,7 +33,16 @@ public class Main extends Application {
 	    int id = regionService.add(r);
 	    System.out.println("Created: "+id);
 	    System.out.println(r.getName());
+        r.setName("New Region name 1");
+        regionService.update(r);
+        r = regionService.get(r.getId());
+        System.out.println(r.getName());
 
 	    System.out.println("From DB:" + regionService.get(r.getId()));
+
+        regionService.remove(r);
+
+        System.out.println("From DB after remove:" + regionService.get(r.getId()));
+
     }
 }
