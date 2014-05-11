@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-<center><GridPane BorderPane.alignment="CENTER">
-  <columnConstraints>
-<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-<ColumnConstraints hgrow="SOMETIMES" maxWidth="122.0" minWidth="10.0" prefWidth="116.0" />
-<ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="10.0" prefWidth="142.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="114.0" minWidth="10.0" prefWidth="96.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.0" minWidth="10.0" prefWidth="141.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-<children><Button mnemonicParsing="false" text="Gebiet erstellen" /><Button mnemonicParsing="false" text="Gebiet ändern" GridPane.columnIndex="4" /><Button mnemonicParsing="false" text="Gebiet löschen" GridPane.columnIndex="2" /><TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="5" GridPane.rowIndex="1" GridPane.rowSpan="2">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<children><Label alignment="CENTER" layoutX="8.0" layoutY="14.0" prefHeight="17.0" prefWidth="584.0" text="Gebiete">
+<font>
+<Font name="System Bold" size="18.0" />
+</font></Label><TableView fx:id="regionTable" layoutX="12.0" layoutY="73.0" prefHeight="318.0" prefWidth="576.0">
   <columns>
-    <TableColumn prefWidth="120.0" text="Gebiet" />
-    <TableColumn minWidth="0.0" prefWidth="370.0" text="Grenzen" /><TableColumn prefWidth="108.0" text="Farbe" />
+    <TableColumn fx:id="regionColumn" prefWidth="151.0" text="Gebiet" />
+    <TableColumn fx:id="borderColumn" prefWidth="352.0" text="Grenzen" /><TableColumn fx:id="colorColumn" prefWidth="72.0" text="Farbe" />
   </columns>
-</TableView>
+</TableView><HBox alignment="CENTER_LEFT" layoutX="12.0" layoutY="41.0" prefHeight="25.0" prefWidth="576.0" spacing="10.0">
+<children><Button fx:id="createButton" layoutX="141.1875" layoutY="63.5" mnemonicParsing="false" text="Erstellen" /><Button fx:id="editButton" disable="true" layoutX="199.1875" layoutY="63.5" mnemonicParsing="false" text="Bearbeiten" /><Button fx:id="deleteButton" disable="true" layoutX="257.1875" layoutY="63.5" mnemonicParsing="false" text="Löschen" />
 </children>
-</GridPane>
-</center></BorderPane>
+<opaqueInsets>
+<Insets />
+</opaqueInsets></HBox>
+</children></Pane>
