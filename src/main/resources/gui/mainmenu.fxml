@@ -26,7 +26,7 @@
     </Menu>
     <Menu fx:id="dateiVerwaltenMenu" mnemonicParsing="false" text="Daten verwalten">
       <items>
-        <MenuItem fx:id="verwaltenHaendlerKategorie" disable="true" mnemonicParsing="false" text="Händlerkategorie" /><MenuItem fx:id="verwaltenGebieteGrenzen" disable="true" mnemonicParsing="false" text="Gebiete &amp; Grenzen" /><MenuItem fx:id="verwaltenWaehrungen" disable="true" mnemonicParsing="false" text="Währungen" /><MenuItem fx:id="verwaltenWaren" disable="true" mnemonicParsing="false" text="Waren" />
+        <MenuItem fx:id="verwaltenHaendlerKategorie" disable="true" mnemonicParsing="false" text="Händlerkategorie" /><MenuItem fx:id="verwaltenGebieteGrenzen" mnemonicParsing="false" onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen" /><MenuItem fx:id="verwaltenWaehrungen" disable="true" mnemonicParsing="false" text="Währungen" /><MenuItem fx:id="verwaltenWaren" disable="true" mnemonicParsing="false" text="Waren" />
       </items>
     </Menu>
   </menus>
