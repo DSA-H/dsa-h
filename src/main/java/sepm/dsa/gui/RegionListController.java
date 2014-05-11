@@ -37,4 +37,6 @@ public class RegionListController implements Initializable {
 
     @FXML
     private void onDeleteButtonPressed() {}
+
+    //FOO
 }

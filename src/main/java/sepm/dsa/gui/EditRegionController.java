@@ -36,5 +36,6 @@ public class EditRegionController implements Initializable {
     public void initialize (java.net.URL location, java.util.ResourceBundle resources) {
         borderColumn.setCellValueFactory(new PropertyValueFactory<>("border"));
         borderColumn.setCellValueFactory(new PropertyValueFactory<>("borderCost"));
+        //FOO
     }
 }
