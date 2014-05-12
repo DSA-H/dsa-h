@@ -3,7 +3,6 @@ package sepm.dsa.dao;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 import sepm.dsa.model.RegionBorderPk;
 
@@ -50,7 +49,7 @@ public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
         List<?> list = sessionFactory.getCurrentSession().getNamedQuery("RegionBorder.findAll").list();
 
         List<RegionBorder> result = new Vector<>(list.size());
-        for (Object o: list) {
+        for (Object o : list) {
             result.add((RegionBorder) o);
         }
 
@@ -64,7 +63,7 @@ public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
                 .list();
 
         List<RegionBorder> result = new Vector<>(list.size());
-        for (Object o: list) {
+        for (Object o : list) {
             result.add((RegionBorder) o);
         }
 

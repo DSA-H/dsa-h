@@ -18,7 +18,7 @@ public class RegionBorderPk implements Serializable {
     private Region region1;
 
     @ManyToOne
-    @JoinColumn(name="region2", nullable = false)
+    @JoinColumn(name = "region2", nullable = false)
     private Region region2;
 
     public RegionBorderPk() {

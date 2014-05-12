@@ -1,7 +1,6 @@
 package sepm.dsa.model;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 
 /**
@@ -41,7 +40,6 @@ public class RegionBorder implements Serializable {
     public void setPk(RegionBorderPk pk) {
         this.pk = pk;
     }
-
 
 
     @Override

@@ -15,8 +15,6 @@ import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
@@ -51,7 +49,7 @@ public class RegionListController implements Initializable {
     private Button deleteButton;
 
     @Override
-    public void initialize (java.net.URL location, java.util.ResourceBundle resources) {
+    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise RegionListController");
 
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -62,16 +60,16 @@ public class RegionListController implements Initializable {
                     int regionId = r.getValue().getId();
                     List<RegionBorder> borders = regionBorderService.getAllForRegion(regionId);
                     StringBuilder sb = new StringBuilder();
-                    for(RegionBorder rb : borders) {
+                    for (RegionBorder rb : borders) {
                         // not this region
-                        if(rb.getPk().getRegion1().getId() != regionId) {
+                        if (rb.getPk().getRegion1().getId() != regionId) {
                             sb.append(rb.getPk().getRegion1().getName());
-                        }else {
+                        } else {
                             sb.append(rb.getPk().getRegion2().getName());
                         }
                         sb.append(", ");
                     }
-                    if(sb.length() >= 2) {
+                    if (sb.length() >= 2) {
                         sb.delete(sb.length() - 2, sb.length());
                     }
                     return new SimpleStringProperty(sb.toString());
@@ -88,7 +86,7 @@ public class RegionListController implements Initializable {
                     @Override
                     public void updateItem(String color, boolean empty) {
                         super.updateItem(color, empty);
-                        if(!empty) {
+                        if (!empty) {
                             color = "#" + color;
                             setStyle("-fx-background-color:" + color);
                         }
@@ -102,13 +100,16 @@ public class RegionListController implements Initializable {
     }
 
     @FXML
-    private void onCreateButtonPressed() {}
+    private void onCreateButtonPressed() {
+    }
 
     @FXML
-    private void onEditButtonPressed() {}
+    private void onEditButtonPressed() {
+    }
 
     @FXML
-    private void onDeleteButtonPressed() {}
+    private void onDeleteButtonPressed() {
+    }
 
     public void setRegionService(RegionService regionService) {
         this.regionService = regionService;

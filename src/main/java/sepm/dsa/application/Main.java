@@ -3,38 +3,18 @@ package sepm.dsa.application;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Callback;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import sepm.dsa.gui.MainMenuController;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
 
 public class Main extends Application {
-
-    @Override
-    public void start(Stage primaryStage) throws Exception{
-        SpringFxmlLoader loader = new SpringFxmlLoader();
-        Parent root = (Parent) loader.load("/gui/mainmenu.fxml");
-        primaryStage.setTitle("DSA-Händlertool");
-        primaryStage.setScene(new Scene(root, 300, 275));
-        // close all windows if mainmenu is closed
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                Platform.exit();
-            }
-        });
-        primaryStage.show();
-    }
-
 
     public static void main(String[] args) {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -47,7 +27,7 @@ public class Main extends Application {
         r.setName("Region 1");
         r.setColor("424242");
         int id = regionService.add(r);
-        System.out.println("Created: "+id);
+        System.out.println("Created: " + id);
         System.out.println(r.getName());
         r.setName("New Region name 1");
         regionService.update(r);
@@ -133,8 +113,23 @@ public class Main extends Application {
         regionService.remove(region3);
 
 
-        Application.launch(Main.class, (java.lang.String[])null);
+        Application.launch(Main.class, (java.lang.String[]) null);
 
     }
-}
 
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        SpringFxmlLoader loader = new SpringFxmlLoader();
+        Parent root = (Parent) loader.load("/gui/mainmenu.fxml");
+        primaryStage.setTitle("DSA-Händlertool");
+        primaryStage.setScene(new Scene(root, 300, 275));
+        // close all windows if mainmenu is closed
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                Platform.exit();
+            }
+        });
+        primaryStage.show();
+    }
+}

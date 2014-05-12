@@ -1,6 +1,5 @@
 package sepm.dsa.dao;
 
-import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 import sepm.dsa.model.RegionBorderPk;
 

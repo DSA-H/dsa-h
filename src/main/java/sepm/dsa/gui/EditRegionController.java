@@ -38,7 +38,7 @@ public class EditRegionController implements Initializable {
     private TableColumn borderCostColumn;
 
     @Override
-    public void initialize (java.net.URL location, java.util.ResourceBundle resources) {
+    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         borderColumn.setCellValueFactory(new PropertyValueFactory<>("border"));
         borderColumn.setCellValueFactory(new PropertyValueFactory<>("borderCost"));
     }
@@ -52,17 +52,22 @@ public class EditRegionController implements Initializable {
     }
 
     @FXML
-    private void onBorderCostColumnChanged() {}
+    private void onBorderCostColumnChanged() {
+    }
 
     @FXML
-    private void onCancelPressed() {}
+    private void onCancelPressed() {
+    }
 
     @FXML
-    private void onSavePressed() {}
+    private void onSavePressed() {
+    }
 
     @FXML
-    private void onAddBorderPressed() {}
+    private void onAddBorderPressed() {
+    }
 
     @FXML
-    private void onRemoveBorderPressed() {}
+    private void onRemoveBorderPressed() {
+    }
 }

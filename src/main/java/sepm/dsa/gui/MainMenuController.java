@@ -2,7 +2,6 @@ package sepm.dsa.gui;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,10 +12,6 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.service.RegionBorderService;
-import sepm.dsa.service.RegionBorderServiceImpl;
-
-import java.io.IOException;
 
 public class MainMenuController implements Initializable {
 
@@ -44,7 +39,7 @@ public class MainMenuController implements Initializable {
     private MenuItem verwaltenWaren;
 
     @Override
-    public void initialize (java.net.URL location, java.util.ResourceBundle resources) {
+    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
 
     }
 
