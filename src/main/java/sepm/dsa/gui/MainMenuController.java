@@ -47,7 +47,7 @@ public class MainMenuController implements Initializable {
         Stage details = new Stage();
         Parent root = null;
         try {
-            root = FXMLLoader.load(getClass().getResource("regionlist.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/gui/regionlist.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
