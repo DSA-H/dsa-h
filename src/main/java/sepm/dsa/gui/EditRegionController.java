@@ -6,10 +6,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sepm.dsa.service.BorderService;
+import sepm.dsa.service.RegionService;
 
 public class EditRegionController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(EditRegionController.class);
+
+    private RegionService regionService;
+    private BorderService borderService;
 
     @FXML
     private TextField name;
@@ -36,6 +41,14 @@ public class EditRegionController implements Initializable {
     public void initialize (java.net.URL location, java.util.ResourceBundle resources) {
         borderColumn.setCellValueFactory(new PropertyValueFactory<>("border"));
         borderColumn.setCellValueFactory(new PropertyValueFactory<>("borderCost"));
+    }
+
+    public void setRegionService(RegionService regionService) {
+        this.regionService = regionService;
+    }
+
+    public void setRegionBorderService(BorderService borderService) {
+        this.borderService = borderService;
     }
 
     @FXML
