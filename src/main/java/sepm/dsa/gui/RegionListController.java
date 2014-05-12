@@ -8,10 +8,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sepm.dsa.service.BorderService;
+import sepm.dsa.service.RegionService;
 
 public class RegionListController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(RegionListController.class);
+
+    private RegionService regionService;
+    private BorderService borderService;
 
     @FXML
     private TableView regionTable;
@@ -33,7 +38,15 @@ public class RegionListController implements Initializable {
     public void initialize (java.net.URL location, java.util.ResourceBundle resources) {
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("region"));
         borderColumn.setCellValueFactory(new PropertyValueFactory<>("border"));
-        colorColumn.setCellValueFactory(new PropertyValueFactory<>("color"));
+      //  colorColumn.setCellFactory();
+    }
+
+    public void setRegionService(RegionService regionService) {
+        this.regionService = regionService;
+    }
+
+    public void setRegionBorderService(BorderService borderService) {
+        this.borderService = borderService;
     }
 
     @FXML
