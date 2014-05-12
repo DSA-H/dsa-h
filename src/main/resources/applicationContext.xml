@@ -54,6 +54,8 @@
     </bean>
 
     <!-- GUI DI -->
+    <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController">
+    </bean>
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>

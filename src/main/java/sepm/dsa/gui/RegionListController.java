@@ -54,11 +54,6 @@ public class RegionListController implements Initializable {
     public void initialize (java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise RegionListController");
 
-        // todo: Spring doesn't work yet
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        regionService = (RegionService) ctx.getBean("regionService");
-        regionBorderService = (RegionBorderService) ctx.getBean("regionBorderService");
-
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Region, String>, ObservableValue<String>>() {
             @Override
@@ -93,7 +88,9 @@ public class RegionListController implements Initializable {
                     @Override
                     public void updateItem(String color, boolean empty) {
                         super.updateItem(color, empty);
-                        setStyle("-fx-background-color:#"+color);
+                        if(!empty) {
+                            setStyle("-fx-background-color:#" + color);
+                        }
                     }
                 };
             }

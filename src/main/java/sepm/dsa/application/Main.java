@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import sepm.dsa.gui.MainMenuController;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 import sepm.dsa.service.RegionBorderService;
@@ -15,24 +16,10 @@ import sepm.dsa.service.RegionService;
 
 public class Main extends Application {
 
-    private ClassPathXmlApplicationContext context;
-
     @Override
     public void start(Stage primaryStage) throws Exception{
-        // load spring context
-        this.context = new ClassPathXmlApplicationContext("spring-config.xml");
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        //add spring context to JavaFX (http://koenserneels.blogspot.co.at/2012/11/javafx-2-with-spring.html)
-        fxmlLoader.setControllerFactory(new Callback<Class<?>, Object>() {
-            @Override
-            public Object call(Class<?> clazz) {
-                return context.getBean(clazz);
-            }
-        });
-        Parent root = fxmlLoader.load(Main.class.getClassLoader().getResourceAsStream("/gui/mainmenu.fxml"));
-//        final MainMenuController mainMenuController = fxmlLoader.getController();
-//        mainMenuController.setStage(primaryStage);
-//        mainMenuController.init();
+        SpringFxmlLoader loader = new SpringFxmlLoader();
+        Parent root = (Parent) loader.load("/gui/mainmenu.fxml");
         primaryStage.setTitle("DSA-Händlertool");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
