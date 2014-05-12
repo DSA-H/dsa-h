@@ -1,4 +1,4 @@
-package sample;
+package sepm.dsa.application;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -16,8 +16,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
+        FXMLLoader loader = new FXMLLoader();
+        Parent root = loader.load(getClass().getResource("mainmenu.fxml").openStream());
+        primaryStage.setTitle("DSA-Händlertool");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
     }
@@ -25,6 +26,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 	    ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        Application.launch(Main.class, (java.lang.String[])null);
 	    RegionService regionService = (RegionService) ctx.getBean("regionService");
         RegionBorderService regionBorderService = (RegionBorderService) ctx.getBean("regionBorderService");
 
@@ -117,3 +119,4 @@ public class Main extends Application {
 
     }
 }
+
