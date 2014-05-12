@@ -43,4 +43,12 @@ public class Region implements Serializable
 	public void setColor(String color) {
 		this.color = color;
 	}
+
+    @Override
+    public String toString() {
+        return "Region{" +
+                "name='" + name + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }

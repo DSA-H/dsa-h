@@ -3,6 +3,7 @@ package sepm.dsa.dao;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import sepm.dsa.dao.RegionDao;
 import sepm.dsa.model.Region;
 
 import java.util.List;
