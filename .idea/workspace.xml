@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c3aeecf2-b768-44fc-9e36-7e385d5a90c5" name="Default" comment="Spring/JavaFX integration (SpringFxmlLoader), should be runnable now&#10;DSA-57">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/sepm/dsa/application/SpringFxmlLoader.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/sepm/dsa/application/Main.java" afterPath="$PROJECT_DIR$/src/main/java/sepm/dsa/application/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/MainMenuController.java" afterPath="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/MainMenuController.java" />
+    <list default="true" id="c3aeecf2-b768-44fc-9e36-7e385d5a90c5" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/RegionListController.java" afterPath="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/RegionListController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/applicationContext.xml" afterPath="$PROJECT_DIR$/src/main/resources/applicationContext.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="tu-sepm-dsa.iws" />
@@ -63,16 +59,17 @@
       <file leaf-file-name="RegionListController.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/sepm/dsa/gui/RegionListController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.1548387" vertical-offset="474" max-vertical-offset="1734">
-              <caret line="93" column="21" selection-start-line="93" selection-start-column="21" selection-end-line="93" selection-end-column="21" />
+            <state vertical-scroll-proportion="0.5241935" vertical-offset="814" max-vertical-offset="1751">
+              <caret line="90" column="36" selection-start-line="90" selection-start-column="36" selection-end-line="90" selection-end-column="36" />
               <folding>
                 <element signature="e#1883#3108#0" expanded="true" />
                 <element signature="e#3097#3098#0" expanded="true" />
-                <element signature="e#3224#3758#0" expanded="true" />
-                <element signature="e#3365#3733#0" expanded="true" />
-                <element signature="e#3747#3748#0" expanded="true" />
-                <element signature="e#4127#4128#0" expanded="true" />
-                <element signature="e#4177#4178#0" expanded="true" />
+                <element signature="e#3224#3806#0" expanded="true" />
+                <element signature="e#3365#3781#0" expanded="true" />
+                <element signature="e#3762#3763#0" expanded="true" />
+                <element signature="e#3795#3796#0" expanded="true" />
+                <element signature="e#4175#4176#0" expanded="true" />
+                <element signature="e#4225#4226#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -125,10 +122,10 @@
         <option value="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/RegionTableModel.java" />
         <option value="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/EditRegionController.java" />
         <option value="$PROJECT_DIR$/src/main/resources/applicationContext.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/RegionListController.java" />
         <option value="$PROJECT_DIR$/src/main/java/sepm/dsa/application/SpringFxmlLoader.java" />
         <option value="$PROJECT_DIR$/src/main/java/sepm/dsa/application/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/MainMenuController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/RegionListController.java" />
       </list>
     </option>
   </component>
@@ -648,7 +645,7 @@
       <workItem from="1399873809864" duration="4357000" />
       <workItem from="1399881178927" duration="792000" />
       <workItem from="1399882153594" duration="8279000" />
-      <workItem from="1399896183708" duration="1912000" />
+      <workItem from="1399896183708" duration="1962000" />
     </task>
     <task id="LOCAL-00001" summary="fxml Loader gefixt">
       <created>1399874833994</created>
@@ -670,11 +667,15 @@
       <created>1399888676920</created>
       <updated>1399888676920</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Spring/JavaFX integration (SpringFxmlLoader), should be runnable now&#10;DSA-57">
+      <created>1399907304776</created>
+      <updated>1399907304776</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17161000" />
+    <option name="totallyTimeSpent" value="17211000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="69" y="-8" width="1859" height="1096" extended-state="6" />
@@ -776,11 +777,12 @@
           <folding>
             <element signature="e#1883#3108#0" expanded="true" />
             <element signature="e#3097#3098#0" expanded="true" />
-            <element signature="e#3224#3758#0" expanded="true" />
-            <element signature="e#3365#3733#0" expanded="true" />
-            <element signature="e#3747#3748#0" expanded="true" />
-            <element signature="e#4127#4128#0" expanded="true" />
-            <element signature="e#4177#4178#0" expanded="true" />
+            <element signature="e#3224#3806#0" expanded="true" />
+            <element signature="e#3365#3781#0" expanded="true" />
+            <element signature="e#3762#3763#0" expanded="true" />
+            <element signature="e#3795#3796#0" expanded="true" />
+            <element signature="e#4175#4176#0" expanded="true" />
+            <element signature="e#4225#4226#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -838,11 +840,12 @@
           <folding>
             <element signature="e#1883#3108#0" expanded="true" />
             <element signature="e#3097#3098#0" expanded="true" />
-            <element signature="e#3224#3758#0" expanded="true" />
-            <element signature="e#3365#3733#0" expanded="true" />
-            <element signature="e#3747#3748#0" expanded="true" />
-            <element signature="e#4127#4128#0" expanded="true" />
-            <element signature="e#4177#4178#0" expanded="true" />
+            <element signature="e#3224#3806#0" expanded="true" />
+            <element signature="e#3365#3781#0" expanded="true" />
+            <element signature="e#3762#3763#0" expanded="true" />
+            <element signature="e#3795#3796#0" expanded="true" />
+            <element signature="e#4175#4176#0" expanded="true" />
+            <element signature="e#4225#4226#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -862,11 +865,12 @@
           <folding>
             <element signature="e#1883#3108#0" expanded="true" />
             <element signature="e#3097#3098#0" expanded="true" />
-            <element signature="e#3224#3758#0" expanded="true" />
-            <element signature="e#3365#3733#0" expanded="true" />
-            <element signature="e#3747#3748#0" expanded="true" />
-            <element signature="e#4127#4128#0" expanded="true" />
-            <element signature="e#4177#4178#0" expanded="true" />
+            <element signature="e#3224#3806#0" expanded="true" />
+            <element signature="e#3365#3781#0" expanded="true" />
+            <element signature="e#3762#3763#0" expanded="true" />
+            <element signature="e#3795#3796#0" expanded="true" />
+            <element signature="e#4175#4176#0" expanded="true" />
+            <element signature="e#4225#4226#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1098,16 +1102,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/sepm/dsa/gui/RegionListController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.1548387" vertical-offset="474" max-vertical-offset="1734">
-          <caret line="93" column="21" selection-start-line="93" selection-start-column="21" selection-end-line="93" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.5241935" vertical-offset="814" max-vertical-offset="1751">
+          <caret line="90" column="36" selection-start-line="90" selection-start-column="36" selection-end-line="90" selection-end-column="36" />
           <folding>
             <element signature="e#1883#3108#0" expanded="true" />
             <element signature="e#3097#3098#0" expanded="true" />
-            <element signature="e#3224#3758#0" expanded="true" />
-            <element signature="e#3365#3733#0" expanded="true" />
-            <element signature="e#3747#3748#0" expanded="true" />
-            <element signature="e#4127#4128#0" expanded="true" />
-            <element signature="e#4177#4178#0" expanded="true" />
+            <element signature="e#3224#3806#0" expanded="true" />
+            <element signature="e#3365#3781#0" expanded="true" />
+            <element signature="e#3762#3763#0" expanded="true" />
+            <element signature="e#3795#3796#0" expanded="true" />
+            <element signature="e#4175#4176#0" expanded="true" />
+            <element signature="e#4225#4226#0" expanded="true" />
           </folding>
         </state>
       </provider>

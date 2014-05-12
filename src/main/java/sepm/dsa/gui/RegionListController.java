@@ -89,7 +89,8 @@ public class RegionListController implements Initializable {
                     public void updateItem(String color, boolean empty) {
                         super.updateItem(color, empty);
                         if(!empty) {
-                            setStyle("-fx-background-color:#" + color);
+                            color = "#" + color;
+                            setStyle("-fx-background-color:" + color);
                         }
                     }
                 };
