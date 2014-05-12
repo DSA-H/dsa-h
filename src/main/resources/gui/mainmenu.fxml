@@ -21,7 +21,7 @@
   <menus>
     <Menu fx:id="dateiMenu" mnemonicParsing="false" text="Datei">
       <items>
-        <MenuItem fx:id="dateiImportExport" disable="true" mnemonicParsing="false" text="Import/Export" /><MenuItem fx:id="dateiExit" disable="true" mnemonicParsing="false" text="Beenden" />
+        <MenuItem fx:id="dateiImport" disable="true" mnemonicParsing="false" text="Import" /><MenuItem fx:id="dateiExport" disable="true" mnemonicParsing="false" text="Export" /><MenuItem fx:id="dateiExit" mnemonicParsing="false" onAction="#onExitClicked" text="Beenden" />
       </items>
     </Menu>
     <Menu fx:id="dateiVerwaltenMenu" mnemonicParsing="false" text="Daten verwalten">

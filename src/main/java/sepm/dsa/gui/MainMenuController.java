@@ -1,5 +1,6 @@
 package sepm.dsa.gui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,7 +27,9 @@ public class MainMenuController implements Initializable {
     @FXML
     private Menu dateiMenu;
     @FXML
-    private MenuItem dateiImportExport;
+    private MenuItem dateiImport;
+    @FXML
+    private MenuItem dateiExport;
     @FXML
     private MenuItem dateiExit;
     @FXML
@@ -57,5 +60,10 @@ public class MainMenuController implements Initializable {
         details.setTitle("Grenzen und Gebiete");
         details.setScene(new Scene(root, 600, 438));
         details.show();
+    }
+
+    @FXML
+    private void onExitClicked() {
+        Platform.exit();
     }
 }

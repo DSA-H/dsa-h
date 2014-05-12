@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3aeecf2-b768-44fc-9e36-7e385d5a90c5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/RegionListController.java" afterPath="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/RegionListController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/sepm/dsa/application/Main.java" afterPath="$PROJECT_DIR$/src/main/java/sepm/dsa/application/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/MainMenuController.java" afterPath="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/MainMenuController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/gui/mainmenu.fxml" afterPath="$PROJECT_DIR$/src/main/resources/gui/mainmenu.fxml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="tu-sepm-dsa.iws" />
@@ -36,12 +38,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainMenuController.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="MainMenuController.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/sepm/dsa/gui/MainMenuController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="884">
-              <caret line="54" column="1" selection-start-line="54" selection-start-column="1" selection-end-line="54" selection-end-column="1" />
-              <folding />
+            <state vertical-scroll-proportion="0.2777778" vertical-offset="51" max-vertical-offset="1003">
+              <caret line="29" column="33" selection-start-line="29" selection-start-column="33" selection-end-line="29" selection-end-column="33" />
+              <folding>
+                <element signature="e#1794#1795#0" expanded="true" />
+                <element signature="e#1825#1826#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -56,11 +61,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RegionListController.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="RegionListController.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/sepm/dsa/gui/RegionListController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5241935" vertical-offset="814" max-vertical-offset="1751">
-              <caret line="90" column="36" selection-start-line="90" selection-start-column="36" selection-end-line="90" selection-end-column="36" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1088" max-vertical-offset="1751">
+              <caret line="45" column="9" selection-start-line="45" selection-start-column="9" selection-end-line="45" selection-end-column="9" />
               <folding>
                 <element signature="e#1883#3108#0" expanded="true" />
                 <element signature="e#3097#3098#0" expanded="true" />
@@ -78,9 +83,12 @@
       <file leaf-file-name="Main.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/sepm/dsa/application/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2108">
-              <caret line="21" column="65" selection-start-line="21" selection-start-column="65" selection-end-line="21" selection-end-column="65" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2227">
+              <caret line="26" column="57" selection-start-line="26" selection-start-column="57" selection-end-line="26" selection-end-column="57" />
+              <folding>
+                <element signature="e#1073#1237#0" expanded="true" />
+                <element signature="e#1226#1227#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -123,9 +131,9 @@
         <option value="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/EditRegionController.java" />
         <option value="$PROJECT_DIR$/src/main/resources/applicationContext.xml" />
         <option value="$PROJECT_DIR$/src/main/java/sepm/dsa/application/SpringFxmlLoader.java" />
+        <option value="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/RegionListController.java" />
         <option value="$PROJECT_DIR$/src/main/java/sepm/dsa/application/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/MainMenuController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/sepm/dsa/gui/RegionListController.java" />
       </list>
     </option>
   </component>
@@ -286,66 +294,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="dsa" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tu-sepm-dsa" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tu-sepm-dsa" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dsa" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gui" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tu-sepm-dsa" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tu-sepm-dsa" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dsa" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="application" />
               <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -645,7 +593,7 @@
       <workItem from="1399873809864" duration="4357000" />
       <workItem from="1399881178927" duration="792000" />
       <workItem from="1399882153594" duration="8279000" />
-      <workItem from="1399896183708" duration="1962000" />
+      <workItem from="1399896183708" duration="3122000" />
     </task>
     <task id="LOCAL-00001" summary="fxml Loader gefixt">
       <created>1399874833994</created>
@@ -671,11 +619,15 @@
       <created>1399907304776</created>
       <updated>1399907304776</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="fix error in set color&#10;DSA-57">
+      <created>1399907372698</created>
+      <updated>1399907372698</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17211000" />
+    <option name="totallyTimeSpent" value="18371000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="69" y="-8" width="1859" height="1096" extended-state="6" />
@@ -697,14 +649,14 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32984293" sideWeight="0.5" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3284974" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3284974" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19121735" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33678755" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33678755" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -734,7 +686,8 @@
     <MESSAGE value="duplicated files deleted&#10;DSA-57" />
     <MESSAGE value="EditRegionController shows Data&#10;DSA-57" />
     <MESSAGE value="Spring/JavaFX integration (SpringFxmlLoader), should be runnable now&#10;DSA-57" />
-    <option name="LAST_COMMIT_MESSAGE" value="Spring/JavaFX integration (SpringFxmlLoader), should be runnable now&#10;DSA-57" />
+    <MESSAGE value="fix error in set color&#10;DSA-57" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix error in set color&#10;DSA-57" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -758,7 +711,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="901" max-vertical-offset="1156">
           <caret line="53" column="94" selection-start-line="53" selection-start-column="46" selection-end-line="53" selection-end-column="94" />
-          <folding />
+          <folding>
+            <element signature="e#1794#1795#0" expanded="true" />
+            <element signature="e#1825#1826#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -791,7 +747,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="289" max-vertical-offset="2346">
           <caret line="28" column="46" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="46" />
-          <folding />
+          <folding>
+            <element signature="e#1073#1237#0" expanded="true" />
+            <element signature="e#1226#1227#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -854,7 +813,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1699" max-vertical-offset="2091">
           <caret line="118" column="9" selection-start-line="118" selection-start-column="9" selection-end-line="118" selection-end-column="9" />
-          <folding />
+          <folding>
+            <element signature="e#1073#1237#0" expanded="true" />
+            <element signature="e#1226#1227#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1072,14 +1034,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/sepm/dsa/gui/MainMenuController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="884">
-          <caret line="54" column="1" selection-start-line="54" selection-start-column="1" selection-end-line="54" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/sepm/dsa/application/SpringFxmlLoader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="663">
@@ -1092,18 +1046,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/sepm/dsa/application/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2108">
-          <caret line="21" column="65" selection-start-line="21" selection-start-column="65" selection-end-line="21" selection-end-column="65" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/sepm/dsa/gui/RegionListController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5241935" vertical-offset="814" max-vertical-offset="1751">
-          <caret line="90" column="36" selection-start-line="90" selection-start-column="36" selection-end-line="90" selection-end-column="36" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1088" max-vertical-offset="1751">
+          <caret line="45" column="9" selection-start-line="45" selection-start-column="9" selection-end-line="45" selection-end-column="9" />
           <folding>
             <element signature="e#1883#3108#0" expanded="true" />
             <element signature="e#3097#3098#0" expanded="true" />
@@ -1113,6 +1059,28 @@
             <element signature="e#3795#3796#0" expanded="true" />
             <element signature="e#4175#4176#0" expanded="true" />
             <element signature="e#4225#4226#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/sepm/dsa/application/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2227">
+          <caret line="26" column="57" selection-start-line="26" selection-start-column="57" selection-end-line="26" selection-end-column="57" />
+          <folding>
+            <element signature="e#1073#1237#0" expanded="true" />
+            <element signature="e#1226#1227#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/sepm/dsa/gui/MainMenuController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2777778" vertical-offset="51" max-vertical-offset="1003">
+          <caret line="29" column="33" selection-start-line="29" selection-start-column="33" selection-end-line="29" selection-end-column="33" />
+          <folding>
+            <element signature="e#1794#1795#0" expanded="true" />
+            <element signature="e#1825#1826#0" expanded="true" />
           </folding>
         </state>
       </provider>

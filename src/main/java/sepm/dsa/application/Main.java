@@ -1,10 +1,13 @@
 package sepm.dsa.application;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -22,6 +25,13 @@ public class Main extends Application {
         Parent root = (Parent) loader.load("/gui/mainmenu.fxml");
         primaryStage.setTitle("DSA-Händlertool");
         primaryStage.setScene(new Scene(root, 300, 275));
+        // close all windows if mainmenu is closed
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                Platform.exit();
+            }
+        });
         primaryStage.show();
     }
 
