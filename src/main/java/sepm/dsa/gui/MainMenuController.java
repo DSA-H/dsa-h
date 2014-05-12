@@ -11,6 +11,8 @@ import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sepm.dsa.service.RegionBorderService;
+import sepm.dsa.service.RegionBorderServiceImpl;
 
 import java.io.IOException;
 
@@ -44,16 +46,17 @@ public class MainMenuController implements Initializable {
 
     @FXML
     private void onGrenzenGebieteClicked() {
+        log.debug("onGrenzenGebieteClicked - open Grenzen und Gebiete Window");
         Stage details = new Stage();
         Parent root = null;
+        FXMLLoader fxmlLoader = new FXMLLoader();
         try {
-            root = FXMLLoader.load(getClass().getResource("/gui/regionlist.fxml"));
+            root = fxmlLoader.load(getClass().getResource("/gui/regionlist.fxml").openStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
         details.setTitle("Grenzen und Gebiete");
         details.setScene(new Scene(root, 600, 438));
         details.show();
-
     }
 }

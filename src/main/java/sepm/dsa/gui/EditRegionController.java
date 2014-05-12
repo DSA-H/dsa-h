@@ -6,7 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sepm.dsa.service.BorderService;
+import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
 
 public class EditRegionController implements Initializable {
@@ -14,7 +14,7 @@ public class EditRegionController implements Initializable {
     private static final Logger log = LoggerFactory.getLogger(EditRegionController.class);
 
     private RegionService regionService;
-    private BorderService borderService;
+    private RegionBorderService borderService;
 
     @FXML
     private TextField name;
@@ -47,7 +47,7 @@ public class EditRegionController implements Initializable {
         this.regionService = regionService;
     }
 
-    public void setRegionBorderService(BorderService borderService) {
+    public void setRegionBorderService(RegionBorderService borderService) {
         this.borderService = borderService;
     }
 

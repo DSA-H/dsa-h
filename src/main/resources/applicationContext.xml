@@ -53,6 +53,12 @@
         <property name="regionBorderDao" ref="regionBorderDao"/>
     </bean>
 
+    <!-- GUI DI -->
+    <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
+        <property name="regionService" ref="regionService"/>
+        <property name="regionBorderService" ref="regionBorderService"/>
+    </bean>
+
 
     <tx:annotation-driven transaction-manager="transactionManager" />
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
