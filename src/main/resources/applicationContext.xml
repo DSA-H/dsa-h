@@ -17,10 +17,15 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="annotatedClasses">
             <list>
-                <value>sepm.dsa.model.Region</value>
+                <value>sepm.dsa.model.Region</value><value>sepm.dsa.model.RegionBorder</value>
             </list>
         </property>
-
+        <property name="mappingResources">
+            <list>
+                <value>sepm/dsa/model/hibernate/Region.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/RegionBorder.hbm.xml</value>
+            </list>
+        </property>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
@@ -29,14 +34,25 @@
         </property>
     </bean>
 
-
+    <!-- DAOs DI -->
     <bean id="regionDao" class="sepm.dsa.dao.RegionDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="regionBorderDao" class="sepm.dsa.dao.RegionBorderDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+
+    <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
     </bean>
+
+    <bean id="regionBorderService" class="sepm.dsa.service.RegionBorderServiceImpl">
+        <property name="regionBorderDao" ref="regionBorderDao"/>
+    </bean>
+
 
     <tx:annotation-driven transaction-manager="transactionManager" />
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">

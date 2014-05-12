@@ -17,6 +17,7 @@ public class RegionTableModel {
 
     public String getBorder() {
         // todo String list of bordering regions
+        return null;
     }
 
 

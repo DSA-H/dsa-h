@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 08.09.2013 22:05:35 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    
+    <query name="RegionBorder.findAll">
+        <![CDATA[from RegionBorder]]>
+    </query>
+
+    <query name="RegionBorder.findAllForRegion">
+        <![CDATA[from RegionBorder WHERE pk.region1.id = :regionId OR pk.region2.id = :regionId]]>
+    </query>
+
+</hibernate-mapping>
