@@ -3,11 +3,16 @@ package sepm.dsa.gui;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Background;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sepm.dsa.model.Border;
+import sepm.dsa.model.Region;
 import sepm.dsa.service.BorderService;
 import sepm.dsa.service.RegionService;
 
@@ -19,7 +24,7 @@ public class RegionListController implements Initializable {
     private BorderService borderService;
 
     @FXML
-    private TableView regionTable;
+    private TableView<Region> regionTable;
     @FXML
     private TableColumn regionColumn;
     @FXML
@@ -37,8 +42,29 @@ public class RegionListController implements Initializable {
     @Override
     public void initialize (java.net.URL location, java.util.ResourceBundle resources) {
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("region"));
-        borderColumn.setCellValueFactory(new PropertyValueFactory<>("border"));
-      //  colorColumn.setCellFactory();
+        borderColumn.setCellValueFactory(new Callback<TableColumn<Region, Border>, TableCell<Region, Border>>(){
+            @Override
+            public TableCell<Region, Border> call(TableColumn<Region, Border> param) {
+                TableCell<Region, Border> cityCell = new TableCell<Region, Border>(){
+                    @Override
+                    protected void updateItem(Border item, boolean empty) {
+                    }
+                };
+                return cityCell;
+            }
+        });
+        colorColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
+            @Override
+            public TableCell call(TableColumn param) {
+                return new TableCell<Region, String>() {
+                    @Override
+                    public void updateItem(String color, boolean empty) {
+                        super.updateItem(color, empty);
+                        setStyle("-fx-background-color: " + color);
+                    }
+                };
+            }
+        });
     }
 
     public void setRegionService(RegionService regionService) {
