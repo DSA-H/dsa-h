@@ -7,15 +7,17 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import sepm.dsa.gui.MainMenuController;
 import sepm.dsa.model.Region;
 import sepm.dsa.service.RegionService;
+
+import java.io.InputStream;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        FXMLLoader loader = new FXMLLoader();
-        Parent root = loader.load(getClass().getResource("mainmenu.fxml").openStream());
+        Parent root = FXMLLoader.load(MainMenuController.class.getResource("/gui/mainmenu.fxml"));
         primaryStage.setTitle("DSA-Händlertool");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
