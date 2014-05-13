@@ -96,6 +96,9 @@ public class RegionListController implements Initializable {
                             color = "#" + color;
                             setStyle("-fx-background-color:" + color);
                         }
+                        else {
+                            setStyle("-fx-background-color:#FFFFFF");
+                        }
                     }
                 };
             }
@@ -129,7 +132,9 @@ public class RegionListController implements Initializable {
         log.debug("onDeleteButtonPressed - deleting selected Region");
         Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
 
-        regionService.remove(selectedRegion);
+        if (selectedRegion != null) {
+            regionService.remove(selectedRegion);
+        }
 
         updateRegionTable();
     }
