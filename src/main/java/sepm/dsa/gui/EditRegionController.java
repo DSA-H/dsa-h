@@ -53,7 +53,7 @@ public class EditRegionController implements Initializable {
     @FXML
     private TableColumn borderCostColumn;
     @FXML
-    private Button Cancel;
+    private Button cancel;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
@@ -110,9 +110,14 @@ public class EditRegionController implements Initializable {
 
         regionService.add(newRegion);
 
+        // return to regionlist
+        Stage stage = (Stage) cancel.getScene().getWindow();
+        Parent scene = null;
+        SpringFxmlLoader loader = new SpringFxmlLoader();
 
-        Stage stage = (Stage) Cancel.getScene().getWindow();
-        stage.close();
+        scene = (Parent) loader.load("/gui/regionlist.fxml");
+
+        stage.setScene(new Scene(scene, 600, 438));
     }
 
     @FXML
