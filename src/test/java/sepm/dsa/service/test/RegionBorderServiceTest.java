@@ -9,6 +9,7 @@ import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 import sepm.dsa.model.RegionBorderPk;
 import sepm.dsa.service.RegionBorderService;
+import sepm.dsa.service.RegionService;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -25,6 +26,7 @@ public class RegionBorderServiceTest {
     public static void testSetup() {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
         rbs = (RegionBorderService) ctx.getBean("regionBorderService");
+        RegionService rs = (RegionService) ctx.getBean("regionService");
 
         Region r1 = new Region();
         Region r2 = new Region();
@@ -40,6 +42,9 @@ public class RegionBorderServiceTest {
         regionBorder = new RegionBorder();
         regionBorder.setBorderCost(1);
         regionBorder.setPk(regionBorderPK);
+
+        rs.add(r1);
+        rs.add(r2);
     }
 
     @AfterClass
