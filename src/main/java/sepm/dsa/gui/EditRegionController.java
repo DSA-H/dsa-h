@@ -27,6 +27,8 @@ public class EditRegionController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(EditRegionController.class);
 
+    private static Region selectedRegion;
+
     @Autowired
     private RegionService regionService;
     @Autowired
@@ -69,6 +71,19 @@ public class EditRegionController implements Initializable {
         temperature.setItems(temperatureList);
         rainfall.setItems(rainList);
 
+        if (selectedRegion != null) {
+            name.setText(selectedRegion.getName());
+            color.setValue(new Color(
+                    (double) Integer.valueOf(selectedRegion.getColor().substring( 0, 2 ), 16 ) / 255,
+                    (double) Integer.valueOf(selectedRegion.getColor().substring( 2, 4 ), 16 ) / 255,
+                    (double) Integer.valueOf(selectedRegion.getColor().substring( 4, 6 ), 16 ) / 255,
+                    1.0)
+            );
+
+
+
+        }
+
     }
 
     public void setRegionService(RegionService regionService) {
@@ -99,25 +114,56 @@ public class EditRegionController implements Initializable {
     private void onSavePressed() {
         log.debug("SaveButtonPressed");
 
-        Region newRegion = new Region();
+        String newName = name.getText();
+
         Color selectedColor = color.getValue();
         String colorString =
                 Integer.toHexString((int) (selectedColor.getRed()*255)) + "" +
                 Integer.toHexString((int) (selectedColor.getGreen()*255)) + "" +
                 Integer.toHexString((int) (selectedColor.getBlue()*255));
-        newRegion.setColor(colorString);
-        newRegion.setName(name.getText());
 
-        regionService.add(newRegion);
+        boolean allowed = true;
+        int counter = 0;
+        for(int i=0; i<newName.length(); i++) {
+            if( newName.charAt(i) == ' ' ) {
+                counter++;
+            }
+        }
+        if (newName.length() == counter) {
+            allowed = false;
+        }
 
-        // return to regionlist
-        Stage stage = (Stage) cancel.getScene().getWindow();
-        Parent scene = null;
-        SpringFxmlLoader loader = new SpringFxmlLoader();
+        if (allowed) {
+            if (selectedRegion == null) {
+                Region newRegion = new Region();
+                newRegion.setColor(colorString);
+                newRegion.setName(newName);
+                regionService.add(newRegion);
+            }
+            else {
+                selectedRegion.setColor(colorString);
+                selectedRegion.setName(newName);
+                regionService.update(selectedRegion);
+            }
 
-        scene = (Parent) loader.load("/gui/regionlist.fxml");
+            // return to regionlist
+            Stage stage = (Stage) cancel.getScene().getWindow();
+            Parent scene = null;
+            SpringFxmlLoader loader = new SpringFxmlLoader();
 
-        stage.setScene(new Scene(scene, 600, 438));
+            scene = (Parent) loader.load("/gui/regionlist.fxml");
+
+            stage.setScene(new Scene(scene, 600, 438));
+        }
+        else {
+            /*
+            Stage warningStage = new Stage();
+            Parent scene = null;
+            SpringFxmlLoader loader = new SpringFxmlLoader();
+            scene = (Parent) loader.load("/gui/warning.fxml");
+            warningStage.setScene(new Scene(scene, 300, 200));
+            */
+        }
     }
 
     @FXML
@@ -126,5 +172,9 @@ public class EditRegionController implements Initializable {
 
     @FXML
     private void onRemoveBorderPressed() {
+    }
+
+    public static void setRegion(Region region) {
+        selectedRegion = region;
     }
 }

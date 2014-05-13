@@ -56,8 +56,6 @@ public class RegionListController implements Initializable {
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise RegionListController");
 
-        //TODO mit den farben stimmt noch was nicht
-
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Region, String>, ObservableValue<String>>() {
             @Override
@@ -98,13 +96,15 @@ public class RegionListController implements Initializable {
                         }else {
                             setStyle("-fx-background-color:#FFFFFF");
                         }
+                        else {
+                            setStyle("-fx-background-color:#FFFFFF");
+                        }
                     }
                 };
             }
         });
 
-        ObservableList<Region> data = FXCollections.observableArrayList(regionService.getAll());
-        regionTable.setItems(data);
+        updateRegionTable();
     }
 
     @FXML
@@ -113,6 +113,8 @@ public class RegionListController implements Initializable {
         Stage details = (Stage) regionTable.getScene().getWindow();
         Parent root = null;
         SpringFxmlLoader loader = new SpringFxmlLoader();
+
+        EditRegionController.setRegion(null);
 
         root = (Parent) loader.load("/gui/editregion.fxml");
 
@@ -123,6 +125,20 @@ public class RegionListController implements Initializable {
 
     @FXML
     private void onEditButtonPressed() {
+
+        log.debug("onEditButtonPressed - open Gebiet-Details Window");
+        Stage details = (Stage) regionTable.getScene().getWindow();
+        Parent root = null;
+        SpringFxmlLoader loader = new SpringFxmlLoader();
+
+        Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
+        EditRegionController.setRegion(selectedRegion);
+
+        root = (Parent) loader.load("/gui/editregion.fxml");
+
+        details.setTitle("Gebiet-Details");
+        details.setScene(new Scene(root, 600, 438));
+        details.show();
     }
 
     @FXML
@@ -130,7 +146,9 @@ public class RegionListController implements Initializable {
         log.debug("onDeleteButtonPressed - deleting selected Region");
         Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
 
-        regionService.remove(selectedRegion);
+        if (selectedRegion != null) {
+            regionService.remove(selectedRegion);
+        }
 
         regionTable.getItems().remove(selectedRegion);
 
@@ -142,9 +160,11 @@ public class RegionListController implements Initializable {
         Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
         if (selectedRegion == null) {
             deleteButton.setDisable(true);
+            editButton.setDisable(true);
         }
         else{
             deleteButton.setDisable(false);
+            editButton.setDisable(false);
         }
 
     }
