@@ -54,6 +54,7 @@ public class MainMenuController implements Initializable {
 
         stage.setTitle("Grenzen und Gebiete");
         stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
         stage.show();
     }
 
