@@ -109,13 +109,13 @@ public class RegionListController implements Initializable {
     private void onCreateButtonPressed() {
 
         log.debug("onCreateButtonPressed - open Gebiet-Details Window");
-        Stage details = new Stage();
+        Stage details = (Stage) regionTable.getScene().getWindow();
         Parent root = null;
         SpringFxmlLoader loader = new SpringFxmlLoader();
 
         root = (Parent) loader.load("/gui/editregion.fxml");
 
-        details.setTitle("Gebiets-Details");
+        details.setTitle("Gebiet-Details");
         details.setScene(new Scene(root, 600, 438));
         details.show();
     }
