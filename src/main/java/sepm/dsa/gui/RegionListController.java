@@ -96,15 +96,13 @@ public class RegionListController implements Initializable {
                         }else {
                             setStyle("-fx-background-color:#FFFFFF");
                         }
-                        else {
-                            setStyle("-fx-background-color:#FFFFFF");
-                        }
                     }
                 };
             }
         });
 
-        updateRegionTable();
+        ObservableList<Region> data = FXCollections.observableArrayList(regionService.getAll());
+        regionTable.setItems(data);
     }
 
     @FXML
