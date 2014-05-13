@@ -95,6 +95,8 @@ public class RegionListController implements Initializable {
                         if (!empty) {
                             color = "#" + color;
                             setStyle("-fx-background-color:" + color);
+                        }else {
+                            setStyle("-fx-background-color:#FFFFFF");
                         }
                     }
                 };
@@ -107,7 +109,6 @@ public class RegionListController implements Initializable {
 
     @FXML
     private void onCreateButtonPressed() {
-
         log.debug("onCreateButtonPressed - open Gebiet-Details Window");
         Stage details = (Stage) regionTable.getScene().getWindow();
         Parent root = null;
@@ -131,11 +132,13 @@ public class RegionListController implements Initializable {
 
         regionService.remove(selectedRegion);
 
-        updateRegionTable();
+        regionTable.getItems().remove(selectedRegion);
+
+        checkFocus();
     }
 
     @FXML
-    private void onMouseClicked() {
+    private void checkFocus() {
         Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
         if (selectedRegion == null) {
             deleteButton.setDisable(true);
@@ -152,10 +155,5 @@ public class RegionListController implements Initializable {
 
     public void setRegionBorderService(RegionBorderService regionBorderService) {
         this.regionBorderService = regionBorderService;
-    }
-
-    private void updateRegionTable() {
-        ObservableList<Region> data = FXCollections.observableArrayList(regionService.getAll());
-        regionTable.setItems(data);
     }
 }
