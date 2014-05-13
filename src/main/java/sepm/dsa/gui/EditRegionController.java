@@ -6,15 +6,20 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
 
+@Service("EditRegionController")
 public class EditRegionController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(EditRegionController.class);
 
+    @Autowired
     private RegionService regionService;
-    private RegionBorderService borderService;
+    @Autowired
+    private RegionBorderService regionBorderService;
 
     @FXML
     private TextField name;
@@ -39,6 +44,7 @@ public class EditRegionController implements Initializable {
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
+        log.debug("initialise EditRegionController");
         borderColumn.setCellValueFactory(new PropertyValueFactory<>("border"));
         borderColumn.setCellValueFactory(new PropertyValueFactory<>("borderCost"));
     }
@@ -47,8 +53,8 @@ public class EditRegionController implements Initializable {
         this.regionService = regionService;
     }
 
-    public void setRegionBorderService(RegionBorderService borderService) {
-        this.borderService = borderService;
+    public void setRegionBorderService(RegionBorderService regionBorderService) {
+        this.regionBorderService = regionBorderService;
     }
 
     @FXML

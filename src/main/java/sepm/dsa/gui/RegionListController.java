@@ -6,16 +6,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 import sepm.dsa.service.RegionBorderService;
@@ -101,6 +105,17 @@ public class RegionListController implements Initializable {
 
     @FXML
     private void onCreateButtonPressed() {
+
+        log.debug("onCreateButtonPressed - open Gebiet-Details Window");
+        Stage details = new Stage();
+        Parent root = null;
+        SpringFxmlLoader loader = new SpringFxmlLoader();
+
+        root = (Parent) loader.load("/gui/editregion.fxml");
+
+        details.setTitle("Gebiets-Details");
+        details.setScene(new Scene(root, 600, 438));
+        details.show();
     }
 
     @FXML
