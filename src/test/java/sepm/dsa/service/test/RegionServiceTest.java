@@ -5,9 +5,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import sepm.dsa.model.RainfallChance;
 import sepm.dsa.model.Region;
+import sepm.dsa.model.Temperature;
 import sepm.dsa.service.RegionService;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -25,6 +28,8 @@ public class RegionServiceTest {
         region = new Region();
         region.setName("testRegion");
         region.setColor("000000");
+        region.setTemperature(Temperature.ARCTIC);
+        region.setRainfallChance(RainfallChance.LOW);
 
         System.out.println("testSetup");
     }
@@ -44,9 +49,9 @@ public class RegionServiceTest {
         int id = rs.add(region);
 
         assertTrue(rs.getAll().size() - 1 == size);
-        //TODO: equals is not working right now
-        //assertTrue(rs.get(id).equals(region));
-        //assertEquals(rs.get(id), region);
+        //TODO: equals is not working right now => DONE
+        assertTrue(rs.get(id).equals(region));
+        assertEquals(rs.get(id), region);
         rs.remove(region);
     }
 
@@ -64,6 +69,7 @@ public class RegionServiceTest {
         int size = rs.getAll().size();
         region.setName("testRegion2");
         region.setColor("999999");
+        region.setTemperature(Temperature.LOW);
 
         rs.update(region);
         assertTrue (rs.getAll().size() == size);
