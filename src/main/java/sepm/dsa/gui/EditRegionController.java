@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sepm.dsa.model.RainfallChance;
+import sepm.dsa.model.Temperature;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
 import sepm.dsa.model.Region;
@@ -113,6 +115,8 @@ public class EditRegionController implements Initializable {
         log.debug("SaveButtonPressed");
 
         String newName = name.getText();
+        Temperature temperature = Temperature.MEDIUM;           // TODO decide from checklist value
+        RainfallChance rainfallChance = RainfallChance.MONSUN;  // TODO decide from checklist value
 
         Color selectedColor = color.getValue();
         String colorString =
@@ -132,15 +136,22 @@ public class EditRegionController implements Initializable {
         }
 
         if (allowed) {
+
+            // TODO refactor: duplicate code (setName, setColor, ...)
             if (selectedRegion == null) {
                 Region newRegion = new Region();
                 newRegion.setColor(colorString);
                 newRegion.setName(newName);
+                newRegion.setTemperature(temperature);
+                newRegion.setRainfallChance(rainfallChance);
                 regionService.add(newRegion);
             }
             else {
                 selectedRegion.setColor(colorString);
                 selectedRegion.setName(newName);
+                selectedRegion.setTemperature(temperature);
+                selectedRegion.setRainfallChance(rainfallChance);
+
                 regionService.update(selectedRegion);
             }
 
