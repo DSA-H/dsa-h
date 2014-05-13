@@ -46,15 +46,15 @@ public class MainMenuController implements Initializable {
     @FXML
     private void onGrenzenGebieteClicked() {
         log.debug("onGrenzenGebieteClicked - open Grenzen und Gebiete Window");
-        Stage details = new Stage();
-        Parent root = null;
+        Stage stage = new Stage();
+        Parent scene = null;
         SpringFxmlLoader loader = new SpringFxmlLoader();
 
-        root = (Parent) loader.load("/gui/regionlist.fxml");
+        scene = (Parent) loader.load("/gui/regionlist.fxml");
 
-        details.setTitle("Grenzen und Gebiete");
-        details.setScene(new Scene(root, 600, 438));
-        details.show();
+        stage.setTitle("Grenzen und Gebiete");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.show();
     }
 
     @FXML

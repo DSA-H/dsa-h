@@ -101,7 +101,8 @@ public class RegionListController implements Initializable {
             }
         });
 
-        updateRegionTable();
+        ObservableList<Region> data = FXCollections.observableArrayList(regionService.getAll());
+        regionTable.setItems(data);
     }
 
     @FXML
@@ -116,8 +117,7 @@ public class RegionListController implements Initializable {
 
         details.setTitle("Gebiets-Details");
         details.setScene(new Scene(root, 600, 438));
-        details.showAndWait();
-        updateRegionTable();
+        details.show();
     }
 
     @FXML
@@ -126,12 +126,6 @@ public class RegionListController implements Initializable {
 
     @FXML
     private void onDeleteButtonPressed() {
-        log.debug("onDeleteButtonPressed - deleting selected region");
-
-        Region toDelete = regionTable.getFocusModel().getFocusedItem();
-        regionService.remove(toDelete);
-
-        updateRegionTable();
     }
 
     public void setRegionService(RegionService regionService) {

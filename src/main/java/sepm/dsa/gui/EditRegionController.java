@@ -4,12 +4,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import sepm.dsa.application.SpringFxmlLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sepm.dsa.service.RegionBorderService;
@@ -47,7 +53,7 @@ public class EditRegionController implements Initializable {
     @FXML
     private TableColumn borderCostColumn;
     @FXML
-    private Button Cancel;
+    private Button cancel;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
@@ -80,8 +86,13 @@ public class EditRegionController implements Initializable {
     @FXML
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
-        Stage stage = (Stage) Cancel.getScene().getWindow();
-        stage.close();
+        Stage stage = (Stage) name.getScene().getWindow();
+        Parent scene = null;
+        SpringFxmlLoader loader = new SpringFxmlLoader();
+
+        scene = (Parent) loader.load("/gui/regionlist.fxml");
+
+        stage.setScene(new Scene(scene, 600, 438));
     }
 
     @FXML
@@ -99,9 +110,14 @@ public class EditRegionController implements Initializable {
 
         regionService.add(newRegion);
 
+        // return to regionlist
+        Stage stage = (Stage) cancel.getScene().getWindow();
+        Parent scene = null;
+        SpringFxmlLoader loader = new SpringFxmlLoader();
 
-        Stage stage = (Stage) Cancel.getScene().getWindow();
-        stage.close();
+        scene = (Parent) loader.load("/gui/regionlist.fxml");
+
+        stage.setScene(new Scene(scene, 600, 438));
     }
 
     @FXML
