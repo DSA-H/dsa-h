@@ -126,6 +126,24 @@ public class RegionListController implements Initializable {
 
     @FXML
     private void onDeleteButtonPressed() {
+        log.debug("onDeleteButtonPressed - deleting selected Region");
+        Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
+
+        regionService.remove(selectedRegion);
+
+        updateRegionTable();
+    }
+
+    @FXML
+    private void onMouseClicked() {
+        Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
+        if (selectedRegion == null) {
+            deleteButton.setDisable(true);
+        }
+        else{
+            deleteButton.setDisable(false);
+        }
+
     }
 
     public void setRegionService(RegionService regionService) {
