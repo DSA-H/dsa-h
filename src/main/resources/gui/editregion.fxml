@@ -57,15 +57,11 @@
                                      prefWidth="231.0" text="Grenzkosten"/>
                     </columns>
                 </TableView>
-                <Button fx:id="removeBorder" mnemonicParsing="false" onAction="#onRemoveBorderPressed" text="Entfernen"
-                        GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="8"/>
-                <Button fx:id="AddBorder" mnemonicParsing="false" onAction="#onAddBorderPressed"
-                        text="Grenze Hinzufügen" GridPane.columnIndex="5" GridPane.rowIndex="8"/>
-                <TextField fx:id="borderCost" prefHeight="25.0" prefWidth="81.0" GridPane.columnIndex="3"
-                           GridPane.rowIndex="8"/>
-                <Label text="Grenzkosten" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="8"/>
-                <Label text="Gebiet verwalten" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.columnSpan="3"
-                       GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                <Button fx:id="removeBorder" mnemonicParsing="false" onAction="#onRemoveBorderPressed" text="Entfernen" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
+                <Button fx:id="AddBorder" mnemonicParsing="false" onAction="#onAddBorderPressed" text="Grenze Hinzufügen" GridPane.columnIndex="5" GridPane.rowIndex="8" />
+                <TextField fx:id="borderCost" prefHeight="25.0" prefWidth="81.0" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+                <Label text="Grenzkosten" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
+                <Label text="Gebiet editieren" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                     <font>
                         <Font name="System Bold" size="18.0"/>
                     </font>
@@ -80,7 +76,7 @@
                     <children>
                         <Button fx:id="save" mnemonicParsing="false" onAction="#onSavePressed" text="Speichern"
                                 GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10"/>
-                        <Button fx:id="Cancel" mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="25.0"
+                        <Button fx:id="cancel" mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="25.0"
                                 prefWidth="94.0" text="Abbrechen" GridPane.columnIndex="5" GridPane.halignment="RIGHT"
                                 GridPane.rowIndex="10"/>
                     </children>

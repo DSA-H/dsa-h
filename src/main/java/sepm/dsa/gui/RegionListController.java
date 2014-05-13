@@ -6,16 +6,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 import sepm.dsa.service.RegionBorderService;
@@ -51,6 +55,8 @@ public class RegionListController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise RegionListController");
+
+        //TODO mit den farben stimmt noch was nicht
 
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Region, String>, ObservableValue<String>>() {
@@ -101,6 +107,17 @@ public class RegionListController implements Initializable {
 
     @FXML
     private void onCreateButtonPressed() {
+
+        log.debug("onCreateButtonPressed - open Gebiet-Details Window");
+        Stage details = new Stage();
+        Parent root = null;
+        SpringFxmlLoader loader = new SpringFxmlLoader();
+
+        root = (Parent) loader.load("/gui/editregion.fxml");
+
+        details.setTitle("Gebiets-Details");
+        details.setScene(new Scene(root, 600, 438));
+        details.show();
     }
 
     @FXML
@@ -109,6 +126,24 @@ public class RegionListController implements Initializable {
 
     @FXML
     private void onDeleteButtonPressed() {
+        log.debug("onDeleteButtonPressed - deleting selected Region");
+        Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
+
+        regionService.remove(selectedRegion);
+
+        updateRegionTable();
+    }
+
+    @FXML
+    private void onMouseClicked() {
+        Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
+        if (selectedRegion == null) {
+            deleteButton.setDisable(true);
+        }
+        else{
+            deleteButton.setDisable(false);
+        }
+
     }
 
     public void setRegionService(RegionService regionService) {
@@ -117,5 +152,10 @@ public class RegionListController implements Initializable {
 
     public void setRegionBorderService(RegionBorderService regionBorderService) {
         this.regionBorderService = regionBorderService;
+    }
+
+    private void updateRegionTable() {
+        ObservableList<Region> data = FXCollections.observableArrayList(regionService.getAll());
+        regionTable.setItems(data);
     }
 }
