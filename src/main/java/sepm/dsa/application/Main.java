@@ -1,18 +1,12 @@
 package sepm.dsa.application;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import sepm.dsa.model.Region;
-import sepm.dsa.model.RegionBorder;
-import sepm.dsa.service.RegionBorderService;
-import sepm.dsa.service.RegionService;
+import sepm.dsa.gui.MainMenuController;
 
 public class Main extends Application {
 
@@ -25,15 +19,16 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        SpringFxmlLoader loader = new SpringFxmlLoader();
+        final SpringFxmlLoader loader = new SpringFxmlLoader();
         Parent root = (Parent) loader.load("/gui/mainmenu.fxml");
+        final MainMenuController ctrl = loader.getController();
         primaryStage.setTitle("DSA-Händlertool");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene(root, 600, 400));
         // close all windows if mainmenu is closed
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
-                Platform.exit();
+                ctrl.closeAllOtherStages();
             }
         });
         primaryStage.setResizable(false);

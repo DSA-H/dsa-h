@@ -1,6 +1,6 @@
 package sepm.dsa.gui;
 
-import javafx.application.Platform;
+import com.sun.javafx.stage.StageHelper;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -12,6 +12,9 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainMenuController implements Initializable {
 
@@ -60,6 +63,18 @@ public class MainMenuController implements Initializable {
 
     @FXML
     private void onExitClicked() {
-        Platform.exit();
+        Stage primaryStage = (Stage)menuBar.getScene().getWindow();
+        closeAllOtherStages();
+        primaryStage.close();
+    }
+
+    public void closeAllOtherStages() {
+        List<Stage> stages = new ArrayList<Stage>(StageHelper.getStages());
+        Stage primaryStage = (Stage)menuBar.getScene().getWindow();
+        for(Stage s : stages) {
+            if(!s.equals(primaryStage)) {
+                s.close();
+            }
+        }
     }
 }
