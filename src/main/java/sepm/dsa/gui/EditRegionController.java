@@ -1,15 +1,20 @@
 package sepm.dsa.gui;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
+import sepm.dsa.model.Region;
 
 @Service("EditRegionController")
 public class EditRegionController implements Initializable {
@@ -41,12 +46,23 @@ public class EditRegionController implements Initializable {
     private TableColumn borderColumn;
     @FXML
     private TableColumn borderCostColumn;
+    @FXML
+    private Button Cancel;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise EditRegionController");
         borderColumn.setCellValueFactory(new PropertyValueFactory<>("border"));
         borderColumn.setCellValueFactory(new PropertyValueFactory<>("borderCost"));
+
+        // DUMMY!
+        // TODO change to enum
+        ObservableList<String> temperatureList = FXCollections.observableArrayList("ARCTIC", "LOW", "MEDIUM", "HIGH", "VOLCANO");
+        ObservableList<String> rainList = FXCollections.observableArrayList("DESERT", "LOW", "MEDIUM", "HIGH", "MONSUN");
+
+        temperature.setItems(temperatureList);
+        rainfall.setItems(rainList);
+
     }
 
     public void setRegionService(RegionService regionService) {
@@ -63,10 +79,29 @@ public class EditRegionController implements Initializable {
 
     @FXML
     private void onCancelPressed() {
+        log.debug("CancelButtonPressed");
+        Stage stage = (Stage) Cancel.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
     private void onSavePressed() {
+        log.debug("SaveButtonPressed");
+
+        Region newRegion = new Region();
+        Color selectedColor = color.getValue();
+        String colorString =
+                Integer.toHexString((int) (selectedColor.getRed()*255)) + "" +
+                Integer.toHexString((int) (selectedColor.getGreen()*255)) + "" +
+                Integer.toHexString((int) (selectedColor.getBlue()*255));
+        newRegion.setColor(colorString);
+        newRegion.setName(name.getText());
+
+        regionService.add(newRegion);
+
+
+        Stage stage = (Stage) Cancel.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
