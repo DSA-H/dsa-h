@@ -56,6 +56,8 @@ public class RegionListController implements Initializable {
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise RegionListController");
 
+        //TODO mit den farben stimmt noch was nicht
+
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Region, String>, ObservableValue<String>>() {
             @Override
@@ -124,7 +126,7 @@ public class RegionListController implements Initializable {
 
     @FXML
     private void onDeleteButtonPressed() {
-        log.debug("onDelteButtonPressed - deleting selected region");
+        log.debug("onDeleteButtonPressed - deleting selected region");
 
         Region toDelete = regionTable.getFocusModel().getFocusedItem();
         regionService.remove(toDelete);
