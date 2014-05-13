@@ -4,18 +4,23 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 import sepm.dsa.service.RegionBorderService;
@@ -51,6 +56,7 @@ public class RegionListController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise RegionListController");
+
 
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Region, String>, ObservableValue<String>>() {
@@ -101,6 +107,13 @@ public class RegionListController implements Initializable {
 
     @FXML
     private void onCreateButtonPressed() {
+        Stage stage = (Stage) regionTable.getScene().getWindow();
+        Parent scene = null;
+        SpringFxmlLoader loader = new SpringFxmlLoader();
+
+        scene = (Parent) loader.load("/gui/editregion.fxml");
+
+        stage.setScene(new Scene(scene, 600, 438));
     }
 
     @FXML

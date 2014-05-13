@@ -61,6 +61,10 @@
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
     </bean>
+    <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
+        <property name="regionService" ref="regionService"/>
+        <property name="regionBorderService" ref="regionBorderService"/>
+    </bean>
 
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
