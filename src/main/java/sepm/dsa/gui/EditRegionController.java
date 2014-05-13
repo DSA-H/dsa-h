@@ -29,9 +29,7 @@ public class EditRegionController implements Initializable {
 
     private static Region selectedRegion;
 
-    @Autowired
     private RegionService regionService;
-    @Autowired
     private RegionBorderService regionBorderService;
 
     @FXML

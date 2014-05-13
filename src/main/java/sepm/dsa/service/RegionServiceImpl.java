@@ -15,7 +15,6 @@ import java.util.List;
 public class RegionServiceImpl implements RegionService, Serializable {
     private static final long serialVersionUID = 7415861483489569621L;
 
-    @Autowired
     private RegionDao regionDao;
 
     @Override

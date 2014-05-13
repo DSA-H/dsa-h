@@ -11,7 +11,6 @@ import java.util.Vector;
 @Repository
 public class RegionDaoHbmImpl implements RegionDao {
 
-    @Autowired
     private SessionFactory sessionFactory;
 
     @Override

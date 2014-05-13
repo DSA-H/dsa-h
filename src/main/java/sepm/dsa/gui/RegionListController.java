@@ -32,9 +32,7 @@ public class RegionListController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(RegionListController.class);
 
-    @Autowired
     private RegionService regionService;
-    @Autowired
     private RegionBorderService regionBorderService;
 
     @FXML

@@ -19,7 +19,6 @@ public class RegionBorderServiceImpl implements RegionBorderService, Serializabl
 
     private static final long serialVersionUID = 7415861483489569621L;
 
-    @Autowired
     private RegionBorderDao regionBorderDao;
 
     @Override

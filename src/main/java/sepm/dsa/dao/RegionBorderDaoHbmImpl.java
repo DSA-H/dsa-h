@@ -16,7 +16,6 @@ import java.util.Vector;
 @Repository
 public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
 
-    @Autowired
     private SessionFactory sessionFactory;
 
     @Override
