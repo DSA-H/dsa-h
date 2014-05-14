@@ -47,18 +47,34 @@ public class Main extends Application {
                 // show detailed message dialog without error code, listing all constraintViolations
                 DSAValidationException ex = (DSAValidationException) cause;
 
-                System.out.println(ex.getMessage());        // TODO view this in (modal?) dialo
+                StringBuilder sb = new StringBuilder();
 
+                sb.append(ex.getMessage());
                 for (ConstraintViolation violation : ex.getConstraintViolations()) {
-                    System.out.println(" -> " + ValidationMessageUtil.errorMsg(violation));
+                    sb.append("\n" + ValidationMessageUtil.errorMsg(violation));
                 }
+
+                Dialogs.create()
+                        .title("Validierungs Fehler")
+                        .masthead(null)
+                        .message(sb.toString())
+                        .showWarning();
             } else if (cause instanceof DSARuntimeException) {
                 // show message with error code in dialog (message is "internal error" by default DSARuntimeException
                 DSARuntimeException ex = (DSARuntimeException) cause;
-                System.out.println(ex.getErrorCode() + ": " + ex.getMessage()); // TODO view this in (modal?) dialog
+
+                Dialogs.create()
+                        .title("Interner Fehler")
+                        .masthead(null)
+                        .message(ex.getErrorCode() + ": " + ex.getMessage())
+                        .showError();
             } else {
                 // show "internal error" message dialog
-                System.out.println(DSARuntimeException.INTERNAL_ERROR_MSG); // TODO view this in dialog
+                Dialogs.create()
+                        .title("Interner Fehler")
+                        .masthead(null)
+                        .message(DSARuntimeException.INTERNAL_ERROR_MSG)
+                        .showError();
             }
             // show error msg dialog
 //                if (e instanceof )
