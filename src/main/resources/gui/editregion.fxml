@@ -42,12 +42,12 @@
                 <Label text="Regenwahrscheinlichkeit" GridPane.columnIndex="5" GridPane.halignment="RIGHT"
                        GridPane.rowIndex="3"/>
                 <Label text="Kommentar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4"/>
-                <TextField fx:id="name" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
-                <TextArea fx:id="comment" prefHeight="62.0" prefWidth="134.0" GridPane.columnIndex="3"
+                <TextField fx:id="nameField" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                <TextArea fx:id="commentArea" prefHeight="62.0" prefWidth="134.0" GridPane.columnIndex="3"
                           GridPane.columnSpan="3" GridPane.rowIndex="4" GridPane.rowSpan="2"/>
-                <ChoiceBox fx:id="rainfall" prefWidth="150.0" GridPane.columnIndex="7" GridPane.rowIndex="3"/>
-                <ChoiceBox fx:id="temperature" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
-                <ColorPicker fx:id="color" prefHeight="25.0" prefWidth="97.0" GridPane.columnIndex="7"
+                <ChoiceBox fx:id="rainfallChoiceBox" prefWidth="150.0" GridPane.columnIndex="7" GridPane.rowIndex="3"/>
+                <ChoiceBox fx:id="temperatureChoiceBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+                <ColorPicker fx:id="colorPicker" prefHeight="25.0" prefWidth="97.0" GridPane.columnIndex="7"
                              GridPane.rowIndex="2"/>
                 <TableView fx:id="borderTable" prefHeight="152.0" prefWidth="561.0" GridPane.columnIndex="1"
                            GridPane.columnSpan="7" GridPane.rowIndex="9">
@@ -70,13 +70,13 @@
                            GridPane.rowIndex="6"/>
                 <Label text="Gebiet auswählen" GridPane.columnIndex="1" GridPane.halignment="RIGHT"
                        GridPane.rowIndex="7"/>
-                <ChoiceBox fx:id="border" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="7"/>
+                <ChoiceBox fx:id="borderChoiceBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="7"/>
                 <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0"
                       spacing="10.0" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="10">
                     <children>
                         <Button fx:id="save" mnemonicParsing="false" onAction="#onSavePressed" text="Speichern"
                                 GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10"/>
-                        <Button fx:id="cancel" mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="25.0"
+                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="25.0"
                                 prefWidth="94.0" text="Abbrechen" GridPane.columnIndex="5" GridPane.halignment="RIGHT"
                                 GridPane.rowIndex="10"/>
                     </children>

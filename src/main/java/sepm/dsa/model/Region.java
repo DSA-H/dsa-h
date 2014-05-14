@@ -18,8 +18,13 @@ public class Region implements Serializable {
     private Integer id;
 
     @NotBlank
+    @Size(max = 60, min = 1)
     @Column(nullable = false, length = 60)
     private String name;
+
+    @Size(max = 1000)
+    @Column(nullable = false, length = 1000)
+    private String comment;
 
     @NotBlank
     @Size(max = 6)
@@ -57,6 +62,14 @@ public class Region implements Serializable {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public Temperature getTemperature() {
