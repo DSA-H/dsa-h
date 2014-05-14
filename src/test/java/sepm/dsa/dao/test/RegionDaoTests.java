@@ -1,5 +1,6 @@
 package sepm.dsa.dao.test;
 
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
@@ -7,6 +8,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import sepm.dsa.dao.RegionDao;
 import sepm.dsa.model.Region;
 

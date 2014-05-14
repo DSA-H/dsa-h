@@ -1,5 +1,8 @@
 package sepm.dsa.service.test;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,7 @@ public class RegionServiceTest {
 
     @Before
     public void setup() {
+
         //TODO: Import directly into testDB
         addRegion = new Region();
         addRegion.setName("testRegionAdd");
@@ -59,8 +63,15 @@ public class RegionServiceTest {
         // Teardown for data used by the unit tests
     }
 
+    //@DatabaseSetup("testData.xml")
+    @Test
+    public void testXML(){
+        System.out.println(rs.get(0));
+    }
+
     @Test
     public void testAdd() {
+        System.out.println(rs.get(0));
         int size = rs.getAll().size();
         int id = rs.add(addRegion);
 
