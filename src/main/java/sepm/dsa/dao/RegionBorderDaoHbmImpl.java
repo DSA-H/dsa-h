@@ -3,6 +3,7 @@ package sepm.dsa.dao;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.RegionBorder;
 import sepm.dsa.model.RegionBorderPk;
 
@@ -14,22 +15,26 @@ import java.util.Vector;
  * Created by Michael on 11.05.2014.
  */
 @Repository
+@Transactional(readOnly = true)
 public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
 
     private SessionFactory sessionFactory;
 
     @Override
+    @Transactional(readOnly = false)
     public RegionBorderPk add(RegionBorder regionBorder) {
         sessionFactory.getCurrentSession().save(regionBorder);
         return regionBorder.getPk();
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void update(RegionBorder regionBorder) {
         sessionFactory.getCurrentSession().update(regionBorder);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void remove(RegionBorder regionBorder) {
         sessionFactory.getCurrentSession().delete(regionBorder);
     }

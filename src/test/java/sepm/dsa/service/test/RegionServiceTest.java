@@ -20,54 +20,68 @@ public class RegionServiceTest {
 	@Autowired
 	private RegionService rs;
 
-    private Region region;
+    private Region addRegion;
+    private Region deleteRegion;
+    private Region updateRegion;
 
     @Before
     public void setup() {
-        region = new Region();
-        region.setName("testRegion");
-        region.setColor("000000");
-        region.setTemperature(Temperature.ARCTIC);
-        region.setRainfallChance(RainfallChance.LOW);
+        //TODO: Import directly into testDB
+        addRegion = new Region();
+        addRegion.setName("testRegionAdd");
+        addRegion.setColor("000000");
+        addRegion.setTemperature(Temperature.ARCTIC);
+        addRegion.setRainfallChance(RainfallChance.LOW);
+
+        deleteRegion = new Region();
+        deleteRegion.setName("testRegionDelete");
+        deleteRegion.setColor("000000");
+        deleteRegion.setTemperature(Temperature.HIGH);
+        deleteRegion.setRainfallChance(RainfallChance.MEDIUM);
+        rs.add(deleteRegion);
+
+        updateRegion = new Region();
+        updateRegion.setName("testRegionUpdate");
+        updateRegion.setColor("000000");
+        updateRegion.setTemperature(Temperature.MEDIUM);
+        updateRegion.setRainfallChance(RainfallChance.HIGH);
+        rs.add(updateRegion);
 
         System.out.println("testSetup");
     }
 
     @After
     public void teardown() {
+
         // Teardown for data used by the unit tests
     }
 
     @Test
     public void testAdd() {
         int size = rs.getAll().size();
-        int id = rs.add(region);
+        int id = rs.add(addRegion);
 
         assertTrue(rs.getAll().size() - 1 == size);
         //TODO: equals is not working right now => DONE
-        assertTrue(rs.get(id).equals(region));
-        assertEquals(rs.get(id), region);
-        rs.remove(region);
+        assertTrue(rs.get(id).equals(addRegion));
+        assertEquals(rs.get(id), addRegion);
     }
 
     @Test
     public void testRemove() {
-        int id = rs.add(region);
         int size = rs.getAll().size();
-        rs.remove(region);
+        rs.remove(deleteRegion);
         assertTrue(rs.getAll().size() + 1 == size);
     }
 
     @Test
     public void testUpdate() {
-        int id = rs.add(region);
         int size = rs.getAll().size();
-        region.setName("testRegion2");
-        region.setColor("999999");
-        region.setTemperature(Temperature.LOW);
+        updateRegion.setName("testRegion2");
+        updateRegion.setColor("999999");
+        updateRegion.setTemperature(Temperature.LOW);
 
-        rs.update(region);
+        rs.update(updateRegion);
         assertTrue (rs.getAll().size() == size);
-        rs.remove(region);
     }
 }
