@@ -1,17 +1,23 @@
 package sepm.dsa.service;
 
+import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.RegionBorderDao;
 import sepm.dsa.dao.RegionDao;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.executable.ExecutableValidator;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 
 @Service("RegionService")
@@ -21,6 +27,8 @@ public class RegionServiceImpl implements RegionService, Serializable {
     private static final long serialVersionUID = 7415861483489569621L;
 
     private static final Logger log = LoggerFactory.getLogger(RegionServiceImpl.class);
+//    private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+    private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private RegionDao regionDao;
     private RegionBorderDao regionBorderDao;
@@ -37,6 +45,7 @@ public class RegionServiceImpl implements RegionService, Serializable {
     @Transactional(readOnly = false)
     public int add(Region r) {
         log.debug("calling add(" + r + ")");
+        validate(r);
         int result = regionDao.add(r);
         log.trace("returning " + result);
         return result;
@@ -46,6 +55,7 @@ public class RegionServiceImpl implements RegionService, Serializable {
     @Transactional(readOnly = false)
     public void update(Region r) {
         log.debug("calling update(" + r + ")");
+        validate(r);
         regionDao.update(r);
     }
 
@@ -77,5 +87,18 @@ public class RegionServiceImpl implements RegionService, Serializable {
         log.debug("calling setRegionBorderDao(" + regionBorderDao + ")");
         this.regionBorderDao = regionBorderDao;
     }
+
+    /**
+     * Validates a region
+     * @param region
+     * @throws DSAValidationException if region is not valid
+     */
+    private void validate(Region region) throws DSAValidationException {
+        Set<ConstraintViolation<Region>> violations = validator.validate(region);
+        if (violations.size() > 0) {
+            throw new DSAValidationException("Gebiet ist nicht valide.", violations);
+        }
+    }
+
 
 }
