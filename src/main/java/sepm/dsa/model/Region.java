@@ -1,6 +1,10 @@
 package sepm.dsa.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -13,15 +17,20 @@ public class Region implements Serializable {
     @Column(nullable = false, unique = true)
     private Integer id;
 
+    @NotBlank
     @Column(nullable = false, length = 60)
     private String name;
 
+    @NotBlank
+    @Size(max = 6)
     @Column(nullable = false, length = 6)
     private String color;
 
+    @NotNull
     @Column(nullable = false)
     private Integer temperatureId;
 
+    @NotNull
     @Column(nullable = false)
     private Integer rainfallChanceId;
 
