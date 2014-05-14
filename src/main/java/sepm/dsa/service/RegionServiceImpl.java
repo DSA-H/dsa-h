@@ -67,7 +67,7 @@ public class RegionServiceImpl implements RegionService, Serializable {
         for (RegionBorder border : borders) {
             regionBorderDao.remove(border);
         }
-        regionDao.remove(r);
+        regionDao.remove(get(r.getId()));
     }
 
     @Override
