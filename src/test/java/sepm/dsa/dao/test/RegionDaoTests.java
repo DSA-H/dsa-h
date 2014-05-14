@@ -1,13 +1,15 @@
 package sepm.dsa.dao.test;
 
 //import com.github.springtestdbunit.DbUnitTestExecutionListener;
+
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -22,8 +24,9 @@ import sepm.dsa.model.Temperature;
  * Created by Michael on 13.05.2014.
  */
 @RunWith(JUnit4.class)
-//@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
-//        DbUnitTestExecutionListener.class })
+@ContextConfiguration
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
+        DbUnitTestExecutionListener.class})
 public class RegionDaoTests {
 
     private RegionDao regionDao;
@@ -42,8 +45,8 @@ public class RegionDaoTests {
 
     }
 
-//   TODO Currently fails on 'HibernateException: No Session found for current thread'
     @Test
+    @DatabaseSetup("test/resources/testData.xml")
     public void add_shouldPersistEntity() {
 
         Region region = new Region();
