@@ -23,7 +23,7 @@ public class Region implements Serializable {
     private String name;
 
     @Size(max = 1000)
-    @Column(nullable = false, length = 1000)
+    @Column(nullable = true, length = 1000)
     private String comment;
 
     @NotBlank
