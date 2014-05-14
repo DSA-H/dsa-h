@@ -46,12 +46,6 @@
     </profiles>
 
     <dependencies>
-        <dependency>
-            <groupId>com.github.springtestdbunit</groupId>
-            <artifactId>spring-test-dbunit</artifactId>
-            <version>1.0.0</version>
-            <scope>test</scope>
-        </dependency>
         <!-- logging -->
         <dependency>
             <groupId>junit</groupId>
@@ -72,6 +66,12 @@
         </dependency>
 
         <!-- hibernate unit testing  -->
+        <dependency>
+            <groupId>com.github.springtestdbunit</groupId>
+            <artifactId>spring-test-dbunit</artifactId>
+            <version>1.0.0</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.dbunit</groupId>
             <artifactId>dbunit</artifactId>
