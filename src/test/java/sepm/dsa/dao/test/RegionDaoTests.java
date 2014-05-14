@@ -24,15 +24,17 @@ import sepm.dsa.model.Temperature;
 @RunWith(JUnit4.class)
 //@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 //        DbUnitTestExecutionListener.class })
-@ContextConfiguration(locations = {"classpath:testContext.xml"})
 public class RegionDaoTests {
 
-    @Autowired
     private RegionDao regionDao;
-
 
     @Before
     public void setUp() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("testContext.xml");
+        regionDao = (RegionDao) ctx.getBean("regionDao");
+        if (regionDao == null) {
+            throw new IllegalStateException("regionDao could not be fetched");
+        }
     }
 
     @After
