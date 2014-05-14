@@ -30,12 +30,14 @@ public class RegionServiceTest {
         addRegion = new Region();
         addRegion.setName("testRegionAdd");
         addRegion.setColor("000000");
+        addRegion.setComment("comment");
         addRegion.setTemperature(Temperature.ARCTIC);
         addRegion.setRainfallChance(RainfallChance.LOW);
 
         deleteRegion = new Region();
         deleteRegion.setName("testRegionDelete");
         deleteRegion.setColor("000000");
+        deleteRegion.setComment("comment");
         deleteRegion.setTemperature(Temperature.HIGH);
         deleteRegion.setRainfallChance(RainfallChance.MEDIUM);
         rs.add(deleteRegion);
@@ -43,6 +45,7 @@ public class RegionServiceTest {
         updateRegion = new Region();
         updateRegion.setName("testRegionUpdate");
         updateRegion.setColor("000000");
+        updateRegion.setComment("comment");
         updateRegion.setTemperature(Temperature.MEDIUM);
         updateRegion.setRainfallChance(RainfallChance.HIGH);
         rs.add(updateRegion);
@@ -79,6 +82,7 @@ public class RegionServiceTest {
         int size = rs.getAll().size();
         updateRegion.setName("testRegion2");
         updateRegion.setColor("999999");
+        updateRegion.setComment("comment");
         updateRegion.setTemperature(Temperature.LOW);
 
         rs.update(updateRegion);

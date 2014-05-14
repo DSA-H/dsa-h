@@ -3,8 +3,10 @@ package sepm.dsa.service.test;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
 import sepm.dsa.model.*;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
@@ -15,14 +17,21 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by Chris on 12.05.2014.
  */
+//@ContextConfiguration(locations = {"classpath:testContext.xml"})
 public class RegionBorderServiceTest {
+
+    @Autowired
     private static RegionBorderService rbs;
+
+    @Autowired
+    private static RegionService rs;
+
     private static RegionBorder regionBorder;
     private static RegionBorderPk regionBorderPK;
 
     @BeforeClass
     public static void testSetup() {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("testContext.xml");
         rbs = (RegionBorderService) ctx.getBean("regionBorderService");
         RegionService rs = (RegionService) ctx.getBean("regionService");
 
@@ -32,6 +41,8 @@ public class RegionBorderServiceTest {
         r2.setColor("999999");
         r1.setName("r1");
         r2.setName("r2");
+        r1.setComment("comment");
+        r2.setComment("comment");
 	    r1.setRainfallChance(RainfallChance.HIGH);
 	    r2.setRainfallChance(RainfallChance.HIGH);
 	    r1.setTemperature(Temperature.ARCTIC);

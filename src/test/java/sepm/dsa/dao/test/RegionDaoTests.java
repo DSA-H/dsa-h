@@ -14,8 +14,8 @@ import sepm.dsa.model.Region;
  * Created by Michael on 13.05.2014.
  */
 @RunWith(JUnit4.class)
-@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class })
+//@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
+//        DbUnitTestExecutionListener.class })
 public class RegionDaoTests {
 
     private RegionDao regionDao;
@@ -42,6 +42,7 @@ public class RegionDaoTests {
         Region region = new Region();
         region.setName("Region1");
         region.setColor("65A3EF");
+        region.setComment("comment");
         int id = regionDao.add(region);
         Region persistedRegion = regionDao.get(id);
         TestCase.assertTrue(persistedRegion != null);
