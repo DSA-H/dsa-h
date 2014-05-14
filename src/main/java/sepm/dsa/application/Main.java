@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.exceptions.DSARuntimeException;
@@ -14,6 +15,7 @@ import sepm.dsa.gui.MainMenuController;
 import sepm.dsa.sepm.dsa.util.ValidationMessageUtil;
 
 import javax.validation.ConstraintViolation;
+import java.awt.*;
 
 public class Main extends Application {
 
@@ -44,7 +46,9 @@ public class Main extends Application {
             if (cause instanceof DSAValidationException) {
                 // show detailed message dialog without error code, listing all constraintViolations
                 DSAValidationException ex = (DSAValidationException) cause;
-                System.out.println(ex.getMessage());        // TODO view this in (modal?) dialog
+
+                System.out.println(ex.getMessage());        // TODO view this in (modal?) dialo
+
                 for (ConstraintViolation violation : ex.getConstraintViolations()) {
                     System.out.println(" -> " + ValidationMessageUtil.errorMsg(violation));
                 }
@@ -69,6 +73,7 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
+                log.debug("CloseRequest - exit Programm Request");
                 if (!ctrl.exitProgramm()) {
                     event.consume();
                 }
