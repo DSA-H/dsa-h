@@ -5,16 +5,18 @@ package sepm.dsa.model;
  */
 public enum RainfallChance {
 
-    DESSERT(1),
-    LOW(2),
-    MEDIUM(3),
-    HIGH(4),
-    MONSUN(5);
+    DESSERT(1, "Wüste"),
+    LOW(2, "niedrig"),
+    MEDIUM(3, "mittel"),
+    HIGH(4, "hoch"),
+    MONSUN(5, "Monsun");
 
     private int value;
+    private String name;
 
-    RainfallChance(int value) {
+    RainfallChance(int value, String name) {
         this.value = value;
+        this.name = name;
     }
 
     public int getValue() {
@@ -35,6 +37,10 @@ public enum RainfallChance {
     @Override
     public String toString() {
         return name() + "(" + this.getValue() + ")";
+    }
+
+    public String getName() {
+        return name;
     }
 
 }
