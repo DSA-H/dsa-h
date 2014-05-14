@@ -1,1 +1,6 @@
 out/*
+.idea
+target
+fooDB.*
+testDB.*
+DSA-H.iml

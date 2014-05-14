@@ -1,0 +1,7 @@
+How to run DSA-H
+
+1) maven -Prun
+
+should run the project
+
+Via XXX one can create a IntelliJ / Eclipse Project
