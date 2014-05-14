@@ -124,7 +124,16 @@ public class EditRegionController implements Initializable {
 
         // init border choice box
         List<Region> otherRegions = regionService.getAll();
-        otherRegions.remove(selectedRegion);  // TODO: Remove all added Regions
+        otherRegions.remove(selectedRegion);
+        if(!isNewRegion) {
+            for (RegionBorder borders : regionBorderService.getAllForRegion(selectedRegion.getId())) {
+                if (borders.getPk().getRegion1().equals(selectedRegion)) {
+                    otherRegions.remove(borders.getPk().getRegion2());
+                } else {
+                    otherRegions.remove(borders.getPk().getRegion1());
+                }
+            }
+        }
         borderChoiceBox.setItems(FXCollections.observableArrayList(otherRegions));
     }
 
@@ -216,12 +225,22 @@ public class EditRegionController implements Initializable {
         RegionBorder border = new RegionBorder();
         RegionBorderPk borderPk = new RegionBorderPk();
 
-        borderPk.setRegion1(selectedRegion);
-        borderPk.setRegion2((Region) borderChoiceBox.getSelectionModel().getSelectedItem());  // TODO: NOT null Exception
-        border.setBorderCost(Integer.parseInt(borderCost.getText()));  // TODO: ClassCastException
-        border.setPk(borderPk);
+        try {
+            borderPk.setRegion1(selectedRegion);
+            Region borderTo = (Region) borderChoiceBox.getSelectionModel().getSelectedItem();
+            if(borderTo == null) {
+                throw new DSAValidationException("Wählen sie ein Gebiet aus, welches an dieses Gebiet grenzen soll.");
+            }
+            borderPk.setRegion2(borderTo);
+            border.setBorderCost(Integer.parseInt(borderCost.getText()));
+            border.setPk(borderPk);
+            borderTable.getItems().add(border);
 
-        borderTable.getItems().add(border);
+            borderChoiceBox.getItems().remove(border.getPk().getRegion2());
+            borderChoiceBox.getSelectionModel().selectFirst();
+        }catch (NumberFormatException ex) {
+            throw new DSAValidationException("Grenzkosten müssen eine Zahl sein.");
+        }
     }
 
     @FXML
@@ -229,6 +248,11 @@ public class EditRegionController implements Initializable {
         RegionBorder selectedborder = borderTable.getFocusModel().getFocusedItem();
         if(selectedborder != null) {
             borderTable.getItems().remove(selectedborder);
+            if(selectedborder.getPk().getRegion1().equals(selectedRegion)) {
+                borderChoiceBox.getItems().add(selectedborder.getPk().getRegion2());
+            }else {
+                borderChoiceBox.getItems().add(selectedborder.getPk().getRegion1());
+            }
         }
 
         checkFocus();
@@ -239,11 +263,9 @@ public class EditRegionController implements Initializable {
         RegionBorder selected = borderTable.getFocusModel().getFocusedItem();
         if (selected == null) {
             removeBorderButton.setDisable(true);
-        }
-        else{
+        } else{
             removeBorderButton.setDisable(false);
         }
-
     }
 
     public static void setRegion(Region region) {

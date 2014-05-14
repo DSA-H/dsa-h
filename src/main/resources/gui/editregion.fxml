@@ -45,7 +45,7 @@
                 <ChoiceBox fx:id="rainfallChoiceBox" prefWidth="150.0" GridPane.columnIndex="7" GridPane.rowIndex="3" />
                 <ChoiceBox fx:id="temperatureChoiceBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                 <ColorPicker fx:id="colorPicker" prefHeight="25.0" prefWidth="97.0" GridPane.columnIndex="7" GridPane.rowIndex="2" />
-                <TableView fx:id="borderTable" editable="true" onMousePressed="#checkFocus" prefHeight="152.0" prefWidth="561.0" GridPane.columnIndex="1" GridPane.columnSpan="7" GridPane.rowIndex="9">
+                <TableView fx:id="borderTable" editable="true" onMouseClicked="#checkFocus" prefHeight="152.0" prefWidth="561.0" GridPane.columnIndex="1" GridPane.columnSpan="7" GridPane.rowIndex="9">
                     <columns>
                         <TableColumn fx:id="borderColumn" prefWidth="327.0" text="Grenzt an" />
                         <TableColumn fx:id="borderCostColumn" minWidth="0.0" onEditCommit="#onBorderCostColumnChanged" prefWidth="231.0" text="Grenzkosten" />
