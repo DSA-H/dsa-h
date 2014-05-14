@@ -5,9 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import sepm.dsa.model.Region;
-import sepm.dsa.model.RegionBorder;
-import sepm.dsa.model.RegionBorderPk;
+import sepm.dsa.model.*;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
 
@@ -34,6 +32,10 @@ public class RegionBorderServiceTest {
         r2.setColor("999999");
         r1.setName("r1");
         r2.setName("r2");
+	    r1.setRainfallChance(RainfallChance.HIGH);
+	    r2.setRainfallChance(RainfallChance.HIGH);
+	    r1.setTemperature(Temperature.ARCTIC);
+	    r2.setTemperature(Temperature.ARCTIC);
 
         regionBorderPK = new RegionBorderPk();
         regionBorderPK.setRegion1(r1);
