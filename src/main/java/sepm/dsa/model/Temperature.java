@@ -5,16 +5,18 @@ package sepm.dsa.model;
  */
 public enum Temperature {
 
-    ARCTIC(1),
-    LOW(2),
-    MEDIUM(3),
-    HIGH(4),
-    VULCANO(5);
+    ARCTIC(1, "arktisch"),
+    LOW(2, "niedrig"),
+    MEDIUM(3, "mittel"),
+    HIGH(4, "hoch"),
+    VULCANO(5, "vulkano");
 
     private int value;
+    private String name;
 
-    Temperature(int value) {
+    Temperature(int value, String name) {
         this.value = value;
+        this.name = name;
     }
 
     public int getValue() {
@@ -35,6 +37,10 @@ public enum Temperature {
     @Override
     public String toString() {
         return name() + "(" + this.getValue() + ")";
+    }
+
+    public String getName() {
+        return name;
     }
 
 }
