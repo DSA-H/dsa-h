@@ -66,6 +66,14 @@
             <version>${hibernate.version}</version>
         </dependency>
 
+        <!-- hibernate unit testing  -->
+        <dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>2.5.0</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- BeanValidation -->
         <dependency>
             <groupId>org.hibernate</groupId>
