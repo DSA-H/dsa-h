@@ -95,6 +95,12 @@
             <version>2.3.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.0.5</version>
+        </dependency>
+
     </dependencies>
 
 </project>

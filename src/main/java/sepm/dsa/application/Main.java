@@ -66,7 +66,9 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
-                ctrl.closeAllOtherStages();
+                if (!ctrl.exitProgramm()) {
+                    event.consume();
+                }
             }
         });
         primaryStage.setResizable(false);

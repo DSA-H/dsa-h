@@ -9,6 +9,9 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.*;
+import org.controlsfx.dialog.Dialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
@@ -63,18 +66,41 @@ public class MainMenuController implements Initializable {
 
     @FXML
     private void onExitClicked() {
-        Stage primaryStage = (Stage)menuBar.getScene().getWindow();
-        closeAllOtherStages();
-        primaryStage.close();
+        if(exitProgramm()) {
+            Stage primaryStage = (Stage)menuBar.getScene().getWindow();
+            primaryStage.close();
+        }
     }
 
-    public void closeAllOtherStages() {
-        List<Stage> stages = new ArrayList<Stage>(StageHelper.getStages());
+    /**
+     * Shows a exit-confirm-dialog if more than the primaryStage are open and close all other stages if confirmed
+     * @return false if the user cancle or refuse the dialog, otherwise true
+     */
+    public boolean exitProgramm() {
         Stage primaryStage = (Stage)menuBar.getScene().getWindow();
-        for(Stage s : stages) {
-            if(!s.equals(primaryStage)) {
-                s.close();
+        List<Stage> stages = new ArrayList<Stage>(StageHelper.getStages());
+
+        // only primaryStage
+        if(stages.size() <= 1) {
+            return true;
+        }
+
+        Action response = Dialogs.create()
+                .owner(primaryStage)
+                .title("Programm beenden?")
+                .masthead(null)
+                .message("Wollen Sie das Händertool wirklich beenden? Nicht gespeicherte Änderungen gehen dabei verloren.")
+                .showConfirm();
+
+        if(response == Dialog.Actions.YES) {
+            for (Stage s : stages) {
+                if (!s.equals(primaryStage)) {
+                    s.close();
+                }
             }
+            return true;
+        }else {
+            return false;
         }
     }
 }
