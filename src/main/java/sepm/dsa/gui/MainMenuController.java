@@ -66,6 +66,7 @@ public class MainMenuController implements Initializable {
 
     @FXML
     private void onExitClicked() {
+        log.debug("onExitClicked - exit Programm Request");
         if(exitProgramm()) {
             Stage primaryStage = (Stage)menuBar.getScene().getWindow();
             primaryStage.close();
@@ -85,6 +86,7 @@ public class MainMenuController implements Initializable {
             return true;
         }
 
+        log.debug("open Dialog - Confirm-Exit-Dialog");
         Action response = Dialogs.create()
                 .owner(primaryStage)
                 .title("Programm beenden?")
@@ -93,13 +95,16 @@ public class MainMenuController implements Initializable {
                 .showConfirm();
 
         if(response == Dialog.Actions.YES) {
+            log.debug("Confirm-Exit-Dialog confirmed");
             for (Stage s : stages) {
                 if (!s.equals(primaryStage)) {
                     s.close();
                 }
             }
             return true;
+
         }else {
+            log.debug("Confirm-Exit-Dialog refused");
             return false;
         }
     }

@@ -124,55 +124,33 @@ public class EditRegionController implements Initializable {
                 Integer.toHexString((int) (selectedColor.getGreen()*255)) + "" +
                 Integer.toHexString((int) (selectedColor.getBlue()*255));
 
-        boolean allowed = true;     // TODO validation must be in the Service!! It is done by BeanValidation annotations
-        int counter = 0;
-        for(int i=0; i<newName.length(); i++) {
-            if( newName.charAt(i) == ' ' ) {
-                counter++;
-            }
-        }
-        if (newName.length() == counter) {
-            allowed = false;
-        }
 
-        if (true) { // change to true from allowed
-
-            // TODO refactor: duplicate code (setName, setColor, ...)
-            if (selectedRegion == null) {
-                Region newRegion = new Region();
-                newRegion.setColor(colorString);
-                newRegion.setName(newName);
-                newRegion.setTemperature(temperature);
-                newRegion.setRainfallChance(rainfallChance);
-                regionService.add(newRegion);
-            }
-            else {
-                selectedRegion.setColor(colorString);
-                selectedRegion.setName(newName);
-                selectedRegion.setTemperature(temperature);
-                selectedRegion.setRainfallChance(rainfallChance);
-
-                regionService.update(selectedRegion);
-            }
-
-            // return to regionlist
-            Stage stage = (Stage) cancel.getScene().getWindow();
-            Parent scene = null;
-            SpringFxmlLoader loader = new SpringFxmlLoader();
-
-            scene = (Parent) loader.load("/gui/regionlist.fxml");
-
-            stage.setScene(new Scene(scene, 600, 438));
+        // TODO refactor: duplicate code (setName, setColor, ...)
+        if (selectedRegion == null) {
+            Region newRegion = new Region();
+            newRegion.setColor(colorString);
+            newRegion.setName(newName);
+            newRegion.setTemperature(temperature);
+            newRegion.setRainfallChance(rainfallChance);
+            regionService.add(newRegion);
         }
         else {
-            /*
-            Stage warningStage = new Stage();
-            Parent scene = null;
-            SpringFxmlLoader loader = new SpringFxmlLoader();
-            scene = (Parent) loader.load("/gui/warning.fxml");
-            warningStage.setScene(new Scene(scene, 300, 200));
-            */
+            selectedRegion.setColor(colorString);
+            selectedRegion.setName(newName);
+            selectedRegion.setTemperature(temperature);
+            selectedRegion.setRainfallChance(rainfallChance);
+
+            regionService.update(selectedRegion);
         }
+
+        // return to regionlist
+        Stage stage = (Stage) cancel.getScene().getWindow();
+        Parent scene = null;
+        SpringFxmlLoader loader = new SpringFxmlLoader();
+
+        scene = (Parent) loader.load("/gui/regionlist.fxml");
+
+        stage.setScene(new Scene(scene, 600, 438));
     }
 
     @FXML
