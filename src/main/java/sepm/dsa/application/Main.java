@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.gui.MainMenuController;
+import sepm.dsa.sepm.dsa.util.ValidationMessageUtil;
+
+import javax.validation.ConstraintViolation;
 
 public class Main extends Application {
 
@@ -42,8 +45,8 @@ public class Main extends Application {
                 // show detailed message dialog without error code, listing all constraintViolations
                 DSAValidationException ex = (DSAValidationException) cause;
                 System.out.println(ex.getMessage());        // TODO view this in (modal?) dialog
-                for (Object violation : ex.getConstraintViolations()) {
-                    System.out.println(" -> " + violation);
+                for (ConstraintViolation violation : ex.getConstraintViolations()) {
+                    System.out.println(" -> " + ValidationMessageUtil.errorMsg(violation));
                 }
             } else if (cause instanceof DSARuntimeException) {
                 // show message with error code in dialog (message is "internal error" by default DSARuntimeException

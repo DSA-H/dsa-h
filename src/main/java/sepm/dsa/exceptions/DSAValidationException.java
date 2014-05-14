@@ -1,5 +1,6 @@
 package sepm.dsa.exceptions;
 
+import javax.validation.ConstraintViolation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,15 +10,15 @@ import java.util.List;
  */
 public class DSAValidationException extends DSARuntimeException {
 
-    private List<?> constraintViolations;
+    private List<ConstraintViolation<?>> constraintViolations;
 
-    public DSAValidationException(String msg, Collection<?> constraintViolations) {
+    public DSAValidationException(String msg, Collection<? extends ConstraintViolation<?>> constraintViolations) {
         super(msg, null, ERROR_VALIDATION);
 
         this.constraintViolations = new ArrayList<>(constraintViolations);
     }
 
-    public List<?> getConstraintViolations() {
+    public List<ConstraintViolation> getConstraintViolations() {
         return new ArrayList<>(constraintViolations);
     }
 }

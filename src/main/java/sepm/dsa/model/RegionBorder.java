@@ -1,6 +1,8 @@
 package sepm.dsa.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -18,6 +20,8 @@ public class RegionBorder implements Serializable {
     @EmbeddedId
     private RegionBorderPk pk;        // invariant: not null
 
+    @NotNull
+    @Min(0)
     @Column(nullable = false)
     private Integer borderCost;
 

@@ -124,7 +124,7 @@ public class EditRegionController implements Initializable {
                 Integer.toHexString((int) (selectedColor.getGreen()*255)) + "" +
                 Integer.toHexString((int) (selectedColor.getBlue()*255));
 
-        boolean allowed = true;
+        boolean allowed = true;     // TODO validation must be in the Service!! It is done by BeanValidation annotations
         int counter = 0;
         for(int i=0; i<newName.length(); i++) {
             if( newName.charAt(i) == ' ' ) {
@@ -135,7 +135,7 @@ public class EditRegionController implements Initializable {
             allowed = false;
         }
 
-        if (allowed) {
+        if (true) { // change to true from allowed
 
             // TODO refactor: duplicate code (setName, setColor, ...)
             if (selectedRegion == null) {

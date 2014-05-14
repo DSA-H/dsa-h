@@ -13,6 +13,8 @@ public class RegionBorderPk implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    // TODO BeanValidation for region1 != region2
+
     @ManyToOne
     @JoinColumn(name = "region1", nullable = false)
     private Region region1;
