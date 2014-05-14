@@ -1,10 +1,10 @@
 package sepm.dsa.service.test;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import sepm.dsa.model.RainfallChance;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.Temperature;
@@ -13,18 +13,17 @@ import sepm.dsa.service.RegionService;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by Chris on 12.05.2014.
- */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:testContext.xml"})
 public class RegionServiceTest {
 
-    private static RegionService rs;
-    private static Region region;
-    @BeforeClass
-    public static void testSetup() {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        rs =  (RegionService) ctx.getBean("regionService");
+	@Autowired
+	private RegionService rs;
 
+    private Region region;
+
+    @Before
+    public void setup() {
         region = new Region();
         region.setName("testRegion");
         region.setColor("000000");
@@ -34,14 +33,10 @@ public class RegionServiceTest {
         System.out.println("testSetup");
     }
 
-    @AfterClass
-    public static void testCleanup() {
+    @After
+    public void teardown() {
         // Teardown for data used by the unit tests
     }
-
-    /*@Test(expected = IllegalArgumentException.class)
-    public void testExceptionIsThrown() {
-    }*/
 
     @Test
     public void testAdd() {
