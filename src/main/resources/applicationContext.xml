@@ -13,16 +13,20 @@
         <property name="username" value="sa"/>
         <property name="password" value=""/>
     </bean>
+
+
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="annotatedClasses">
             <list>
+                <!-- hibernate managed model classes -->
                 <value>sepm.dsa.model.Region</value>
                 <value>sepm.dsa.model.RegionBorder</value>
             </list>
         </property>
         <property name="mappingResources">
             <list>
+                <!-- hql named queries xml -->
                 <value>sepm/dsa/model/hibernate/Region.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/RegionBorder.hbm.xml</value>
             </list>
