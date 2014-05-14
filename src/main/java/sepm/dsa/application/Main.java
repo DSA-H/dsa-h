@@ -27,12 +27,16 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
-            log.error("Uncaught error: ", throwable);
 
+            log.info("Uncaught error (details): ", throwable);    // exception trace at info log level
+
+            String causeString = "";
             Throwable cause = throwable;
             while (cause.getCause() != null) {
                 cause = cause.getCause();
+                causeString += "\n\tCaused by: " + cause.getClass() + (cause.getMessage() == null ? "" : ": " + cause.getMessage());
             }
+            log.error("Uncaught error: " + throwable.getClass() + (throwable.getMessage() == null ? "" : ": " + throwable.getMessage() + causeString));
 
             if (cause instanceof DSAValidationException) {
                 // show detailed message dialog without error code, listing all constraintViolations
