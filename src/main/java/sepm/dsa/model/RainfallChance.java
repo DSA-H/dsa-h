@@ -5,11 +5,11 @@ package sepm.dsa.model;
  */
 public enum RainfallChance {
 
-    DESSERT(1, "Wüste"),
-    LOW(2, "niedrig"),
-    MEDIUM(3, "mittel"),
-    HIGH(4, "hoch"),
-    MONSUN(5, "Monsun");
+    DESSERT(0, "Wüste"),
+    LOW(1, "niedrig"),
+    MEDIUM(2, "mittel"),
+    HIGH(3, "hoch"),
+    MONSUN(4, "Monsun");
 
     private int value;
     private String name;
