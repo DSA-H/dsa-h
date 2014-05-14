@@ -4,6 +4,7 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.springframework.context.ApplicationContext;
@@ -39,7 +40,7 @@ public class RegionDaoTests {
     }
 
 //   TODO Currently fails on 'HibernateException: No Session found for current thread'
-//    @Test
+    @Test
     public void add_shouldPersistEntity() {
 
         Region region = new Region();
