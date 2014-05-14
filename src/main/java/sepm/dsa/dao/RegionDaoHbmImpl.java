@@ -5,12 +5,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Region;
 
 import java.util.List;
 import java.util.Vector;
 
 @Repository
+@Transactional(readOnly = true)
 public class RegionDaoHbmImpl implements RegionDao {
 
     private static final Logger log = LoggerFactory.getLogger(RegionDaoHbmImpl.class);
@@ -18,6 +20,7 @@ public class RegionDaoHbmImpl implements RegionDao {
     private SessionFactory sessionFactory;
 
     @Override
+    @Transactional(readOnly = false)
     public int add(Region region) {
         log.debug("calling add(" + region + ")");
         sessionFactory.getCurrentSession().save(region);
@@ -27,12 +30,14 @@ public class RegionDaoHbmImpl implements RegionDao {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void update(Region region) {
         log.debug("calling update(" + region + ")");
         sessionFactory.getCurrentSession().update(region);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void remove(Region region) {
         log.debug("calling remove(" + region + ")");
         sessionFactory.getCurrentSession().delete(region);
