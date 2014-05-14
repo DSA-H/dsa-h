@@ -15,9 +15,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.Dialog;
+import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Region;
@@ -54,6 +56,7 @@ public class RegionListController implements Initializable {
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise RegionListController");
 
+        // init table
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Region, String>, ObservableValue<String>>() {
             @Override
@@ -106,7 +109,7 @@ public class RegionListController implements Initializable {
     @FXML
     private void onCreateButtonPressed() {
         log.debug("onCreateButtonPressed - open Gebiet-Details Window");
-        Stage details = (Stage) regionTable.getScene().getWindow();
+        Stage stage =  (Stage) regionTable.getScene().getWindow();
         Parent root = null;
         SpringFxmlLoader loader = new SpringFxmlLoader();
 
@@ -114,16 +117,16 @@ public class RegionListController implements Initializable {
 
         root = (Parent) loader.load("/gui/editregion.fxml");
 
-        details.setTitle("Gebiet-Details");
-        details.setScene(new Scene(root, 600, 438));
-        details.show();
+        stage.setTitle("Gebiet-Details");
+        stage.setScene(new Scene(root, 600, 438));
+        stage.show();
     }
 
     @FXML
     private void onEditButtonPressed() {
-
         log.debug("onEditButtonPressed - open Gebiet-Details Window");
-        Stage details = (Stage) regionTable.getScene().getWindow();
+        Stage stage =  (Stage) regionTable.getScene().getWindow();
+
         Parent root = null;
         SpringFxmlLoader loader = new SpringFxmlLoader();
 
@@ -132,9 +135,9 @@ public class RegionListController implements Initializable {
 
         root = (Parent) loader.load("/gui/editregion.fxml");
 
-        details.setTitle("Gebiet-Details");
-        details.setScene(new Scene(root, 600, 438));
-        details.show();
+        stage.setTitle("Gebiet-Details");
+        stage.setScene(new Scene(root, 600, 438));
+        stage.show();
     }
 
     @FXML
@@ -143,10 +146,17 @@ public class RegionListController implements Initializable {
         Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
 
         if (selectedRegion != null) {
-            regionService.remove(selectedRegion);
+            log.debug("open Confirm-Delete-Region Dialog");
+            Action response = Dialogs.create()
+                    .title("Löschen?")
+                    .masthead(null)
+                    .message("Wollen Sie die Region '" + selectedRegion.getName() + "' und alle zugehörigen Grenzen wirklich löschen?")
+                    .showConfirm();
+            if(response == Dialog.Actions.YES) {
+                regionService.remove(selectedRegion);
+                regionTable.getItems().remove(selectedRegion);
+            }
         }
-
-        regionTable.getItems().remove(selectedRegion);
 
         checkFocus();
     }

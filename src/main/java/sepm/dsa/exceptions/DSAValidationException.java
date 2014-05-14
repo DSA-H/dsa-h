@@ -12,6 +12,11 @@ public class DSAValidationException extends DSARuntimeException {
 
     private List<ConstraintViolation<?>> constraintViolations;
 
+    public DSAValidationException(String msg) {
+        super(msg);
+        constraintViolations = new ArrayList<>();
+    }
+
     public DSAValidationException(String msg, Collection<? extends ConstraintViolation<?>> constraintViolations) {
         super(msg, null, ERROR_VALIDATION);
 

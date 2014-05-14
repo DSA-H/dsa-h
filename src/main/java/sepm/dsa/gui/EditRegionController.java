@@ -1,6 +1,9 @@
 package sepm.dsa.gui;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -9,15 +12,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.model.RainfallChance;
-import sepm.dsa.model.Temperature;
+import sepm.dsa.exceptions.DSAValidationException;
+import sepm.dsa.model.*;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
-import sepm.dsa.model.Region;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,21 +52,22 @@ public class EditRegionController implements Initializable {
     @FXML
     private TextArea commentArea;
     @FXML
-    private TableView borderTable;
+    private TableView<RegionBorder> borderTable;
     @FXML
     private TableColumn borderColumn;
     @FXML
     private TableColumn borderCostColumn;
     @FXML
     private Button cancelButton;
+    @FXML
+    private Button removeBorderButton;
+
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise EditRegionController");
-        borderColumn.setCellValueFactory(new PropertyValueFactory<>("borderChoiceBox"));
-        borderColumn.setCellValueFactory(new PropertyValueFactory<>("borderCost"));
 
-
+        // init ChoiceBoxes
         List<String> temperatureList = new ArrayList<>();
         for(Temperature t : Temperature.values()) {
             temperatureList.add(t.getName());
@@ -72,7 +76,6 @@ public class EditRegionController implements Initializable {
         for(RainfallChance t : RainfallChance.values()) {
             rainList.add(t.getName());
         }
-
         temperatureChoiceBox.setItems(FXCollections.observableArrayList(temperatureList));
         rainfallChoiceBox.setItems(FXCollections.observableArrayList(rainList));
 
@@ -89,12 +92,40 @@ public class EditRegionController implements Initializable {
             temperatureChoiceBox.getSelectionModel().select(selectedRegion.getTemperature().getValue());
             rainfallChoiceBox.getSelectionModel().select(selectedRegion.getRainfallChance().getValue());
             commentArea.setText(selectedRegion.getComment());
+
+            ObservableList<RegionBorder> data = FXCollections.observableArrayList(regionBorderService.getAllForRegion(selectedRegion.getId()));
+            borderTable.setItems(data);
         }else {
             isNewRegion = true;
+            selectedRegion = new Region();
             temperatureChoiceBox.getSelectionModel().select(Temperature.MEDIUM.getValue());
             rainfallChoiceBox.getSelectionModel().select(RainfallChance.MEDIUM.getValue());
+
+            ObservableList<RegionBorder> data = FXCollections.observableArrayList();
+            borderTable.setItems(data);
         }
 
+        // init border table
+        borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<RegionBorder, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<RegionBorder, String> r) {
+                if (r.getValue() != null) {
+                    if(r.getValue().getPk().getRegion1().equals(selectedRegion)) {
+                        return new SimpleStringProperty(r.getValue().getPk().getRegion2().getName());
+                    }else {
+                        return new SimpleStringProperty(r.getValue().getPk().getRegion1().getName());
+                    }
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
+        borderCostColumn.setCellValueFactory(new PropertyValueFactory<>("borderCost"));
+
+        // init border choice box
+        List<Region> otherRegions = regionService.getAll();
+        otherRegions.remove(selectedRegion);  // TODO: Remove all added Regions
+        borderChoiceBox.setItems(FXCollections.observableArrayList(otherRegions));
     }
 
     public void setRegionService(RegionService regionService) {
@@ -125,20 +156,16 @@ public class EditRegionController implements Initializable {
     private void onSavePressed() {
         log.debug("SaveButtonPressed");
 
+        // save region
         String name = nameField.getText();
         Temperature temperature = Temperature.parse(temperatureChoiceBox.getSelectionModel().getSelectedIndex());
         RainfallChance rainfallChance = RainfallChance.parse(rainfallChoiceBox.getSelectionModel().getSelectedIndex());
         String comment = commentArea.getText();
-
         Color selectedColor = colorPicker.getValue();
         String colorString =
                 Integer.toHexString((int) (selectedColor.getRed()*255)) + "" +
                 Integer.toHexString((int) (selectedColor.getGreen()*255)) + "" +
                 Integer.toHexString((int) (selectedColor.getBlue()*255));
-
-        if (isNewRegion) {
-            selectedRegion = new Region();
-        }
 
         selectedRegion.setColor(colorString);
         selectedRegion.setName(name);
@@ -150,6 +177,26 @@ public class EditRegionController implements Initializable {
             regionService.add(selectedRegion);
         }else {
             regionService.update(selectedRegion);
+        }
+
+        // save borders
+        List<RegionBorder> localBorderList = borderTable.getItems();
+        for(RegionBorder border : regionBorderService.getAllForRegion(selectedRegion.getId())) {
+            boolean contain = false;
+            for(RegionBorder localBorder : localBorderList) {
+                if (localBorder.getPk().equals(border.getPk())) {
+                    regionBorderService.update(border);
+                    contain = true;
+                    break;
+                }
+            }
+            if(!contain) {
+                regionBorderService.remove(border);
+            }
+            localBorderList.remove(border);
+        }
+        for(RegionBorder border : localBorderList) {
+            regionBorderService.add(border);
         }
 
         // return to regionlist
@@ -164,10 +211,39 @@ public class EditRegionController implements Initializable {
 
     @FXML
     private void onAddBorderPressed() {
+        log.debug("AddBorderPressed");
+
+        RegionBorder border = new RegionBorder();
+        RegionBorderPk borderPk = new RegionBorderPk();
+
+        borderPk.setRegion1(selectedRegion);
+        borderPk.setRegion2((Region) borderChoiceBox.getSelectionModel().getSelectedItem());  // TODO: NOT null Exception
+        border.setBorderCost(Integer.parseInt(borderCost.getText()));  // TODO: ClassCastException
+        border.setPk(borderPk);
+
+        borderTable.getItems().add(border);
     }
 
     @FXML
     private void onRemoveBorderPressed() {
+        RegionBorder selectedborder = borderTable.getFocusModel().getFocusedItem();
+        if(selectedborder != null) {
+            borderTable.getItems().remove(selectedborder);
+        }
+
+        checkFocus();
+    }
+
+    @FXML
+    private void checkFocus() {
+        RegionBorder selected = borderTable.getFocusModel().getFocusedItem();
+        if (selected == null) {
+            removeBorderButton.setDisable(true);
+        }
+        else{
+            removeBorderButton.setDisable(false);
+        }
+
     }
 
     public static void setRegion(Region region) {
