@@ -2,8 +2,6 @@ package sepm.dsa.dao.test;
 
 //import com.github.springtestdbunit.DbUnitTestExecutionListener;
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
@@ -25,8 +23,6 @@ import sepm.dsa.model.Temperature;
  */
 @RunWith(JUnit4.class)
 @ContextConfiguration
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class})
 public class RegionDaoTests {
 
     private RegionDao regionDao;
@@ -46,7 +42,6 @@ public class RegionDaoTests {
     }
 
     @Test
-    @DatabaseSetup("test/resources/testData.xml")
     public void add_shouldPersistEntity() {
 
         Region region = new Region();

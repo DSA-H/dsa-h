@@ -1,5 +1,11 @@
 package sepm.dsa.service.test;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import org.dbunit.DBTestCase;
+import org.dbunit.PropertiesBasedJdbcDatabaseTester;
+import org.dbunit.database.DatabaseConfig;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +16,14 @@ import sepm.dsa.model.Region;
 import sepm.dsa.model.Temperature;
 import sepm.dsa.service.RegionService;
 
+import java.io.FileInputStream;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:testContext.xml"})
-public class RegionServiceTest {
+public class RegionServiceTest extends DBTestCase {
 
 	@Autowired
 	private RegionService rs;
@@ -24,8 +32,15 @@ public class RegionServiceTest {
     private Region deleteRegion;
     private Region updateRegion;
 
-    @Before
-    public void setup() {
+    public RegionServiceTest(){
+
+        System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS, "org.hsqldb.jdbc.JDBCDriver" );
+        System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, "jdbc:hsqldb:file:testDB" );
+        System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, "sa" );
+        System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, "" );
+        // System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_SCHEMA, "" );
+
+
 
         //TODO: Import directly into testDB
         addRegion = new Region();
@@ -41,7 +56,6 @@ public class RegionServiceTest {
         deleteRegion.setComment("comment");
         deleteRegion.setTemperature(Temperature.HIGH);
         deleteRegion.setRainfallChance(RainfallChance.MEDIUM);
-        rs.add(deleteRegion);
 
         updateRegion = new Region();
         updateRegion.setName("testRegionUpdate");
@@ -49,31 +63,34 @@ public class RegionServiceTest {
         updateRegion.setComment("comment");
         updateRegion.setTemperature(Temperature.MEDIUM);
         updateRegion.setRainfallChance(RainfallChance.HIGH);
-        rs.add(updateRegion);
 
+    }
+
+    @Before
+    public void setup() {
         System.out.println("testSetup");
+        rs.add(deleteRegion);
+        rs.add(updateRegion);
     }
 
     @After
     public void teardown() {
-
         // Teardown for data used by the unit tests
     }
 
-    //@DatabaseSetup("testData.xml")
+    @DatabaseSetup("testData.xml")
     @Test
     public void testXML(){
-        System.out.println(rs.get(0));
+        System.out.println("DB-File 0 = " + rs.getAll().toString());
     }
 
     @Test
     public void testAdd() {
-        System.out.println(rs.get(0));
+        System.out.println("DB-File 0 = " + rs.get(0));
         int size = rs.getAll().size();
         int id = rs.add(addRegion);
 
         assertTrue(rs.getAll().size() - 1 == size);
-        //TODO: equals is not working right now => DONE
         assertTrue(rs.get(id).equals(addRegion));
         assertEquals(rs.get(id), addRegion);
     }
@@ -88,12 +105,17 @@ public class RegionServiceTest {
     @Test
     public void testUpdate() {
         int size = rs.getAll().size();
-        updateRegion.setName("testRegion2");
+        updateRegion.setName("testRegionUpdate2");
         updateRegion.setColor("999999");
         updateRegion.setComment("comment");
         updateRegion.setTemperature(Temperature.LOW);
 
         rs.update(updateRegion);
         assertTrue (rs.getAll().size() == size);
+    }
+
+    @Override
+    protected IDataSet getDataSet() throws Exception {
+        return new FlatXmlDataSetBuilder().build(new FileInputStream("testData.xml"));
     }
 }
