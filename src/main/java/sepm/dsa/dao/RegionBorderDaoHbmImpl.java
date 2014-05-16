@@ -12,9 +12,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
-/**
- * Created by Michael on 11.05.2014.
- */
 @Repository
 @Transactional(readOnly = true)
 public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
