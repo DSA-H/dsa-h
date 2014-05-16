@@ -17,6 +17,7 @@ import java.io.Serializable;
 })
 public class RegionBorder implements Serializable {
 
+    private static final long serialVersionUID = -5121547134534726826L;
     @EmbeddedId
     private RegionBorderPk pk;        // invariant: not null
 
@@ -73,4 +74,5 @@ public class RegionBorder implements Serializable {
                 ", borderCost=" + borderCost +
                 '}';
     }
+
 }
