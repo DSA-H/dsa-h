@@ -42,12 +42,10 @@ public class RegionServiceImpl implements RegionService, Serializable {
 
     @Override
     @Transactional(readOnly = false)
-    public int add(Region r) {
+    public void add(Region r) {
         log.debug("calling add(" + r + ")");
         validate(r);
-        int result = regionDao.add(r);
-        log.trace("returning " + result);
-        return result;
+        regionDao.add(r);
     }
 
     @Override

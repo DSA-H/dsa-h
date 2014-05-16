@@ -70,12 +70,12 @@ public class RegionServiceTest {
     public void testAdd() {
         System.out.println(rs.get(0));
         int size = rs.getAll().size();
-        int id = rs.add(addRegion);
+        rs.add(addRegion);
 
         assertTrue(rs.getAll().size() - 1 == size);
         //TODO: equals is not working right now => DONE
-        assertTrue(rs.get(id).equals(addRegion));
-        assertEquals(rs.get(id), addRegion);
+        assertTrue(rs.get(addRegion.getId()).equals(addRegion));
+        assertEquals(rs.get(addRegion.getId()), addRegion);
     }
 
     @Test

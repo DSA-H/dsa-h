@@ -56,18 +56,18 @@ public class RegionBorderServiceTest {
     @Test
     public void testAdd() {
         int size = rbs.getAll().size();
-        RegionBorderPk rbpk2 = rbs.add(regionBorder);
+        rbs.add(regionBorder);
 
         assertTrue(rbs.getAll().size() - 1 == size);
 
-        assertTrue(rbs.get(rbpk2).equals(regionBorder));
-        assertEquals(rbs.get(rbpk2), regionBorder);
+        assertTrue(rbs.get(regionBorder.getPk()).equals(regionBorder));
+        assertEquals(rbs.get(regionBorder.getPk()), regionBorder);
         rbs.remove(regionBorder);
     }
 
     @Test
     public void testRemove() {
-        RegionBorderPk rbpk2 = rbs.add(regionBorder);
+        rbs.add(regionBorder);
         int size = rbs.getAll().size();
         rbs.remove(regionBorder);
         assertTrue(rbs.getAll().size() + 1 == size);
@@ -75,7 +75,7 @@ public class RegionBorderServiceTest {
 
     @Test
     public void testUpdate() {
-        RegionBorderPk rbpk2 = rbs.add(regionBorder);
+        rbs.add(regionBorder);
         int size = rbs.getAll().size();
         regionBorder.setBorderCost(2);
 

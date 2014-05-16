@@ -23,11 +23,10 @@ public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
 
     @Override
     @Transactional(readOnly = false)
-    public RegionBorderPk add(RegionBorder regionBorder) {
+    public void add(RegionBorder regionBorder) {
         log.debug("calling add(" + regionBorder + ")");
         sessionFactory.getCurrentSession().save(regionBorder);
         log.trace("returning " + regionBorder.getPk());
-        return regionBorder.getPk();
     }
 
     @Override

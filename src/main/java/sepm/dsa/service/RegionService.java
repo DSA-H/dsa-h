@@ -16,9 +16,8 @@ public interface RegionService {
     /**
      * Add a new region to DB
      * @param r region (not null)
-     * @return the assigned id
      */
-    int add(Region r);
+    void add(Region r);
 
     /**
      * Update a region

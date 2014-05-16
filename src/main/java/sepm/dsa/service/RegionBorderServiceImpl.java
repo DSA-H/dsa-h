@@ -32,11 +32,9 @@ public class RegionBorderServiceImpl implements RegionBorderService, Serializabl
 
     @Override
     @Transactional(readOnly = false)
-    public RegionBorderPk add(RegionBorder regionBorder) {
+    public void add(RegionBorder regionBorder) {
         log.debug("calling add(" + regionBorder + ")");
         validate(regionBorder);
-        log.trace("returning " + regionBorder);
-        return regionBorderDao.add(regionBorder);
     }
 
     @Override

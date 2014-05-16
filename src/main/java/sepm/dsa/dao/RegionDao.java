@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RegionDao {
 
-    public int add(Region region);
+    public void add(Region region);
 
     public void update(Region region);
 

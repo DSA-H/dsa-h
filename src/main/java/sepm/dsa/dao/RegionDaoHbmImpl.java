@@ -21,12 +21,9 @@ public class RegionDaoHbmImpl implements RegionDao {
 
     @Override
     @Transactional(readOnly = false)
-    public int add(Region region) {
+    public void add(Region region) {
         log.debug("calling add(" + region + ")");
         sessionFactory.getCurrentSession().save(region);
-        int result = region.getId();
-        log.trace("returning " + result);
-        return result;
     }
 
     @Override

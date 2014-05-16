@@ -1,8 +1,6 @@
 package sepm.dsa.dao;
 
 import sepm.dsa.model.Location;
-import sepm.dsa.model.LocationBorder;
-import sepm.dsa.model.LocationPk;
 
 import java.util.List;
 
@@ -13,7 +11,7 @@ interface LocationBorderDao {
      * @param location to be persisted
      * @return
      */
-    LocationPk add(Location location);
+    void add(Location location);
 
     /**
      * Updates a already existing {@code Location} in the database
@@ -27,7 +25,7 @@ interface LocationBorderDao {
      */
     void remove(Location location);
 
-    LocationBorder get(LocationPk pk);
+    Location get(int id);
 
     /**
      * Finds all Locations

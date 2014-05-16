@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface RegionBorderDao {
 
-    RegionBorderPk add(RegionBorder regionBorder);
+    void add(RegionBorder regionBorder);
 
     void update(RegionBorder regionBorder);
 
