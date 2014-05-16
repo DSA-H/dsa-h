@@ -6,27 +6,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.RegionBorderDao;
+import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.RegionBorder;
-import sepm.dsa.model.RegionBorderPk;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by Michael on 11.05.2014.
- */
 @Service("RegionBorderService")
 @Transactional(readOnly = true)
 public class RegionBorderServiceImpl implements RegionBorderService, Serializable {
 
     private static final long serialVersionUID = 7415861483489569621L;
     private static final Logger log = LoggerFactory.getLogger(RegionBorderServiceImpl.class);
-    //    private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
     private RegionBorderDao regionBorderDao;
 
@@ -54,14 +51,6 @@ public class RegionBorderServiceImpl implements RegionBorderService, Serializabl
     }
 
     @Override
-    public RegionBorder get(RegionBorderPk pk) {
-        log.debug("calling get(" + pk + ")");
-        RegionBorder result = regionBorderDao.get(pk);
-        log.trace("returning " + result);
-        return result;
-    }
-
-    @Override
     public List<RegionBorder> getAll() {
         log.debug("calling getAll()");
         List<RegionBorder> result = regionBorderDao.getAll();
@@ -70,9 +59,10 @@ public class RegionBorderServiceImpl implements RegionBorderService, Serializabl
     }
 
     @Override
-    public List<RegionBorder> getAllByRegion(int regionId) {
+    public List<RegionBorder> getAllByRegion(int regionId) throws DSARuntimeException {
         log.debug("calling getAll()");
-        List<RegionBorder> result = regionBorderDao.getAllByRegion(regionId);
+        List<RegionBorder> result = new ArrayList<>();
+        result = regionBorderDao.getAllByRegion(regionId);
         log.trace("returning " + result);
         return result;
     }
