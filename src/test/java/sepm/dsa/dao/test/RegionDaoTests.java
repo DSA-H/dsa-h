@@ -1,52 +1,39 @@
 package sepm.dsa.dao.test;
 
-//import com.github.springtestdbunit.DbUnitTestExecutionListener;
-
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import junit.framework.TestCase;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import sepm.dsa.dao.RegionDao;
 import sepm.dsa.model.RainfallChance;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.Temperature;
 
-/**
- * Created by Michael on 13.05.2014.
- */
-@RunWith(JUnit4.class)
-@ContextConfiguration
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class})
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:testContext.xml"})
+@TestExecutionListeners({
+	DependencyInjectionTestExecutionListener.class,
+	DbUnitTestExecutionListener.class,
+	DirtiesContextTestExecutionListener.class,
+	TransactionDbUnitTestExecutionListener.class
+})
 public class RegionDaoTests {
 
+	@Autowired
     private RegionDao regionDao;
 
-    @Before
-    public void setUp() {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("testContext.xml");
-        regionDao = (RegionDao) ctx.getBean("regionDao");
-        if (regionDao == null) {
-            throw new IllegalStateException("regionDao could not be fetched");
-        }
-    }
-
-    @After
-    public void tearDown() {
-
-    }
-
     @Test
-    @DatabaseSetup("test/resources/testData.xml")
+    @DatabaseSetup("/testData.xml")
     public void add_shouldPersistEntity() {
 
         Region region = new Region();
@@ -57,9 +44,15 @@ public class RegionDaoTests {
         region.setTemperature(Temperature.LOW);
         regionDao.add(region);
         Region persistedRegion = regionDao.get(region.getId());
-        TestCase.assertTrue(persistedRegion != null);
+	assertTrue(persistedRegion != null);
 
         regionDao.remove(region);
     }
 
+	@Test
+	@DatabaseSetup("/testData.xml")
+	public void testGetRegionReturnsRegionFromDatabase() {
+		Region r = regionDao.get(2);
+		assertEquals(new Integer(2), r.getId());
+	}
 }
