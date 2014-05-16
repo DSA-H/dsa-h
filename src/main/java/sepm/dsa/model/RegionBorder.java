@@ -5,10 +5,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-/**
- * Created by Michael on 11.05.2014.
- */
-
 @Entity
 @Table(name = "borders")
 @AssociationOverrides({
@@ -18,17 +14,14 @@ import java.io.Serializable;
 public class RegionBorder implements Serializable {
 
     private static final long serialVersionUID = -5121547134534726826L;
+
     @EmbeddedId
-    private RegionBorderPk pk;        // invariant: not null
+    private Pk pk = new Pk();        // invariant: not null
 
     @NotNull
     @Min(0)
     @Column(nullable = false)
     private Integer borderCost;
-
-    public RegionBorder() {
-        this.pk = new RegionBorderPk();
-    }
 
     public Integer getBorderCost() {
         return borderCost;
@@ -38,14 +31,21 @@ public class RegionBorder implements Serializable {
         this.borderCost = borderCost;
     }
 
-    public RegionBorderPk getPk() {
-        return pk;
+    public Region getRegion2() {
+        return pk.region2;
     }
 
-    public void setPk(RegionBorderPk pk) {
-        this.pk = pk;
+    public void setRegion2(Region region2) {
+        this.pk.region2 = region2;
     }
 
+    public Region getRegion1() {
+        return pk.region1;
+    }
+
+    public void setRegion1(Region region1) {
+        this.pk.region1 = region1;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -75,4 +75,41 @@ public class RegionBorder implements Serializable {
                 '}';
     }
 
+    public boolean equalsById(RegionBorder other) {
+        if (other == null) {
+            return false;
+        }
+        return (this.pk.region1.equals(other.pk.region1)
+                && this.pk.region2.equals(other.pk.region2));
+    }
+
+    @Embeddable
+    private static class Pk implements Serializable {
+
+        private static final long serialVersionUID = 5989205421915335466L;
+
+        // TODO BeanValidation for region1 != region2
+
+        @ManyToOne
+        @JoinColumn(name = "region1", nullable = false)
+        private Region region1;
+
+        @ManyToOne
+        @JoinColumn(name = "region2", nullable = false)
+        private Region region2;
+
+        public Pk() {
+
+        }
+
+        @Override
+        public String toString() {
+            return "RegionBorderPk{" +
+                    "region1=" + region1 +
+                    ", region2=" + region2 +
+                    '}';
+        }
+
+
+    }
 }

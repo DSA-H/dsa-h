@@ -110,10 +110,10 @@ public class EditRegionController implements Initializable {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<RegionBorder, String> r) {
                 if (r.getValue() != null) {
-                    if (r.getValue().getPk().getRegion1().equals(selectedRegion)) {
-                        return new SimpleStringProperty(r.getValue().getPk().getRegion2().getName());
+                    if (r.getValue().getRegion1().equals(selectedRegion)) {
+                        return new SimpleStringProperty(r.getValue().getRegion2().getName());
                     } else {
-                        return new SimpleStringProperty(r.getValue().getPk().getRegion1().getName());
+                        return new SimpleStringProperty(r.getValue().getRegion1().getName());
                     }
                 } else {
                     return new SimpleStringProperty("");
@@ -127,10 +127,10 @@ public class EditRegionController implements Initializable {
         otherRegions.remove(selectedRegion);
         if(!isNewRegion) {
             for (RegionBorder borders : regionBorderService.getAllByRegion(selectedRegion.getId())) {
-                if (borders.getPk().getRegion1().equals(selectedRegion)) {
-                    otherRegions.remove(borders.getPk().getRegion2());
+                if (borders.getRegion1().equals(selectedRegion)) {
+                    otherRegions.remove(borders.getRegion2());
                 } else {
-                    otherRegions.remove(borders.getPk().getRegion1());
+                    otherRegions.remove(borders.getRegion1());
                 }
             }
         }
@@ -197,7 +197,7 @@ public class EditRegionController implements Initializable {
         for(RegionBorder border : regionBorderService.getAllByRegion(selectedRegion.getId())) {
             boolean contain = false;
             for (RegionBorder localBorder : localBorderList) {
-                if (localBorder.getPk().equals(border.getPk())) {
+                if (localBorder.equalsById(border)) {
                     regionBorderService.update(border);
                     contain = true;
                     break;
@@ -227,20 +227,18 @@ public class EditRegionController implements Initializable {
         log.debug("calling AddBorderPressed");
 
         RegionBorder border = new RegionBorder();
-        RegionBorderPk borderPk = new RegionBorderPk();
 
         try {
-            borderPk.setRegion1(selectedRegion);
+            border.setRegion1(selectedRegion);
             Region borderTo = (Region) borderChoiceBox.getSelectionModel().getSelectedItem();
             if (borderTo == null) {
                 throw new DSAValidationException("Wählen sie ein Gebiet aus, welches an dieses Gebiet grenzen soll.");
             }
-            borderPk.setRegion2(borderTo);
+            border.setRegion2(borderTo);
             border.setBorderCost(Integer.parseInt(borderCost.getText()));
-            border.setPk(borderPk);
             borderTable.getItems().add(border);
 
-            borderChoiceBox.getItems().remove(border.getPk().getRegion2());
+            borderChoiceBox.getItems().remove(border.getRegion2());
             borderChoiceBox.getSelectionModel().selectFirst();
         } catch (NumberFormatException ex) {
             throw new DSAValidationException("Grenzkosten müssen eine Zahl sein.");
@@ -253,10 +251,10 @@ public class EditRegionController implements Initializable {
         RegionBorder selectedborder = borderTable.getFocusModel().getFocusedItem();
         if (selectedborder != null) {
             borderTable.getItems().remove(selectedborder);
-            if (selectedborder.getPk().getRegion1().equals(selectedRegion)) {
-                borderChoiceBox.getItems().add(selectedborder.getPk().getRegion2());
+            if (selectedborder.getRegion1().equals(selectedRegion)) {
+                borderChoiceBox.getItems().add(selectedborder.getRegion2());
             } else {
-                borderChoiceBox.getItems().add(selectedborder.getPk().getRegion1());
+                borderChoiceBox.getItems().add(selectedborder.getRegion1());
             }
         }
         checkFocus();

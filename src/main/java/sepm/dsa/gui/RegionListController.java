@@ -67,10 +67,10 @@ public class RegionListController implements Initializable {
                     StringBuilder sb = new StringBuilder();
                     for (RegionBorder rb : borders) {
                         // not this region
-                        if (rb.getPk().getRegion1().getId() != regionId) {
-                            sb.append(rb.getPk().getRegion1().getName());
+                        if (rb.getRegion1().getId() != regionId) {
+                            sb.append(rb.getRegion1().getName());
                         } else {
-                            sb.append(rb.getPk().getRegion2().getName());
+                            sb.append(rb.getRegion2().getName());
                         }
                         sb.append(", ");
                     }

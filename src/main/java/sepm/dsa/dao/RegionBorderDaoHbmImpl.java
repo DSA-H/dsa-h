@@ -26,7 +26,6 @@ public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
     public void add(RegionBorder regionBorder) {
         log.debug("calling add(" + regionBorder + ")");
         sessionFactory.getCurrentSession().save(regionBorder);
-        log.trace("returning " + regionBorder.getPk());
     }
 
     @Override
