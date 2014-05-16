@@ -30,7 +30,7 @@ import static org.junit.Assert.assertTrue;
 	DirtiesContextTestExecutionListener.class,
 	TransactionDbUnitTestExecutionListener.class
 })
-public class RegionDaoTests {
+public class RegionDaoTest {
 
 	@Autowired
 	private RegionDao regionDao;
