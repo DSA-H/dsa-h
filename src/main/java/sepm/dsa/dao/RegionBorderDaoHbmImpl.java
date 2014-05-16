@@ -18,7 +18,7 @@ import java.util.Vector;
 @Transactional(readOnly = true)
 public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -6861938639963421412L;
 
     private SessionFactory sessionFactory;
 
