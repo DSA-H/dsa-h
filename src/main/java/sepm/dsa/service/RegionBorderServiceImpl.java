@@ -79,6 +79,7 @@ public class RegionBorderServiceImpl implements RegionBorderService, Serializabl
      * @throws sepm.dsa.exceptions.DSAValidationException if region border is not valid
      */
     private void validate(RegionBorder regionBorder) throws DSAValidationException {
+//        TODO region1 must not equals region2
         log.debug("calling validate(" + regionBorder + ")");
         Set<ConstraintViolation<RegionBorder>> violations = validator.validate(regionBorder);
         if (violations.size() > 0) {

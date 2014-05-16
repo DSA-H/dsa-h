@@ -1,6 +1,6 @@
 package sepm.dsa.model;
 
-public class Connection {
+public class LocationConnection {
 
     private Location location1;
     private Location location2;
