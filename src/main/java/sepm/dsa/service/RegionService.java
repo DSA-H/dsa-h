@@ -21,13 +21,13 @@ public interface RegionService {
 
     /**
      * Update a region
-     * @param r region (not null)
+     * @param r region (must not be null)
      */
     void update(Region r);
 
     /**
      * Removes a region from DB and also all connected region borders
-     * @param r region (not null)
+     * @param r region (must not be null)
      * @see sepm.dsa.model.RegionBorder
      */
     void remove(Region r);
