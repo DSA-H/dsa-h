@@ -39,6 +39,8 @@ public class Region implements Serializable {
     @Column(nullable = false)
     private Integer rainfallChanceId;
 
+//    private Region
+
 
     public Integer getId() {
         return id;
