@@ -35,6 +35,7 @@ public class RegionBorderServiceImpl implements RegionBorderService, Serializabl
     public void add(RegionBorder regionBorder) {
         log.debug("calling add(" + regionBorder + ")");
         validate(regionBorder);
+        regionBorderDao.add(regionBorder);
     }
 
     @Override

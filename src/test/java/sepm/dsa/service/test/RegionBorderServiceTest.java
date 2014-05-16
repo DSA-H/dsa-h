@@ -60,7 +60,6 @@ public class RegionBorderServiceTest {
 
         assertTrue(rbs.getAll().size() - 1 == size);
 
-        assertTrue(rbs.get(regionBorder.getPk()).equals(regionBorder));
         assertEquals(rbs.get(regionBorder.getPk()), regionBorder);
         rbs.remove(regionBorder);
     }
