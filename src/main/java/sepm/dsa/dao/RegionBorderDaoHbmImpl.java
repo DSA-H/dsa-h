@@ -22,7 +22,6 @@ public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
     private static final long serialVersionUID = -6861938639963421412L;
 
     private static final Logger log = LoggerFactory.getLogger(RegionBorderDaoHbmImpl.class);
-
     private SessionFactory sessionFactory;
 
     @Override
