@@ -124,7 +124,7 @@ public class RegionBorder implements Serializable {
 
         @Override
         public String toString() {
-            return "RegionBorderPk{" +
+            return "Pk{" +
                     "region1=" + region1 +
                     ", region2=" + region2 +
                     '}';

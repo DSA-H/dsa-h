@@ -1,6 +1,10 @@
 package sepm.dsa.model;
 
-public class LocationConnection {
+import java.io.Serializable;
+
+public class LocationConnection implements Serializable {
+
+    private static final long serialVersionUID = 5915927914933432772L;
 
     private Location location1;
     private Location location2;
@@ -38,4 +42,7 @@ public class LocationConnection {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+
+
 }

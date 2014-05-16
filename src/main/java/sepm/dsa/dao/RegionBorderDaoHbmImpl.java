@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.RegionBorder;
-import sepm.dsa.model.RegionBorderPk;
 
 import java.io.Serializable;
 import java.util.List;
@@ -40,17 +39,6 @@ public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
     public void remove(RegionBorder regionBorder) {
         log.debug("calling remove(" + regionBorder + ")");
         sessionFactory.getCurrentSession().delete(regionBorder);
-    }
-
-    @Override
-    public RegionBorder get(RegionBorderPk pk) {
-        log.debug("calling get(" + pk + ")");
-        Object result = sessionFactory.getCurrentSession().get(RegionBorder.class, pk);
-        if (result == null) {
-            return null;
-        }
-        log.trace("returning " + result);
-        return (RegionBorder) result;
     }
 
     @Override

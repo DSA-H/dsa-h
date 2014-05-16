@@ -6,6 +6,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "regions")
@@ -39,7 +41,11 @@ public class Region implements Serializable {
     @Column(nullable = false)
     private Integer rainfallChanceId;
 
-//    private Region
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region1")
+    private Set<RegionBorder> borders1 = new HashSet<RegionBorder>();
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region2")
+    private Set<RegionBorder> borders2 = new HashSet<RegionBorder>();
 
 
     public Integer getId() {
@@ -101,6 +107,22 @@ public class Region implements Serializable {
             this.rainfallChanceId = null;
         }
         this.rainfallChanceId = rainfallChance.getValue();
+    }
+
+    public Set<RegionBorder> getBorders1() {
+        return borders1;
+    }
+
+    public void setBorders1(Set<RegionBorder> borders1) {
+        this.borders1 = borders1;
+    }
+
+    public Set<RegionBorder> getBorders2() {
+        return borders2;
+    }
+
+    public void setBorders2(Set<RegionBorder> borders2) {
+        this.borders2 = borders2;
     }
 
     @Override

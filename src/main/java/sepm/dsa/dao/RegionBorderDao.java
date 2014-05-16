@@ -1,7 +1,6 @@
 package sepm.dsa.dao;
 
 import sepm.dsa.model.RegionBorder;
-import sepm.dsa.model.RegionBorderPk;
 
 import java.util.List;
 
@@ -15,8 +14,6 @@ public interface RegionBorderDao {
     void update(RegionBorder regionBorder);
 
     void remove(RegionBorder regionBorder);
-
-    RegionBorder get(RegionBorderPk pk);
 
     List<RegionBorder> getAll();
 
