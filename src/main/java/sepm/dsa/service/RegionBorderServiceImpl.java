@@ -1,19 +1,16 @@
 package sepm.dsa.service;
 
 import org.hibernate.validator.HibernateValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.RegionBorderDao;
 import sepm.dsa.exceptions.DSAValidationException;
-import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 import sepm.dsa.model.RegionBorderPk;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.executable.ExecutableValidator;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -64,8 +61,8 @@ public class RegionBorderServiceImpl implements RegionBorderService, Serializabl
     }
 
     @Override
-    public List<RegionBorder> getAllForRegion(int regionId) {
-        return regionBorderDao.getAllForRegion(regionId);
+    public List<RegionBorder> getAllByRegion(int regionId) {
+        return regionBorderDao.getAllByRegion(regionId);
     }
 
     public void setRegionBorderDao(RegionBorderDao regionBorderDao) {

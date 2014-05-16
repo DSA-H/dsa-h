@@ -18,6 +18,8 @@ import java.util.Vector;
 @Transactional(readOnly = true)
 public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private SessionFactory sessionFactory;
 
     @Override
@@ -61,7 +63,7 @@ public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
     }
 
     @Override
-    public List<RegionBorder> getAllForRegion(int regionId) {
+    public List<RegionBorder> getAllByRegion(int regionId) {
         List<?> list = sessionFactory.getCurrentSession().getNamedQuery("RegionBorder.findAllForRegion")
                 .setParameter("regionId", regionId)
                 .list();

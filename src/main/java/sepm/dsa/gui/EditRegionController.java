@@ -93,7 +93,7 @@ public class EditRegionController implements Initializable {
             rainfallChoiceBox.getSelectionModel().select(selectedRegion.getRainfallChance().getValue());
             commentArea.setText(selectedRegion.getComment());
 
-            ObservableList<RegionBorder> data = FXCollections.observableArrayList(regionBorderService.getAllForRegion(selectedRegion.getId()));
+            ObservableList<RegionBorder> data = FXCollections.observableArrayList(regionBorderService.getAllByRegion(selectedRegion.getId()));
             borderTable.setItems(data);
         }else {
             isNewRegion = true;
@@ -126,7 +126,7 @@ public class EditRegionController implements Initializable {
         List<Region> otherRegions = regionService.getAll();
         otherRegions.remove(selectedRegion);
         if(!isNewRegion) {
-            for (RegionBorder borders : regionBorderService.getAllForRegion(selectedRegion.getId())) {
+            for (RegionBorder borders : regionBorderService.getAllByRegion(selectedRegion.getId())) {
                 if (borders.getPk().getRegion1().equals(selectedRegion)) {
                     otherRegions.remove(borders.getPk().getRegion2());
                 } else {
@@ -190,7 +190,7 @@ public class EditRegionController implements Initializable {
 
         // save borders
         List<RegionBorder> localBorderList = borderTable.getItems();
-        for(RegionBorder border : regionBorderService.getAllForRegion(selectedRegion.getId())) {
+        for(RegionBorder border : regionBorderService.getAllByRegion(selectedRegion.getId())) {
             boolean contain = false;
             for(RegionBorder localBorder : localBorderList) {
                 if (localBorder.getPk().equals(border.getPk())) {

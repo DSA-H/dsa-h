@@ -63,7 +63,7 @@ public class RegionListController implements Initializable {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Region, String> r) {
                 if (r.getValue() != null) {
                     int regionId = r.getValue().getId();
-                    List<RegionBorder> borders = regionBorderService.getAllForRegion(regionId);
+                    List<RegionBorder> borders = regionBorderService.getAllByRegion(regionId);
                     StringBuilder sb = new StringBuilder();
                     for (RegionBorder rb : borders) {
                         // not this region

@@ -14,7 +14,6 @@ import sepm.dsa.model.RegionBorder;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.executable.ExecutableValidator;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -63,7 +62,7 @@ public class RegionServiceImpl implements RegionService, Serializable {
     @Transactional(readOnly = false)
     public void remove(Region r) {
         log.debug("calling remove(" + r + ")");
-        List<RegionBorder> borders = regionBorderDao.getAllForRegion(r.getId());
+        List<RegionBorder> borders = regionBorderDao.getAllByRegion(r.getId());
         for (RegionBorder border : borders) {
             regionBorderDao.remove(border);
         }

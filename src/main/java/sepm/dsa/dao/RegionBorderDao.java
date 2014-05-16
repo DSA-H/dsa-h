@@ -20,6 +20,6 @@ public interface RegionBorderDao {
 
     List<RegionBorder> getAll();
 
-    List<RegionBorder> getAllForRegion(int regionId);
+    List<RegionBorder> getAllByRegion(int regionId);
 
 }
