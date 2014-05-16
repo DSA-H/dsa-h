@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import sepm.dsa.dao.RegionDao;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.RainfallChance;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.Temperature;
@@ -55,24 +56,8 @@ public class RegionDaoTests {
 		Region r = regionDao.get(2);
 		assertEquals(new Integer(2), r.getId());
 	}
-    @Test
-    @DatabaseSetup("test/resources/testData.xml")
-    public void add_shouldPersistEntity() {
 
-        Region region = new Region();
-        region.setName("Region1");
-        region.setColor("65A3EF");
-        region.setComment("comment");
-        region.setRainfallChance(RainfallChance.MONSUN);
-        region.setTemperature(Temperature.LOW);
-        regionDao.add(region);
-        Region persistedRegion = regionDao.get(region.getId());
-        TestCase.assertTrue(persistedRegion != null);
-
-        regionDao.remove(region);
-    }
-
-    @Test(expected = ValidationException.class)
+    @Test(expected = DSAValidationException.class)
     public void add_incompleteRegion_shouldNOTPersistEntity() {
 
         Region region = new Region();
