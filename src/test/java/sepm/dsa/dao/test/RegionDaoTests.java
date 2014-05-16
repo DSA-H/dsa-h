@@ -30,24 +30,24 @@ import static org.junit.Assert.assertTrue;
 public class RegionDaoTests {
 
 	@Autowired
-    private RegionDao regionDao;
+	private RegionDao regionDao;
 
-    @Test
-    @DatabaseSetup("/testData.xml")
-    public void add_shouldPersistEntity() {
+	@Test
+	@DatabaseSetup("/testData.xml")
+	public void add_shouldPersistEntity() {
 
-        Region region = new Region();
-        region.setName("Region1");
-        region.setColor("65A3EF");
-        region.setComment("comment");
-        region.setRainfallChance(RainfallChance.MONSUN);
-        region.setTemperature(Temperature.LOW);
-        regionDao.add(region);
-        Region persistedRegion = regionDao.get(region.getId());
-	assertTrue(persistedRegion != null);
+		Region region = new Region();
+		region.setName("Region1");
+		region.setColor("65A3EF");
+		region.setComment("comment");
+		region.setRainfallChance(RainfallChance.MONSUN);
+		region.setTemperature(Temperature.LOW);
+		regionDao.add(region);
+		Region persistedRegion = regionDao.get(region.getId());
+		assertTrue(persistedRegion != null);
 
-        regionDao.remove(region);
-    }
+		regionDao.remove(region);
+	}
 
 	@Test
 	@DatabaseSetup("/testData.xml")
