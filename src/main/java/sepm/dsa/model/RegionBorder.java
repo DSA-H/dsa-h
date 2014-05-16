@@ -103,6 +103,26 @@ public class RegionBorder implements Serializable {
         }
 
         @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Pk pk = (Pk) o;
+
+            if (region1 != null ? !region1.equals(pk.region1) : pk.region1 != null) return false;
+            if (region2 != null ? !region2.equals(pk.region2) : pk.region2 != null) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = region1 != null ? region1.hashCode() : 0;
+            result = 31 * result + (region2 != null ? region2.hashCode() : 0);
+            return result;
+        }
+
+        @Override
         public String toString() {
             return "RegionBorderPk{" +
                     "region1=" + region1 +

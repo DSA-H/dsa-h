@@ -17,6 +17,8 @@ import sepm.dsa.model.RainfallChance;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.Temperature;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -57,7 +59,7 @@ public class RegionDaoTests {
 		assertEquals(new Integer(2), r.getId());
 	}
 
-    @Test(expected = DSAValidationException.class)
+    @Test(expected = org.hibernate.PropertyValueException.class)
     public void add_incompleteRegion_shouldNOTPersistEntity() {
 
         Region region = new Region();
@@ -66,6 +68,7 @@ public class RegionDaoTests {
         region.setRainfallChance(RainfallChance.MONSUN);
         regionDao.add(region);
         Region persistedRegion = regionDao.get(region.getId());
+        assertTrue(persistedRegion == null);
     }
 
 }
