@@ -1,8 +1,12 @@
 package sepm.dsa.dao;
 
+import sepm.dsa.model.Location;
+import sepm.dsa.model.LocationBorder;
+import sepm.dsa.model.LocationPk;
+
 import java.util.List;
 
-public class LocationBorderDao {
+interface LocationBorderDao {
 
     /**
      * Persists a Locatoin in the Database
@@ -22,7 +26,6 @@ public class LocationBorderDao {
      * @param location to be deleted
      */
     void remove(Location location);
-
 
     LocationBorder get(LocationPk pk);
 
