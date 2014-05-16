@@ -22,8 +22,9 @@ import java.util.List;
 public class MainMenuController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(MainMenuController.class);
+	private SpringFxmlLoader loader;
 
-    @FXML
+	@FXML
     private MenuBar menuBar;
     @FXML
     private Menu dateiMenu;
@@ -53,10 +54,7 @@ public class MainMenuController implements Initializable {
     private void onGrenzenGebieteClicked() {
         log.debug("onGrenzenGebieteClicked - open Grenzen und Gebiete Window");
         Stage stage = new Stage();
-        Parent scene = null;
-        SpringFxmlLoader loader = new SpringFxmlLoader();
-
-        scene = (Parent) loader.load("/gui/regionlist.fxml");
+	Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
 
         stage.setTitle("Grenzen und Gebiete");
         stage.setScene(new Scene(scene, 600, 438));
@@ -108,4 +106,8 @@ public class MainMenuController implements Initializable {
             return false;
         }
     }
+
+	public void setLoader(SpringFxmlLoader loader) {
+		this.loader = loader;
+	}
 }

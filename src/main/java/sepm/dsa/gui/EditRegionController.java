@@ -29,6 +29,7 @@ import java.util.List;
 public class EditRegionController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(EditRegionController.class);
+	private SpringFxmlLoader loader;
 
     private static Region selectedRegion;
 
@@ -63,7 +64,7 @@ public class EditRegionController implements Initializable {
     private Button removeBorderButton;
 
 
-    @Override
+	@Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise EditRegionController");
 
@@ -157,10 +158,7 @@ public class EditRegionController implements Initializable {
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = null;
-        SpringFxmlLoader loader = new SpringFxmlLoader();
-
-        scene = (Parent) loader.load("/gui/regionlist.fxml");
+	Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
 
         stage.setScene(new Scene(scene, 600, 438));
     }
@@ -214,10 +212,7 @@ public class EditRegionController implements Initializable {
 
         // return to regionlist
         Stage stage = (Stage) cancelButton.getScene().getWindow();
-        Parent scene = null;
-        SpringFxmlLoader loader = new SpringFxmlLoader();
-
-        scene = (Parent) loader.load("/gui/regionlist.fxml");
+	Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
 
         stage.setScene(new Scene(scene, 600, 438));
     }
@@ -275,4 +270,8 @@ public class EditRegionController implements Initializable {
         log.debug("calling setRegion(" + region + ")");
         selectedRegion = region;
     }
+
+	public void setLoader(SpringFxmlLoader loader) {
+		this.loader = loader;
+	}
 }

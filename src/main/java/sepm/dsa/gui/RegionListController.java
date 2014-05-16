@@ -33,26 +33,27 @@ import java.util.List;
 public class RegionListController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(RegionListController.class);
+	private SpringFxmlLoader loader;
 
-    private RegionService regionService;
+	private RegionService regionService;
+
     private RegionBorderService regionBorderService;
-
-    @FXML
+	@FXML
     private TableView<Region> regionTable;
-    @FXML
+	@FXML
     private TableColumn regionColumn;
-    @FXML
+	@FXML
     private TableColumn borderColumn;
-    @FXML
+	@FXML
     private TableColumn colorColumn;
-    @FXML
+	@FXML
     private Button createButton;
-    @FXML
+	@FXML
     private Button editButton;
     @FXML
     private Button deleteButton;
 
-    @Override
+	@Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise RegionListController");
 
@@ -109,13 +110,11 @@ public class RegionListController implements Initializable {
     @FXML
     private void onCreateButtonPressed() {
         log.debug("onCreateButtonPressed - open Gebiet-Details Window");
-        Stage stage =  (Stage) regionTable.getScene().getWindow();
-        Parent root = null;
-        SpringFxmlLoader loader = new SpringFxmlLoader();
 
-        EditRegionController.setRegion(null);
+	Stage stage =  (Stage) regionTable.getScene().getWindow();
+	Parent root = (Parent) loader.load("/gui/editregion.fxml");
 
-        root = (Parent) loader.load("/gui/editregion.fxml");
+	    EditRegionController.setRegion(null);
 
         stage.setTitle("Gebiet-Details");
         stage.setScene(new Scene(root, 600, 438));
@@ -125,15 +124,12 @@ public class RegionListController implements Initializable {
     @FXML
     private void onEditButtonPressed() {
         log.debug("onEditButtonPressed - open Gebiet-Details Window");
-        Stage stage =  (Stage) regionTable.getScene().getWindow();
 
-        Parent root = null;
-        SpringFxmlLoader loader = new SpringFxmlLoader();
+	Stage stage = (Stage) regionTable.getScene().getWindow();
+	Parent root = (Parent) loader.load("/gui/editregion.fxml");
 
         Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
         EditRegionController.setRegion(selectedRegion);
-
-        root = (Parent) loader.load("/gui/editregion.fxml");
 
         stage.setTitle("Gebiet-Details");
         stage.setScene(new Scene(root, 600, 438));
@@ -182,4 +178,8 @@ public class RegionListController implements Initializable {
     public void setRegionBorderService(RegionBorderService regionBorderService) {
         this.regionBorderService = regionBorderService;
     }
+
+	public void setLoader(SpringFxmlLoader loader) {
+		this.loader = loader;
+	}
 }
