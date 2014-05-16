@@ -56,7 +56,7 @@ public class RegionDaoTests {
         region.setRainfallChance(RainfallChance.MONSUN);
         region.setTemperature(Temperature.LOW);
         int id = regionDao.add(region);
-        Region persistedRegion = regionDao.get(id);
+        Region persistedRegion = regionDao.get(region.getId());
         TestCase.assertTrue(persistedRegion != null);
 
         regionDao.remove(region);

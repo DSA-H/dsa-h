@@ -1,6 +1,8 @@
 package sepm.dsa.service;
 
 import org.hibernate.validator.HibernateValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.RegionBorderDao;
@@ -23,23 +25,24 @@ import java.util.Set;
 public class RegionBorderServiceImpl implements RegionBorderService, Serializable {
 
     private static final long serialVersionUID = 7415861483489569621L;
-
-//    private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-
+    private static final Logger log = LoggerFactory.getLogger(RegionBorderServiceImpl.class);
+    //    private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
-
     private RegionBorderDao regionBorderDao;
 
     @Override
     @Transactional(readOnly = false)
     public RegionBorderPk add(RegionBorder regionBorder) {
+        log.debug("calling add(" + regionBorder + ")");
         validate(regionBorder);
+        log.trace("returning " + regionBorder);
         return regionBorderDao.add(regionBorder);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void update(RegionBorder regionBorder) {
+        log.debug("calling update(" + regionBorder + ")");
         validate(regionBorder);
         regionBorderDao.update(regionBorder);
     }
@@ -47,34 +50,47 @@ public class RegionBorderServiceImpl implements RegionBorderService, Serializabl
     @Override
     @Transactional(readOnly = false)
     public void remove(RegionBorder regionBorder) {
+        log.debug("calling remove(" + regionBorder + ")");
         regionBorderDao.remove(regionBorder);
     }
 
     @Override
     public RegionBorder get(RegionBorderPk pk) {
-        return regionBorderDao.get(pk);
+        log.debug("calling get(" + pk + ")");
+        RegionBorder result = regionBorderDao.get(pk);
+        log.trace("returning " + result);
+        return result;
     }
 
     @Override
     public List<RegionBorder> getAll() {
-        return regionBorderDao.getAll();
+        log.debug("calling getAll()");
+        List<RegionBorder> result = regionBorderDao.getAll();
+        log.trace("returning " + result);
+        return result;
     }
 
     @Override
     public List<RegionBorder> getAllByRegion(int regionId) {
-        return regionBorderDao.getAllByRegion(regionId);
+        log.debug("calling getAll()");
+        List<RegionBorder> result = regionBorderDao.getAllByRegion(regionId);
+        log.trace("returning " + result);
+        return result;
     }
 
     public void setRegionBorderDao(RegionBorderDao regionBorderDao) {
+        log.debug("calling setRegionBorderDao(" + regionBorderDao + ")");
         this.regionBorderDao = regionBorderDao;
     }
 
     /**
      * Validates a region border
+     *
      * @param regionBorder
      * @throws sepm.dsa.exceptions.DSAValidationException if region border is not valid
      */
     private void validate(RegionBorder regionBorder) throws DSAValidationException {
+        log.debug("calling validate(" + regionBorder + ")");
         Set<ConstraintViolation<RegionBorder>> violations = validator.validate(regionBorder);
         if (violations.size() > 0) {
             throw new DSAValidationException("Gebietsgrenze ist nicht valide.", violations);
