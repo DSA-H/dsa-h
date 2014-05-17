@@ -44,6 +44,8 @@ public class MainMenuController implements Initializable {
     private MenuItem verwaltenWaehrungen;
     @FXML
     private MenuItem verwaltenWaren;
+    @FXML
+    private MenuItem location;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
@@ -57,6 +59,18 @@ public class MainMenuController implements Initializable {
 	Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
 
         stage.setTitle("Grenzen und Gebiete");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
+    private void onShowLocationsClicked() {
+        log.debug("onShowLocationsClicked - open Location Window");
+        Stage stage = new Stage();
+        Parent scene = (Parent) loader.load("/gui/locationlist.fxml");
+
+        stage.setTitle("Orte verwalten");
         stage.setScene(new Scene(scene, 600, 438));
         stage.setResizable(false);
         stage.show();
