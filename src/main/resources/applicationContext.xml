@@ -87,7 +87,15 @@
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
     </bean>
-
+    <bean id="LocationListController" class="sepm.dsa.gui.LocationListController">
+        <property name="loader" ref="loader"/>
+        <property name="locationService" ref="locationService"/>
+    </bean>
+    <bean id="EditLocationController" class="sepm.dsa.gui.EditLocationController">
+        <property name="loader" ref="loader"/>
+        <property name="locationService" ref="locationService"/>
+        <property name="regionService" ref="regionService"/>
+    </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
