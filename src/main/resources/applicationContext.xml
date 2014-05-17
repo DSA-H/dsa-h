@@ -52,6 +52,10 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="locationDao" class="sepm.dsa.dao.LocationDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
 
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
@@ -61,6 +65,10 @@
 
     <bean id="regionBorderService" class="sepm.dsa.service.RegionBorderServiceImpl">
         <property name="regionBorderDao" ref="regionBorderDao"/>
+    </bean>
+
+    <bean id="locationService" class="sepm.dsa.service.LocationServiceImpl">
+        <property name="locationDao" ref="locationDao"/>
     </bean>
 
     <!-- GUI DI -->

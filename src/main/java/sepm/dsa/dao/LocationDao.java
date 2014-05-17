@@ -4,7 +4,7 @@ import sepm.dsa.model.Location;
 
 import java.util.List;
 
-interface LocationDao {
+public interface LocationDao {
 
     /**
      * Persists a {@code Location} in the Database

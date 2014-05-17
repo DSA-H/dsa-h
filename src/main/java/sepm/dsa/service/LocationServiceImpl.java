@@ -6,14 +6,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.LocationDao;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Location;
-import sepm.dsa.model.Region;
-import sepm.dsa.model.RegionBorder;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Service("LocationService")
 @Transactional(readOnly = true)
@@ -27,14 +28,14 @@ public class LocationServiceImpl implements  LocationService, Serializable {
     @Override
     public void add(Location location) {
         log.debug("calling add(" + location + ")");
-        validator(location);
+        validate(location);
         locationDao.add(location);
     }
 
     @Override
     public void update(Location location) {
         log.debug("calling update(" + location + ")");
-        validator(location);
+        validate(location);
         locationDao.update(location);
     }
 
@@ -58,5 +59,17 @@ public class LocationServiceImpl implements  LocationService, Serializable {
         List<Location> result = locationDao.getAll();
         log.trace("returning " + result);
         return result;
+    }
+
+    /**
+     * Validates a Location
+     * @param location must not be null
+     * @throws DSAValidationException if location is not valid
+     */
+    private void validate(Location location) throws DSAValidationException {
+        Set<ConstraintViolation<Location>> violations = validator.validate(location);
+        if (violations.size() > 0) {
+            throw new DSAValidationException("Gebiet ist nicht valide.", violations);
+        }
     }
 }

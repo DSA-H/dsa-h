@@ -41,7 +41,7 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public Location get(int id) {
+    public Location get(int id){
         log.debug("calling get(" + id + ")");
 
         Object result = sessionFactory.getCurrentSession().get(Location.class, id);
