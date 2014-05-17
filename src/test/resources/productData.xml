@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <Region id="0" name="fooRegion" color="FFFFFF" temperatureId="0" rainfallChanceId="0"/>
-    <Region id="1" name="region2" color="ED8311" temperatureId="1" rainfallChanceId="2"/>
-    <Region id="2" name="region3" color="1C11ED" temperatureId="2" rainfallChanceId="3"/>
-    <Region id="3" name="region4" color="ED8311" temperatureId="3" rainfallChanceId="4"/>
-    <Region id="3" name="region5" color="1C11ED" temperatureId="0" rainfallChanceId="1"/>
-    <Region id="4" name="region6" color="FFFFFF" temperatureId="4" rainfallChanceId="0"/>
-
     <Product name="p1" cost="10" unit="asdf" attribute="a1" comment="noComment" quality="true"/>
 </dataset>
