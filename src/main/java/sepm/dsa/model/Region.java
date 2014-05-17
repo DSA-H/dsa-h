@@ -1,6 +1,7 @@
 package sepm.dsa.model;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.jdbc.core.CallableStatementCallback;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -41,11 +42,11 @@ public class Region implements Serializable {
     @Column(nullable = false)
     private Integer rainfallChanceId;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region1")
-    private Set<RegionBorder> borders1 = new HashSet<RegionBorder>();
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region1", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RegionBorder> borders1 = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region2")
-    private Set<RegionBorder> borders2 = new HashSet<RegionBorder>();
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region2", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RegionBorder> borders2 = new HashSet<>();
 
 
     public Integer getId() {

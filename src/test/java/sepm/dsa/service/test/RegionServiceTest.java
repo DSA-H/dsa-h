@@ -100,15 +100,15 @@ public class RegionServiceTest {
         // Teardown for data used by the unit tests
     }
 
-    //@DatabaseSetup("testData.xml")
     @Test
+    @DatabaseSetup("/testData.xml")
     public void testXML(){
-        System.out.println(rs.get(0));
+        System.out.println(rs.get(1));
     }
 
     @Test
     public void testAdd() {
-        System.out.println(rs.get(0));
+//        System.out.println(rs.get(0));
         int size = rs.getAll().size();
         rs.add(addRegion);
 
