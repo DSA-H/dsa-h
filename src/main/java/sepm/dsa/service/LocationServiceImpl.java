@@ -18,13 +18,14 @@ import java.util.Set;
 
 @Service("LocationService")
 @Transactional(readOnly = true)
-public class LocationServiceImpl implements  LocationService, Serializable {
+public class LocationServiceImpl implements LocationService, Serializable {
 
     private static final long serialVersionUID = -3272024118547942934L;
     private static final Logger log = LoggerFactory.getLogger(LocationServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private LocationDao locationDao;
+
     @Override
     public void add(Location location) {
         log.debug("calling add(" + location + ")");
@@ -61,8 +62,13 @@ public class LocationServiceImpl implements  LocationService, Serializable {
         return result;
     }
 
+    public void setLocationDao(LocationDao locationDao) {
+        this.locationDao = locationDao;
+    }
+
     /**
      * Validates a Location
+     *
      * @param location must not be null
      * @throws DSAValidationException if location is not valid
      */

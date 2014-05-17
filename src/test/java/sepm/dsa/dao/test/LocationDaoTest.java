@@ -18,6 +18,11 @@ import sepm.dsa.model.Region;
 import sepm.dsa.service.RegionService;
 import sepm.dsa.service.RegionServiceImpl;
 
+import java.util.List;
+
+import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.hasItems;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:testContext.xml"})
 @TestExecutionListeners({
@@ -44,7 +49,7 @@ public class LocationDaoTest extends TestCase {
         locationDao.add(location);
 
         Location persistedLocation = locationDao.get(location.getId());
-        assertTrue (persistedLocation != null);
+        assertTrue(persistedLocation != null);
         locationDao.remove(location);
     }
 
@@ -67,6 +72,9 @@ public class LocationDaoTest extends TestCase {
     @Test
     @DatabaseSetup("/testData.xml")
     public void testGetAll() throws Exception {
-        //TODO
+        List<Location> allFoundLocations = locationDao.getAll();
+        Location l1 = locationDao.get(1);
+        Location l2 = locationDao.get(2);
+        assertThat(locationDao.getAll(), hasItems(l1, l2));
     }
 }

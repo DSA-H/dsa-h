@@ -18,6 +18,11 @@ import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionService;
 import sepm.dsa.service.RegionServiceImpl;
 
+import java.util.List;
+
+import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.hasItems;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:testContext.xml"})
 @TestExecutionListeners({
@@ -67,7 +72,12 @@ public class LocationServiceTest extends TestCase {
         assertNotNull(location);
     }
 
+    @Test
+    @DatabaseSetup("/testData.xml")
     public void testGetAll() throws Exception {
-        //TODO
+        List<Location> allFoundLocations = locationService.getAll();
+        Location l1 = locationService.get(1);
+        Location l2 = locationService.get(2);
+        assertThat(locationService.getAll(), hasItems(l1, l2));
     }
 }

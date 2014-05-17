@@ -23,11 +23,8 @@ public class Location implements Serializable {
     @Column(nullable = false, length = 100)
     private String name;
 
-    //    @NotBlank
-//    @Size(max = 100, min = 1)
-//    @Column(nullable = false, length = 100)
-    //TODO wie ist es mit cascade delete?
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "region")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
     private Region region;
 
     @NotNull
@@ -40,10 +37,10 @@ public class Location implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    private TownSize size;
+    private Integer sizeId;
 
-    //TODO check if optional
-    private String planFilepath;
+    @Column(nullable = true)
+    private String planFileName;
 
     @NotNull
     @Column(nullable = false)
@@ -51,10 +48,12 @@ public class Location implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    private Weather weather;
+    private Integer weatherId;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = true)
+    @Embedded
+    //TODO abklären martin johannes
     private DSADate weatherCollectedDate;
 
     @Size(max = 1000)
@@ -94,19 +93,25 @@ public class Location implements Serializable {
     }
 
     public TownSize getSize() {
-        return size;
+        if (sizeId == null) {
+            return null;
+        }
+        return TownSize.parse(sizeId);
     }
 
     public void setSize(TownSize size) {
-        this.size = size;
+        if (size == null) {
+            this.sizeId = null;
+        }
+        this.sizeId = size.getValue();
     }
 
-    public String getPlanFilepath() {
-        return planFilepath;
+    public String getPlanFileName() {
+        return planFileName;
     }
 
-    public void setPlanFilepath(String planFilepath) {
-        this.planFilepath = planFilepath;
+    public void setPlanFileName(String planFileName) {
+        this.planFileName = planFileName;
     }
 
     public Integer getHeight() {
@@ -118,11 +123,17 @@ public class Location implements Serializable {
     }
 
     public Weather getWeather() {
-        return weather;
+        if (weatherId == null) {
+            return null;
+        }
+        return Weather.parse(weatherId);
     }
 
     public void setWeather(Weather weather) {
-        this.weather = weather;
+        if (weather == null) {
+            this.weatherId = null;
+        }
+        this.weatherId = weather.getValue();
     }
 
     public DSADate getWeatherCollectedDate() {
@@ -160,11 +171,11 @@ public class Location implements Serializable {
         if (height != null ? !height.equals(location.height) : location.height != null) return false;
         if (id != null ? !id.equals(location.id) : location.id != null) return false;
         if (name != null ? !name.equals(location.name) : location.name != null) return false;
-        if (planFilepath != null ? !planFilepath.equals(location.planFilepath) : location.planFilepath != null)
+        if (planFileName != null ? !planFileName.equals(location.planFileName) : location.planFileName != null)
             return false;
         if (region != null ? !region.equals(location.region) : location.region != null) return false;
-        if (size != location.size) return false;
-        if (weather != location.weather) return false;
+        if (sizeId != location.sizeId) return false;
+        if (weatherId != location.weatherId) return false;
         if (weatherCollectedDate != null ? !weatherCollectedDate.equals(location.weatherCollectedDate) : location.weatherCollectedDate != null)
             return false;
         if (xCoord != null ? !xCoord.equals(location.xCoord) : location.xCoord != null) return false;
@@ -180,10 +191,10 @@ public class Location implements Serializable {
         result = 31 * result + (region != null ? region.hashCode() : 0);
         result = 31 * result + (xCoord != null ? xCoord.hashCode() : 0);
         result = 31 * result + (yCoord != null ? yCoord.hashCode() : 0);
-        result = 31 * result + (size != null ? size.hashCode() : 0);
-        result = 31 * result + (planFilepath != null ? planFilepath.hashCode() : 0);
+        result = 31 * result + (sizeId != null ? sizeId.hashCode() : 0);
+        result = 31 * result + (planFileName != null ? planFileName.hashCode() : 0);
         result = 31 * result + (height != null ? height.hashCode() : 0);
-        result = 31 * result + (weather != null ? weather.hashCode() : 0);
+        result = 31 * result + (weatherId != null ? weatherId.hashCode() : 0);
         result = 31 * result + (weatherCollectedDate != null ? weatherCollectedDate.hashCode() : 0);
         result = 31 * result + (comment != null ? comment.hashCode() : 0);
         return result;
