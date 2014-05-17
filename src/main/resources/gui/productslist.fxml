@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<center><GridPane BorderPane.alignment="CENTER">
+  <columnConstraints>
+<ColumnConstraints hgrow="SOMETIMES" maxWidth="147.0" minWidth="10.0" prefWidth="33.0" />
+<ColumnConstraints hgrow="SOMETIMES" maxWidth="147.0" minWidth="10.0" prefWidth="92.0" />
+<ColumnConstraints hgrow="SOMETIMES" maxWidth="147.0" minWidth="10.0" prefWidth="90.0" />
+<ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="79.0" />
+<ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="10.0" prefWidth="68.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="156.0" minWidth="10.0" prefWidth="78.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="148.0" minWidth="10.0" prefWidth="146.0" />
+<ColumnConstraints hgrow="SOMETIMES" maxWidth="135.0" minWidth="10.0" prefWidth="32.0" />
+  </columnConstraints>
+  <rowConstraints>
+<RowConstraints maxHeight="51.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
+<RowConstraints maxHeight="95.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="261.0" minHeight="10.0" prefHeight="261.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+<children><Label alignment="CENTER" contentDisplay="CENTER" text="Waren" textAlignment="CENTER" GridPane.columnIndex="4">
+<font>
+<Font name="System Bold" size="18.0" />
+</font></Label><Button mnemonicParsing="false" text="Erstellen" GridPane.columnIndex="1" GridPane.rowIndex="1" /><Button mnemonicParsing="false" text="Bearbeiten" GridPane.columnIndex="2" GridPane.rowIndex="1" /><Button mnemonicParsing="false" text="Löschen" GridPane.columnIndex="3" GridPane.rowIndex="1" /><TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="2">
+  <columns>
+    <TableColumn prefWidth="75.0" text="Ware" />
+    <TableColumn prefWidth="56.0" text="Preis" /><TableColumn prefWidth="60.0" text="Gewicht" /><TableColumn prefWidth="141.0" text="Produktionsgebiet" /><TableColumn prefWidth="112.0" text="Warenkategorien" /><TableColumn prefWidth="95.0" text="Attribute" />
+  </columns>
+</TableView>
+</children>
+</GridPane>
+</center></BorderPane>

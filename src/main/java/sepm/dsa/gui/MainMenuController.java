@@ -65,6 +65,21 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
+    private void onWarenClicked() {
+        log.debug("onWarenClicked - open Waren Window");
+        Stage stage = new Stage();
+        Parent scene = null;
+        SpringFxmlLoader loader = new SpringFxmlLoader();
+
+        scene = (Parent) loader.load("/gui/productslist.fxml");
+
+        stage.setTitle("Waren");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
     private void onExitClicked() {
         log.debug("onExitClicked - exit Programm Request");
         if(exitProgramm()) {
