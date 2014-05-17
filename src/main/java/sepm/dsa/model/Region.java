@@ -42,10 +42,10 @@ public class Region implements Serializable {
     private Integer rainfallChanceId;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region1")
-    private Set<RegionBorder> borders1 = new HashSet<RegionBorder>();
+    private Set<RegionBorder> borders1 = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region2")
-    private Set<RegionBorder> borders2 = new HashSet<RegionBorder>();
+    private Set<RegionBorder> borders2 = new HashSet<>();
 
 
     public Integer getId() {
@@ -123,6 +123,13 @@ public class Region implements Serializable {
 
     public void setBorders2(Set<RegionBorder> borders2) {
         this.borders2 = borders2;
+    }
+
+    public Set<RegionBorder> getAllBorders() {
+        Set<RegionBorder> result = new HashSet<>(borders1.size() + borders2.size());
+        result.addAll(borders1);
+        result.addAll(borders2);
+        return result;
     }
 
     @Override

@@ -6,4 +6,10 @@
     <regions id="4" name="region4" color="ED8311" temperatureId="3" rainfallChanceId="4"/>
     <regions id="5" name="region5" color="1C11ED" temperatureId="0" rainfallChanceId="1"/>
     <regions id="6" name="region6" color="FFFFFF" temperatureId="4" rainfallChanceId="0"/>
+    <borders region1="1" region2="2" borderCost="8" />
+    <borders region1="1" region2="3" borderCost="5" />
+    <borders region1="3" region2="4" borderCost="14" />
+    <borders region1="4" region2="5" borderCost="4" />
+    <borders region1="4" region2="6" borderCost="11" />
+    <borders region1="1" region2="6" borderCost="6" />
 </dataset>
