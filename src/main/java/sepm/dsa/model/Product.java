@@ -24,7 +24,19 @@ public class Product implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    private Integer weight;
+    private String unit;
+
+    @Size(max = 20)
+    @Column(nullable = true, length = 20)
+    private String attribute;
+
+    @Size(max = 1000)
+    @Column(nullable = true, length = 1000)
+    private String comment;
+
+    @NotNull
+    @Column(nullable = false)
+    private Boolean quality;
 
 
     public String getName() {
@@ -35,12 +47,12 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public Integer getWeight() {
-        return weight;
+    public String getUnit() {
+        return unit;
     }
 
-    public void setWeight(Integer weight) {
-        this.weight = weight;
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public Integer getCost() {
@@ -49,6 +61,30 @@ public class Product implements Serializable {
 
     public void setCost(Integer cost) {
         this.cost = cost;
+    }
+
+    public String getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Boolean getQuality() {
+        return quality;
+    }
+
+    public void setQuality(Boolean quality) {
+        this.quality = quality;
     }
 
     @Override
@@ -60,9 +96,15 @@ public class Product implements Serializable {
 
         if (name != null ? !name.equals(product.name) : product.name != null)
             return false;
-        if (weight != null ? !weight.equals(product.weight) : product.weight != null)
+        if (unit != null ? !unit.equals(product.unit) : product.unit != null)
             return false;
         if (cost != null ? !cost.equals(product.cost) : product.cost != null)
+            return false;
+        if (attribute != null ? !attribute.equals(product.attribute) : product.attribute != null)
+            return false;
+        if (comment != null ? !comment.equals(product.comment) : product.comment != null)
+            return false;
+        if (quality != null ? !quality.equals(product.quality) : product.quality != null)
             return false;
 
         return true;
@@ -71,8 +113,11 @@ public class Product implements Serializable {
     @Override
     public int hashCode() {
         int result = (name != null ? name.hashCode() : 0);
-        result = 31 * result + (weight != null ? weight.hashCode() : 0);
+        result = 31 * result + (unit != null ? unit.hashCode() : 0);
         result = 31 * result + (cost != null ? cost.hashCode() : 0);
+        result = 31 * result + (attribute != null ? attribute.hashCode() : 0);
+        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+        result = 31 * result + (quality != null ? quality.hashCode() : 0);
 
         return result;
     }
