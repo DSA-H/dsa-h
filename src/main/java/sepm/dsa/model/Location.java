@@ -1,34 +1,64 @@
 package sepm.dsa.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-/**
- * Created by Michael on 16.05.2014.
- */
+@Entity
+@Table(name = "locations")
 public class Location implements Serializable {
 
     private static final long serialVersionUID = 1616654812413948966L;
 
+    @Id
+    @GeneratedValue
+    @Column(nullable = false, unique = true)
     private Integer id;
 
+    @NotBlank
+    @Size(max = 100, min = 1)
+    @Column(nullable = false, length = 100)
     private String name;
 
+    //    @NotBlank
+//    @Size(max = 100, min = 1)
+//    @Column(nullable = false, length = 100)
+    //TODO wie ist es mit cascade delete?
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "region")
     private Region region;
 
+    @NotNull
+    @Column(nullable = false)
     private Integer xCoord;
 
+    @NotNull
+    @Column(nullable = false)
     private Integer yCoord;
 
+    @NotNull
+    @Column(nullable = false)
     private TownSize size;
 
+    //TODO check if optional
     private String planFilepath;
 
+    @NotNull
+    @Column(nullable = false)
     private Integer height;
 
+    @NotNull
+    @Column(nullable = false)
     private Weather weather;
 
+    @NotNull
+    @Column(nullable = false)
     private DSADate weatherCollectedDate;
 
+    @Size(max = 1000)
+    @Column(nullable = true, length = 1000)
     private String comment;
 
     public Integer getId() {

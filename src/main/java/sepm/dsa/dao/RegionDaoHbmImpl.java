@@ -16,7 +16,6 @@ import java.util.Vector;
 public class RegionDaoHbmImpl implements RegionDao {
 
     private static final Logger log = LoggerFactory.getLogger(RegionDaoHbmImpl.class);
-
     private SessionFactory sessionFactory;
 
     @Override
