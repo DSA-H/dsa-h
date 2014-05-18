@@ -12,8 +12,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import sepm.dsa.dao.LocationDao;
+import sepm.dsa.dao.ProductDao;
 import sepm.dsa.dao.TraderCategoryDao;
 import sepm.dsa.dao.TraderDao;
+import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.*;
 
 import static org.junit.Assert.assertTrue;
@@ -37,6 +39,8 @@ public class TraderDaoTest {
     private LocationDao locationDao;
     @Autowired
     private TraderCategoryDao traderCategoryDao;
+    @Autowired
+    private ProductDao productDao;
 
     @Test
     @DatabaseSetup("/testData.xml")
@@ -61,6 +65,16 @@ public class TraderDaoTest {
 
         Trader persistedTrader = traderDao.get(trader.getId());
         assertTrue(persistedTrader != null);
+    }
+
+    @Test(expected = DSARuntimeException.class)
+    @DatabaseSetup("/testData.xml")
+    public void delete_shouldPersistEntity() {
+        Trader trader = traderDao.get(1);
+
+        traderDao.remove(trader);
+
+            Trader persistedTrader = traderDao.get(1);
     }
 
     @Test(expected = org.hibernate.PropertyValueException.class)
@@ -98,26 +112,37 @@ public class TraderDaoTest {
 
     @Test
     @DatabaseSetup("/testData.xml")
-    public void update_TraderWithOffersShouldPersistEntity() {
-        Trader persistedTrader = traderDao.get(1);
+    public void add_TraderWithOffersShouldPersistEntity() {
+        Trader trader = new Trader();
+        trader.setName("TestTrader1");
+        trader.setCharisma(10);
+        trader.setIntelligence(11);
+        trader.setMut(14);
+        trader.setComment("test12345 Kommentar");
+        trader.setConvince(15);
+        trader.setSize(20);
+        Location l = locationDao.get(1);
+        trader.setLocation(l);
+        trader.setxPos(1);
+        trader.setyPos(2);
+        TraderCategory tc = traderCategoryDao.get(1);
+        tc.setName("tc1");
+        trader.setCategory(tc);
 
         Offer o1 = new Offer();
         o1.setAmount(10);
         o1.setPricePerUnit(170);
-        Product p1 = new Product();
-        p1.setName("testproduct");
-        p1.setAttribute(ProductAttribute.NORMAL);
-        p1.setCost(140);
-        p1.setQuality(true);
+        Product p1 = productDao.get(1);
         o1.setProduct(p1);
+        o1.setTrader(trader);
         o1.setQuality(ProductQuality.SCHLECHT);
-        persistedTrader.getOffers().add(o1);
+        trader.getOffers().add(o1);
 
-        traderDao.update(persistedTrader);
+        traderDao.add(trader);
 
-        persistedTrader = traderDao.get(1);
-        assertTrue(persistedTrader != null);
-        assertTrue(persistedTrader.getOffers().contains(o1));
+        trader = traderDao.get(trader.getId());
+        assertTrue(trader != null);
+        assertTrue(trader.getOffers().contains(o1));
     }
 
 }
