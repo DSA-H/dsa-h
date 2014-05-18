@@ -91,7 +91,7 @@ public class MainMenuController implements Initializable {
      */
     public boolean exitProgramm() {
         Stage primaryStage = (Stage)menuBar.getScene().getWindow();
-        List<Stage> stages = new ArrayList<Stage>(StageHelper.getStages());
+        List<Stage> stages = new ArrayList<>(StageHelper.getStages());
 
         // only primaryStage
         if(stages.size() <= 1) {

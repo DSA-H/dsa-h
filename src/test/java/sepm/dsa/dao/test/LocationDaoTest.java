@@ -17,7 +17,6 @@ import sepm.dsa.model.Location;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.TownSize;
 import sepm.dsa.service.RegionService;
-import sepm.dsa.service.RegionServiceImpl;
 
 import java.util.List;
 
@@ -43,6 +42,7 @@ public class LocationDaoTest extends TestCase {
     @Test
     @DatabaseSetup("/testData.xml")
     public void testAdd() throws Exception {
+        List<Location> all = locationDao.getAll();
         Location location = new Location();
         location.setComment("foo comment");
         location.setHeight(40);
