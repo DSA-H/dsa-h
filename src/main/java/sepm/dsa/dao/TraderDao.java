@@ -1,6 +1,5 @@
 package sepm.dsa.dao;
 
-import sepm.dsa.model.Location;
 import sepm.dsa.model.Trader;
 
 import java.util.List;
@@ -10,13 +9,39 @@ import java.util.List;
  */
 public interface TraderDao {
 
+    /**
+     * Persists a {@code Trader} in the Database
+     *
+     * @param trader to be persisted must not be null
+     * @return
+     */
     void add(Trader trader);
 
+    /**
+     * Updates a already existing {@code Trader} in the database
+     *
+     * @param trader to update must not be null
+     */
     void update(Trader trader);
 
+    /**
+     * Delete a trader permanently
+     *
+     * @param trader to be deleted must not be null
+     */
     void remove(Trader trader);
 
+    /**
+     * Finds all Traders
+     *
+     * @return the traders or empty list of no traders exist (not null)
+     */
     Trader get(int id);
 
-    List<Trader> getAllByLocation(Location location);
+    /**
+     * Finds all Traders
+     *
+     * @return the traders or empty list of no traders exist (not null)
+     */
+    List<Trader> getAllByTrader(Trader trader);
 }
