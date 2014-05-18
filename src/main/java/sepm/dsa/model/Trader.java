@@ -62,7 +62,7 @@ public class Trader implements Serializable{
     @JoinColumn(nullable = false)
     private Location location;
 
-    @OneToMany(mappedBy = "trader")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "trader", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Offer> offers = new HashSet<>();
 
     @OneToMany

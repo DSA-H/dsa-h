@@ -53,10 +53,11 @@ public class TraderDaoTest {
         trader.setLocation(l);
         trader.setxPos(1);
         trader.setyPos(2);
-        traderDao.add(trader);
         TraderCategory tc = traderCategoryDao.get(1);
         tc.setName("tc1");
         trader.setCategory(tc);
+
+        traderDao.add(trader);
 
         Trader persistedTrader = traderDao.get(trader.getId());
         assertTrue(persistedTrader != null);
