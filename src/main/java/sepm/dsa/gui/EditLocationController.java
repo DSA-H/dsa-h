@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionService;
@@ -85,6 +86,10 @@ public class EditLocationController implements Initializable {
             weatherChoiceBox.getSelectionModel().select(selectedLocation.getWeather().getValue());
             sizeChoiceBox.getSelectionModel().select(selectedLocation.getSize().getValue());
             commentArea.setText(selectedLocation.getComment());
+            xCoord.setText(selectedLocation.getxCoord().toString());
+            yCoord.setText(selectedLocation.getyCoord().toString());
+            height.setText(selectedLocation.getHeight().toString());
+            regionChoiceBox.getSelectionModel().select(selectedLocation.getRegion());
         } else {
             isNewLocation = true;
             selectedLocation = new Location();
@@ -94,7 +99,7 @@ public class EditLocationController implements Initializable {
 
         // init region choice box
         List<Region> otherRegions = regionService.getAll();
-        otherRegions.remove(selectedLocation);
+//        otherRegions.remove(selectedLocation.getRegion());
         regionChoiceBox.setItems(FXCollections.observableArrayList(otherRegions));
     }
 
@@ -126,11 +131,31 @@ public class EditLocationController implements Initializable {
         Weather weather = Weather.parse(weatherChoiceBox.getSelectionModel().getSelectedIndex());
         TownSize townSize = TownSize.parse(sizeChoiceBox.getSelectionModel().getSelectedIndex());
         String comment = commentArea.getText();
+        Region  seletcedRegionForLocation = (Region) regionChoiceBox.getSelectionModel().getSelectedItem();
+        if (seletcedRegionForLocation == null) {
+            throw new DSAValidationException("Wählen sie ein Gebiet aus");
+        }
         selectedLocation.setPlanFileName(backgroundMapName);
         selectedLocation.setName(name);
         selectedLocation.setComment(comment);
         selectedLocation.setWeather(weather);
         selectedLocation.setSize(townSize);
+        selectedLocation.setRegion(seletcedRegionForLocation);
+        try {
+        selectedLocation.setxCoord(Integer.parseInt(xCoord.getText()));
+        }catch (NumberFormatException e){
+            throw new DSAValidationException("xCoord muss eine Zahl sein.");
+        }
+        try {
+            selectedLocation.setyCoord(Integer.parseInt(yCoord.getText()));
+        }catch (NumberFormatException e){
+            throw new DSAValidationException("yCoord muss eine Zahl sein.");
+        }
+        try {
+            selectedLocation.setHeight(Integer.parseInt(height.getText()));
+        }catch (NumberFormatException e){
+            throw new DSAValidationException("Höhe muss eine Zahl sein.");
+        }
 
         if (isNewLocation) {
             locationService.add(selectedLocation);
@@ -158,7 +183,7 @@ public class EditLocationController implements Initializable {
     }
 
 
-    public static void setLocation(Location location) {
+    public void setLocation(Location location) {
         log.debug("calling setLocation(" + location + ")");
         selectedLocation = location;
     }
