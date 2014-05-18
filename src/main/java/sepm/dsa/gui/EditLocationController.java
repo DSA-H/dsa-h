@@ -75,8 +75,8 @@ public class EditLocationController implements Initializable {
         for (Weather w : Weather.values()) {
             weatherList.add(w.getName());
         }
-        weatherChoiceBox.setItems(FXCollections.observableArrayList(sizeList));
-        sizeChoiceBox.setItems(FXCollections.observableArrayList(weatherList));
+        weatherChoiceBox.setItems(FXCollections.observableArrayList(weatherList));
+        sizeChoiceBox.setItems(FXCollections.observableArrayList(sizeList));
 
         // set values if editing
         if (selectedLocation != null) {

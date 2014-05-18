@@ -103,7 +103,7 @@ public class MainMenuController implements Initializable {
                 .owner(primaryStage)
                 .title("Programm beenden?")
                 .masthead(null)
-                .message("Wollen Sie das Händertool wirklich beenden? Nicht gespeicherte Änderungen gehen dabei verloren.")
+                .message("Wollen Sie das Händlertool wirklich beenden? Nicht gespeicherte Änderungen gehen dabei verloren.")
                 .showConfirm();
 
         if(response == Dialog.Actions.YES) {
