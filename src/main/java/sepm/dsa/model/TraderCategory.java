@@ -4,12 +4,15 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "traderCategories")
-public class TraderCategory {
+public class TraderCategory implements Serializable{
+    private static final long serialVersionUID = 2957793850231481713L;
+
 
     @Id
     @GeneratedValue

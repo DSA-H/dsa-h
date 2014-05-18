@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "products")
 public class Product implements Serializable {
-    private static final long serialVersionUID = 5890354733231481712L;
+    private static final long serialVersionUID = 5810354733231481712L;
 
     @Id
     @GeneratedValue

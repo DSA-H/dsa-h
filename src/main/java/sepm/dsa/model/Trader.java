@@ -12,7 +12,7 @@ import java.util.Set;
 @Table(name = "traders")
 public class Trader implements Serializable{
 
-    private static final long serialVersionUID = 2957293850231481712L;
+    private static final long serialVersionUID = 2857293850231481712L;
 
     @Id
     @GeneratedValue
@@ -58,8 +58,8 @@ public class Trader implements Serializable{
     @JoinColumn(nullable = true)
     private TraderCategory category;
 
-    @NotNull
-    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false)
     private Location location;
 
     @OneToMany(mappedBy = "trader")
