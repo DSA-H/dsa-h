@@ -36,6 +36,14 @@ public class Offer {
         this.id = id;
     }
 
+    public Integer getQualityId() {
+        return qualityId;
+    }
+
+    public void setQualityId(Integer qualityId) {
+        this.qualityId = qualityId;
+    }
+
     public Product getProduct() {
         return product;
     }

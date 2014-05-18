@@ -11,7 +11,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import sepm.dsa.dao.RegionDao;
 import sepm.dsa.dao.TraderDao;
 import sepm.dsa.model.*;
 
@@ -38,9 +37,9 @@ public class TraderDaoTest {
     public void add_shouldPersistEntity() {
         Trader trader = new Trader();
         trader.setName("TestTrader1");
-        trader.setCh(10);
-        trader.setIn(11);
-        trader.setMu(14);
+        trader.setCharisma(10);
+        trader.setIntelligence(11);
+        trader.setMut(14);
         trader.setComment("test12345 Kommentar");
         trader.setConvince(15);
         Location l = new Location();
@@ -72,9 +71,9 @@ public class TraderDaoTest {
     public void add_incompleteShouldNotPersist() {
         Trader trader = new Trader();
         trader.setName("TestTrader1");
-        trader.setCh(10);
-        trader.setIn(11);
-        trader.setMu(14);
+        trader.setCharisma(10);
+        trader.setIntelligence(11);
+        trader.setMut(14);
         trader.setComment("test12345 Kommentar");
         trader.setConvince(15);
 

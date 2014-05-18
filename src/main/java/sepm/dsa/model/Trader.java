@@ -115,27 +115,27 @@ public class Trader {
         this.comment = comment;
     }
 
-    public Integer getMu() {
+    public Integer getMut() {
         return mut;
     }
 
-    public void setMu(Integer mu) {
+    public void setMut(Integer mu) {
         this.mut = mu;
     }
 
-    public Integer getIn() {
+    public Integer getIntelligence() {
         return intelligence;
     }
 
-    public void setIn(Integer in) {
+    public void setIntelligence(Integer in) {
         this.intelligence = in;
     }
 
-    public Integer getCh() {
+    public Integer getCharisma() {
         return charisma;
     }
 
-    public void setCh(Integer ch) {
+    public void setCharisma(Integer ch) {
         this.charisma = ch;
     }
 
