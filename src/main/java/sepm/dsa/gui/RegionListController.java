@@ -111,7 +111,7 @@ public class RegionListController implements Initializable {
     private void onCreateButtonPressed() {
         log.debug("onCreateButtonPressed - open Gebiet-Details Window");
 
-	Stage stage =  (Stage) regionTable.getScene().getWindow();
+	Stage stage = new Stage();// (Stage) regionTable.getScene().getWindow();
 	Parent root = (Parent) loader.load("/gui/editregion.fxml");
 
         stage.setTitle("Gebiet-Details");
