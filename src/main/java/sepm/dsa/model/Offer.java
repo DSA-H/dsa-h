@@ -60,4 +60,12 @@ public class Offer {
     public void setPricePerUnit(Integer pricePerUnit) {
         this.pricePerUnit = pricePerUnit;
     }
+
+    public ProductQuality getQuality() {
+        return quality;
+    }
+
+    public void setQuality(ProductQuality quality) {
+        this.quality = quality;
+    }
 }
