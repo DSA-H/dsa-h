@@ -1,7 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,27 +7,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import org.controlsfx.control.action.Action;
-import org.controlsfx.dialog.Dialog;
-import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Product;
-import sepm.dsa.model.Region;
-import sepm.dsa.model.RegionBorder;
 import sepm.dsa.service.ProductService;
-import sepm.dsa.service.RegionBorderService;
-import sepm.dsa.service.RegionService;
-
-import java.util.List;
 
 @Service("RegionListController")
 public class ProductListController implements Initializable {
@@ -45,7 +32,7 @@ public class ProductListController implements Initializable {
     @FXML
     private TableColumn tablecolumn_cost;
     @FXML
-    private TableColumn tablecolumn_weight;
+    private TableColumn tablecolumn_unit;
     @FXML
     private TableColumn tablecolumn_productions;
     @FXML
@@ -62,10 +49,14 @@ public class ProductListController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise ProductListController");
-        /*
         // init table
-        regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Region, String>, ObservableValue<String>>() {
+
+        tablecolumn_product.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tablecolumn_cost.setCellValueFactory(new PropertyValueFactory<>("cost"));
+        tablecolumn_unit.setCellValueFactory(new PropertyValueFactory<>("unit"));
+
+
+        /*borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Region, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Region, String> r) {
                 if (r.getValue() != null) {
@@ -107,11 +98,11 @@ public class ProductListController implements Initializable {
                     }
                 };
             }
-        });
+        });*/
 
-        ObservableList<Region> data = FXCollections.observableArrayList(regionService.getAll());
-        regionTable.setItems(data);
-        */
+        ObservableList<Product> data = FXCollections.observableArrayList(productService.getAll());
+        tableview_product.setItems(data);
+
     }
 
     @FXML
@@ -119,9 +110,9 @@ public class ProductListController implements Initializable {
         log.debug("onCreateButtonPressed - open Product-List Window");
         Stage stage = new Stage();
         Parent scene = null;
-        SpringFxmlLoader loader = new SpringFxmlLoader();
-
         EditRegionController.setRegion(null);
+
+        SpringFxmlLoader loader = new SpringFxmlLoader();
         scene = (Parent) loader.load("/gui/editproduct.fxml");
 
         stage.setTitle("Waren-Details");
