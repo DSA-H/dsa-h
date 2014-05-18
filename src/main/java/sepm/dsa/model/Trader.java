@@ -4,6 +4,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "traders")
@@ -50,6 +52,22 @@ public class Trader {
     @NotNull
     @Column(nullable = false)
     private Integer convince;
+
+    @NotNull
+    @Column(nullable = false)
+    private TraderCategory category;
+
+    @NotNull
+    @Column(nullable = false)
+    private Location location;
+
+    @OneToMany
+    @JoinColumn(name = "offers", nullable = true)
+    private Set<Offer> offers = new HashSet<>();
+
+    @OneToMany
+    @JoinColumn(name = "deals", nullable = true)
+    private Set<Deal> deals = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -129,5 +147,37 @@ public class Trader {
 
     public void setConvince(Integer convince) {
         this.convince = convince;
+    }
+
+    public TraderCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(TraderCategory category) {
+        this.category = category;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public Set<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(Set<Offer> offers) {
+        this.offers = offers;
+    }
+
+    public Set<Deal> getDeals() {
+        return deals;
+    }
+
+    public void setDeals(Set<Deal> deals) {
+        this.deals = deals;
     }
 }
