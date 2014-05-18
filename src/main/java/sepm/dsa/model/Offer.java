@@ -28,6 +28,10 @@ public class Offer {
     @Column(nullable = false)
     private Integer qualityId;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false)
+    private Trader trader;
+
     public Integer getId() {
         return id;
     }
@@ -58,6 +62,22 @@ public class Offer {
 
     public void setPricePerUnit(Integer pricePerUnit) {
         this.pricePerUnit = pricePerUnit;
+    }
+
+    public Integer getQualityId() {
+        return qualityId;
+    }
+
+    public void setQualityId(Integer qualityId) {
+        this.qualityId = qualityId;
+    }
+
+    public Trader getTrader() {
+        return trader;
+    }
+
+    public void setTrader(Trader trader) {
+        this.trader = trader;
     }
 
     public ProductQuality getQuality() {
