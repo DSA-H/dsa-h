@@ -45,9 +45,9 @@ public class EditProductController implements Initializable {
     @FXML
     private ChoiceBox choice_unit;
     @FXML
-    private ChoiceBox choice_category;
+    private ChoiceBox<ProductCategory> choice_category;
     @FXML
-    private ChoiceBox choice_production;
+    private ChoiceBox<Region> choice_production;
     @FXML
     private CheckBox check_quality;
     @FXML
@@ -55,7 +55,7 @@ public class EditProductController implements Initializable {
     @FXML
     private TableView<ProductCategory> tableview_category;
     @FXML
-    private TableView<String> tableview_production;
+    private TableView<Region> tableview_production;
     @FXML
     private TableColumn tablecolumn_category;
     @FXML
@@ -63,7 +63,13 @@ public class EditProductController implements Initializable {
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialise EditProductController");
+        log.debug("initialize EditProductController");
+        //DEBUG:
+        /*ProductUnit pu = new ProductUnit();
+        pu.setName("pu");
+        pu.setUnitType("ut");
+        pu.setValue(10);
+        productUnitService.add(pu);*/
 
         // init ChoiceBoxes
         List<String> attributeList = new ArrayList<>();
@@ -85,12 +91,11 @@ public class EditProductController implements Initializable {
             text_name.setText(selectedProduct.getName());
             text_cost.setText(selectedProduct.getCost().toString());
             choice_attribute.getSelectionModel().select(selectedProduct.getAttribute().getValue());
-            choice_unit.getSelectionModel().select(productUnitService.get(selectedProduct.getUnit()));
-
-            //tablecolumn_category <= selectedProduct.getCategories();
-            //ObservableList<RegionBorder> data = FXCollections.observableArrayList(regionBorderService.getAllForRegion(selectedRegion.getId()));
-            //borderTable.setItems(data);
-            //tablecolumn_production <= selectedProduct.getProductions();
+            //choice_unit.getSelectionModel().select(productUnitService.get(selectedProduct.getUnit()));
+            ObservableList<Region> regionData = FXCollections.observableArrayList(selectedProduct.getRegions());
+            tableview_production.setItems(regionData);
+            ObservableList<ProductCategory> categoryData = FXCollections.observableArrayList(selectedProduct.getCategories());
+            tableview_category.setItems(categoryData);
             textarea_comment.setText(selectedProduct.getComment());
         }else {
             isNewProduct = true;
@@ -121,13 +126,19 @@ public class EditProductController implements Initializable {
         Integer cost = Integer.parseInt(text_cost.getText());
         ProductUnit unit = (ProductUnit) choice_unit.getSelectionModel().getSelectedItem();
         ProductAttribute attribute = ProductAttribute.parse(choice_attribute.getSelectionModel().getSelectedIndex());
+        List<ProductCategory> localCategoryList = tableview_category.getItems();
+        List<Region> localRegionList = tableview_production.getItems();
 
         selectedProduct.setName(name);
         selectedProduct.setCost(cost);
-        selectedProduct.setUnit(unit);
+
+        //selectedProduct.setUnit(unit);
+
         selectedProduct.setAttribute(attribute);
         selectedProduct.setQuality(check_quality.isSelected());
         selectedProduct.setComment(textarea_comment.getText());
+        selectedProduct.setCategories(localCategoryList);
+        selectedProduct.setRegions(localRegionList);
 
         if(isNewProduct) {
             productService.add(selectedProduct);
@@ -135,77 +146,73 @@ public class EditProductController implements Initializable {
             productService.update(selectedProduct);
         }
 
-        // save productcategories & productproductions
-        List<ProductCategory> localCategoryList = tableview_category.getItems();
-        /*
-        for(RegionBorder border : regionBorderService.getAllForRegion(selectedRegion.getId())) {
-            boolean contain = false;
-            for(RegionBorder localBorder : localBorderList) {
-                if (localBorder.getPk().equals(border.getPk())) {
-                    regionBorderService.update(border);
-                    contain = true;
-                    break;
-                }
-            }
-            if(!contain) {
-                regionBorderService.remove(border);
-            }
-            localBorderList.remove(border);
-        }
-        for(RegionBorder border : localBorderList) {
-            regionBorderService.add(border);
-        }
-
-        // return to regionlist
-        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        // return to productslist
+        Stage stage = (Stage) text_name.getScene().getWindow();
         Parent scene = null;
         SpringFxmlLoader loader = new SpringFxmlLoader();
 
-        scene = (Parent) loader.load("/gui/regionlist.fxml");
-
+        scene = (Parent) loader.load("/gui/productslist.fxml");
         stage.setScene(new Scene(scene, 600, 438));
-        */
     }
-/*
-    @FXML
-    private void onAddBorderPressed() {
-        log.debug("AddBorderPressed");
 
-        RegionBorder border = new RegionBorder();
-        RegionBorderPk borderPk = new RegionBorderPk();
+    @FXML
+    private void onAddCategoryPressed() {
+        log.debug("AddCategoryPressed");
 
         try {
-            borderPk.setRegion1(selectedRegion);
-            Region borderTo = (Region) borderChoiceBox.getSelectionModel().getSelectedItem();
-            if(borderTo == null) {
-                throw new DSAValidationException("Wählen sie ein Gebiet aus, welches an dieses Gebiet grenzen soll.");
+            ProductCategory pc = choice_category.getSelectionModel().getSelectedItem();
+            if (pc!=null){
+                tableview_category.getItems().add(pc);
             }
-            borderPk.setRegion2(borderTo);
-            border.setBorderCost(Integer.parseInt(borderCost.getText()));
-            border.setPk(borderPk);
-            borderTable.getItems().add(border);
-
-            borderChoiceBox.getItems().remove(border.getPk().getRegion2());
-            borderChoiceBox.getSelectionModel().selectFirst();
         }catch (NumberFormatException ex) {
-            throw new DSAValidationException("Grenzkosten müssen eine Zahl sein.");
+            throw new DSAValidationException("Fehler beim Hinzufügen der Kategorie.");
         }
     }
 
     @FXML
-    private void onRemoveBorderPressed() {
-        RegionBorder selectedborder = borderTable.getFocusModel().getFocusedItem();
-        if(selectedborder != null) {
-            borderTable.getItems().remove(selectedborder);
-            if(selectedborder.getPk().getRegion1().equals(selectedRegion)) {
-                borderChoiceBox.getItems().add(selectedborder.getPk().getRegion2());
-            }else {
-                borderChoiceBox.getItems().add(selectedborder.getPk().getRegion1());
+    private void onRemoveCategoryPressed() {
+        try {
+            ProductCategory pc = choice_category.getSelectionModel().getSelectedItem();
+            if (pc!=null){
+                tableview_category.getItems().remove(pc);
+                choice_category.getItems().add(pc);
             }
+        }catch (NumberFormatException ex) {
+            throw new DSAValidationException("Fehler beim Entfernen der Kategorie.");
         }
 
-        checkFocus();
+        //checkFocus();
     }
+
+    @FXML
+    private void onAddProductionPressed() {
+        log.debug("AddCategoryPressed");
+
+        try {
+            Region r = choice_production.getSelectionModel().getSelectedItem();
+            if (r!=null){
+                tableview_production.getItems().add(r);
+            }
+        }catch (NumberFormatException ex) {
+            throw new DSAValidationException("Fehler beim hinzufügen des Produktionsgebietes");
+        }
+    }
+    @FXML
+    private void onRemoveProductionPressed() {
+        try {
+            Region r = choice_production.getSelectionModel().getSelectedItem();
+            if (r!=null){
+                tableview_production.getItems().remove(r);
+                choice_production.getItems().add(r);
+            }
+        }catch (NumberFormatException ex) {
+            throw new DSAValidationException("Fehler beim Entfernen des Produktionsgebietes.");
+        }
+
+        //checkFocus();
+    }
+/*
+
 
     @FXML
     private void checkFocus() {
