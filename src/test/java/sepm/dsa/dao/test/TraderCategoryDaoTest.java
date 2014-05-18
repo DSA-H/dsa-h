@@ -38,6 +38,7 @@ public class TraderCategoryDaoTest {
         myCategory.setName("fooTrader");
         //TODO change
         myCategory.setAssortments(null);
+        traderCategoryDao.add(myCategory);
 
         TraderCategory persTraderCat = traderCategoryDao.get(myCategory.getId());
         Assert.assertTrue(persTraderCat != null);
