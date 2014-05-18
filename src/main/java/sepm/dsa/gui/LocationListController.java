@@ -86,8 +86,6 @@ public class LocationListController implements Initializable {
 	Stage stage =  (Stage) locationTable.getScene().getWindow();
 	Parent root = (Parent) loader.load("/gui/editlocation.fxml");
 
-	    EditLocationController.setLocation(null);
-
         stage.setTitle("Ort-Details");
         stage.setScene(new Scene(root, 600, 438));
         stage.show();
@@ -101,7 +99,8 @@ public class LocationListController implements Initializable {
 	Parent root = (Parent) loader.load("/gui/editlocation.fxml");
 
         Location selectedLocation = locationTable.getFocusModel().getFocusedItem();
-        EditLocationController.setLocation(selectedLocation);
+        ((EditLocationController)loader.getController()).setLocation(selectedLocation);
+
 
         stage.setTitle("Location-Details");
         stage.setScene(new Scene(root, 600, 438));
