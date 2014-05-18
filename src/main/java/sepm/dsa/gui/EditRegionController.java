@@ -268,7 +268,7 @@ public class EditRegionController implements Initializable {
         }
     }
 
-    public static void setRegion(Region region) {
+    public void setRegion(Region region) {
         log.debug("calling setRegion(" + region + ")");
         selectedRegion = region;
     }
