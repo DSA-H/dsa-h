@@ -1,11 +1,14 @@
 package sepm.dsa.model;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.jdbc.core.CallableStatementCallback;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "regions")
@@ -38,6 +41,12 @@ public class Region implements Serializable {
     @NotNull
     @Column(nullable = false)
     private Integer rainfallChanceId;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region1", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RegionBorder> borders1 = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region2", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RegionBorder> borders2 = new HashSet<>();
 
 
     public Integer getId() {
@@ -82,8 +91,9 @@ public class Region implements Serializable {
     public void setTemperature(Temperature temperature) {
         if (temperature == null) {
             this.temperatureId = null;
+        } else {
+            this.temperatureId = temperature.getValue();
         }
-        this.temperatureId = temperature.getValue();
     }
 
 
@@ -97,8 +107,25 @@ public class Region implements Serializable {
     public void setRainfallChance(RainfallChance rainfallChance) {
         if (rainfallChance == null) {
             this.rainfallChanceId = null;
+        } else {
+            this.rainfallChanceId = rainfallChance.getValue();
         }
-        this.rainfallChanceId = rainfallChance.getValue();
+    }
+
+    public Set<RegionBorder> getBorders1() {
+        return borders1;
+    }
+
+    public void setBorders1(Set<RegionBorder> borders1) {
+        this.borders1 = borders1;
+    }
+
+    public Set<RegionBorder> getBorders2() {
+        return borders2;
+    }
+
+    public void setBorders2(Set<RegionBorder> borders2) {
+        this.borders2 = borders2;
     }
 
     @Override

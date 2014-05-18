@@ -22,8 +22,9 @@ import java.util.List;
 public class MainMenuController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(MainMenuController.class);
+	private SpringFxmlLoader loader;
 
-    @FXML
+	@FXML
     private MenuBar menuBar;
     @FXML
     private Menu dateiMenu;
@@ -43,6 +44,8 @@ public class MainMenuController implements Initializable {
     private MenuItem verwaltenWaehrungen;
     @FXML
     private MenuItem verwaltenWaren;
+    @FXML
+    private MenuItem location;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
@@ -53,12 +56,21 @@ public class MainMenuController implements Initializable {
     private void onGrenzenGebieteClicked() {
         log.debug("onGrenzenGebieteClicked - open Grenzen und Gebiete Window");
         Stage stage = new Stage();
-        Parent scene = null;
-        SpringFxmlLoader loader = new SpringFxmlLoader();
-
-        scene = (Parent) loader.load("/gui/regionlist.fxml");
+	Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
 
         stage.setTitle("Grenzen und Gebiete");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
+    private void onShowLocationsClicked() {
+        log.debug("onShowLocationsClicked - open Location Window");
+        Stage stage = new Stage();
+        Parent scene = (Parent) loader.load("/gui/locationlist.fxml");
+
+        stage.setTitle("Orte verwalten");
         stage.setScene(new Scene(scene, 600, 438));
         stage.setResizable(false);
         stage.show();
@@ -79,7 +91,7 @@ public class MainMenuController implements Initializable {
      */
     public boolean exitProgramm() {
         Stage primaryStage = (Stage)menuBar.getScene().getWindow();
-        List<Stage> stages = new ArrayList<Stage>(StageHelper.getStages());
+        List<Stage> stages = new ArrayList<>(StageHelper.getStages());
 
         // only primaryStage
         if(stages.size() <= 1) {
@@ -91,7 +103,7 @@ public class MainMenuController implements Initializable {
                 .owner(primaryStage)
                 .title("Programm beenden?")
                 .masthead(null)
-                .message("Wollen Sie das Händertool wirklich beenden? Nicht gespeicherte Änderungen gehen dabei verloren.")
+                .message("Wollen Sie das Händlertool wirklich beenden? Nicht gespeicherte Änderungen gehen dabei verloren.")
                 .showConfirm();
 
         if(response == Dialog.Actions.YES) {
@@ -108,4 +120,8 @@ public class MainMenuController implements Initializable {
             return false;
         }
     }
+
+	public void setLoader(SpringFxmlLoader loader) {
+		this.loader = loader;
+	}
 }

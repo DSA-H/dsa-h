@@ -16,19 +16,18 @@ public interface RegionService {
     /**
      * Add a new region to DB
      * @param r region (not null)
-     * @return the assigned id
      */
-    int add(Region r);
+    void add(Region r);
 
     /**
      * Update a region
-     * @param r region (not null)
+     * @param r region (must not be null)
      */
     void update(Region r);
 
     /**
      * Removes a region from DB and also all connected region borders
-     * @param r region (not null)
+     * @param r region (must not be null)
      * @see sepm.dsa.model.RegionBorder
      */
     void remove(Region r);
