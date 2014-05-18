@@ -80,6 +80,14 @@ public class Product implements Serializable {
         }
         this.attributeId = attribute.getValue();
     }
+    public ProductUnit getUnit() {
+        if (attributeId == null){
+            return null;
+        }else {
+            return null; //TODO: ProductUnitService
+        }
+    }
+
 
     public String getComment() {
         return comment;

@@ -9,7 +9,7 @@
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.hsqldb.jdbc.JDBCDriver"/>
-        <property name="url" value="jdbc:hsqldb:file:database/fooDB"/>
+        <property name="url" value="jdbc:hsqldb:file:fooDB"/>
         <property name="username" value="sa"/>
         <property name="password" value=""/>
     </bean>
@@ -30,6 +30,7 @@
                 <value>sepm.dsa.model.AssortmentNature</value>
                 <value>sepm.dsa.model.ProductCategory</value>
                 <value>sepm.dsa.model.Location</value>
+                <value>sepm.dsa.model.ProductUnit</value>
             </list>
         </property>
         <property name="mappingResources">
@@ -40,6 +41,9 @@
                 <value>sepm/dsa/model/hibernate/Trader.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/TraderCategory.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Location.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Product.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/ProductCategory.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/ProductUnit.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -66,6 +70,9 @@
     <bean id="traderDao" class="sepm.dsa.dao.TraderDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+    <bean id="productDao" class="sepm.dsa.dao.ProductDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 
     <bean id="traderCategory" class="sepm.dsa.dao.TraderCategoryDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
@@ -75,6 +82,13 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="productCategoryDao" class="sepm.dsa.dao.ProductCategoryDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="productUnitDao" class="sepm.dsa.dao.ProductUnitDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
@@ -89,17 +103,30 @@
         <property name="locationDao" ref="locationDao"/>
     </bean>
 
+    <bean id="productService" class="sepm.dsa.service.ProductServiceImpl">
+        <property name="productDao" ref="productDao"/>
+    </bean>
+
+    <bean id="productCategoryService" class="sepm.dsa.service.ProductCategoryServiceImpl">
+        <property name="productCategoryDao" ref="productCategoryDao"/>
+    </bean>
+
+    <bean id="productUnitService" class="sepm.dsa.service.ProductUnitServiceImpl">
+        <property name="productUnitDao" ref="productUnitDao"/>
+    </bean>
+
     <!-- GUI DI -->
     <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController">
 	    <property name="loader" ref="loader"/>
     </bean>
+    <bean id="regionListController" class="sepm.dsa.gui.RegionListController">
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
-	<property name="loader" ref="loader"/>
+	    <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
     </bean>
     <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
-	<property name="loader" ref="loader"/>
+	    <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
     </bean>
@@ -110,6 +137,15 @@
     <bean id="EditLocationController" class="sepm.dsa.gui.EditLocationController">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
+        <property name="regionService" ref="regionService"/>
+    </bean>
+    <bean id="productListController" class="sepm.dsa.gui.ProductListController">
+        <property name="productService" ref="productService"/>
+    </bean>
+    <bean id="editProductController" class="sepm.dsa.gui.EditProductController">
+        <property name="productService" ref="productService"/>
+        <property name="productCategoryService" ref="productCategoryService"/>
+        <property name="productUnitService" ref="productUnitService"/>
         <property name="regionService" ref="regionService"/>
     </bean>
 

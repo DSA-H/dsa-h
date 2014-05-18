@@ -58,6 +58,8 @@ public class MainMenuController implements Initializable {
         Stage stage = new Stage();
 	Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
 
+        scene = (Parent) loader.load("/gui/regionlist.fxml");
+
         stage.setTitle("Grenzen und Gebiete");
         stage.setScene(new Scene(scene, 600, 438));
         stage.setResizable(false);
