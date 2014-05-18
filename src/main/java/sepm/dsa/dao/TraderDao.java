@@ -13,35 +13,34 @@ public interface TraderDao {
      * Persists a {@code Trader} in the Database
      *
      * @param trader to be persisted must not be null
-     * @return
      */
-    void add(Trader trader);
+    public void add(Trader trader);
 
     /**
      * Updates a already existing {@code Trader} in the database
      *
      * @param trader to update must not be null
      */
-    void update(Trader trader);
+    public void update(Trader trader);
 
     /**
      * Delete a trader permanently
      *
      * @param trader to be deleted must not be null
      */
-    void remove(Trader trader);
+    public void remove(Trader trader);
+
+    /**
+     * Finds all Traders
+     *
+     * @return the trader or throw a DSARuntimeException;
+     */
+    public Trader get(int id);
 
     /**
      * Finds all Traders
      *
      * @return the traders or empty list of no traders exist (not null)
      */
-    Trader get(int id);
-
-    /**
-     * Finds all Traders
-     *
-     * @return the traders or empty list of no traders exist (not null)
-     */
-    List<Trader> getAllByTrader(Trader trader);
+    public List<Trader> getAllByLocation(Trader trader);
 }

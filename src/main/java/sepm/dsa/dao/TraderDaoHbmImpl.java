@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.exceptions.DSARegionNotExistingException;
+import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Trader;
 
@@ -49,17 +50,17 @@ public class TraderDaoHbmImpl implements TraderDao {
         Object result = sessionFactory.getCurrentSession().get(Trader.class, id);
 
         if (result == null) {
-            throw new DSARegionNotExistingException();
+            throw new DSARuntimeException("Für diese ID existiert leider kein Trader");
         }
         log.trace("returning " + result);
         return (Trader) result;
     }
 
     @Override
-    public List<Trader> getAllByLocation(Location location) {
-        log.debug("calling getAllByLocation("+location+")");
+    public List<Trader> getAllByLocation(Trader trader) {
+        log.debug("calling getAllByLocation("+trader+")");
         List<?> list = sessionFactory.getCurrentSession().getNamedQuery("trader.getAllForLocation")
-                .setParameter("location", location)
+                .setParameter("location", trader)
                 .list();
 
         List<Trader> result = new Vector<>(list.size());
