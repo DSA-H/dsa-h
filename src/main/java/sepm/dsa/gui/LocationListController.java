@@ -94,7 +94,7 @@ public class LocationListController implements Initializable {
             Action response = Dialogs.create()
                     .title("Löschen?")
                     .masthead(null)
-                    .message("Wollen Sie den Ort '" + selectedLocation.getName() + "' und alle zugehörigen Händler WTF ja nein ??")
+                    .message("Wollen Sie den Ort '" + selectedLocation.getName() + "' löschen")
                     .showConfirm(); // TODO was ist hier sinnvoll?
             if (response == Dialog.Actions.YES) {
                 locationService.remove(selectedLocation);
