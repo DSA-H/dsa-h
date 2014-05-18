@@ -42,6 +42,14 @@ public class Product implements Serializable {
     @Column(nullable = false)
     private Boolean quality;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
