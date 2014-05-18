@@ -24,7 +24,7 @@ public class Location implements Serializable {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name="region", nullable = false)
+    @JoinColumn(name = "region", nullable = false)
     private Region region;
 
     @NotNull
@@ -180,7 +180,7 @@ public class Location implements Serializable {
         if (region != null ? !region.equals(location.region) : location.region != null) return false;
         if (sizeId != location.sizeId) return false;
         if (weatherId != location.weatherId) return false;
-       // if (weatherCollectedDate != null ? !weatherCollectedDate.equals(location.weatherCollectedDate) : location.weatherCollectedDate != null)
+        // if (weatherCollectedDate != null ? !weatherCollectedDate.equals(location.weatherCollectedDate) : location.weatherCollectedDate != null)
         //    return false;
         if (xCoord != null ? !xCoord.equals(location.xCoord) : location.xCoord != null) return false;
         if (yCoord != null ? !yCoord.equals(location.yCoord) : location.yCoord != null) return false;

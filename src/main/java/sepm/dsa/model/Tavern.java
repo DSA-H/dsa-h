@@ -11,7 +11,7 @@ public class Tavern implements Serializable {
     private Integer xPos;
     private Integer yPos;
     private Integer usage;
-//    private ??? overnightStayPrice;
+    //    private ??? overnightStayPrice;
     private DSADate onDate;
     private Location location;
 

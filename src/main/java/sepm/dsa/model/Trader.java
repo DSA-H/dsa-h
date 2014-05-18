@@ -1,6 +1,7 @@
 package sepm.dsa.model;
 
 import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -10,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "traders")
-public class Trader implements Serializable{
+public class Trader implements Serializable {
 
     private static final long serialVersionUID = 2857293850231481712L;
 
@@ -58,7 +59,7 @@ public class Trader implements Serializable{
     @JoinColumn(nullable = true)
     private TraderCategory category;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private Location location;
 
@@ -193,7 +194,8 @@ public class Trader implements Serializable{
         if (convince != null ? !convince.equals(trader.convince) : trader.convince != null) return false;
         if (deals != null ? !deals.equals(trader.deals) : trader.deals != null) return false;
         if (id != null ? !id.equals(trader.id) : trader.id != null) return false;
-        if (intelligence != null ? !intelligence.equals(trader.intelligence) : trader.intelligence != null) return false;
+        if (intelligence != null ? !intelligence.equals(trader.intelligence) : trader.intelligence != null)
+            return false;
         if (location != null ? !location.equals(trader.location) : trader.location != null) return false;
         if (mut != null ? !mut.equals(trader.mut) : trader.mut != null) return false;
         if (name != null ? !name.equals(trader.name) : trader.name != null) return false;

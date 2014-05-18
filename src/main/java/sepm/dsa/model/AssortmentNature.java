@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "assortmentNatures")
-public class AssortmentNature implements Serializable{
+public class AssortmentNature implements Serializable {
     private static final long serialVersionUID = 2957293850231481715L;
 
     @Id

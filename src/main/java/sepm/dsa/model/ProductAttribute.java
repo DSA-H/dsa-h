@@ -20,7 +20,7 @@ public enum ProductAttribute {
     }
 
     public static ProductAttribute parse(int value) {
-        ProductAttribute right = null;		// Default
+        ProductAttribute right = null;        // Default
         for (ProductAttribute item : ProductAttribute.values()) {
             if (item.getValue() == value) {
                 right = item;

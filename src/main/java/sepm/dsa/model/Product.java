@@ -26,9 +26,9 @@ public class Product implements Serializable {
     @Column(nullable = false)
     private Integer cost;
 
-    @NotNull
-    @Column(nullable = false)
-    private String unit;   // todo: Unit is a class, change with Issue DSA-88
+//    @NotNull
+//    @Column(nullable = false)
+//    private String unit;   // todo: Unit is a class, change with Issue DSA-88
 
     @NotNull
     @Column(nullable = false)
@@ -109,7 +109,7 @@ public class Product implements Serializable {
         if (cost != null ? !cost.equals(product.cost) : product.cost != null) return false;
         if (name != null ? !name.equals(product.name) : product.name != null) return false;
         if (quality != null ? !quality.equals(product.quality) : product.quality != null) return false;
-        if (unit != null ? !unit.equals(product.unit) : product.unit != null) return false;
+        //if (unit != null ? !unit.equals(product.unit) : product.unit != null) return false;
 
         return true;
     }
@@ -118,7 +118,7 @@ public class Product implements Serializable {
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (cost != null ? cost.hashCode() : 0);
-        result = 31 * result + (unit != null ? unit.hashCode() : 0);
+        //result = 31 * result + (unit != null ? unit.hashCode() : 0);
         result = 31 * result + (attributeId != null ? attributeId.hashCode() : 0);
         result = 31 * result + (comment != null ? comment.hashCode() : 0);
         result = 31 * result + (quality != null ? quality.hashCode() : 0);

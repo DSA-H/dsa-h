@@ -22,7 +22,7 @@ public enum ProductQuality {
     }
 
     public static ProductQuality parse(int value) {
-        ProductQuality right = null;		// Default
+        ProductQuality right = null;        // Default
         for (ProductQuality item : ProductQuality.values()) {
             if (item.getValue() == value) {
                 right = item;

@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "traderCategories")
-public class TraderCategory implements Serializable{
+public class TraderCategory implements Serializable {
     private static final long serialVersionUID = 2957793850231481713L;
 
 

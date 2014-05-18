@@ -61,8 +61,6 @@ public class TraderDaoTest {
 
         Trader persistedTrader = traderDao.get(trader.getId());
         assertTrue(persistedTrader != null);
-
-        traderDao.remove(trader);
     }
 
     @Test(expected = org.hibernate.PropertyValueException.class)
@@ -82,7 +80,7 @@ public class TraderDaoTest {
         assertTrue(persistedTrader == null);
     }
 
-  /*  @Test
+    @Test
     @DatabaseSetup("/testData.xml")
     public void update_ShouldPersistEntity() {
         Trader persistedTrader = traderDao.get(2);
@@ -120,6 +118,6 @@ public class TraderDaoTest {
         persistedTrader = traderDao.get(1);
         assertTrue(persistedTrader != null);
         assertTrue(persistedTrader.getOffers().contains(o1));
-    }*/
+    }
 
 }

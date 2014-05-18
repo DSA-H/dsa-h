@@ -30,10 +30,10 @@ public final class DSADate {
     }
 
     public void setMonth(int month) {
-        if(month > 13 || month < 1) {
+        if (month > 13 || month < 1) {
             throw new DSADateException("Invalid Month '" + month + "'. Month has to be between 1 and 13");
         }
-        if(month == 13 && day > 5) {
+        if (month == 13 && day > 5) {
             throw new DSADateException("Invalid Day in Month 13 '" + day + "'. Month 13 has only 5 days");
         }
         this.month = month;
@@ -44,42 +44,42 @@ public final class DSADate {
     }
 
     public void setDay(int day) {
-        if(day > 30 || day < 1) {
-            throw new DSADateException("Invalid Day '" +day + "'. Day has to be between 1 and 30");
+        if (day > 30 || day < 1) {
+            throw new DSADateException("Invalid Day '" + day + "'. Day has to be between 1 and 30");
         }
         this.day = day;
     }
 
     public boolean isAfter(DSADate date) {
-        if(this.getYear()>date.getYear()) {
+        if (this.getYear() > date.getYear()) {
             return true;
-        }else if(this.getYear()==date.getYear()) {
-            if(this.getMonth()>date.getMonth()) {
+        } else if (this.getYear() == date.getYear()) {
+            if (this.getMonth() > date.getMonth()) {
                 return true;
-            }else if(this.getMonth()==date.getMonth()) {
-                if(this.getDay()>this.getDay()) {
+            } else if (this.getMonth() == date.getMonth()) {
+                if (this.getDay() > this.getDay()) {
                     return true;
-                }else {
+                } else {
                     return false;
                 }
-            }else {
+            } else {
                 return false;
             }
-        }else {
+        } else {
             return false;
         }
     }
 
     public long getTimestamp() {
-        return year*365 + (month - 1) *30 + (day-1);
+        return year * 365 + (month - 1) * 30 + (day - 1);
     }
 
     public void setTimestamp(long timestamp) {
-        this.year = (int)timestamp / 365;
-        timestamp = timestamp% 365;
-        this.month = (int)(timestamp / 30) + 1;
+        this.year = (int) timestamp / 365;
+        timestamp = timestamp % 365;
+        this.month = (int) (timestamp / 30) + 1;
         timestamp = timestamp % 30;
-        this.day = (int)timestamp + 1;
+        this.day = (int) timestamp + 1;
     }
 
     @Override

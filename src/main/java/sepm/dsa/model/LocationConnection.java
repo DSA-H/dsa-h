@@ -44,5 +44,4 @@ public class LocationConnection implements Serializable {
     }
 
 
-
 }
