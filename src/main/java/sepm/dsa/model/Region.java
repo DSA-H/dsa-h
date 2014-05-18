@@ -128,6 +128,13 @@ public class Region implements Serializable {
         this.borders2 = borders2;
     }
 
+    public Set<RegionBorder> getAllBorders() {
+        Set<RegionBorder> result = new HashSet<>(borders1.size() + borders2.size());
+        result.addAll(borders1);
+        result.addAll(borders2);
+        return result;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -41,7 +41,7 @@ public class RegionServiceTest {
 
     private Region addRegion2;
     private Region addRegion3;
-    private RegionBorder regionBorder1;
+//    private RegionBorder regionBorder1;
 
     @Before
     public void setup() {
@@ -84,12 +84,12 @@ public class RegionServiceTest {
         addRegion3.setTemperature(Temperature.VULCANO);
         addRegion3.setRainfallChance(RainfallChance.HIGH);
 
-        regionBorder1 = new RegionBorder();
-        regionBorder1.setBorderCost(8);
-        regionBorder1.setRegion1(addRegion2);
-        regionBorder1.setRegion2(addRegion3);
-        addRegion2.getBorders1().add(regionBorder1);
-        addRegion3.getBorders2().add(regionBorder1);
+//        regionBorder1 = new RegionBorder();
+//        regionBorder1.setBorderCost(8);
+//        regionBorder1.setRegion1(addRegion2);
+//        regionBorder1.setRegion2(addRegion3);
+//        addRegion2.getBorders1().add(regionBorder1);
+//        addRegion3.getBorders2().add(regionBorder1);
 
         System.out.println("testSetup");
     }
@@ -137,22 +137,43 @@ public class RegionServiceTest {
         assertTrue (rs.getAll().size() == size);
     }
 
-//    @Test
-//    @DatabaseSetup("/testData.xml")
+    @Test
+    @DatabaseSetup("/testData.xml")
     public void add_withBorder_shouldPersist() {
         int size = rs.getAll().size();
+
+        // must exist
         rs.add(addRegion2);
+
+        // add region border
+        RegionBorder regionBorder1 = new RegionBorder();
+        regionBorder1.setBorderCost(8);
+        addRegion3.getBorders2().add(regionBorder1);
+        regionBorder1.setRegion1(addRegion2);
+        regionBorder1.setRegion2(addRegion3);
+
+        // now add the region
         rs.add(addRegion3);
+
         List<Region> listLater = rs.getAll();
         int sizeLater = listLater.size();
         assertTrue(sizeLater == size + 2);
         assertTrue(listLater.contains(addRegion2));
         assertTrue(listLater.contains(addRegion3));
-        addRegion2.getBorders1().add(regionBorder1);
-        rs.update(addRegion2);
-        assertTrue(addRegion2.getBorders1().contains(regionBorder1) || addRegion2.getBorders2().contains(regionBorder1));
+        addRegion2 = rs.get(addRegion2.getId());
+        assertTrue(addRegion2.getAllBorders().contains(regionBorder1));
         addRegion3 = rs.get(addRegion3.getId());
-        assertTrue(addRegion3.getBorders1().contains(regionBorder1) || addRegion3.getBorders2().contains(regionBorder1));
+        assertTrue(addRegion3.getAllBorders().contains(regionBorder1));
+
+    }
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void oneToMany_hasValues() {
+        Region region = rs.get(1);
+        assertTrue(region.getAllBorders().size() == 3);
+        assertTrue(region.getBorders1().size() == 3);
+        assertTrue(region.getBorders2().size() == 0);
 
     }
 
