@@ -68,4 +68,30 @@ public class Offer {
     public void setQuality(ProductQuality quality) {
         this.quality = quality;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Offer offer = (Offer) o;
+
+        if (amount != null ? !amount.equals(offer.amount) : offer.amount != null) return false;
+        if (id != null ? !id.equals(offer.id) : offer.id != null) return false;
+        if (pricePerUnit != null ? !pricePerUnit.equals(offer.pricePerUnit) : offer.pricePerUnit != null) return false;
+        if (product != null ? !product.equals(offer.product) : offer.product != null) return false;
+        if (quality != offer.quality) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (product != null ? product.hashCode() : 0);
+        result = 31 * result + (amount != null ? amount.hashCode() : 0);
+        result = 31 * result + (pricePerUnit != null ? pricePerUnit.hashCode() : 0);
+        result = 31 * result + (quality != null ? quality.hashCode() : 0);
+        return result;
+    }
 }

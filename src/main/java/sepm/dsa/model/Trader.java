@@ -178,4 +178,48 @@ public class Trader {
     public void setDeals(Set<Deal> deals) {
         this.deals = deals;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Trader trader = (Trader) o;
+
+        if (category != null ? !category.equals(trader.category) : trader.category != null) return false;
+        if (ch != null ? !ch.equals(trader.ch) : trader.ch != null) return false;
+        if (comment != null ? !comment.equals(trader.comment) : trader.comment != null) return false;
+        if (convince != null ? !convince.equals(trader.convince) : trader.convince != null) return false;
+        if (deals != null ? !deals.equals(trader.deals) : trader.deals != null) return false;
+        if (id != null ? !id.equals(trader.id) : trader.id != null) return false;
+        if (in != null ? !in.equals(trader.in) : trader.in != null) return false;
+        if (location != null ? !location.equals(trader.location) : trader.location != null) return false;
+        if (mu != null ? !mu.equals(trader.mu) : trader.mu != null) return false;
+        if (name != null ? !name.equals(trader.name) : trader.name != null) return false;
+        if (offers != null ? !offers.equals(trader.offers) : trader.offers != null) return false;
+        if (size != null ? !size.equals(trader.size) : trader.size != null) return false;
+        if (xPos != null ? !xPos.equals(trader.xPos) : trader.xPos != null) return false;
+        if (yPos != null ? !yPos.equals(trader.yPos) : trader.yPos != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (size != null ? size.hashCode() : 0);
+        result = 31 * result + (xPos != null ? xPos.hashCode() : 0);
+        result = 31 * result + (yPos != null ? yPos.hashCode() : 0);
+        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+        result = 31 * result + (mu != null ? mu.hashCode() : 0);
+        result = 31 * result + (in != null ? in.hashCode() : 0);
+        result = 31 * result + (ch != null ? ch.hashCode() : 0);
+        result = 31 * result + (convince != null ? convince.hashCode() : 0);
+        result = 31 * result + (category != null ? category.hashCode() : 0);
+        result = 31 * result + (location != null ? location.hashCode() : 0);
+        result = 31 * result + (offers != null ? offers.hashCode() : 0);
+        result = 31 * result + (deals != null ? deals.hashCode() : 0);
+        return result;
+    }
 }
