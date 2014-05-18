@@ -15,6 +15,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import sepm.dsa.dao.LocationDao;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Region;
+import sepm.dsa.model.TownSize;
 import sepm.dsa.service.RegionService;
 import sepm.dsa.service.RegionServiceImpl;
 
@@ -46,6 +47,9 @@ public class LocationDaoTest extends TestCase {
         location.setComment("foo comment");
         location.setHeight(40);
         location.setName("foo name");
+        location.setSize(TownSize.BIG);
+        location.setxCoord(5);
+        location.setyCoord(10);
         Region someRandomRegion = regionService.get(2);
         location.setRegion(someRandomRegion);
         locationDao.add(location);

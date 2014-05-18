@@ -47,8 +47,7 @@ public class LocationServiceTest extends TestCase {
         location.setComment("foo comment");
         location.setHeight(40);
         location.setName("foo name");
-        location.setRegion(regionService.get(1));
-        location.setSize(TownSize.MEDIUM);
+        location.setSize(TownSize.BIG);
         location.setxCoord(5);
         location.setyCoord(10);
         Region someRandomRegion = regionService.get(2);
@@ -66,7 +65,7 @@ public class LocationServiceTest extends TestCase {
         Location location = locationService.get(2);
         locationService.remove(location);
 
-        //TODO oder sollte das eine Exception sein?? -- Anwortwort Michael: nein, keine Exception
+        //TODO oder sollte das eine Exception sein?? -- Antwort Michael: nein, keine Exception
         assertEquals(null, locationService.get(2));
     }
 

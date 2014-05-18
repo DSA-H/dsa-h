@@ -100,8 +100,9 @@ public class Location implements Serializable {
     public void setSize(TownSize size) {
         if (size == null) {
             this.sizeId = null;
+        } else {
+            this.sizeId = size.getValue();
         }
-        this.sizeId = size.getValue();
     }
 
     public String getPlanFileName() {
@@ -130,8 +131,9 @@ public class Location implements Serializable {
     public void setWeather(Weather weather) {
         if (weather == null) {
             this.weatherId = null;
+        } else {
+            this.weatherId = weather.getValue();
         }
-        this.weatherId = weather.getValue();
     }
 
     public DSADate getWeatherCollectedDate() {
