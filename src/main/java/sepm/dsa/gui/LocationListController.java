@@ -25,24 +25,24 @@ import sepm.dsa.service.LocationService;
 public class LocationListController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(LocationListController.class);
-	private SpringFxmlLoader loader;
+    private SpringFxmlLoader loader;
 
-	private LocationService locationService;
+    private LocationService locationService;
 
-	@FXML
+    @FXML
     private TableView<Location> locationTable;
-	@FXML
+    @FXML
     private TableColumn nameColumn;
-	@FXML
+    @FXML
     private TableColumn regionColumn;
-	@FXML
+    @FXML
     private Button createButton;
-	@FXML
+    @FXML
     private Button editButton;
     @FXML
     private Button deleteButton;
 
-	@Override
+    @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize LocationListController");
 
@@ -58,8 +58,10 @@ public class LocationListController implements Initializable {
     private void onCreateButtonPressed() {
         log.debug("onCreateButtonPressed - open Location-Details Window");
 
-	Stage stage =  (Stage) locationTable.getScene().getWindow();
-	Parent root = (Parent) loader.load("/gui/editlocation.fxml");
+        EditLocationController.setLocation(null);
+
+        Stage stage = (Stage) locationTable.getScene().getWindow();
+        Parent root = (Parent) loader.load("/gui/editlocation.fxml");
 
         stage.setTitle("Ort erstellen");
         stage.setScene(new Scene(root, 600, 438));
@@ -70,12 +72,12 @@ public class LocationListController implements Initializable {
     private void onEditButtonPressed() {
         log.debug("onEditButtonPressed - open Location-Details Window");
 
-	Stage stage = (Stage) locationTable.getScene().getWindow();
-	Parent root = (Parent) loader.load("/gui/editlocation.fxml");
+        Stage stage = (Stage) locationTable.getScene().getWindow();
+        Parent root = (Parent) loader.load("/gui/editlocation.fxml");
 
+        //TODO schön machen
         Location selectedLocation = locationTable.getFocusModel().getFocusedItem();
-        ((EditLocationController)loader.getController()).setLocation(selectedLocation);
-
+        EditLocationController.setLocation(selectedLocation);
 
         stage.setTitle("Ort bearbeiten");
         stage.setScene(new Scene(root, 600, 438));
@@ -94,7 +96,7 @@ public class LocationListController implements Initializable {
                     .masthead(null)
                     .message("Wollen Sie den Ort '" + selectedLocation.getName() + "' und alle zugehörigen Händler WTF ja nein ??")
                     .showConfirm(); // TODO was ist hier sinnvoll?
-            if(response == Dialog.Actions.YES) {
+            if (response == Dialog.Actions.YES) {
                 locationService.remove(selectedLocation);
                 locationTable.getItems().remove(selectedLocation);
             }
@@ -109,8 +111,7 @@ public class LocationListController implements Initializable {
         if (selectedLocation == null) {
             deleteButton.setDisable(true);
             editButton.setDisable(true);
-        }
-        else{
+        } else {
             deleteButton.setDisable(false);
             editButton.setDisable(false);
         }
@@ -121,7 +122,7 @@ public class LocationListController implements Initializable {
         this.locationService = locationService;
     }
 
-	public void setLoader(SpringFxmlLoader loader) {
-		this.loader = loader;
-	}
+    public void setLoader(SpringFxmlLoader loader) {
+        this.loader = loader;
+    }
 }

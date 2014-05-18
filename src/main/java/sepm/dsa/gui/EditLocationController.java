@@ -183,7 +183,7 @@ public class EditLocationController implements Initializable {
     }
 
 
-    public void setLocation(Location location) {
+    public static void setLocation(Location location) {
         log.debug("calling setLocation(" + location + ")");
         selectedLocation = location;
     }
