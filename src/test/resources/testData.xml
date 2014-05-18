@@ -12,13 +12,13 @@
     <borders region1="4" region2="5" borderCost="4" />
     <borders region1="4" region2="6" borderCost="11" />
     <borders region1="1" region2="6" borderCost="6" />
-    <traderCategories id="1" name="category1" assortments="null" />
-    <traderCategories id="2" name="category2" assortments="null" />
-    <locations id="1" name="location1" region="1" xCoord="7" yCoord="7" sizeId="1" planFileName="null" height="0" weatherId="1" weatherCollectedDate="null" comment="comment" />
-    <products id="1" name="product1" cost="17" unit="" attributeId="1" comment="" quality="false" />
-    <products id="2" name="product2" cost="23" unit="" attributeId="2" comment="" quality="true" />
-    <traders id="1" name="Optimus Prime" size="20" xPos="7" yPos="7" comment="" mu="14" in="14" ch="14" convince="5" category="1" location="1" offers="null" deals="null" />
-    <traders id="2" name="Megatron" size="18" xPos="7" yPos="7" comment="" mu="13" in="13" ch="13" convince="7" category="2" location="1" offers="null" deals="null" />
+    <traderCategories id="1" name="category1" />
+    <traderCategories id="2" name="category2" />
+    <locations id="1" name="location1" region="1" xCoord="7" yCoord="7" sizeId="1" height="0" weatherId="1" comment="comment" />
+    <products id="1" name="product1" cost="17" unit="unit1" attributeId="1" quality="false" />
+    <products id="2" name="product2" cost="23" unit="unit2" attributeId="2" quality="true" />
+    <traders id="1" name="Optimus Prime" size="20" xPos="7" yPos="7" comment="" mut="14" intelligence="14" charisma="14" convince="5" category="1" location="1" />
+    <traders id="2" name="Megatron" size="18" xPos="7" yPos="7" comment="" mut="13" intelligence="13" charisma="13" convince="7" category="2" location="1" />
     <offers id="1" product="1" amount="2" pricePerUnit="50" qualityId="1" />
     <offers id="2" product="2" amount="8" pricePerUnit="10" qualityId="0" />
 </dataset>

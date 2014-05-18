@@ -49,10 +49,12 @@ public class Location implements Serializable {
     @Column(nullable = true)
     private Integer weatherId;
 
+    /*
     @Column(nullable = true)
     @Embedded
     //TODO abklären martin johannes
     private DSADate weatherCollectedDate;
+    */
 
     @Size(max = 1000)
     @Column(nullable = true, length = 1000)
@@ -136,6 +138,7 @@ public class Location implements Serializable {
         }
     }
 
+    /*
     public DSADate getWeatherCollectedDate() {
         return weatherCollectedDate;
     }
@@ -143,6 +146,7 @@ public class Location implements Serializable {
     public void setWeatherCollectedDate(DSADate weatherCollectedDate) {
         this.weatherCollectedDate = weatherCollectedDate;
     }
+    */
 
     public String getComment() {
         return comment;
@@ -176,8 +180,8 @@ public class Location implements Serializable {
         if (region != null ? !region.equals(location.region) : location.region != null) return false;
         if (sizeId != location.sizeId) return false;
         if (weatherId != location.weatherId) return false;
-        if (weatherCollectedDate != null ? !weatherCollectedDate.equals(location.weatherCollectedDate) : location.weatherCollectedDate != null)
-            return false;
+       // if (weatherCollectedDate != null ? !weatherCollectedDate.equals(location.weatherCollectedDate) : location.weatherCollectedDate != null)
+        //    return false;
         if (xCoord != null ? !xCoord.equals(location.xCoord) : location.xCoord != null) return false;
         if (yCoord != null ? !yCoord.equals(location.yCoord) : location.yCoord != null) return false;
 
@@ -195,7 +199,7 @@ public class Location implements Serializable {
         result = 31 * result + (planFileName != null ? planFileName.hashCode() : 0);
         result = 31 * result + (height != null ? height.hashCode() : 0);
         result = 31 * result + (weatherId != null ? weatherId.hashCode() : 0);
-        result = 31 * result + (weatherCollectedDate != null ? weatherCollectedDate.hashCode() : 0);
+        //result = 31 * result + (weatherCollectedDate != null ? weatherCollectedDate.hashCode() : 0);
         result = 31 * result + (comment != null ? comment.hashCode() : 0);
         return result;
     }
