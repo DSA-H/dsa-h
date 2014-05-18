@@ -113,7 +113,7 @@ public class RegionListController implements Initializable {
 
         EditRegionController.setRegion(null);
 
-	    Stage stage = new Stage();// (Stage) regionTable.getScene().getWindow();
+	    Stage stage = (Stage) regionTable.getScene().getWindow();
 	    Parent root = (Parent) loader.load("/gui/editregion.fxml");
 
         stage.setTitle("Gebiet-Details");
