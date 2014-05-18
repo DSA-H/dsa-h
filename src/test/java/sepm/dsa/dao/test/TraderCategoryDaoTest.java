@@ -15,6 +15,9 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import sepm.dsa.dao.TraderCategoryDao;
 import sepm.dsa.model.TraderCategory;
 
+import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.hasItems;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:testContext.xml"})
 @TestExecutionListeners({
@@ -33,7 +36,8 @@ public class TraderCategoryDaoTest extends TestCase {
     public void testAdd() throws Exception {
         TraderCategory myCategory = new TraderCategory();
         myCategory.setName("fooTrader");
-        myCategory.setAssortments();
+        //TODO change
+        myCategory.setAssortments(null);
 
         TraderCategory persTraderCat = traderCategoryDao.get(myCategory.getId());
         assertTrue(persTraderCat != null);
@@ -47,12 +51,18 @@ public class TraderCategoryDaoTest extends TestCase {
     @Test
     @DatabaseSetup("/testData.xml")
     public void testRemove() throws Exception {
+        TraderCategory traderCategory = traderCategoryDao.get(1);
+        traderCategoryDao.remove(traderCategory);
 
+        assertEquals(null, traderCategoryDao.get(traderCategory.getId()));
     }
 
     @Test
     @DatabaseSetup("/testData.xml")
     public void testGetAllByTraderCategory() throws Exception {
-
+        TraderCategory cat1 = traderCategoryDao.get(1);
+        TraderCategory l1 = traderCategoryDao.get(1);
+        TraderCategory l2 = traderCategoryDao.get(2);
+        assertThat(traderCategoryDao.getAllByTraderCategory(cat1), hasItems(l1, l2));
     }
 }
