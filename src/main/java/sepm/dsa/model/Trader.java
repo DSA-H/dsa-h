@@ -25,11 +25,9 @@ public class Trader {
     @Column(nullable = false)
     private Integer size;
 
-    @NotNull
     @Column(nullable = false)
     private Integer xPos;
 
-    @NotNull
     @Column(nullable = false)
     private Integer yPos;
 

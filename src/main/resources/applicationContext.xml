@@ -52,6 +52,10 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="traderDao" class="sepm.dsa.dao.TraderDaoHbmlImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
 
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
