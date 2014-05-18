@@ -24,7 +24,7 @@ public class ProductCategory {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @Column(nullable = true)
+    @JoinColumn(nullable = true)
     private ProductCategory parent;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)

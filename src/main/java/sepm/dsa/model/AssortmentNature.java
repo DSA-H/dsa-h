@@ -12,7 +12,7 @@ public class AssortmentNature {
     @Column(nullable = false, unique = true)
     private Integer id;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(nullable = true)
     private ProductCategory productCategory;
 

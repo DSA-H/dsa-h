@@ -23,6 +23,13 @@
                 <value>sepm.dsa.model.Region</value>
                 <value>sepm.dsa.model.RegionBorder</value>
                 <value>sepm.dsa.model.Trader</value>
+                <value>sepm.dsa.model.Product</value>
+                <value>sepm.dsa.model.Offer</value>
+                <value>sepm.dsa.model.Deal</value>
+                <value>sepm.dsa.model.DSADate</value>
+                <value>sepm.dsa.model.TraderCategory</value>
+                <value>sepm.dsa.model.AssortmentNature</value>
+                <value>sepm.dsa.model.ProductCategory</value>
             </list>
         </property>
         <property name="mappingResources">

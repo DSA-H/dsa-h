@@ -2,9 +2,24 @@ package sepm.dsa.model;
 
 import sepm.dsa.exceptions.DSADateException;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+@Entity
+@Table(name = "dates")
 public final class DSADate {
+    @Id
+    @GeneratedValue
+    @Column(nullable = false, unique = true)
+    private Integer id;
+    @NotNull
+    @Column(nullable = false)
     private int year;
+    @NotNull
+    @Column(nullable = false)
     private int month;   // every month has 30 days, month 13 has 5 days
+    @NotNull
+    @Column(nullable = false)
     private int day;
 
     public DSADate(int month, int day, int year) {
