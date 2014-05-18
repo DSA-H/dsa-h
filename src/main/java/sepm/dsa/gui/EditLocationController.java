@@ -59,7 +59,7 @@ public class EditLocationController implements Initializable {
     @FXML
     private Button removeBorderButton;
     //map file name
-    private String backgroundMapName;
+    private String backgroundMapName = "";
 
 
     @Override
