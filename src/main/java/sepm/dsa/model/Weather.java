@@ -3,11 +3,9 @@ package sepm.dsa.model;
 
 public enum Weather {
 
-    MINI(0, "Mini"),
-    LITTLE(1, "klein"),
-    MEDIUM(2, "mittel"),
-    BIG(3, "hoch"),
-    METROPOL(4, "Metropole");
+    SUNNY(0, "sonnig"),
+    RAINY(1, "regnerisch"),
+    CLOUDY(2, "bewölkt");
 
     private int value;
     private String name;

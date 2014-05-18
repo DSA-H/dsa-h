@@ -4,9 +4,6 @@ import sepm.dsa.model.Currency;
 
 import java.util.List;
 
-/**
- * Created by georg on 16.05.14 for project sepmDSA.
- */
 public class CurrencyDaoImpl implements CurrencyDao{
     @Override
     public void add(Currency currency) {

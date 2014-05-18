@@ -100,7 +100,6 @@ public class RegionServiceTest {
         // Teardown for data used by the unit tests
     }
 
-    //@DatabaseSetup("testData.xml")
     @Test
     @DatabaseSetup("/testData.xml")
     public void testXML(){

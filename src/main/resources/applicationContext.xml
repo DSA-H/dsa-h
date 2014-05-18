@@ -9,7 +9,7 @@
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.hsqldb.jdbc.JDBCDriver"/>
-        <property name="url" value="jdbc:hsqldb:file:fooDB"/>
+        <property name="url" value="jdbc:hsqldb:file:database/fooDB"/>
         <property name="username" value="sa"/>
         <property name="password" value=""/>
     </bean>
@@ -39,6 +39,7 @@
                 <value>sepm/dsa/model/hibernate/RegionBorder.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Trader.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/TraderCategory.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Location.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -73,6 +74,9 @@
     <bean id="locationDao" class="sepm.dsa.dao.LocationDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+    <bean id="locationDao" class="sepm.dsa.dao.LocationDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
@@ -82,6 +86,10 @@
 
     <bean id="regionBorderService" class="sepm.dsa.service.RegionBorderServiceImpl">
         <property name="regionBorderDao" ref="regionBorderDao"/>
+    </bean>
+
+    <bean id="locationService" class="sepm.dsa.service.LocationServiceImpl">
+        <property name="locationDao" ref="locationDao"/>
     </bean>
 
     <!-- GUI DI -->
@@ -98,7 +106,15 @@
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
     </bean>
-
+    <bean id="LocationListController" class="sepm.dsa.gui.LocationListController">
+        <property name="loader" ref="loader"/>
+        <property name="locationService" ref="locationService"/>
+    </bean>
+    <bean id="EditLocationController" class="sepm.dsa.gui.EditLocationController">
+        <property name="loader" ref="loader"/>
+        <property name="locationService" ref="locationService"/>
+        <property name="regionService" ref="regionService"/>
+    </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">

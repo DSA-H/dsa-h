@@ -12,21 +12,21 @@ public interface LocationDao {
      * @param location to be persisted must not be null
      * @return
      */
-    void add(Location location);
+    public void add(Location location);
 
     /**
      * Updates a already existing {@code Location} in the database
      *
      * @param location to update must not be null
      */
-    void update(Location location);
+    public void update(Location location);
 
     /**
      * Delete a location permanently
      *
      * @param location to be deleted must not be null
      */
-    void remove(Location location);
+    public void remove(Location location);
 
     Location get(int id);
 
@@ -35,5 +35,5 @@ public interface LocationDao {
      *
      * @return the locations or empty list of no locations exist (not null)
      */
-    List<Location> getAll();
+    public List<Location> getAll();
 }

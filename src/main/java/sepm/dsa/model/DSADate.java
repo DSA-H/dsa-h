@@ -1,9 +1,6 @@
 package sepm.dsa.model;
 
-
 import sepm.dsa.exceptions.DSADateException;
-
-import javax.persistence.Column;
 
 public final class DSADate {
     private int year;

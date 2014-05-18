@@ -1,6 +1,7 @@
 package sepm.dsa.model;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.jdbc.core.CallableStatementCallback;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -90,8 +91,9 @@ public class Region implements Serializable {
     public void setTemperature(Temperature temperature) {
         if (temperature == null) {
             this.temperatureId = null;
+        } else {
+            this.temperatureId = temperature.getValue();
         }
-        this.temperatureId = temperature.getValue();
     }
 
 
@@ -105,8 +107,9 @@ public class Region implements Serializable {
     public void setRainfallChance(RainfallChance rainfallChance) {
         if (rainfallChance == null) {
             this.rainfallChanceId = null;
+        } else {
+            this.rainfallChanceId = rainfallChance.getValue();
         }
-        this.rainfallChanceId = rainfallChance.getValue();
     }
 
     public Set<RegionBorder> getBorders1() {

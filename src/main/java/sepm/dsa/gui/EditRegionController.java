@@ -111,7 +111,9 @@ public class EditRegionController implements Initializable {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<RegionBorder, String> r) {
                 if (r.getValue() != null) {
-                    if (r.getValue().getRegion1().equals(selectedRegion)) {
+                    if (r.getValue()
+                            .getRegion1()
+                            .equals(selectedRegion)) {
                         return new SimpleStringProperty(r.getValue().getRegion2().getName());
                     } else {
                         return new SimpleStringProperty(r.getValue().getRegion1().getName());
