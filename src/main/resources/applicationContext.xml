@@ -64,6 +64,7 @@
     </bean>
 
     <bean id="productService" class="sepm.dsa.service.ProductServiceImpl">
+        <property name="productDao" ref="productDao"/>
     </bean>
 
     <!-- GUI DI -->
@@ -76,6 +77,12 @@
     <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
+    </bean>
+    <bean id="EditProductController" class="sepm.dsa.gui.EditProductController">
+        <property name="productService" ref="productService"/>
+    </bean>
+    <bean id="ProductListController" class="sepm.dsa.gui.ProductListController">
+        <property name="productService" ref="productService"/>
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
