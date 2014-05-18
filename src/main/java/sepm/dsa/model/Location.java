@@ -23,8 +23,8 @@ public class Location implements Serializable {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
+    @ManyToOne
+    @JoinColumn(name="region", nullable = false)
     private Region region;
 
     @NotNull
@@ -50,7 +50,6 @@ public class Location implements Serializable {
     @Column(nullable = false)
     private Integer weatherId;
 
-    @NotNull
     @Column(nullable = true)
     @Embedded
     //TODO abklären martin johannes

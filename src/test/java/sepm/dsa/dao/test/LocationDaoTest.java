@@ -36,6 +36,9 @@ public class LocationDaoTest extends TestCase {
     @Autowired
     private LocationDao locationDao;
 
+    @Autowired
+    private RegionService regionService;
+
     @Test
     @DatabaseSetup("/testData.xml")
     public void testAdd() throws Exception {
@@ -43,7 +46,6 @@ public class LocationDaoTest extends TestCase {
         location.setComment("foo comment");
         location.setHeight(40);
         location.setName("foo name");
-        RegionService regionService = new RegionServiceImpl();
         Region someRandomRegion = regionService.get(2);
         location.setRegion(someRandomRegion);
         locationDao.add(location);

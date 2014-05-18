@@ -36,6 +36,9 @@ public class LocationServiceTest extends TestCase {
     @Autowired
     private LocationService locationService;
 
+    @Autowired
+    private RegionService regionService;
+
     private Location locaction;
 
     @Test
@@ -45,7 +48,6 @@ public class LocationServiceTest extends TestCase {
         location.setComment("foo comment");
         location.setHeight(40);
         location.setName("foo name");
-        RegionService regionService = new RegionServiceImpl();
         Region someRandomRegion = regionService.get(2);
         location.setRegion(someRandomRegion);
         locationService.add(location);
