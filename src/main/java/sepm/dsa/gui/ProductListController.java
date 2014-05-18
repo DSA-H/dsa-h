@@ -25,6 +25,7 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
+import sepm.dsa.service.ProductService;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
 
@@ -35,7 +36,7 @@ public class ProductListController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(ProductListController.class);
 
-    private RegionService productService;
+    private ProductService productService;
 
     @FXML
     private TableView<Product> tableview_product;
@@ -116,16 +117,16 @@ public class ProductListController implements Initializable {
     @FXML
     private void onCreateButtonPressed() {
         log.debug("onCreateButtonPressed - open Product-List Window");
-        Stage stage =  (Stage) tableview_product.getScene().getWindow();
-        Parent root = null;
+        Stage stage = new Stage();
+        Parent scene = null;
         SpringFxmlLoader loader = new SpringFxmlLoader();
 
         EditRegionController.setRegion(null);
+        scene = (Parent) loader.load("/gui/editproduct.fxml");
 
-        root = (Parent) loader.load("/gui/editproduct.fxml");
-
-        stage.setTitle("Product-Details");
-        stage.setScene(new Scene(root, 600, 438));
+        stage.setTitle("Waren-Details");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
         stage.show();
     }
     /*
@@ -182,12 +183,8 @@ public class ProductListController implements Initializable {
 
     }
 
-    public void setRegionService(RegionService regionService) {
-        this.regionService = regionService;
-    }
-
-    public void setRegionBorderService(RegionBorderService regionBorderService) {
-        this.regionBorderService = regionBorderService;
-    }
     */
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
+    }
 }

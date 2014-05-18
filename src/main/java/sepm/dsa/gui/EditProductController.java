@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
+import sepm.dsa.service.ProductService;
+import sepm.dsa.service.ProductServiceImpl;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
 
@@ -31,8 +33,7 @@ public class EditProductController implements Initializable {
     private static final Logger log = LoggerFactory.getLogger(EditProductController.class);
 
     private static Product selectedProduct;
-
-    private RegionService productService;
+    private ProductService productService;
     // true if the region is not editing
     private boolean isNewProduct;
 
@@ -276,9 +277,17 @@ public class EditProductController implements Initializable {
             removeBorderButton.setDisable(false);
         }
     }
-
-    public static void setRegion(Region region) {
-        selectedRegion = region;
-    }
     */
+
+    public static void setProduct(Product product) {
+        selectedProduct = product;
+    }
+
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
+    }
+
+    public ProductService getProductService() {
+        return productService;
+    }
 }

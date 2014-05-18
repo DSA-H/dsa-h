@@ -67,6 +67,11 @@ public class ProductServiceImpl implements ProductService, Serializable {
         return result;
     }
 
+    public void setProductDao(ProductDao productDao) {
+        log.debug("calling setProductDao(" + productDao + ")");
+        this.productDao = productDao;
+    }
+
     /**
      * Validates a product
      * @param product

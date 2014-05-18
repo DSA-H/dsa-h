@@ -3,6 +3,7 @@ package sepm.dsa.dao;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Product;
 
@@ -12,6 +13,8 @@ import java.util.Vector;
 /**
  * Created by Chris on 17.05.2014.
  */
+@Repository
+@Transactional(readOnly = true)
 public class ProductDaoHbmImpl implements ProductDao {
 
     private static final Logger log = LoggerFactory.getLogger(RegionDaoHbmImpl.class);
