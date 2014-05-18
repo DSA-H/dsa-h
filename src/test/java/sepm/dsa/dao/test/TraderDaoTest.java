@@ -42,6 +42,7 @@ public class TraderDaoTest {
         trader.setMut(14);
         trader.setComment("test12345 Kommentar");
         trader.setConvince(15);
+        trader.setSize(20);
         Location l = new Location();
         l.setName("l1");
         l.setHeight(120);
