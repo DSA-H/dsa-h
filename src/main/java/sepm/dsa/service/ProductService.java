@@ -13,13 +13,13 @@ public interface ProductService {
      * @param id the id
      * @return the product
      */
-    Product get(int id);
+    Product get(Integer id);
 
     /**
      * Add a new product to DB
      * @param p product (not null)
      */
-    void add(Product p);
+    int add(Product p);
 
     /**
      * Update a product
