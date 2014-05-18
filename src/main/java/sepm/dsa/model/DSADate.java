@@ -8,10 +8,6 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "dates")
 public final class DSADate {
-    @Id
-    @GeneratedValue
-    @Column(nullable = false, unique = true)
-    private Integer id;
     @NotNull
     @Column(nullable = false)
     private int year;

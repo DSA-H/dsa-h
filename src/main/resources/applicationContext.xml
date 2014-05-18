@@ -30,6 +30,7 @@
                 <value>sepm.dsa.model.TraderCategory</value>
                 <value>sepm.dsa.model.AssortmentNature</value>
                 <value>sepm.dsa.model.ProductCategory</value>
+                <value>sepm.dsa.model.Location</value>
             </list>
         </property>
         <property name="mappingResources">
