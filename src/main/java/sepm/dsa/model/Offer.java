@@ -12,7 +12,7 @@ public class Offer {
     @Column(nullable = false, unique = true)
     private Integer id;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private Product product;
 
@@ -26,7 +26,8 @@ public class Offer {
 
     @NotNull
     @Column(nullable = false)
-    private Integer qualityId;
+    @Enumerated(EnumType.ORDINAL)
+    private ProductQuality quality;
 
     public Integer getId() {
         return id;
@@ -61,16 +62,10 @@ public class Offer {
     }
 
     public ProductQuality getQuality() {
-        if (qualityId == null) {
-            return null;
-        }
-        return ProductQuality.parse(qualityId);
+        return quality;
     }
 
-    public void setquality(ProductQuality quality) {
-        if (quality == null) {
-            this.qualityId = null;
-        }
-        this.qualityId = quality.getValue();
+    public void setQuality(ProductQuality quality) {
+        this.quality = quality;
     }
 }
