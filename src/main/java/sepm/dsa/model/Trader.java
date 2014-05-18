@@ -37,22 +37,22 @@ public class Trader {
 
     @NotNull
     @Column(nullable = false)
-    private Integer mu;
+    private Integer mut;
 
     @NotNull
     @Column(nullable = false)
-    private Integer in;
+    private Integer intelligence;
 
     @NotNull
     @Column(nullable = false)
-    private Integer ch;
+    private Integer charisma;
 
     @NotNull
     @Column(nullable = false)
     private Integer convince;
 
-    @NotNull
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(nullable = false)
     private TraderCategory category;
 
     @NotNull
@@ -116,27 +116,27 @@ public class Trader {
     }
 
     public Integer getMu() {
-        return mu;
+        return mut;
     }
 
     public void setMu(Integer mu) {
-        this.mu = mu;
+        this.mut = mu;
     }
 
     public Integer getIn() {
-        return in;
+        return intelligence;
     }
 
     public void setIn(Integer in) {
-        this.in = in;
+        this.intelligence = in;
     }
 
     public Integer getCh() {
-        return ch;
+        return charisma;
     }
 
     public void setCh(Integer ch) {
-        this.ch = ch;
+        this.charisma = ch;
     }
 
     public Integer getConvince() {
@@ -187,14 +187,14 @@ public class Trader {
         Trader trader = (Trader) o;
 
         if (category != null ? !category.equals(trader.category) : trader.category != null) return false;
-        if (ch != null ? !ch.equals(trader.ch) : trader.ch != null) return false;
+        if (charisma != null ? !charisma.equals(trader.charisma) : trader.charisma != null) return false;
         if (comment != null ? !comment.equals(trader.comment) : trader.comment != null) return false;
         if (convince != null ? !convince.equals(trader.convince) : trader.convince != null) return false;
         if (deals != null ? !deals.equals(trader.deals) : trader.deals != null) return false;
         if (id != null ? !id.equals(trader.id) : trader.id != null) return false;
-        if (in != null ? !in.equals(trader.in) : trader.in != null) return false;
+        if (intelligence != null ? !intelligence.equals(trader.intelligence) : trader.intelligence != null) return false;
         if (location != null ? !location.equals(trader.location) : trader.location != null) return false;
-        if (mu != null ? !mu.equals(trader.mu) : trader.mu != null) return false;
+        if (mut != null ? !mut.equals(trader.mut) : trader.mut != null) return false;
         if (name != null ? !name.equals(trader.name) : trader.name != null) return false;
         if (offers != null ? !offers.equals(trader.offers) : trader.offers != null) return false;
         if (size != null ? !size.equals(trader.size) : trader.size != null) return false;
@@ -212,9 +212,9 @@ public class Trader {
         result = 31 * result + (xPos != null ? xPos.hashCode() : 0);
         result = 31 * result + (yPos != null ? yPos.hashCode() : 0);
         result = 31 * result + (comment != null ? comment.hashCode() : 0);
-        result = 31 * result + (mu != null ? mu.hashCode() : 0);
-        result = 31 * result + (in != null ? in.hashCode() : 0);
-        result = 31 * result + (ch != null ? ch.hashCode() : 0);
+        result = 31 * result + (mut != null ? mut.hashCode() : 0);
+        result = 31 * result + (intelligence != null ? intelligence.hashCode() : 0);
+        result = 31 * result + (charisma != null ? charisma.hashCode() : 0);
         result = 31 * result + (convince != null ? convince.hashCode() : 0);
         result = 31 * result + (category != null ? category.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);

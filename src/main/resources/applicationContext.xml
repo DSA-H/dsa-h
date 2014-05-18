@@ -23,10 +23,14 @@
                 <value>sepm.dsa.model.Region</value>
                 <value>sepm.dsa.model.RegionBorder</value>
                 <value>sepm.dsa.model.Trader</value>
-                <value>sepm.dsa.model.Offer</value>
                 <value>sepm.dsa.model.Product</value>
+                <value>sepm.dsa.model.Offer</value>
                 <value>sepm.dsa.model.Deal</value>
                 <value>sepm.dsa.model.DSADate</value>
+                <value>sepm.dsa.model.TraderCategory</value>
+                <value>sepm.dsa.model.AssortmentNature</value>
+                <value>sepm.dsa.model.ProductCategory</value>
+                <value>sepm.dsa.model.Location</value>
             </list>
         </property>
         <property name="mappingResources">
@@ -35,6 +39,7 @@
                 <value>sepm/dsa/model/hibernate/Region.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/RegionBorder.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Trader.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/TraderCategory.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -62,6 +67,9 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="traderCategory" class="sepm.dsa.dao.TraderCategoryDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
