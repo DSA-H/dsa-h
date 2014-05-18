@@ -220,7 +220,6 @@ public class Trader implements Serializable {
         result = 31 * result + (convince != null ? convince.hashCode() : 0);
         result = 31 * result + (category != null ? category.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
-        result = 31 * result + (deals != null ? deals.hashCode() : 0);
         return result;
     }
 }
