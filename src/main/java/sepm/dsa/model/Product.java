@@ -13,9 +13,13 @@ public class Product implements Serializable {
     private static final long serialVersionUID = 5890354733231481712L;
 
     @Id
+    @GeneratedValue
+    @Column(nullable = false, unique = true)
+    private Integer id;
+
     @NotBlank
     @Size(max = 60, min = 1)
-    @Column(nullable = false, length = 60, unique = true)
+    @Column(nullable = false, length = 60)
     private String name;
 
     @NotNull
@@ -24,7 +28,7 @@ public class Product implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    private String unit;
+    private String unit;   // todo: Unit is a class, change with Issue DSA-88
 
     @Size(max = 20)
     @Column(nullable = true, length = 20)
@@ -38,7 +42,6 @@ public class Product implements Serializable {
     @Column(nullable = false)
     private Boolean quality;
 
-
     public String getName() {
         return name;
     }
@@ -47,13 +50,6 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
 
     public Integer getCost() {
         return cost;
