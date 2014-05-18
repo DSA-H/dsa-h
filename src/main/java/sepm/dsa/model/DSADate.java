@@ -1,24 +1,20 @@
 package sepm.dsa.model;
 
+
 import sepm.dsa.exceptions.DSADateException;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Column;
 
-@Entity
-@Table(name = "dates")
 public final class DSADate {
-    @NotNull
-    @Column(nullable = false)
     private int year;
-    @NotNull
-    @Column(nullable = false)
     private int month;   // every month has 30 days, month 13 has 5 days
-    @NotNull
-    @Column(nullable = false)
     private int day;
 
-    public DSADate(int month, int day, int year) {
+    public DSADate(long timestamp) {
+        setTimestamp(timestamp);
+    }
+
+    public DSADate(int year, int month, int day) {
         setDay(day);
         setMonth(month);
         this.year = year;
@@ -75,6 +71,18 @@ public final class DSADate {
         }else {
             return false;
         }
+    }
+
+    public long getTimestamp() {
+        return year*365 + (month - 1) *30 + (day-1);
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.year = (int)timestamp / 365;
+        timestamp = timestamp% 365;
+        this.month = (int)(timestamp / 30) + 1;
+        timestamp = timestamp % 30;
+        this.day = (int)timestamp + 1;
     }
 
     @Override

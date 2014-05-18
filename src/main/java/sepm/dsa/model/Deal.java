@@ -28,9 +28,9 @@ public class Deal {
     @Column(nullable = false)
     private Integer qualityId;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private DSADate date;
+    @NotNull
+    @Column
+    private Long date;
 
     public Integer getId() {
         return id;
@@ -79,11 +79,11 @@ public class Deal {
     }
 
     public DSADate getDate() {
-        return date;
+        return new DSADate(date);
     }
 
     public void setDate(DSADate date) {
-        this.date = date;
+        this.date = date.getTimestamp();
     }
 
     @Override
