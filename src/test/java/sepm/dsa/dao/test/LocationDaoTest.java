@@ -15,8 +15,9 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import sepm.dsa.dao.LocationDao;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Region;
+import sepm.dsa.model.TownSize;
+import sepm.dsa.model.Weather;
 import sepm.dsa.service.RegionService;
-import sepm.dsa.service.RegionServiceImpl;
 
 import java.util.List;
 
@@ -42,11 +43,17 @@ public class LocationDaoTest extends TestCase {
     @Test
     @DatabaseSetup("/testData.xml")
     public void testAdd() throws Exception {
+        List<Location> all = locationDao.getAll();
         Location location = new Location();
         location.setComment("foo comment");
         location.setHeight(40);
         location.setName("foo name");
-        Region someRandomRegion = regionService.get(2);
+        location.setHeight(100);
+        location.setxCoord(40);
+        location.setyCoord(20);
+        location.setSize(TownSize.MEDIUM);
+        location.setWeather(Weather.BIG);
+        Region someRandomRegion = regionService.get(1);
         location.setRegion(someRandomRegion);
         locationDao.add(location);
 

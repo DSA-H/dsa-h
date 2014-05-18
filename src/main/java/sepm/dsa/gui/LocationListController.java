@@ -1,7 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,12 +7,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import org.controlsfx.control.action.Action;
 import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
@@ -40,8 +36,6 @@ public class LocationListController implements Initializable {
 	@FXML
     private TableColumn regionColumn;
 	@FXML
-    private TableColumn merchantColumn;
-	@FXML
     private Button createButton;
 	@FXML
     private Button editButton;
@@ -50,16 +44,17 @@ public class LocationListController implements Initializable {
 
 	@Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialise LocationListController");
+        log.debug("initialize LocationListController");
 
         // init table
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        regionColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Location, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Location, String> l) {
-                if (l.getValue() != null) {
-                    int locationId = l.getValue().getId();
-                    StringBuilder sb = new StringBuilder();
+        regionColumn.setCellValueFactory(new PropertyValueFactory<>("region"));
+//                new Callback<TableColumn.CellDataFeatures<Location, String>, ObservableValue<String>>() {
+//            @Override
+//            public ObservableValue<String> call(TableColumn.CellDataFeatures<Location, String> l) {
+//                if (l.getValue() != null) {
+//                    int locationId = l.getValue().getId();
+//                    StringBuilder sb = new StringBuilder();
 //                    for (RegionBorder rb : borders) {
 //                        // not this region
 //                        if (rb.getRegion1().getId() != locationId) {
@@ -72,30 +67,13 @@ public class LocationListController implements Initializable {
 //                    if (sb.length() >= 2) {
 //                        sb.delete(sb.length() - 2, sb.length());
 //                    }
-                    return new SimpleStringProperty(sb.toString());
-                } else {
-                    return new SimpleStringProperty("");
-                }
-            }
-        });
-        merchantColumn.setCellValueFactory(new PropertyValueFactory<>("merchant"));
-        merchantColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
-            @Override
-            public TableCell call(TableColumn param) {
-                return new TableCell<Location, String>() {
-                    @Override
-                    public void updateItem(String color, boolean empty) {
-                        super.updateItem(color, empty);
-                        if (!empty) {
-                            color = "#" + color;
-                            setStyle("-fx-background-color:" + color);
-                        } else {
-                            setStyle("-fx-background-color:#FFFFFF");
-                        }
-                    }
-                };
-            }
-        });
+//                    return new SimpleStringProperty(sb.toString());
+//                } else {
+//                    return new SimpleStringProperty("");
+//                }
+//            }
+//        });
+
 
         ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
         locationTable.setItems(data);
