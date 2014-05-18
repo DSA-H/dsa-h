@@ -74,7 +74,7 @@ public class TraderDaoTest {
 
         traderDao.remove(trader);
 
-            Trader persistedTrader = traderDao.get(1);
+        Trader persistedTrader = traderDao.get(1);
     }
 
     @Test(expected = org.hibernate.PropertyValueException.class)

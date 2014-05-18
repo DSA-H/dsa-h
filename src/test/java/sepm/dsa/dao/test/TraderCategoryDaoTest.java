@@ -44,7 +44,7 @@ public class TraderCategoryDaoTest {
         Assert.assertTrue(persTraderCat != null);
     }
 
-    @Test
+    @Test(expected = java.lang.IllegalArgumentException.class)
     public void testAdd_null_shouldFail() throws Exception {
         traderCategoryDao.add(null);
     }

@@ -119,7 +119,6 @@
     <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController">
 	    <property name="loader" ref="loader"/>
     </bean>
-    <bean id="regionListController" class="sepm.dsa.gui.RegionListController">
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
 	    <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
