@@ -30,9 +30,9 @@ public class Product implements Serializable {
     @Column(nullable = false)
     private String unit;   // todo: Unit is a class, change with Issue DSA-88
 
-    @Size(max = 20)
-    @Column(nullable = true, length = 20)
-    private String attribute;
+    @NotNull
+    @Column(nullable = false)
+    private Integer attributeId;
 
     @Size(max = 1000)
     @Column(nullable = true, length = 1000)
@@ -41,6 +41,14 @@ public class Product implements Serializable {
     @NotNull
     @Column(nullable = false)
     private Boolean quality;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -59,12 +67,18 @@ public class Product implements Serializable {
         this.cost = cost;
     }
 
-    public String getAttribute() {
-        return attribute;
+    public ProductAttribute getAttribute() {
+        if (attributeId == null) {
+            return null;
+        }
+        return ProductAttribute.parse(attributeId);
     }
 
-    public void setAttribute(String attribute) {
-        this.attribute = attribute;
+    public void setAttribute(ProductAttribute attribute) {
+        if (attribute == null) {
+            this.attributeId = null;
+        }
+        this.attributeId = attribute.getValue();
     }
 
     public String getComment() {
@@ -90,31 +104,24 @@ public class Product implements Serializable {
 
         Product product = (Product) o;
 
-        if (name != null ? !name.equals(product.name) : product.name != null)
-            return false;
-        if (unit != null ? !unit.equals(product.unit) : product.unit != null)
-            return false;
-        if (cost != null ? !cost.equals(product.cost) : product.cost != null)
-            return false;
-        if (attribute != null ? !attribute.equals(product.attribute) : product.attribute != null)
-            return false;
-        if (comment != null ? !comment.equals(product.comment) : product.comment != null)
-            return false;
-        if (quality != null ? !quality.equals(product.quality) : product.quality != null)
-            return false;
+        if (attributeId != null ? !attributeId.equals(product.attributeId) : product.attributeId != null) return false;
+        if (comment != null ? !comment.equals(product.comment) : product.comment != null) return false;
+        if (cost != null ? !cost.equals(product.cost) : product.cost != null) return false;
+        if (name != null ? !name.equals(product.name) : product.name != null) return false;
+        if (quality != null ? !quality.equals(product.quality) : product.quality != null) return false;
+        if (unit != null ? !unit.equals(product.unit) : product.unit != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = (name != null ? name.hashCode() : 0);
-        result = 31 * result + (unit != null ? unit.hashCode() : 0);
+        int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (cost != null ? cost.hashCode() : 0);
-        result = 31 * result + (attribute != null ? attribute.hashCode() : 0);
+        result = 31 * result + (unit != null ? unit.hashCode() : 0);
+        result = 31 * result + (attributeId != null ? attributeId.hashCode() : 0);
         result = 31 * result + (comment != null ? comment.hashCode() : 0);
         result = 31 * result + (quality != null ? quality.hashCode() : 0);
-
         return result;
     }
 
