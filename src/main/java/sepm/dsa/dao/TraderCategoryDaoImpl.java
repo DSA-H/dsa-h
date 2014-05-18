@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.exceptions.DSARuntimeException;
-import sepm.dsa.model.Region;
 import sepm.dsa.model.TraderCategory;
 
 import java.util.List;
@@ -45,7 +44,7 @@ public class TraderCategoryDaoImpl implements TraderCategoryDao {
     public TraderCategory get(int id) {
         log.debug("calling get(" + id + ")");
 
-        Object result = sessionFactory.getCurrentSession().get(Region.class, id);
+        Object result = sessionFactory.getCurrentSession().get(TraderCategory.class, id);
 
         if (result == null) {
             throw new DSARuntimeException("Leider existiert für diese ID keine Trader Category");

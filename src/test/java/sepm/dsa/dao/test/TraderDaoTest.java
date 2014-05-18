@@ -11,6 +11,8 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import sepm.dsa.dao.LocationDao;
+import sepm.dsa.dao.TraderCategoryDao;
 import sepm.dsa.dao.TraderDao;
 import sepm.dsa.model.*;
 
@@ -31,6 +33,10 @@ public class TraderDaoTest {
 
     @Autowired
     private TraderDao traderDao;
+    @Autowired
+    private LocationDao locationDao;
+    @Autowired
+    private TraderCategoryDao traderCategoryDao;
 
     @Test
     @DatabaseSetup("/testData.xml")
@@ -43,25 +49,14 @@ public class TraderDaoTest {
         trader.setComment("test12345 Kommentar");
         trader.setConvince(15);
         trader.setSize(20);
-        Location l = new Location();
-        l.setName("l1");
-        l.setHeight(120);
-        Region r = new Region();
-        r.setName("r1");
-        r.setTemperature(Temperature.MEDIUM);
-        r.setRainfallChance(RainfallChance.DESSERT);
-        l.setRegion(r);
-        l.setxCoord(1);
-        l.setyCoord(7);
-        l.setSize(TownSize.MEDIUM);
+        Location l = locationDao.get(1);
         trader.setLocation(l);
-        TraderCategory tc = new TraderCategory();
-        tc.setName("tc1");
-        trader.setCategory(tc);
         trader.setxPos(1);
         trader.setyPos(2);
-
         traderDao.add(trader);
+        TraderCategory tc = traderCategoryDao.get(1);
+        tc.setName("tc1");
+        trader.setCategory(tc);
 
         Trader persistedTrader = traderDao.get(trader.getId());
         assertTrue(persistedTrader != null);
