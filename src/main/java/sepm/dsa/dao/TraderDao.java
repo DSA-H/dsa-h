@@ -18,5 +18,5 @@ public interface TraderDao {
 
     Trader get(int id);
 
-    List<Location> getAllbyLocation(Location location);
+    List<Trader> getAllByLocation(Location location);
 }
