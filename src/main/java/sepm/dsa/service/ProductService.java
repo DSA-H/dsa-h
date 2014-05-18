@@ -9,11 +9,11 @@ import java.util.List;
  */
 public interface ProductService {
     /**
-     * Get a region by its ID (name)
-     * @param name the name
+     * Get a product by its ID
+     * @param id the id
      * @return the product
      */
-    Product get(String name);
+    Product get(int id);
 
     /**
      * Add a new product to DB
