@@ -1,6 +1,6 @@
 How to run DSA-H
 
-1) maven -Prun
+1) maven install
 
 should run the project
 
