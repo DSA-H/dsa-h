@@ -49,31 +49,6 @@ public class LocationListController implements Initializable {
         // init table
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("region"));
-//                new Callback<TableColumn.CellDataFeatures<Location, String>, ObservableValue<String>>() {
-//            @Override
-//            public ObservableValue<String> call(TableColumn.CellDataFeatures<Location, String> l) {
-//                if (l.getValue() != null) {
-//                    int locationId = l.getValue().getId();
-//                    StringBuilder sb = new StringBuilder();
-//                    for (RegionBorder rb : borders) {
-//                        // not this region
-//                        if (rb.getRegion1().getId() != locationId) {
-//                            sb.append(rb.getRegion1().getName());
-//                        } else {
-//                            sb.append(rb.getRegion2().getName());
-//                        }
-//                        sb.append(", ");
-//                    }
-//                    if (sb.length() >= 2) {
-//                        sb.delete(sb.length() - 2, sb.length());
-//                    }
-//                    return new SimpleStringProperty(sb.toString());
-//                } else {
-//                    return new SimpleStringProperty("");
-//                }
-//            }
-//        });
-
 
         ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
         locationTable.setItems(data);
@@ -86,7 +61,7 @@ public class LocationListController implements Initializable {
 	Stage stage =  (Stage) locationTable.getScene().getWindow();
 	Parent root = (Parent) loader.load("/gui/editlocation.fxml");
 
-        stage.setTitle("Ort-Details");
+        stage.setTitle("Ort erstellen");
         stage.setScene(new Scene(root, 600, 438));
         stage.show();
     }
@@ -102,7 +77,7 @@ public class LocationListController implements Initializable {
         ((EditLocationController)loader.getController()).setLocation(selectedLocation);
 
 
-        stage.setTitle("Location-Details");
+        stage.setTitle("Ort bearbeiten");
         stage.setScene(new Scene(root, 600, 438));
         stage.show();
     }
