@@ -31,7 +31,7 @@ public class Trader {
     @Column(nullable = false)
     private Integer yPos;
 
-    @Size(max = 1000, min = 0)
+    @Size(max = 1000)
     @Column(nullable = true, length = 1000)
     private String comment;
 
@@ -115,28 +115,28 @@ public class Trader {
         this.comment = comment;
     }
 
-    public Integer getMu() {
+    public Integer getMut() {
         return mut;
     }
 
-    public void setMu(Integer mu) {
-        this.mut = mu;
+    public void setMut(Integer mut) {
+        this.mut = mut;
     }
 
-    public Integer getIn() {
+    public Integer getIntelligence() {
         return intelligence;
     }
 
-    public void setIn(Integer in) {
-        this.intelligence = in;
+    public void setIntelligence(Integer intelligence) {
+        this.intelligence = intelligence;
     }
 
-    public Integer getCh() {
+    public Integer getCharisma() {
         return charisma;
     }
 
-    public void setCh(Integer ch) {
-        this.charisma = ch;
+    public void setCharisma(Integer charisma) {
+        this.charisma = charisma;
     }
 
     public Integer getConvince() {
