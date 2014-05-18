@@ -4,12 +4,12 @@ import sepm.dsa.exceptions.DSADateException;
 
 public final class DSADate {
     private int year;
-    private int month;
+    private int month;   // every month has 30 days, month 13 has 5 days
     private int day;
 
     public DSADate(int month, int day, int year) {
-        setMonth(month);
         setDay(day);
+        setMonth(month);
         this.year = year;
     }
 
@@ -26,8 +26,11 @@ public final class DSADate {
     }
 
     public void setMonth(int month) {
-        if(day > 12 || day < 1) {
-            throw new DSADateException("Invalid Month '" + month + "'. Month has to be between 1 and 12");
+        if(month > 13 || month < 1) {
+            throw new DSADateException("Invalid Month '" + month + "'. Month has to be between 1 and 13");
+        }
+        if(month == 13 && day > 5) {
+            throw new DSADateException("Invalid Day in Month 13 '" + day + "'. Month 13 has only 5 days");
         }
         this.month = month;
     }
