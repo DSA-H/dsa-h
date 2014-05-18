@@ -3,7 +3,7 @@ package sepm.dsa.dao.test;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import junit.framework.TestCase;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import static org.junit.matchers.JUnitMatchers.hasItems;
         DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class
 })
-public class TraderCategoryDaoTest extends TestCase {
+public class TraderCategoryDaoTest {
 
     @Autowired
     private TraderCategoryDao traderCategoryDao;
@@ -40,7 +40,7 @@ public class TraderCategoryDaoTest extends TestCase {
         myCategory.setAssortments(null);
 
         TraderCategory persTraderCat = traderCategoryDao.get(myCategory.getId());
-        assertTrue(persTraderCat != null);
+        Assert.assertTrue(persTraderCat != null);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class TraderCategoryDaoTest extends TestCase {
         TraderCategory traderCategory = traderCategoryDao.get(1);
         traderCategoryDao.remove(traderCategory);
 
-        assertEquals(null, traderCategoryDao.get(traderCategory.getId()));
+        Assert.assertEquals(null, traderCategoryDao.get(traderCategory.getId()));
     }
 
     @Test
