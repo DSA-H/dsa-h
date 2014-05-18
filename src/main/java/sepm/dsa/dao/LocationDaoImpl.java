@@ -47,7 +47,8 @@ public class LocationDaoImpl implements LocationDao {
         Object result = sessionFactory.getCurrentSession().get(Location.class, id);
 
         if (result == null) {
-            throw new DSARegionNotExistingException();
+            log.trace("returning " + result);
+            return null;
         }
         log.trace("returning " + result);
         return (Location) result;

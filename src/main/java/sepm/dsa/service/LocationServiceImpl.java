@@ -27,6 +27,7 @@ public class LocationServiceImpl implements LocationService, Serializable {
     private LocationDao locationDao;
 
     @Override
+    @Transactional(readOnly = false)
     public void add(Location location) {
         log.debug("calling add(" + location + ")");
         validate(location);
@@ -34,6 +35,7 @@ public class LocationServiceImpl implements LocationService, Serializable {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void update(Location location) {
         log.debug("calling update(" + location + ")");
         validate(location);
@@ -41,9 +43,10 @@ public class LocationServiceImpl implements LocationService, Serializable {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void remove(Location location) {
         log.debug("calling remove(" + location + ")");
-        locationDao.remove(get(location.getId()));
+        locationDao.remove(location);
     }
 
     @Override

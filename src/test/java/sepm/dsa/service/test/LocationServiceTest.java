@@ -14,6 +14,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Region;
+import sepm.dsa.model.TownSize;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionService;
 import sepm.dsa.service.RegionServiceImpl;
@@ -39,8 +40,6 @@ public class LocationServiceTest extends TestCase {
     @Autowired
     private RegionService regionService;
 
-    private Location locaction;
-
     @Test
     @DatabaseSetup("/testData.xml")
     public void testAdd() throws Exception {
@@ -48,6 +47,10 @@ public class LocationServiceTest extends TestCase {
         location.setComment("foo comment");
         location.setHeight(40);
         location.setName("foo name");
+        location.setRegion(regionService.get(1));
+        location.setSize(TownSize.MEDIUM);
+        location.setxCoord(5);
+        location.setyCoord(10);
         Region someRandomRegion = regionService.get(2);
         location.setRegion(someRandomRegion);
         locationService.add(location);
@@ -63,8 +66,8 @@ public class LocationServiceTest extends TestCase {
         Location location = locationService.get(2);
         locationService.remove(location);
 
-        //TODO oder sollte das eine Exception sein??
-        assertEquals(null, locationService.get(location.getId()));
+        //TODO oder sollte das eine Exception sein?? -- Anwortwort Michael: nein, keine Exception
+        assertEquals(null, locationService.get(2));
     }
 
     @Test

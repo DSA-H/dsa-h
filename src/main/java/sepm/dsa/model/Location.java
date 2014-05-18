@@ -46,8 +46,7 @@ public class Location implements Serializable {
     @Column(nullable = false)
     private Integer height;
 
-    @NotNull
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer weatherId;
 
     @Column(nullable = true)
