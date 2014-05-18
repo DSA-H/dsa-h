@@ -1,25 +1,20 @@
 package sepm.dsa.model;
 
+import org.hibernate.annotations.Columns;
+import org.hibernate.annotations.Entity;
+import org.hibernate.annotations.Type;
 import sepm.dsa.exceptions.DSADateException;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Column;
+import javax.persistence.Table;
 
-@Entity
-@Table(name = "dates")
+@Type
 public final class DSADate {
-    @Id
-    @GeneratedValue
-    @Column(nullable = false, unique = true)
-    private Integer id;
-    @NotNull
-    @Column(nullable = false)
+    @Column
     private int year;
-    @NotNull
-    @Column(nullable = false)
+    @Column
     private int month;   // every month has 30 days, month 13 has 5 days
-    @NotNull
-    @Column(nullable = false)
+    @Column
     private int day;
 
     public DSADate(int month, int day, int year) {
