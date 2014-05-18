@@ -26,7 +26,7 @@ public class Deal {
 
     @NotNull
     @Column(nullable = false)
-    private ProductQuality quality;
+    private Integer qualityId;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -65,11 +65,17 @@ public class Deal {
     }
 
     public ProductQuality getQuality() {
-        return quality;
+        if (qualityId == null) {
+            return null;
+        }
+        return ProductQuality.parse(qualityId);
     }
 
-    public void setQuality(ProductQuality quality) {
-        this.quality = quality;
+    public void setquality(ProductQuality quality) {
+        if (quality == null) {
+            this.qualityId = null;
+        }
+        this.qualityId = quality.getValue();
     }
 
     public DSADate getDate() {
