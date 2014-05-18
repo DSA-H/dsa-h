@@ -62,7 +62,6 @@ public class TraderCategoryDaoTest extends TestCase {
     public void testGetAllByTraderCategory() throws Exception {
         TraderCategory cat1 = traderCategoryDao.get(1);
         TraderCategory l1 = traderCategoryDao.get(1);
-        TraderCategory l2 = traderCategoryDao.get(2);
-        assertThat(traderCategoryDao.getAllByTraderCategory(cat1), hasItems(l1, l2));
+        assertThat(traderCategoryDao.getAllByTraderCategory(cat1), hasItems(l1));
     }
 }
