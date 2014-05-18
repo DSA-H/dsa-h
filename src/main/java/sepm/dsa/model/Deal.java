@@ -34,6 +34,22 @@ public class Deal implements Serializable {
     @Column
     private Long date;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false)
+    private Trader trader;
+
+    public void setDate(Long date) {
+        this.date = date;
+    }
+
+    public Trader getTrader() {
+        return trader;
+    }
+
+    public void setTrader(Trader trader) {
+        this.trader = trader;
+    }
+
     public Integer getId() {
         return id;
     }

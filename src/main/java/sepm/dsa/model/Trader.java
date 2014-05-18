@@ -65,7 +65,7 @@ public class Trader implements Serializable{
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "trader", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Offer> offers = new HashSet<>();
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "trader", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Deal> deals = new HashSet<>();
 
     public Integer getId() {
