@@ -10,6 +10,7 @@ import sepm.dsa.exceptions.DSARegionNotExistingException;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Trader;
+import sepm.dsa.model.TraderCategory;
 
 import java.util.List;
 import java.util.Vector;
@@ -57,10 +58,26 @@ public class TraderDaoHbmImpl implements TraderDao {
     }
 
     @Override
-    public List<Trader> getAllByLocation(Trader trader) {
-        log.debug("calling getAllByLocation("+trader+")");
+    public List<Trader> getAllByLocation(Location location) {
+        log.debug("calling getAllByLocation("+location+")");
         List<?> list = sessionFactory.getCurrentSession().getNamedQuery("trader.getAllForLocation")
-                .setParameter("location", trader)
+                .setParameter("location", location)
+                .list();
+
+        List<Trader> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((Trader) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Trader> getAllByCategory(TraderCategory category) {
+        log.debug("calling getAllByCategory("+category+")");
+        List<?> list = sessionFactory.getCurrentSession().getNamedQuery("trader.getAllForCategory")
+                .setParameter("category", category)
                 .list();
 
         List<Trader> result = new Vector<>(list.size());

@@ -55,7 +55,7 @@ public class Trader implements Serializable {
     @Column(nullable = false)
     private Integer convince;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private TraderCategory category;
 
@@ -199,7 +199,6 @@ public class Trader implements Serializable {
         if (location != null ? !location.equals(trader.location) : trader.location != null) return false;
         if (mut != null ? !mut.equals(trader.mut) : trader.mut != null) return false;
         if (name != null ? !name.equals(trader.name) : trader.name != null) return false;
-        if (offers != null ? !offers.equals(trader.offers) : trader.offers != null) return false;
         if (size != null ? !size.equals(trader.size) : trader.size != null) return false;
         if (xPos != null ? !xPos.equals(trader.xPos) : trader.xPos != null) return false;
         if (yPos != null ? !yPos.equals(trader.yPos) : trader.yPos != null) return false;
@@ -221,7 +220,6 @@ public class Trader implements Serializable {
         result = 31 * result + (convince != null ? convince.hashCode() : 0);
         result = 31 * result + (category != null ? category.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
-        result = 31 * result + (offers != null ? offers.hashCode() : 0);
         result = 31 * result + (deals != null ? deals.hashCode() : 0);
         return result;
     }

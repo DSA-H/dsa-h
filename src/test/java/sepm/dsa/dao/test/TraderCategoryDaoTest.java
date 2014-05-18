@@ -3,6 +3,8 @@ package sepm.dsa.dao.test;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import sepm.dsa.dao.TraderCategoryDao;
+import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.TraderCategory;
 
 import static org.junit.Assert.assertThat;
@@ -36,12 +39,10 @@ public class TraderCategoryDaoTest {
     public void testAdd() throws Exception {
         TraderCategory myCategory = new TraderCategory();
         myCategory.setName("fooTrader");
-        //TODO change
-        myCategory.setAssortments(null);
         traderCategoryDao.add(myCategory);
 
         TraderCategory persTraderCat = traderCategoryDao.get(myCategory.getId());
-        Assert.assertTrue(persTraderCat != null);
+        assertTrue(persTraderCat != null);
     }
 
     @Test(expected = java.lang.IllegalArgumentException.class)
@@ -49,13 +50,14 @@ public class TraderCategoryDaoTest {
         traderCategoryDao.add(null);
     }
 
-    @Test
+    @Test(expected = sepm.dsa.exceptions.DSARuntimeException.class)
     @DatabaseSetup("/testData.xml")
     public void testRemove() throws Exception {
-        TraderCategory traderCategory = traderCategoryDao.get(1);
-        traderCategoryDao.remove(traderCategory);
-
-        Assert.assertEquals(null, traderCategoryDao.get(traderCategory.getId()));
+        TraderCategory myCategory = new TraderCategory();
+        myCategory.setName("fooTrader");
+        traderCategoryDao.add(myCategory);
+        traderCategoryDao.remove(myCategory);
+        traderCategoryDao.get(myCategory.getId());
     }
 
     @Test

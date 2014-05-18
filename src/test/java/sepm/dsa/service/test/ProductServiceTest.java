@@ -35,7 +35,7 @@ public class ProductServiceTest {
     private ProductService ps;
 
     @Test
-    @DatabaseSetup("/productData.xml")
+    @DatabaseSetup("/testData.xml")
     public void testXML()
     {
         System.out.println(ps.getAll().toString());

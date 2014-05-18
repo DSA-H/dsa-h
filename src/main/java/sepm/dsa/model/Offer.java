@@ -109,6 +109,7 @@ public class Offer implements Serializable {
         if (pricePerUnit != null ? !pricePerUnit.equals(offer.pricePerUnit) : offer.pricePerUnit != null) return false;
         if (product != null ? !product.equals(offer.product) : offer.product != null) return false;
         if (qualityId != null ? !qualityId.equals(offer.qualityId) : offer.qualityId != null) return false;
+        if (trader != null ? !trader.equals(offer.trader) : offer.trader != null) return false;
 
         return true;
     }
@@ -116,10 +117,11 @@ public class Offer implements Serializable {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (product != null ? product.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
+        result = 31 * result + (product != null ? product.hashCode() : 0);
         result = 31 * result + (pricePerUnit != null ? pricePerUnit.hashCode() : 0);
         result = 31 * result + (qualityId != null ? qualityId.hashCode() : 0);
+        result = 31 * result + (trader != null ? trader.hashCode() : 0);
         return result;
     }
 }

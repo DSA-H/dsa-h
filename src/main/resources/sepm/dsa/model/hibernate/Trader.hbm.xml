@@ -3,8 +3,12 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <query name="Trader.getAllForLocation">
+    <query name="trader.getAllForLocation">
         <![CDATA[from Trader WHERE location = :location ORDER BY id ASC]]>
+    </query>
+
+    <query name="trader.getAllForCategory">
+        <![CDATA[from Trader WHERE category = :category ORDER BY id ASC]]>
     </query>
 
 </hibernate-mapping>

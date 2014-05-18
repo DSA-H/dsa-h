@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-    <Product name="p1" cost="10" unit="asdf" attribute="a1" comment="noComment" quality="true"/>
-</dataset>
