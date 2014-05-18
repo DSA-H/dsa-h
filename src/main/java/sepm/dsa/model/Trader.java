@@ -52,7 +52,7 @@ public class Trader {
     private Integer convince;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = true)
     private TraderCategory category;
 
     @NotNull
@@ -60,7 +60,7 @@ public class Trader {
     private Location location;
 
     @OneToMany
-    @JoinColumn(nullable = true)
+    @JoinColumn(nullable = false)
     private Set<Offer> offers = new HashSet<>();
 
     @OneToMany
