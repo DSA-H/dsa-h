@@ -22,6 +22,7 @@
                 <!-- hibernate managed model classes -->
                 <value>sepm.dsa.model.Region</value>
                 <value>sepm.dsa.model.RegionBorder</value>
+                <value>sepm.dsa.model.Trader</value>
             </list>
         </property>
         <property name="mappingResources">
@@ -29,6 +30,7 @@
                 <!-- hql named queries xml -->
                 <value>sepm/dsa/model/hibernate/Region.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/RegionBorder.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Trader.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -52,7 +54,7 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="traderDao" class="sepm.dsa.dao.TraderDaoHbmlImpl">
+    <bean id="traderDao" class="sepm.dsa.dao.TraderDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
