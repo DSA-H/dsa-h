@@ -62,11 +62,11 @@ public class Trader {
     private Location location;
 
     @OneToMany
-    @JoinColumn(name = "offers", nullable = true)
+    @JoinColumn(nullable = true)
     private Set<Offer> offers = new HashSet<>();
 
     @OneToMany
-    @JoinColumn(name = "deals", nullable = true)
+    @JoinColumn(nullable = true)
     private Set<Deal> deals = new HashSet<>();
 
     public Integer getId() {
