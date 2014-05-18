@@ -12,6 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name = "productCategories")
 public class ProductCategory {
+
     @Id
     @GeneratedValue
     @Column(nullable = false, unique = true)
@@ -22,12 +23,15 @@ public class ProductCategory {
     @Column(nullable = false, length = 60)
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Column(nullable = true)
     private ProductCategory parent;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProductCategory> childs = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Product> products = new HashSet<>();
 
 
     public Integer getId() {
@@ -62,6 +66,14 @@ public class ProductCategory {
         this.childs = childs;
     }
 
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,6 +85,7 @@ public class ProductCategory {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (parent != null ? !parent.equals(that.parent) : that.parent != null) return false;
+        if (products != null ? !products.equals(that.products) : that.products != null) return false;
 
         return true;
     }
@@ -83,6 +96,7 @@ public class ProductCategory {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (parent != null ? parent.hashCode() : 0);
         result = 31 * result + (childs != null ? childs.hashCode() : 0);
+        result = 31 * result + (products != null ? products.hashCode() : 0);
         return result;
     }
 }
