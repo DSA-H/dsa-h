@@ -110,7 +110,7 @@ public class ProductListController implements Initializable {
         log.debug("onCreateButtonPressed - open Product-List Window");
         Stage stage = new Stage();
         Parent scene = null;
-        EditRegionController.setRegion(null);
+        EditProductController.setProduct(null);
 
         SpringFxmlLoader loader = new SpringFxmlLoader();
         scene = (Parent) loader.load("/gui/editproduct.fxml");

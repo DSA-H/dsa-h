@@ -9,17 +9,17 @@ import java.util.List;
  */
 public interface ProductService {
     /**
-     * Get a region by its ID (name)
-     * @param name the name
+     * Get a product by its ID
+     * @param id the id
      * @return the product
      */
-    Product get(String name);
+    Product get(Integer id);
 
     /**
      * Add a new product to DB
      * @param p product (not null)
      */
-    void add(Product p);
+    int add(Product p);
 
     /**
      * Update a product

@@ -23,6 +23,8 @@
                 <value>sepm.dsa.model.Region</value>
                 <value>sepm.dsa.model.RegionBorder</value>
                 <value>sepm.dsa.model.Product</value>
+                <value>sepm.dsa.model.ProductCategory</value>
+                <value>sepm.dsa.model.ProductUnit</value>
             </list>
         </property>
         <property name="mappingResources">
@@ -31,6 +33,8 @@
                 <value>sepm/dsa/model/hibernate/Region.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/RegionBorder.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Product.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/ProductCategory.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/ProductUnit.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -53,6 +57,14 @@
     <bean id="productDao" class="sepm.dsa.dao.ProductDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+
+    <bean id="productCategoryDao" class="sepm.dsa.dao.ProductCategoryDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="productUnitDao" class="sepm.dsa.dao.ProductUnitDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
@@ -67,22 +79,33 @@
         <property name="productDao" ref="productDao"/>
     </bean>
 
+    <bean id="productCategoryService" class="sepm.dsa.service.ProductCategoryServiceImpl">
+        <property name="productCategoryDao" ref="productCategoryDao"/>
+    </bean>
+
+    <bean id="productUnitService" class="sepm.dsa.service.ProductUnitServiceImpl">
+        <property name="productUnitDao" ref="productUnitDao"/>
+    </bean>
+
     <!-- GUI DI -->
-    <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController">
+    <bean id="mainMenuController" class="sepm.dsa.gui.MainMenuController">
     </bean>
-    <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
+    <bean id="regionListController" class="sepm.dsa.gui.RegionListController">
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
     </bean>
-    <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
+    <bean id="editRegionController" class="sepm.dsa.gui.EditRegionController">
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
     </bean>
-    <bean id="EditProductController" class="sepm.dsa.gui.EditProductController">
+    <bean id="productListController" class="sepm.dsa.gui.ProductListController">
         <property name="productService" ref="productService"/>
     </bean>
-    <bean id="ProductListController" class="sepm.dsa.gui.ProductListController">
+    <bean id="editProductController" class="sepm.dsa.gui.EditProductController">
         <property name="productService" ref="productService"/>
+        <property name="productCategoryService" ref="productCategoryService"/>
+        <property name="productUnitService" ref="productUnitService"/>
+        <property name="regionService" ref="regionService"/>
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>

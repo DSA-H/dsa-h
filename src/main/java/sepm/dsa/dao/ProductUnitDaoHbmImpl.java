@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.model.Product;
+import sepm.dsa.model.ProductUnit;
 
 import java.util.List;
 import java.util.Vector;
@@ -15,7 +15,7 @@ import java.util.Vector;
  */
 @Repository
 @Transactional(readOnly = true)
-public class ProductDaoHbmImpl implements ProductDao {
+public class ProductUnitDaoHbmImpl implements ProductUnitDao {
 
     private static final Logger log = LoggerFactory.getLogger(RegionDaoHbmImpl.class);
 
@@ -23,47 +23,47 @@ public class ProductDaoHbmImpl implements ProductDao {
 
     @Override
     @Transactional(readOnly = false)
-    public int add(Product product) {
-        log.debug("calling add(" + product + ")");
-        sessionFactory.getCurrentSession().save(product);
-        return product.getId();
+    public int add(ProductUnit Unit) {
+        log.debug("calling add(" + Unit + ")");
+        sessionFactory.getCurrentSession().save(Unit);
+        return Unit.getId();
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void update(Product product) {
-        log.debug("calling update(" + product + ")");
-        sessionFactory.getCurrentSession().update(product);
+    public void update(ProductUnit Unit) {
+        log.debug("calling update(" + Unit + ")");
+        sessionFactory.getCurrentSession().update(Unit);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void remove(Product product) {
-        log.debug("calling remove(" + product + ")");
-        sessionFactory.getCurrentSession().delete(product);
+    public void remove(ProductUnit Unit) {
+        log.debug("calling remove(" + Unit + ")");
+        sessionFactory.getCurrentSession().delete(Unit);
     }
 
     @Override
-    public Product get(Integer id) {
+    public ProductUnit get(Integer id) {
         log.debug("calling get(" + id + ")");
 
-        Object result = sessionFactory.getCurrentSession().get(Product.class, id);
+        Object result = sessionFactory.getCurrentSession().get(ProductUnit.class, id);
 
         if (result == null) {
             return null;
         }
         log.trace("returning " + result);
-        return (Product) result;
+        return (ProductUnit) result;
     }
 
     @Override
-    public List<Product> getAll() {
+    public List<ProductUnit> getAll() {
         log.debug("calling getAll()");
-        List<?> list = sessionFactory.getCurrentSession().getNamedQuery("Product.findAll").list();
+        List<?> list = sessionFactory.getCurrentSession().getNamedQuery("ProductUnit.findAll").list();
 
-        List<Product> result = new Vector<>(list.size());
+        List<ProductUnit> result = new Vector<>(list.size());
         for (Object o : list) {
-            result.add((Product) o);
+            result.add((ProductUnit) o);
         }
 
         log.trace("returning " + result);

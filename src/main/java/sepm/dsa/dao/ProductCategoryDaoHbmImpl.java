@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.model.Product;
+import sepm.dsa.model.ProductCategory;
 
 import java.util.List;
 import java.util.Vector;
@@ -15,7 +15,7 @@ import java.util.Vector;
  */
 @Repository
 @Transactional(readOnly = true)
-public class ProductDaoHbmImpl implements ProductDao {
+public class ProductCategoryDaoHbmImpl implements ProductCategoryDao {
 
     private static final Logger log = LoggerFactory.getLogger(RegionDaoHbmImpl.class);
 
@@ -23,47 +23,47 @@ public class ProductDaoHbmImpl implements ProductDao {
 
     @Override
     @Transactional(readOnly = false)
-    public int add(Product product) {
-        log.debug("calling add(" + product + ")");
-        sessionFactory.getCurrentSession().save(product);
-        return product.getId();
+    public int add(ProductCategory category) {
+        log.debug("calling add(" + category + ")");
+        sessionFactory.getCurrentSession().save(category);
+        return category.getId();
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void update(Product product) {
-        log.debug("calling update(" + product + ")");
-        sessionFactory.getCurrentSession().update(product);
+    public void update(ProductCategory category) {
+        log.debug("calling update(" + category + ")");
+        sessionFactory.getCurrentSession().update(category);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void remove(Product product) {
-        log.debug("calling remove(" + product + ")");
-        sessionFactory.getCurrentSession().delete(product);
+    public void remove(ProductCategory category) {
+        log.debug("calling remove(" + category + ")");
+        sessionFactory.getCurrentSession().delete(category);
     }
 
     @Override
-    public Product get(Integer id) {
+    public ProductCategory get(Integer id) {
         log.debug("calling get(" + id + ")");
 
-        Object result = sessionFactory.getCurrentSession().get(Product.class, id);
+        Object result = sessionFactory.getCurrentSession().get(ProductCategory.class, id);
 
         if (result == null) {
             return null;
         }
         log.trace("returning " + result);
-        return (Product) result;
+        return (ProductCategory) result;
     }
 
     @Override
-    public List<Product> getAll() {
+    public List<ProductCategory> getAll() {
         log.debug("calling getAll()");
-        List<?> list = sessionFactory.getCurrentSession().getNamedQuery("Product.findAll").list();
+        List<?> list = sessionFactory.getCurrentSession().getNamedQuery("ProductCategory.findAll").list();
 
-        List<Product> result = new Vector<>(list.size());
+        List<ProductCategory> result = new Vector<>(list.size());
         for (Object o : list) {
-            result.add((Product) o);
+            result.add((ProductCategory) o);
         }
 
         log.trace("returning " + result);

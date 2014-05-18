@@ -28,7 +28,7 @@ public class Product implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    private String unit;   // todo: Unit is a class, change with Issue DSA-88
+    private Integer unitId;
 
     @NotNull
     @Column(nullable = false)
@@ -70,15 +70,33 @@ public class Product implements Serializable {
     public ProductAttribute getAttribute() {
         if (attributeId == null) {
             return null;
+        }else {
+            return ProductAttribute.parse(attributeId);
         }
-        return ProductAttribute.parse(attributeId);
     }
 
     public void setAttribute(ProductAttribute attribute) {
         if (attribute == null) {
             this.attributeId = null;
+        }else {
+            this.attributeId = attribute.getValue();
         }
-        this.attributeId = attribute.getValue();
+    }
+    public ProductUnit getUnit() {
+        if (attributeId == null){
+            return null;
+        }else {
+            return null; //TODO: ProductUnitService
+        }
+    }
+
+
+    public void setUnit(ProductUnit unit) {
+        if (unit==null){
+            this.unitId = null;
+        }else{
+            this.unitId = unit.getId();
+        }
     }
 
     public String getComment() {
@@ -109,7 +127,7 @@ public class Product implements Serializable {
         if (cost != null ? !cost.equals(product.cost) : product.cost != null) return false;
         if (name != null ? !name.equals(product.name) : product.name != null) return false;
         if (quality != null ? !quality.equals(product.quality) : product.quality != null) return false;
-        if (unit != null ? !unit.equals(product.unit) : product.unit != null) return false;
+        if (unitId != null ? !unitId.equals(product.unitId) : product.unitId != null) return false;
 
         return true;
     }
@@ -118,7 +136,7 @@ public class Product implements Serializable {
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (cost != null ? cost.hashCode() : 0);
-        result = 31 * result + (unit != null ? unit.hashCode() : 0);
+        result = 31 * result + (unitId != null ? unitId.hashCode() : 0);
         result = 31 * result + (attributeId != null ? attributeId.hashCode() : 0);
         result = 31 * result + (comment != null ? comment.hashCode() : 0);
         result = 31 * result + (quality != null ? quality.hashCode() : 0);

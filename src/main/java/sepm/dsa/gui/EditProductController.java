@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
-import sepm.dsa.service.ProductService;
-import sepm.dsa.service.ProductServiceImpl;
-import sepm.dsa.service.RegionBorderService;
-import sepm.dsa.service.RegionService;
+import sepm.dsa.service.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +30,11 @@ public class EditProductController implements Initializable {
     private static final Logger log = LoggerFactory.getLogger(EditProductController.class);
 
     private static Product selectedProduct;
-    private ProductService productService;
-    // true if the region is not editing
     private boolean isNewProduct;
+    private ProductService productService;
+    private ProductCategoryService productCategoryService;
+    private ProductUnitService productUnitService;
+    private RegionService regionService;
 
     @FXML
     private TextField text_name;
@@ -49,8 +48,8 @@ public class EditProductController implements Initializable {
     private ChoiceBox choice_category;
     @FXML
     private ChoiceBox choice_production;
-    /*@FXML
-    private TextArea commentArea;*/
+    @FXML
+    private TextArea textarea_comment;
     @FXML
     private TableView<String> tableview_category;
     @FXML
@@ -75,86 +74,38 @@ public class EditProductController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise EditProductController");
-        /*
+
         // init ChoiceBoxes
-        List<String> temperatureList = new ArrayList<>();
-        for(Temperature t : Temperature.values()) {
-            temperatureList.add(t.getName());
+        List<String> attributeList = new ArrayList<>();
+        for(ProductAttribute t : ProductAttribute.values()) {
+            attributeList.add(t.getName());
         }
-        List<String> rainList = new ArrayList<>();
-        for(RainfallChance t : RainfallChance.values()) {
-            rainList.add(t.getName());
-        }
-        temperatureChoiceBox.setItems(FXCollections.observableArrayList(temperatureList));
-        rainfallChoiceBox.setItems(FXCollections.observableArrayList(rainList));
+        List<ProductCategory> categoryList = productCategoryService.getAll();
+        List<Region> productionsList = regionService.getAll();
+        //unit
 
-        // set values if editing
-        if (selectedRegion != null) {
-            isNewRegion = false;
-            nameField.setText(selectedRegion.getName());
-            colorPicker.setValue(new Color(
-                            (double) Integer.valueOf(selectedRegion.getColor().substring(0, 2), 16) / 255,
-                            (double) Integer.valueOf(selectedRegion.getColor().substring(2, 4), 16) / 255,
-                            (double) Integer.valueOf(selectedRegion.getColor().substring(4, 6), 16) / 255,
-                            1.0)
-            );
-            temperatureChoiceBox.getSelectionModel().select(selectedRegion.getTemperature().getValue());
-            rainfallChoiceBox.getSelectionModel().select(selectedRegion.getRainfallChance().getValue());
-            commentArea.setText(selectedRegion.getComment());
+        choice_attribute.setItems(FXCollections.observableArrayList(attributeList));
+        choice_category.setItems(FXCollections.observableArrayList(categoryList));
+        choice_production.setItems(FXCollections.observableArrayList(productionsList));
+        //unit
 
-            ObservableList<RegionBorder> data = FXCollections.observableArrayList(regionBorderService.getAllForRegion(selectedRegion.getId()));
-            borderTable.setItems(data);
+        if (selectedProduct != null){
+            isNewProduct = false;
+            text_name.setText(selectedProduct.getName());
+            text_cost.setText(selectedProduct.getCost().toString());
+            choice_attribute.getSelectionModel().select(selectedProduct.getAttribute().getValue());
+            //tablecolumn_category <= selectedProduct.getCategories();
+            //ObservableList<RegionBorder> data = FXCollections.observableArrayList(regionBorderService.getAllForRegion(selectedRegion.getId()));
+            //borderTable.setItems(data);
+            //tablecolumn_production <= selectedProduct.getProductions();
+            textarea_comment.setText(selectedProduct.getComment());
         }else {
-            isNewRegion = true;
-            selectedRegion = new Region();
-            temperatureChoiceBox.getSelectionModel().select(Temperature.MEDIUM.getValue());
-            rainfallChoiceBox.getSelectionModel().select(RainfallChance.MEDIUM.getValue());
+            isNewProduct = true;
+            selectedProduct = new Product();
 
-            ObservableList<RegionBorder> data = FXCollections.observableArrayList();
-            borderTable.setItems(data);
         }
-
-        // init border table
-        borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<RegionBorder, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<RegionBorder, String> r) {
-                if (r.getValue() != null) {
-                    if(r.getValue().getPk().getRegion1().equals(selectedRegion)) {
-                        return new SimpleStringProperty(r.getValue().getPk().getRegion2().getName());
-                    }else {
-                        return new SimpleStringProperty(r.getValue().getPk().getRegion1().getName());
-                    }
-                } else {
-                    return new SimpleStringProperty("");
-                }
-            }
-        });
-        borderCostColumn.setCellValueFactory(new PropertyValueFactory<>("borderCost"));
-
-        // init border choice box
-        List<Region> otherRegions = regionService.getAll();
-        otherRegions.remove(selectedRegion);
-        if(!isNewRegion) {
-            for (RegionBorder borders : regionBorderService.getAllForRegion(selectedRegion.getId())) {
-                if (borders.getPk().getRegion1().equals(selectedRegion)) {
-                    otherRegions.remove(borders.getPk().getRegion2());
-                } else {
-                    otherRegions.remove(borders.getPk().getRegion1());
-                }
-            }
-        }
-        borderChoiceBox.setItems(FXCollections.observableArrayList(otherRegions));
-        */
     }
 /*
-    public void setRegionService(RegionService regionService) {
-        this.regionService = regionService;
-    }
-
-    public void setRegionBorderService(RegionBorderService regionBorderService) {
-        this.regionBorderService = regionBorderService;
-    }
-
     @FXML
     private void onBorderCostColumnChanged() {
     }
@@ -282,12 +233,17 @@ public class EditProductController implements Initializable {
     public static void setProduct(Product product) {
         selectedProduct = product;
     }
-
     public void setProductService(ProductService productService) {
         this.productService = productService;
     }
-
-    public ProductService getProductService() {
-        return productService;
+    public void setProductCategoryService(ProductCategoryService productCategoryService) {
+        this.productCategoryService = productCategoryService;
     }
+public void setProductUnitService(ProductUnitService productUnitService) {
+        this.productUnitService = productUnitService;
+    }
+    public void setRegionService(RegionService regionService) {
+        this.regionService = regionService;
+    }
+
 }
