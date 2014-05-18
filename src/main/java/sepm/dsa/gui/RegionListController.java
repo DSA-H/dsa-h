@@ -114,8 +114,6 @@ public class RegionListController implements Initializable {
 	Stage stage =  (Stage) regionTable.getScene().getWindow();
 	Parent root = (Parent) loader.load("/gui/editregion.fxml");
 
-	    EditRegionController.setRegion(null);
-
         stage.setTitle("Gebiet-Details");
         stage.setScene(new Scene(root, 600, 438));
         stage.show();
@@ -129,7 +127,7 @@ public class RegionListController implements Initializable {
 	Parent root = (Parent) loader.load("/gui/editregion.fxml");
 
         Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
-        EditRegionController.setRegion(selectedRegion);
+        ((EditRegionController)loader.getController()).setRegion(selectedRegion);
 
         stage.setTitle("Gebiet-Details");
         stage.setScene(new Scene(root, 600, 438));

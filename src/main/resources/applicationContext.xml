@@ -65,7 +65,7 @@
 
     <!-- GUI DI -->
     <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController">
-	<property name="loader" ref="loader"/>
+	    <property name="loader" ref="loader"/>
     </bean>
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
 	<property name="loader" ref="loader"/>

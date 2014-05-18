@@ -33,8 +33,8 @@ public class Trader {
     @Column(nullable = false)
     private Integer yPos;
 
-    @Size(max = 500, min = 0)
-    @Column(nullable = true, length = 500)
+    @Size(max = 1000, min = 0)
+    @Column(nullable = true, length = 1000)
     private String comment;
 
     @NotNull
