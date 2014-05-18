@@ -38,6 +38,7 @@
                 <value>sepm/dsa/model/hibernate/Region.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/RegionBorder.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Trader.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/TraderCategory.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -65,6 +66,9 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="traderCategory" class="sepm.dsa.dao.TraderCategoryDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
