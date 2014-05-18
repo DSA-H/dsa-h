@@ -1,0 +1,133 @@
+package sepm.dsa.model;
+
+import org.hibernate.validator.constraints.NotBlank;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+@Entity
+@Table(name = "traders")
+public class Trader {
+
+    @Id
+    @GeneratedValue
+    @Column(nullable = false, unique = true)
+    private Integer id;
+
+    @NotBlank
+    @Size(max = 60, min = 1)
+    @Column(nullable = false, length = 60)
+    private String name;
+
+    @NotNull
+    @Column(nullable = false)
+    private Integer size;
+
+    @NotNull
+    @Column(nullable = false)
+    private Integer xPos;
+
+    @NotNull
+    @Column(nullable = false)
+    private Integer yPos;
+
+    @Size(max = 500, min = 0)
+    @Column(nullable = true, length = 500)
+    private String comment;
+
+    @NotNull
+    @Column(nullable = false)
+    private Integer mu;
+
+    @NotNull
+    @Column(nullable = false)
+    private Integer in;
+
+    @NotNull
+    @Column(nullable = false)
+    private Integer ch;
+
+    @NotNull
+    @Column(nullable = false)
+    private Integer convince;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
+
+    public Integer getxPos() {
+        return xPos;
+    }
+
+    public void setxPos(Integer xPos) {
+        this.xPos = xPos;
+    }
+
+    public Integer getyPos() {
+        return yPos;
+    }
+
+    public void setyPos(Integer yPos) {
+        this.yPos = yPos;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Integer getMu() {
+        return mu;
+    }
+
+    public void setMu(Integer mu) {
+        this.mu = mu;
+    }
+
+    public Integer getIn() {
+        return in;
+    }
+
+    public void setIn(Integer in) {
+        this.in = in;
+    }
+
+    public Integer getCh() {
+        return ch;
+    }
+
+    public void setCh(Integer ch) {
+        this.ch = ch;
+    }
+
+    public Integer getConvince() {
+        return convince;
+    }
+
+    public void setConvince(Integer convince) {
+        this.convince = convince;
+    }
+}
