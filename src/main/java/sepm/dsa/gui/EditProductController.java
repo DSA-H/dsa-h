@@ -49,27 +49,17 @@ public class EditProductController implements Initializable {
     @FXML
     private ChoiceBox choice_production;
     @FXML
+    private CheckBox check_quality;
+    @FXML
     private TextArea textarea_comment;
     @FXML
-    private TableView<String> tableview_category;
+    private TableView<ProductCategory> tableview_category;
     @FXML
     private TableView<String> tableview_production;
     @FXML
     private TableColumn tablecolumn_category;
     @FXML
     private TableColumn tablecolumn_production;
-    @FXML
-    private Button button_remove_category;
-    @FXML
-    private Button button_add_category;
-    @FXML
-    private Button button_remove_production;
-    @FXML
-    private Button button_add_production;
-    @FXML
-    private Button button_abort;
-    @FXML
-    private Button button_save;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
@@ -82,18 +72,21 @@ public class EditProductController implements Initializable {
         }
         List<ProductCategory> categoryList = productCategoryService.getAll();
         List<Region> productionsList = regionService.getAll();
-        //unit
+        List<ProductUnit> unitList = productUnitService.getAll();
 
         choice_attribute.setItems(FXCollections.observableArrayList(attributeList));
         choice_category.setItems(FXCollections.observableArrayList(categoryList));
         choice_production.setItems(FXCollections.observableArrayList(productionsList));
-        //unit
+        choice_unit.setItems(FXCollections.observableArrayList(unitList));
+
 
         if (selectedProduct != null){
             isNewProduct = false;
             text_name.setText(selectedProduct.getName());
             text_cost.setText(selectedProduct.getCost().toString());
             choice_attribute.getSelectionModel().select(selectedProduct.getAttribute().getValue());
+            choice_unit.getSelectionModel().select(productUnitService.get(selectedProduct.getUnit()));
+
             //tablecolumn_category <= selectedProduct.getCategories();
             //ObservableList<RegionBorder> data = FXCollections.observableArrayList(regionBorderService.getAllForRegion(selectedRegion.getId()));
             //borderTable.setItems(data);
@@ -105,19 +98,16 @@ public class EditProductController implements Initializable {
 
         }
     }
-/*
-    @FXML
-    private void onBorderCostColumnChanged() {
-    }
+
 
     @FXML
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
-        Stage stage = (Stage) nameField.getScene().getWindow();
+        Stage stage = (Stage) text_name.getScene().getWindow();
         Parent scene = null;
         SpringFxmlLoader loader = new SpringFxmlLoader();
 
-        scene = (Parent) loader.load("/gui/regionlist.fxml");
+        scene = (Parent) loader.load("/gui/productlist.fxml");
 
         stage.setScene(new Scene(scene, 600, 438));
     }
@@ -126,31 +116,28 @@ public class EditProductController implements Initializable {
     private void onSavePressed() {
         log.debug("SaveButtonPressed");
 
-        // save region
-        String name = nameField.getText();
-        Temperature temperature = Temperature.parse(temperatureChoiceBox.getSelectionModel().getSelectedIndex());
-        RainfallChance rainfallChance = RainfallChance.parse(rainfallChoiceBox.getSelectionModel().getSelectedIndex());
-        String comment = commentArea.getText();
-        Color selectedColor = colorPicker.getValue();
-        String colorString =
-                Integer.toHexString((int) (selectedColor.getRed()*255)) + "" +
-                Integer.toHexString((int) (selectedColor.getGreen()*255)) + "" +
-                Integer.toHexString((int) (selectedColor.getBlue()*255));
+        // save product
+        String name = text_name.getText();
+        Integer cost = Integer.parseInt(text_cost.getText());
+        ProductUnit unit = (ProductUnit) choice_unit.getSelectionModel().getSelectedItem();
+        ProductAttribute attribute = ProductAttribute.parse(choice_attribute.getSelectionModel().getSelectedIndex());
 
-        selectedRegion.setColor(colorString);
-        selectedRegion.setName(name);
-        selectedRegion.setComment(comment);
-        selectedRegion.setTemperature(temperature);
-        selectedRegion.setRainfallChance(rainfallChance);
+        selectedProduct.setName(name);
+        selectedProduct.setCost(cost);
+        selectedProduct.setUnit(unit);
+        selectedProduct.setAttribute(attribute);
+        selectedProduct.setQuality(check_quality.isSelected());
+        selectedProduct.setComment(textarea_comment.getText());
 
-        if(isNewRegion) {
-            regionService.add(selectedRegion);
+        if(isNewProduct) {
+            productService.add(selectedProduct);
         }else {
-            regionService.update(selectedRegion);
+            productService.update(selectedProduct);
         }
 
-        // save borders
-        List<RegionBorder> localBorderList = borderTable.getItems();
+        // save productcategories & productproductions
+        List<ProductCategory> localCategoryList = tableview_category.getItems();
+        /*
         for(RegionBorder border : regionBorderService.getAllForRegion(selectedRegion.getId())) {
             boolean contain = false;
             for(RegionBorder localBorder : localBorderList) {
@@ -177,8 +164,9 @@ public class EditProductController implements Initializable {
         scene = (Parent) loader.load("/gui/regionlist.fxml");
 
         stage.setScene(new Scene(scene, 600, 438));
+        */
     }
-
+/*
     @FXML
     private void onAddBorderPressed() {
         log.debug("AddBorderPressed");
