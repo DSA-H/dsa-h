@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.*?>
+
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0"
             prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="sepm.dsa.gui.EditLocationController">
@@ -71,7 +73,6 @@
                 </HBox>
                 <Label alignment="CENTER" text="xCoord" GridPane.columnIndex="1" GridPane.halignment="RIGHT"
                        GridPane.rowIndex="9" GridPane.valignment="CENTER"/>
-                <Label text="Grenzkosten"/>
                 <Label text="yCoord" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="10"/>
                 <TextField GridPane.columnIndex="3" GridPane.rowIndex="9" fx:id="xCoord"/>
                 <TextField fx:id="yCoord" GridPane.columnIndex="3" GridPane.rowIndex="10"/>
