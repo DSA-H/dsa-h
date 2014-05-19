@@ -18,6 +18,8 @@ import sepm.dsa.dao.TraderCategoryDao;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.TraderCategory;
 
+import java.util.List;
+
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
@@ -62,9 +64,9 @@ public class TraderCategoryDaoTest {
 
     @Test
     @DatabaseSetup("/testData.xml")
-    public void testGetAllByTraderCategory() throws Exception {
+    public void testGetAll() throws Exception {
         TraderCategory cat1 = traderCategoryDao.get(1);
-        TraderCategory l1 = traderCategoryDao.get(1);
-        assertThat(traderCategoryDao.getAllByTraderCategory(cat1), hasItems(l1));
+        List<TraderCategory> l1 = traderCategoryDao.getAll();
+        assertTrue(l1.contains(cat1));
     }
 }

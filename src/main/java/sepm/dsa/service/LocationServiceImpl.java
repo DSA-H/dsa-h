@@ -78,7 +78,7 @@ public class LocationServiceImpl implements LocationService, Serializable {
     private void validate(Location location) throws DSAValidationException {
         Set<ConstraintViolation<Location>> violations = validator.validate(location);
         if (violations.size() > 0) {
-            throw new DSAValidationException("Gebiet ist nicht valide.", violations);
+            throw new DSAValidationException("Ort ist nicht valide.", violations);
         }
     }
 }

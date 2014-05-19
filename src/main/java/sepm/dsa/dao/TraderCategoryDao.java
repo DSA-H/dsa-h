@@ -40,5 +40,5 @@ public interface TraderCategoryDao {
      *
      * @return the traderCategories or empty list of no traderCategorys exist (not null)
      */
-   public List<TraderCategory> getAllByTraderCategory(TraderCategory traderCategory);
+   public List<TraderCategory> getAll();
 }

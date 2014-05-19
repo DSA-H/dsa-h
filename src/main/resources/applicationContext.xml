@@ -70,11 +70,12 @@
     <bean id="traderDao" class="sepm.dsa.dao.TraderDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+
     <bean id="productDao" class="sepm.dsa.dao.ProductDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="traderCategory" class="sepm.dsa.dao.TraderCategoryDaoImpl">
+    <bean id="traderCategoryDao" class="sepm.dsa.dao.TraderCategoryDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
@@ -113,6 +114,14 @@
 
     <bean id="productUnitService" class="sepm.dsa.service.ProductUnitServiceImpl">
         <property name="productUnitDao" ref="productUnitDao"/>
+    </bean>
+
+    <bean id="traderCategoryService" class="sepm.dsa.service.TraderCategoryServiceImpl">
+        <property name="traderCategoryDao" ref="traderCategoryDao"/>
+    </bean>
+
+    <bean id="traderService" class="sepm.dsa.service.TraderServiceImpl">
+        <property name="traderDao" ref="traderDao"/>
     </bean>
 
     <!-- GUI DI -->

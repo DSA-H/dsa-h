@@ -3,6 +3,7 @@ package sepm.dsa.service;
 
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Trader;
+import sepm.dsa.model.TraderCategory;
 
 import java.util.List;
 
@@ -13,4 +14,5 @@ public interface TraderService {
     void update(Trader t);
     void remove(Trader t);
     List<Trader> getAllForLocation(Location location);
+    List<Trader> getAllByCategory(TraderCategory category);
 }

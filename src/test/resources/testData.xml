@@ -15,6 +15,7 @@
     <borders region1="1" region2="6" borderCost="6" />
     <traderCategories id="1" name="category1" />
     <traderCategories id="2" name="category2" />
+    <traderCategories id="3" name="category3" />
     <products id="1" name="product1" cost="17" attributeId="1" quality="false" />
     <products id="2" name="product2" cost="23" attributeId="2" quality="true" />
     <locations id="1" name="fooLocation" region="1" xCoord="30" yCoord="20" sizeId="2" height="10" weatherId="1"/>

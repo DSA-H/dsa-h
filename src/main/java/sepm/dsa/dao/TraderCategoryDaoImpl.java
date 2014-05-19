@@ -66,7 +66,7 @@ public class TraderCategoryDaoImpl implements TraderCategoryDao {
     }
 
     @Override
-    public List<TraderCategory> getAllByTraderCategory(TraderCategory traderCategory) {
+    public List<TraderCategory> getAll() {
         log.debug("calling getAll()");
         List<?> list = sessionFactory.getCurrentSession().getNamedQuery("TraderCategory.findAll").list();
 
