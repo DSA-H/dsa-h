@@ -156,6 +156,14 @@
         <property name="productUnitService" ref="productUnitService"/>
         <property name="regionService" ref="regionService"/>
     </bean>
+    <bean id="tradercategoryList" class="sepm.dsa.gui.TraderCategoryListController">
+        <property name="traderCategoryService" ref="traderCategoryService"/>
+        <property name="traderService" ref="traderService"/>
+    </bean>
+
+    <bean id="editTraderCategory" class="sepm.dsa.gui.EditTraderCategoryController">
+        <property name="traderCategoryService" ref="traderCategoryService"/>
+    </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
