@@ -74,7 +74,6 @@ public class ProductListController implements Initializable {
         tablecolumn_comment.setCellValueFactory(new PropertyValueFactory<>("comment"));
 
         ObservableList<Product> data = FXCollections.observableArrayList(productService.getAll());
-
         tableview_product.setItems(data);
 
     }
