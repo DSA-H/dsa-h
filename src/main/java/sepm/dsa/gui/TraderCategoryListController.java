@@ -1,7 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,7 +11,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import org.controlsfx.control.action.Action;
 import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
@@ -21,26 +18,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.model.Trader;
 import sepm.dsa.model.TraderCategory;
 import sepm.dsa.service.TraderCategoryService;
-import sepm.dsa.service.TraderService;
-
-import java.util.List;
 
 @Service("TraderCategoryService")
 public class TraderCategoryListController implements Initializable {
     private TraderCategoryService traderCategoryService;
     private static final Logger log = LoggerFactory.getLogger(TraderCategoryListController.class);
     private SpringFxmlLoader loader;
-    private TraderService traderService;
 
     @FXML
     private TableView<TraderCategory> traderCategoryTable;
     @FXML
     private TableColumn traderCategoryColumn;
-    @FXML
-    private TableColumn traderColumn;
     @FXML
     private Button createButton;
     @FXML
@@ -54,26 +44,6 @@ public class TraderCategoryListController implements Initializable {
 
         // init table
         traderCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        traderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Trader, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Trader, String> r) {
-                if (r.getValue() != null) {
-                    int tCategoryId = r.getValue().getId();
-                    List<Trader> borders = traderService.getAllByCategory(traderCategoryService.get(tCategoryId));
-                    StringBuilder sb = new StringBuilder();
-                    for (Trader trader : borders) {
-                        sb.append(trader.getName());
-                        sb.append(", ");
-                    }
-                    if (sb.length() >= 2) {
-                        sb.delete(sb.length() - 2, sb.length());
-                    }
-                    return new SimpleStringProperty(sb.toString());
-                } else {
-                    return new SimpleStringProperty("");
-                }
-            }
-        });
 
         ObservableList<TraderCategory> data = FXCollections.observableArrayList(traderCategoryService.getAll());
         traderCategoryTable.setItems(data);
@@ -153,11 +123,4 @@ public class TraderCategoryListController implements Initializable {
         this.loader = loader;
     }
 
-    public void setTraderService(TraderService traderService) {
-        this.traderService = traderService;
-    }
-
-    public TraderService getTraderService() {
-        return traderService;
-    }
 }
