@@ -32,7 +32,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
     private ProductDao productDao;
 
     @Override
-    public Product get(Integer id) {
+    public Product get(int id) {
         log.debug("calling get(" + id + ")");
         Product result = productDao.get(id);
         log.trace("returning " + result);

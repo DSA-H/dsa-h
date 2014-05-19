@@ -16,7 +16,7 @@ public interface ProductDao {
 
     public void remove(Product product);
 
-    public Product get(Integer id);
+    public Product get(int id);
 
     public List<Product> getAll();
 

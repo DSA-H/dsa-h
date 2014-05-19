@@ -32,7 +32,7 @@ public class ProductCategory implements Serializable {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "product_categories", joinColumns = { @JoinColumn(name = "categoryId") }, inverseJoinColumns = { @JoinColumn(name = "productId") })
-    private Set<Product> products;
+    private Set<Product> products = new HashSet<>();
 
 
     public Integer getId() {
