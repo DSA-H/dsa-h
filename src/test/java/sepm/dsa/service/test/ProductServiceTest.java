@@ -49,13 +49,6 @@ public class ProductServiceTest {
 
     @Test
     @DatabaseSetup("/productData.xml")
-    public void testXML()
-    {
-        System.out.println(productService.getAll().toString());
-    }
-
-    @Test
-    @DatabaseSetup("/productData.xml")
     public void testAdd()
     {
         System.out.println(productService.getAll().toString());
@@ -83,7 +76,12 @@ public class ProductServiceTest {
         p.setCost(1);
         p.setAttribute(ProductAttribute.LAGERBAR);
 
-        Set<Region> regionSet = new HashSet<Region>(regionService.getAll());
+        List<Region> regionList = regionService.getAll();
+        Set<Region> regionSet = new HashSet<Region>();
+
+        for (int i = 0; i<regionList.size(); i++) {
+            regionSet.add(regionList.get(i));
+        }
 
         p.setRegions(regionSet);
 
@@ -95,6 +93,32 @@ public class ProductServiceTest {
         assertTrue(p.getRegions().equals(newP.getRegions()));
     }
 
+    @Test
+    @DatabaseSetup("/productData.xml")
+    public void testAddCategories()
+    {
+        System.out.println(productService.getAll().toString());
+        Product p = new Product();
+        p.setName("tester");
+        p.setQuality(false);
+        p.setCost(1);
+        p.setAttribute(ProductAttribute.LAGERBAR);
 
+        List<ProductCategory> categoryList = productCategoryService.getAll();
+        Set<ProductCategory> categorySet = new HashSet<ProductCategory>();
 
+        for (int i = 0; i<categoryList.size(); i++) {
+            categorySet.add(categoryList.get(i));
+        }
+
+        p.setCategories(categorySet);
+
+        int size = productService.getAll().size();
+        int id = productService.add(p);
+        assertTrue (productService.getAll().size()-1 == size);
+        Product newP = productService.get(id);
+        assertTrue(p.equals(newP));
+        assertTrue(p.getRegions().equals(newP.getRegions()));
+    }
+    
 }
