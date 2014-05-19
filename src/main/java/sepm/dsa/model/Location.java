@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Collection;
 
 @Entity
 @Table(name = "locations")
@@ -208,4 +209,15 @@ public class Location implements Serializable {
                 ", region=" + region +
                 '}';
     }
+
+	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+	private Collection<Tavern> taverns;
+
+	public Collection<Tavern> getTaverns() {
+		return taverns;
+	}
+
+	public void setTaverns(Collection<Tavern> taverns) {
+		this.taverns = taverns;
+	}
 }
