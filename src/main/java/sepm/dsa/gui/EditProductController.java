@@ -84,7 +84,8 @@ public class EditProductController implements Initializable {
         choice_category.setItems(FXCollections.observableArrayList(categoryList));
         choice_production.setItems(FXCollections.observableArrayList(productionsList));
         choice_unit.setItems(FXCollections.observableArrayList(unitList));
-
+        tablecolumn_category.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tablecolumn_production.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         if (selectedProduct != null){
             isNewProduct = false;
@@ -112,7 +113,7 @@ public class EditProductController implements Initializable {
         Parent scene = null;
         SpringFxmlLoader loader = new SpringFxmlLoader();
 
-        scene = (Parent) loader.load("/gui/productlist.fxml");
+        scene = (Parent) loader.load("/gui/productslist.fxml");
 
         stage.setScene(new Scene(scene, 600, 438));
     }
