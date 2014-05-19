@@ -20,5 +20,18 @@
     <products id="5" name="product5" cost="200" attributeId="3" quality="true" />
     <products id="6" name="product6" cost="450" attributeId="0" quality="true" />
     <products id="7" name="product7" cost="65" attributeId="2" quality="true" />
-
+    <ProductCategory id="1" name="category1" />
+    <ProductCategory id="2" name="category2" />
+    <ProductCategory id="3" name="category3" />
+    <ProductCategory id="4" name="category4" />
+    <ProductCategory id="5" name="category5" />
+    <product_categories productId="1" categoryId="1" />
+    <product_categories productId="1" categoryId="2" />
+    <product_categories productId="1" categoryId="3" />
+    <product_categories productId="2" categoryId="5" />
+    <product_categories productId="2" categoryId="1" />
+    <product_categories productId="3" categoryId="1" />
+    <product_categories productId="4" categoryId="2" />
+    <product_categories productId="6" categoryId="1" />
+    <product_categories productId="7" categoryId="3" />
 </dataset>
