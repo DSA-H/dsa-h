@@ -15,7 +15,7 @@ public interface ProductService {
      * @param id the id
      * @return the product
      */
-    Product get(Integer id);
+    Product get(int id);
 
     /**
      * Add a new product to DB

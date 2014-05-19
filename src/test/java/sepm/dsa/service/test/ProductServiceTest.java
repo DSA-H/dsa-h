@@ -49,6 +49,13 @@ public class ProductServiceTest {
 
     @Test
     @DatabaseSetup("/testData.xml")
+    public void testGet()  {
+        Product p = productService.get(2);
+        assertTrue(p!=null);
+    }
+
+     /*  @Test
+    @DatabaseSetup("/testData.xml")
     public void testAdd()
     {
         System.out.println(productService.getAll().toString());
@@ -67,8 +74,7 @@ public class ProductServiceTest {
 
     @Test
     @DatabaseSetup("/testData.xml")
-    public void testAddRegions()
-    {
+    public void testAddRegions()  {
         System.out.println(productService.getAll().toString());
         Product p = new Product();
         p.setName("tester");
@@ -87,7 +93,7 @@ public class ProductServiceTest {
         assertTrue(p.getRegions().equals(newP.getRegions()));
     }
 
-   /* @Test
+    @Test
     @DatabaseSetup("/testData.xml")
     public void testAddCategories()
     {

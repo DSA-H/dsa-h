@@ -59,7 +59,7 @@ public class TraderCategoryDaoImpl implements TraderCategoryDao {
         Object result = sessionFactory.getCurrentSession().get(TraderCategory.class, id);
 
         if (result == null) {
-            throw new DSARuntimeException("Leider existiert für diese ID keine Trader Category");
+            throw new DSARuntimeException("Leider existiert für diese ID keine Händlerkategorie");
         }
         log.trace("returning " + result);
         return (TraderCategory) result;
