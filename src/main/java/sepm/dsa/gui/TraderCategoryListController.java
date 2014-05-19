@@ -20,8 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.model.Region;
-import sepm.dsa.model.RegionBorder;
+import sepm.dsa.model.Trader;
 import sepm.dsa.model.TraderCategory;
 import sepm.dsa.service.TraderCategoryService;
 import sepm.dsa.service.TraderService;
@@ -54,20 +53,15 @@ public class TraderCategoryListController {
 
         // init table
         traderCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        traderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Region, String>, ObservableValue<String>>() {
+        traderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Trader, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Region, String> r) {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Trader, String> r) {
                 if (r.getValue() != null) {
-                    int regionId = r.getValue().getId();
-                    List<RegionBorder> borders = regionBorderService.getAllByRegion(regionId);
+                    int tCategoryId = r.getValue().getId();
+                    List<Trader> borders = traderService.getAllByCategory(traderCategoryService.get(tCategoryId));
                     StringBuilder sb = new StringBuilder();
-                    for (RegionBorder rb : borders) {
-                        // not this region
-                        if (rb.getRegion1().getId() != regionId) {
-                            sb.append(rb.getRegion1().getName());
-                        } else {
-                            sb.append(rb.getRegion2().getName());
-                        }
+                    for (Trader trader : borders) {
+                        sb.append(trader.getName());
                         sb.append(", ");
                     }
                     if (sb.length() >= 2) {

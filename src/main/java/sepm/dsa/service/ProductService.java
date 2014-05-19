@@ -40,7 +40,7 @@ public interface ProductService {
     List<Product> getAll();
 
     /**
-     * @return all products from a productcategory and all its child categories -- if nothing found empty list is returned
+     * @return all products from a product-category and all of its child categories -- if nothing found empty list is returned
      */
     java.util.Set<Product> getAllFromProductcategory(ProductCategory productCategory);
 }
