@@ -11,6 +11,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.RegionDao;
 import sepm.dsa.model.*;
 
@@ -51,7 +52,7 @@ public class ProductServiceTest {
     @DatabaseSetup("/testData.xml")
     public void testGet()  {
         Product p = productService.get(1);
-        assertTrue(p!=null);
+        assertTrue(p != null);
     }
 
     @Test
@@ -74,6 +75,7 @@ public class ProductServiceTest {
 
     @Test
     @DatabaseSetup("/testData.xml")
+    @Transactional(readOnly = false)
     public void testAddRegions()  {
         System.out.println(productService.getAll().toString());
         Product p = new Product();
@@ -90,7 +92,7 @@ public class ProductServiceTest {
         assertTrue (productService.getAll().size()-1 == size);
         Product newP = productService.get(p.getId());
         assertTrue(p.equals(newP));
-        Set<Region> l1 = newP.getRegions();  // todo: diese zeile geht nicht
+        Set<Region> l1 = newP.getRegions();
         Set<Region> l2 = p.getRegions();
         assertTrue(l1.equals(l2));
     }
