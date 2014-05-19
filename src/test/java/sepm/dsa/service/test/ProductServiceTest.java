@@ -118,7 +118,7 @@ public class ProductServiceTest {
         assertTrue (productService.getAll().size()-1 == size);
         Product newP = productService.get(id);
         assertTrue(p.equals(newP));
-        assertTrue(p.getRegions().equals(newP.getRegions()));
+        assertTrue(p.getCategories().equals(newP.getCategories()));
     }
     
 }
