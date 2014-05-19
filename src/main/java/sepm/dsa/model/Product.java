@@ -86,7 +86,6 @@ public class Product implements Serializable {
         }else {
             return ProductAttribute.parse(attributeId);
         }
-        return ProductAttribute.parse(attributeId);
     }
 
     public void setAttribute(ProductAttribute attribute) {
@@ -97,20 +96,6 @@ public class Product implements Serializable {
         }
         this.attributeId = attribute.getValue();
     }
-    public ProductUnit getUnit() {
-        if (attributeId == null){
-            return null;
-        }else {
-            return null; //TODO: ProductUnitService
-        }
-    }
-    public void setUnit(ProductUnit unit) {
-        if (unit==null){
-            this.unitId = null;
-        }else{
-            this.unitId = unit.getId();
-        }
-    }*/
 
     public String getComment() {
         return comment;
