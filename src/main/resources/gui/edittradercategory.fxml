@@ -57,7 +57,7 @@
                     <columns><TableColumn fx:id="assortmentColumn" prefWidth="371.0" text="Gewählte Warenkategorien" /><TableColumn fx:id="defaultOccurenceColumn" prefWidth="262.0" text="Vorkommen" />
                     </columns>
                 </TableView>
-                <ChoiceBox fx:id="productCategoryChoiceBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="7" /><Button mnemonicParsing="false" onAction="#addAssortmentClicked" prefHeight="26.0" prefWidth="288.0" text="Warenkategorie wählen" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="8" /><Button fx:id="removeAssortButton" mnemonicParsing="false" onAction="#removeSelectedAssortment" prefHeight="26.0" prefWidth="152.0" text="Kategorie abwählen" GridPane.columnIndex="5" GridPane.rowIndex="8" /><Label text="Vorkommen" GridPane.columnIndex="5" GridPane.rowIndex="7" /><TextField fx:id="defaultOccurence" GridPane.columnIndex="7" GridPane.rowIndex="7" />
+                <ChoiceBox fx:id="productCategoryChoiceBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="7" /><Button mnemonicParsing="false" onAction="#addAssortmentClicked" prefHeight="26.0" prefWidth="288.0" text="Warenkategorie hinzufügen" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="8" /><Button fx:id="removeAssortButton" disable="true" mnemonicParsing="false" onAction="#removeSelectedAssortment" prefHeight="26.0" prefWidth="152.0" text="Kategorie abwählen" GridPane.columnIndex="5" GridPane.rowIndex="8" /><Label text="Vorkommen" GridPane.columnIndex="5" GridPane.rowIndex="7" /><TextField fx:id="defaultOccurence" GridPane.columnIndex="7" GridPane.rowIndex="7" />
             </children>
         </GridPane>
     </center>

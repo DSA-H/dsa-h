@@ -80,7 +80,8 @@ public class EditTraderCategoryController implements Initializable {
             productCategories.remove(traderCategory.getAssortments());
 
             productCategoryChoiceBox.setItems(FXCollections.observableArrayList(productCategories));
-            assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("productCategory"));
+            assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+            assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("defaultOccurence"));
             assortmentTable.setItems(FXCollections.observableArrayList(traderCategory.getAssortments()));
 
         } else {
@@ -135,7 +136,6 @@ public class EditTraderCategoryController implements Initializable {
     @FXML
     private void onAssortmentsSelectedChanged() {
         log.debug("calling onAssortmentsSelectedChanged()");
-
     }
 
     @FXML
