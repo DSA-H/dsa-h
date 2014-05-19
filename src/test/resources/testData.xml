@@ -20,4 +20,5 @@
     <products id="5" name="product5" cost="200" attributeId="3" quality="true" />
     <products id="6" name="product6" cost="450" attributeId="0" quality="true" />
     <products id="7" name="product7" cost="65" attributeId="2" quality="true" />
+
 </dataset>

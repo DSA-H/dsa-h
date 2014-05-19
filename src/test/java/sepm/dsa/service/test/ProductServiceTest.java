@@ -83,12 +83,7 @@ public class ProductServiceTest {
         p.setCost(1);
         p.setAttribute(ProductAttribute.LAGERBAR);
 
-        List<Region> regionList = regionService.getAll();
-        Set<Region> regionSet = new HashSet<Region>();
-
-        for (int i = 0; i<regionList.size(); i++) {
-            regionSet.add(regionList.get(i));
-        }
+        Set<Region> regionSet = new HashSet<Region>(regionService.getAll());
 
         p.setRegions(regionSet);
 
@@ -99,5 +94,7 @@ public class ProductServiceTest {
         assertTrue(p.equals(newP));
         assertTrue(p.getRegions().equals(newP.getRegions()));
     }
+
+
 
 }

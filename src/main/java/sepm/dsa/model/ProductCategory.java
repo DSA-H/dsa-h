@@ -30,6 +30,10 @@ public class ProductCategory {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProductCategory> childs = new HashSet<>();
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "product_categories", joinColumns = { @JoinColumn(name = "categoryId") }, inverseJoinColumns = { @JoinColumn(name = "productId") })
+    private Set<Product> products;
+
     //@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     //private Set<Product> products;
 
@@ -66,13 +70,13 @@ public class ProductCategory {
         this.childs = childs;
     }
 
-    /*public Set<Product> getProducts() {
+    public Set<Product> getProducts() {
         return products;
     }
 
     public void setProducts(Set<Product> products) {
         this.products = products;
-    }*/
+    }
 
     @Override
     public boolean equals(Object o) {
