@@ -22,21 +22,16 @@ public class ProductCategory {
     @Size(max = 60, min = 1)
     @Column(nullable = false, length = 60)
     private String name;
-/*
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @Column(nullable = true)
-    private ProductCategory parent;*/
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private ProductCategory parent;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "parent", orphanRemoval = true)
     private Set<ProductCategory> childs = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "product_categories", joinColumns = { @JoinColumn(name = "categoryId") }, inverseJoinColumns = { @JoinColumn(name = "productId") })
     private Set<Product> products;
-
-    //@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    //private Set<Product> products;
-
 
     public Integer getId() {
         return categoryId;
@@ -54,13 +49,13 @@ public class ProductCategory {
         this.name = name;
     }
 
-    /*public ProductCategory getParent() {
+    public ProductCategory getParent() {
         return parent;
     }
 
     public void setParent(ProductCategory parent) {
         this.parent = parent;
-    }*/
+    }
 
     public Set<ProductCategory> getChilds() {
         return childs;
