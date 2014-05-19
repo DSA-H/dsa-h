@@ -3,9 +3,9 @@ package sepm.dsa.dao;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.exceptions.DSARegionNotExistingException;
 import sepm.dsa.model.Region;
 
 import java.util.List;
@@ -16,17 +16,13 @@ import java.util.Vector;
 public class RegionDaoHbmImpl implements RegionDao {
 
     private static final Logger log = LoggerFactory.getLogger(RegionDaoHbmImpl.class);
-
     private SessionFactory sessionFactory;
 
     @Override
     @Transactional(readOnly = false)
-    public int add(Region region) {
+    public void add(Region region) {
         log.debug("calling add(" + region + ")");
         sessionFactory.getCurrentSession().save(region);
-        int result = region.getId();
-        log.trace("returning " + result);
-        return result;
     }
 
     @Override
@@ -44,13 +40,13 @@ public class RegionDaoHbmImpl implements RegionDao {
     }
 
     @Override
-    public Region get(int id) {
+    public Region get(int id) throws DSARegionNotExistingException {
         log.debug("calling get(" + id + ")");
 
         Object result = sessionFactory.getCurrentSession().get(Region.class, id);
 
         if (result == null) {
-            return null;
+            throw new DSARegionNotExistingException();
         }
         log.trace("returning " + result);
         return (Region) result;

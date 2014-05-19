@@ -22,7 +22,7 @@ public enum ProductQuality {
     }
 
     public static ProductQuality parse(int value) {
-        ProductQuality right = null;		// Default
+        ProductQuality right = null;        // Default
         for (ProductQuality item : ProductQuality.values()) {
             if (item.getValue() == value) {
                 right = item;
@@ -30,6 +30,30 @@ public enum ProductQuality {
             }
         }
         return right;
+    }
+
+    public float getQualityProbabilityValue() {
+        switch (value) {
+            case -2: return 0.05f;
+            case -1: return 0.15f;
+            case 0: return 0.7f;
+            case 1: return 0.9f;
+            case 2: return 0.98f;
+            case 3: return 1f;
+            default: return 0;
+        }
+    }
+
+    public float getQualityPriceFactor() {
+        switch (value) {
+            case -2: return 0.5f;
+            case -1: return 0.8f;
+            case 0: return 1f;
+            case 1: return 2f;
+            case 2: return 5f;
+            case 3: return 10f;
+            default: return 0;
+        }
     }
 
     @Override

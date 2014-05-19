@@ -10,6 +10,7 @@ import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
 import sepm.dsa.model.Region;
+import sepm.dsa.model.ProductCategory;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -42,7 +43,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
     @Transactional(readOnly = false)
     public int add(Product p) {
         log.debug("calling add(" + p + ")");
-        //validate(p);
+        validate(p);
         return productDao.add(p);
     }
 
@@ -50,7 +51,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
     @Transactional(readOnly = false)
     public void update(Product p) {
         log.debug("calling update(" + p + ")");
-        //validate(p);
+        validate(p);
         productDao.update(p);
     }
 
@@ -81,6 +82,14 @@ public class ProductServiceImpl implements ProductService, Serializable {
     public List<ProductCategory> getAllCategories(int productId) {
         log.debug("calling getAll()");
         List<ProductCategory> result = productDao.getAllCategories(productId);
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public Set<Product> getAllFromProductcategory(ProductCategory productCategory) {
+        log.debug("calling getAllFromProductcategory");
+        Set<Product> result = productCategory.getProducts();
         log.trace("returning " + result);
         return result;
     }

@@ -10,8 +10,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "ProductCategory")
-public class ProductCategory {
+@Table(name = "productCategories")
+public class ProductCategory implements Serializable {
+    private static final long serialVersionUID = 2997293850231481717L;
 
     @Id
     @GeneratedValue
@@ -32,6 +33,7 @@ public class ProductCategory {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "product_categories", joinColumns = { @JoinColumn(name = "categoryId") }, inverseJoinColumns = { @JoinColumn(name = "productId") })
     private Set<Product> products;
+
 
     public Integer getId() {
         return id;

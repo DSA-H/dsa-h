@@ -9,13 +9,14 @@ import javafx.stage.WindowEvent;
 import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.gui.MainMenuController;
+import sepm.dsa.model.*;
 import sepm.dsa.sepm.dsa.util.ValidationMessageUtil;
 
 import javax.validation.ConstraintViolation;
-import java.awt.*;
 
 public class Main extends Application {
 
@@ -79,8 +80,9 @@ public class Main extends Application {
 //                if (e instanceof )
         });
 
-        final SpringFxmlLoader loader = new SpringFxmlLoader();
-        Parent root = (Parent) loader.load("/gui/mainmenu.fxml");
+	    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        final SpringFxmlLoader loader = (SpringFxmlLoader) context.getBean("loader");
+	    Parent root = (Parent) loader.load("/gui/mainmenu.fxml");
         final MainMenuController ctrl = loader.getController();
         primaryStage.setTitle("DSA-Händlertool");
         primaryStage.setScene(new Scene(root, 600, 400));

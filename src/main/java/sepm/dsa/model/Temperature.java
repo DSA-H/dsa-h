@@ -24,7 +24,7 @@ public enum Temperature {
     }
 
     public static Temperature parse(int value) {
-        Temperature right = null;		// Default
+        Temperature right = null;        // Default
         for (Temperature item : Temperature.values()) {
             if (item.getValue() == value) {
                 right = item;

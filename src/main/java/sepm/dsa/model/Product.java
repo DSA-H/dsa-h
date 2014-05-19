@@ -1,15 +1,11 @@
 package sepm.dsa.model;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -60,8 +56,8 @@ public class Product implements Serializable {
         return id;
     }
 
-    public void setId(Integer productID) {
-        this.id = productID;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
