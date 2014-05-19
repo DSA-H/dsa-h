@@ -131,7 +131,7 @@ public class EditLocationController implements Initializable {
         Weather weather = Weather.parse(weatherChoiceBox.getSelectionModel().getSelectedIndex());
         TownSize townSize = TownSize.parse(sizeChoiceBox.getSelectionModel().getSelectedIndex());
         String comment = commentArea.getText();
-        Region  seletcedRegionForLocation = (Region) regionChoiceBox.getSelectionModel().getSelectedItem();
+        Region seletcedRegionForLocation = (Region) regionChoiceBox.getSelectionModel().getSelectedItem();
         if (seletcedRegionForLocation == null) {
             throw new DSAValidationException("Wählen sie ein Gebiet aus");
         }
@@ -142,18 +142,18 @@ public class EditLocationController implements Initializable {
         selectedLocation.setSize(townSize);
         selectedLocation.setRegion(seletcedRegionForLocation);
         try {
-        selectedLocation.setxCoord(Integer.parseInt(xCoord.getText()));
-        }catch (NumberFormatException e){
+            selectedLocation.setxCoord(Integer.parseInt(xCoord.getText()));
+        } catch (NumberFormatException e) {
             throw new DSAValidationException("xCoord muss eine Zahl sein.");
         }
         try {
             selectedLocation.setyCoord(Integer.parseInt(yCoord.getText()));
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             throw new DSAValidationException("yCoord muss eine Zahl sein.");
         }
         try {
             selectedLocation.setHeight(Integer.parseInt(height.getText()));
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             throw new DSAValidationException("Höhe muss eine Zahl sein.");
         }
 
@@ -175,12 +175,27 @@ public class EditLocationController implements Initializable {
     @FXML
     public void chooseBackground() {
         log.info("Select Backgroundimage Location");
+//choose File to export
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Ortskarte wählen");
-        File backgroundLocationMap = fileChooser.showOpenDialog(null);
-        //TODO check if this is correct
-        //COMMENT by Flo: darum kümmer ich mich im nächsten abschnitt
-        this.backgroundMapName = backgroundLocationMap.getName();
+        fileChooser.setTitle("Ort Karte wählen");
+        List<String> extensions = new ArrayList<String>();
+        extensions.add("*.jpg");
+        extensions.add("*.png");
+        extensions.add("*.gif");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Images", extensions),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                new FileChooser.ExtensionFilter("GIF", "*.gif"),
+                new FileChooser.ExtensionFilter("PNG", "*.png")
+        );
+
+        //look for location map
+        File newlocationMap = fileChooser.showOpenDialog(new Stage());
+
+        if (newlocationMap == null) {
+            return;
+        }
+        this.backgroundMapName = newlocationMap.getAbsolutePath();
     }
 
 
