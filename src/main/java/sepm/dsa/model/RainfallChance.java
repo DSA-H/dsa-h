@@ -24,7 +24,7 @@ public enum RainfallChance {
     }
 
     public static RainfallChance parse(int value) {
-        RainfallChance right = null;		// Default
+        RainfallChance right = null;        // Default
         for (RainfallChance item : RainfallChance.values()) {
             if (item.getValue() == value) {
                 right = item;

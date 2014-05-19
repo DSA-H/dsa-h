@@ -22,8 +22,14 @@
                 <!-- hibernate managed model classes -->
                 <value>sepm.dsa.model.Region</value>
                 <value>sepm.dsa.model.RegionBorder</value>
+                <value>sepm.dsa.model.Trader</value>
                 <value>sepm.dsa.model.Product</value>
+                <value>sepm.dsa.model.Offer</value>
+                <value>sepm.dsa.model.Deal</value>
+                <value>sepm.dsa.model.TraderCategory</value>
+                <value>sepm.dsa.model.AssortmentNature</value>
                 <value>sepm.dsa.model.ProductCategory</value>
+                <value>sepm.dsa.model.Location</value>
                 <value>sepm.dsa.model.ProductUnit</value>
             </list>
         </property>
@@ -32,6 +38,9 @@
                 <!-- hql named queries xml -->
                 <value>sepm/dsa/model/hibernate/Region.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/RegionBorder.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Trader.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/TraderCategory.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Location.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Product.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/ProductCategory.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/ProductUnit.hbm.xml</value>
@@ -41,8 +50,12 @@
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="javax.persistence.validation.mode">none</prop>
             </props>
         </property>
+    </bean>
+
+    <bean id="loader" class="sepm.dsa.application.SpringFxmlLoader">
     </bean>
 
     <!-- DAOs DI -->
@@ -54,7 +67,19 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="traderDao" class="sepm.dsa.dao.TraderDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <bean id="productDao" class="sepm.dsa.dao.ProductDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="traderCategoryDao" class="sepm.dsa.dao.TraderCategoryDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="locationDao" class="sepm.dsa.dao.LocationDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
@@ -75,6 +100,10 @@
         <property name="regionBorderDao" ref="regionBorderDao"/>
     </bean>
 
+    <bean id="locationService" class="sepm.dsa.service.LocationServiceImpl">
+        <property name="locationDao" ref="locationDao"/>
+    </bean>
+
     <bean id="productService" class="sepm.dsa.service.ProductServiceImpl">
         <property name="productDao" ref="productDao"/>
     </bean>
@@ -87,16 +116,37 @@
         <property name="productUnitDao" ref="productUnitDao"/>
     </bean>
 
+    <bean id="traderCategoryService" class="sepm.dsa.service.TraderCategoryServiceImpl">
+        <property name="traderCategoryDao" ref="traderCategoryDao"/>
+    </bean>
+
+    <bean id="traderService" class="sepm.dsa.service.TraderServiceImpl">
+        <property name="traderDao" ref="traderDao"/>
+        <property name="productService" ref="productService"/>
+    </bean>
+
     <!-- GUI DI -->
-    <bean id="mainMenuController" class="sepm.dsa.gui.MainMenuController">
+    <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController">
+	    <property name="loader" ref="loader"/>
     </bean>
-    <bean id="regionListController" class="sepm.dsa.gui.RegionListController">
+    <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
+	    <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
     </bean>
-    <bean id="editRegionController" class="sepm.dsa.gui.EditRegionController">
+    <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
+	    <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
+    </bean>
+    <bean id="LocationListController" class="sepm.dsa.gui.LocationListController">
+        <property name="loader" ref="loader"/>
+        <property name="locationService" ref="locationService"/>
+    </bean>
+    <bean id="EditLocationController" class="sepm.dsa.gui.EditLocationController">
+        <property name="loader" ref="loader"/>
+        <property name="locationService" ref="locationService"/>
+        <property name="regionService" ref="regionService"/>
     </bean>
     <bean id="productListController" class="sepm.dsa.gui.ProductListController">
         <property name="productService" ref="productService"/>
@@ -106,6 +156,14 @@
         <property name="productCategoryService" ref="productCategoryService"/>
         <property name="productUnitService" ref="productUnitService"/>
         <property name="regionService" ref="regionService"/>
+    </bean>
+    <bean id="tradercategoryList" class="sepm.dsa.gui.TraderCategoryListController">
+        <property name="traderCategoryService" ref="traderCategoryService"/>
+        <property name="traderService" ref="traderService"/>
+    </bean>
+
+    <bean id="editTraderCategory" class="sepm.dsa.gui.EditTraderCategoryController">
+        <property name="traderCategoryService" ref="traderCategoryService"/>
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>

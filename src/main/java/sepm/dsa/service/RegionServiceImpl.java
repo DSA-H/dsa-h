@@ -14,7 +14,6 @@ import sepm.dsa.model.RegionBorder;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.executable.ExecutableValidator;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +26,6 @@ public class RegionServiceImpl implements RegionService, Serializable {
     private static final long serialVersionUID = 7415861483489569621L;
 
     private static final Logger log = LoggerFactory.getLogger(RegionServiceImpl.class);
-//    private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private RegionDao regionDao;
@@ -43,12 +41,10 @@ public class RegionServiceImpl implements RegionService, Serializable {
 
     @Override
     @Transactional(readOnly = false)
-    public int add(Region r) {
+    public void add(Region r) {
         log.debug("calling add(" + r + ")");
         validate(r);
-        int result = regionDao.add(r);
-        log.trace("returning " + result);
-        return result;
+        regionDao.add(r);
     }
 
     @Override
@@ -63,7 +59,7 @@ public class RegionServiceImpl implements RegionService, Serializable {
     @Transactional(readOnly = false)
     public void remove(Region r) {
         log.debug("calling remove(" + r + ")");
-        List<RegionBorder> borders = regionBorderDao.getAllForRegion(r.getId());
+        List<RegionBorder> borders = regionBorderDao.getAllByRegion(r.getId());
         for (RegionBorder border : borders) {
             regionBorderDao.remove(border);
         }

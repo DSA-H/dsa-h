@@ -43,4 +43,9 @@ public interface ProductService {
     List<Region> getAllRegions(int productId);
 
     List<ProductCategory> getAllCategories(int productId);
+
+    /**
+     * @return all products from a product-category and all of its child categories -- if nothing found empty list is returned
+     */
+    java.util.Set<Product> getAllFromProductcategory(ProductCategory productCategory);
 }

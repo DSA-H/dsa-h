@@ -62,6 +62,18 @@ public class EditProductController implements Initializable {
     private TableColumn tablecolumn_category;
     @FXML
     private TableColumn tablecolumn_production;
+    @FXML
+    private Button button_remove_category;
+    @FXML
+    private Button button_add_category;
+    @FXML
+    private Button button_remove_production;
+    @FXML
+    private Button button_add_production;
+    @FXML
+    private Button button_abort;
+    @FXML
+    private Button button_save;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
