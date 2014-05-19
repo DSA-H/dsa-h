@@ -36,9 +36,7 @@
             </rowConstraints>
             <children>
                 <Label text="Name" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                <Label text="Sub-Kategorie" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
                 <TextField fx:id="nameField" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                <ChoiceBox fx:id="subCategoryChoiceBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                 <Label text="Händlerkategorie editieren" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                     <font>
                         <Font name="System Bold" size="18.0" />
@@ -48,18 +46,18 @@
                 <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="10">
                     <children>
                         <Button fx:id="save" defaultButton="true" mnemonicParsing="false" onAction="#onSavePressed" text="Speichern" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
-                        <Button cancelButton="true" mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="25.0" prefWidth="94.0" text="Abbrechen" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
+                        <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="25.0" prefWidth="94.0" text="Abbrechen" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
                     </children>
                     <opaqueInsets>
                         <Insets />
                     </opaqueInsets>
                 </HBox>
-                <Label text="Waren" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
+                <Label text="Warenkategorien" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
                 <TableView fx:id="assortmentTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="7" GridPane.rowIndex="9">
-                    <columns><TableColumn fx:id="assortmentColumn" prefWidth="558.0" text="Gewählte Waren" />
+                    <columns><TableColumn fx:id="assortmentColumn" prefWidth="371.0" text="Gewählte Warenkategorien" /><TableColumn fx:id="defaultOccurenceColumn" prefWidth="262.0" text="Vorkommen" />
                     </columns>
                 </TableView>
-                <ChoiceBox fx:id="assortmentChoiceBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="7" /><Button mnemonicParsing="false" onAction="#addAssortmentClicked" prefHeight="26.0" prefWidth="147.0" text="Ware wählen" GridPane.columnIndex="1" GridPane.rowIndex="8" /><Button fx:id="removeAssortButton" mnemonicParsing="false" onAction="#removeSelectedAssortment" prefHeight="26.0" prefWidth="152.0" text="Ware nicht anbieten" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+                <ChoiceBox fx:id="productCategoryChoiceBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="7" /><Button mnemonicParsing="false" onAction="#addAssortmentClicked" prefHeight="26.0" prefWidth="288.0" text="Warenkategorie wählen" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="8" /><Button fx:id="removeAssortButton" mnemonicParsing="false" onAction="#removeSelectedAssortment" prefHeight="26.0" prefWidth="152.0" text="Kategorie abwählen" GridPane.columnIndex="5" GridPane.rowIndex="8" /><Label text="Vorkommen" GridPane.columnIndex="5" GridPane.rowIndex="7" /><TextField fx:id="defaultOccurence" GridPane.columnIndex="7" GridPane.rowIndex="7" />
             </children>
         </GridPane>
     </center>

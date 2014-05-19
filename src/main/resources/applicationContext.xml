@@ -163,6 +163,7 @@
 
     <bean id="editTraderCategory" class="sepm.dsa.gui.EditTraderCategoryController">
         <property name="traderCategoryService" ref="traderCategoryService"/>
+        <property name="productCategoryService" ref="productCategoryService"/>
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
