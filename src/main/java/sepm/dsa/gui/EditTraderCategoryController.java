@@ -20,6 +20,7 @@ import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.TraderCategoryService;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service("EditTraderCategoryController")
@@ -156,7 +157,8 @@ public class EditTraderCategoryController implements Initializable {
         assortmentTable.getItems();
 
         traderCategory.setName(name);
-        traderCategory.setAssortments(assortmentTable.getItems());
+        HashSet<AssortmentNature> assortmentNatures = new HashSet<>(assortmentTable.getItems());
+        traderCategory.setAssortments(assortmentNatures);
 
         if (isNewTraderCategory) {
             traderCategoryService.add(traderCategory);
