@@ -7,9 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.TraderCategoryDao;
 import sepm.dsa.dao.TraderDao;
 import sepm.dsa.exceptions.DSAValidationException;
-import sepm.dsa.model.Location;
-import sepm.dsa.model.Trader;
-import sepm.dsa.model.TraderCategory;
+import sepm.dsa.model.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -73,6 +71,18 @@ public class TraderServiceImpl implements TraderService, Serializable {
         List<Trader> result = traderDao.getAllByCategory(traderCategory);
         log.trace("returning " + result);
         return result;
+    }
+
+    @Override
+    public List<Offer> calcualteOffers(Trader trader) {
+        log.debug("calling calcualteOffers()");
+        for(AssortmentNature assortmentNature : trader.getCategory().getAssortments()) {
+            int defaultOccurence = assortmentNature.getDefaultOccurence();
+            ProductCategory productCategory = assortmentNature.getProductCategory();
+            productCategory.get
+            for(Product product : .getChilds())
+
+        }
     }
 
     public void setTraderDao(TraderDao traderDao) {

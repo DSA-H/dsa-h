@@ -1,6 +1,7 @@
 package sepm.dsa.service;
 
 import sepm.dsa.model.Product;
+import sepm.dsa.model.ProductCategory;
 
 import java.util.List;
 
@@ -37,4 +38,9 @@ public interface ProductService {
      * @return all entries, might be an empty list (not null)
      */
     List<Product> getAll();
+
+    /**
+     * @return all products from a productcategory and all its child categories
+     */
+    List<Product> getAllFromProductcategory(ProductCategory productCategory);
 }

@@ -2,6 +2,7 @@ package sepm.dsa.service;
 
 
 import sepm.dsa.model.Location;
+import sepm.dsa.model.Offer;
 import sepm.dsa.model.Trader;
 import sepm.dsa.model.TraderCategory;
 
@@ -15,4 +16,6 @@ public interface TraderService {
     void remove(Trader t);
     List<Trader> getAllForLocation(Location location);
     List<Trader> getAllByCategory(TraderCategory category);
+
+    List<Offer> calcualteOffers(Trader trader);
 }
