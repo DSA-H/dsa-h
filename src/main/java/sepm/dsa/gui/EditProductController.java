@@ -78,6 +78,12 @@ public class EditProductController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize EditProductController");
+        //DEBUG:
+        /*ProductUnit pu = new ProductUnit();
+        pu.setName("pu");
+        pu.setUnitType("ut");
+        pu.setValue(10);
+        productUnitService.add(pu);*/
 
         // init ChoiceBoxes
         List<String> attributeList = new ArrayList<>();

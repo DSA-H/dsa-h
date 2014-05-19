@@ -50,11 +50,11 @@ public class ProductServiceTest {
     @Test
     @DatabaseSetup("/testData.xml")
     public void testGet()  {
-        Product p = productService.get(2);
+        Product p = productService.get(1);
         assertTrue(p!=null);
     }
 
-     /*  @Test
+    @Test
     @DatabaseSetup("/testData.xml")
     public void testAdd()
     {
@@ -90,7 +90,9 @@ public class ProductServiceTest {
         assertTrue (productService.getAll().size()-1 == size);
         Product newP = productService.get(p.getId());
         assertTrue(p.equals(newP));
-        assertTrue(p.getRegions().equals(newP.getRegions()));
+        Set<Region> l1 = newP.getRegions();  // todo: diese zeile geht nicht
+        Set<Region> l2 = p.getRegions();
+        assertTrue(l1.equals(l2));
     }
 
     @Test
@@ -120,5 +122,4 @@ public class ProductServiceTest {
         assertTrue(p.equals(newP));
         assertTrue(p.getCategories().equals(newP.getCategories()));
     }
-    */
 }

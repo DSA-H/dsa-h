@@ -73,7 +73,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
     @Override
     public Set<Product> getAllFromProductcategory(ProductCategory productCategory) {
         log.debug("calling getAllFromProductcategory");
-        Set<Product> result = productCategory.getProducts();
+        Set<Product> result = productCategory.getProducts(); // todo das ist falsch! hier sollten auch alle produkte aus subkategorien geladen werden
         log.trace("returning " + result);
         return result;
     }
