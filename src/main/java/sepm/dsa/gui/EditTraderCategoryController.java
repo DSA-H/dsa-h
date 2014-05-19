@@ -151,48 +151,18 @@ public class EditTraderCategoryController implements Initializable {
     private void onSavePressed() {
         log.debug("calling SaveButtonPressed");
 
-        // save region
-//        String name = nameField.getText();
-//        Temperature temperature = Temperature.parse(temperatureChoiceBox.getSelectionModel().getSelectedIndex());
-//        RainfallChance rainfallChance = RainfallChance.parse(rainfallChoiceBox.getSelectionModel().getSelectedIndex());
-//        String comment = commentArea.getText();
-//        Color selectedColor = colorPicker.getValue();
-//        String colorString =
-//                Integer.toHexString((int) (selectedColor.getRed() * 255)) + "" +
-//                        Integer.toHexString((int) (selectedColor.getGreen() * 255)) + "" +
-//                        Integer.toHexString((int) (selectedColor.getBlue() * 255));
-//
-//        traderCategory.setColor(colorString);
-//        traderCategory.setName(name);
-//        traderCategory.setComment(comment);
-//        traderCategory.setTemperature(temperature);
-//        traderCategory.setRainfallChance(rainfallChance);
-//
-//        if (isNewTraderCategory) {
-//            regionService.add(traderCategory);
-//        } else {
-//            regionService.update(traderCategory);
-//        }
-//
-//        // save borders
-//        List<RegionBorder> localBorderList = borderTable.getItems();
-//        for (RegionBorder border : regionBorderService.getAllByRegion(traderCategory.getId())) {
-//            boolean contain = false;
-//            for (RegionBorder localBorder : localBorderList) {
-//                if (localBorder.equalsById(border)) {
-//                    regionBorderService.update(border);
-//                    contain = true;
-//                    break;
-//                }
-//            }
-//            if (!contain) {
-//                regionBorderService.remove(border);
-//            }
-//            localBorderList.remove(border);
-//        }
-//        for (RegionBorder border : localBorderList) {
-//            regionBorderService.add(border);
-//        }
+//        save traderCategory
+        String name = nameField.getText();
+        assortmentTable.getItems();
+
+        traderCategory.setName(name);
+        traderCategory.setAssortments(assortmentTable.getItems());
+
+        if (isNewTraderCategory) {
+            traderCategoryService.add(traderCategory);
+        } else {
+            traderCategoryService.update(traderCategory);
+        }
 
         // return to traderCategoryList
         Stage stage = (Stage) cancelButton.getScene().getWindow();
