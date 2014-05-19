@@ -23,6 +23,7 @@
                 <value>sepm.dsa.model.Region</value>
                 <value>sepm.dsa.model.RegionBorder</value>
                 <value>sepm.dsa.model.Location</value>
+                <value>sepm.dsa.model.Tavern</value>
             </list>
         </property>
         <property name="mappingResources">
@@ -31,6 +32,7 @@
                 <value>sepm/dsa/model/hibernate/Region.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/RegionBorder.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Location.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Tavern.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -55,6 +57,10 @@
     </bean>
 
     <bean id="locationDao" class="sepm.dsa.dao.LocationDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="tavernDao" class="sepm.dsa.dao.TavernDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 

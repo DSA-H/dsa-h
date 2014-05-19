@@ -15,4 +15,6 @@
     <borders region1="1" region2="6" borderCost="6" />
     <locations id="1" name="fooLocation" REGION="1" xCoord="30" yCoord="20" sizeId="2" height="10" weatherId="1"/>
     <locations id="2" name="fooLocation2" REGION="2" xCoord="30" yCoord="20" sizeId="2" height="10" weatherId="1"/>
+    <taverns id="1" name="Zum Wegstein" location_id="1" xPos="42" yPos="12" usage="12"/>
+    <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="42" yPos="12" usage="12"/>
 </dataset>
