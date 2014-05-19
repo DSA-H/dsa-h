@@ -1,6 +1,7 @@
 package sepm.dsa.dao;
 
 import sepm.dsa.model.Location;
+import sepm.dsa.model.LocationConnection;
 
 import java.util.List;
 
@@ -36,4 +37,22 @@ public interface LocationDao {
      * @return the locations or empty list of no locations exist (not null)
      */
     public List<Location> getAll();
+
+    /**
+     * Gets a list of locations near a given location.
+     * @param location the location
+     * @param withinDistance the distance in [??] around the location
+     * @return
+     */
+    List<Location> getAllAround(Location location, double withinDistance);
+
+    /**
+     * Gets a list of locations near a given location having no connection yet.
+     * @param location the location
+     * @param withinDistance the distance in [??] around the location
+     * @return
+     */
+    List<Location> getAllAroundNotConnected(Location location, double withinDistance);
+
+
 }

@@ -13,6 +13,15 @@
     <borders region1="4" region2="5" borderCost="4" />
     <borders region1="4" region2="6" borderCost="11" />
     <borders region1="1" region2="6" borderCost="6" />
-    <locations id="1" name="fooLocation" REGION="1" xCoord="30" yCoord="20" sizeId="2" height="10" weatherId="1"/>
-    <locations id="2" name="fooLocation2" REGION="2" xCoord="30" yCoord="20" sizeId="2" height="10" weatherId="1"/>
+    <locations id="1" name="location1" REGION="1" xCoord="50" yCoord="50" sizeId="2" height="10" weatherId="1"/>
+    <locations id="2" name="location2" REGION="2" xCoord="100" yCoord="100" sizeId="2" height="10" weatherId="3"/>
+    <locations id="3" name="location3" REGION="2" xCoord="70" yCoord="80" sizeId="4" height="30" weatherId="2"/>
+    <locations id="4" name="location4_dont_change" REGION="2" xCoord="500" yCoord="500" sizeId="4" height="100" weatherId="1"/>
+    <locations id="5" name="location5_dont_change" REGION="2" xCoord="500" yCoord="550" sizeId="4" height="100" weatherId="1"/>
+    <locations id="6" name="location6_dont_change" REGION="2" xCoord="550" yCoord="500" sizeId="4" height="100" weatherId="1"/>
+    <locations id="7" name="location7_dont_change" REGION="2" xCoord="530" yCoord="520" sizeId="0" height="50" weatherId="2"/>
+    <locations id="8" name="location8_dont_change" REGION="3" xCoord="550" yCoord="550" sizeId="1" height="40" weatherId="4"/>
+    <locations id="9" name="location9_dont_change" REGION="3" xCoord="700" yCoord="700" sizeId="3" height="140" weatherId="1"/>
+    <!--<connections LOCATION1_ID="1" LOCATION2_ID="2" travelTime="4" />-->
+
 </dataset>

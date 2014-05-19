@@ -6,6 +6,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "locations")
@@ -57,6 +60,12 @@ public class Location implements Serializable {
     @Size(max = 1000)
     @Column(nullable = true, length = 1000)
     private String comment;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.location1", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<LocationConnection> connections1 = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.location2", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<LocationConnection> connections2 = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -158,6 +167,36 @@ public class Location implements Serializable {
 
     public void setRegion(Region region) {
         this.region = region;
+    }
+
+    public Set<LocationConnection> getConnections1() {
+        return connections1;
+    }
+
+    /**
+     *
+     * @param connections1 must not be null
+     */
+    public void setConnections1(Collection<LocationConnection> connections1) {
+        this.connections1 = new HashSet<>(connections1);
+    }
+
+    public Set<LocationConnection> getConnections2() {
+        return connections2;
+    }
+
+    /**
+     * @param connections2 must not be null
+     */
+    public void setConnections2(Collection<LocationConnection> connections2) {
+        this.connections2 = new HashSet<>(connections2);
+    }
+
+    public Set<LocationConnection> getAllConnections() {
+        Set<LocationConnection> result = new HashSet<>(connections1.size() + connections2.size());
+        result.addAll(connections1);
+        result.addAll(connections2);
+        return result;
     }
 
     @Override

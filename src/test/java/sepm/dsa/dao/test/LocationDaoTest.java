@@ -21,6 +21,7 @@ import sepm.dsa.service.RegionService;
 import java.util.List;
 
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -83,4 +84,27 @@ public class LocationDaoTest extends TestCase {
         Location l2 = locationDao.get(2);
         assertThat(locationDao.getAll(), hasItems(l1, l2));
     }
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void getAllAround_SomeLocationsAround() throws Exception {
+        Location location = locationDao.get(4);
+        List<Location> locationsAround = locationDao.getAllAround(location, 100.0);
+        Location l1 = locationDao.get(5);
+        Location l2 = locationDao.get(6);
+        Location l3 = locationDao.get(7);
+        Location l4 = locationDao.get(8);
+        assertThat(locationsAround, hasItems(l1, l2, l3, l4));
+        assertEquals(4, locationsAround.size());
+    }
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void getAllAround_NoLocationsAround() throws Exception {
+        Location location = locationDao.get(4);
+        List<Location> locationsAround = locationDao.getAllAround(location, 10.0);
+        assertTrue(locationsAround.size() == 0);
+    }
+
+
 }

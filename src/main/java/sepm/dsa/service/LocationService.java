@@ -1,6 +1,7 @@
 package sepm.dsa.service;
 
 import sepm.dsa.model.Location;
+import sepm.dsa.model.LocationConnection;
 
 import java.util.List;
 
@@ -35,5 +36,33 @@ public interface LocationService {
      *
      * @return the locations or empty list of no locations exist (not null)
      */
-   public  List<Location> getAll();
+    public  List<Location> getAll();
+
+
+    /**
+     * Suggests a list of location connections to the location from a given location.
+     * Already existing location connections are not suggested. The distance
+     * @param location the location
+     * @param withinDistance the distance in [??] around the location, must be > 0
+     * @return
+     */
+    List<LocationConnection> suggestLocationConnectionsAround(Location location, double withinDistance);
+
+    /**
+     * The suggested distance between two locations. Used in suggestConnectionsAround(Location, Integer)
+     * @param location1
+     * @param location2
+     * @return the suggested distance (>= 0)
+     * @throws java.lang.IllegalArgumentException if one of the locations doesn't have x- or y-coordinate specified
+     * @see LocationService#suggestLocationConnectionsAround(sepm.dsa.model.Location, double) suggestLocationConnectionsAround
+     */
+    double suggestedDistanceBetween(Location location1, Location location2);
+
+    /**
+     * Calculates a travel
+     * @param distance
+     * @return
+     */
+    int suggestedTravelTimeForDistance(double distance);
+
 }

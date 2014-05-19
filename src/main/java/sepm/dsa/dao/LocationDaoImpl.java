@@ -1,14 +1,17 @@
 package sepm.dsa.dao;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.exceptions.DSARegionNotExistingException;
 import sepm.dsa.model.Location;
+import sepm.dsa.model.LocationConnection;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 @Repository
@@ -58,6 +61,56 @@ public class LocationDaoImpl implements LocationDao {
     public List<Location> getAll() {
         log.debug("calling getAll()");
         List<?> list = sessionFactory.getCurrentSession().getNamedQuery("Location.findAll").list();
+
+        List<Location> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((Location) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Location> getAllAround(Location location, double withinDistance) {
+        log.debug("calling getAllAround(" + location + "," + withinDistance + ")");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("Location.findAllAround");
+        query.setParameter("ownLocationId", location.getId());
+        query.setParameter("xCoord", location.getxCoord());
+        query.setParameter("yCoord", location.getyCoord());
+        query.setParameter("distance", withinDistance);
+        List<?> list = query.list();
+
+                List<Location> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((Location) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Location> getAllAroundNotConnected(Location location, double withinDistance) {
+        log.debug("calling getAllAroundNotConnected(" + location + "," + withinDistance + ")");
+
+//        Integer locationId = location.getId();
+//        Set<LocationConnection> connections = location.getAllConnections();
+//        List<Integer> connectedIds = new ArrayList<Integer>(connections.size());
+//        for (LocationConnection con : connections) {
+//            if (!con.getLocation1().getId().equals(locationId)) {
+//                connectedIds.add(con.getLocation1().getId());
+//            } else {
+//                connectedIds.add(con.getLocation2().getId());
+//            }
+//        }
+
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("Location.findAllAroundNotConnected");
+        query.setParameter("ownLocationId", location.getId());
+        query.setParameter("xCoord", location.getxCoord());
+        query.setParameter("yCoord", location.getyCoord());
+        query.setParameter("distance", withinDistance);
+        List<?> list = query.list();
 
         List<Location> result = new Vector<>(list.size());
         for (Object o : list) {

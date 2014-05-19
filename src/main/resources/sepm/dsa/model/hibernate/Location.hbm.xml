@@ -7,4 +7,17 @@
         <![CDATA[from Location ORDER BY name ASC]]>
     </query>
 
+    <query name="Location.findAllAround">
+        <![CDATA[   FROM Location
+                    WHERE (:ownLocationId is NULL OR id != :ownLocationId) AND sqrt((:xCoord - xCoord) * (:xCoord - xCoord) + (:yCoord - yCoord) * (:yCoord - yCoord)) < :distance
+                    ORDER BY name ASC]]>
+    </query>
+
+    <query name="Location.findAllAroundNotConnected">
+        <![CDATA[   FROM Location l
+                    WHERE (:ownLocationId is NULL OR l.id != :ownLocationId) AND sqrt((:xCoord - l.xCoord) * (:xCoord - l.xCoord) + (:yCoord - l.yCoord) * (:yCoord - l.yCoord)) < :distance
+                            AND l NOT IN (select c.pk.location1, c.pk.location2 from LocationConnection c where c.pk.location1.id = :ownLocationId OR c.pk.location2.id = :ownLocationId)
+                    ORDER BY l.name ASC]]>
+    </query>
+
 </hibernate-mapping>

@@ -23,6 +23,7 @@
                 <value>sepm.dsa.model.Region</value>
                 <value>sepm.dsa.model.RegionBorder</value>
                 <value>sepm.dsa.model.Location</value>
+                <value>sepm.dsa.model.LocationConnection</value>
             </list>
         </property>
         <property name="mappingResources">
