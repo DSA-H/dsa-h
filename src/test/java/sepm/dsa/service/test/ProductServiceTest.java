@@ -51,75 +51,53 @@ public class ProductServiceTest {
     @DatabaseSetup("/productData.xml")
     public void testXML()
     {
-
-
+        System.out.println(productService.getAll().toString());
     }
 
     @Test
     @DatabaseSetup("/productData.xml")
     public void testAdd()
     {
+        System.out.println(productService.getAll().toString());
         Product p = new Product();
         p.setName("tester");
         p.setQuality(false);
         p.setCost(1);
         p.setAttribute(ProductAttribute.LAGERBAR);
 
-        //p.setAttribute();
         int size = productService.getAll().size();
         int id = productService.add(p);
-        assertTrue(productService.getAll().size()-1 == size);
+        assertTrue (productService.getAll().size()-1 == size);
         Product newP = productService.get(id);
         assertTrue(p.equals(newP));
     }
 
     @Test
     @DatabaseSetup("/productData.xml")
-    public void testAddWithRegion()
+    public void testAddRegions()
     {
+        System.out.println(productService.getAll().toString());
         Product p = new Product();
         p.setName("tester");
         p.setQuality(false);
         p.setCost(1);
         p.setAttribute(ProductAttribute.LAGERBAR);
 
-        Region r1 = regionService.get(1);
-        Set<Region> rl = new HashSet<>();
-        rl.add(r1);
-        p.setRegions(rl);
+        List<Region> regionList = regionService.getAll();
+        Set<Region> regionSet = new HashSet<Region>();
 
-        //p.setAttribute();
+        for (int i = 0; i<regionList.size(); i++) {
+            regionSet.add(regionList.get(i));
+        }
+
+        p.setRegions(regionSet);
+
         int size = productService.getAll().size();
         int id = productService.add(p);
-        assertTrue(productService.getAll().size()-1 == size);
+        assertTrue (productService.getAll().size()-1 == size);
         Product newP = productService.get(id);
         assertTrue(p.equals(newP));
-        assertTrue(p.getRegions().size() == 1);
+        assertTrue(p.getRegions().equals(newP.getRegions()));
     }
-
-    @Test
-    @DatabaseSetup("/productData.xml")
-    public void testRemove()
-    {
-        Product p = new Product();
-        p.setName("tester");
-        p.setQuality(false);
-        p.setCost(1);
-        p.setAttribute(ProductAttribute.LAGERBAR);
-
-        Region r1 = regionService.get(1);
-        Set<Region> rl = new HashSet<>();
-        rl.add(r1);
-        p.setRegions(rl);
-
-        //p.setAttribute();
-        int size = productService.getAll().size();
-        int id = productService.add(p);
-        assertTrue(productService.getAll().size()-1 == size);
-        Product newP = productService.get(id);
-        assertTrue(p.equals(newP));
-        assertTrue(p.getRegions().size() == 1);
-    }
-
 
 }
