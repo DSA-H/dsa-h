@@ -67,6 +67,20 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
+    private void onTraderCategoriesClicked() {
+        log.debug("onTraderCategoriesClicked - open Trader Categories Window");
+        Stage stage = new Stage();
+        Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml");
+
+        scene = (Parent) loader.load("/gui/tradercategorylist.fxml");
+
+        stage.setTitle("Händlerkategorien");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
     private void onShowLocationsClicked() {
         log.debug("onShowLocationsClicked - open Location Window");
         Stage stage = new Stage();

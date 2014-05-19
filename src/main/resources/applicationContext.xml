@@ -157,13 +157,14 @@
         <property name="productUnitService" ref="productUnitService"/>
         <property name="regionService" ref="regionService"/>
     </bean>
-    <bean id="tradercategoryList" class="sepm.dsa.gui.TraderCategoryListController">
+    <bean id="TraderCategoryList" class="sepm.dsa.gui.TraderCategoryListController">
+        <property name="loader" ref="loader"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
-        <property name="traderService" ref="traderService"/>
     </bean>
 
     <bean id="editTraderCategory" class="sepm.dsa.gui.EditTraderCategoryController">
         <property name="traderCategoryService" ref="traderCategoryService"/>
+        <property name="productCategoryService" ref="productCategoryService"/>
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>

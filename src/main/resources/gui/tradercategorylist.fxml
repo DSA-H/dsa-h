@@ -15,8 +15,7 @@
         </Label>
         <TableView fx:id="traderCategoryTable" layoutX="12.0" layoutY="73.0" onMousePressed="#checkFocus" prefHeight="318.0" prefWidth="576.0">
             <columns>
-                <TableColumn fx:id="traderCategoryColumn" prefWidth="151.0" text="Händlerkategorie" />
-                <TableColumn fx:id="traderColumn" prefWidth="352.0" text="Händler" />
+                <TableColumn fx:id="traderCategoryColumn" prefWidth="574.0" text="Händlerkategorie" />
             </columns>
         </TableView>
         <HBox alignment="CENTER_LEFT" layoutX="12.0" layoutY="41.0" prefHeight="25.0" prefWidth="576.0" spacing="10.0">

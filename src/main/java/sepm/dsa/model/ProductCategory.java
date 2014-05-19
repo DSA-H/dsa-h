@@ -3,7 +3,6 @@ package sepm.dsa.model;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -99,5 +98,9 @@ public class ProductCategory implements Serializable {
         result = 31 * result + (childs != null ? childs.hashCode() : 0);
         //result = 31 * result + (products != null ? products.hashCode() : 0);
         return result;
+    }
+    @Override
+    public String toString(){
+        return name;
     }
 }
