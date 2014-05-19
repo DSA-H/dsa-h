@@ -35,7 +35,6 @@ public class LocationDaoImpl implements LocationDao {
     @Override
     @Transactional(readOnly = false)
     public void remove(Location location) {
-
         log.debug("calling remove(" + location + ")");
         sessionFactory.getCurrentSession().delete(location);
     }

@@ -50,7 +50,7 @@ public class Region implements Serializable {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "product_regions", joinColumns = { @JoinColumn(name = "regionId") }, inverseJoinColumns = { @JoinColumn(name = "productId") })
-    private Set<Product> products;
+    private Set<Product> products = new HashSet<>();;
 
     public Set<Product> getProducts() {
         return products;
