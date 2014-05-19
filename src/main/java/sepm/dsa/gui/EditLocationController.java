@@ -179,6 +179,7 @@ public class EditLocationController implements Initializable {
         fileChooser.setTitle("Ortskarte wählen");
         File backgroundLocationMap = fileChooser.showOpenDialog(null);
         //TODO check if this is correct
+        //COMMENT by Flo: darum kümmer ich mich im nächsten abschnitt
         this.backgroundMapName = backgroundLocationMap.getName();
     }
 
