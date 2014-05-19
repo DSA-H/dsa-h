@@ -27,6 +27,7 @@ import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 import sepm.dsa.service.ProductService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("RegionListController")
@@ -72,8 +73,8 @@ public class ProductListController implements Initializable {
         tablecolumn_categories.setCellValueFactory(new PropertyValueFactory<>("categories"));
         tablecolumn_comment.setCellValueFactory(new PropertyValueFactory<>("comment"));
 
-
         ObservableList<Product> data = FXCollections.observableArrayList(productService.getAll());
+
         tableview_product.setItems(data);
 
     }

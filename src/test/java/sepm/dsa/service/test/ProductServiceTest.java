@@ -19,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.ProductService;
 
+import javax.validation.constraints.AssertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,22 +53,19 @@ public class ProductServiceTest {
     @DatabaseSetup("/productData.xml")
     public void testAdd()
     {
-
         System.out.println(productService.getAll().toString());
-        /*Product p = new Product();
+        Product p = new Product();
         p.setName("tester");
         p.setQuality(false);
         p.setCost(1);
-
         p.setAttribute(ProductAttribute.LAGERBAR);
 
-        List<ProductCategory> productCategories = productCategoryService.getAll();
-        p.setCategories(productCategories);
-
-        System.out.println(p.getCategories());
-        p.setId(productService.add(p));
-        Product compareProduct = productService.get(p.getId());
-        System.out.println(compareProduct.getCategories());*/
+        //p.setAttribute();
+        int size = productService.getAll().size();
+        int id = productService.add(p);
+        assertTrue (productService.getAll().size()-1 == size);
+        Product newP = productService.get(id);
+        assertTrue(p.equals(newP));
     }
 
 
