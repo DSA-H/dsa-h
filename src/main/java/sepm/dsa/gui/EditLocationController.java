@@ -226,16 +226,20 @@ public class EditLocationController implements Initializable {
             throw new DSAValidationException("Höhe muss eine Zahl sein.");
         }
 
-//        Set<LocationConnection> conn1 = new HashSet<>(locationConnectionsTable.getItems().size());
-//        Set<LocationConnection> conn2 = new HashSet<>(locationConnectionsTable.getItems().size());
-//        for (LocationConnection con : locationConnectionsTable.getItems()) {
-//
-//        }
-//
-//        selectedLocation.getConnections1().clear();
-//        selectedLocation.getConnections2().clear();
-//        selectedLocation.setConnections1(conn1);
-//        selectedLocation.setConnections1(conn2);
+        Set<LocationConnection> conn1 = new HashSet<>(locationConnectionsTable.getItems().size());
+        Set<LocationConnection> conn2 = new HashSet<>(locationConnectionsTable.getItems().size());
+        for (LocationConnection con : locationConnectionsTable.getItems()) {
+            if (con.getLocation1().equals(selectedLocation)) {
+                conn1.add(con);
+                log.info("location1: " + con);
+            } else {
+                conn2.add(con);
+                log.info("location2: " + con);
+            }
+        }
+
+        selectedLocation.getConnections1().clear();
+        selectedLocation.getConnections2().clear();
 
         log.info("connections now in selected Location");
         for (LocationConnection con : selectedLocation.getAllConnections()) {
@@ -249,6 +253,10 @@ public class EditLocationController implements Initializable {
             log.info("update location");
             locationService.update(selectedLocation);
         }
+        selectedLocation.getConnections1().addAll(conn1);
+        selectedLocation.getConnections1().addAll(conn2);
+
+        locationService.update(selectedLocation);
 
         selectedLocation = locationService.get(selectedLocation.getId());
 
@@ -309,7 +317,7 @@ public class EditLocationController implements Initializable {
         }
         ObservableList<LocationConnection> connections = FXCollections.observableArrayList(suggestedConnections);
         locationConnectionsTable.setItems(connections);
-        selectedLocation.getConnections1().addAll(connections);
+
     }
 
     @FXML
@@ -321,13 +329,6 @@ public class EditLocationController implements Initializable {
     public void onRemoveConnectionBtnClicked() {
         LocationConnection selected = locationConnectionsTable.getSelectionModel().getSelectedItem();
         locationConnectionsTable.getItems().remove(selected);
-        if (selected.getLocation1().equals(selectedLocation)) {
-            selectedLocation.getConnections1().remove(selected);
-            log.info("removed location1: " + selected);
-        } else {
-            selectedLocation.getConnections2().remove(selected);
-            log.info("removed location2: " + selected);
-        }
     }
 
 
