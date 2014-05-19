@@ -18,7 +18,7 @@ public class Offer implements Serializable {
     @Column(nullable = false)
     private Integer amount;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private Product product;
 
@@ -30,7 +30,7 @@ public class Offer implements Serializable {
     @Column(nullable = false)
     private Integer qualityId;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private Trader trader;
 

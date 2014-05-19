@@ -42,10 +42,10 @@ public class Region implements Serializable {
     @Column(nullable = false)
     private Integer rainfallChanceId;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.region1", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region1", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RegionBorder> borders1 = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.region2", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region2", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RegionBorder> borders2 = new HashSet<>();
 
 
