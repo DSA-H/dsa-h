@@ -29,4 +29,20 @@
     <traders id="2" name="Megatron" category_id="2" size="18" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13" convince="7" location_id="1" />
     <offers id="1" product_id="1" trader_id="1" amount="2" pricePerUnit="50" qualityId="1" />
     <offers id="2" product_id="2" trader_id="1" amount="8" pricePerUnit="10" qualityId="0" />
+    <productCategories id="1" name="category1" />
+    <productCategories id="2" name="category2" />
+    <productCategories id="3" name="category3" />
+    <productCategories id="4" name="category4" />
+    <productCategories id="5" name="category5" />
+    <product_categories productId="1" categoryId="1" />
+    <product_categories productId="1" categoryId="2" />
+    <product_categories productId="1" categoryId="3" />
+    <product_categories productId="2" categoryId="5" />
+    <product_categories productId="2" categoryId="1" />
+    <product_categories productId="3" categoryId="1" />
+    <product_categories productId="4" categoryId="2" />
+    <product_categories productId="6" categoryId="1" />
+    <product_categories productId="7" categoryId="3" />
+    <product_regions productId="1" regionId="1" />
+
 </dataset>

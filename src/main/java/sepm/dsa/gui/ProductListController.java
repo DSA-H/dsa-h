@@ -40,7 +40,9 @@ public class ProductListController implements Initializable {
     @FXML
     private TableColumn tablecolumn_categories;
     @FXML
-    private TableColumn tablecolumn_attributes;
+    private TableColumn tablecolumn_attribute;
+    @FXML
+    private TableColumn tablecolumn_comment;
     @FXML
     private Button button_create;
     @FXML
@@ -55,52 +57,11 @@ public class ProductListController implements Initializable {
 
         tablecolumn_product.setCellValueFactory(new PropertyValueFactory<>("name"));
         tablecolumn_cost.setCellValueFactory(new PropertyValueFactory<>("cost"));
-        tablecolumn_unit.setCellValueFactory(new PropertyValueFactory<>("unit"));
-
-
-        /*borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Region, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Region, String> r) {
-                if (r.getValue() != null) {
-                    int regionId = r.getValue().getId();
-                    List<RegionBorder> borders = regionBorderService.getAllForRegion(regionId);
-                    StringBuilder sb = new StringBuilder();
-                    for (RegionBorder rb : borders) {
-                        // not this region
-                        if (rb.getPk().getRegion1().getId() != regionId) {
-                            sb.append(rb.getPk().getRegion1().getName());
-                        } else {
-                            sb.append(rb.getPk().getRegion2().getName());
-                        }
-                        sb.append(", ");
-                    }
-                    if (sb.length() >= 2) {
-                        sb.delete(sb.length() - 2, sb.length());
-                    }
-                    return new SimpleStringProperty(sb.toString());
-                } else {
-                    return new SimpleStringProperty("");
-                }
-            }
-        });
-        colorColumn.setCellValueFactory(new PropertyValueFactory<>("color"));
-        colorColumn.setCellFactory(new Callback<TableColumn, TableCell>() {
-            @Override
-            public TableCell call(TableColumn param) {
-                return new TableCell<Region, String>() {
-                    @Override
-                    public void updateItem(String color, boolean empty) {
-                        super.updateItem(color, empty);
-                        if (!empty) {
-                            color = "#" + color;
-                            setStyle("-fx-background-color:" + color);
-                        }else {
-                            setStyle("-fx-background-color:#FFFFFF");
-                        }
-                    }
-                };
-            }
-        });*/
+        tablecolumn_unit.setCellValueFactory(new PropertyValueFactory<>("unitId"));
+        tablecolumn_attribute.setCellValueFactory(new PropertyValueFactory<>("attributeId"));
+        tablecolumn_productions.setCellValueFactory(new PropertyValueFactory<>("productionRegions"));
+        tablecolumn_categories.setCellValueFactory(new PropertyValueFactory<>("categories"));
+        tablecolumn_comment.setCellValueFactory(new PropertyValueFactory<>("comment"));
 
         ObservableList<Product> data = FXCollections.observableArrayList(productService.getAll());
         tableview_product.setItems(data);

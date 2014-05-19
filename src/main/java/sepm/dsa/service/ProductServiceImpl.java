@@ -9,6 +9,8 @@ import sepm.dsa.dao.ProductDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
+import sepm.dsa.model.Region;
+import sepm.dsa.model.ProductCategory;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -30,7 +32,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
     private ProductDao productDao;
 
     @Override
-    public Product get(Integer id) {
+    public Product get(int id) {
         log.debug("calling get(" + id + ")");
         Product result = productDao.get(id);
         log.trace("returning " + result);
@@ -71,7 +73,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
     @Override
     public Set<Product> getAllFromProductcategory(ProductCategory productCategory) {
         log.debug("calling getAllFromProductcategory");
-        Set<Product> result = productCategory.getProducts();
+        Set<Product> result = productCategory.getProducts(); // todo das ist falsch! hier sollten auch alle produkte aus subkategorien geladen werden
         log.trace("returning " + result);
         return result;
     }
@@ -83,7 +85,6 @@ public class ProductServiceImpl implements ProductService, Serializable {
 
     /**
      * Validates a product
-     *
      * @param product
      * @throws sepm.dsa.exceptions.DSAValidationException if product is not valid
      */
@@ -93,4 +94,5 @@ public class ProductServiceImpl implements ProductService, Serializable {
             throw new DSAValidationException("Produkt ist nicht valide.", violations);
         }
     }
+
 }

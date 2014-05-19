@@ -26,10 +26,10 @@
 <children><Label alignment="CENTER" contentDisplay="CENTER" text="Waren" textAlignment="CENTER" GridPane.columnIndex="4">
 <font>
 <Font name="System Bold" size="18.0" />
-</font></Label><Button fx:id="button_create" mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Erstellen" GridPane.columnIndex="1" GridPane.rowIndex="1" /><Button fx:id="button_edit" mnemonicParsing="false" text="Bearbeiten" GridPane.columnIndex="2" GridPane.rowIndex="1" /><Button fx:id="button_remove" mnemonicParsing="false" text="Löschen" GridPane.columnIndex="3" GridPane.rowIndex="1" /><TableView fx:id="tableview_product" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="2">
+</font></Label><Button fx:id="button_create" mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Erstellen" GridPane.columnIndex="1" GridPane.rowIndex="1" /><Button fx:id="button_edit" mnemonicParsing="false" onAction="#onEditButtonPressed" text="Bearbeiten" GridPane.columnIndex="2" GridPane.rowIndex="1" /><Button fx:id="button_remove" mnemonicParsing="false" text="Löschen" GridPane.columnIndex="3" GridPane.rowIndex="1" /><TableView fx:id="tableview_product" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="2">
   <columns>
-    <TableColumn fx:id="tablecolumn_product" prefWidth="75.0" text="Ware" />
-    <TableColumn fx:id="tablecolumn_cost" prefWidth="56.0" text="Preis" /><TableColumn fx:id="tablecolumn_unit" prefWidth="60.0" text="Unit" /><TableColumn fx:id="tablecolumn_productions" prefWidth="141.0" text="Produktionsgebiet" /><TableColumn fx:id="tablecolumn_categories" prefWidth="112.0" text="Warenkategorien" /><TableColumn fx:id="tablecolumn_attribute" prefWidth="95.0" text="Attribute" />
+    <TableColumn fx:id="tablecolumn_product" prefWidth="54.0" text="Ware" />
+    <TableColumn fx:id="tablecolumn_cost" prefWidth="53.0" text="Preis" /><TableColumn fx:id="tablecolumn_unit" prefWidth="62.0" text="Unit" /><TableColumn fx:id="tablecolumn_productions" prefWidth="126.0" text="Produktionsgebiete" /><TableColumn fx:id="tablecolumn_categories" prefWidth="114.0" text="Warenkategorien" /><TableColumn fx:id="tablecolumn_attribute" prefWidth="56.0" text="Attribut" /><TableColumn fx:id="tablecolumn_comment" prefWidth="74.0" text="Kommentar" />
   </columns>
 </TableView>
 </children>

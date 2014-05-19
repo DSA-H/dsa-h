@@ -2,6 +2,7 @@ package sepm.dsa.service;
 
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
+import sepm.dsa.model.Region;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface ProductService {
      * @param id the id
      * @return the product
      */
-    Product get(Integer id);
+    Product get(int id);
 
     /**
      * Add a new product to DB

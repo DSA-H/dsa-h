@@ -97,7 +97,7 @@ public class TraderServiceImpl implements TraderService, Serializable {
                 }
                 // calculate weight for a product
                 float weight = 1f;
-                List<RegionBorder> borders = getCheaperstWayBordersBetween(product.getRegions(), trader.getLocation().getRegion());
+                List<RegionBorder> borders = getCheapestWayBordersBetween(product.getRegions(), trader.getLocation().getRegion());
                 // no connection
                 if(borders == null) {
                     break;
@@ -119,12 +119,8 @@ public class TraderServiceImpl implements TraderService, Serializable {
 
         // random pick a weight product, till the trader is full
         Map<Product, Integer> productAmmountMap = new HashMap<>();
-        double sumOfWeight = weights
-                .stream()
-                .mapToDouble(f -> f.doubleValue())
-                .sum();
-        for(int i = 0; i<trader.getSize(); i++) {
-            double random = Math.random()*sumOfWeight;
+                for(int i = 0; i<trader.getSize(); i++) {
+            double random = Math.random()*topWeight;
             int j = 0;
             for(float weight : weights) {
                 // random picked found
@@ -193,7 +189,7 @@ public class TraderServiceImpl implements TraderService, Serializable {
      */
     public int calculatePriceForProduct(Product product, Trader trader) {
         int price = product.getCost();
-        List<RegionBorder> borders = getCheaperstWayBordersBetween(product.getRegions(), trader.getLocation().getRegion());
+        List<RegionBorder> borders = getCheapestWayBordersBetween(product.getRegions(), trader.getLocation().getRegion());
         // no connection
         if(borders == null) {
             throw new DSAValidationException("Preis nicht berechenbar, da keine Verbindung zwischen Produktionsgebieten und Händlergebiet besteht.");
@@ -201,13 +197,13 @@ public class TraderServiceImpl implements TraderService, Serializable {
         for(RegionBorder border : borders) {
             price += product.getCost()*
                     (border.getBorderCost()/100f)
-                    *product.getAttribute().getProductTranporabilityFactor();
+                    *product.getAttribute().getProductTransporabilityFactor();
         }
 
         return price;
     }
 
-    private List<RegionBorder> getCheaperstWayBordersBetween(List<Region> productionRegion, Region tradeRegion) {
+    private List<RegionBorder> getCheapestWayBordersBetween(Set<Region> productionRegion, Region tradeRegion) {
        // todo: implement
        return null;
     }

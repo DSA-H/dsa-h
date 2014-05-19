@@ -5,7 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.Product;
+import sepm.dsa.model.ProductCategory;
+import sepm.dsa.model.Region;
 
 import java.util.List;
 import java.util.Vector;
@@ -44,13 +47,13 @@ public class ProductDaoHbmImpl implements ProductDao {
     }
 
     @Override
-    public Product get(Integer id) {
+    public Product get(int id) {
         log.debug("calling get(" + id + ")");
 
         Object result = sessionFactory.getCurrentSession().get(Product.class, id);
 
         if (result == null) {
-            return null;
+            throw new DSARuntimeException("Leider existiert für diese ID kein Produkt");
         }
         log.trace("returning " + result);
         return (Product) result;

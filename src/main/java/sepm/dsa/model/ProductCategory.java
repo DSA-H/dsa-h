@@ -24,15 +24,15 @@ public class ProductCategory implements Serializable {
     @Column(nullable = false, length = 60)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private ProductCategory parent;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "parent", orphanRemoval = true)
     private Set<ProductCategory> childs = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Product> products;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "product_categories", joinColumns = { @JoinColumn(name = "categoryId") }, inverseJoinColumns = { @JoinColumn(name = "productId") })
+    private Set<Product> products = new HashSet<>();
 
 
     public Integer getId() {
@@ -85,8 +85,8 @@ public class ProductCategory implements Serializable {
         if (childs != null ? !childs.equals(that.childs) : that.childs != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (parent != null ? !parent.equals(that.parent) : that.parent != null) return false;
-        if (products != null ? !products.equals(that.products) : that.products != null) return false;
+        //if (parent != null ? !parent.equals(that.parent) : that.parent != null) return false;
+        //if (products != null ? !products.equals(that.products) : that.products != null) return false;
 
         return true;
     }
@@ -95,9 +95,9 @@ public class ProductCategory implements Serializable {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (parent != null ? parent.hashCode() : 0);
+        //result = 31 * result + (parent != null ? parent.hashCode() : 0);
         result = 31 * result + (childs != null ? childs.hashCode() : 0);
-        result = 31 * result + (products != null ? products.hashCode() : 0);
+        //result = 31 * result + (products != null ? products.hashCode() : 0);
         return result;
     }
 }

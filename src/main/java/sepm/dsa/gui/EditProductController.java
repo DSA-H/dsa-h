@@ -22,7 +22,9 @@ import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service("EditProductController")
 public class EditProductController implements Initializable {
@@ -60,6 +62,18 @@ public class EditProductController implements Initializable {
     private TableColumn tablecolumn_category;
     @FXML
     private TableColumn tablecolumn_production;
+    @FXML
+    private Button button_remove_category;
+    @FXML
+    private Button button_add_category;
+    @FXML
+    private Button button_remove_production;
+    @FXML
+    private Button button_add_production;
+    @FXML
+    private Button button_abort;
+    @FXML
+    private Button button_save;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
@@ -93,15 +107,18 @@ public class EditProductController implements Initializable {
             text_cost.setText(selectedProduct.getCost().toString());
             choice_attribute.getSelectionModel().select(selectedProduct.getAttribute().getValue());
             //choice_unit.getSelectionModel().select(productUnitService.get(selectedProduct.getUnit()));
+            //ObservableList<Region> regionData = FXCollections.observableArrayList(selectedProduct.getRegions());
+            int id = selectedProduct.getId();
+            //System.out.println(productService.getAllRegions(id) + " + " +  id);
             ObservableList<Region> regionData = FXCollections.observableArrayList(selectedProduct.getRegions());
             tableview_production.setItems(regionData);
+            //ObservableList<ProductCategory> categoryData = FXCollections.observableArrayList(selectedProduct.getCategories());
             ObservableList<ProductCategory> categoryData = FXCollections.observableArrayList(selectedProduct.getCategories());
             tableview_category.setItems(categoryData);
             textarea_comment.setText(selectedProduct.getComment());
         }else {
             isNewProduct = true;
             selectedProduct = new Product();
-
         }
     }
 
@@ -127,8 +144,8 @@ public class EditProductController implements Initializable {
         Integer cost = Integer.parseInt(text_cost.getText());
         ProductUnit unit = (ProductUnit) choice_unit.getSelectionModel().getSelectedItem();
         ProductAttribute attribute = ProductAttribute.parse(choice_attribute.getSelectionModel().getSelectedIndex());
-        List<ProductCategory> localCategoryList = tableview_category.getItems();
-        List<Region> localRegionList = tableview_production.getItems();
+        Set<ProductCategory> localCategoryList = new HashSet<>(tableview_category.getItems());
+        Set<Region> localRegionList =  new HashSet<>(tableview_production.getItems());
 
         selectedProduct.setName(name);
         selectedProduct.setCost(cost);
