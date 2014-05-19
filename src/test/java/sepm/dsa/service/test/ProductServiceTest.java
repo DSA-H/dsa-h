@@ -48,7 +48,7 @@ public class ProductServiceTest {
 
 
     @Test
-    @DatabaseSetup("/productData.xml")
+    @DatabaseSetup("/testData.xml")
     public void testAdd()
     {
         System.out.println(productService.getAll().toString());
@@ -66,7 +66,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    @DatabaseSetup("/productData.xml")
+    @DatabaseSetup("/testData.xml")
     public void testAddRegions()
     {
         System.out.println(productService.getAll().toString());
@@ -94,7 +94,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    @DatabaseSetup("/productData.xml")
+    @DatabaseSetup("/testData.xml")
     public void testAddCategories()
     {
         System.out.println(productService.getAll().toString());

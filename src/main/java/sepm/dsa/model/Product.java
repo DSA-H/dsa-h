@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "Product")
+@Table(name = "products")
 public class Product implements Serializable {
     private static final long serialVersionUID = 5890354733231481712L;
 
     @Id
     @GeneratedValue
     @Column(nullable = false, unique = true)
-    private Integer productID;
+    private Integer id;
 
     @NotBlank
     @Size(max = 60, min = 1)
@@ -57,11 +57,11 @@ public class Product implements Serializable {
     private Set<Region> productionRegions;
 
     public Integer getId() {
-        return productID;
+        return id;
     }
 
     public void setId(Integer productID) {
-        this.productID = productID;
+        this.id = productID;
     }
 
     public String getName() {

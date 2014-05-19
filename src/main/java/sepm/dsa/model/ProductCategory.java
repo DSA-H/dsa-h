@@ -16,7 +16,7 @@ public class ProductCategory {
     @Id
     @GeneratedValue
     @Column(nullable = false, unique = true)
-    private Integer categoryId;
+    private Integer id;
 
     @NotBlank
     @Size(max = 60, min = 1)
@@ -34,11 +34,11 @@ public class ProductCategory {
     private Set<Product> products;
 
     public Integer getId() {
-        return categoryId;
+        return id;
     }
 
     public void setId(Integer id) {
-        this.categoryId = id;
+        this.id = id;
     }
 
     public String getName() {
@@ -81,7 +81,7 @@ public class ProductCategory {
         ProductCategory that = (ProductCategory) o;
 
         if (childs != null ? !childs.equals(that.childs) : that.childs != null) return false;
-        if (categoryId != null ? !categoryId.equals(that.categoryId) : that.categoryId != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         //if (parent != null ? !parent.equals(that.parent) : that.parent != null) return false;
         //if (products != null ? !products.equals(that.products) : that.products != null) return false;
@@ -91,7 +91,7 @@ public class ProductCategory {
 
     @Override
     public int hashCode() {
-        int result = categoryId != null ? categoryId.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         //result = 31 * result + (parent != null ? parent.hashCode() : 0);
         result = 31 * result + (childs != null ? childs.hashCode() : 0);

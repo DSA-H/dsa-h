@@ -18,7 +18,7 @@ public class Region implements Serializable {
     @Id
     @GeneratedValue
     @Column(nullable = false, unique = true)
-    private Integer regionId;
+    private Integer id;
 
     @NotBlank
     @Size(max = 60, min = 1)
@@ -56,11 +56,11 @@ public class Region implements Serializable {
     }
 
     public Integer getId() {
-        return regionId;
+        return id;
     }
 
     public void setId(Integer id) {
-        this.regionId = id;
+        this.id = id;
     }
 
     public String getName() {
@@ -123,7 +123,7 @@ public class Region implements Serializable {
         Region region = (Region) o;
 
         if (color != null ? !color.equals(region.color) : region.color != null) return false;
-        if (regionId != null ? !regionId.equals(region.regionId) : region.regionId != null) return false;
+        if (id != null ? !id.equals(region.id) : region.id != null) return false;
         if (name != null ? !name.equals(region.name) : region.name != null) return false;
         if (rainfallChanceId != null ? !rainfallChanceId.equals(region.rainfallChanceId) : region.rainfallChanceId != null)
             return false;
@@ -135,7 +135,7 @@ public class Region implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = regionId != null ? regionId.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (color != null ? color.hashCode() : 0);
         result = 31 * result + (temperatureId != null ? temperatureId.hashCode() : 0);
