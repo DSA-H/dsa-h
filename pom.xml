@@ -137,6 +137,14 @@
             <version>8.0.5</version>
         </dependency>
 
+        <!-- File copy -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+
+
     </dependencies>
 
 </project>
