@@ -85,7 +85,7 @@ public class Main extends Application {
 	    Parent root = (Parent) loader.load("/gui/mainmenu.fxml");
         final MainMenuController ctrl = loader.getController();
         primaryStage.setTitle("DSA-Händlertool");
-        primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.setScene(new Scene(root, 800, 600));
         // close all windows if mainmenu is closed
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override

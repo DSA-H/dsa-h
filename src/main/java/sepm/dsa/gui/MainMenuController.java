@@ -11,6 +11,8 @@ import javafx.scene.control.MenuItem;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.controlsfx.control.action.Action;
@@ -19,6 +21,8 @@ import org.controlsfx.dialog.Dialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+
+import java.net.URL;
 import java.util.List;
 
 import java.io.File;
@@ -60,10 +64,12 @@ public class MainMenuController implements Initializable {
     private MenuItem weltkarteExportieren;
     @FXML
     private MenuItem location;
+    @FXML
+    private ImageView worldMapImageView;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-
+        updateWorldMap();
     }
 
     @FXML
@@ -144,6 +150,7 @@ public class MainMenuController implements Initializable {
             try {
                 FileUtils.copyFile(oldMap, temp);
                 log.debug("copied old map to alternative (temp)");
+                oldMap.delete();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -159,11 +166,15 @@ public class MainMenuController implements Initializable {
             e.printStackTrace();
         }
 
+        matchingFiles = activeDir.listFiles(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.startsWith("lastWorldMapTemp");
+            }
+        });
         if (matchingFiles != null && matchingFiles.length >= 1) {
             File oldMap = matchingFiles[0];
             String extOld = FilenameUtils.getExtension(oldMap.getAbsolutePath());
             oldMap.delete();
-            File temp = new File("maps/alternative/lastWorldMapTemp." + extOld);
             File dest =  new File("maps/alternative/ehemaligeWeltkarte." + extOld);
             int k=1;
             while(dest.exists() && !dest.isDirectory()){
@@ -171,13 +182,15 @@ public class MainMenuController implements Initializable {
                 k++;
             }
             try {
-                FileUtils.copyFile(temp, dest);
+                FileUtils.copyFile(oldMap, dest);
                 log.debug("copied temp to alternative");
-                temp.delete();
+                oldMap.delete();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        updateWorldMap();
     }
 
     @FXML
@@ -226,6 +239,27 @@ public class MainMenuController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void updateWorldMap() {
+        log.debug("updateWorldMap called");
+        File activeDir = new File("maps/active");
+        File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.startsWith("worldMap");
+            }
+        });
+
+        if (matchingFiles != null && matchingFiles.length >= 1) {
+            File worldMap = matchingFiles[0];
+            String ext = FilenameUtils.getExtension(worldMap.getAbsolutePath());
+            Image image = new Image("file:"+worldMap.getAbsolutePath(), true);
+            worldMapImageView.setImage(image);
+            worldMapImageView.setFitHeight(550);
+            worldMapImageView.setFitWidth(400);
+            worldMapImageView.setSmooth(true);
+            worldMapImageView.setPreserveRatio(false);
         }
     }
 
