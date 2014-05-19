@@ -157,7 +157,8 @@
         <property name="productUnitService" ref="productUnitService"/>
         <property name="regionService" ref="regionService"/>
     </bean>
-    <bean id="tradercategoryList" class="sepm.dsa.gui.TraderCategoryListController">
+    <bean id="TraderCategoryList" class="sepm.dsa.gui.TraderCategoryListController">
+        <property name="loader" ref="loader"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
     </bean>
 
