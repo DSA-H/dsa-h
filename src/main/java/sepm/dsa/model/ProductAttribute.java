@@ -30,6 +30,32 @@ public enum ProductAttribute {
         return right;
     }
 
+    /**
+     * @return factor from DSA-rules for price calculation
+     */
+    public float getProductTranporabilityFactor() {
+        switch (value) {
+            case 0: return 1f;
+            case 1: return 1.5f;
+            case 2: return 0.875f;
+            case 3: return 1.5f;
+            default: return 0f;
+        }
+    }
+
+    /**
+     * @return factor from DSA-rules for availability calculation
+     */
+    public int getProductTranporabilitySubtrahend() {
+        switch (value) {
+            case 0: return 0;
+            case 1: return 320;
+            case 2: return 200;
+            case 3: return 0;
+            default: return 0;
+        }
+    }
+
     @Override
     public String toString() {
         return name() + "(" + this.getValue() + ")";

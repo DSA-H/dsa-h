@@ -4,6 +4,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.dao.ProductDao;
 import sepm.dsa.dao.TraderCategoryDao;
 import sepm.dsa.dao.TraderDao;
 import sepm.dsa.exceptions.DSAValidationException;
@@ -13,8 +14,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Jotschi on 19.05.2014.
@@ -25,6 +25,7 @@ public class TraderServiceImpl implements TraderService, Serializable {
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private TraderDao traderDao;
+    private ProductService productService;
 
     @Override
     public Trader get(int id) {
@@ -73,20 +74,131 @@ public class TraderServiceImpl implements TraderService, Serializable {
         return result;
     }
 
+    /**
+     * @param trader
+     * @return a new calculated list of offers this trader at this position has.
+     */
     @Override
     public List<Offer> calcualteOffers(Trader trader) {
         log.debug("calling calcualteOffers()");
+        List<Product> weightProducts = new ArrayList<>();
+        List<Float> weights = new ArrayList<>();
+        float topWeight = 0;
+        // calculate weight for each product
         for(AssortmentNature assortmentNature : trader.getCategory().getAssortments()) {
             int defaultOccurence = assortmentNature.getDefaultOccurence();
             ProductCategory productCategory = assortmentNature.getProductCategory();
-            productCategory.get
-            for(Product product : .getChilds())
+            // get all products from this and the sub Categories
+            List<Product> products = productService.getAllFromProductcategory(productCategory);
+            for(Product product : products) {
+                if(weightProducts.contains(product)) {
+                    break;
+                }
+                // calculate weight for a product
+                float weight = 1f;
+                List<RegionBorder> borders = getCheaperstWayBordersBetween(product.getRegions(), trader.getLocation().getRegion());
+                // bordercosts
+                for(RegionBorder border : borders) {
+                    float x = border.getBorderCost()
+                            / (800f-product.getAttribute().getProductTranporabilitySubtrahend());
+                    weight -= 1-x;
+                }
+                weight *= (defaultOccurence / 100f);
+
+                topWeight += weight;
+
+                weightProducts.add(product);
+                weights.add(topWeight);
+            }
+        }
+
+        // random pick a weight product, till the trader is full
+        Map<Product, Integer> productAmmountMap = new HashMap<>();
+        double sumOfWeight = weights
+                .stream()
+                .mapToDouble(f -> f.doubleValue())
+                .sum();
+        for(int i = 0; i<trader.getSize(); i++) {
+            double random = Math.random()*sumOfWeight;
+            int j = 0;
+            for(float weight : weights) {
+                // random picked found
+                if(random < weight) {
+                    if(productAmmountMap.containsKey(weightProducts.get(j))) {
+                        int ammount = productAmmountMap.get(productAmmountMap);
+                        ammount++;
+                        productAmmountMap.put(weightProducts.get(j), ammount);
+                    }else {
+                        productAmmountMap.put(weightProducts.get(j), 1);
+                    }
+                    break;
+                }
+                j++;
+            }
+        }
+
+        // create Offers
+        List<Offer> offers = new ArrayList<>();
+        for(Product product : productAmmountMap.keySet()) {
+            int ammount = productAmmountMap.get(product);
+            // random quality distribution
+            double random = Math.random();
+            int amountQualities[] = new int[ProductQuality.values().length];
+            for(int i = 0; i<ammount; i++) {
+                int j = 0;
+                for (ProductQuality productQuality : ProductQuality.values()) {
+                    if (random < productQuality.getQualityProbabilityValue()) {
+                        amountQualities[j]++;
+                        break;
+                    }
+                    j++;
+                }
+            }
+            // create offers
+            int i = 0;
+            for(ProductQuality productQuality : ProductQuality.values()) {
+                if(amountQualities[i]==0) {
+                    break;
+                }
+                Offer offer = new Offer();
+                offer.setTrader(trader);
+                offer.setQuality(productQuality);
+                int price = (int)(calculatePriceForProduct(product, trader)*productQuality.getQualityPriceFactor());
+                offer.setPricePerUnit(price);
+                offer.setProduct(product);
+                offer.setAmount(amountQualities[i]);
+                offers.add(offer);
+                i++;
+            }
 
         }
+        return offers;
+    }
+
+    public int calculatePriceForProduct(Product product, Trader trader) {
+        int price = product.getCost();
+        List<RegionBorder> borders = getCheaperstWayBordersBetween(product.getRegions(), trader.getLocation().getRegion());
+
+        for(RegionBorder border : borders) {
+            price += product.getCost()*
+                    (border.getBorderCost()/100f)
+                    *product.getAttribute().getProductTranporabilityFactor();
+        }
+
+        return price;
+    }
+
+    private List<RegionBorder> getCheaperstWayBordersBetween(List<Region> productionRegion, Region tradeRegion) {
+        // todo
+        return null;
     }
 
     public void setTraderDao(TraderDao traderDao) {
         this.traderDao = traderDao;
+    }
+
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
     }
 
     /**

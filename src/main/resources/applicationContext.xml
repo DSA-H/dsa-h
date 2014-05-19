@@ -122,6 +122,7 @@
 
     <bean id="traderService" class="sepm.dsa.service.TraderServiceImpl">
         <property name="traderDao" ref="traderDao"/>
+        <property name="productService" ref="productService"/>
     </bean>
 
     <!-- GUI DI -->

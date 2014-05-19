@@ -11,6 +11,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.controlsfx.dialog.Dialog;
+import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -108,7 +110,7 @@ public class ProductListController implements Initializable {
     @FXML
     private void onCreateButtonPressed() {
         log.debug("onCreateButtonPressed - open Product-List Window");
-        Stage stage = new Stage();
+        Stage stage = (Stage) button_create.getScene().getWindow();
         Parent scene = null;
         EditProductController.setProduct(null);
 
@@ -120,46 +122,47 @@ public class ProductListController implements Initializable {
         stage.setResizable(false);
         stage.show();
     }
-    /*
+
     @FXML
     private void onEditButtonPressed() {
-        log.debug("onEditButtonPressed - open Gebiet-Details Window");
-        Stage stage =  (Stage) regionTable.getScene().getWindow();
+        log.debug("onEditButtonPressed - open Product-List Window");
+        Stage stage = (Stage) button_create.getScene().getWindow();
+        Parent scene = null;
+        EditProductController.setProduct(tableview_product.getSelectionModel().getSelectedItem());
+        //EditProductController.setProduct(tableview_product.getFocusModel().getFocusedItem());
 
-        Parent root = null;
         SpringFxmlLoader loader = new SpringFxmlLoader();
+        scene = (Parent) loader.load("/gui/editproduct.fxml");
 
-        Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
-        EditRegionController.setRegion(selectedRegion);
-
-        root = (Parent) loader.load("/gui/editregion.fxml");
-
-        stage.setTitle("Gebiet-Details");
-        stage.setScene(new Scene(root, 600, 438));
+        stage.setTitle("Waren-Details");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
         stage.show();
+
     }
 
     @FXML
     private void onDeleteButtonPressed() {
         log.debug("onDeleteButtonPressed - deleting selected Region");
-        Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
+        Product selectedProduct = (tableview_product.getSelectionModel().getSelectedItem());
+        //Product selectedProduct = tableview_product.getFocusModel().getFocusedItem();
 
-        if (selectedRegion != null) {
-            log.debug("open Confirm-Delete-Region Dialog");
-            Action response = Dialogs.create()
+        if (selectedProduct != null) {
+            log.debug("open Confirm-Delete-Product Dialog");
+            org.controlsfx.control.action.Action response = Dialogs.create()
                     .title("Löschen?")
                     .masthead(null)
-                    .message("Wollen Sie die Region '" + selectedRegion.getName() + "' und alle zugehörigen Grenzen wirklich löschen?")
+                    .message("Wollen Sie das Product '" + selectedProduct.getName() + "' wirklich löschen?")
                     .showConfirm();
             if(response == Dialog.Actions.YES) {
-                regionService.remove(selectedRegion);
-                regionTable.getItems().remove(selectedRegion);
+                productService.remove(selectedProduct);
+                tableview_product.getItems().remove(selectedProduct);
             }
         }
 
-        checkFocus();
+        //checkFocus();
     }
-
+/*
     @FXML
     private void checkFocus() {
         Region selectedRegion = regionTable.getFocusModel().getFocusedItem();

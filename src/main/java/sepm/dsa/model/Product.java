@@ -1,16 +1,21 @@
 package sepm.dsa.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
 public class Product implements Serializable {
-    private static final long serialVersionUID = 5810354733231481712L;
+    private static final long serialVersionUID = 5890354733231481712L;
 
     @Id
     @GeneratedValue
@@ -42,6 +47,14 @@ public class Product implements Serializable {
     @Column(nullable = false)
     private Boolean quality;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(mappedBy="products", cascade = CascadeType.ALL)
+    private List<ProductCategory> categories;
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(mappedBy="products", cascade = CascadeType.ALL)
+    private List<Region> productionRegions;
+
     public Integer getId() {
         return id;
     }
@@ -70,6 +83,8 @@ public class Product implements Serializable {
     public ProductAttribute getAttribute() {
         if (attributeId == null) {
             return null;
+        }else {
+            return ProductAttribute.parse(attributeId);
         }
         return ProductAttribute.parse(attributeId);
     }
@@ -77,6 +92,8 @@ public class Product implements Serializable {
     public void setAttribute(ProductAttribute attribute) {
         if (attribute == null) {
             this.attributeId = null;
+        }else {
+            this.attributeId = attribute.getValue();
         }
         this.attributeId = attribute.getValue();
     }
@@ -87,7 +104,13 @@ public class Product implements Serializable {
             return null; //TODO: ProductUnitService
         }
     }
-
+    public void setUnit(ProductUnit unit) {
+        if (unit==null){
+            this.unitId = null;
+        }else{
+            this.unitId = unit.getId();
+        }
+    }*/
 
     public String getComment() {
         return comment;
@@ -95,6 +118,22 @@ public class Product implements Serializable {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public List<ProductCategory> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<ProductCategory> categories) {
+        this.categories = categories;
+    }
+
+    public List<Region> getRegions() {
+        return productionRegions;
+    }
+
+    public void setRegions(List<Region> productionRegions) {
+        this.productionRegions = productionRegions;
     }
 
     public Boolean getQuality() {

@@ -1,10 +1,7 @@
 package sepm.dsa.service;
 
 
-import sepm.dsa.model.Location;
-import sepm.dsa.model.Offer;
-import sepm.dsa.model.Trader;
-import sepm.dsa.model.TraderCategory;
+import sepm.dsa.model.*;
 
 import java.util.List;
 
@@ -18,4 +15,5 @@ public interface TraderService {
     List<Trader> getAllByCategory(TraderCategory category);
 
     List<Offer> calcualteOffers(Trader trader);
+    int calculatePriceForProduct(Product product, Trader trader);
 }
