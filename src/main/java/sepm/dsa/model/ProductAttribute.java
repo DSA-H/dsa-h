@@ -33,7 +33,7 @@ public enum ProductAttribute {
     /**
      * @return factor from DSA-rules for price calculation
      */
-    public float getProductTranporabilityFactor() {
+    public float getProductTransporabilityFactor() {
         switch (value) {
             case 0: return 1f;
             case 1: return 1.5f;
