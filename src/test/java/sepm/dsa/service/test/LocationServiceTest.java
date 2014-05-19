@@ -95,7 +95,7 @@ public class LocationServiceTest extends TestCase {
     public void suggestConnectionsAround_locationsAround() throws Exception {
         Location location = locationService.get(4);
         List<LocationConnection> suggestions = locationService.suggestLocationConnectionsAround(location, 100);
-        assertEquals(4, suggestions.size());
+        assertEquals(1, suggestions.size());
     }
 
     @Test

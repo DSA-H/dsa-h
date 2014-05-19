@@ -70,7 +70,7 @@ public class LocationServiceImpl implements LocationService, Serializable {
     @Override
     public List<LocationConnection> suggestLocationConnectionsAround(Location location, double withinDistance) {
         log.debug("calling suggestLocationConnectionsAround(" + location + "," + withinDistance + ")");
-        List<Location> nearLocations = locationDao.getAllAround(location, withinDistance);
+        List<Location> nearLocations = locationDao.getAllAroundNotConnected(location, withinDistance);
         List<LocationConnection> result = new ArrayList<>(nearLocations.size());
 
         for (Location l : nearLocations) {
@@ -98,7 +98,7 @@ public class LocationServiceImpl implements LocationService, Serializable {
     public int suggestedTravelTimeForDistance(double distance) {
         log.debug("calling suggestedTravelTimeForDistance(" + distance + ")");
 
-        int result = (int) (distance * 50); // TODO find good value
+        int result = (int) (distance / 10); // TODO find good value
         log.trace("returning " + result);
         return result;
     }

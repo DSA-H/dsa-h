@@ -16,7 +16,8 @@
     <query name="Location.findAllAroundNotConnected">
         <![CDATA[   FROM Location l
                     WHERE (:ownLocationId is NULL OR l.id != :ownLocationId) AND sqrt((:xCoord - l.xCoord) * (:xCoord - l.xCoord) + (:yCoord - l.yCoord) * (:yCoord - l.yCoord)) < :distance
-                            AND l NOT IN (select c.pk.location1, c.pk.location2 from LocationConnection c where c.pk.location1.id = :ownLocationId OR c.pk.location2.id = :ownLocationId)
+                            AND l.id NOT IN (select c.pk.location2.id from LocationConnection c where c.pk.location1.id = :ownLocationId)
+                            AND l.id NOT IN (select c.pk.location1.id from LocationConnection c where c.pk.location2.id = :ownLocationId)
                     ORDER BY l.name ASC]]>
     </query>
 

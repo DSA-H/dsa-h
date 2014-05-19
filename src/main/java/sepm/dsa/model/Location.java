@@ -114,6 +114,19 @@ public class Location implements Serializable {
         }
     }
 
+//    public boolean containsConnection(LocationConnection connection) {
+//
+//        if (connection.getLocation1().getId().equals(this.getId()))
+//
+//        if (connections1.contains(connection)) {
+//            return true;
+//        }
+//        if (connections2.contains(connection)) {
+//            return true;
+//        }
+//        return false;
+//    }
+
     public String getPlanFileName() {
         return planFileName;
     }

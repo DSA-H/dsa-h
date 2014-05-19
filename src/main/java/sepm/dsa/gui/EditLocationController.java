@@ -316,6 +316,7 @@ public class EditLocationController implements Initializable {
             }
         }
         ObservableList<LocationConnection> connections = FXCollections.observableArrayList(suggestedConnections);
+        locationConnectionsTable.getItems().clear();
         locationConnectionsTable.setItems(connections);
 
     }
