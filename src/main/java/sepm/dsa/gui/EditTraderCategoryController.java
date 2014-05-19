@@ -45,7 +45,7 @@ public class EditTraderCategoryController implements Initializable {
     @FXML
     private Button removeAssortButton;
     @FXML
-    private TableColumn<String, AssortmentNature> assortmentColumn;
+    private TableColumn<String, ProductCategory> assortmentColumn;
     @FXML
     private TableColumn<String, Integer> defaultOccurenceColumn;
     @FXML
@@ -80,8 +80,34 @@ public class EditTraderCategoryController implements Initializable {
             productCategories.remove(traderCategory.getAssortments());
 
             productCategoryChoiceBox.setItems(FXCollections.observableArrayList(productCategories));
-            assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-            assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("defaultOccurence"));
+            assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("productCategory"));
+            defaultOccurenceColumn.setCellValueFactory(new PropertyValueFactory<>("defaultOccurence"));
+
+//            borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Region, String>, ObservableValue<String>>() {
+//                @Override
+//                public ObservableValue<String> call(TableColumn.CellDataFeatures<Region, String> r) {
+//                    if (r.getValue() != null) {
+//                        int regionId = r.getValue().getId();
+//                        List<RegionBorder> borders = regionBorderService.getAllByRegion(regionId);
+//                        StringBuilder sb = new StringBuilder();
+//                        for (RegionBorder rb : borders) {
+//                            // not this region
+//                            if (rb.getRegion1().getId() != regionId) {
+//                                sb.append(rb.getRegion1().getName());
+//                            } else {
+//                                sb.append(rb.getRegion2().getName());
+//                            }
+//                            sb.append(", ");
+//                        }
+//                        if (sb.length() >= 2) {
+//                            sb.delete(sb.length() - 2, sb.length());
+//                        }
+//                        return new SimpleStringProperty(sb.toString());
+//                    } else {
+//                        return new SimpleStringProperty("");
+//                    }
+//                }
+//            });
             assortmentTable.setItems(FXCollections.observableArrayList(traderCategory.getAssortments()));
 
         } else {
