@@ -1,9 +1,6 @@
 package sepm.dsa.gui;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -12,7 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,6 +19,7 @@ import sepm.dsa.service.TraderCategoryService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service("EditTraderCategoryController")
 public class EditTraderCategoryController implements Initializable {
@@ -39,73 +36,39 @@ public class EditTraderCategoryController implements Initializable {
     @FXML
     private ChoiceBox<AssortmentNature> assortmentChoiceBox;
     @FXML
-    private ChoiceBox<TraderCategory> choiceParent;
+    private ChoiceBox<TraderCategory> subCategoryChoiceBox;
     @FXML
     private TableView<AssortmentNature> assortmentTable;
     @FXML
     private Button removeAssortButton;
     @FXML
-    private Button removeParentButton;
-
+    private TableColumn<AssortmentNature, String> assortmentColumn;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise EditRegionController");
 
         // init ChoiceBoxes
-        List<String> parentCategories = new ArrayList<>();
-        for (TraderCategory t : traderCategoryService.getAll()) {
-            parentCategories.add(t.getName());
-        }
+        List<TraderCategory> parentCategories = new ArrayList<>();
         // set values if editing
         if (traderCategory != null) {
             isNewTraderCategory = false;
             nameField.setText(traderCategory.getName());
             parentCategories.remove(traderCategory);
-
+            subCategoryChoiceBox.setItems(FXCollections.observableArrayList(parentCategories));
+            subCategoryChoiceBox.getSelectionModel().select(traderCategory);
             assortmentChoiceBox.setItems(FXCollections.observableArrayList(traderCategory.getAssortments()));
+            assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("productCategory"));
+            assortmentTable.setItems(FXCollections.observableArrayList(traderCategory.getAssortments()));
+
         } else {
             isNewTraderCategory = true;
             traderCategory = new TraderCategory();
-            temperatureChoiceBox.getSelectionModel().select(Temperature.MEDIUM.getValue());
-            rainfallChoiceBox.getSelectionModel().select(RainfallChance.MEDIUM.getValue());
-
-//            ObservableList<RegionBorder> data = FXCollections.observableArrayList();
-//            borderTable.setItems(data);
+            subCategoryChoiceBox.setItems(FXCollections.observableArrayList(parentCategories));
         }
 
-        // init border table
-        borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<RegionBorder, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<RegionBorder, String> r) {
-                if (r.getValue() != null) {
-                    if (r.getValue()
-                            .getRegion1()
-                            .equals(traderCategory)) {
-                        return new SimpleStringProperty(r.getValue().getRegion2().getName());
-                    } else {
-                        return new SimpleStringProperty(r.getValue().getRegion1().getName());
-                    }
-                } else {
-                    return new SimpleStringProperty("");
-                }
-            }
-        });
-        borderCostColumn.setCellValueFactory(new PropertyValueFactory<>("borderCost"));
-
-        // init border choice box
-        List<Region> otherRegions = regionService.getAll();
-        otherRegions.remove(traderCategory);
-        if (!isNewTraderCategory) {
-            for (RegionBorder borders : regionBorderService.getAllByRegion(traderCategory.getId())) {
-                if (borders.getRegion1().equals(traderCategory)) {
-                    otherRegions.remove(borders.getRegion2());
-                } else {
-                    otherRegions.remove(borders.getRegion1());
-                }
-            }
-        }
-        borderChoiceBox.setItems(FXCollections.observableArrayList(otherRegions));
+        // init assortment table based on the selection of the selection of parent category ;)
+        assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("productCategory"));
     }
 
     @FXML
@@ -121,10 +84,9 @@ public class EditTraderCategoryController implements Initializable {
     }
 
     @FXML
-    private void removeSelectedParent() {
-        log.debug("calling removeSelectedParent()");
-
-        //TODO
+    private void changedParent() {
+        log.debug("calling changedParent()");
+        assortmentChoiceBox.setItems(FXCollections.observableArrayList(subCategoryChoiceBox.getSelectionModel().getSelectedItem().getAssortments()));
     }
 
     @FXML
@@ -142,13 +104,6 @@ public class EditTraderCategoryController implements Initializable {
 
         //TODO besser / schöner gestalten -> evtl. inkrementelle Suche oder sonstwas
         //TODO multiple select ermöglichen
-    }
-
-    @FXML
-    private void addParentClicked() {
-        log.debug("calling addParentClicked()");
-
-        //TODO
     }
 
     @FXML
