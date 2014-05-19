@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.ProductDao;
 import sepm.dsa.dao.TraderCategoryDao;
 import sepm.dsa.dao.TraderDao;
+import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 
@@ -97,6 +98,10 @@ public class TraderServiceImpl implements TraderService, Serializable {
                 // calculate weight for a product
                 float weight = 1f;
                 List<RegionBorder> borders = getCheaperstWayBordersBetween(product.getRegions(), trader.getLocation().getRegion());
+                // no connection
+                if(borders == null) {
+                    break;
+                }
                 // bordercosts
                 for(RegionBorder border : borders) {
                     float x = border.getBorderCost()
@@ -141,18 +146,23 @@ public class TraderServiceImpl implements TraderService, Serializable {
         List<Offer> offers = new ArrayList<>();
         for(Product product : productAmmountMap.keySet()) {
             int ammount = productAmmountMap.get(product);
+
             // random quality distribution
-            double random = Math.random();
             int amountQualities[] = new int[ProductQuality.values().length];
-            for(int i = 0; i<ammount; i++) {
-                int j = 0;
-                for (ProductQuality productQuality : ProductQuality.values()) {
-                    if (random < productQuality.getQualityProbabilityValue()) {
-                        amountQualities[j]++;
-                        break;
+            if(product.getQuality()) {
+                double random = Math.random();
+                for (int i = 0; i < ammount; i++) {
+                    int j = 0;
+                    for (ProductQuality productQuality : ProductQuality.values()) {
+                        if (random < productQuality.getQualityProbabilityValue()) {
+                            amountQualities[j]++;
+                            break;
+                        }
+                        j++;
                     }
-                    j++;
                 }
+            }else {
+                amountQualities[0] = ammount;
             }
             // create offers
             int i = 0;
@@ -175,10 +185,19 @@ public class TraderServiceImpl implements TraderService, Serializable {
         return offers;
     }
 
+    /**
+     * Returns the price for the product for the given trader
+     * @param product
+     * @param trader
+     * @return the price or -1
+     */
     public int calculatePriceForProduct(Product product, Trader trader) {
         int price = product.getCost();
         List<RegionBorder> borders = getCheaperstWayBordersBetween(product.getRegions(), trader.getLocation().getRegion());
-
+        // no connection
+        if(borders == null) {
+            throw new DSAValidationException("Preis nicht berechenbar, da keine Verbindung zwischen Produktionsgebieten und Händlergebiet besteht.");
+        }
         for(RegionBorder border : borders) {
             price += product.getCost()*
                     (border.getBorderCost()/100f)
@@ -189,7 +208,7 @@ public class TraderServiceImpl implements TraderService, Serializable {
     }
 
     private List<RegionBorder> getCheaperstWayBordersBetween(List<Region> productionRegion, Region tradeRegion) {
-        // todo
+       // todo: implement
        return null;
     }
 

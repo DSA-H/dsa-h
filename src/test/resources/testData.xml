@@ -18,6 +18,11 @@
     <traderCategories id="3" name="category3" />
     <products id="1" name="product1" cost="17" attributeId="1" quality="false" />
     <products id="2" name="product2" cost="23" attributeId="2" quality="true" />
+    <products id="3" name="product3" cost="29" attributeId="3" quality="true" />
+    <products id="4" name="product4" cost="36" attributeId="0" quality="true" />
+    <products id="5" name="product5" cost="200" attributeId="3" quality="true" />
+    <products id="6" name="product6" cost="450" attributeId="0" quality="true" />
+    <products id="7" name="product7" cost="65" attributeId="2" quality="true" />
     <locations id="1" name="fooLocation" region="1" xCoord="30" yCoord="20" sizeId="2" height="10" weatherId="1"/>
     <locations id="2" name="fooLocation2" region="2" xCoord="30" yCoord="20" sizeId="2" height="10" weatherId="1"/>
     <traders id="1" name="Optimus Prime" category_id="1" size="20" xPos="7" yPos="7" mut="14" intelligence="14" charisma="14" convince="5" location_id="1" />

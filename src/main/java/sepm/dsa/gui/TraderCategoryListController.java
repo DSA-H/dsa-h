@@ -5,6 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,7 +29,7 @@ import sepm.dsa.service.TraderService;
 import java.util.List;
 
 @Service("TraderCategoryService")
-public class TraderCategoryListController {
+public class TraderCategoryListController implements Initializable {
     private TraderCategoryService traderCategoryService;
     private static final Logger log = LoggerFactory.getLogger(TraderCategoryListController.class);
     private SpringFxmlLoader loader;
