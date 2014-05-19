@@ -79,8 +79,8 @@ public class TraderServiceImpl implements TraderService {
      * @return a new calculated list of offers this trader at this position has.
      */
     @Override
-    public List<Offer> calcualteOffers(Trader trader) {
-        log.debug("calling calcualteOffers()");
+    public List<Offer> calculateOffers(Trader trader) {
+	log.debug("calling calculateOffers()");
         List<Product> weightProducts = new ArrayList<>();
         List<Float> weights = new ArrayList<>();
         float topWeight = 0;

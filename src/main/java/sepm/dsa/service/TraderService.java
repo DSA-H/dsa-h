@@ -14,6 +14,6 @@ public interface TraderService {
     List<Trader> getAllForLocation(Location location);
     List<Trader> getAllByCategory(TraderCategory category);
 
-    List<Offer> calcualteOffers(Trader trader);
+    List<Offer> calculateOffers(Trader trader);
     int calculatePriceForProduct(Product product, Trader trader);
 }
