@@ -190,8 +190,9 @@ public class TraderServiceImpl implements TraderService, Serializable {
 
     private List<RegionBorder> getCheaperstWayBordersBetween(List<Region> productionRegion, Region tradeRegion) {
         // todo
-        return null;
+       return null;
     }
+
 
     public void setTraderDao(TraderDao traderDao) {
         this.traderDao = traderDao;
