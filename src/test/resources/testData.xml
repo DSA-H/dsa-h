@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <Region id="0" name="fooRegion" color="FFFFFF" temperatureId="0" rainfallChanceId="0"/>
-    <Region id="1" name="region2" color="ED8311" temperatureId="1" rainfallChanceId="2"/>
-    <Region id="2" name="region3" color="1C11ED" temperatureId="2" rainfallChanceId="3"/>
-    <Region id="3" name="region4" color="ED8311" temperatureId="3" rainfallChanceId="4"/>
-    <Region id="3" name="region5" color="1C11ED" temperatureId="0" rainfallChanceId="1"/>
-    <Region id="4" name="region6" color="FFFFFF" temperatureId="4" rainfallChanceId="0"/>
+    <regions id="1" name="fooRegion" color="FFFFFF" temperatureId="0" rainfallChanceId="0"/>
+    <regions id="2" name="region2" color="ED8311" temperatureId="1" rainfallChanceId="2"/>
+    <regions id="3" name="region3" color="1C11ED" temperatureId="2" rainfallChanceId="3"/>
+    <regions id="4" name="region4" color="ED8311" temperatureId="3" rainfallChanceId="4"/>
+    <regions id="5" name="region5" color="1C11ED" temperatureId="0" rainfallChanceId="1"/>
+    <regions id="6" name="region6" color="FFFFFF" temperatureId="4" rainfallChanceId="0"/>
+    <borders region1="1" region2="2" borderCost="8" />
+    <borders region1="1" region2="3" borderCost="3" />
+    <borders region1="3" region2="4" borderCost="13" />
+    <borders region1="5" region2="6" borderCost="16" />
+    <borders region1="4" region2="5" borderCost="4" />
+    <borders region1="4" region2="6" borderCost="11" />
+    <borders region1="1" region2="6" borderCost="6" />
+    <products id="1" name="product1" cost="17" attributeId="1" quality="false" />
+    <products id="2" name="product2" cost="23" attributeId="2" quality="true" />
+    <products id="3" name="product3" cost="29" attributeId="3" quality="true" />
+    <products id="4" name="product4" cost="36" attributeId="0" quality="true" />
+    <products id="5" name="product5" cost="200" attributeId="3" quality="true" />
+    <products id="6" name="product6" cost="450" attributeId="0" quality="true" />
+    <products id="7" name="product7" cost="65" attributeId="2" quality="true" />
 </dataset>

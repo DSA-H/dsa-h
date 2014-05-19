@@ -18,10 +18,13 @@ import static org.junit.Assert.assertTrue;
 
 import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.ProductService;
+import sepm.dsa.service.RegionService;
 
 import javax.validation.constraints.AssertTrue;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Chris on 17.05.2014.
@@ -40,20 +43,22 @@ public class ProductServiceTest {
     private ProductService productService;
     @Autowired
     private ProductCategoryService productCategoryService;
+    @Autowired
+    private RegionService regionService;
 
 
     @Test
     @DatabaseSetup("/productData.xml")
     public void testXML()
     {
-        System.out.println(productService.getAll().toString());
+
+
     }
 
     @Test
     @DatabaseSetup("/productData.xml")
     public void testAdd()
     {
-        System.out.println(productService.getAll().toString());
         Product p = new Product();
         p.setName("tester");
         p.setQuality(false);
@@ -63,9 +68,57 @@ public class ProductServiceTest {
         //p.setAttribute();
         int size = productService.getAll().size();
         int id = productService.add(p);
-        assertTrue (productService.getAll().size()-1 == size);
+        assertTrue(productService.getAll().size()-1 == size);
         Product newP = productService.get(id);
         assertTrue(p.equals(newP));
+    }
+
+    @Test
+    @DatabaseSetup("/productData.xml")
+    public void testAddWithRegion()
+    {
+        Product p = new Product();
+        p.setName("tester");
+        p.setQuality(false);
+        p.setCost(1);
+        p.setAttribute(ProductAttribute.LAGERBAR);
+
+        Region r1 = regionService.get(1);
+        Set<Region> rl = new HashSet<>();
+        rl.add(r1);
+        p.setRegions(rl);
+
+        //p.setAttribute();
+        int size = productService.getAll().size();
+        int id = productService.add(p);
+        assertTrue(productService.getAll().size()-1 == size);
+        Product newP = productService.get(id);
+        assertTrue(p.equals(newP));
+        assertTrue(p.getRegions().size() == 1);
+    }
+
+    @Test
+    @DatabaseSetup("/productData.xml")
+    public void testRemove()
+    {
+        Product p = new Product();
+        p.setName("tester");
+        p.setQuality(false);
+        p.setCost(1);
+        p.setAttribute(ProductAttribute.LAGERBAR);
+
+        Region r1 = regionService.get(1);
+        Set<Region> rl = new HashSet<>();
+        rl.add(r1);
+        p.setRegions(rl);
+
+        //p.setAttribute();
+        int size = productService.getAll().size();
+        int id = productService.add(p);
+        assertTrue(productService.getAll().size()-1 == size);
+        Product newP = productService.get(id);
+        assertTrue(p.equals(newP));
+        assertTrue(p.getRegions().size() == 1);
     }
 
 
