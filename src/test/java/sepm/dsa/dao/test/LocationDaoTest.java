@@ -87,6 +87,18 @@ public class LocationDaoTest extends TestCase {
 
     @Test
     @DatabaseSetup("/testData.xml")
+    public void update_removesConnections() throws Exception {
+        Location location = locationDao.get(4);
+        location.getConnections1().clear();
+        locationDao.update(location);
+        Location newLocation = locationDao.get(location.getId());
+        assertEquals(0, newLocation.getConnections1().size());
+        assertEquals(1, newLocation.getConnections2().size());
+
+    }
+
+    @Test
+    @DatabaseSetup("/testData.xml")
     public void getAllAround_SomeLocationsAround() throws Exception {
         Location location = locationDao.get(4);
         List<Location> locationsAround = locationDao.getAllAround(location, 100.0);

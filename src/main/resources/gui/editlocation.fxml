@@ -73,20 +73,22 @@
         </GridPane>
     </center>
    <right>
-      <BorderPane prefHeight="200.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER">
          <center>
-            <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <TableView fx:id="locationConnectionsTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn prefWidth="161.0" text="Verbindung zu" />
-                <TableColumn minWidth="0.0" prefWidth="112.0" text="Reisedauer" />
+                <TableColumn fx:id="location1Column" prefWidth="141.0" text="Ort 1" />
+                <TableColumn fx:id="location2Column" minWidth="0.0" prefWidth="132.0" text="Ort 2" />
+                  <TableColumn fx:id="travelTimeColumn" minWidth="0.0" prefWidth="106.0" text="Reisedauer" />
               </columns>
             </TableView>
          </center>
          <top>
             <FlowPane prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" text="hinzufügen" />
-                  <Button mnemonicParsing="false" text="entfernen" />
+                  <Button fx:id="addConnectionBtn" mnemonicParsing="false" onAction="#onAddConnectionBtnClicked" text="hinzufügen" />
+                  <Button fx:id="removeConnectionBtn" mnemonicParsing="false" onAction="#onRemoveConnectionBtnClicked" text="entfernen" />
+                  <Button fx:id="suggestConnectionsBtn" mnemonicParsing="false" onAction="#onSuggestConnectionsBtnClicked" text="vorschlagen" />
                </children>
             </FlowPane>
          </top>

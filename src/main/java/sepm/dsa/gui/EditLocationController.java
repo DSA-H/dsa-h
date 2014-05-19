@@ -1,16 +1,16 @@
 package sepm.dsa.gui;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,8 +21,7 @@ import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionService;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service("EditLocationController")
 public class EditLocationController implements Initializable {
@@ -62,6 +61,21 @@ public class EditLocationController implements Initializable {
     //map file name
     private String backgroundMapName = "";
 
+    @FXML
+    private TableView<LocationConnection> locationConnectionsTable;
+    @FXML
+    private TableColumn<LocationConnection, Location> location1Column;
+    @FXML
+    private TableColumn<LocationConnection, Location> location2Column;
+    @FXML
+    private TableColumn<LocationConnection, Integer> travelTimeColumn;
+
+    @FXML
+    private Button suggestConnectionsBtn;
+    @FXML
+    private Button addConnectionBtn;
+    @FXML
+    private Button removeConnectionBtn;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
@@ -101,6 +115,61 @@ public class EditLocationController implements Initializable {
         List<Region> otherRegions = regionService.getAll();
 //        otherRegions.remove(selectedLocation.getRegion());
         regionChoiceBox.setItems(FXCollections.observableArrayList(otherRegions));
+
+        location1Column.setCellValueFactory(new PropertyValueFactory<>("location1"));
+        location2Column.setCellValueFactory(new PropertyValueFactory<>("location2"));
+        travelTimeColumn.setCellValueFactory(new PropertyValueFactory<>("travelTime"));
+        location1Column.setCellFactory(new Callback<TableColumn<LocationConnection, Location>, TableCell<LocationConnection, Location>>() {
+            @Override
+            public TableCell<LocationConnection, Location> call(TableColumn<LocationConnection, Location> locationConnectionLocationTableColumn) {
+                return new TableCell<LocationConnection, Location>() {
+
+                    @Override
+                    protected void updateItem(Location item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (!empty) {
+                            if (item != null) {
+                                setText(item.getName());
+                            } else {
+                                setText("<null>");
+                            }
+                        } else {
+                            setText(null);
+                        }
+                    }
+
+                };
+            }
+        });
+        location2Column.setCellFactory(new Callback<TableColumn<LocationConnection, Location>, TableCell<LocationConnection, Location>>() {
+            @Override
+            public TableCell<LocationConnection, Location> call(TableColumn<LocationConnection, Location> locationConnectionLocationTableColumn) {
+                return new TableCell<LocationConnection, Location>() {
+
+                    @Override
+                    protected void updateItem(Location item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (!empty) {
+                            if (item != null) {
+                                setText(item.getName());
+                            } else {
+                                setText("<null>");
+                            }
+                        } else {
+                            setText(null);
+                        }
+                    }
+
+                };
+            }
+        });
+
+        Set<LocationConnection> allConnections = selectedLocation.getAllConnections();
+        ObservableList<LocationConnection> connections = FXCollections.observableArrayList(allConnections);
+        locationConnectionsTable.setItems(connections);
+
     }
 
     public void setLocationService(LocationService locationService) {
@@ -157,9 +226,26 @@ public class EditLocationController implements Initializable {
             throw new DSAValidationException("Höhe muss eine Zahl sein.");
         }
 
+        Set<LocationConnection> conn1 = new HashSet<>(locationConnectionsTable.getItems().size());
+        Set<LocationConnection> conn2 = new HashSet<>(locationConnectionsTable.getItems().size());
+        for (LocationConnection con : locationConnectionsTable.getItems()) {
+            if (con.getLocation1().equals(selectedLocation)) {
+                conn1.add(con);
+                log.info("location1: " + con);
+            } else {
+                conn2.add(con);
+                log.info("location2: " + con);
+            }
+        }
+
+        selectedLocation.setConnections1(conn1);
+        selectedLocation.setConnections2(conn2);
+
         if (isNewLocation) {
+            log.info("add location");
             locationService.add(selectedLocation);
         } else {
+            log.info("update location");
             locationService.update(selectedLocation);
         }
 
@@ -207,4 +293,32 @@ public class EditLocationController implements Initializable {
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
     }
+
+    @FXML
+    public void onSuggestConnectionsBtnClicked() {
+        List<LocationConnection> suggestedConnections = locationService.suggestLocationConnectionsAround(selectedLocation, 100.0);
+
+        if (selectedLocation.getId() != null) {
+            Location reloaded = locationService.get(selectedLocation.getId());
+            if (reloaded != null) {
+                suggestedConnections.addAll(reloaded.getAllConnections());
+            }
+        }
+        ObservableList<LocationConnection> connections = FXCollections.observableArrayList(suggestedConnections);
+        locationConnectionsTable.setItems(connections);
+
+    }
+
+    @FXML
+    public void onAddConnectionBtnClicked() {
+
+    }
+
+    @FXML
+    public void onRemoveConnectionBtnClicked() {
+        LocationConnection selected = locationConnectionsTable.getSelectionModel().getSelectedItem();
+        locationConnectionsTable.getItems().remove(selected);
+    }
+
+
 }

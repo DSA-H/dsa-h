@@ -72,15 +72,15 @@ public class LocationListController implements Initializable {
     private void onEditButtonPressed() {
         log.debug("onEditButtonPressed - open Location-Details Window");
 
-        Stage stage = (Stage) locationTable.getScene().getWindow();
-        Parent root = (Parent) loader.load("/gui/editlocation.fxml");
-
         //TODO schön machen
         Location selectedLocation = locationTable.getFocusModel().getFocusedItem();
         EditLocationController.setLocation(selectedLocation);
 
+        Stage stage = (Stage) locationTable.getScene().getWindow();
+        Parent root = (Parent) loader.load("/gui/editlocation.fxml");
+
         stage.setTitle("Ort bearbeiten");
-        stage.setScene(new Scene(root, 600, 438));
+        stage.setScene(new Scene(root, 900, 438));
         stage.show();
     }
 

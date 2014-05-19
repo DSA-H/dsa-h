@@ -22,6 +22,8 @@
     <locations id="7" name="location7_dont_change" REGION="2" xCoord="530" yCoord="520" sizeId="0" height="50" weatherId="2"/>
     <locations id="8" name="location8_dont_change" REGION="3" xCoord="550" yCoord="550" sizeId="1" height="40" weatherId="4"/>
     <locations id="9" name="location9_dont_change" REGION="3" xCoord="700" yCoord="700" sizeId="3" height="140" weatherId="1"/>
-    <!--<connections LOCATION1_ID="1" LOCATION2_ID="2" travelTime="4" />-->
+    <connections LOCATION1_ID="4" LOCATION2_ID="5" travelTime="4" />
+    <connections LOCATION1_ID="4" LOCATION2_ID="6" travelTime="7" />
+    <connections LOCATION1_ID="7" LOCATION2_ID="4" travelTime="10" />
 
 </dataset>

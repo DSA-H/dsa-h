@@ -177,8 +177,9 @@ public class Location implements Serializable {
      *
      * @param connections1 must not be null
      */
-    public void setConnections1(Collection<LocationConnection> connections1) {
-        this.connections1 = new HashSet<>(connections1);
+    public void setConnections1(Set<LocationConnection> connections1) {
+//        this.connections1 = new HashSet<>(connections1);
+        this.connections1 = connections1;
     }
 
     public Set<LocationConnection> getConnections2() {
@@ -188,8 +189,9 @@ public class Location implements Serializable {
     /**
      * @param connections2 must not be null
      */
-    public void setConnections2(Collection<LocationConnection> connections2) {
-        this.connections2 = new HashSet<>(connections2);
+    public void setConnections2(Set<LocationConnection> connections2) {
+//        this.connections2 = new HashSet<>(connections2);
+        this.connections2 = connections2;
     }
 
     public Set<LocationConnection> getAllConnections() {
