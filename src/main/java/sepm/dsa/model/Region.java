@@ -2,6 +2,7 @@ package sepm.dsa.model;
 
 import org.hibernate.FetchMode;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
