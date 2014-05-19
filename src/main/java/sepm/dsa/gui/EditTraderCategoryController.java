@@ -19,14 +19,10 @@ import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
-import sepm.dsa.service.RegionBorderService;
-import sepm.dsa.service.RegionService;
 import sepm.dsa.service.TraderCategoryService;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 @Service("EditTraderCategoryController")
 public class EditTraderCategoryController implements Initializable {
@@ -43,7 +39,13 @@ public class EditTraderCategoryController implements Initializable {
     @FXML
     private ChoiceBox<AssortmentNature> assortmentChoiceBox;
     @FXML
+    private ChoiceBox<TraderCategory> choiceParent;
+    @FXML
     private TableView<AssortmentNature> assortmentTable;
+    @FXML
+    private Button removeAssortButton;
+    @FXML
+    private Button removeParentButton;
 
 
     @Override
@@ -60,18 +62,16 @@ public class EditTraderCategoryController implements Initializable {
             isNewTraderCategory = false;
             nameField.setText(traderCategory.getName());
             parentCategories.remove(traderCategory);
-            commentArea.setText(traderCategory.getComment());
 
-            ObservableList<RegionBorder> data = FXCollections.observableArrayList(regionBorderService.getAllByRegion(traderCategory.getId()));
-            borderTable.setItems(data);
+            assortmentChoiceBox.setItems(FXCollections.observableArrayList(traderCategory.getAssortments()));
         } else {
             isNewTraderCategory = true;
             traderCategory = new TraderCategory();
             temperatureChoiceBox.getSelectionModel().select(Temperature.MEDIUM.getValue());
             rainfallChoiceBox.getSelectionModel().select(RainfallChance.MEDIUM.getValue());
 
-            ObservableList<RegionBorder> data = FXCollections.observableArrayList();
-            borderTable.setItems(data);
+//            ObservableList<RegionBorder> data = FXCollections.observableArrayList();
+//            borderTable.setItems(data);
         }
 
         // init border table
@@ -96,7 +96,7 @@ public class EditTraderCategoryController implements Initializable {
         // init border choice box
         List<Region> otherRegions = regionService.getAll();
         otherRegions.remove(traderCategory);
-        if(!isNewTraderCategory) {
+        if (!isNewTraderCategory) {
             for (RegionBorder borders : regionBorderService.getAllByRegion(traderCategory.getId())) {
                 if (borders.getRegion1().equals(traderCategory)) {
                     otherRegions.remove(borders.getRegion2());
@@ -109,18 +109,51 @@ public class EditTraderCategoryController implements Initializable {
     }
 
     @FXML
-    private void removeSelectedAssortment(){
+    private void removeSelectedAssortment() {
+        log.debug("calling removeSelectedAssortment");
+        AssortmentNature selAssortment = assortmentTable.getFocusModel().getFocusedItem();
+        if (selAssortment != null) {
+            assortmentTable.getItems().remove(selAssortment);
+            //TODO check macht das Sinn?
+            assortmentChoiceBox.getItems().add(selAssortment);
+        }
+        checkFocus();
+    }
+
+    @FXML
+    private void removeSelectedParent() {
+        log.debug("calling removeSelectedParent()");
+
         //TODO
     }
 
     @FXML
-    private void addAssortmentClicked(){
+    private void addAssortmentClicked() {
+        log.debug("calling addAssortmentClicked");
+
+        AssortmentNature selectedChoiceAssortment = assortmentChoiceBox.getSelectionModel().getSelectedItem();
+        if (selectedChoiceAssortment == null) {
+            throw new DSAValidationException("Wählen sie eine Ware Aus aus, welche Händler dieser Kategorie anbieten.");
+        }
+        assortmentTable.getItems().add(selectedChoiceAssortment);
+
+        assortmentChoiceBox.getItems().remove(selectedChoiceAssortment);
+        assortmentChoiceBox.getSelectionModel().selectFirst();
+
+        //TODO besser / schöner gestalten -> evtl. inkrementelle Suche oder sonstwas
+        //TODO multiple select ermöglichen
+    }
+
+    @FXML
+    private void addParentClicked() {
+        log.debug("calling addParentClicked()");
+
         //TODO
     }
 
     @FXML
-    private void onBorderCostColumnChanged() {
-        log.debug("calling onBorderCostColumnChanged()");
+    private void onAssortmentsSelectedChanged() {
+        log.debug("calling onAssortmentsSelectedChanged()");
 
     }
 
@@ -128,7 +161,7 @@ public class EditTraderCategoryController implements Initializable {
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
+        Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml");
 
         stage.setScene(new Scene(scene, 600, 438));
     }
@@ -162,7 +195,7 @@ public class EditTraderCategoryController implements Initializable {
 
         // save borders
         List<RegionBorder> localBorderList = borderTable.getItems();
-        for(RegionBorder border : regionBorderService.getAllByRegion(traderCategory.getId())) {
+        for (RegionBorder border : regionBorderService.getAllByRegion(traderCategory.getId())) {
             boolean contain = false;
             for (RegionBorder localBorder : localBorderList) {
                 if (localBorder.equalsById(border)) {
@@ -188,57 +221,14 @@ public class EditTraderCategoryController implements Initializable {
     }
 
     @FXML
-    private void onAddBorderPressed() {
-        log.debug("calling AddBorderPressed");
-
-        RegionBorder border = new RegionBorder();
-
-        try {
-            border.setRegion1(traderCategory);
-            Region borderTo = (Region) borderChoiceBox.getSelectionModel().getSelectedItem();
-            if (borderTo == null) {
-                throw new DSAValidationException("Wählen sie ein Gebiet aus, welches an dieses Gebiet grenzen soll.");
-            }
-            border.setRegion2(borderTo);
-            border.setBorderCost(Integer.parseInt(borderCost.getText()));
-            borderTable.getItems().add(border);
-
-            borderChoiceBox.getItems().remove(border.getRegion2());
-            borderChoiceBox.getSelectionModel().selectFirst();
-        } catch (NumberFormatException ex) {
-            throw new DSAValidationException("Grenzkosten müssen eine Zahl sein.");
-        }
-    }
-
-    @FXML
-    private void onRemoveBorderPressed() {
-        log.debug("calling onRemoveBorderPressed");
-        RegionBorder selectedborder = borderTable.getFocusModel().getFocusedItem();
-        if (selectedborder != null) {
-            borderTable.getItems().remove(selectedborder);
-            if (selectedborder.getRegion1().equals(traderCategory)) {
-                borderChoiceBox.getItems().add(selectedborder.getRegion2());
-            } else {
-                borderChoiceBox.getItems().add(selectedborder.getRegion1());
-            }
-        }
-        checkFocus();
-    }
-
-    @FXML
     private void checkFocus() {
         log.debug("calling checkFocus()");
-        RegionBorder selected = borderTable.getFocusModel().getFocusedItem();
+        AssortmentNature selected = assortmentTable.getFocusModel().getFocusedItem();
         if (selected == null) {
-            removeBorderButton.setDisable(true);
+            removeAssortButton.setDisable(true);
         } else {
-            removeBorderButton.setDisable(false);
+            removeAssortButton.setDisable(false);
         }
-    }
-
-    public static void setRegion(Region region) {
-        log.debug("calling setRegion(" + region + ")");
-        traderCategory = region;
     }
 
     public void setLoader(SpringFxmlLoader loader) {
@@ -249,16 +239,7 @@ public class EditTraderCategoryController implements Initializable {
         EditTraderCategoryController.traderCategory = traderCategory;
     }
 
-    public static TraderCategory getTraderCategory() {
-        return traderCategory;
-    }
-
     public void setTraderCategoryService(TraderCategoryService traderCategoryService) {
         this.traderCategoryService = traderCategoryService;
     }
-
-    public TraderCategoryService getTraderCategoryService() {
-        return traderCategoryService;
-    }
-
 }

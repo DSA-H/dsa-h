@@ -47,17 +47,25 @@
                 <Separator prefHeight="3.0" prefWidth="491.0" GridPane.columnIndex="1" GridPane.columnSpan="7" GridPane.rowIndex="6" />
                 <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="10">
                     <children>
-                        <Button fx:id="save" mnemonicParsing="false" onAction="#onSavePressed" text="Speichern" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
-                        <Button mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="25.0" prefWidth="94.0" text="Abbrechen" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
+                        <Button fx:id="save" defaultButton="true" mnemonicParsing="false" onAction="#onSavePressed" text="Speichern" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
+                        <Button cancelButton="true" mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="25.0" prefWidth="94.0" text="Abbrechen" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
                     </children>
                     <opaqueInsets>
                         <Insets />
                     </opaqueInsets>
-                </HBox><Label text="Waren" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" /><TableView fx:id="assortmentTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="7" GridPane.rowIndex="9">
+                </HBox>
+                <Label text="Waren" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
+                <TableView fx:id="assortmentTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="9">
+                    <columns><TableColumn prefWidth="287.0" text="Gewählte Waren" />
+                    </columns>
+                </TableView>
+                <ChoiceBox fx:id="assortmentChoiceBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+                <Button mnemonicParsing="false" onAction="#addParentClicked" text="Parent hinzufügen" GridPane.columnIndex="5" GridPane.rowIndex="8" />
+                <Button fx:id="removeParentButton" disable="true" mnemonicParsing="false" onAction="#removeSelectedParent" text="Entferne Parent" GridPane.columnIndex="7" GridPane.rowIndex="8" /><TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="9">
   <columns>
-    <TableColumn prefWidth="558.0" text="Ware" />
+    <TableColumn prefWidth="257.0" text="Gewählte Parent Kategorien" />
   </columns>
-</TableView><ChoiceBox fx:id="assortmentChoiceBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="7" /><Button mnemonicParsing="false" onAction="#addAssortmentClicked" text="Hinzufügen" GridPane.columnIndex="5" GridPane.rowIndex="8" /><Button mnemonicParsing="false" onAction="#removeSelectedAssortment" text="Entfernen" GridPane.columnIndex="7" GridPane.rowIndex="8" />
+</TableView><Button mnemonicParsing="false" onAction="#addAssortmentClicked" text="Ware wählen" GridPane.columnIndex="1" GridPane.rowIndex="8" /><Button fx:id="removeAssortButton" mnemonicParsing="false" onAction="#removeSelectedAssortment" text="Ware nicht anbieten" GridPane.columnIndex="3" GridPane.rowIndex="8" /><ChoiceBox fx:id="choiceParent" prefWidth="150.0" GridPane.columnIndex="5" GridPane.rowIndex="7" /><Label text="Parent" GridPane.columnIndex="7" GridPane.rowIndex="7" />
             </children>
         </GridPane>
     </center>
