@@ -238,8 +238,15 @@ public class EditLocationController implements Initializable {
             }
         }
 
-        selectedLocation.setConnections1(conn1);
-        selectedLocation.setConnections2(conn2);
+        selectedLocation.getConnections1().clear();
+        selectedLocation.getConnections2().clear();
+        selectedLocation.getConnections1().addAll(conn1);
+        selectedLocation.getConnections1().addAll(conn2);
+
+        log.info("connections now in selected Location");
+        for (LocationConnection con : selectedLocation.getAllConnections()) {
+            log.info("location: " + con);
+        }
 
         if (isNewLocation) {
             log.info("add location");
@@ -248,6 +255,8 @@ public class EditLocationController implements Initializable {
             log.info("update location");
             locationService.update(selectedLocation);
         }
+
+        selectedLocation = locationService.get(selectedLocation.getId());
 
         // return to locationlist
         Stage stage = (Stage) cancelButton.getScene().getWindow();

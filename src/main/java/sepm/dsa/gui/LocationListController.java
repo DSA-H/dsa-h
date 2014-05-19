@@ -64,7 +64,7 @@ public class LocationListController implements Initializable {
         Parent root = (Parent) loader.load("/gui/editlocation.fxml");
 
         stage.setTitle("Ort erstellen");
-        stage.setScene(new Scene(root, 600, 438));
+        stage.setScene(new Scene(root, 900, 438));
         stage.show();
     }
 
