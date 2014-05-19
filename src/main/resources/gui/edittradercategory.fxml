@@ -46,7 +46,7 @@
                 <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="10">
                     <children>
                         <Button fx:id="save" defaultButton="true" mnemonicParsing="false" onAction="#onSavePressed" text="Speichern" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
-                        <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="25.0" prefWidth="94.0" text="Abbrechen" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
+                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="25.0" prefWidth="94.0" text="Abbrechen" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
                     </children>
                     <opaqueInsets>
                         <Insets />

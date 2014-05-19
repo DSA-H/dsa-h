@@ -45,10 +45,9 @@ public class EditTraderCategoryController implements Initializable {
     @FXML
     private Button removeAssortButton;
     @FXML
-    private TableColumn<AssortmentNature, String> assortmentColumn;
-    //TODO check wierum das sein muss
+    private TableColumn<String, AssortmentNature> assortmentColumn;
     @FXML
-    private TableColumn<Integer, String> defaultOccurenceColumn;
+    private TableColumn<String, Integer> defaultOccurenceColumn;
     @FXML
     private TextField defaultOccurence;
     @FXML
@@ -56,7 +55,7 @@ public class EditTraderCategoryController implements Initializable {
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialise EditRegionController");
+        log.debug("initialize EditRegionController");
 
         // init ChoiceBoxes
         List<ProductCategory> productCategories = new ArrayList<>();
@@ -68,7 +67,7 @@ public class EditTraderCategoryController implements Initializable {
         ProductCategory p1 = new ProductCategory();
         p1.setName("dfsdf");
         ProductCategory p2 = new ProductCategory();
-        p1.setName("kjk");
+        p2.setName("kjk");
         productCategories.add(p1);
         productCategories.add(p2);
 
