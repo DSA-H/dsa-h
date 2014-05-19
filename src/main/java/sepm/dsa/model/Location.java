@@ -1,34 +1,61 @@
 package sepm.dsa.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-/**
- * Created by Michael on 16.05.2014.
- */
+@Entity
+@Table(name = "locations")
 public class Location implements Serializable {
 
     private static final long serialVersionUID = 1616654812413948966L;
 
+    @Id
+    @GeneratedValue
+    @Column(nullable = false, unique = true)
     private Integer id;
 
+    @NotBlank
+    @Size(max = 100, min = 1)
+    @Column(nullable = false, length = 100)
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name="region", nullable = false)
     private Region region;
 
+    @NotNull
+    @Column(nullable = false)
     private Integer xCoord;
 
+    @NotNull
+    @Column(nullable = false)
     private Integer yCoord;
 
-    private TownSize size;
+    @NotNull
+    @Column(nullable = false)
+    private Integer sizeId;
 
-    private String planFilepath;
+    @Column(nullable = true)
+    private String planFileName;
 
+    @NotNull
+    @Column(nullable = false)
     private Integer height;
 
-    private Weather weather;
+    @Column(nullable = true)
+    private Integer weatherId;
 
+    @Column(nullable = true)
+    @Embedded
+    //TODO abklären martin johannes
     private DSADate weatherCollectedDate;
 
+    @Size(max = 1000)
+    @Column(nullable = true, length = 1000)
     private String comment;
 
     public Integer getId() {
@@ -64,19 +91,26 @@ public class Location implements Serializable {
     }
 
     public TownSize getSize() {
-        return size;
+        if (sizeId == null) {
+            return null;
+        }
+        return TownSize.parse(sizeId);
     }
 
     public void setSize(TownSize size) {
-        this.size = size;
+        if (size == null) {
+            this.sizeId = null;
+        } else {
+            this.sizeId = size.getValue();
+        }
     }
 
-    public String getPlanFilepath() {
-        return planFilepath;
+    public String getPlanFileName() {
+        return planFileName;
     }
 
-    public void setPlanFilepath(String planFilepath) {
-        this.planFilepath = planFilepath;
+    public void setPlanFileName(String planFileName) {
+        this.planFileName = planFileName;
     }
 
     public Integer getHeight() {
@@ -88,11 +122,18 @@ public class Location implements Serializable {
     }
 
     public Weather getWeather() {
-        return weather;
+        if (weatherId == null) {
+            return null;
+        }
+        return Weather.parse(weatherId);
     }
 
     public void setWeather(Weather weather) {
-        this.weather = weather;
+        if (weather == null) {
+            this.weatherId = null;
+        } else {
+            this.weatherId = weather.getValue();
+        }
     }
 
     public DSADate getWeatherCollectedDate() {
@@ -130,11 +171,11 @@ public class Location implements Serializable {
         if (height != null ? !height.equals(location.height) : location.height != null) return false;
         if (id != null ? !id.equals(location.id) : location.id != null) return false;
         if (name != null ? !name.equals(location.name) : location.name != null) return false;
-        if (planFilepath != null ? !planFilepath.equals(location.planFilepath) : location.planFilepath != null)
+        if (planFileName != null ? !planFileName.equals(location.planFileName) : location.planFileName != null)
             return false;
         if (region != null ? !region.equals(location.region) : location.region != null) return false;
-        if (size != location.size) return false;
-        if (weather != location.weather) return false;
+        if (sizeId != location.sizeId) return false;
+        if (weatherId != location.weatherId) return false;
         if (weatherCollectedDate != null ? !weatherCollectedDate.equals(location.weatherCollectedDate) : location.weatherCollectedDate != null)
             return false;
         if (xCoord != null ? !xCoord.equals(location.xCoord) : location.xCoord != null) return false;
@@ -150,10 +191,10 @@ public class Location implements Serializable {
         result = 31 * result + (region != null ? region.hashCode() : 0);
         result = 31 * result + (xCoord != null ? xCoord.hashCode() : 0);
         result = 31 * result + (yCoord != null ? yCoord.hashCode() : 0);
-        result = 31 * result + (size != null ? size.hashCode() : 0);
-        result = 31 * result + (planFilepath != null ? planFilepath.hashCode() : 0);
+        result = 31 * result + (sizeId != null ? sizeId.hashCode() : 0);
+        result = 31 * result + (planFileName != null ? planFileName.hashCode() : 0);
         result = 31 * result + (height != null ? height.hashCode() : 0);
-        result = 31 * result + (weather != null ? weather.hashCode() : 0);
+        result = 31 * result + (weatherId != null ? weatherId.hashCode() : 0);
         result = 31 * result + (weatherCollectedDate != null ? weatherCollectedDate.hashCode() : 0);
         result = 31 * result + (comment != null ? comment.hashCode() : 0);
         return result;

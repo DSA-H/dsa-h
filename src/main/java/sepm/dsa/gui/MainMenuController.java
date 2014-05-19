@@ -10,9 +10,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import javafx.stage.FileChooser;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.controlsfx.control.action.Action;
 import org.controlsfx.dialog.*;
 import org.controlsfx.dialog.Dialog;
@@ -58,6 +55,8 @@ public class MainMenuController implements Initializable {
     private MenuItem weltkarteImportieren;
     @FXML
     private MenuItem weltkarteExportieren;
+    @FXML
+    private MenuItem location;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
@@ -71,6 +70,18 @@ public class MainMenuController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
 
         stage.setTitle("Grenzen und Gebiete");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
+    private void onShowLocationsClicked() {
+        log.debug("onShowLocationsClicked - open Location Window");
+        Stage stage = new Stage();
+        Parent scene = (Parent) loader.load("/gui/locationlist.fxml");
+
+        stage.setTitle("Orte verwalten");
         stage.setScene(new Scene(scene, 600, 438));
         stage.setResizable(false);
         stage.show();
@@ -217,11 +228,10 @@ public class MainMenuController implements Initializable {
 
     /**
      * Shows a exit-confirm-dialog if more than the primaryStage are open and close all other stages if confirmed
-     *
      * @return false if the user cancle or refuse the dialog, otherwise true
      */
     public boolean exitProgramm() {
-        Stage primaryStage = (Stage) menuBar.getScene().getWindow();
+        Stage primaryStage = (Stage)menuBar.getScene().getWindow();
         List<Stage> stages = new ArrayList<Stage>(StageHelper.getStages());
 
         // only primaryStage
@@ -234,7 +244,7 @@ public class MainMenuController implements Initializable {
                 .owner(primaryStage)
                 .title("Programm beenden?")
                 .masthead(null)
-                .message("Wollen Sie das Händertool wirklich beenden? Nicht gespeicherte Änderungen gehen dabei verloren.")
+                .message("Wollen Sie das Händlertool wirklich beenden? Nicht gespeicherte Änderungen gehen dabei verloren.")
                 .showConfirm();
 
         if (response == Dialog.Actions.YES) {
@@ -246,7 +256,7 @@ public class MainMenuController implements Initializable {
             }
             return true;
 
-        } else {
+        }else {
             log.debug("Confirm-Exit-Dialog refused");
             return false;
         }

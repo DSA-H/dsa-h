@@ -26,7 +26,6 @@ public class RegionServiceImpl implements RegionService, Serializable {
     private static final long serialVersionUID = 7415861483489569621L;
 
     private static final Logger log = LoggerFactory.getLogger(RegionServiceImpl.class);
-//    private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private RegionDao regionDao;

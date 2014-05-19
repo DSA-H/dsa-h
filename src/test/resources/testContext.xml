@@ -6,7 +6,7 @@
     <import resource="applicationContext.xml"/>
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.hsqldb.jdbc.JDBCDriver"/>
-        <property name="url" value="jdbc:hsqldb:file:testDB"/>
+        <property name="url" value="jdbc:hsqldb:file:database/testDB"/>
         <property name="username" value="sa"/>
         <property name="password" value=""/>
     </bean>
