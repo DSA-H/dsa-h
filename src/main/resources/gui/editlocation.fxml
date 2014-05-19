@@ -81,7 +81,7 @@
                 <Label text="Höhe" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11"/>
                 <TextField fx:id="height" GridPane.columnIndex="3" GridPane.rowIndex="11"/>
                 <Button mnemonicParsing="false" onAction="#chooseBackground" prefHeight="26.0" prefWidth="262.0"
-                        text="Hintergrundkarte wählen" GridPane.columnIndex="5" GridPane.columnSpan="3"
+                        text="Ortskarte wählen" GridPane.columnIndex="5" GridPane.columnSpan="3"
                         GridPane.rowIndex="2"/>
             </children>
         </GridPane>
