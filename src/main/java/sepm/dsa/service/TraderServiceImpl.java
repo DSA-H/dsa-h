@@ -203,7 +203,7 @@ public class TraderServiceImpl implements TraderService, Serializable {
         return price;
     }
 
-    private List<RegionBorder> getCheapestWayBordersBetween(List<Region> productionRegion, Region tradeRegion) {
+    private List<RegionBorder> getCheapestWayBordersBetween(Set<Region> productionRegion, Region tradeRegion) {
        // todo: implement
        return null;
     }
