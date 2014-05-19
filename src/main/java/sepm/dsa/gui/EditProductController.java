@@ -22,7 +22,9 @@ import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service("EditProductController")
 public class EditProductController implements Initializable {
@@ -128,8 +130,8 @@ public class EditProductController implements Initializable {
         Integer cost = Integer.parseInt(text_cost.getText());
         ProductUnit unit = (ProductUnit) choice_unit.getSelectionModel().getSelectedItem();
         ProductAttribute attribute = ProductAttribute.parse(choice_attribute.getSelectionModel().getSelectedIndex());
-        List<ProductCategory> localCategoryList = tableview_category.getItems();
-        List<Region> localRegionList = tableview_production.getItems();
+        Set<ProductCategory> localCategoryList = new HashSet<>(tableview_category.getItems());
+        Set<Region> localRegionList =  new HashSet<>(tableview_production.getItems());
 
         selectedProduct.setName(name);
         selectedProduct.setCost(cost);
