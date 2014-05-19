@@ -48,17 +48,13 @@ public class Product implements Serializable {
     @Column(nullable = false)
     private Boolean quality;
 
-    //@ManyToMany(mappedBy="products")//, cascade = CascadeType.ALL)
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "product_categories", joinColumns = { @JoinColumn(name = "productId") }, inverseJoinColumns = { @JoinColumn(name = "categoryId") })
-    private List<ProductCategory> categories;
+    private Set<ProductCategory> categories;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    //@ManyToMany(mappedBy="products")//, cascade = CascadeType.ALL)
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "product_regions", joinColumns = { @JoinColumn(name = "productId") }, inverseJoinColumns = { @JoinColumn(name = "regionId") })
-    private List<Region> productionRegions;
+    private Set<Region> productionRegions;
 
     public Integer getId() {
         return productID;
@@ -124,19 +120,19 @@ public class Product implements Serializable {
         this.comment = comment;
     }
 
-    public List<ProductCategory> getCategories() {
+    public Set<ProductCategory> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<ProductCategory> categories) {
+    public void setCategories(Set<ProductCategory> categories) {
         this.categories = categories;
     }
 
-    public List<Region> getRegions() {
+    public Set<Region> getRegions() {
         return productionRegions;
     }
 
-    public void setRegions(List<Region> productionRegions) {
+    public void setRegions(Set<Region> productionRegions) {
         this.productionRegions = productionRegions;
     }
 
