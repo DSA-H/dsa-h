@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "Region")
+@Table(name = "regions")
 public class Region implements Serializable {
     private static final long serialVersionUID = 5890354733231481712L;
 

@@ -57,7 +57,7 @@ public class Product implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     //@ManyToMany(mappedBy="products")//, cascade = CascadeType.ALL)
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "product_regions", joinColumns = { @JoinColumn(name = "productId") }, inverseJoinColumns = { @JoinColumn(name = "categoryId") })
+    @JoinTable(name = "product_regions", joinColumns = { @JoinColumn(name = "productId") }, inverseJoinColumns = { @JoinColumn(name = "regionId") })
     private List<Region> productionRegions;
 
     public Integer getId() {
