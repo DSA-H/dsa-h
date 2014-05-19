@@ -40,10 +40,6 @@ public interface ProductService {
      */
     List<Product> getAll();
 
-    List<Region> getAllRegions(int productId);
-
-    List<ProductCategory> getAllCategories(int productId);
-
     /**
      * @return all products from a product-category and all of its child categories -- if nothing found empty list is returned
      */

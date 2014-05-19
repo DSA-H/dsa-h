@@ -104,10 +104,10 @@ public class EditProductController implements Initializable {
             //ObservableList<Region> regionData = FXCollections.observableArrayList(selectedProduct.getRegions());
             int id = selectedProduct.getId();
             //System.out.println(productService.getAllRegions(id) + " + " +  id);
-            ObservableList<Region> regionData = FXCollections.observableArrayList(productService.getAllRegions(id));
+            ObservableList<Region> regionData = FXCollections.observableArrayList(selectedProduct.getRegions());
             tableview_production.setItems(regionData);
             //ObservableList<ProductCategory> categoryData = FXCollections.observableArrayList(selectedProduct.getCategories());
-            ObservableList<ProductCategory> categoryData = FXCollections.observableArrayList(productService.getAllCategories(selectedProduct.getId()));
+            ObservableList<ProductCategory> categoryData = FXCollections.observableArrayList(selectedProduct.getCategories());
             tableview_category.setItems(categoryData);
             textarea_comment.setText(selectedProduct.getComment());
         }else {

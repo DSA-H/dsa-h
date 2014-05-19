@@ -73,34 +73,6 @@ public class ProductDaoHbmImpl implements ProductDao {
         return result;
     }
 
-    @Override
-    public List<Region> getAllRegions(int productId) {
-        List<?> list = sessionFactory.getCurrentSession().getNamedQuery("RegionBorder.findAllRegions")
-                .setParameter("productId", productId)
-                .list();
-
-        List<Region> result = new Vector<>(list.size());
-        for (Object o : list) {
-            result.add((Region) o);
-        }
-
-        return result;
-    }
-
-    @Override
-    public List<ProductCategory> getAllCategories(int productId) {
-        List<?> list = sessionFactory.getCurrentSession().getNamedQuery("RegionBorder.findAllCategories")
-                .setParameter("productId", productId)
-                .list();
-
-        List<ProductCategory> result = new Vector<>(list.size());
-        for (Object o : list) {
-            result.add((ProductCategory) o);
-        }
-
-        return result;
-    }
-
     public void setSessionFactory(SessionFactory sessionFactory) {
         log.debug("calling setSessionFactory(" + sessionFactory + ")");
         this.sessionFactory = sessionFactory;

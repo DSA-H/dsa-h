@@ -71,22 +71,6 @@ public class ProductServiceImpl implements ProductService, Serializable {
     }
 
     @Override
-    public List<Region> getAllRegions(int productId) {
-        log.debug("calling getAll()");
-        List<Region> result = productDao.getAllRegions(productId);
-        log.trace("returning " + result);
-        return result;
-    }
-
-    @Override
-    public List<ProductCategory> getAllCategories(int productId) {
-        log.debug("calling getAll()");
-        List<ProductCategory> result = productDao.getAllCategories(productId);
-        log.trace("returning " + result);
-        return result;
-    }
-
-    @Override
     public Set<Product> getAllFromProductcategory(ProductCategory productCategory) {
         log.debug("calling getAllFromProductcategory");
         Set<Product> result = productCategory.getProducts();

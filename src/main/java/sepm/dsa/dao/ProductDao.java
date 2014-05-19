@@ -19,8 +19,4 @@ public interface ProductDao {
     public Product get(int id);
 
     public List<Product> getAll();
-
-    public List<Region> getAllRegions(int productId);
-
-    public List<ProductCategory> getAllCategories(int productId);
 }
