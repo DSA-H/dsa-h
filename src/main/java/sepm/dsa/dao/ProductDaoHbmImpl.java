@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Product;
+import sepm.dsa.model.ProductCategory;
+import sepm.dsa.model.Region;
 
 import java.util.List;
 import java.util.Vector;
@@ -67,6 +69,34 @@ public class ProductDaoHbmImpl implements ProductDao {
         }
 
         log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Region> getAllRegions(int productId) {
+        List<?> list = sessionFactory.getCurrentSession().getNamedQuery("RegionBorder.findAllRegions")
+                .setParameter("productId", productId)
+                .list();
+
+        List<Region> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((Region) o);
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<ProductCategory> getAllCategories(int productId) {
+        List<?> list = sessionFactory.getCurrentSession().getNamedQuery("RegionBorder.findAllCategories")
+                .setParameter("productId", productId)
+                .list();
+
+        List<ProductCategory> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((ProductCategory) o);
+        }
+
         return result;
     }
 

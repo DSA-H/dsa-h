@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "regions")
+@Table(name = "Region")
 public class Region implements Serializable {
     private static final long serialVersionUID = 5890354733231481712L;
 
     @Id
     @GeneratedValue
     @Column(nullable = false, unique = true)
-    private Integer id;
+    private Integer regionId;
 
     @NotBlank
     @Size(max = 60, min = 1)
@@ -42,7 +42,7 @@ public class Region implements Serializable {
     @Column(nullable = false)
     private Integer rainfallChanceId;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    /*@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Product> products;
 
     public List<Product> getProducts() {
@@ -51,14 +51,14 @@ public class Region implements Serializable {
 
     public void setProducts(List<Product> products) {
         this.products = products;
-    }
+    }*/
 
     public Integer getId() {
-        return id;
+        return regionId;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.regionId = id;
     }
 
     public String getName() {
@@ -121,7 +121,7 @@ public class Region implements Serializable {
         Region region = (Region) o;
 
         if (color != null ? !color.equals(region.color) : region.color != null) return false;
-        if (id != null ? !id.equals(region.id) : region.id != null) return false;
+        if (regionId != null ? !regionId.equals(region.regionId) : region.regionId != null) return false;
         if (name != null ? !name.equals(region.name) : region.name != null) return false;
         if (rainfallChanceId != null ? !rainfallChanceId.equals(region.rainfallChanceId) : region.rainfallChanceId != null)
             return false;
@@ -133,7 +133,7 @@ public class Region implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = regionId != null ? regionId.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (color != null ? color.hashCode() : 0);
         result = 31 * result + (temperatureId != null ? temperatureId.hashCode() : 0);

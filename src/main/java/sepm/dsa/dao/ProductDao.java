@@ -1,6 +1,8 @@
 package sepm.dsa.dao;
 
 import sepm.dsa.model.Product;
+import sepm.dsa.model.ProductCategory;
+import sepm.dsa.model.Region;
 
 import java.util.List;
 
@@ -17,4 +19,8 @@ public interface ProductDao {
     public Product get(Integer id);
 
     public List<Product> getAll();
+
+    public List<Region> getAllRegions(int productId);
+
+    public List<ProductCategory> getAllCategories(int productId);
 }

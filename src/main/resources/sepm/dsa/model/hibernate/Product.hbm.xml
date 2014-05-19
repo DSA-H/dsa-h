@@ -7,4 +7,13 @@
         <![CDATA[from Product ORDER BY name ASC]]>
     </query>
 
+    <!--<query name="Product.findAllRegions">
+        <![CDATA[from product_regions WHERE productId = :productId]]>
+    </query>
+
+    <query name="Product.findAllCategories">
+        <![CDATA[from product_categories WHERE productId = :productId]]>
+    </query>-->
+
+
 </hibernate-mapping>

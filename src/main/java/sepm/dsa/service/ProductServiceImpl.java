@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.ProductDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Product;
+import sepm.dsa.model.ProductCategory;
+import sepm.dsa.model.Region;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -40,7 +42,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
     @Transactional(readOnly = false)
     public int add(Product p) {
         log.debug("calling add(" + p + ")");
-        validate(p);
+        //validate(p);
         return productDao.add(p);
     }
 
@@ -48,7 +50,7 @@ public class ProductServiceImpl implements ProductService, Serializable {
     @Transactional(readOnly = false)
     public void update(Product p) {
         log.debug("calling update(" + p + ")");
-        validate(p);
+        //validate(p);
         productDao.update(p);
     }
 
@@ -63,6 +65,22 @@ public class ProductServiceImpl implements ProductService, Serializable {
     public List<Product> getAll() {
         log.debug("calling getAll()");
         List<Product> result = productDao.getAll();
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Region> getAllRegions(int productId) {
+        log.debug("calling getAll()");
+        List<Region> result = productDao.getAllRegions(productId);
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<ProductCategory> getAllCategories(int productId) {
+        log.debug("calling getAll()");
+        List<ProductCategory> result = productDao.getAllCategories(productId);
         log.trace("returning " + result);
         return result;
     }

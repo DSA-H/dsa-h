@@ -10,13 +10,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "productCategories")
+@Table(name = "ProductCategory")
 public class ProductCategory {
 
     @Id
     @GeneratedValue
     @Column(nullable = false, unique = true)
-    private Integer id;
+    private Integer categoryId;
 
     @NotBlank
     @Size(max = 60, min = 1)
@@ -30,16 +30,16 @@ public class ProductCategory {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProductCategory> childs = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Product> products;
+    //@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    //private Set<Product> products;
 
 
     public Integer getId() {
-        return id;
+        return categoryId;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.categoryId = id;
     }
 
     public String getName() {
@@ -66,13 +66,13 @@ public class ProductCategory {
         this.childs = childs;
     }
 
-    public Set<Product> getProducts() {
+    /*public Set<Product> getProducts() {
         return products;
     }
 
     public void setProducts(Set<Product> products) {
         this.products = products;
-    }
+    }*/
 
     @Override
     public boolean equals(Object o) {
@@ -82,21 +82,21 @@ public class ProductCategory {
         ProductCategory that = (ProductCategory) o;
 
         if (childs != null ? !childs.equals(that.childs) : that.childs != null) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (categoryId != null ? !categoryId.equals(that.categoryId) : that.categoryId != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         //if (parent != null ? !parent.equals(that.parent) : that.parent != null) return false;
-        if (products != null ? !products.equals(that.products) : that.products != null) return false;
+        //if (products != null ? !products.equals(that.products) : that.products != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = categoryId != null ? categoryId.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         //result = 31 * result + (parent != null ? parent.hashCode() : 0);
         result = 31 * result + (childs != null ? childs.hashCode() : 0);
-        result = 31 * result + (products != null ? products.hashCode() : 0);
+        //result = 31 * result + (products != null ? products.hashCode() : 0);
         return result;
     }
 }

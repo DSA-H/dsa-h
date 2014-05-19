@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <Product name="p1" cost="10" unit="asdf" attribute="a1" comment="noComment" quality="true"/>
+    <Region regionId="0" name="region1" color="FFFFFF" comment="comment" temperatureId="0" rainfallChanceId="0"/>
+    <Region regionId="1" name="region2" color="ED8311" comment="comment" temperatureId="1" rainfallChanceId="2"/>
+    <Region regionId="2" name="region3" color="1C11ED" comment="comment" temperatureId="2" rainfallChanceId="3"/>
+
+    <ProductUnit id="0" name="pu1" type="type1" value="10"/>
+    <ProductUnit id="1" name="pu2" type="type2" value="22"/>
+
+    <ProductCategory categoryId="0" name="category1"/>
+
+    <Product id="0" name="product1" cost="10" attributeId="0" comment="noComment" quality="false"/>
+    <Product id="1" name="product2" cost="11" attributeId="0" comment="noComment" quality="false"/>
+    <Product id="2" name="product3" cost="12" attributeId="0" comment="noComment" quality="true"/>
+    <Product id="3" name="product4" cost="13" attributeId="0" comment="noComment" quality="true"/>
+
+    <PRODUCT_REGIONS productId="0" regionId="0"/>
+    <PRODUCT_REGIONS productId="0" regionId="1"/>
+    <PRODUCT_REGIONS productId="1" regionId="1"/>
+
+    <PRODUCT_CATEGORIES productId="0" categoryId="0"/>
+    <PRODUCT_CATEGORIES productId="1" categoryId="0"/>
+
 </dataset>

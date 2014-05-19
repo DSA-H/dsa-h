@@ -93,15 +93,16 @@ public class EditProductController implements Initializable {
             text_cost.setText(selectedProduct.getCost().toString());
             choice_attribute.getSelectionModel().select(selectedProduct.getAttribute().getValue());
             //choice_unit.getSelectionModel().select(productUnitService.get(selectedProduct.getUnit()));
-            ObservableList<Region> regionData = FXCollections.observableArrayList(selectedProduct.getRegions());
+            //ObservableList<Region> regionData = FXCollections.observableArrayList(selectedProduct.getRegions());
+            ObservableList<Region> regionData = FXCollections.observableArrayList(productService.getAllRegions(selectedProduct.getId()));
             tableview_production.setItems(regionData);
-            ObservableList<ProductCategory> categoryData = FXCollections.observableArrayList(selectedProduct.getCategories());
+            //ObservableList<ProductCategory> categoryData = FXCollections.observableArrayList(selectedProduct.getCategories());
+            ObservableList<ProductCategory> categoryData = FXCollections.observableArrayList(productService.getAllCategories(selectedProduct.getId()));
             tableview_category.setItems(categoryData);
             textarea_comment.setText(selectedProduct.getComment());
         }else {
             isNewProduct = true;
             selectedProduct = new Product();
-
         }
     }
 

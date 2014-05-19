@@ -1,6 +1,8 @@
 package sepm.dsa.service;
 
 import sepm.dsa.model.Product;
+import sepm.dsa.model.ProductCategory;
+import sepm.dsa.model.Region;
 
 import java.util.List;
 
@@ -37,4 +39,8 @@ public interface ProductService {
      * @return all entries, might be an empty list (not null)
      */
     List<Product> getAll();
+
+    List<Region> getAllRegions(int productId);
+
+    List<ProductCategory> getAllCategories(int productId);
 }

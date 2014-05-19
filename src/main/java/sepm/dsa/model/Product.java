@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "products")
+@Table(name = "Product")
 public class Product implements Serializable {
     private static final long serialVersionUID = 5890354733231481712L;
 
     @Id
     @GeneratedValue
     @Column(nullable = false, unique = true)
-    private Integer id;
+    private Integer productID;
 
     @NotBlank
     @Size(max = 60, min = 1)
@@ -48,20 +48,24 @@ public class Product implements Serializable {
     @Column(nullable = false)
     private Boolean quality;
 
+    //@ManyToMany(mappedBy="products")//, cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(mappedBy="products", cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "product_categories", joinColumns = { @JoinColumn(name = "productId") }, inverseJoinColumns = { @JoinColumn(name = "categoryId") })
     private List<ProductCategory> categories;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(mappedBy="products", cascade = CascadeType.ALL)
+    //@ManyToMany(mappedBy="products")//, cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "product_regions", joinColumns = { @JoinColumn(name = "productId") }, inverseJoinColumns = { @JoinColumn(name = "categoryId") })
     private List<Region> productionRegions;
 
     public Integer getId() {
-        return id;
+        return productID;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(Integer productID) {
+        this.productID = productID;
     }
 
     public String getName() {
