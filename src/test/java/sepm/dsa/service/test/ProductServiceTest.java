@@ -132,10 +132,9 @@ public class ProductServiceTest {
     {
         System.out.println(productService.getAll().toString());
         int size = productService.getAll().size();
-        Product p = productService.get(0);
+        Product p = productService.get(1);
         productService.remove(p);
-        assertTrue(size == productService.getAll().size());
-
+        assertTrue(size-1 == productService.getAll().size());
     }
 
     @Test
@@ -144,12 +143,12 @@ public class ProductServiceTest {
     {
         System.out.println(productService.getAll().toString());
         int size = productService.getAll().size();
-        Product p = productService.get(0);
+        Product p = productService.get(1);
         p.setName("testerUpdate");
         p.setComment("testerComment");
         productService.update(p);
         assertTrue(size == productService.getAll().size());
-        Product updateProduct = productService.get(0);
+        Product updateProduct = productService.get(1);
         assertEquals(p,updateProduct);
     }
 }
