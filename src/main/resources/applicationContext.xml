@@ -148,10 +148,12 @@
         <property name="locationService" ref="locationService"/>
         <property name="regionService" ref="regionService"/>
     </bean>
-    <bean id="productListController" class="sepm.dsa.gui.ProductListController">
+    <bean id="ProductListController" class="sepm.dsa.gui.ProductListController">
+        <property name="loader" ref="loader"/>
         <property name="productService" ref="productService"/>
     </bean>
     <bean id="editProductController" class="sepm.dsa.gui.EditProductController">
+        <property name="loader" ref="loader"/>
         <property name="productService" ref="productService"/>
         <property name="productCategoryService" ref="productCategoryService"/>
         <property name="productUnitService" ref="productUnitService"/>

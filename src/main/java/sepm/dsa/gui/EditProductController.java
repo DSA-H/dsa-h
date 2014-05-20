@@ -30,6 +30,7 @@ import java.util.Set;
 public class EditProductController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(EditProductController.class);
+    private SpringFxmlLoader loader = new SpringFxmlLoader();
 
     private static Product selectedProduct;
     private boolean isNewProduct;
@@ -128,7 +129,6 @@ public class EditProductController implements Initializable {
         log.debug("CancelButtonPressed");
         Stage stage = (Stage) text_name.getScene().getWindow();
         Parent scene = null;
-        SpringFxmlLoader loader = new SpringFxmlLoader();
 
         scene = (Parent) loader.load("/gui/productslist.fxml");
 
@@ -167,7 +167,6 @@ public class EditProductController implements Initializable {
         // return to productslist
         Stage stage = (Stage) text_name.getScene().getWindow();
         Parent scene = null;
-        SpringFxmlLoader loader = new SpringFxmlLoader();
 
         scene = (Parent) loader.load("/gui/productslist.fxml");
         stage.setScene(new Scene(scene, 600, 438));
@@ -259,4 +258,7 @@ public void setProductUnitService(ProductUnitService productUnitService) {
         this.regionService = regionService;
     }
 
+    public void setLoader(SpringFxmlLoader loader) {
+        this.loader = loader;
+    }
 }

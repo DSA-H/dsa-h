@@ -20,10 +20,11 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Product;
 import sepm.dsa.service.ProductService;
 
-@Service("RegionListController")
+@Service("ProductListController")
 public class ProductListController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(ProductListController.class);
+    SpringFxmlLoader loader = new SpringFxmlLoader();
 
     private ProductService productService;
 
@@ -52,7 +53,7 @@ public class ProductListController implements Initializable {
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialise ProductListController");
+        log.debug("initialize ProductListController");
         // init table
 
         tablecolumn_product.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -70,15 +71,14 @@ public class ProductListController implements Initializable {
 
     @FXML
     private void onCreateButtonPressed() {
-        log.debug("onCreateButtonPressed - open Product-List Window");
-        Stage stage = (Stage) button_create.getScene().getWindow();
-        Parent scene = null;
-        EditProductController.setProduct(null);
+        log.debug("onCreateClicked - open Waren Window");
 
-        SpringFxmlLoader loader = new SpringFxmlLoader();
-        scene = (Parent) loader.load("/gui/editproduct.fxml");
+        Stage stage = (Stage) tableview_product.getScene().getWindow();
+        Parent scene = (Parent) loader.load("/gui/editproduct.fxml");
 
-        stage.setTitle("Waren-Details");
+        //scene = (Parent) loader.load("/gui/editproduct.fxml");
+
+        stage.setTitle("Waren");
         stage.setScene(new Scene(scene, 600, 438));
         stage.setResizable(false);
         stage.show();
@@ -86,20 +86,17 @@ public class ProductListController implements Initializable {
 
     @FXML
     private void onEditButtonPressed() {
-        log.debug("onEditButtonPressed - open Product-List Window");
-        Stage stage = (Stage) button_create.getScene().getWindow();
-        Parent scene = null;
+        log.debug("onWarenClicked - open Waren Window");
+        Stage stage = (Stage) tableview_product.getScene().getWindow();
+        Parent scene = (Parent) loader.load("/gui/editproduct.fxml");
         EditProductController.setProduct(tableview_product.getSelectionModel().getSelectedItem());
         //EditProductController.setProduct(tableview_product.getFocusModel().getFocusedItem());
-
-        SpringFxmlLoader loader = new SpringFxmlLoader();
         scene = (Parent) loader.load("/gui/editproduct.fxml");
 
-        stage.setTitle("Waren-Details");
+        stage.setTitle("Waren");
         stage.setScene(new Scene(scene, 600, 438));
         stage.setResizable(false);
         stage.show();
-
     }
 
     @FXML
@@ -141,5 +138,9 @@ public class ProductListController implements Initializable {
     */
     public void setProductService(ProductService productService) {
         this.productService = productService;
+    }
+
+    public void setLoader(SpringFxmlLoader loader) {
+        this.loader = loader;
     }
 }
