@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.RegionDao;
 import sepm.dsa.model.*;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import sepm.dsa.service.ProductCategoryService;
@@ -70,7 +71,7 @@ public class ProductServiceTest {
         productService.add(p);
         assertTrue (productService.getAll().size()-1 == size);
         Product newP = productService.get(p.getId());
-        assertTrue(p.equals(newP));
+        assertEquals(p,newP);
     }
 
     @Test
@@ -91,10 +92,10 @@ public class ProductServiceTest {
         productService.add(p);
         assertTrue (productService.getAll().size()-1 == size);
         Product newP = productService.get(p.getId());
-        assertTrue(p.equals(newP));
+        assertEquals(p,newP);
         Set<Region> l1 = newP.getRegions();
         Set<Region> l2 = p.getRegions();
-        assertTrue(l1.equals(l2));
+        assertEquals(l1,l2);
     }
 
     @Test
@@ -121,7 +122,34 @@ public class ProductServiceTest {
         productService.add(p);
         assertTrue (productService.getAll().size()-1 == size);
         Product newP = productService.get(p.getId());
-        assertTrue(p.equals(newP));
-        assertTrue(p.getCategories().equals(newP.getCategories()));
+        assertEquals(p, newP);
+        assertEquals(p.getCategories(),newP.getCategories());
+    }
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void testRemove()
+    {
+        System.out.println(productService.getAll().toString());
+        int size = productService.getAll().size();
+        Product p = productService.get(0);
+        productService.remove(p);
+        assertTrue(size == productService.getAll().size());
+
+    }
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void testUpdate()
+    {
+        System.out.println(productService.getAll().toString());
+        int size = productService.getAll().size();
+        Product p = productService.get(0);
+        p.setName("testerUpdate");
+        p.setComment("testerComment");
+        productService.update(p);
+        assertTrue(size == productService.getAll().size());
+        Product updateProduct = productService.get(0);
+        assertEquals(p,updateProduct);
     }
 }
