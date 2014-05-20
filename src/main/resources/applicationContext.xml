@@ -32,6 +32,7 @@
                 <value>sepm/dsa/model/hibernate/Region.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/RegionBorder.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Location.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/LocationConnection.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -59,6 +60,9 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="locationConnectionDao" class="sepm.dsa.dao.LocationConnectionDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
@@ -72,6 +76,10 @@
 
     <bean id="locationService" class="sepm.dsa.service.LocationServiceImpl">
         <property name="locationDao" ref="locationDao"/>
+    </bean>
+
+    <bean id="locationConnectionService" class="sepm.dsa.service.LocationConnectionServiceImpl">
+        <property name="locationConnectionDao" ref="locationConnectionDao"/>
     </bean>
 
     <!-- GUI DI -->
@@ -95,6 +103,7 @@
     <bean id="EditLocationController" class="sepm.dsa.gui.EditLocationController">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
+        <property name="locationConnectionService" ref="locationConnectionService"/>
         <property name="regionService" ref="regionService"/>
     </bean>
 

@@ -52,6 +52,15 @@ public class LocationConnection implements Serializable {
         this.comment = comment;
     }
 
+    public Location connectedTo(Location l) {
+        if (l.equals(pk.location1)) {
+            return pk.location2;
+        } else if (l.equals(pk.location2)) {
+            return pk.location1;
+        }
+        return null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -91,12 +100,14 @@ public class LocationConnection implements Serializable {
 
         @NotNull
         @ManyToOne
-        @JoinColumn(nullable = false, insertable=false, updatable=false)
+//        @JoinColumn(nullable = false, insertable=false, updatable=false)
+//        @JoinColumn(name = "location1_fk", nullable = false, insertable=false, updatable=false)
+        @JoinColumn(nullable = false)
         private Location location1;
 
         @NotNull
         @ManyToOne
-        @JoinColumn(nullable = false, insertable=false, updatable=false)
+        @JoinColumn(nullable = false)
         private Location location2;
 
         public Pk() {}

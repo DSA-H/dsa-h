@@ -11,12 +11,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
+import sepm.dsa.service.LocationConnectionService;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionService;
 
@@ -31,6 +34,7 @@ public class EditLocationController implements Initializable {
 
     private static Location selectedLocation;
 
+    private LocationConnectionService locationConnectionService;
     private LocationService locationService;
     private RegionService regionService;
     // true if the location is not editing
@@ -229,20 +233,22 @@ public class EditLocationController implements Initializable {
             throw new DSAValidationException("Höhe muss eine Zahl sein.");
         }
 
-        Set<LocationConnection> conn1 = new HashSet<>(locationConnectionsTable.getItems().size());
-        Set<LocationConnection> conn2 = new HashSet<>(locationConnectionsTable.getItems().size());
-        for (LocationConnection con : locationConnectionsTable.getItems()) {
-            if (con.getLocation1().equals(selectedLocation)) {
-                conn1.add(con);
-                log.info("location1: " + con);
-            } else {
-                conn2.add(con);
-                log.info("location2: " + con);
-            }
-        }
-
-        selectedLocation.getConnections1().clear();
-        selectedLocation.getConnections2().clear();
+//        Set<LocationConnection> conn1 = new HashSet<>(locationConnectionsTable.getItems().size());
+//        Set<LocationConnection> conn2 = new HashSet<>(locationConnectionsTable.getItems().size());
+//        for (LocationConnection con : locationConnectionsTable.getItems()) {
+//            if (con.getLocation1().equals(selectedLocation)) {
+//                conn1.add(con);
+//                log.info("location1: " + con);
+//            } else {
+//                conn2.add(con);
+//                log.info("location2: " + con);
+//            }
+//        }
+//
+//        selectedLocation.getConnections1().clear();
+//        selectedLocation.getConnections2().clear();
+//        selectedLocation.getConnections1().addAll(conn1);
+//        selectedLocation.getConnections1().addAll(conn2);
 
         log.info("connections now in selected Location");
         for (LocationConnection con : selectedLocation.getAllConnections()) {
@@ -256,10 +262,8 @@ public class EditLocationController implements Initializable {
             log.info("update location");
             locationService.update(selectedLocation);
         }
-        selectedLocation.getConnections1().addAll(conn1);
-        selectedLocation.getConnections1().addAll(conn2);
 
-        locationService.update(selectedLocation);
+//        locationService.update(selectedLocation);
 
         selectedLocation = locationService.get(selectedLocation.getId());
 
@@ -322,15 +326,31 @@ public class EditLocationController implements Initializable {
         }
         List<LocationConnection> suggestedConnections = locationService.suggestLocationConnectionsAround(selectedLocation, 100.0);
 
-        if (selectedLocation.getId() != null) {
-            Location reloaded = locationService.get(selectedLocation.getId());
-            if (reloaded != null) {
-                suggestedConnections.addAll(reloaded.getAllConnections());
+//        if (selectedLocation.getId() != null) {
+//            Location reloaded = locationService.get(selectedLocation.getId());
+//            if (reloaded != null) {
+//                suggestedConnections.addAll(reloaded.getAllConnections());
+//            }
+//        }
+//        ObservableList<LocationConnection> connections = FXCollections.observableArrayList(suggestedConnections);
+//        locationConnectionsTable.getItems().clear();
+//        locationConnectionsTable.setItems(connections);
+        ArrayList<String> errorMsgs = new ArrayList<>();
+        for (LocationConnection c : suggestedConnections) {
+            try {
+                locationConnectionService.add(c);
+                locationConnectionsTable.getItems().add(c);
+            } catch (DSARuntimeException ex) {
+                errorMsgs.add(ex.getMessage());
             }
         }
-        ObservableList<LocationConnection> connections = FXCollections.observableArrayList(suggestedConnections);
-        locationConnectionsTable.getItems().clear();
-        locationConnectionsTable.setItems(connections);
+        if (errorMsgs.size() > 0) {
+            Dialogs.create()
+                    .title(errorMsgs.size() + " Verbindungen konnten nicht hinzugefügt werden.")
+                    .masthead(null)
+                    .message(errorMsgs.toString())
+                    .showWarning();
+        }
 
     }
 
@@ -342,8 +362,17 @@ public class EditLocationController implements Initializable {
     @FXML
     public void onRemoveConnectionBtnClicked() {
         LocationConnection selected = locationConnectionsTable.getSelectionModel().getSelectedItem();
+        locationConnectionService.remove(selected);
         locationConnectionsTable.getItems().remove(selected);
     }
 
+    public void setLocationConnectionService(LocationConnectionService locationConnectionService) {
+        this.locationConnectionService = locationConnectionService;
+    }
+
+
+//    private void removeConnection(LocationConnection connection) {
+//        selectedLocation.removeConnection(connection);
+//    }
 
 }

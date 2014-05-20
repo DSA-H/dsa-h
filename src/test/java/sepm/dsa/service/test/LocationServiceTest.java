@@ -145,17 +145,17 @@ public class LocationServiceTest extends TestCase {
         }
     }
 
-    @Test
-    @DatabaseSetup("/testData.xml")
-    public void update_removesConnections() throws Exception {
-        Location location = locationService.get(4);
-        assertEquals(2, location.getConnections1().size());
-        assertEquals(1, location.getConnections2().size());
-        location.getConnections1().clear();
-        locationService.update(location);
-        Location newLocation = locationService.get(location.getId());
-        assertEquals(0, newLocation.getConnections1().size());
-        assertEquals(1, newLocation.getConnections2().size());
-
-    }
+//    @Test
+//    @DatabaseSetup("/testData.xml")
+//    public void update_removesConnections() throws Exception {
+//        Location location = locationService.get(4);
+//        assertEquals(2, location.getConnections1().size());
+//        assertEquals(1, location.getConnections2().size());
+//        location.getConnections1().clear();
+//        locationService.update(location);
+//        Location newLocation = locationService.get(location.getId());
+//        assertEquals(0, newLocation.getConnections1().size());
+//        assertEquals(1, newLocation.getConnections2().size());
+//
+//    }
 }
