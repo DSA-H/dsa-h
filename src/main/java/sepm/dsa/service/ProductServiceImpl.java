@@ -9,8 +9,6 @@ import sepm.dsa.dao.ProductDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
-import sepm.dsa.model.Region;
-import sepm.dsa.model.ProductCategory;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -74,7 +72,9 @@ public class ProductServiceImpl implements ProductService, Serializable {
     public Set<Product> getAllFromProductcategory(ProductCategory productCategory) {
         log.debug("calling getAllFromProductcategory");
         Set<Product> result = productCategory.getProducts(); // todo das ist falsch! hier sollten auch alle produkte aus subkategorien geladen werden
+//        traderDao.getAllByCategory(traderCategory);
         log.trace("returning " + result);
+//        Set<Product> result = productDao.getAllByCategories(productCategory.getChilds());
         return result;
     }
 
