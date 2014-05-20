@@ -57,7 +57,8 @@ public class ProductServiceImpl implements ProductService, Serializable {
     @Transactional(readOnly = false)
     public void remove(Product p) {
         log.debug("calling remove(" + p + ")");
-        productDao.remove(get(p.getId()));
+        //productDao.remove(get(p.getId()));
+        productDao.remove(p);
     }
 
     @Override

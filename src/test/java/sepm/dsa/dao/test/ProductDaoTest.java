@@ -16,6 +16,7 @@ import sepm.dsa.dao.ProductDao;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.*;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -48,6 +49,22 @@ public class ProductDaoTest {
 
         Product persistedproduct = productDao.get(product.getId());
         assertTrue(persistedproduct != null);
+    }
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void testGetProduct() {
+        Product p = productDao.get(2);
+        assertEquals(new Integer(2), p.getId());
+    }
+
+    @Test(expected = org.hibernate.PropertyValueException.class)
+    public void add_incompleteRegion_shouldNOTPersistEntity() {
+
+        Product product = new Product();
+        productDao.add(product);
+        Product persistedProduct = productDao.get(product.getId());
+        assertTrue(persistedProduct == null);
     }
 
 }
