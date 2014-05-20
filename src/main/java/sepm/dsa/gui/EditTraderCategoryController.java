@@ -70,6 +70,8 @@ public class EditTraderCategoryController implements Initializable {
         p2.setName("kjk");
         productCategories.add(p1);
         productCategories.add(p2);
+        productCategoryService.add(p1);
+        productCategoryService.add(p2);
 
         // end mock ############
 

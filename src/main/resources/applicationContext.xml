@@ -163,6 +163,7 @@
     </bean>
 
     <bean id="editTraderCategory" class="sepm.dsa.gui.EditTraderCategoryController">
+        <property name="loader" ref="loader"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
         <property name="productCategoryService" ref="productCategoryService"/>
     </bean>
