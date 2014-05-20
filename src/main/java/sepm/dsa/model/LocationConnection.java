@@ -91,12 +91,12 @@ public class LocationConnection implements Serializable {
 
         @NotNull
         @ManyToOne
-        @JoinColumn(nullable = false)
+        @JoinColumn(nullable = false, insertable=false, updatable=false)
         private Location location1;
 
         @NotNull
         @ManyToOne
-        @JoinColumn(nullable = false)
+        @JoinColumn(nullable = false, insertable=false, updatable=false)
         private Location location2;
 
         public Pk() {}

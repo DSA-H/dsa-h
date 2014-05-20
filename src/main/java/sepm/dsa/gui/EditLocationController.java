@@ -131,6 +131,9 @@ public class EditLocationController implements Initializable {
                         if (!empty) {
                             if (item != null) {
                                 setText(item.getName());
+                                if (selectedLocation.equals(item)) {
+                                    //
+                                }
                             } else {
                                 setText("<null>");
                             }
@@ -307,6 +310,16 @@ public class EditLocationController implements Initializable {
 
     @FXML
     public void onSuggestConnectionsBtnClicked() {
+        try {
+            selectedLocation.setxCoord(Integer.parseInt(xCoord.getText()));
+        } catch (NumberFormatException e) {
+            throw new DSAValidationException("xCoord muss eine Zahl sein.");
+        }
+        try {
+            selectedLocation.setyCoord(Integer.parseInt(yCoord.getText()));
+        } catch (NumberFormatException e) {
+            throw new DSAValidationException("yCoord muss eine Zahl sein.");
+        }
         List<LocationConnection> suggestedConnections = locationService.suggestLocationConnectionsAround(selectedLocation, 100.0);
 
         if (selectedLocation.getId() != null) {
