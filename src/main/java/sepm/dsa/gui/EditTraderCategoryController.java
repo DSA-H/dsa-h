@@ -63,22 +63,10 @@ public class EditTraderCategoryController implements Initializable {
         log.debug("initialize EditRegionController");
 
         // init ChoiceBoxes
-        List<ProductCategory> productCategories = new ArrayList<>();
-        productCategories = productCategoryService.getAll();
-
-        //Try on mock ############
-  /*      ProductCategory p1 = new ProductCategory();
-        p1.setName("ProductaCategory 1");
-        ProductCategory p2 = new ProductCategory();
-        p2.setName("ProductaCategory 2");
-        productCategories.add(p1);
-        productCategories.add(p2);
-        productCategoryService.add(p1);
-        productCategoryService.add(p2);*/
-        // end mock ############
-
+        List<ProductCategory> productCategories = productCategoryService.getAll();
         assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("productCategory"));
         defaultOccurenceColumn.setCellValueFactory(new PropertyValueFactory<>("defaultOccurence"));
+
 
         // set values if editing
         if (traderCategory != null) {
@@ -137,6 +125,7 @@ public class EditTraderCategoryController implements Initializable {
             //do nothing just use the 100 as default
         }
         assortToSave.setDefaultOccurence(defaultOcc);
+        assortmentNatureService.validate(assortToSave);
         assortmentTable.getItems().add(assortToSave);
 
         productCategoryChoiceBox.getItems().remove(selectedProductCategory);

@@ -1,6 +1,8 @@
 package sepm.dsa.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -18,7 +20,7 @@ public class AssortmentNature implements Serializable {
     @ManyToOne
     private ProductCategory productCategory;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false, name = "assortments")
     private TraderCategory traderCategory;
 
@@ -47,7 +49,8 @@ public class AssortmentNature implements Serializable {
     }
 
     @NotNull
-    @Size(min = 1, max = 100)
+    @Min(value = 1)
+    @Max(value = 100)
     @Column(nullable = false)
     private Integer defaultOccurence;
 

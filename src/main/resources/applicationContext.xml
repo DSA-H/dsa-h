@@ -78,6 +78,7 @@
 
     <bean id="traderCategoryDao" class="sepm.dsa.dao.TraderCategoryDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="traderDao" ref="traderDao"/>
     </bean>
 
     <bean id="locationDao" class="sepm.dsa.dao.LocationDaoImpl">

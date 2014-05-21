@@ -36,7 +36,7 @@ public class AssortmentNatureServiceImpl implements AssortmentNatureService {
 
     @Override
     @Transactional(readOnly = false)
-    public void add(HashSet<AssortmentNature> assortmentNature) {
+    public void add(Set<AssortmentNature> assortmentNature) {
         for (AssortmentNature an : assortmentNature) {
             add(an);
         }
@@ -79,7 +79,7 @@ public class AssortmentNatureServiceImpl implements AssortmentNatureService {
      * @param assortmentNature must not be null
      * @throws sepm.dsa.exceptions.DSAValidationException if assortmentNature is not valid
      */
-    private void validate(AssortmentNature assortmentNature) throws DSAValidationException {
+    public void validate(AssortmentNature assortmentNature) throws DSAValidationException {
         Set<ConstraintViolation<AssortmentNature>> violations = validator.validate(assortmentNature);
         if (violations.size() > 0) {
             throw new DSAValidationException("Assortment Nature ist nicht valide.", violations);

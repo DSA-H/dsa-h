@@ -12,6 +12,7 @@ import sepm.dsa.model.Location;
 import sepm.dsa.model.Trader;
 import sepm.dsa.model.TraderCategory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -80,7 +81,7 @@ public class TraderDaoHbmImpl implements TraderDao {
                 .setParameter("category", category)
                 .list();
 
-        List<Trader> result = new Vector<>(list.size());
+        List<Trader> result = new ArrayList<>(list.size());
         for (Object o : list) {
             result.add((Trader) o);
         }
