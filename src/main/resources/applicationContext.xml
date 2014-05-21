@@ -79,6 +79,9 @@
         <property name="locationDao" ref="locationDao"/>
     </bean>
 
+    <bean id="tavernService" class="sepm.dsa.service.TavernServiceImpl">
+    </bean>
+
     <!-- GUI DI -->
     <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController">
 	<property name="loader" ref="loader"/>
