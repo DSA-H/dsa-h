@@ -1,5 +1,6 @@
 package sepm.dsa.service;
 
+import org.apache.commons.collections.IteratorUtils;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.TraderDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
+import sepm.dsa.service.path.NoPathException;
 import sepm.dsa.service.path.PathService;
 
 import javax.validation.ConstraintViolation;
@@ -20,7 +22,9 @@ public class TraderServiceImpl implements TraderService {
 
 	private TraderDao traderDao;
 	private ProductService productService;
-	private PathService pathService;
+	private PathService<RegionBorder> pathService;
+	private RegionService regionService;
+	private RegionBorderService regionBorderService;
 
 	@Override
 	public Trader get(int id) {
@@ -74,6 +78,7 @@ public class TraderServiceImpl implements TraderService {
 	 * @return a new calculated list of offers this trader at this position has.
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<Offer> calculateOffers(Trader trader) {
 	log.debug("calling calculateOffers()");
 		List<Product> weightProducts = new ArrayList<>();
@@ -91,9 +96,10 @@ public class TraderServiceImpl implements TraderService {
 				}
 				// calculate weight for a product
 				float weight = 1f;
-				List<RegionBorder> borders = getCheapestWayBordersBetween(product.getRegions(), trader.getLocation().getRegion());
-				// no connection
-				if(borders == null) {
+				List<RegionBorder> borders;
+				try {
+					borders = getCheapestWayBordersBetween(product.getRegions(), trader.getLocation().getRegion());
+				} catch (NoPathException e) {
 					break;
 				}
 				// bordercosts
@@ -120,9 +126,9 @@ public class TraderServiceImpl implements TraderService {
 				// random picked found
 				if(random < weight) {
 					if(productAmmountMap.containsKey(weightProducts.get(j))) {
-						int ammount = productAmmountMap.get(productAmmountMap);
-						ammount++;
-						productAmmountMap.put(weightProducts.get(j), ammount);
+						int amount = productAmmountMap.get(productAmmountMap);
+						amount++;
+						productAmmountMap.put(weightProducts.get(j), amount);
 					}else {
 						productAmmountMap.put(weightProducts.get(j), 1);
 					}
@@ -182,12 +188,15 @@ public class TraderServiceImpl implements TraderService {
 	 * @return the price or -1
 	 */
 	public int calculatePriceForProduct(Product product, Trader trader) {
+		List<RegionBorder> borders;
 		int price = product.getCost();
-		List<RegionBorder> borders = getCheapestWayBordersBetween(product.getRegions(), trader.getLocation().getRegion());
-		// no connection
-		if(borders == null) {
+
+		try {
+			borders = getCheapestWayBordersBetween(product.getRegions(), trader.getLocation().getRegion());
+		} catch (NoPathException e) {
 			throw new DSAValidationException("Preis nicht berechenbar, da keine Verbindung zwischen Produktionsgebieten und Händlergebiet besteht.");
 		}
+
 		for(RegionBorder border : borders) {
 			price += product.getCost()*
 					(border.getBorderCost()/100f)
@@ -197,9 +206,13 @@ public class TraderServiceImpl implements TraderService {
 		return price;
 	}
 
-	private List<RegionBorder> getCheapestWayBordersBetween(Set<Region> productionRegion, Region tradeRegion) {
-	   // todo: implement
-	   return null;
+	private List<RegionBorder> getCheapestWayBordersBetween(Set<Region> productionRegions, Region tradeRegion) throws NoPathException{
+		List<RegionBorder> allBorders = regionBorderService.getAll();
+		List<Region> allRegions = regionService.getAll();
+
+		List<Region> destinationRegions = (List<Region>) IteratorUtils.toList(productionRegions.iterator());
+
+		return pathService.findShortestPath(allRegions, allBorders, tradeRegion, destinationRegions);
 	}
 
 
@@ -213,6 +226,14 @@ public class TraderServiceImpl implements TraderService {
 
 	public void setPathService(PathService pathService) {
 		this.pathService = pathService;
+	}
+
+	public void setRegionService(RegionService regionService) {
+		this.regionService = regionService;
+	}
+
+	public void setRegionBorderService(RegionBorderService regionBorderService) {
+		this.regionBorderService = regionBorderService;
 	}
 
 	/**
