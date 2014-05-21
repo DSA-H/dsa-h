@@ -20,8 +20,7 @@ import java.util.*;
 /**
  * Created by Jotschi on 19.05.2014.
  */
-public class TraderServiceImpl implements TraderService, Serializable {
-    private static final long serialVersionUID = -3972024123454778934L;
+public class TraderServiceImpl implements TraderService {
     private static final Logger log = LoggerFactory.getLogger(TraderServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 

@@ -23,8 +23,7 @@ import java.util.Set;
  */
 @Service("ProductUnitService")
 @Transactional(readOnly = true)
-public class ProductUnitServiceImpl implements ProductUnitService, Serializable {
-    private static final long serialVersionUID = 7415861483489569621L;
+public class ProductUnitServiceImpl implements ProductUnitService {
     private static final Logger log = LoggerFactory.getLogger(RegionServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
     private ProductUnitDao productUnitDao;

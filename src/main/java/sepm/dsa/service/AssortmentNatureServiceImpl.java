@@ -19,10 +19,9 @@ import java.util.Set;
 
 @Service("AssortmentNatureService")
 @Transactional(readOnly = true)
-public class AssortmentNatureServiceImpl implements AssortmentNatureService, Serializable {
+public class AssortmentNatureServiceImpl implements AssortmentNatureService {
 
     private static final Logger log = LoggerFactory.getLogger(AssortmentNatureServiceImpl.class);
-    private static final long serialVersionUID = 3588022811927307892L;
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private AssortmentNatureDao assortmentNatureDao;
