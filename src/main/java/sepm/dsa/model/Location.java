@@ -1,6 +1,7 @@
 package sepm.dsa.model;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -64,12 +65,16 @@ public class Location implements Serializable {
 //    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.location1", cascade = CascadeType.ALL, orphanRemoval = true)
 //    @OneToMany
 //    @JoinColumn(name = "location1_fk")
+//    @OneToMany(mappedBy = "pk.location1")
+//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.location1", cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToMany(mappedBy = "pk.location1")
     private Set<LocationConnection> connections1 = new HashSet<>();
 
 //    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.location2", cascade = CascadeType.ALL, orphanRemoval = true)
 //    @OneToMany
 //    @JoinColumn(name = "location2_fk")
+//    @OneToMany(mappedBy = "pk.location2")
+//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.location2", cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToMany(mappedBy = "pk.location2")
     private Set<LocationConnection> connections2 = new HashSet<>();
 
@@ -188,9 +193,9 @@ public class Location implements Serializable {
         this.region = region;
     }
 
-//    public Set<LocationConnection> getConnections1() {
-//        return connections1;
-//    }
+    public Set<LocationConnection> getConnections1() {
+        return connections1;
+    }
 //
 //    /**
 //     *
@@ -201,9 +206,9 @@ public class Location implements Serializable {
 //        this.connections1 = connections1;
 //    }
 //
-//    public Set<LocationConnection> getConnections2() {
-//        return connections2;
-//    }
+    public Set<LocationConnection> getConnections2() {
+        return connections2;
+    }
 //
 //    /**
 //     * @param connections2 must not be null

@@ -6,6 +6,10 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="connections")
+@AssociationOverrides({
+        @AssociationOverride(name = "pk.location1", joinColumns = @JoinColumn(name = "location1")),
+        @AssociationOverride(name = "pk.location2", joinColumns = @JoinColumn(name = "location2"))
+})
 public class LocationConnection implements Serializable {
 
     private static final long serialVersionUID = 5915927914933432772L;
@@ -92,22 +96,22 @@ public class LocationConnection implements Serializable {
     }
 
     @Embeddable
-    private static class Pk implements Serializable {
+    protected static class Pk implements Serializable {
 
         private static final long serialVersionUID = 5989205421915335466L;
 
         // TODO BeanValidation for location1 != location2
 
-        @NotNull
-        @ManyToOne
 //        @JoinColumn(nullable = false, insertable=false, updatable=false)
 //        @JoinColumn(name = "location1_fk", nullable = false, insertable=false, updatable=false)
-        @JoinColumn(nullable = false)
+        @NotNull
+        @ManyToOne
+        @JoinColumn(name="location1", nullable = false)
         private Location location1;
 
         @NotNull
         @ManyToOne
-        @JoinColumn(nullable = false)
+        @JoinColumn(name="location2", nullable = false)
         private Location location2;
 
         public Pk() {}

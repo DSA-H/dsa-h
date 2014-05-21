@@ -38,6 +38,12 @@ public interface LocationConnectionService {
      */
     LocationConnection get(Location location1, Location location2);
 
+//    /**
+//     * Gets all {@code LocationConnection}s
+//     * @return
+//     */
+//    LocationConnection getAll();
+
     /**
      * Gets an ordered list being the shortest path of {@code LocationConnection}s between two locations
      *

@@ -16,7 +16,7 @@ import java.util.Vector;
 @Transactional(readOnly = true)
 public class LocationConnectionDaoHbmImpl implements LocationConnectionDao {
 
-    private static final Logger log = LoggerFactory.getLogger(LocationDaoImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(LocationConnectionDaoHbmImpl.class);
 
     private SessionFactory sessionFactory;
 
@@ -25,6 +25,9 @@ public class LocationConnectionDaoHbmImpl implements LocationConnectionDao {
     public void add(LocationConnection locationConnection) {
         log.debug("calling add(" + locationConnection + ")");
         sessionFactory.getCurrentSession().save(locationConnection);
+        sessionFactory.getCurrentSession().flush();
+//        sessionFactory.getCurrentSession().refresh(locationConnection.getLocation1());
+//        sessionFactory.getCurrentSession().refresh(locationConnection.getLocation2());
     }
 
     @Transactional(readOnly = false)
@@ -32,6 +35,9 @@ public class LocationConnectionDaoHbmImpl implements LocationConnectionDao {
     public void update(LocationConnection locationConnection) {
         log.debug("calling update(" + locationConnection + ")");
         sessionFactory.getCurrentSession().update(locationConnection);
+        sessionFactory.getCurrentSession().flush();
+//        sessionFactory.getCurrentSession().refresh(locationConnection.getLocation1());
+//        sessionFactory.getCurrentSession().refresh(locationConnection.getLocation2());
     }
 
     @Transactional(readOnly = false)
@@ -39,6 +45,9 @@ public class LocationConnectionDaoHbmImpl implements LocationConnectionDao {
     public void remove(LocationConnection locationConnection) {
         log.debug("calling delete(" + locationConnection + ")");
         sessionFactory.getCurrentSession().delete(locationConnection);
+        sessionFactory.getCurrentSession().flush();
+//        sessionFactory.getCurrentSession().refresh(locationConnection.getLocation1());
+//        sessionFactory.getCurrentSession().refresh(locationConnection.getLocation2()); // imperformant ?
     }
 
     @Override
