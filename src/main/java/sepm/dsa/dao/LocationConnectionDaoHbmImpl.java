@@ -26,18 +26,14 @@ public class LocationConnectionDaoHbmImpl implements LocationConnectionDao {
         log.debug("calling add(" + locationConnection + ")");
         sessionFactory.getCurrentSession().save(locationConnection);
         sessionFactory.getCurrentSession().flush();
-//        sessionFactory.getCurrentSession().refresh(locationConnection.getLocation1());
-//        sessionFactory.getCurrentSession().refresh(locationConnection.getLocation2());
     }
 
     @Transactional(readOnly = false)
     @Override
     public void update(LocationConnection locationConnection) {
         log.debug("calling update(" + locationConnection + ")");
-        sessionFactory.getCurrentSession().update(locationConnection);
+        sessionFactory.getCurrentSession().merge(locationConnection);       // previously: update
         sessionFactory.getCurrentSession().flush();
-//        sessionFactory.getCurrentSession().refresh(locationConnection.getLocation1());
-//        sessionFactory.getCurrentSession().refresh(locationConnection.getLocation2());
     }
 
     @Transactional(readOnly = false)
@@ -46,8 +42,6 @@ public class LocationConnectionDaoHbmImpl implements LocationConnectionDao {
         log.debug("calling delete(" + locationConnection + ")");
         sessionFactory.getCurrentSession().delete(locationConnection);
         sessionFactory.getCurrentSession().flush();
-//        sessionFactory.getCurrentSession().refresh(locationConnection.getLocation1());
-//        sessionFactory.getCurrentSession().refresh(locationConnection.getLocation2()); // imperformant ?
     }
 
     @Override

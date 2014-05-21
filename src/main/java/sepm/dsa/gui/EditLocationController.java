@@ -296,6 +296,9 @@ public class EditLocationController implements Initializable {
     @FXML
     public void onEditConnectionsClicked() {
         log.debug("calling onEditConnectionsClicked");
+
+        saveLocation();
+
         EditLocationConnectionsController.setSelectedLocation(selectedLocation);
 
         Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();

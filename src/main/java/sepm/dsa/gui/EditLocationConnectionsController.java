@@ -21,6 +21,7 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
 import sepm.dsa.service.LocationConnectionService;
+import sepm.dsa.service.LocationService;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -36,8 +37,10 @@ public class EditLocationConnectionsController implements Initializable {
     private SpringFxmlLoader loader;
 
     private static Location selectedLocation;
+    private static List<LocationConnection> locationConnections;
 
     private LocationConnectionService locationConnectionService;
+    private LocationService locationService;
 
     @FXML
     private TableView<LocationConnection> locationConnectionsTable;
@@ -127,6 +130,17 @@ public class EditLocationConnectionsController implements Initializable {
     @FXML
     public void onEditConnectionClicked() {
         log.debug("calling onEditConnectionClicked()");
+
+        LocationConnection selected = locationConnectionsTable.getSelectionModel().getSelectedItem();
+//        selected = locationConnectionService.get(selected.getLocation1(), selected.getLocation2());
+        EditLocationConnectionController.setLocationConnection(selected);
+
+        Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
+        Parent root = (Parent) loader.load("/gui/editlocationconnection.fxml");
+
+        stage.setTitle("Reiseverbindung bearbeiten");
+        stage.setScene(new Scene(root, 500, 380));
+        stage.show();
     }
 
     @FXML
@@ -156,6 +170,8 @@ public class EditLocationConnectionsController implements Initializable {
     @FXML
     public void onFinishedClicked() {
         log.debug("calling onFinishedClicked()");
+
+//        selectedLocation = locationService.get(selectedLocation.getId());
         EditLocationController.setLocation(selectedLocation);
 
         Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
@@ -164,6 +180,14 @@ public class EditLocationConnectionsController implements Initializable {
         stage.setTitle("Ort erstellen");
         stage.setScene(new Scene(root, 900, 438));
         stage.show();
+    }
+
+    public void setLocationService(LocationService locationService) {
+        this.locationService = locationService;
+    }
+
+    public static void setLocationConnections(List<LocationConnection> locationConnections) {
+        EditLocationConnectionsController.locationConnections = locationConnections;
     }
 
 }

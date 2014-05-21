@@ -102,8 +102,6 @@ public class LocationConnection implements Serializable {
 
         // TODO BeanValidation for location1 != location2
 
-//        @JoinColumn(nullable = false, insertable=false, updatable=false)
-//        @JoinColumn(name = "location1_fk", nullable = false, insertable=false, updatable=false)
         @NotNull
         @ManyToOne
         @JoinColumn(name="location1", nullable = false)
@@ -115,22 +113,6 @@ public class LocationConnection implements Serializable {
         private Location location2;
 
         public Pk() {}
-
-//        public Location getLocation2() {
-//            return location2;
-//        }
-//
-//        public void setLocation2(Location location2) {
-//            this.location2 = location2;
-//        }
-//
-//        public Location getLocation1() {
-//            return location1;
-//        }
-//
-//        public void setLocation1(Location location1) {
-//            this.location1 = location1;
-//        }
 
         @Override
         public boolean equals(Object o) {

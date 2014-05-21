@@ -62,19 +62,9 @@ public class Location implements Serializable {
     @Column(nullable = true, length = 1000)
     private String comment;
 
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.location1", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @OneToMany
-//    @JoinColumn(name = "location1_fk")
-//    @OneToMany(mappedBy = "pk.location1")
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.location1", cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToMany(mappedBy = "pk.location1", fetch = FetchType.EAGER)
     private Set<LocationConnection> connections1 = new HashSet<>();
 
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.location2", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @OneToMany
-//    @JoinColumn(name = "location2_fk")
-//    @OneToMany(mappedBy = "pk.location2")
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.location2", cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToMany(mappedBy = "pk.location2", fetch = FetchType.EAGER)
     private Set<LocationConnection> connections2 = new HashSet<>();
 
@@ -124,19 +114,6 @@ public class Location implements Serializable {
             this.sizeId = size.getValue();
         }
     }
-
-//    public boolean containsConnection(LocationConnection connection) {
-//
-//        if (connection.getLocation1().getId().equals(this.getId()))
-//
-//        if (connections1.contains(connection)) {
-//            return true;
-//        }
-//        if (connections2.contains(connection)) {
-//            return true;
-//        }
-//        return false;
-//    }
 
     public String getPlanFileName() {
         return planFileName;
@@ -193,86 +170,12 @@ public class Location implements Serializable {
         this.region = region;
     }
 
-    public Set<LocationConnection> getConnections1() {
-        return connections1;
-    }
-//
-//    /**
-//     *
-//     * @param connections1 must not be null
-//     */
-//    public void setConnections1(Set<LocationConnection> connections1) {
-////        this.connections1 = new HashSet<>(connections1);
-//        this.connections1 = connections1;
-//    }
-//
-    public Set<LocationConnection> getConnections2() {
-        return connections2;
-    }
-//
-//    /**
-//     * @param connections2 must not be null
-//     */
-//    public void setConnections2(Set<LocationConnection> connections2) {
-////        this.connections2 = new HashSet<>(connections2);
-//        this.connections2 = connections2;
-//    }
-
     public Set<LocationConnection> getAllConnections() {
         Set<LocationConnection> result = new HashSet<>(connections1.size() + connections2.size());
         result.addAll(connections1);
         result.addAll(connections2);
         return result;
     }
-
-//    public LocationConnection addConnection(Location to, LocationConnection connection) {
-//        if (to != null) {
-//            if (this.id == null || this.id > to.getId()) { //
-//                connection.setLocation1(to);
-//                connection.setLocation2(this);
-//                if (connections2.add(connection)) {
-//                    return connection;
-//                }
-//            } else {
-//                connection.setLocation1(this);
-//                connection.setLocation2(to);
-//                if (connections1.add(connection)) {
-//                    return connection;
-//                }
-//            }
-//        } else {
-//            if (connections1.add(connection)) {
-//                return connection;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public LocationConnection removeConnection(Location to) {
-//        for (LocationConnection l : connections1) {
-//            if (equalsByPk(l.getLocation1()) || equalsByPk(l.getLocation2())) {
-//                connections1.remove(l);
-//                return l;
-//            }
-//        }
-//        for (LocationConnection l : connections2) {
-//            if (equalsByPk(l.getLocation1()) || equalsByPk(l.getLocation2())) {
-//                connections2.remove(l);
-//                return l;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public LocationConnection removeConnection(LocationConnection connection) {
-//        if (connections1.remove(connection)) {
-//            return connection;
-//        }
-//        if (connections2.remove(connection)) {
-//            return connection;
-//        }
-//        return null;
-//    }
 
     public boolean equalsByPk(Location location) {
         if (id == null || location.id == null) {

@@ -109,6 +109,11 @@
     <bean id="EditLocationConnectionsController" class="sepm.dsa.gui.EditLocationConnectionsController">
         <property name="loader" ref="loader"/>
         <property name="locationConnectionService" ref="locationConnectionService"/>
+        <property name="locationService" ref="locationService"/>
+    </bean>
+    <bean id="EditLocationConnectionController" class="sepm.dsa.gui.EditLocationConnectionController">
+        <property name="loader" ref="loader"/>
+        <property name="locationConnectionService" ref="locationConnectionService"/>
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
