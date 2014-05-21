@@ -89,10 +89,6 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="assortmentNatureDao" class="sepm.dsa.dao.AssortmentNatureDaoImpl">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
     <bean id="productUnitDao" class="sepm.dsa.dao.ProductUnitDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
@@ -132,7 +128,6 @@
     </bean>
 
     <bean id="assortmentNatureService" class="sepm.dsa.service.AssortmentNatureServiceImpl">
-        <property name="assortmentNatureDao" ref="assortmentNatureDao"/>
     </bean>
 
     <!-- GUI DI -->

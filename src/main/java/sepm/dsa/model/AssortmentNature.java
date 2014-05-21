@@ -21,7 +21,7 @@ public class AssortmentNature implements Serializable {
     private ProductCategory productCategory;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false, name = "assortments")
+    @JoinColumn(nullable = false)
     private TraderCategory traderCategory;
 
     @Override

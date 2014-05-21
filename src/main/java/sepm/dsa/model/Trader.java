@@ -55,7 +55,7 @@ public class Trader implements Serializable {
     @Column(nullable = false)
     private Integer convince;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private TraderCategory category;
 

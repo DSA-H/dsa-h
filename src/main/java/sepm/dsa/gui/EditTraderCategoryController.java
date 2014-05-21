@@ -67,7 +67,6 @@ public class EditTraderCategoryController implements Initializable {
         assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("productCategory"));
         defaultOccurenceColumn.setCellValueFactory(new PropertyValueFactory<>("defaultOccurence"));
 
-
         // set values if editing
         if (traderCategory != null) {
             isNewTraderCategory = false;
