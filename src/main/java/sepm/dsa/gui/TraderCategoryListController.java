@@ -68,7 +68,7 @@ public class TraderCategoryListController implements Initializable {
         log.debug("onEditButtonPressed - open Gebiet-Details Window");
 
         TraderCategory selectedTraderCategory = traderCategoryTable.getFocusModel().getFocusedItem();
-        ((EditTraderCategoryController) loader.getController()).setTraderCategory(selectedTraderCategory);
+        EditTraderCategoryController.setTraderCategory(selectedTraderCategory);
 
         Stage stage = (Stage) traderCategoryTable.getScene().getWindow();
         Parent root = (Parent) loader.load("/gui/edittradercategory.fxml");

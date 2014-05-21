@@ -84,6 +84,7 @@ public class EditTraderCategoryController implements Initializable {
             productCategories.remove(traderCategory.getAssortments());
 
             productCategoryChoiceBox.setItems(FXCollections.observableArrayList(productCategories));
+//            productCategoryChoiceBox.getSelectionModel().select(traderCategory.ge);
             assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("productCategory"));
             defaultOccurenceColumn.setCellValueFactory(new PropertyValueFactory<>("defaultOccurence"));
 
@@ -189,8 +190,8 @@ public class EditTraderCategoryController implements Initializable {
         HashSet<AssortmentNature> assortmentNatures = new HashSet<>(assortmentTable.getItems());
         traderCategory.setAssortments(assortmentNatures);
 
+        assortmentNatureService.add(assortmentNatures);
         if (isNewTraderCategory) {
-            assortmentNatureService.add(assortmentNatures);
             traderCategoryService.add(traderCategory);
         } else {
             traderCategoryService.update(traderCategory);
