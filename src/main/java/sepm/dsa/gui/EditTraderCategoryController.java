@@ -80,11 +80,14 @@ public class EditTraderCategoryController implements Initializable {
         // set values if editing
         if (traderCategory != null) {
             isNewTraderCategory = false;
+            removeAssortButton.setDisable(false);
             nameField.setText(traderCategory.getName());
-            productCategories.remove(traderCategory.getAssortments());
+            ArrayList<AssortmentNature> assortmentNaturesAlreadySelected = new ArrayList<>(traderCategory.getAssortments());
+            for (AssortmentNature as:assortmentNaturesAlreadySelected){
+                productCategories.remove(as.getProductCategory());
+            }
 
             productCategoryChoiceBox.setItems(FXCollections.observableArrayList(productCategories));
-//            productCategoryChoiceBox.getSelectionModel().select(traderCategory.ge);
             assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("productCategory"));
             defaultOccurenceColumn.setCellValueFactory(new PropertyValueFactory<>("defaultOccurence"));
 
@@ -188,6 +191,9 @@ public class EditTraderCategoryController implements Initializable {
 
         traderCategory.setName(name);
         HashSet<AssortmentNature> assortmentNatures = new HashSet<>(assortmentTable.getItems());
+        if (assortmentNatures.size()<= 0){
+            throw new DSAValidationException("Mindestens eine Warenkategorie muss gewählt werden");
+        }
         traderCategory.setAssortments(assortmentNatures);
 
         assortmentNatureService.add(assortmentNatures);
