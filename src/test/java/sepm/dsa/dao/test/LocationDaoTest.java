@@ -16,6 +16,7 @@ import sepm.dsa.dao.LocationDao;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.TownSize;
+import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionService;
 
 import java.util.List;
@@ -36,6 +37,9 @@ public class LocationDaoTest extends TestCase {
 
     @Autowired
     private LocationDao locationDao;
+
+    @Autowired
+    private LocationService locationService;
 
     @Autowired
     private RegionService regionService;
@@ -119,5 +123,46 @@ public class LocationDaoTest extends TestCase {
         assertTrue(locationsAround.size() == 0);
     }
 
+       @Test
+    @DatabaseSetup("/testData.xml")
+    public void getAllAroundNotConnected_NoConnectionsEqualsgetAllAround() throws Exception {
+        Location location = locationDao.get(8);
+        int sizeAll = locationDao.getAllAround(location, 50.0).size();
+        int sizeAllNotConnected = locationDao.getAllAroundNotConnected(location, 50.0).size();
+        assertEquals(sizeAll, sizeAllNotConnected);
+    }
 
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void getAllAroundNotConnected_ConnectedLocationsNotReturned() throws Exception {
+        Location location = locationDao.get(7);
+        int sizeAll = locationDao.getAllAround(location, 50.0).size();
+        int sizeAllNotConnected = locationDao.getAllAroundNotConnected(location, 50.0).size();
+        assertEquals(sizeAll - 1, sizeAllNotConnected);
+    }
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void getAllByNameNotConnectedTo_UnconnectedAndUnfilteredReturnsAll() throws Exception {
+        Location location = locationDao.get(8);
+        int sizeAll = locationDao.getAll().size();
+        int sizeAllNotConnected = locationDao.getAllByNameNotConnectedTo(location, "%").size();
+        assertEquals(sizeAll - 1, sizeAllNotConnected);
+    }
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void getAllByNameNotConnectedTo_UnconnectedAndFiltered() throws Exception {
+        Location location = locationDao.get(8);
+        int sizeAllNotConnected = locationDao.getAllByNameNotConnectedTo(location, "%_LoConTest%").size();
+        assertEquals(5, sizeAllNotConnected);
+    }
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void getAllByNameNotConnectedTo_ConnectedAndFiltered() throws Exception {
+        Location location = locationDao.get(7);
+        int sizeAllNotConnected = locationDao.getAllByNameNotConnectedTo(location, "%_LoConTest%").size();
+        assertEquals(4, sizeAllNotConnected);
+    }
 }

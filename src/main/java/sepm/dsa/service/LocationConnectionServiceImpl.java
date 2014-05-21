@@ -83,7 +83,7 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
     public List<LocationConnection> suggestLocationConnectionsByFilter(Location location, String filter) {
         log.debug("calling suggestLocationConnectionsByFilter(" + location + "," + filter + ")");
         //extract filter info (currently just location name)
-        String locationName = filter == null ? null : "%" + filter + "%";
+        String locationName = filter == null ? "%" : "%" + filter + "%";
         List<Location> locations = locationDao.getAllByNameNotConnectedTo(location, locationName);
         List<LocationConnection> result = makeconnectionSuggestions(location, locations);
         log.trace("returning " + result);
