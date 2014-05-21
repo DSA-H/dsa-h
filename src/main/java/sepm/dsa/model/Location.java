@@ -171,37 +171,14 @@ public class Location implements Serializable {
 
         Location location = (Location) o;
 
-        if (comment != null ? !comment.equals(location.comment) : location.comment != null) return false;
-        if (height != null ? !height.equals(location.height) : location.height != null) return false;
         if (id != null ? !id.equals(location.id) : location.id != null) return false;
-        if (name != null ? !name.equals(location.name) : location.name != null) return false;
-        if (planFileName != null ? !planFileName.equals(location.planFileName) : location.planFileName != null)
-            return false;
-        if (region != null ? !region.equals(location.region) : location.region != null) return false;
-        if (sizeId != location.sizeId) return false;
-        if (weatherId != location.weatherId) return false;
-        // if (weatherCollectedDate != null ? !weatherCollectedDate.equals(location.weatherCollectedDate) : location.weatherCollectedDate != null)
-        //    return false;
-        if (xCoord != null ? !xCoord.equals(location.xCoord) : location.xCoord != null) return false;
-        if (yCoord != null ? !yCoord.equals(location.yCoord) : location.yCoord != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (region != null ? region.hashCode() : 0);
-        result = 31 * result + (xCoord != null ? xCoord.hashCode() : 0);
-        result = 31 * result + (yCoord != null ? yCoord.hashCode() : 0);
-        result = 31 * result + (sizeId != null ? sizeId.hashCode() : 0);
-        result = 31 * result + (planFileName != null ? planFileName.hashCode() : 0);
-        result = 31 * result + (height != null ? height.hashCode() : 0);
-        result = 31 * result + (weatherId != null ? weatherId.hashCode() : 0);
-        //result = 31 * result + (weatherCollectedDate != null ? weatherCollectedDate.hashCode() : 0);
-        result = 31 * result + (comment != null ? comment.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override

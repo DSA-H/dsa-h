@@ -70,18 +70,13 @@ public class TraderCategory implements Serializable {
 
         TraderCategory that = (TraderCategory) o;
 
-        if (assortments != null ? !assortments.equals(that.assortments) : that.assortments != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (assortments != null ? assortments.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 }

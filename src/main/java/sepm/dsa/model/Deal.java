@@ -111,24 +111,13 @@ public class Deal implements Serializable {
 
         Deal deal = (Deal) o;
 
-        if (purchase != deal.purchase) return false;
-        if (amount != null ? !amount.equals(deal.amount) : deal.amount != null) return false;
-        if (date != null ? !date.equals(deal.date) : deal.date != null) return false;
         if (id != null ? !id.equals(deal.id) : deal.id != null) return false;
-        if (price != null ? !price.equals(deal.price) : deal.price != null) return false;
-        if (qualityId != null ? !qualityId.equals(deal.qualityId) : deal.qualityId != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (purchase ? 1 : 0);
-        result = 31 * result + (price != null ? price.hashCode() : 0);
-        result = 31 * result + (amount != null ? amount.hashCode() : 0);
-        result = 31 * result + (qualityId != null ? qualityId.hashCode() : 0);
-        result = 31 * result + (date != null ? date.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 }

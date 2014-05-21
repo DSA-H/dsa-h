@@ -151,25 +151,14 @@ public class Product implements Serializable {
 
         Product product = (Product) o;
 
-        if (attributeId != null ? !attributeId.equals(product.attributeId) : product.attributeId != null) return false;
-        if (comment != null ? !comment.equals(product.comment) : product.comment != null) return false;
-        if (cost != null ? !cost.equals(product.cost) : product.cost != null) return false;
-        if (name != null ? !name.equals(product.name) : product.name != null) return false;
-        if (quality != null ? !quality.equals(product.quality) : product.quality != null) return false;
-        //if (unitId != null ? !unitId.equals(product.unitId) : product.unitId != null) return false;
+        if (id != null ? !id.equals(product.id) : product.id != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (cost != null ? cost.hashCode() : 0);
-        //result = 31 * result + (unitId != null ? unitId.hashCode() : 0);
-        result = 31 * result + (attributeId != null ? attributeId.hashCode() : 0);
-        result = 31 * result + (comment != null ? comment.hashCode() : 0);
-        result = 31 * result + (quality != null ? quality.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override

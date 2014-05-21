@@ -52,19 +52,16 @@ public class RegionBorder implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RegionBorder border = (RegionBorder) o;
+        RegionBorder that = (RegionBorder) o;
 
-        if (borderCost != null ? !borderCost.equals(border.borderCost) : border.borderCost != null) return false;
-        if (pk != null ? !pk.equals(border.pk) : border.pk != null) return false;
+        if (pk != null ? !pk.equals(that.pk) : that.pk != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = pk != null ? pk.hashCode() : 0;
-        result = 31 * result + (borderCost != null ? borderCost.hashCode() : 0);
-        return result;
+        return pk != null ? pk.hashCode() : 0;
     }
 
     @Override

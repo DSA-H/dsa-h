@@ -80,23 +80,13 @@ public class ProductCategory implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         ProductCategory that = (ProductCategory) o;
-
-        //if (childs != null ? !childs.equals(that.childs) : that.childs != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        //if (parent != null ? !parent.equals(that.parent) : that.parent != null) return false;
-        //if (products != null ? !products.equals(that.products) : that.products != null) return false;
-
         return true;
     }
 
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        //result = 31 * result + (parent != null ? parent.hashCode() : 0);
-        //result = 31 * result + (childs != null ? childs.hashCode() : 0);
-        //result = 31 * result + (products != null ? products.hashCode() : 0);
         return result;
     }
     @Override

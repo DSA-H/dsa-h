@@ -155,25 +155,14 @@ public class Region implements Serializable {
 
         Region region = (Region) o;
 
-        if (color != null ? !color.equals(region.color) : region.color != null) return false;
         if (id != null ? !id.equals(region.id) : region.id != null) return false;
-        if (name != null ? !name.equals(region.name) : region.name != null) return false;
-        if (rainfallChanceId != null ? !rainfallChanceId.equals(region.rainfallChanceId) : region.rainfallChanceId != null)
-            return false;
-        if (temperatureId != null ? !temperatureId.equals(region.temperatureId) : region.temperatureId != null)
-            return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (color != null ? color.hashCode() : 0);
-        result = 31 * result + (temperatureId != null ? temperatureId.hashCode() : 0);
-        result = 31 * result + (rainfallChanceId != null ? rainfallChanceId.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override
