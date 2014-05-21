@@ -10,7 +10,7 @@
    <left>
       <BorderPane prefHeight="200.0" prefWidth="380.0" BorderPane.alignment="CENTER">
          <center>
-            <TableView fx:id="suggestLocationConnectionsTable" prefHeight="371.0" prefWidth="351.0" BorderPane.alignment="CENTER">
+            <TableView fx:id="suggestLocationConnectionsTable" onMouseClicked="#onSuggestTableClicked" prefHeight="371.0" prefWidth="351.0" BorderPane.alignment="CENTER">
               <columns>
                 <TableColumn fx:id="scConnectedToColumn" prefWidth="231.0" text="Reiseverbindung zu" />
                 <TableColumn fx:id="scTravelTimeColumn" prefWidth="102.0" text="Reisedauer" />

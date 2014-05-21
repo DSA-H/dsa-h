@@ -171,7 +171,6 @@ public class EditLocationConnectionsController implements Initializable {
     public void onFinishedClicked() {
         log.debug("calling onFinishedClicked()");
 
-//        selectedLocation = locationService.get(selectedLocation.getId());
         EditLocationController.setLocation(selectedLocation);
 
         Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
@@ -182,11 +181,35 @@ public class EditLocationConnectionsController implements Initializable {
         stage.show();
     }
 
+    private long lastClickedSuggestTable = 0;
+
+    @FXML
+    public void onSuggestTableClicked() {
+        log.debug("calling onSuggestTableClicked()");
+
+        long newClick = new java.util.Date().getTime();
+
+        if (newClick - lastClickedSuggestTable > 300) {
+            lastClickedSuggestTable = newClick;
+            return;
+        }
+        // double click detected
+        log.debug("freeBoxesTableClicked - Double click detected! (" + (newClick - lastClickedSuggestTable) + " ms)");
+        lastClickedSuggestTable = newClick;
+
+        LocationConnection selected = suggestLocationConnectionsTable.getSelectionModel().getSelectedItem();
+        locationConnectionService.add(selected);
+        suggestLocationConnectionsTable.getItems().remove(selected);
+        locationConnectionsTable.getItems().add(selected);
+    }
+
     public void setLocationService(LocationService locationService) {
+        log.debug("calling setLocationService(" +locationService+ ")");
         this.locationService = locationService;
     }
 
     public static void setLocationConnections(List<LocationConnection> locationConnections) {
+        log.debug("calling setLocationConnections()");
         EditLocationConnectionsController.locationConnections = locationConnections;
     }
 
