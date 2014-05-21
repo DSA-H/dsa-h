@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.TraderDetailsController">
+<children><Label fx:id="nameLabel" layoutX="214.0" layoutY="14.0" text="Vorname Nachname" textAlignment="CENTER">
+<font>
+<Font name="System Bold" size="18.0" />
+</font></Label><Label fx:id="categoryLabel" layoutX="254.0" layoutY="41.0" text="Händlerkategorie" textAlignment="CENTER" /><TableView fx:id="offerTable" layoutX="21.0" layoutY="67.0" prefHeight="200.0" prefWidth="550.0">
+  <columns>
+    <TableColumn fx:id="amountColumn" prefWidth="75.0" text="Menge" /><TableColumn fx:id="productColumn" prefWidth="275.0" text="Ware" /><TableColumn fx:id="localPriceColumn" prefWidth="100.0" text="Preis (lokal)" /><TableColumn fx:id="standardPriceColumn" prefWidth="100.0" text="Preis (standard)" />
+  </columns>
+</TableView><Button layoutX="519.0" layoutY="354.0" mnemonicParsing="false" onAction="#onBackPressed" text="Zurück" /><Separator layoutX="233.0" layoutY="272.0" orientation="VERTICAL" prefHeight="121.0" prefWidth="11.0" /><Label layoutX="21.0048828125" layoutY="279.5" text="Überreden:" underline="true" /><Label layoutX="21.0" layoutY="304.0" text="Erschwernis:" /><TextField fx:id="difficultyField" layoutX="93.0" layoutY="300.0" prefHeight="25.0" prefWidth="30.0" /><Button layoutX="141.0" layoutY="300.0" mnemonicParsing="false" onAction="#onRolePressed" text="Würfeln" /><Label layoutX="21.009765625" layoutY="332.5" text="Ergebnis:" /><Label fx:id="resultLabel" layoutX="82.0" layoutY="333.0" text="ERGEBNIS" textAlignment="CENTER" /><Label layoutX="267.0" layoutY="280.0" text="Waren:" underline="true" /><Button layoutX="267.0" layoutY="300.0" mnemonicParsing="false" onAction="#onAddPressed" text="Hinzufügen" /><Button layoutX="355.0" layoutY="300.0" mnemonicParsing="false" onAction="#onDeletePressed" text="Entfernen" /><Button layoutX="434.0" layoutY="354.0" mnemonicParsing="false" onAction="#onEditPressed" text="Bearbeiten" />
+</children></Pane>
