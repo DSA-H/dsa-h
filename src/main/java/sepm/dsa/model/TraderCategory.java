@@ -13,7 +13,6 @@ import java.util.Set;
 public class TraderCategory implements Serializable {
     private static final long serialVersionUID = 2957793850231481713L;
 
-
     @Id
     @GeneratedValue
     @Column(nullable = false, unique = true)
@@ -23,6 +22,10 @@ public class TraderCategory implements Serializable {
     @Size(max = 60, min = 1)
     @Column(nullable = false, length = 60)
     private String name;
+
+    @Size(max = 1000)
+    @Column(length = 1000)
+    private String comment;
 
     @OneToMany
     @JoinColumn(nullable = true, name = "productCategory")
@@ -50,6 +53,14 @@ public class TraderCategory implements Serializable {
 
     public void setAssortments(Set<AssortmentNature> assortments) {
         this.assortments = assortments;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     @Override

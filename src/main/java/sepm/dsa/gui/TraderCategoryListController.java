@@ -1,5 +1,7 @@
 package sepm.dsa.gui;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,6 +13,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.controlsfx.control.action.Action;
 import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
@@ -18,7 +21,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.model.AssortmentNature;
+import sepm.dsa.model.RegionBorder;
 import sepm.dsa.model.TraderCategory;
+import sepm.dsa.service.AssortmentNatureService;
 import sepm.dsa.service.TraderCategoryService;
 
 @Service("TraderCategoryService")
@@ -32,6 +38,8 @@ public class TraderCategoryListController implements Initializable {
     @FXML
     private TableColumn traderCategoryColumn;
     @FXML
+    private TableColumn prodcutCategoryColumn;
+    @FXML
     private Button createButton;
     @FXML
     private Button editButton;
@@ -44,9 +52,30 @@ public class TraderCategoryListController implements Initializable {
 
         // init table
         traderCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        prodcutCategoryColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TraderCategory, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<TraderCategory, String> r) {
+                if (r.getValue() != null) {
+                   StringBuilder sb = new StringBuilder();
+                   for(AssortmentNature assortmentNature : r.getValue().getAssortments()) {
+                       String productCategorieName = assortmentNature.getProductCategory().getName();
+                       sb.append(productCategorieName + ", ");
+                    }
+                    if (sb.length() >= 2) {
+                        sb.delete(sb.length() - 2, sb.length());
+                    }
+                    return new SimpleStringProperty(sb.toString());
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
+
 
         ObservableList<TraderCategory> data = FXCollections.observableArrayList(traderCategoryService.getAll());
         traderCategoryTable.setItems(data);
+
+        checkFocus();
     }
 
     @FXML
@@ -58,7 +87,7 @@ public class TraderCategoryListController implements Initializable {
         Stage stage = (Stage) traderCategoryTable.getScene().getWindow();
         Parent root = (Parent) loader.load("/gui/edittradercategory.fxml");
 
-        stage.setTitle("Neuen Händler erstellen");
+        stage.setTitle("Händlerkategorie");
         stage.setScene(new Scene(root, 600, 438));
         stage.show();
     }
