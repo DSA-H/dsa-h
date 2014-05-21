@@ -18,8 +18,7 @@ import java.util.Set;
 /**
  * Created by Jotschi on 19.05.2014.
  */
-public class TraderCategoryServiceImpl implements TraderCategoryService, Serializable {
-    private static final long serialVersionUID = -3272024123454792934L;
+public class TraderCategoryServiceImpl implements TraderCategoryService {
     private static final Logger log = LoggerFactory.getLogger(TraderCategoryServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
