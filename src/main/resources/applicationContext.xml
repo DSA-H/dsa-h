@@ -125,6 +125,10 @@
     <bean id="traderService" class="sepm.dsa.service.TraderServiceImpl">
         <property name="traderDao" ref="traderDao"/>
         <property name="productService" ref="productService"/>
+        <property name="pathService" ref="pathService"/>
+    </bean>
+
+    <bean id="pathService" class="sepm.dsa.service.path.PathServiceDijkstraJGraphImpl">
     </bean>
 
     <bean id="assortmentNatureService" class="sepm.dsa.service.AssortmentNatureServiceImpl">

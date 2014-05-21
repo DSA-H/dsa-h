@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.TraderDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
+import sepm.dsa.service.path.PathService;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -19,6 +20,7 @@ public class TraderServiceImpl implements TraderService {
 
 	private TraderDao traderDao;
 	private ProductService productService;
+	private PathService pathService;
 
 	@Override
 	public Trader get(int id) {
@@ -207,6 +209,10 @@ public class TraderServiceImpl implements TraderService {
 
 	public void setProductService(ProductService productService) {
 		this.productService = productService;
+	}
+
+	public void setPathService(PathService pathService) {
+		this.pathService = pathService;
 	}
 
 	/**
