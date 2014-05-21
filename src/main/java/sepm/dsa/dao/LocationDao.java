@@ -54,5 +54,13 @@ public interface LocationDao {
      */
     List<Location> getAllAroundNotConnected(Location location, double withinDistance);
 
+    /**
+     * TODO fill out
+     *
+     * @param location
+     * @param locationName
+     * @return
+     */
+    List<Location> getAllByNameNotConnectedTo(Location location, String locationName);
 
 }

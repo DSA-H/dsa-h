@@ -38,5 +38,4 @@ public interface LocationService {
      */
     public  List<Location> getAll();
 
-
 }

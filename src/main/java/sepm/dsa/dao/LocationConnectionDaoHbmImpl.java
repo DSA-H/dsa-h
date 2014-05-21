@@ -81,6 +81,22 @@ public class LocationConnectionDaoHbmImpl implements LocationConnectionDao {
         return result;
     }
 
+    @Override
+    public List<LocationConnection> getAllByLocationName(Location location, String locationName) {
+        log.debug("calling getAllByLocationName(" + location + ", " + locationName + ")");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("LocationConnection.findAllByFilter1");
+        query.setParameter("locationId", location.getId());
+        query.setParameter("locationName", locationName);
+        List<?> list = query.list();
+        List<LocationConnection> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((LocationConnection) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
+
     public void setSessionFactory(SessionFactory sessionFactory) {
         log.debug("calling setSessionFactory(" + sessionFactory + ")");
         this.sessionFactory = sessionFactory;

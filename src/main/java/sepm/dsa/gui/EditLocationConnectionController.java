@@ -13,8 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
 import sepm.dsa.service.LocationConnectionService;
+import sepm.dsa.service.LocationService;
 
 import java.net.URL;
 import java.text.ParseException;
@@ -28,6 +30,7 @@ public class EditLocationConnectionController implements Initializable {
     private SpringFxmlLoader loader;
 
     private LocationConnectionService locationConnectionService;
+    private LocationService locationService;
 
     private static LocationConnection locationConnection;
 
@@ -48,7 +51,7 @@ public class EditLocationConnectionController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         log.debug("initialise");
         lbl_Location1.setText(locationConnection.getLocation1().getName());
-        lbl_Location1.setText(locationConnection.getLocation2().getName());
+        lbl_Location2.setText(locationConnection.getLocation2().getName());
         tf_TravelTime.setText(locationConnection.getTravelTime() + "");
         String comment = locationConnection.getComment();
         ta_Comment.setText(comment == null ? "" : comment);
@@ -96,5 +99,9 @@ public class EditLocationConnectionController implements Initializable {
 
     public static void setLocationConnection(LocationConnection locationConnection) {
         EditLocationConnectionController.locationConnection = locationConnection;
+    }
+
+    public void setLocationService(LocationService locationService) {
+        this.locationService = locationService;
     }
 }

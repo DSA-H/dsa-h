@@ -4,14 +4,18 @@
 <hibernate-mapping>
 
     <query name="LocationConnection.findAll">
-        <![CDATA[from LocationConnection ORDER BY pk.location1.name ASC, pk.location2.name ASC]]>
+        <![CDATA[FROM LocationConnection ORDER BY pk.location1.name asc, pk.location2.name asc]]>
     </query>
 
     <query name="LocationConnection.findByLocations">
-        <![CDATA[   from LocationConnection
+        <![CDATA[   FROM LocationConnection
                     WHERE pk.location1.id = :location1ID and pk.location2.id = :location2ID
-                        or pk.location1.id = :location2ID and pk.location2.id = :location1ID]]>
+                        or pk.location1.id = :location2ID and pk.location2.id = :location1ID    ]]>
     </query>
 
-
+    <query name="LocationConnection.findAllByFilter1">
+        <![CDATA[   FROM LocationConnection
+                    WHERE ((pk.location1.id = :locationId and pk.location2.name like :locationName)
+                            or (pk.location2.id = :locationId and pk.location1.name like :locationName)) ]]>
+    </query>
 </hibernate-mapping>

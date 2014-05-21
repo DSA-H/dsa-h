@@ -54,6 +54,13 @@ public interface LocationConnectionService {
      */
     List<LocationConnection> getShortestPathBetween(Location location1, Location location2);
 
+    /**
+     *
+     * @param location the location
+     * @param filter the filter string (location name), might be null
+     * @return
+     */
+    List<LocationConnection> getAllByLocationFilter1(Location location, String filter);
 
     /**
      * Suggests a list of location connections to the location from a given location.
@@ -63,6 +70,16 @@ public interface LocationConnectionService {
      * @return
      */
     List<LocationConnection> suggestLocationConnectionsAround(Location location, double withinDistance);
+
+    /**
+     * Suggests a list of location connections to the location from a given location.
+     * It is filtered by a filter string.
+     * Already existing location connections are not suggested.
+     * @param location the location
+     * @param filter the filter string (location name), might be null
+     * @return
+     */
+    List<LocationConnection> suggestLocationConnectionsByFilter(Location location, String filter);
 
     /**
      * The suggested distance between two locations. Used in suggestConnectionsAround(Location, Integer)

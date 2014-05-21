@@ -58,6 +58,24 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
+    public List<Location> getAllByNameNotConnectedTo(Location location, String locationName) {
+        log.debug("calling getAllByNameNotConnectedTo(" + location + "," + locationName + ")");
+
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("Location.findAllByNameNotConnected");
+        query.setParameter("ownLocationId", location.getId());
+        query.setParameter("locationName", locationName);
+        List<?> list = query.list();
+
+        List<Location> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((Location) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
     public List<Location> getAll() {
         log.debug("calling getAll()");
         List<?> list = sessionFactory.getCurrentSession().getNamedQuery("Location.findAll").list();
@@ -93,17 +111,6 @@ public class LocationDaoImpl implements LocationDao {
     @Override
     public List<Location> getAllAroundNotConnected(Location location, double withinDistance) {
         log.debug("calling getAllAroundNotConnected(" + location + "," + withinDistance + ")");
-
-//        Integer locationId = location.getId();
-//        Set<LocationConnection> connections = location.getAllConnections();
-//        List<Integer> connectedIds = new ArrayList<Integer>(connections.size());
-//        for (LocationConnection con : connections) {
-//            if (!con.getLocation1().getId().equals(locationId)) {
-//                connectedIds.add(con.getLocation1().getId());
-//            } else {
-//                connectedIds.add(con.getLocation2().getId());
-//            }
-//        }
 
         Query query = sessionFactory.getCurrentSession().getNamedQuery("Location.findAllAroundNotConnected");
         query.setParameter("ownLocationId", location.getId());

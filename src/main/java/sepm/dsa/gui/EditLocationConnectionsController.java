@@ -68,6 +68,8 @@ public class EditLocationConnectionsController implements Initializable {
         log.debug("initialize");
         log.info("--- going to edit location connections for location '" + selectedLocation + "'");
 
+        reloadLocation();
+
         travelTimeColumn.setCellValueFactory(new PropertyValueFactory<>("travelTime"));
         connectionToColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LocationConnection, String>, ObservableValue<String>>() {
             @Override
@@ -125,12 +127,15 @@ public class EditLocationConnectionsController implements Initializable {
     @FXML
     public void onFilterConnectionsClicked() {
         log.debug("calling onFilterConnectionsClicked()");
+        List<LocationConnection> suggestedConnections = locationConnectionService.suggestLocationConnectionsByFilter(selectedLocation, locationNameFilter.getText());
+        ObservableList<LocationConnection> connections = FXCollections.observableArrayList(suggestedConnections);
+        suggestLocationConnectionsTable.setItems(connections);
     }
+
 
     @FXML
     public void onEditConnectionClicked() {
         log.debug("calling onEditConnectionClicked()");
-
         LocationConnection selected = locationConnectionsTable.getSelectionModel().getSelectedItem();
 //        selected = locationConnectionService.get(selected.getLocation1(), selected.getLocation2());
         EditLocationConnectionController.setLocationConnection(selected);
@@ -201,6 +206,7 @@ public class EditLocationConnectionsController implements Initializable {
         locationConnectionService.add(selected);
         suggestLocationConnectionsTable.getItems().remove(selected);
         locationConnectionsTable.getItems().add(selected);
+        reloadLocation();
     }
 
     public void setLocationService(LocationService locationService) {
@@ -211,6 +217,10 @@ public class EditLocationConnectionsController implements Initializable {
     public static void setLocationConnections(List<LocationConnection> locationConnections) {
         log.debug("calling setLocationConnections()");
         EditLocationConnectionsController.locationConnections = locationConnections;
+    }
+
+    private void reloadLocation() {
+        selectedLocation = locationService.get(selectedLocation.getId());
     }
 
 }

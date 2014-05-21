@@ -15,10 +15,20 @@
 
     <query name="Location.findAllAroundNotConnected">
         <![CDATA[   FROM Location l
-                    WHERE (:ownLocationId is NULL OR l.id != :ownLocationId) AND sqrt((:xCoord - l.xCoord) * (:xCoord - l.xCoord) + (:yCoord - l.yCoord) * (:yCoord - l.yCoord)) < :distance
-                            AND l.id NOT IN (select c.pk.location2.id from LocationConnection c where c.pk.location1.id = :ownLocationId)
-                            AND l.id NOT IN (select c.pk.location1.id from LocationConnection c where c.pk.location2.id = :ownLocationId)
-                    ORDER BY l.name ASC]]>
+                    WHERE (:ownLocationId is null or l.id != :ownLocationId)
+                            and sqrt((:xCoord - l.xCoord) * (:xCoord - l.xCoord) + (:yCoord - l.yCoord) * (:yCoord - l.yCoord)) < :distance
+                            and l.id not in (SELECT c.pk.location2.id FROM LocationConnection c WHERE c.pk.location1.id = :ownLocationId)
+                            and l.id not in (SELECT c.pk.location1.id FROM LocationConnection c WHERE c.pk.location2.id = :ownLocationId)
+                    ORDER BY l.name asc]]>
+    </query>
+
+    <query name="Location.findAllByNameNotConnected">
+        <![CDATA[   FROM Location l
+                    WHERE (:ownLocationId is null or l.id != :ownLocationId)
+                            and l.name like :locationName
+                            and l.id not in (SELECT c.pk.location2.id FROM LocationConnection c WHERE c.pk.location1.id = :ownLocationId)
+                            and l.id not in (SELECT c.pk.location1.id FROM LocationConnection c WHERE c.pk.location2.id = :ownLocationId)
+                    ORDER BY l.name asc]]>
     </query>
 
 </hibernate-mapping>

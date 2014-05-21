@@ -45,4 +45,12 @@ public interface LocationConnectionDao {
      */
     public List<LocationConnection> getAll();
 
+    /**
+     *
+     * @param location
+     * @param locationName
+     * @return
+     */
+    public List<LocationConnection> getAllByLocationName(Location location, String locationName);
+
 }

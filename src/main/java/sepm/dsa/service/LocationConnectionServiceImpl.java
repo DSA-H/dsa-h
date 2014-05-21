@@ -36,10 +36,11 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
     @Override
     public void add(LocationConnection locationConnection) {
         log.debug("calling add(" + locationConnection + ")");
-//        if (get(locationConnection.getLocation1(), locationConnection.getLocation2()) != null) {
-//            throw new DSAAlreadyExistsException();
-//        }
+        if (get(locationConnection.getLocation1(), locationConnection.getLocation2()) != null) {
+            throw new DSAAlreadyExistsException();
+        }
         locationConnectionDao.add(locationConnection);
+        log.info("added " + locationConnection);
     }
 
     @Transactional(readOnly = false)
@@ -50,17 +51,19 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
         locationConnection.setLocation1(trueConn.getLocation1());
         locationConnection.setLocation2(trueConn.getLocation2());
         locationConnectionDao.update(locationConnection);
+        log.info("updated " + locationConnection);
     }
 
     @Transactional(readOnly = false)
     @Override
     public void remove(LocationConnection locationConnection) {
-        log.info("calling remove(" + locationConnection + ")");
+        log.debug("calling remove(" + locationConnection + ")");
         LocationConnection trueConn = locationConnectionDao.get(locationConnection.getLocation1(), locationConnection.getLocation2());
         if (trueConn != null) {
-            log.info(" really remove " + trueConn);
+            log.debug(" really remove " + trueConn);
             locationConnectionDao.remove(trueConn);
         }
+        log.info("removed " + trueConn);
     }
 
     @Override
@@ -76,22 +79,47 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
         throw new DSARuntimeException("Not yet implemented");
     }
 
+    @Override
+    public List<LocationConnection> suggestLocationConnectionsByFilter(Location location, String filter) {
+        log.debug("calling suggestLocationConnectionsByFilter(" + location + "," + filter + ")");
+        //extract filter info (currently just location name)
+        String locationName = filter == null ? null : "%" + filter + "%";
+        List<Location> locations = locationDao.getAllByNameNotConnectedTo(location, locationName);
+        List<LocationConnection> result = makeconnectionSuggestions(location, locations);
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<LocationConnection> getAllByLocationFilter1(Location location, String filter) {
+        log.debug("calling getAllByLocationFilter1(" + location + "," + filter + ")");
+        //extract filter info (currently just location name)
+        String locationName = filter == null ? null : "%" + filter + "%";
+        List<LocationConnection> result = locationConnectionDao.getAllByLocationName(location, locationName);
+        log.trace("returning " + result);
+        return result;
+    }
+
+    private List<LocationConnection> makeconnectionSuggestions(Location from, List<Location> to) {
+        List<LocationConnection> result = new ArrayList<>(to.size());
+        for (Location l : to) {
+            LocationConnection suggestion = new LocationConnection();
+            suggestion.setLocation1(from);
+            suggestion.setLocation2(l);
+            double distanceSuggested = suggestedDistanceBetween(from, l);
+            int suggestedTravelTime = suggestedTravelTimeForDistance(distanceSuggested);
+            suggestion.setTravelTime(suggestedTravelTime);
+            result.add(suggestion);
+        }
+        return result;
+    }
+
 
     @Override
     public List<LocationConnection> suggestLocationConnectionsAround(Location location, double withinDistance) {
         log.debug("calling suggestLocationConnectionsAround(" + location + "," + withinDistance + ")");
         List<Location> nearLocations = locationDao.getAllAroundNotConnected(location, withinDistance);
-        List<LocationConnection> result = new ArrayList<>(nearLocations.size());
-
-        for (Location l : nearLocations) {
-            LocationConnection suggestion = new LocationConnection();
-            suggestion.setLocation1(location);
-            suggestion.setLocation2(l);
-            double distanceSuggested = suggestedDistanceBetween(location, l);
-            int suggestedTravelTime = suggestedTravelTimeForDistance(distanceSuggested);
-            suggestion.setTravelTime(suggestedTravelTime);
-            result.add(suggestion);
-        }
+        List<LocationConnection> result = makeconnectionSuggestions(location, nearLocations);
         log.trace("returning " + result);
         return result;
     }
