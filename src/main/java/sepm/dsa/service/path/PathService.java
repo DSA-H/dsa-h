@@ -3,7 +3,7 @@ package sepm.dsa.service.path;
 import java.util.Collection;
 import java.util.List;
 
-public interface PathService {
+public interface PathService<E extends PathEdge> {
 	/**
 	 * Calculates the shortest path from startNode to any endPoint.
 	 *
@@ -17,5 +17,5 @@ public interface PathService {
 	 * @throws java.lang.IllegalArgumentException if one of the argument is null or if one of the edge's source or target is not found in the list of nodes.
 	 * @throws sepm.dsa.service.path.NoPathException if no path was found.
 	 */
-	List<PathEdge> findShortestPath(List<PathNode> nodes, List<PathEdge> edges, PathNode startNode, Collection<PathNode> endNodes) throws NoPathException;
+	List<E> findShortestPath(List<? extends PathNode> nodes, List<E> edges, PathNode startNode, Collection<? extends PathNode> endNodes) throws NoPathException;
 }

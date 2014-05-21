@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public class PathServiceDijkstraJGraphImpl implements PathService {
+public class PathServiceDijkstraJGraphImpl<E extends PathEdge> implements PathService<E> {
 	/**
 	 * Calculates the shortest path from startNode to any endPoint.
 	 *
@@ -23,20 +23,20 @@ public class PathServiceDijkstraJGraphImpl implements PathService {
 	 * @throws sepm.dsa.service.path.NoPathException if no path was found.
 	 */
 	@Override
-	public List<PathEdge> findShortestPath(List<PathNode> nodes, List<PathEdge> edges, PathNode startNode, Collection<PathNode> endNodes) throws NoPathException {
+	public List<E> findShortestPath(List nodes, List edges, PathNode startNode, Collection endNodes) throws NoPathException {
 		if (nodes == null || edges == null || startNode == null || endNodes == null) {
 			throw new IllegalArgumentException("Expected no null parameter");
 		}
 
-		Iterator<ProxyWeightedEdge> proxiedEdges = edges.stream().map(ProxyWeightedEdge::new).iterator();
+		Iterator<ProxyWeightedEdge<E>> proxiedEdges = edges.stream().map(e -> new ProxyWeightedEdge<>((E) e)).iterator();
 
-		Graph<PathNode, ProxyWeightedEdge> graph = initializeGraph(nodes, proxiedEdges);
-		List<ProxyWeightedEdge> resultList = getShortestPath(startNode, endNodes, graph);
+		Graph<PathNode, ProxyWeightedEdge<E>> graph = initializeGraph(nodes, proxiedEdges);
+		List<ProxyWeightedEdge<E>> resultList = getShortestPath(startNode, endNodes, graph);
 
 		if (resultList == null) {
 			throw new NoPathException();
 		} else {
-			List<PathEdge> returnList = new ArrayList<>(resultList.size());
+			List<E> returnList = new ArrayList<>(resultList.size());
 			resultList.stream().forEach(e -> returnList.add(e.getEdge()));
 			return returnList;
 		}
@@ -50,12 +50,12 @@ public class PathServiceDijkstraJGraphImpl implements PathService {
 	 * @param graph     the graph on which the path is searched for.
 	 * @return a list of the edges from A to B or null if no result could be found.
 	 */
-	private List<ProxyWeightedEdge> getShortestPath(PathNode startNode, Collection<PathNode> endNodes, Graph<PathNode, ProxyWeightedEdge> graph) {
+	private List<ProxyWeightedEdge<E>> getShortestPath(PathNode startNode, Collection<PathNode> endNodes, Graph<PathNode, ProxyWeightedEdge<E>> graph) {
 		int costs = Integer.MAX_VALUE;
-		List<ProxyWeightedEdge> resultList = null;
+		List<ProxyWeightedEdge<E>> resultList = null;
 
 		for (PathNode endNode : endNodes) {
-			List<ProxyWeightedEdge> pathBetween = DijkstraShortestPath.findPathBetween(graph, startNode, endNode);
+			List<ProxyWeightedEdge<E>> pathBetween = DijkstraShortestPath.findPathBetween(graph, startNode, endNode);
 
 			if (pathBetween == null) {
 				continue;
@@ -77,8 +77,8 @@ public class PathServiceDijkstraJGraphImpl implements PathService {
 	 * @param edges the graph's edges
 	 * @return the initialized graph
 	 */
-	private Graph<PathNode, ProxyWeightedEdge> initializeGraph(List<PathNode> nodes, Iterator<ProxyWeightedEdge> edges) {
-		SimpleWeightedGraph<PathNode, ProxyWeightedEdge> graph = new SimpleWeightedGraph<>(ProxyWeightedEdge.class);
+	private Graph<PathNode, ProxyWeightedEdge<E>> initializeGraph(List<PathNode> nodes, Iterator<ProxyWeightedEdge<E>> edges) {
+		SimpleWeightedGraph<PathNode, ProxyWeightedEdge<E>> graph = new SimpleWeightedGraph<>((sourceVertex, targetVertex) -> null);
 
 		nodes.forEach(graph::addVertex);
 		edges.forEachRemaining(e -> graph.addEdge(e.getStart(), e.getEnd(), e));
@@ -92,16 +92,16 @@ public class PathServiceDijkstraJGraphImpl implements PathService {
 	 * Sadly JGraph does not provide eny interfaces for edges but requires to extend
 	 * from their own implementation :(
 	 */
-	private class ProxyWeightedEdge extends DefaultWeightedEdge implements PathEdge {
+	private class ProxyWeightedEdge<EDGE extends PathEdge> extends DefaultWeightedEdge implements PathEdge {
 		private static final long serialVersionUID = 3713399967102132422L;
-		private PathEdge edge;
+		private EDGE edge;
 
-		private ProxyWeightedEdge(PathEdge edge) {
+		private ProxyWeightedEdge(EDGE edge) {
 			super();
 			this.edge = edge;
 		}
 
-		public PathEdge getEdge() {
+		public EDGE getEdge() {
 			return edge;
 		}
 
