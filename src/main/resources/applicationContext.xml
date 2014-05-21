@@ -24,6 +24,7 @@
                 <value>sepm.dsa.model.RegionBorder</value>
                 <value>sepm.dsa.model.Location</value>
                 <value>sepm.dsa.model.LocationConnection</value>
+                <value>sepm.dsa.model.Tavern</value>
             </list>
         </property>
         <property name="mappingResources">
@@ -33,6 +34,7 @@
                 <value>sepm/dsa/model/hibernate/RegionBorder.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Location.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/LocationConnection.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Tavern.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -64,6 +66,10 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="tavernDao" class="sepm.dsa.dao.TavernDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
@@ -81,6 +87,9 @@
     <bean id="locationConnectionService" class="sepm.dsa.service.LocationConnectionServiceImpl">
         <property name="locationConnectionDao" ref="locationConnectionDao"/>
         <property name="locationDao" ref="locationDao"/>
+    </bean>
+
+    <bean id="tavernService" class="sepm.dsa.service.TavernServiceImpl">
     </bean>
 
     <!-- GUI DI -->

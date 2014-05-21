@@ -1,7 +1,6 @@
 package sepm.dsa.model;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -232,4 +231,15 @@ public class Location implements Serializable {
                 ", region=" + region +
                 '}';
     }
+
+	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+	private Collection<Tavern> taverns;
+
+	public Collection<Tavern> getTaverns() {
+		return taverns;
+	}
+
+	public void setTaverns(Collection<Tavern> taverns) {
+		this.taverns = taverns;
+	}
 }
