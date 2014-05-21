@@ -44,6 +44,7 @@
                 <value>sepm/dsa/model/hibernate/Product.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/ProductCategory.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/ProductUnit.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/AssortmentNature.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
