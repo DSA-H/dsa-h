@@ -67,7 +67,7 @@ public class Location implements Serializable {
 //    @JoinColumn(name = "location1_fk")
 //    @OneToMany(mappedBy = "pk.location1")
 //    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.location1", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OneToMany(mappedBy = "pk.location1")
+    @OneToMany(mappedBy = "pk.location1", fetch = FetchType.EAGER)
     private Set<LocationConnection> connections1 = new HashSet<>();
 
 //    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.location2", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -75,7 +75,7 @@ public class Location implements Serializable {
 //    @JoinColumn(name = "location2_fk")
 //    @OneToMany(mappedBy = "pk.location2")
 //    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.location2", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OneToMany(mappedBy = "pk.location2")
+    @OneToMany(mappedBy = "pk.location2", fetch = FetchType.EAGER)
     private Set<LocationConnection> connections2 = new HashSet<>();
 
     public Integer getId() {

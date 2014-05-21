@@ -116,21 +116,21 @@ public class LocationConnection implements Serializable {
 
         public Pk() {}
 
-        public Location getLocation2() {
-            return location2;
-        }
-
-        public void setLocation2(Location location2) {
-            this.location2 = location2;
-        }
-
-        public Location getLocation1() {
-            return location1;
-        }
-
-        public void setLocation1(Location location1) {
-            this.location1 = location1;
-        }
+//        public Location getLocation2() {
+//            return location2;
+//        }
+//
+//        public void setLocation2(Location location2) {
+//            this.location2 = location2;
+//        }
+//
+//        public Location getLocation1() {
+//            return location1;
+//        }
+//
+//        public void setLocation1(Location location1) {
+//            this.location1 = location1;
+//        }
 
         @Override
         public boolean equals(Object o) {

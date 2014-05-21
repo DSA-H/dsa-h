@@ -21,6 +21,8 @@ import sepm.dsa.model.LocationConnection;
 import sepm.dsa.service.LocationConnectionService;
 import sepm.dsa.service.LocationService;
 
+import java.util.List;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:testContext.xml"})
@@ -41,6 +43,9 @@ public class LocationConnectionServiceTest extends TestCase {
     private LocationService locationService;
 
     LocationConnection locationConnection;
+
+    private final static double EPSILON = 1E-5;
+
 
     @Before
     public void setUp() {
@@ -157,6 +162,62 @@ public class LocationConnectionServiceTest extends TestCase {
 
         LocationConnection connection = locationConnectionService.get(location1, location2);
         assertNull(connection);
+    }
+
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void suggestConnectionsAround_locationsAround() throws Exception {
+        Location location = locationService.get(4);
+        List<LocationConnection> suggestions = locationConnectionService.suggestLocationConnectionsAround(location, 100);
+        assertEquals(1, suggestions.size());
+    }
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void suggestConnectionsAround_noLocationsAround() throws Exception {
+        Location location = locationService.get(4);
+        List<LocationConnection> suggestions = locationConnectionService.suggestLocationConnectionsAround(location, 25);
+        assertEquals(0, suggestions.size());
+    }
+
+
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void suggestConnectionsAround_locationIsLocation1() {
+        Location location = locationService.get(4);
+        List<LocationConnection> suggestions = locationConnectionService.suggestLocationConnectionsAround(location, 100);
+        LocationConnection con1 = suggestions.get(0);
+        assertEquals(location, con1.getLocation1());
+    }
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void suggestedDistanceBetween_positive() {
+        Location location = locationService.get(6);
+        List<LocationConnection> suggestions = locationConnectionService.suggestLocationConnectionsAround(location, 100);
+        for (LocationConnection suggestion : suggestions) {
+            Location other = suggestion.getLocation2();
+            double distanceSuggested = locationConnectionService.suggestedDistanceBetween(location, other);
+            assertTrue(distanceSuggested >= 0);
+        }
+    }
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void suggestedDistanceBetween_GtOrEqDirectDistance() {
+        Location location = locationService.get(6);
+        List<LocationConnection> suggestions = locationConnectionService.suggestLocationConnectionsAround(location, 100);
+        for (LocationConnection suggestion : suggestions) {
+            Location other = suggestion.getLocation2();
+            double distanceSuggested = locationConnectionService.suggestedDistanceBetween(location, other);
+            assertTrue(distanceSuggested >= Math.abs(location.getxCoord() - other.getxCoord()));
+            assertTrue(distanceSuggested >= Math.abs(location.getyCoord() - other.getyCoord()));
+            double minDistance = Math.sqrt(Math.pow(location.getxCoord() - other.getxCoord(), 2)
+                    + Math.pow(location.getyCoord() - other.getyCoord(), 2));
+            assertTrue(distanceSuggested >= minDistance - EPSILON);
+        }
     }
 
 //    @Transactional

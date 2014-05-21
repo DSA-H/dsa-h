@@ -80,19 +80,20 @@
 
     <bean id="locationConnectionService" class="sepm.dsa.service.LocationConnectionServiceImpl">
         <property name="locationConnectionDao" ref="locationConnectionDao"/>
+        <property name="locationDao" ref="locationDao"/>
     </bean>
 
     <!-- GUI DI -->
     <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController">
-	<property name="loader" ref="loader"/>
+	    <property name="loader" ref="loader"/>
     </bean>
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
-	<property name="loader" ref="loader"/>
+	    <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
     </bean>
     <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
-	<property name="loader" ref="loader"/>
+	    <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
     </bean>
@@ -103,8 +104,11 @@
     <bean id="EditLocationController" class="sepm.dsa.gui.EditLocationController">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
-        <property name="locationConnectionService" ref="locationConnectionService"/>
         <property name="regionService" ref="regionService"/>
+    </bean>
+    <bean id="EditLocationConnectionsController" class="sepm.dsa.gui.EditLocationConnectionsController">
+        <property name="loader" ref="loader"/>
+        <property name="locationConnectionService" ref="locationConnectionService"/>
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>

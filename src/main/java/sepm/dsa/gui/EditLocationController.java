@@ -1,5 +1,7 @@
 package sepm.dsa.gui;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,6 +17,7 @@ import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
@@ -34,7 +37,6 @@ public class EditLocationController implements Initializable {
 
     private static Location selectedLocation;
 
-    private LocationConnectionService locationConnectionService;
     private LocationService locationService;
     private RegionService regionService;
     // true if the location is not editing
@@ -67,19 +69,22 @@ public class EditLocationController implements Initializable {
 
     @FXML
     private TableView<LocationConnection> locationConnectionsTable;
+
     @FXML
-    private TableColumn<LocationConnection, Location> location1Column;
-    @FXML
-    private TableColumn<LocationConnection, Location> location2Column;
+    private TableColumn<LocationConnection, String> connectionToColumn;
+//    @FXML
+//    private TableColumn<LocationConnection, Location> location2Column;
     @FXML
     private TableColumn<LocationConnection, Integer> travelTimeColumn;
 
     @FXML
-    private Button suggestConnectionsBtn;
-    @FXML
-    private Button addConnectionBtn;
-    @FXML
-    private Button removeConnectionBtn;
+    private Button editConnectionsBtn;
+//    @FXML
+//    private Button suggestConnectionsBtn;
+//    @FXML
+//    private Button addConnectionBtn;
+//    @FXML
+//    private Button removeConnectionBtn;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
@@ -120,56 +125,44 @@ public class EditLocationController implements Initializable {
 //        otherRegions.remove(selectedLocation.getRegion());
         regionChoiceBox.setItems(FXCollections.observableArrayList(otherRegions));
 
-        location1Column.setCellValueFactory(new PropertyValueFactory<>("location1"));
-        location2Column.setCellValueFactory(new PropertyValueFactory<>("location2"));
         travelTimeColumn.setCellValueFactory(new PropertyValueFactory<>("travelTime"));
-        location1Column.setCellFactory(new Callback<TableColumn<LocationConnection, Location>, TableCell<LocationConnection, Location>>() {
+//        location1Column.setCellValueFactory(new PropertyValueFactory<>("location1"));
+//        location2Column.setCellValueFactory(new PropertyValueFactory<>("location2"));
+//        location1Column.setCellFactory(new Callback<TableColumn<LocationConnection, Location>, TableCell<LocationConnection, Location>>() {
+//            @Override
+//            public TableCell<LocationConnection, Location> call(TableColumn<LocationConnection, Location> locationConnectionLocationTableColumn) {
+//                return new TableCell<LocationConnection, Location>() {
+//
+//                    @Override
+//                    protected void updateItem(Location item, boolean empty) {
+//                        super.updateItem(item, empty);
+//
+//                        if (!empty) {
+//                            if (item != null) {
+//                                setText(item.getName());
+//                                if (selectedLocation.equals(item)) {
+//                                    //
+//                                }
+//                            } else {
+//                                setText("<null>");
+//                            }
+//                        } else {
+//                            setText(null);
+//                        }
+//                    }
+//
+//                };
+//            }
+//        });
+        connectionToColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LocationConnection, String>, ObservableValue<String>>() {
             @Override
-            public TableCell<LocationConnection, Location> call(TableColumn<LocationConnection, Location> locationConnectionLocationTableColumn) {
-                return new TableCell<LocationConnection, Location>() {
-
-                    @Override
-                    protected void updateItem(Location item, boolean empty) {
-                        super.updateItem(item, empty);
-
-                        if (!empty) {
-                            if (item != null) {
-                                setText(item.getName());
-                                if (selectedLocation.equals(item)) {
-                                    //
-                                }
-                            } else {
-                                setText("<null>");
-                            }
-                        } else {
-                            setText(null);
-                        }
-                    }
-
-                };
-            }
-        });
-        location2Column.setCellFactory(new Callback<TableColumn<LocationConnection, Location>, TableCell<LocationConnection, Location>>() {
-            @Override
-            public TableCell<LocationConnection, Location> call(TableColumn<LocationConnection, Location> locationConnectionLocationTableColumn) {
-                return new TableCell<LocationConnection, Location>() {
-
-                    @Override
-                    protected void updateItem(Location item, boolean empty) {
-                        super.updateItem(item, empty);
-
-                        if (!empty) {
-                            if (item != null) {
-                                setText(item.getName());
-                            } else {
-                                setText("<null>");
-                            }
-                        } else {
-                            setText(null);
-                        }
-                    }
-
-                };
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<LocationConnection, String> r) {
+                if (r.getValue() != null) {
+                    String connectedToString = r.getValue().connectedTo(selectedLocation).getName();
+                    return new SimpleStringProperty(connectedToString);
+                } else {
+                    return new SimpleStringProperty("");
+                }
             }
         });
 
@@ -198,10 +191,7 @@ public class EditLocationController implements Initializable {
         stage.setScene(new Scene(scene, 600, 438));
     }
 
-    @FXML
-    private void onSavePressed() {
-        log.debug("calling SaveButtonPressed");
-
+    private void saveLocation() {
         // save region
         String name = nameField.getText();
         Weather weather = Weather.parse(weatherChoiceBox.getSelectionModel().getSelectedIndex());
@@ -233,23 +223,6 @@ public class EditLocationController implements Initializable {
             throw new DSAValidationException("Höhe muss eine Zahl sein.");
         }
 
-//        Set<LocationConnection> conn1 = new HashSet<>(locationConnectionsTable.getItems().size());
-//        Set<LocationConnection> conn2 = new HashSet<>(locationConnectionsTable.getItems().size());
-//        for (LocationConnection con : locationConnectionsTable.getItems()) {
-//            if (con.getLocation1().equals(selectedLocation)) {
-//                conn1.add(con);
-//                log.info("location1: " + con);
-//            } else {
-//                conn2.add(con);
-//                log.info("location2: " + con);
-//            }
-//        }
-//
-//        selectedLocation.getConnections1().clear();
-//        selectedLocation.getConnections2().clear();
-//        selectedLocation.getConnections1().addAll(conn1);
-//        selectedLocation.getConnections1().addAll(conn2);
-
         log.info("connections now in selected Location");
         for (LocationConnection con : selectedLocation.getAllConnections()) {
             log.info("location: " + con);
@@ -263,9 +236,17 @@ public class EditLocationController implements Initializable {
             locationService.update(selectedLocation);
         }
 
+        selectedLocation = locationService.get(selectedLocation.getId());
+    }
+
+    @FXML
+    private void onSavePressed() {
+        log.debug("calling SaveButtonPressed");
+
+        saveLocation();
+
 //        locationService.update(selectedLocation);
 
-        selectedLocation = locationService.get(selectedLocation.getId());
 
         // return to locationlist
         Stage stage = (Stage) cancelButton.getScene().getWindow();
@@ -313,62 +294,75 @@ public class EditLocationController implements Initializable {
     }
 
     @FXML
-    public void onSuggestConnectionsBtnClicked() {
-        try {
-            selectedLocation.setxCoord(Integer.parseInt(xCoord.getText()));
-        } catch (NumberFormatException e) {
-            throw new DSAValidationException("xCoord muss eine Zahl sein.");
-        }
-        try {
-            selectedLocation.setyCoord(Integer.parseInt(yCoord.getText()));
-        } catch (NumberFormatException e) {
-            throw new DSAValidationException("yCoord muss eine Zahl sein.");
-        }
-        List<LocationConnection> suggestedConnections = locationService.suggestLocationConnectionsAround(selectedLocation, 100.0);
+    public void onEditConnectionsClicked() {
+        log.debug("calling onEditConnectionsClicked");
+        EditLocationConnectionsController.setSelectedLocation(selectedLocation);
 
-//        if (selectedLocation.getId() != null) {
-//            Location reloaded = locationService.get(selectedLocation.getId());
-//            if (reloaded != null) {
-//                suggestedConnections.addAll(reloaded.getAllConnections());
+        Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
+        Parent root = (Parent) loader.load("/gui/editlocationconnections.fxml");
+
+        stage.setTitle("Reiseverbindungen für Ort '" + selectedLocation.getName() + "' bearbeiten");
+        stage.setScene(new Scene(root, 900, 500));
+        stage.show();
+    }
+
+//    @FXML
+//    public void onSuggestConnectionsBtnClicked() {
+//        try {
+//            selectedLocation.setxCoord(Integer.parseInt(xCoord.getText()));
+//        } catch (NumberFormatException e) {
+//            throw new DSAValidationException("xCoord muss eine Zahl sein.");
+//        }
+//        try {
+//            selectedLocation.setyCoord(Integer.parseInt(yCoord.getText()));
+//        } catch (NumberFormatException e) {
+//            throw new DSAValidationException("yCoord muss eine Zahl sein.");
+//        }
+//        List<LocationConnection> suggestedConnections = locationService.suggestLocationConnectionsAround(selectedLocation, 100.0);
+//
+////        if (selectedLocation.getId() != null) {
+////            Location reloaded = locationService.get(selectedLocation.getId());
+////            if (reloaded != null) {
+////                suggestedConnections.addAll(reloaded.getAllConnections());
+////            }
+////        }
+////        ObservableList<LocationConnection> connections = FXCollections.observableArrayList(suggestedConnections);
+////        locationConnectionsTable.getItems().clear();
+////        locationConnectionsTable.setItems(connections);
+//        ArrayList<String> errorMsgs = new ArrayList<>();
+//        for (LocationConnection c : suggestedConnections) {
+//            try {
+//                locationConnectionService.add(c);
+//                locationConnectionsTable.getItems().add(c);
+//            } catch (DSARuntimeException ex) {
+//                errorMsgs.add(ex.getMessage());
 //            }
 //        }
-//        ObservableList<LocationConnection> connections = FXCollections.observableArrayList(suggestedConnections);
-//        locationConnectionsTable.getItems().clear();
-//        locationConnectionsTable.setItems(connections);
-        ArrayList<String> errorMsgs = new ArrayList<>();
-        for (LocationConnection c : suggestedConnections) {
-            try {
-                locationConnectionService.add(c);
-                locationConnectionsTable.getItems().add(c);
-            } catch (DSARuntimeException ex) {
-                errorMsgs.add(ex.getMessage());
-            }
-        }
-        if (errorMsgs.size() > 0) {
-            Dialogs.create()
-                    .title(errorMsgs.size() + " Verbindungen konnten nicht hinzugefügt werden.")
-                    .masthead(null)
-                    .message(errorMsgs.toString())
-                    .showWarning();
-        }
+//        if (errorMsgs.size() > 0) {
+//            Dialogs.create()
+//                    .title(errorMsgs.size() + " Verbindungen konnten nicht hinzugefügt werden.")
+//                    .masthead(null)
+//                    .message(errorMsgs.toString())
+//                    .showWarning();
+//        }
+//
+//    }
 
-    }
+//    @FXML
+//    public void onAddConnectionBtnClicked() {
+//
+//    }
+//
+//    @FXML
+//    public void onRemoveConnectionBtnClicked() {
+//        LocationConnection selected = locationConnectionsTable.getSelectionModel().getSelectedItem();
+//        locationConnectionService.remove(selected);
+//        locationConnectionsTable.getItems().remove(selected);
+//    }
 
-    @FXML
-    public void onAddConnectionBtnClicked() {
-
-    }
-
-    @FXML
-    public void onRemoveConnectionBtnClicked() {
-        LocationConnection selected = locationConnectionsTable.getSelectionModel().getSelectedItem();
-        locationConnectionService.remove(selected);
-        locationConnectionsTable.getItems().remove(selected);
-    }
-
-    public void setLocationConnectionService(LocationConnectionService locationConnectionService) {
-        this.locationConnectionService = locationConnectionService;
-    }
+//    public void setLocationConnectionService(LocationConnectionService locationConnectionService) {
+//        this.locationConnectionService = locationConnectionService;
+//    }
 
 
 //    private void removeConnection(LocationConnection connection) {

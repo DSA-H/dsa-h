@@ -67,42 +67,6 @@ public class LocationServiceImpl implements LocationService, Serializable {
         return result;
     }
 
-    @Override
-    public List<LocationConnection> suggestLocationConnectionsAround(Location location, double withinDistance) {
-        log.debug("calling suggestLocationConnectionsAround(" + location + "," + withinDistance + ")");
-        List<Location> nearLocations = locationDao.getAllAroundNotConnected(location, withinDistance);
-        List<LocationConnection> result = new ArrayList<>(nearLocations.size());
-
-        for (Location l : nearLocations) {
-            LocationConnection suggestion = new LocationConnection();
-            suggestion.setLocation1(location);
-            suggestion.setLocation2(l);
-            double distanceSuggested = suggestedDistanceBetween(location, l);
-            int suggestedTravelTime = suggestedTravelTimeForDistance(distanceSuggested);
-            suggestion.setTravelTime(suggestedTravelTime);
-            result.add(suggestion);
-        }
-        log.trace("returning " + result);
-        return result;
-    }
-
-    @Override
-    public double suggestedDistanceBetween(Location location1, Location location2) {
-        log.debug("calling suggestedDistanceBetween(" + location1 + "," + location2 + ")");
-        double result = Math.sqrt(Math.pow(location1.getxCoord() - location2.getxCoord(), 2) + Math.pow(location1.getyCoord() - location2.getyCoord(), 2));
-        log.trace("returning " + result);
-        return result;
-    }
-
-    @Override
-    public int suggestedTravelTimeForDistance(double distance) {
-        log.debug("calling suggestedTravelTimeForDistance(" + distance + ")");
-
-        int result = (int) (distance / 10); // TODO find good value
-        log.trace("returning " + result);
-        return result;
-    }
-
     public void setLocationDao(LocationDao locationDao) {
         this.locationDao = locationDao;
     }

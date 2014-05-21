@@ -77,18 +77,15 @@
          <center>
             <TableView fx:id="locationConnectionsTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn fx:id="location1Column" prefWidth="141.0" text="Ort 1" />
-                <TableColumn fx:id="location2Column" minWidth="0.0" prefWidth="132.0" text="Ort 2" />
-                  <TableColumn fx:id="travelTimeColumn" minWidth="0.0" prefWidth="106.0" text="Reisedauer" />
+                <TableColumn fx:id="connectionToColumn" prefWidth="212.0" text="Reiseverbindung zu" />
+                  <TableColumn fx:id="travelTimeColumn" minWidth="0.0" prefWidth="139.0" text="Reisedauer" />
               </columns>
             </TableView>
          </center>
          <top>
-            <FlowPane prefWidth="200.0" BorderPane.alignment="CENTER">
+            <FlowPane alignment="TOP_CENTER" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="addConnectionBtn" mnemonicParsing="false" onAction="#onAddConnectionBtnClicked" text="hinzufügen" />
-                  <Button fx:id="removeConnectionBtn" mnemonicParsing="false" onAction="#onRemoveConnectionBtnClicked" text="entfernen" />
-                  <Button fx:id="suggestConnectionsBtn" mnemonicParsing="false" onAction="#onSuggestConnectionsBtnClicked" text="vorschlagen" />
+                  <Button fx:id="editConnectionsBtn" mnemonicParsing="false" onAction="#onEditConnectionsClicked" text="Reiseverbindungen bearbeiten" />
                </children>
             </FlowPane>
          </top>

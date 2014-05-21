@@ -43,8 +43,6 @@ public class LocationServiceTest extends TestCase {
     @Autowired
     private RegionService regionService;
 
-    private final static double EPSILON = 1E-5;
-
     @Test
     @DatabaseSetup("/testData.xml")
     public void testAdd() throws Exception {
@@ -88,61 +86,6 @@ public class LocationServiceTest extends TestCase {
         Location l1 = locationService.get(1);
         Location l2 = locationService.get(2);
         assertThat(locationService.getAll(), hasItems(l1, l2));
-    }
-
-    @Test
-    @DatabaseSetup("/testData.xml")
-    public void suggestConnectionsAround_locationsAround() throws Exception {
-        Location location = locationService.get(4);
-        List<LocationConnection> suggestions = locationService.suggestLocationConnectionsAround(location, 100);
-        assertEquals(1, suggestions.size());
-    }
-
-    @Test
-    @DatabaseSetup("/testData.xml")
-    public void suggestConnectionsAround_noLocationsAround() throws Exception {
-        Location location = locationService.get(4);
-        List<LocationConnection> suggestions = locationService.suggestLocationConnectionsAround(location, 25);
-        assertEquals(0, suggestions.size());
-    }
-
-
-
-    @Test
-    @DatabaseSetup("/testData.xml")
-    public void suggestConnectionsAround_locationIsLocation1() {
-        Location location = locationService.get(4);
-        List<LocationConnection> suggestions = locationService.suggestLocationConnectionsAround(location, 100);
-        LocationConnection con1 = suggestions.get(0);
-        assertEquals(location, con1.getLocation1());
-    }
-
-    @Test
-    @DatabaseSetup("/testData.xml")
-    public void suggestedDistanceBetween_positive() {
-        Location location = locationService.get(6);
-        List<LocationConnection> suggestions = locationService.suggestLocationConnectionsAround(location, 100);
-        for (LocationConnection suggestion : suggestions) {
-            Location other = suggestion.getLocation2();
-            double distanceSuggested = locationService.suggestedDistanceBetween(location, other);
-            assertTrue(distanceSuggested >= 0);
-        }
-    }
-
-    @Test
-    @DatabaseSetup("/testData.xml")
-    public void suggestedDistanceBetween_GtOrEqDirectDistance() {
-        Location location = locationService.get(6);
-        List<LocationConnection> suggestions = locationService.suggestLocationConnectionsAround(location, 100);
-        for (LocationConnection suggestion : suggestions) {
-            Location other = suggestion.getLocation2();
-            double distanceSuggested = locationService.suggestedDistanceBetween(location, other);
-            assertTrue(distanceSuggested >= Math.abs(location.getxCoord() - other.getxCoord()));
-            assertTrue(distanceSuggested >= Math.abs(location.getyCoord() - other.getyCoord()));
-            double minDistance = Math.sqrt(Math.pow(location.getxCoord() - other.getxCoord(), 2)
-                                            + Math.pow(location.getyCoord() - other.getyCoord(), 2));
-            assertTrue(distanceSuggested >= minDistance - EPSILON);
-        }
     }
 
 //    @Test
