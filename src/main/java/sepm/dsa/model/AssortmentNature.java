@@ -2,6 +2,7 @@ package sepm.dsa.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -15,8 +16,11 @@ public class AssortmentNature implements Serializable {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(nullable = true, name = "productCategory", insertable = false, updatable = false)
     private ProductCategory productCategory;
+
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "assortments")
+    private TraderCategory traderCategory;
 
     @Override
     public boolean equals(Object o) {
@@ -43,6 +47,7 @@ public class AssortmentNature implements Serializable {
     }
 
     @NotNull
+    @Size(min = 1, max = 100)
     @Column(nullable = false)
     private Integer defaultOccurence;
 
@@ -68,5 +73,13 @@ public class AssortmentNature implements Serializable {
 
     public void setDefaultOccurence(Integer defaultOccurence) {
         this.defaultOccurence = defaultOccurence;
+    }
+
+    public TraderCategory getTraderCategory() {
+        return traderCategory;
+    }
+
+    public void setTraderCategory(TraderCategory traderCategory) {
+        this.traderCategory = traderCategory;
     }
 }

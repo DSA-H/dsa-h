@@ -27,8 +27,8 @@ public class TraderCategory implements Serializable {
     @Column(length = 1000)
     private String comment;
 
-    @OneToMany
-    @JoinColumn(nullable = true, name = "productCategory")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(nullable = true, name = "traderCategory")
     private Set<AssortmentNature> assortments = new HashSet<>();
 
     public Integer getId() {
