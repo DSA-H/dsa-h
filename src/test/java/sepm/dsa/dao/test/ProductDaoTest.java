@@ -59,12 +59,21 @@ public class ProductDaoTest {
     }
 
     @Test(expected = org.hibernate.PropertyValueException.class)
-    public void add_incompleteRegion_shouldNOTPersistEntity() {
+    public void add_incompleteProduct_shouldNOTPersistEntity() {
 
         Product product = new Product();
         productDao.add(product);
         Product persistedProduct = productDao.get(product.getId());
         assertTrue(persistedProduct == null);
+    }
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void testRemoveProduct() {
+        Product p = productDao.get(2);
+        int size = productDao.getAll().size();
+        productDao.remove(p);
+        assertEquals(size, productDao.getAll().size()+1);
     }
 
 }
