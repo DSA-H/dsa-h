@@ -61,21 +61,10 @@ public class EditTraderCategoryController implements Initializable {
 
         // init ChoiceBoxes
         List<ProductCategory> productCategories = new ArrayList<>();
-
-        //TODO erst verwenden wenn der service wirklich funktioniert
         productCategories = productCategoryService.getAll();
 
-        //Try on mock ############
-//        ProductCategory p1 = new ProductCategory();
-//        p1.setName("dfsdf");
-//        ProductCategory p2 = new ProductCategory();
-//        p2.setName("kjk");
-//        productCategories.add(p1);
-//        productCategories.add(p2);
-//        productCategoryService.add(p1);
-//        productCategoryService.add(p2);
-
-        // end mock ############
+        assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("productCategory"));
+        defaultOccurenceColumn.setCellValueFactory(new PropertyValueFactory<>("defaultOccurence"));
 
         // set values if editing
         if (traderCategory != null) {
@@ -83,13 +72,11 @@ public class EditTraderCategoryController implements Initializable {
             removeAssortButton.setDisable(false);
             nameField.setText(traderCategory.getName());
             ArrayList<AssortmentNature> assortmentNaturesAlreadySelected = new ArrayList<>(traderCategory.getAssortments());
-            for (AssortmentNature as:assortmentNaturesAlreadySelected){
+            for (AssortmentNature as : assortmentNaturesAlreadySelected) {
                 productCategories.remove(as.getProductCategory());
             }
 
             productCategoryChoiceBox.setItems(FXCollections.observableArrayList(productCategories));
-            assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("productCategory"));
-            defaultOccurenceColumn.setCellValueFactory(new PropertyValueFactory<>("defaultOccurence"));
 
 //            borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Region, String>, ObservableValue<String>>() {
 //                @Override
@@ -191,7 +178,7 @@ public class EditTraderCategoryController implements Initializable {
 
         traderCategory.setName(name);
         HashSet<AssortmentNature> assortmentNatures = new HashSet<>(assortmentTable.getItems());
-        if (assortmentNatures.size()<= 0){
+        if (assortmentNatures.size() <= 0) {
             throw new DSAValidationException("Mindestens eine Warenkategorie muss gewählt werden");
         }
         traderCategory.setAssortments(assortmentNatures);
