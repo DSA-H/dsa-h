@@ -20,7 +20,6 @@ public class TraderCategoryDaoImpl implements TraderCategoryDao {
 
     private static final Logger log = LoggerFactory.getLogger(TraderCategoryDaoImpl.class);
 
-    @Autowired
     private TraderDao traderDao;
 
     private SessionFactory sessionFactory;
@@ -48,7 +47,7 @@ public class TraderCategoryDaoImpl implements TraderCategoryDao {
         if (traders.isEmpty()) {
             sessionFactory.getCurrentSession().delete(traderCategory);
         } else {
-            throw new DSAValidationException("existing traders in this category");
+            throw new DSAValidationException("Löschen nicht möglich. Zu dieser Kategorie sind noch Händler vorhanden.");
         }
     }
 
@@ -81,5 +80,9 @@ public class TraderCategoryDaoImpl implements TraderCategoryDao {
     public void setSessionFactory(SessionFactory sessionFactory) {
         log.debug("calling setSessionFactory(" + sessionFactory + ")");
         this.sessionFactory = sessionFactory;
+    }
+
+    public void setTraderDao(TraderDao traderDao) {
+        this.traderDao = traderDao;
     }
 }

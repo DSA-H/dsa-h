@@ -23,6 +23,7 @@ import sepm.dsa.service.TraderCategoryService;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service("EditTraderCategoryController")
 public class EditTraderCategoryController implements Initializable {
@@ -62,17 +63,17 @@ public class EditTraderCategoryController implements Initializable {
         log.debug("initialize EditRegionController");
 
         // init ChoiceBoxes
-        List<ProductCategory> productCategories = new ArrayList<>();
-        productCategories = productCategoryService.getAll();
-
+        List<ProductCategory> productCategories = productCategoryService.getAll();
         assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("productCategory"));
         defaultOccurenceColumn.setCellValueFactory(new PropertyValueFactory<>("defaultOccurence"));
+
 
         // set values if editing
         if (traderCategory != null) {
             isNewTraderCategory = false;
             removeAssortButton.setDisable(false);
             nameField.setText(traderCategory.getName());
+            commentField.setText(traderCategory.getComment());
             ArrayList<AssortmentNature> assortmentNaturesAlreadySelected = new ArrayList<>(traderCategory.getAssortments());
             for (AssortmentNature as : assortmentNaturesAlreadySelected) {
                 productCategories.remove(as.getProductCategory());
@@ -111,25 +112,26 @@ public class EditTraderCategoryController implements Initializable {
         }
         AssortmentNature assortToSave = new AssortmentNature();
         assortToSave.setProductCategory(selectedProductCategory);
+        assortToSave.setTraderCategory(traderCategory);
         int defaultOcc = 100;
         if (!defaultOccurence.getText().isEmpty()) {
             try {
                 defaultOcc = Integer.parseInt(defaultOccurence.getText());
             } catch (NumberFormatException ex) {
-                throw new DSAValidationException("Vorkommen muss eine ganze Zahl zwischen 1 und 100 sein.");
+                throw new DSAValidationException("Häufigkeit muss eine ganze Zahl zwischen 1 und 100 sein.");
             }
         } else {
             //Empty case
             //do nothing just use the 100 as default
         }
         assortToSave.setDefaultOccurence(defaultOcc);
+        assortmentNatureService.validate(assortToSave);
         assortmentTable.getItems().add(assortToSave);
 
         productCategoryChoiceBox.getItems().remove(selectedProductCategory);
         productCategoryChoiceBox.getSelectionModel().selectFirst();
-
         //TODO besser / schöner gestalten -> evtl. inkrementelle Suche oder sonstwas
-        //TODO multiple select ermöglichen
+        //TODO multiple select ermöglichen ???? Wie soll das gehen ??
     }
 
     @FXML
@@ -151,18 +153,15 @@ public class EditTraderCategoryController implements Initializable {
         log.debug("calling SaveButtonPressed");
 
         // save traderCategory
-        String name = nameField.getText();
-        assortmentTable.getItems();
         traderCategory.setComment(commentField.getText());
+        traderCategory.setName(nameField.getText());
 
-        traderCategory.setName(name);
-        HashSet<AssortmentNature> assortmentNatures = new HashSet<>(assortmentTable.getItems());
+        Set<AssortmentNature> assortmentNatures = new HashSet<>(assortmentTable.getItems());
         if (assortmentNatures.size() <= 0) {
             throw new DSAValidationException("Mindestens eine Warenkategorie muss gewählt werden");
         }
         traderCategory.setAssortments(assortmentNatures);
 
-        assortmentNatureService.add(assortmentNatures);
         if (isNewTraderCategory) {
             traderCategoryService.add(traderCategory);
         } else {

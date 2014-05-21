@@ -117,10 +117,9 @@ public class TraderCategoryListController implements Initializable {
             Action response = Dialogs.create()
                     .title("Löschen?")
                     .masthead(null)
-                    .message("Wollen Sie die Händlerkategorie '" + selectedTraderCategory.getName() + "' und alle zugehörigen Händler wirklich löschen?")
+                    .message("Wollen Sie die Händlerkategorie '" + selectedTraderCategory.getName() + "' wirklich löschen?")
                     .showConfirm();
             if (response == Dialog.Actions.YES) {
-                //TODO check if traders are removed as well !!!! ######################### <<<<< ####
                 traderCategoryService.remove(selectedTraderCategory);
                 traderCategoryTable.getItems().remove(selectedTraderCategory);
             }
