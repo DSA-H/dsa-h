@@ -1,5 +1,8 @@
 package sepm.dsa.model;
 
+import sepm.dsa.service.path.PathEdge;
+import sepm.dsa.service.path.PathNode;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -11,7 +14,7 @@ import java.io.Serializable;
         @AssociationOverride(name = "pk.region1", joinColumns = @JoinColumn(name = "region1")),
         @AssociationOverride(name = "pk.region2", joinColumns = @JoinColumn(name = "region2"))
 })
-public class RegionBorder implements Serializable {
+public class RegionBorder implements Serializable, PathEdge {
 
     private static final long serialVersionUID = -5121547134534726826L;
 
@@ -126,7 +129,20 @@ public class RegionBorder implements Serializable {
                     ", region2=" + region2 +
                     '}';
         }
-
-
     }
+
+	@Override
+	public int getPathCosts() {
+		return getBorderCost();
+	}
+
+	@Override
+	public PathNode getStart() {
+		return getRegion1();
+	}
+
+	@Override
+	public PathNode getEnd() {
+		return getRegion2();
+	}
 }

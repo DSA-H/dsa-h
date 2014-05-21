@@ -1,8 +1,7 @@
 package sepm.dsa.model;
 
-import org.hibernate.FetchMode;
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.service.path.PathNode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,7 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "regions")
-public class Region implements Serializable {
+public class Region implements Serializable, PathNode {
     private static final long serialVersionUID = 5890354733231481712L;
 
     @Id
