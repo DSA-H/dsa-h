@@ -16,6 +16,7 @@ import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.AssortmentNature;
 import sepm.dsa.model.ProductCategory;
 import sepm.dsa.model.TraderCategory;
+import sepm.dsa.service.AssortmentNatureService;
 import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.TraderCategoryService;
 
@@ -25,9 +26,10 @@ import java.util.List;
 
 @Service("EditTraderCategoryController")
 public class EditTraderCategoryController implements Initializable {
-    private TraderCategoryService traderCategoryService;
 
+    private TraderCategoryService traderCategoryService;
     private ProductCategoryService productCategoryService;
+    private AssortmentNatureService assortmentNatureService;
 
     private static TraderCategory traderCategory;
 
@@ -59,19 +61,19 @@ public class EditTraderCategoryController implements Initializable {
 
         // init ChoiceBoxes
         List<ProductCategory> productCategories = new ArrayList<>();
-        /*
+
         //TODO erst verwenden wenn der service wirklich funktioniert
         productCategories = productCategoryService.getAll();
-        */
+
         //Try on mock ############
-        ProductCategory p1 = new ProductCategory();
-        p1.setName("dfsdf");
-        ProductCategory p2 = new ProductCategory();
-        p2.setName("kjk");
-        productCategories.add(p1);
-        productCategories.add(p2);
-        productCategoryService.add(p1);
-        productCategoryService.add(p2);
+//        ProductCategory p1 = new ProductCategory();
+//        p1.setName("dfsdf");
+//        ProductCategory p2 = new ProductCategory();
+//        p2.setName("kjk");
+//        productCategories.add(p1);
+//        productCategories.add(p2);
+//        productCategoryService.add(p1);
+//        productCategoryService.add(p2);
 
         // end mock ############
 
@@ -188,6 +190,7 @@ public class EditTraderCategoryController implements Initializable {
         traderCategory.setAssortments(assortmentNatures);
 
         if (isNewTraderCategory) {
+            assortmentNatureService.add(assortmentNatures);
             traderCategoryService.add(traderCategory);
         } else {
             traderCategoryService.update(traderCategory);
@@ -223,11 +226,11 @@ public class EditTraderCategoryController implements Initializable {
         this.traderCategoryService = traderCategoryService;
     }
 
-    public ProductCategoryService getProductCategoryService() {
-        return productCategoryService;
-    }
-
     public void setProductCategoryService(ProductCategoryService productCategoryService) {
         this.productCategoryService = productCategoryService;
+    }
+
+    public void setAssortmentNatureService(AssortmentNatureService assortmentNatureService) {
+        this.assortmentNatureService = assortmentNatureService;
     }
 }

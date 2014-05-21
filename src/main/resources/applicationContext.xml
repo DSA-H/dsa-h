@@ -87,6 +87,10 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="assortmentNatureDao" class="sepm.dsa.dao.AssortmentNatureDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <bean id="productUnitDao" class="sepm.dsa.dao.ProductUnitDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
@@ -123,6 +127,10 @@
     <bean id="traderService" class="sepm.dsa.service.TraderServiceImpl">
         <property name="traderDao" ref="traderDao"/>
         <property name="productService" ref="productService"/>
+    </bean>
+
+    <bean id="assortmentNatureService" class="sepm.dsa.service.AssortmentNatureServiceImpl">
+        <property name="assortmentNatureDao" ref="assortmentNatureDao"/>
     </bean>
 
     <!-- GUI DI -->
@@ -166,6 +174,7 @@
         <property name="loader" ref="loader"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
         <property name="productCategoryService" ref="productCategoryService"/>
+        <property name="assortmentNatureService" ref="assortmentNatureService"/>
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>

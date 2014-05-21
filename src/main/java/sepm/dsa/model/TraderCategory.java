@@ -25,7 +25,7 @@ public class TraderCategory implements Serializable {
     private String name;
 
     @OneToMany
-    @JoinColumn(nullable = true)
+    @JoinColumn(nullable = true, name = "productCategory")
     private Set<AssortmentNature> assortments = new HashSet<>();
 
     public Integer getId() {

@@ -15,7 +15,7 @@ public class AssortmentNature implements Serializable {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(nullable = true)
+    @JoinColumn(nullable = true, name = "productCategory", insertable = false, updatable = false)
     private ProductCategory productCategory;
 
     @Override
