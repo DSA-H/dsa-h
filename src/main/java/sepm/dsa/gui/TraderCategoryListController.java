@@ -17,6 +17,8 @@ import javafx.util.Callback;
 import org.controlsfx.control.action.Action;
 import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,7 @@ public class TraderCategoryListController implements Initializable {
     private TraderCategoryService traderCategoryService;
     private static final Logger log = LoggerFactory.getLogger(TraderCategoryListController.class);
     private SpringFxmlLoader loader;
+    private SessionFactory sessionFactory;
 
     @FXML
     private TableView<TraderCategory> traderCategoryTable;
@@ -57,14 +60,18 @@ public class TraderCategoryListController implements Initializable {
             @Transactional(readOnly = true)
             public ObservableValue<String> call(TableColumn.CellDataFeatures<TraderCategory, String> r) {
                 if (r.getValue() != null) {
+                   Session session = sessionFactory.openSession();
                    StringBuilder sb = new StringBuilder();
-                   for(AssortmentNature assortmentNature : r.getValue().getAssortments()) {
+                   TraderCategory tc = r.getValue();
+                   session.refresh(tc);
+                   for(AssortmentNature assortmentNature : tc.getAssortments()) {
                        String productCategorieName = assortmentNature.getProductCategory().getName();
                        sb.append(productCategorieName + ", ");
                     }
                     if (sb.length() >= 2) {
                         sb.delete(sb.length() - 2, sb.length());
                     }
+                    session.close();
                     return new SimpleStringProperty(sb.toString());
                 } else {
                     return new SimpleStringProperty("");
@@ -111,7 +118,7 @@ public class TraderCategoryListController implements Initializable {
     @FXML
     private void onDeleteButtonPressed() {
         log.debug("onDeleteButtonPressed - deleting selected Region");
-        TraderCategory selectedTraderCategory = traderCategoryTable.getFocusModel().getFocusedItem();
+        TraderCategory selectedTraderCategory = traderCategoryTable.getSelectionModel().getSelectedItem();
 
         if (selectedTraderCategory != null) {
             log.debug("open Confirm-Delete-Region Dialog");
@@ -130,7 +137,7 @@ public class TraderCategoryListController implements Initializable {
 
     @FXML
     private void checkFocus() {
-        TraderCategory selectedTraderCategory = traderCategoryTable.getFocusModel().getFocusedItem();
+        TraderCategory selectedTraderCategory = traderCategoryTable.getSelectionModel().getSelectedItem();
         if (selectedTraderCategory == null) {
             deleteButton.setDisable(true);
             editButton.setDisable(true);
@@ -152,4 +159,7 @@ public class TraderCategoryListController implements Initializable {
         this.loader = loader;
     }
 
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 }

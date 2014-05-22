@@ -130,7 +130,6 @@
             <version>1.6.2</version>
         </dependency>
 
-
         <!-- hibernate entity manager -->
         <dependency>
             <groupId>org.hibernate</groupId>

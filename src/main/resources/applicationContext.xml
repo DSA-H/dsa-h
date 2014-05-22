@@ -203,6 +203,7 @@
 
     <bean id="TraderCategoryList" class="sepm.dsa.gui.TraderCategoryListController">
         <property name="loader" ref="loader"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
     </bean>
 
