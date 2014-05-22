@@ -5,10 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -50,6 +47,8 @@ public class TraderDetailsController implements Initializable {
 	private TextField difficultyField;
 	@FXML
 	private Label resultLabel;
+	@FXML
+	private TextArea commentArea;
 
 
 	@Override
@@ -110,6 +109,7 @@ public class TraderDetailsController implements Initializable {
 
 		nameLabel.setText(trader.getName());
 		categoryLabel.setText(trader.getCategory().getName());
+		commentArea.setText(trader.getComment());
 
 		List<Offer> offers = new ArrayList<>(trader.getOffers());
 		offerTable.setItems(FXCollections.observableArrayList(offers));
