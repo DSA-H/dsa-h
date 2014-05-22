@@ -115,30 +115,52 @@ public class TraderServiceTest extends TestCase {
         assertTrue(traders.contains(t1));
     }
 
-    @Test
-    @DatabaseSetup("/testData.xml")
-    public void calculatePriceForProduct_alwaysPositive() {
-        Trader trader = traderService.get(1);
-        Set<AssortmentNature> assortments = trader.getCategory().getAssortments();
-        for (AssortmentNature a : assortments) {
-            for (Product p : a.getProductCategory().getProducts()) {
-                assertTrue("Preis muss positiv sein", traderService.calculatePriceForProduct(p, trader) > 0);
-            }
-        }
-    }
-
-    @Test
-    @DatabaseSetup("/testData.xml")
-    public void calculateOffers() {
-        Trader trader = traderService.get(1);
-        int traderSize = trader.getSize();
-
-        int offersAmount = 0;
-        List<Offer> offers = traderService.calculateOffers(trader);
-        for (Offer o : offers) {
-            offersAmount += o.getAmount();
-        }
-        assertTrue(offersAmount <= traderSize);
-    }
-
+//    @Test
+//    @DatabaseSetup("/testData.xml")
+//    public void calculatePriceForProduct_alwaysPositive() {
+//        Trader trader = traderService.get(1);
+//        Set<AssortmentNature> assortments = trader.getCategory().getAssortments();
+//        for (AssortmentNature a : assortments) {
+//            for (Product p : a.getProductCategory().getProducts()) {
+//                assertTrue("Preis muss positiv sein", traderService.calculatePriceForProduct(p, trader) > 0);
+//            }
+//        }
+////        assertTrue("There were no assortments set in test data", assortments.size() > 0);
+//    }
+//
+//    @Test
+//    @DatabaseSetup("/testData.xml")
+//    public void calculateOffers_OffersShouldNotExceedTraderSpace() {
+//        Trader trader = traderService.get(2);
+//        int traderSize = trader.getSize();
+//
+//        int offersAmount = 0;
+//        List<Offer> offers = traderService.calculateOffers(trader);
+//        for (Offer o : offers) {
+//            offersAmount += o.getAmount();
+//        }
+////        assertTrue("TraderService didn't find a offer to suggest, update test data", offers.size() > 0);
+//        assertTrue(offersAmount <= traderSize);
+//    }
+//
+//    @Test
+//    @DatabaseSetup("/testData.xml")
+//    public void calculateOffers_OffersShouldNotExceedTraderSpace2() {
+//        Trader trader = traderService.get(2);
+//
+//        List<Offer> offers = traderService.calculateOffers(trader);
+//        for (Offer o : offers) {
+//            Product p = o.getProduct();
+//            boolean contains = false;
+//            for (AssortmentNature a : trader.getCategory().getAssortments()) {
+//                if (a.getProductCategory().getProducts().contains(p)) {
+//                    contains = true;
+//                    break;
+//                }
+//            }
+//            assertTrue("Product in Trader Offer ist not in connected to the trader categories normal product categories", contains);
+//        }
+////        assertTrue("TraderService didn't find a offer to suggest, update test data", offers.size() > 0);
+//
+//    }
 }

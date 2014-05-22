@@ -45,7 +45,7 @@
     <product_categories productId="7" categoryId="3" />
     <product_regions productId="1" regionId="1" />
     <assortmentNatures ID="1" DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="1" traderCategory_id="1"  />
-    <assortmentNatures ID="2" DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="1" traderCategory_id="1" />
+    <assortmentNatures ID="2" DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="2" traderCategory_id="1" />
     <!-- location cascade deleting test data, don't change this -->
 
     <!-- end of location cascade deleting test data -->
