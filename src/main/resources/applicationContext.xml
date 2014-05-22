@@ -25,6 +25,7 @@
                 <value>sepm.dsa.model.Location</value>
                 <value>sepm.dsa.model.LocationConnection</value>
                 <value>sepm.dsa.model.Tavern</value>
+                <value>sepm.dsa.model.Player</value>
             </list>
         </property>
         <property name="mappingResources">
@@ -35,6 +36,7 @@
                 <value>sepm/dsa/model/hibernate/Location.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/LocationConnection.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Tavern.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Player.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -67,6 +69,10 @@
     </bean>
 
     <bean id="tavernDao" class="sepm.dsa.dao.TavernDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="playerDao" class="sepm.dsa.dao.PlayerDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 

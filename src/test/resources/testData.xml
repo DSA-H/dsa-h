@@ -32,4 +32,7 @@
 
     <taverns id="1" name="Zum Wegstein" location_id="1" xPos="42" yPos="12" usage="12"/>
     <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="42" yPos="12" usage="12"/>
+
+    <players id="1" name="Mr X" />
+    <players id="2" name="Mr Z" comment="A test comment"/>
 </dataset>
