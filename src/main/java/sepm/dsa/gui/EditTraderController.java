@@ -21,6 +21,8 @@ import sepm.dsa.service.LocationService;
 import sepm.dsa.service.TraderCategoryService;
 import sepm.dsa.service.TraderService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service("EditRegionController")
@@ -35,6 +37,9 @@ public class EditTraderController implements Initializable {
 	private LocationService locationService;
 
 	private boolean isNewTrader;
+
+	ArrayList<String> firstNames = new ArrayList<String>(
+			Arrays.asList("Orasilas", "", ""));
 
 	@FXML
 	private TextField nameField;
@@ -202,16 +207,6 @@ public class EditTraderController implements Initializable {
 		//comment
 		selectedTrader.setComment(commentArea.getText());
 
-		/*
-		selectedTrader.setName(nameField.getText());
-		selectedTrader.setSize(Integer.parseInt(sizeField.getText()));
-		selectedTrader.setMut(Integer.parseInt(muField.getText()));
-		selectedTrader.setIntelligence(Integer.parseInt(inField.getText()));
-		selectedTrader.setCharisma(Integer.parseInt(chField.getText()));
-		selectedTrader.setConvince(Integer.parseInt(convinceField.getText()));
-		selectedTrader.setLocation((Location) locationBox.getSelectionModel().getSelectedItem());
-		selectedTrader.setCategory((TraderCategory) categoryBox.getSelectionModel().getSelectedItem());
-		*/
 
 		if (isNewTrader) {
 			traderService.add(selectedTrader);
