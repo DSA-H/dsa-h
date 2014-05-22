@@ -1,5 +1,7 @@
 package sepm.dsa.service;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.apache.commons.collections.IteratorUtils;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
@@ -40,6 +42,10 @@ public class TraderServiceImpl implements TraderService {
 		log.debug("calling add(" + t + ")");
 		validate(t);
 		traderDao.add(t);
+		HashSet<Offer> offers = new HashSet<>(calculateOffers(t));
+		t.setOffers(offers);
+		update(t);
+
 	}
 
 	@Override
