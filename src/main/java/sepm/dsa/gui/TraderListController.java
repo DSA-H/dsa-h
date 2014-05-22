@@ -57,13 +57,23 @@ public class TraderListController implements Initializable {
 					@Override
 					public void changed(ObservableValue<? extends Location> selected, Location oldLoc, Location newLoc) {
 						List<Trader> traders = traderService.getAllForLocation((Location) locationBox.getSelectionModel().getSelectedItem());
-						List<String> names = new ArrayList();
-						log.info("SIZE: " + names.size());
-						for (Trader t : traders) {
-							names.add(t.getName());
-						}
-						traderList.setItems(FXCollections.observableArrayList(names));
+						traderList.setItems(FXCollections.observableArrayList(traders));
 						checkFocus();
+					}
+				}
+		);
+		traderList.getSelectionModel().selectedItemProperty().addListener(
+				new ChangeListener<Trader>() {
+					@Override
+					public void changed(ObservableValue<? extends Trader> selected, Trader oldTra, Trader newTra) {
+						selectedTrader = newTra;
+						if (selectedTrader == null) {
+							detailsButton.setDisable(true);
+							deleteButton.setDisable(true);
+						} else {
+							detailsButton.setDisable(false);
+							deleteButton.setDisable(false);
+						}
 					}
 				}
 		);
@@ -106,7 +116,7 @@ public class TraderListController implements Initializable {
 
 		Stage stage = (Stage) locationBox.getScene().getWindow();
 		Parent scene = (Parent) loader.load("/gui/traderdetails.fxml");
-		EditTraderController controller = loader.getController();
+		TraderDetailsController controller = loader.getController();
 		checkFocus();
 		controller.setTrader(selectedTrader);
 		stage.setScene(new Scene(scene, 600, 400));

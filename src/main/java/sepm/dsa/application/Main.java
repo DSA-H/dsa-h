@@ -10,6 +10,8 @@ import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import sepm.dsa.dao.ProductCategoryDao;
+import sepm.dsa.dao.ProductCategoryDaoHbmImpl;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.gui.MainMenuController;

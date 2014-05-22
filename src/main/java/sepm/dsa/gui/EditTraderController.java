@@ -16,10 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.dao.ProductCategoryDao;
+import sepm.dsa.dao.ProductCategoryDaoHbmImpl;
 import sepm.dsa.model.*;
-import sepm.dsa.service.LocationService;
-import sepm.dsa.service.TraderCategoryService;
-import sepm.dsa.service.TraderService;
+import sepm.dsa.service.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;

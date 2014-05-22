@@ -69,11 +69,6 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         return result;
     }
 
-    public void setProductDao(ProductCategoryDao productCategoryDao) {
-        log.debug("calling setProductDao(" + productCategoryDao + ")");
-        this.productCategoryDao = productCategoryDao;
-    }
-
     /**
      * Validates a product
      * @param product

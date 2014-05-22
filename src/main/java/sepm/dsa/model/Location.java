@@ -185,6 +185,12 @@ public class Location implements Serializable {
         return id != null ? id.hashCode() : 0;
     }
 
+	@Override
+	public String toString() {
+		return name;
+	}
+
+	/*
     @Override
     public String toString() {
         return "Location{" +
@@ -193,4 +199,6 @@ public class Location implements Serializable {
                 ", region=" + region +
                 '}';
     }
+    */
+
 }
