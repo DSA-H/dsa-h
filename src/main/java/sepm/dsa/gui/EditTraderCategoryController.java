@@ -155,7 +155,9 @@ public class EditTraderCategoryController implements Initializable {
         traderCategory.setComment(commentField.getText());
         traderCategory.setName(nameField.getText());
 
-        Set<AssortmentNature> assortmentNatures = new HashSet<>(assortmentTable.getItems());
+        Set<AssortmentNature> assortmentNatures = traderCategory.getAssortments();
+        assortmentNatures.clear();
+        assortmentNatures.addAll(assortmentTable.getItems());
         if (assortmentNatures.size() <= 0) {
             throw new DSAValidationException("Mindestens eine Warenkategorie muss gewählt werden");
         }
