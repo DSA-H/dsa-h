@@ -143,6 +143,7 @@ public class MainMenuController implements Initializable {
             }
         });
 
+	    //copy old file to temp
         if (matchingFiles != null && matchingFiles.length >= 1) {
             File oldMap = matchingFiles[0];
             String extOld = FilenameUtils.getExtension(oldMap.getAbsolutePath());
@@ -166,7 +167,8 @@ public class MainMenuController implements Initializable {
             e.printStackTrace();
         }
 
-        matchingFiles = activeDir.listFiles(new FilenameFilter() {
+	    //rename temp
+        matchingFiles = alternativeDir.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 return name.startsWith("lastWorldMapTemp");
             }
@@ -174,7 +176,6 @@ public class MainMenuController implements Initializable {
         if (matchingFiles != null && matchingFiles.length >= 1) {
             File oldMap = matchingFiles[0];
             String extOld = FilenameUtils.getExtension(oldMap.getAbsolutePath());
-            oldMap.delete();
             File dest =  new File("maps/alternative/ehemaligeWeltkarte." + extOld);
             int k=1;
             while(dest.exists() && !dest.isDirectory()){
