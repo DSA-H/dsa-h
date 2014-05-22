@@ -25,6 +25,7 @@
                 <value>sepm.dsa.model.Location</value>
                 <value>sepm.dsa.model.LocationConnection</value>
                 <value>sepm.dsa.model.Tavern</value>
+                <value>sepm.dsa.model.Currency</value>
             </list>
         </property>
         <property name="mappingResources">
@@ -35,6 +36,7 @@
                 <value>sepm/dsa/model/hibernate/Location.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/LocationConnection.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Tavern.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Currency.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -70,6 +72,10 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="currencyDao" class="sepm.dsa.dao.CurrencyDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
@@ -84,6 +90,10 @@
         <property name="locationDao" ref="locationDao"/>
     </bean>
 
+    <bean id="currencyService" class="sepm.dsa.service.CurrencyServiceImpl">
+        <property name="currencyDao" ref="currencyDao"/>
+    </bean>
+
     <bean id="locationConnectionService" class="sepm.dsa.service.LocationConnectionServiceImpl">
         <property name="locationConnectionDao" ref="locationConnectionDao"/>
         <property name="locationDao" ref="locationDao"/>
@@ -94,15 +104,15 @@
 
     <!-- GUI DI -->
     <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController">
-	    <property name="loader" ref="loader"/>
+        <property name="loader" ref="loader"/>
     </bean>
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
-	    <property name="loader" ref="loader"/>
+        <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
     </bean>
     <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
-	    <property name="loader" ref="loader"/>
+        <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
     </bean>
