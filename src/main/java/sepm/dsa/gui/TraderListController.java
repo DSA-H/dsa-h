@@ -87,7 +87,7 @@ public class TraderListController implements Initializable {
 		Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
 		EditTraderController controller = loader.getController();
 		controller.setTrader(null);
-		stage.setScene(new Scene(scene, 800, 400));
+		stage.setScene(new Scene(scene, 600, 400));
 	}
 
 	@FXML

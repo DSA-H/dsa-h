@@ -18,8 +18,7 @@
                     </items>
                 </Menu>
                 <Menu fx:id="dateiVerwaltenMenu" mnemonicParsing="false" text="Daten verwalten">
-                    <items>
-                        <MenuItem fx:id="verwaltenHaendlerKategorie" disable="true" mnemonicParsing="false" text="Händlerkategorie" /><Menu fx:id="verwaltenWeltkarte" mnemonicParsing="false" text="Weltkarte">
+                    <items><Menu fx:id="verwaltenWeltkarte" mnemonicParsing="false" text="Weltkarte">
   <items>
     <MenuItem fx:id="weltkarteImportieren" mnemonicParsing="false" onAction="#onWeltkarteImportierenPressed" text="Importieren" /><MenuItem fx:id="weltkarteExportieren" mnemonicParsing="false" onAction="#onWeltkarteExportierenPressed" text="Exportieren" />
   </items>
@@ -28,7 +27,7 @@
                         <MenuItem fx:id="verwaltenGebieteGrenzen" mnemonicParsing="false" onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen" />
                         <MenuItem fx:id="verwaltenWaehrungen" disable="true" mnemonicParsing="false" text="Währungen" />
                         <MenuItem fx:id="verwaltenWaren" disable="true" mnemonicParsing="false" text="Waren" />
-                        <MenuItem mnemonicParsing="false" onAction="#onShowLocationsClicked" text="Orte" />
+                        <MenuItem mnemonicParsing="false" onAction="#onShowLocationsClicked" text="Orte" /><MenuItem mnemonicParsing="false" onAction="#onTradersPressed" text="Händlerverwaltung" />
                     </items>
                 </Menu>
             </menus>
