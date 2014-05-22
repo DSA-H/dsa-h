@@ -48,24 +48,30 @@ public class TraderDetailsController implements Initializable {
 	@FXML
 	private void onBackPressed() {
 		log.debug("called onBackPressed");
+		//TODO back to TraderListController
 	}
 
 	@FXML
 	private void onEditPressed() {
 		log.debug("called onEditPressed");
+		//TODO switch to EditTraderController
 	}
 
 	@FXML
 	private void onRolePressed() {
 		log.debug("called onRolePressed");
+		//TODO not part of version 1
 	}
 	@FXML
 	private void onAddPressed() {
 		log.debug("called onAddPressed");
+		//TODO not part of version 1
 	}
+
 	@FXML
 	private void onDeletePressed() {
 		log.debug("called onDeletePressed");
+		//TODO not part of version 1
 	}
 
 	public void setTraderService(TraderService traderService) { this.traderService = traderService; }
