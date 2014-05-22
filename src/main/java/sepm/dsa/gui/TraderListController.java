@@ -103,6 +103,13 @@ public class TraderListController implements Initializable {
 	@FXML
 	private void onDetailsPressed() {
 		log.debug("called onDetailsPressed");
+
+		Stage stage = (Stage) locationBox.getScene().getWindow();
+		Parent scene = (Parent) loader.load("/gui/traderdetails.fxml");
+		EditTraderController controller = loader.getController();
+		checkFocus();
+		controller.setTrader(selectedTrader);
+		stage.setScene(new Scene(scene, 600, 400));
 	}
 
 	@FXML
