@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "locations")
@@ -59,6 +60,9 @@ public class Location implements Serializable {
     @Size(max = 1000)
     @Column(nullable = true, length = 1000)
     private String comment;
+
+    @OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) // no getter+setter to avoid lazy loading exceptions :)
+    private Set<Trader> traders;
 
     public Integer getId() {
         return id;

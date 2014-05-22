@@ -11,10 +11,8 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import sepm.dsa.model.RainfallChance;
-import sepm.dsa.model.Region;
-import sepm.dsa.model.RegionBorder;
-import sepm.dsa.model.Temperature;
+import sepm.dsa.model.*;
+import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionService;
 
 import java.util.List;
@@ -34,6 +32,9 @@ public class RegionServiceTest {
 
 	@Autowired
 	private RegionService rs;
+
+    @Autowired
+    private LocationService locationService;
 
     private Region addRegion;
     private Region deleteRegion;
@@ -174,6 +175,24 @@ public class RegionServiceTest {
         assertTrue(region.getAllBorders().size() == 3);
         assertTrue(region.getBorders1().size() == 3);
         assertTrue(region.getBorders2().size() == 0);
+
+    }
+
+    @Test
+    @DatabaseSetup("/testData.xml")
+    public void remove_LocationsInside_ShouldCascadeDeleteLocations() {
+        Region region = rs.get(1);
+        List<Location> locationsInside = locationService.getAllByRegion(region.getId());
+        int totalLocations = locationService.getAll().size();
+
+        rs.remove(region);
+
+        List<Location> locationsInsideNow = locationService.getAllByRegion(region.getId());
+        int totalLocationsNow = locationService.getAll().size();
+
+        assertTrue("Must have at least one location inside to get a reasonable test result", locationsInside.size() > 0);
+        assertEquals(totalLocations - 1, totalLocationsNow);
+        assertEquals(0, locationsInsideNow.size());
 
     }
 

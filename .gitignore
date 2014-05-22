@@ -4,3 +4,4 @@ target
 fooDB.*
 testDB.*
 DSA-H.iml
+log/*

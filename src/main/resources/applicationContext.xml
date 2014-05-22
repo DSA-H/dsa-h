@@ -96,6 +96,7 @@
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
         <property name="regionBorderDao" ref="regionBorderDao"/>
+        <property name="locationService" ref="locationService"/>
     </bean>
 
     <bean id="regionBorderService" class="sepm.dsa.service.RegionBorderServiceImpl">
@@ -104,6 +105,7 @@
 
     <bean id="locationService" class="sepm.dsa.service.LocationServiceImpl">
         <property name="locationDao" ref="locationDao"/>
+        <property name="traderService" ref="traderService"/>
     </bean>
 
     <bean id="productService" class="sepm.dsa.service.ProductServiceImpl">
@@ -144,6 +146,7 @@
 	    <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
+        <property name="locationService" ref="locationService" />
     </bean>
     <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
 	    <property name="loader" ref="loader"/>
@@ -153,6 +156,7 @@
     <bean id="LocationListController" class="sepm.dsa.gui.LocationListController">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
+        <property name="traderService" ref="traderService"/>
     </bean>
     <bean id="EditLocationController" class="sepm.dsa.gui.EditLocationController">
         <property name="loader" ref="loader"/>

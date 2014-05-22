@@ -69,14 +69,14 @@ public class TraderDaoTest {
         assertNotNull(persistedTrader);
     }
 
-    @Test(expected = DSARuntimeException.class)
+    @Test
     @DatabaseSetup("/testData.xml")
     public void delete_shouldPersistEntity() {
         Trader trader = traderDao.get(1);
 
         traderDao.remove(trader);
 
-        Trader persistedTrader = traderDao.get(1);
+        assertNull(traderDao.get(1));
     }
 
     @Test(expected = org.hibernate.PropertyValueException.class)

@@ -1,5 +1,6 @@
 package sepm.dsa.dao;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,22 @@ public class LocationDaoImpl implements LocationDao {
     public void update(Location location) {
         log.debug("calling update(" + location + ")");
         sessionFactory.getCurrentSession().update(location);
+    }
+
+    @Override
+    public List<Location> getAllByRegion(int regionId) {
+        log.debug("calling getAll()");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("Location.findAllByRegion");
+        query.setParameter("regionId", regionId);
+        List<?> list = query.list();
+
+        List<Location> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((Location) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
     }
 
     @Override
