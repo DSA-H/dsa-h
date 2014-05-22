@@ -97,6 +97,19 @@ public class MainMenuController implements Initializable {
         }
     }
 
+	@FXML
+	private void onTradersPressed() {
+
+		log.debug("called onTradersPressed");
+		Stage stage = new Stage();
+		Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
+		stage.setTitle("Händlerverwaltung");
+		stage.setScene(new Scene(scene, 600, 400));
+		stage.setResizable(false);
+		stage.show();
+
+	}
+
     /**
      * Shows a exit-confirm-dialog if more than the primaryStage are open and close all other stages if confirmed
      * @return false if the user cancle or refuse the dialog, otherwise true

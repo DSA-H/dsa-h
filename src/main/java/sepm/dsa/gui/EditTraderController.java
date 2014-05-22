@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.controlsfx.dialog.Dialogs;
@@ -20,8 +21,6 @@ import sepm.dsa.service.LocationService;
 import sepm.dsa.service.TraderCategoryService;
 import sepm.dsa.service.TraderService;
 
-import java.awt.*;
-import java.util.*;
 import java.util.List;
 
 @Service("EditRegionController")
@@ -100,7 +99,7 @@ public class EditTraderController implements Initializable {
 	private void onSavePressed() {
 		log.debug("called onSavePressed");
 
-		/*
+
 		//name
 		int count = StringUtils.countOccurrencesOf(nameField.getText(), " ");
 		if (count != nameField.getText().length()) {
@@ -202,8 +201,8 @@ public class EditTraderController implements Initializable {
 
 		//comment
 		selectedTrader.setComment(commentArea.getText());
-		*/
 
+		/*
 		selectedTrader.setName(nameField.getText());
 		selectedTrader.setSize(Integer.parseInt(sizeField.getText()));
 		selectedTrader.setMut(Integer.parseInt(muField.getText()));
@@ -212,7 +211,7 @@ public class EditTraderController implements Initializable {
 		selectedTrader.setConvince(Integer.parseInt(convinceField.getText()));
 		selectedTrader.setLocation((Location) locationBox.getSelectionModel().getSelectedItem());
 		selectedTrader.setCategory((TraderCategory) categoryBox.getSelectionModel().getSelectedItem());
-
+		*/
 
 		if (isNewTrader) {
 			traderService.add(selectedTrader);
@@ -222,7 +221,7 @@ public class EditTraderController implements Initializable {
 
 		Stage stage = (Stage) nameField.getScene().getWindow();
 		Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
-		stage.setScene(new Scene(scene, 600, 438));
+		stage.setScene(new Scene(scene, 600, 400));
 
 
 	}
@@ -233,7 +232,7 @@ public class EditTraderController implements Initializable {
 
 		Stage stage = (Stage) nameField.getScene().getWindow();
 		Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
-		stage.setScene(new Scene(scene, 600, 438));
+		stage.setScene(new Scene(scene, 600, 400));
 	}
 
 	public void setTraderService(TraderService traderService) {
