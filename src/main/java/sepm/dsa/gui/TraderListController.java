@@ -11,6 +11,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.Dialog;
+import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -52,15 +55,15 @@ public class TraderListController implements Initializable {
 		locationBox.getSelectionModel().selectedItemProperty().addListener(
 				new ChangeListener<Location>() {
 					@Override
-					public void changed (ObservableValue<? extends Location> selected, Location oldLoc, Location newLoc) {
-						log.info("Location changed");
+					public void changed(ObservableValue<? extends Location> selected, Location oldLoc, Location newLoc) {
 						List<Trader> traders = traderService.getAllForLocation((Location) locationBox.getSelectionModel().getSelectedItem());
 						List<String> names = new ArrayList();
-						log.info("SIZE: "+names.size());
+						log.info("SIZE: " + names.size());
 						for (Trader t : traders) {
 							names.add(t.getName());
 						}
 						traderList.setItems(FXCollections.observableArrayList(names));
+						checkFocus();
 					}
 				}
 		);
@@ -80,7 +83,21 @@ public class TraderListController implements Initializable {
 	@FXML
 	private void onDeletePressed() {
 		log.debug("called onDeleteButtonPressed");
+		checkFocus();
+		if (selectedTrader != null) {
+			log.debug("open Confirm-Delete-Trader Dialog");
+			Action response = Dialogs.create()
+					.title("Löschen?")
+					.masthead(null)
+					.message("Wollen Sie den Händer '" + selectedTrader.getName() + "' wirklich löschen")
+					.showConfirm();
+			if (response == Dialog.Actions.YES) {
+				traderService.remove(selectedTrader);
+				traderList.getItems().remove(selectedTrader);
+			}
+		}
 
+		checkFocus();
 	}
 
 	@FXML
