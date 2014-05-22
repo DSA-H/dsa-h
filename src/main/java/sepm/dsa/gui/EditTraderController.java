@@ -38,8 +38,11 @@ public class EditTraderController implements Initializable {
 
 	private boolean isNewTrader;
 
+	//TODO fill with better names
 	ArrayList<String> firstNames = new ArrayList<String>(
-			Arrays.asList("Orasilas", "", ""));
+			Arrays.asList("Max", "Paul", "Tom"));
+	ArrayList<String> lastNames = new ArrayList<String>(
+			Arrays.asList("Huber", "Kurz", "Lang"));
 
 	@FXML
 	private TextField nameField;
@@ -93,11 +96,61 @@ public class EditTraderController implements Initializable {
 	}
 
 	private void generateRandoms() {
-		nameField.setText("Random Name");
-		muField.setText("14");
-		inField.setText("14");
-		chField.setText("14");
-		convinceField.setText("5");
+		double rand;
+		double rand2;
+		int result;
+
+		String name = "";
+		rand = Math.random() * firstNames.size();
+		name += firstNames.get((int) rand);
+		rand = Math.random() * lastNames.size();
+		name += " " + lastNames.get((int) rand);
+		nameField.setText(name);
+
+		rand = Math.random();
+		rand *= rand;
+		rand *= 5;
+		rand2 = Math.random();
+		if (rand2 < 0.5) {
+			result = (int) (14+rand);
+		} else {
+			result = (int) (14-rand);
+		}
+		muField.setText(""+result);
+
+		rand = Math.random();
+		rand *= rand;
+		rand *= 5;
+		rand2 = Math.random();
+		if (rand2 < 0.5) {
+			result = (int) (14+rand);
+		} else {
+			result = (int) (14-rand);
+		}
+		inField.setText(""+result);
+
+		rand = Math.random();
+		rand *= rand;
+		rand *= 5;
+		rand2 = Math.random();
+		if (rand2 < 0.5) {
+			result = (int) (14+rand);
+		} else {
+			result = (int) (14-rand);
+		}
+		chField.setText(""+result);
+
+		rand = Math.random();
+		rand *= rand;
+		rand *= 4;
+		rand2 = Math.random();
+		if (rand2 < 0.5) {
+			result = (int) (4+rand);
+		} else {
+			result = (int) (4-rand);
+		}
+		convinceField.setText(""+result);
+
 	}
 
 	@FXML
