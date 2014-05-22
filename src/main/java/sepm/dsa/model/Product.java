@@ -47,11 +47,11 @@ public class Product implements Serializable {
     @Column(nullable = false)
     private Boolean quality;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "product_categories", joinColumns = { @JoinColumn(name = "productId") }, inverseJoinColumns = { @JoinColumn(name = "categoryId") })
     private Set<ProductCategory> categories = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "product_regions", joinColumns = { @JoinColumn(name = "productId") }, inverseJoinColumns = { @JoinColumn(name = "regionId") })
     private Set<Region> productionRegions = new HashSet<>();
 
@@ -150,25 +150,14 @@ public class Product implements Serializable {
 
         Product product = (Product) o;
 
-        if (attributeId != null ? !attributeId.equals(product.attributeId) : product.attributeId != null) return false;
-        if (comment != null ? !comment.equals(product.comment) : product.comment != null) return false;
-        if (cost != null ? !cost.equals(product.cost) : product.cost != null) return false;
-        if (name != null ? !name.equals(product.name) : product.name != null) return false;
-        if (quality != null ? !quality.equals(product.quality) : product.quality != null) return false;
-        //if (unitId != null ? !unitId.equals(product.unitId) : product.unitId != null) return false;
+        if (id != null ? !id.equals(product.id) : product.id != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (cost != null ? cost.hashCode() : 0);
-        //result = 31 * result + (unitId != null ? unitId.hashCode() : 0);
-        result = 31 * result + (attributeId != null ? attributeId.hashCode() : 0);
-        result = 31 * result + (comment != null ? comment.hashCode() : 0);
-        result = 31 * result + (quality != null ? quality.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override
