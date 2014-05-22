@@ -20,9 +20,8 @@ import java.util.Set;
 
 @Service("LocationService")
 @Transactional(readOnly = true)
-public class LocationServiceImpl implements LocationService, Serializable {
+public class LocationServiceImpl implements LocationService {
 
-    private static final long serialVersionUID = -3272024118547942934L;
     private static final Logger log = LoggerFactory.getLogger(LocationServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
@@ -80,7 +79,7 @@ public class LocationServiceImpl implements LocationService, Serializable {
     private void validate(Location location) throws DSAValidationException {
         Set<ConstraintViolation<Location>> violations = validator.validate(location);
         if (violations.size() > 0) {
-            throw new DSAValidationException("Gebiet ist nicht valide.", violations);
+            throw new DSAValidationException("Ort ist nicht valide.", violations);
         }
     }
 }

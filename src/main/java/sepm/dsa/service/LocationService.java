@@ -1,7 +1,6 @@
 package sepm.dsa.service;
 
 import sepm.dsa.model.Location;
-import sepm.dsa.model.LocationConnection;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ public interface LocationService {
      * @param location to be persisted must not be null
      * @return
      */
-   public void add(Location location);
+    public void add(Location location);
 
     /**
      * Asks the DAO to update a already existing {@code Location} in the database
@@ -37,5 +36,4 @@ public interface LocationService {
      * @return the locations or empty list of no locations exist (not null)
      */
     public  List<Location> getAll();
-
 }

@@ -3,7 +3,6 @@ package sepm.dsa.dao.test;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,7 @@ import sepm.dsa.service.RegionService;
 
 import java.util.List;
 
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -33,7 +31,7 @@ import static org.junit.matchers.JUnitMatchers.hasItems;
         DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class
 })
-public class LocationDaoTest extends TestCase {
+public class LocationDaoTest{
 
     @Autowired
     private LocationDao locationDao;
@@ -60,7 +58,7 @@ public class LocationDaoTest extends TestCase {
         locationDao.add(location);
 
         Location persistedLocation = locationDao.get(location.getId());
-        assertTrue(persistedLocation != null);
+        assertNotNull(persistedLocation);
         locationDao.remove(location);
     }
 

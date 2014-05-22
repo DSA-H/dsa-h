@@ -24,9 +24,10 @@
     <MenuItem fx:id="weltkarteImportieren" mnemonicParsing="false" onAction="#onWeltkarteImportierenPressed" text="Importieren" /><MenuItem fx:id="weltkarteExportieren" mnemonicParsing="false" onAction="#onWeltkarteExportierenPressed" text="Exportieren" />
   </items>
 </Menu>
+                        <MenuItem fx:id="verwaltenHaendlerKategorie" mnemonicParsing="false" onAction="#onTraderCategoriesClicked" text="Händlerkategorie" />
                         <MenuItem fx:id="verwaltenGebieteGrenzen" mnemonicParsing="false" onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen" />
                         <MenuItem fx:id="verwaltenWaehrungen" disable="true" mnemonicParsing="false" text="Währungen" />
-                        <MenuItem fx:id="verwaltenWaren" disable="true" mnemonicParsing="false" text="Waren" />
+                        <MenuItem fx:id="verwaltenWaren" onAction="#onWarenClicked" mnemonicParsing="false" text="Waren" />
                         <MenuItem mnemonicParsing="false" onAction="#onShowLocationsClicked" text="Orte" />
                     </items>
                 </Menu>

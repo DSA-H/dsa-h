@@ -32,4 +32,45 @@
 
     <taverns id="1" name="Zum Wegstein" location_id="1" xPos="42" yPos="12" usage="12"/>
     <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="42" yPos="12" usage="12"/>
+    <traderCategories id="1" name="category1" />
+    <traderCategories id="2" name="category2" />
+    <traderCategories id="3" name="category3" />
+    <products id="1" name="product1" cost="17" attributeId="1" quality="false" />
+    <products id="2" name="product2" cost="23" attributeId="2" quality="true" />
+    <products id="3" name="product3" cost="29" attributeId="3" quality="true" />
+    <products id="4" name="product4" cost="36" attributeId="0" quality="true" />
+    <products id="5" name="product5" cost="200" attributeId="3" quality="true" />
+    <products id="6" name="product6" cost="450" attributeId="0" quality="true" />
+    <products id="7" name="product7" cost="65" attributeId="2" quality="true" />
+    <locations id="1" name="fooLocation" region="1" xCoord="30" yCoord="20" sizeId="2" height="10" weatherId="1"/>
+    <locations id="2" name="fooLocation2" region="2" xCoord="30" yCoord="20" sizeId="2" height="10" weatherId="1"/>
+    <traders id="1" name="Optimus Prime" category_id="1" size="20" xPos="7" yPos="7" mut="14" intelligence="14" charisma="14" convince="5" location_id="1" />
+    <traders id="2" name="Megatron" category_id="2" size="18" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13" convince="7" location_id="1" />
+    <offers id="1" product_id="1" trader_id="1" amount="2" pricePerUnit="50" qualityId="1" />
+    <offers id="2" product_id="2" trader_id="1" amount="8" pricePerUnit="10" qualityId="0" />
+    <productCategories id="1" name="category1" />
+    <productCategories id="2" name="category2" />
+    <productCategories id="3" name="category3" parent="2"/>
+    <productCategories id="4" name="category4" parent="2"/>
+    <productCategories id="5" name="category5" parent="1"/>
+    <product_categories productId="1" categoryId="1" />
+    <product_categories productId="1" categoryId="2" />
+    <product_categories productId="1" categoryId="3" />
+    <product_categories productId="2" categoryId="5" />
+    <product_categories productId="2" categoryId="1" />
+    <product_categories productId="3" categoryId="1" />
+    <product_categories productId="4" categoryId="2" />
+    <product_categories productId="6" categoryId="1" />
+    <product_categories productId="7" categoryId="3" />
+    <product_regions productId="1" regionId="1" />
+    <product_regions productId="2" regionId="3" />
+    <product_regions productId="2" regionId="2" />
+    <product_regions productId="3" regionId="2" />
+    <product_regions productId="4" regionId="2" />
+    <product_regions productId="5" regionId="4" />
+    <product_regions productId="5" regionId="5" />
+    <product_regions productId="5" regionId="3" />
+    <product_regions productId="6" regionId="5" />
+    <assortmentNatures ID="1" DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="1" traderCategory_id="1"  />
+    <assortmentNatures ID="2" DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="1" traderCategory_id="1" />
 </dataset>

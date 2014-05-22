@@ -24,7 +24,7 @@ public enum TownSize {
     }
 
     public static TownSize parse(int value) {
-        TownSize right = null;		// Default
+        TownSize right = null;        // Default
         for (TownSize item : TownSize.values()) {
             if (item.getValue() == value) {
                 right = item;

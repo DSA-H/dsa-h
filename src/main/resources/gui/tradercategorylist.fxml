@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.TraderCategoryListController">
+    <children>
+        <Label alignment="CENTER" layoutX="8.0" layoutY="14.0" prefHeight="17.0" prefWidth="584.0" text="Händlerkategorie">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        <TableView fx:id="traderCategoryTable" layoutX="12.0" layoutY="73.0" onMouseClicked="#checkFocus" onMousePressed="#checkFocus" prefHeight="318.0" prefWidth="576.0">
+            <columns>
+                <TableColumn fx:id="traderCategoryColumn" editable="false" prefWidth="215.0" text="Händlerkategorie" />
+<TableColumn fx:id="prodcutCategoryColumn" editable="false" prefWidth="360.0" text="Warenkategorien" />
+            </columns>
+        </TableView>
+        <HBox alignment="CENTER_LEFT" layoutX="12.0" layoutY="41.0" prefHeight="25.0" prefWidth="576.0" spacing="10.0">
+            <children>
+                <Button fx:id="createButton" layoutX="141.1875" layoutY="63.5" mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Erstellen" />
+                <Button fx:id="editButton" disable="true" layoutX="199.1875" layoutY="63.5" mnemonicParsing="false" onAction="#onEditButtonPressed" text="Bearbeiten" />
+                <Button fx:id="deleteButton" disable="true" layoutX="257.1875" layoutY="63.5" mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" />
+            </children>
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+        </HBox>
+    </children>
+</Pane>

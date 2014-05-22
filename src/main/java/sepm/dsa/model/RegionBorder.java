@@ -1,5 +1,8 @@
 package sepm.dsa.model;
 
+import sepm.dsa.service.path.PathEdge;
+import sepm.dsa.service.path.PathNode;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -11,7 +14,7 @@ import java.io.Serializable;
         @AssociationOverride(name = "pk.region1", joinColumns = @JoinColumn(name = "region1")),
         @AssociationOverride(name = "pk.region2", joinColumns = @JoinColumn(name = "region2"))
 })
-public class RegionBorder implements Serializable {
+public class RegionBorder implements Serializable, PathEdge {
 
     private static final long serialVersionUID = -5121547134534726826L;
 
@@ -52,19 +55,16 @@ public class RegionBorder implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RegionBorder border = (RegionBorder) o;
+        RegionBorder that = (RegionBorder) o;
 
-        if (borderCost != null ? !borderCost.equals(border.borderCost) : border.borderCost != null) return false;
-        if (pk != null ? !pk.equals(border.pk) : border.pk != null) return false;
+        if (pk != null ? !pk.equals(that.pk) : that.pk != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = pk != null ? pk.hashCode() : 0;
-        result = 31 * result + (borderCost != null ? borderCost.hashCode() : 0);
-        return result;
+        return pk != null ? pk.hashCode() : 0;
     }
 
     @Override
@@ -129,7 +129,20 @@ public class RegionBorder implements Serializable {
                     ", region2=" + region2 +
                     '}';
         }
-
-
     }
+
+	@Override
+	public int getPathCosts() {
+		return getBorderCost();
+	}
+
+	@Override
+	public PathNode getStart() {
+		return getRegion1();
+	}
+
+	@Override
+	public PathNode getEnd() {
+		return getRegion2();
+	}
 }

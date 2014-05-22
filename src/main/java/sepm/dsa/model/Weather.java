@@ -20,7 +20,7 @@ public enum Weather {
     }
 
     public static Weather parse(int value) {
-        Weather right = null;		// Default
+        Weather right = null;        // Default
         for (Weather item : Weather.values()) {
             if (item.getValue() == value) {
                 right = item;

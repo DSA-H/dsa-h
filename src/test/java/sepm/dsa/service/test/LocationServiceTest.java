@@ -18,7 +18,6 @@ import sepm.dsa.model.Region;
 import sepm.dsa.model.TownSize;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionService;
-import sepm.dsa.service.RegionServiceImpl;
 
 import javax.validation.constraints.AssertTrue;
 import java.util.List;
@@ -63,12 +62,10 @@ public class LocationServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml") //todo setup xml file
+    @DatabaseSetup("/testData.xml")
     public void testRemove() throws Exception {
         Location location = locationService.get(2);
         locationService.remove(location);
-
-        //TODO oder sollte das eine Exception sein?? -- Antwort Michael: nein, keine Exception
         assertEquals(null, locationService.get(2));
     }
 

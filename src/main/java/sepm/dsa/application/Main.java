@@ -13,6 +13,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.gui.MainMenuController;
+import sepm.dsa.model.*;
 import sepm.dsa.sepm.dsa.util.ValidationMessageUtil;
 
 import javax.validation.ConstraintViolation;
@@ -22,7 +23,6 @@ public class Main extends Application {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-
 
         Application.launch(Main.class, (java.lang.String[]) null);
 
@@ -81,7 +81,7 @@ public class Main extends Application {
         });
 
 	    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	    final SpringFxmlLoader loader = (SpringFxmlLoader) context.getBean("loader");
+        final SpringFxmlLoader loader = (SpringFxmlLoader) context.getBean("loader");
 	    Parent root = (Parent) loader.load("/gui/mainmenu.fxml");
         final MainMenuController ctrl = loader.getController();
         primaryStage.setTitle("DSA-Händlertool");

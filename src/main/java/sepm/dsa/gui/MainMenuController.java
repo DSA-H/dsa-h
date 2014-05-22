@@ -76,9 +76,34 @@ public class MainMenuController implements Initializable {
     private void onGrenzenGebieteClicked() {
         log.debug("onGrenzenGebieteClicked - open Grenzen und Gebiete Window");
         Stage stage = new Stage();
-        Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
+	    Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
 
         stage.setTitle("Grenzen und Gebiete");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
+    private void onTraderCategoriesClicked() {
+        log.debug("onTraderCategoriesClicked - open Trader Categories Window");
+        Stage stage = new Stage();
+        Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml");
+
+        stage.setTitle("Händlerkategorien");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
+    private void onWarenClicked() {
+        log.debug("onWarenClicked - open Waren Window");
+        Stage stage = new Stage();
+
+        Parent scene = (Parent) loader.load("/gui/productslist.fxml");
+
+        stage.setTitle("Waren");
         stage.setScene(new Scene(scene, 600, 438));
         stage.setResizable(false);
         stage.show();
