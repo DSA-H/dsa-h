@@ -76,7 +76,6 @@ public class ProductServiceTest {
     @DatabaseSetup("/testData.xml")
     @Transactional(readOnly = false)
     public void testAddRegions()  {
-        System.out.println(productService.getAll().toString());
         Product p = new Product();
         p.setName("tester");
         p.setQuality(false);
@@ -100,7 +99,6 @@ public class ProductServiceTest {
     @DatabaseSetup("/testData.xml")
     public void testAddCategories()
     {
-        System.out.println(productService.getAll().toString());
         Product p = new Product();
         p.setName("tester");
         p.setQuality(false);
@@ -128,7 +126,6 @@ public class ProductServiceTest {
     @DatabaseSetup("/testData.xml")
     public void testRemove()
     {
-        System.out.println(productService.getAll().toString());
         int size = productService.getAll().size();
         Product p = productService.get(1);
         productService.remove(p);
@@ -139,7 +136,6 @@ public class ProductServiceTest {
     @DatabaseSetup("/testData.xml")
     public void testUpdate()
     {
-        System.out.println(productService.getAll().toString());
         int size = productService.getAll().size();
         Product p = productService.get(1);
         p.setName("testerUpdate");

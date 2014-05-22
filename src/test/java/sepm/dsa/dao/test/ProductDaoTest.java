@@ -75,7 +75,6 @@ public class ProductDaoTest {
     @DatabaseSetup("/testData.xml")
     public void testRemoveProduct() {
         Product p = productDao.get(2);
-//        p.get
         int size = productDao.getAll().size();
         productDao.remove(p);
         assertEquals(size - 1, productDao.getAll().size());

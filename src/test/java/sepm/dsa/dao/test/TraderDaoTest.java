@@ -11,6 +11,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.LocationDao;
 import sepm.dsa.dao.ProductDao;
 import sepm.dsa.dao.TraderCategoryDao;
@@ -114,6 +115,7 @@ public class TraderDaoTest {
 
     @Test
     @DatabaseSetup("/testData.xml")
+    @Transactional(readOnly = false)
     public void add_TraderWithOffersShouldPersistEntity() {
         Trader trader = new Trader();
         trader.setName("TestTrader1");

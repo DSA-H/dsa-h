@@ -61,7 +61,8 @@ public class Product implements Serializable {
 
 //    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)//, cascade = CascadeType.REMOVE) // owning side
 //    @JoinColumn(name = "product_id", nullable = false)
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<Offer> offer = new HashSet<>();
 
     public Integer getId() {
@@ -89,13 +90,13 @@ public class Product implements Serializable {
         this.cost = cost;
     }
 
-//    public Set<Offer> getOffer() {
-//        return offer;
-//    }
-//
-//    public void setOffer(Set<Offer> offer) {
-//        this.offer = offer;
-//    }
+    public Set<Offer> getOffer() {
+        return offer;
+    }
+
+    public void setOffer(Set<Offer> offer) {
+       this.offer = offer;
+    }
 
     public ProductAttribute getAttribute() {
         if (attributeId == null) {

@@ -31,9 +31,9 @@
     <offers id="2" product_id="2" trader_id="1" amount="8" pricePerUnit="10" qualityId="0" />
     <productCategories id="1" name="category1" />
     <productCategories id="2" name="category2" />
-    <productCategories id="3" name="category3" />
-    <productCategories id="4" name="category4" />
-    <productCategories id="5" name="category5" />
+    <productCategories id="3" name="category3" parent="2"/>
+    <productCategories id="4" name="category4" parent="2"/>
+    <productCategories id="5" name="category5" parent="1"/>
     <product_categories productId="1" categoryId="1" />
     <product_categories productId="1" categoryId="2" />
     <product_categories productId="1" categoryId="3" />
@@ -44,6 +44,14 @@
     <product_categories productId="6" categoryId="1" />
     <product_categories productId="7" categoryId="3" />
     <product_regions productId="1" regionId="1" />
+    <product_regions productId="2" regionId="3" />
+    <product_regions productId="2" regionId="2" />
+    <product_regions productId="3" regionId="2" />
+    <product_regions productId="4" regionId="2" />
+    <product_regions productId="5" regionId="4" />
+    <product_regions productId="5" regionId="5" />
+    <product_regions productId="5" regionId="3" />
+    <product_regions productId="6" regionId="5" />
     <assortmentNatures ID="1" DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="1" traderCategory_id="1"  />
     <assortmentNatures ID="2" DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="1" traderCategory_id="1" />
 </dataset>
