@@ -1,7 +1,10 @@
 package sepm.dsa.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -15,8 +18,11 @@ public class AssortmentNature implements Serializable {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(nullable = true)
     private ProductCategory productCategory;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false)
+    private TraderCategory traderCategory;
 
     @Override
     public boolean equals(Object o) {
@@ -25,24 +31,19 @@ public class AssortmentNature implements Serializable {
 
         AssortmentNature that = (AssortmentNature) o;
 
-        if (defaultOccurence != null ? !defaultOccurence.equals(that.defaultOccurence) : that.defaultOccurence != null)
-            return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (productCategory != null ? !productCategory.equals(that.productCategory) : that.productCategory != null)
-            return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (productCategory != null ? productCategory.hashCode() : 0);
-        result = 31 * result + (defaultOccurence != null ? defaultOccurence.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 
     @NotNull
+    @Min(value = 1)
+    @Max(value = 100)
     @Column(nullable = false)
     private Integer defaultOccurence;
 
@@ -68,5 +69,13 @@ public class AssortmentNature implements Serializable {
 
     public void setDefaultOccurence(Integer defaultOccurence) {
         this.defaultOccurence = defaultOccurence;
+    }
+
+    public TraderCategory getTraderCategory() {
+        return traderCategory;
+    }
+
+    public void setTraderCategory(TraderCategory traderCategory) {
+        this.traderCategory = traderCategory;
     }
 }

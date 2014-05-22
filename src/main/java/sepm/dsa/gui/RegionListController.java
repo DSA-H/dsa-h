@@ -126,7 +126,7 @@ public class RegionListController implements Initializable {
         log.debug("onEditButtonPressed - open Gebiet-Details Window");
 
         Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
-        ((EditRegionController)loader.getController()).setRegion(selectedRegion);
+        EditRegionController.setRegion(selectedRegion);
 
 	    Stage stage = (Stage) regionTable.getScene().getWindow();
 	    Parent root = (Parent) loader.load("/gui/editregion.fxml");
@@ -149,6 +149,9 @@ public class RegionListController implements Initializable {
                     .message("Wollen Sie die Region '" + selectedRegion.getName() + "' und alle zugehörigen Grenzen wirklich löschen?")
                     .showConfirm();
             if(response == Dialog.Actions.YES) {
+                for(RegionBorder regionBorder : selectedRegion.getAllBorders()) {
+                    regionBorderService.remove(regionBorder);
+                }
                 regionService.remove(selectedRegion);
                 regionTable.getItems().remove(selectedRegion);
             }

@@ -18,6 +18,8 @@ import sepm.dsa.dao.TraderDao;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.*;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -64,7 +66,7 @@ public class TraderDaoTest {
         traderDao.add(trader);
 
         Trader persistedTrader = traderDao.get(trader.getId());
-        assertTrue(persistedTrader != null);
+        assertNotNull(persistedTrader);
     }
 
     @Test(expected = DSARuntimeException.class)
@@ -91,7 +93,7 @@ public class TraderDaoTest {
         traderDao.add(trader);
 
         Trader persistedTrader = traderDao.get(trader.getId());
-        assertTrue(persistedTrader == null);
+        assertNull(persistedTrader);
     }
 
     @Test
@@ -105,7 +107,7 @@ public class TraderDaoTest {
 
         persistedTrader = traderDao.get(2);
 
-        assertTrue(persistedTrader != null);
+        assertNotNull(persistedTrader);
         assertTrue(persistedTrader.getName().equals("Megatron"));
         assertTrue(persistedTrader.getComment().equals("xyz123"));
     }
@@ -141,8 +143,8 @@ public class TraderDaoTest {
         traderDao.add(trader);
 
         trader = traderDao.get(trader.getId());
-        assertTrue(trader != null);
-        assertTrue(trader.getOffers().contains(o1));
+        assertNotNull(trader);
+        assertTrue(trader.getOffers().size() == 1);
     }
 
 }

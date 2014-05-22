@@ -20,9 +20,8 @@ import java.util.Set;
 
 @Service("RegionBorderService")
 @Transactional(readOnly = true)
-public class RegionBorderServiceImpl implements RegionBorderService, Serializable {
+public class RegionBorderServiceImpl implements RegionBorderService {
 
-    private static final long serialVersionUID = 7415861483489569621L;
     private static final Logger log = LoggerFactory.getLogger(RegionBorderServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
     private RegionBorderDao regionBorderDao;

@@ -55,7 +55,7 @@ public class Trader implements Serializable {
     @Column(nullable = false)
     private Integer convince;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private TraderCategory category;
 
@@ -188,38 +188,13 @@ public class Trader implements Serializable {
 
         Trader trader = (Trader) o;
 
-        if (category != null ? !category.equals(trader.category) : trader.category != null) return false;
-        if (charisma != null ? !charisma.equals(trader.charisma) : trader.charisma != null) return false;
-        if (comment != null ? !comment.equals(trader.comment) : trader.comment != null) return false;
-        if (convince != null ? !convince.equals(trader.convince) : trader.convince != null) return false;
-        if (deals != null ? !deals.equals(trader.deals) : trader.deals != null) return false;
         if (id != null ? !id.equals(trader.id) : trader.id != null) return false;
-        if (intelligence != null ? !intelligence.equals(trader.intelligence) : trader.intelligence != null)
-            return false;
-        if (location != null ? !location.equals(trader.location) : trader.location != null) return false;
-        if (mut != null ? !mut.equals(trader.mut) : trader.mut != null) return false;
-        if (name != null ? !name.equals(trader.name) : trader.name != null) return false;
-        if (size != null ? !size.equals(trader.size) : trader.size != null) return false;
-        if (xPos != null ? !xPos.equals(trader.xPos) : trader.xPos != null) return false;
-        if (yPos != null ? !yPos.equals(trader.yPos) : trader.yPos != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (size != null ? size.hashCode() : 0);
-        result = 31 * result + (xPos != null ? xPos.hashCode() : 0);
-        result = 31 * result + (yPos != null ? yPos.hashCode() : 0);
-        result = 31 * result + (comment != null ? comment.hashCode() : 0);
-        result = 31 * result + (mut != null ? mut.hashCode() : 0);
-        result = 31 * result + (intelligence != null ? intelligence.hashCode() : 0);
-        result = 31 * result + (charisma != null ? charisma.hashCode() : 0);
-        result = 31 * result + (convince != null ? convince.hashCode() : 0);
-        result = 31 * result + (category != null ? category.hashCode() : 0);
-        result = 31 * result + (location != null ? location.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 }

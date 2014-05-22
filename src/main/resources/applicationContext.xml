@@ -9,7 +9,7 @@
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.hsqldb.jdbc.JDBCDriver"/>
-        <property name="url" value="jdbc:hsqldb:file:fooDB"/>
+        <property name="url" value="jdbc:hsqldb:file:database/fooDB"/>
         <property name="username" value="sa"/>
         <property name="password" value=""/>
     </bean>
@@ -44,6 +44,7 @@
                 <value>sepm/dsa/model/hibernate/Product.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/ProductCategory.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/ProductUnit.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/AssortmentNature.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -77,6 +78,7 @@
 
     <bean id="traderCategoryDao" class="sepm.dsa.dao.TraderCategoryDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="traderDao" ref="traderDao"/>
     </bean>
 
     <bean id="locationDao" class="sepm.dsa.dao.LocationDaoImpl">
@@ -123,6 +125,15 @@
     <bean id="traderService" class="sepm.dsa.service.TraderServiceImpl">
         <property name="traderDao" ref="traderDao"/>
         <property name="productService" ref="productService"/>
+        <property name="pathService" ref="pathService"/>
+        <property name="regionService" ref="regionService"/>
+        <property name="regionBorderService" ref="regionBorderService"/>
+    </bean>
+
+    <bean id="pathService" class="sepm.dsa.service.path.PathServiceDijkstraJGraphImpl">
+    </bean>
+
+    <bean id="assortmentNatureService" class="sepm.dsa.service.AssortmentNatureServiceImpl">
     </bean>
 
     <!-- GUI DI -->
@@ -159,13 +170,16 @@
         <property name="productUnitService" ref="productUnitService"/>
         <property name="regionService" ref="regionService"/>
     </bean>
-    <bean id="tradercategoryList" class="sepm.dsa.gui.TraderCategoryListController">
+    <bean id="TraderCategoryList" class="sepm.dsa.gui.TraderCategoryListController">
+        <property name="loader" ref="loader"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
-        <property name="traderService" ref="traderService"/>
     </bean>
 
     <bean id="editTraderCategory" class="sepm.dsa.gui.EditTraderCategoryController">
+        <property name="loader" ref="loader"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
+        <property name="productCategoryService" ref="productCategoryService"/>
+        <property name="assortmentNatureService" ref="assortmentNatureService"/>
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>

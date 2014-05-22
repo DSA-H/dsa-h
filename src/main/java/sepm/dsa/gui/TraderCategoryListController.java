@@ -21,26 +21,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.model.Trader;
+import sepm.dsa.model.AssortmentNature;
+import sepm.dsa.model.RegionBorder;
 import sepm.dsa.model.TraderCategory;
+import sepm.dsa.service.AssortmentNatureService;
 import sepm.dsa.service.TraderCategoryService;
-import sepm.dsa.service.TraderService;
-
-import java.util.List;
 
 @Service("TraderCategoryService")
 public class TraderCategoryListController implements Initializable {
     private TraderCategoryService traderCategoryService;
     private static final Logger log = LoggerFactory.getLogger(TraderCategoryListController.class);
     private SpringFxmlLoader loader;
-    private TraderService traderService;
 
     @FXML
     private TableView<TraderCategory> traderCategoryTable;
     @FXML
     private TableColumn traderCategoryColumn;
     @FXML
-    private TableColumn traderColumn;
+    private TableColumn prodcutCategoryColumn;
     @FXML
     private Button createButton;
     @FXML
@@ -54,16 +52,14 @@ public class TraderCategoryListController implements Initializable {
 
         // init table
         traderCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        traderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Trader, String>, ObservableValue<String>>() {
+        prodcutCategoryColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TraderCategory, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Trader, String> r) {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<TraderCategory, String> r) {
                 if (r.getValue() != null) {
-                    int tCategoryId = r.getValue().getId();
-                    List<Trader> borders = traderService.getAllByCategory(traderCategoryService.get(tCategoryId));
-                    StringBuilder sb = new StringBuilder();
-                    for (Trader trader : borders) {
-                        sb.append(trader.getName());
-                        sb.append(", ");
+                   StringBuilder sb = new StringBuilder();
+                   for(AssortmentNature assortmentNature : r.getValue().getAssortments()) {
+                       String productCategorieName = assortmentNature.getProductCategory().getName();
+                       sb.append(productCategorieName + ", ");
                     }
                     if (sb.length() >= 2) {
                         sb.delete(sb.length() - 2, sb.length());
@@ -75,8 +71,11 @@ public class TraderCategoryListController implements Initializable {
             }
         });
 
+
         ObservableList<TraderCategory> data = FXCollections.observableArrayList(traderCategoryService.getAll());
         traderCategoryTable.setItems(data);
+
+        checkFocus();
     }
 
     @FXML
@@ -88,7 +87,7 @@ public class TraderCategoryListController implements Initializable {
         Stage stage = (Stage) traderCategoryTable.getScene().getWindow();
         Parent root = (Parent) loader.load("/gui/edittradercategory.fxml");
 
-        stage.setTitle("Neuen Händler erstellen");
+        stage.setTitle("Händlerkategorie");
         stage.setScene(new Scene(root, 600, 438));
         stage.show();
     }
@@ -98,7 +97,7 @@ public class TraderCategoryListController implements Initializable {
         log.debug("onEditButtonPressed - open Gebiet-Details Window");
 
         TraderCategory selectedTraderCategory = traderCategoryTable.getFocusModel().getFocusedItem();
-        ((EditTraderCategoryController) loader.getController()).setTraderCategory(selectedTraderCategory);
+        EditTraderCategoryController.setTraderCategory(selectedTraderCategory);
 
         Stage stage = (Stage) traderCategoryTable.getScene().getWindow();
         Parent root = (Parent) loader.load("/gui/edittradercategory.fxml");
@@ -118,10 +117,9 @@ public class TraderCategoryListController implements Initializable {
             Action response = Dialogs.create()
                     .title("Löschen?")
                     .masthead(null)
-                    .message("Wollen Sie die Händlerkategorie '" + selectedTraderCategory.getName() + "' und alle zugehörigen Händler wirklich löschen?")
+                    .message("Wollen Sie die Händlerkategorie '" + selectedTraderCategory.getName() + "' wirklich löschen?")
                     .showConfirm();
             if (response == Dialog.Actions.YES) {
-                //TODO check if traders are removed as well !!!! ######################### <<<<< ####
                 traderCategoryService.remove(selectedTraderCategory);
                 traderCategoryTable.getItems().remove(selectedTraderCategory);
             }
@@ -153,11 +151,4 @@ public class TraderCategoryListController implements Initializable {
         this.loader = loader;
     }
 
-    public void setTraderService(TraderService traderService) {
-        this.traderService = traderService;
-    }
-
-    public TraderService getTraderService() {
-        return traderService;
-    }
 }

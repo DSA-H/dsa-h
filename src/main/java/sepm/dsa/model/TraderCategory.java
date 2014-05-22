@@ -13,7 +13,6 @@ import java.util.Set;
 public class TraderCategory implements Serializable {
     private static final long serialVersionUID = 2957793850231481713L;
 
-
     @Id
     @GeneratedValue
     @Column(nullable = false, unique = true)
@@ -24,7 +23,11 @@ public class TraderCategory implements Serializable {
     @Column(nullable = false, length = 60)
     private String name;
 
-    @OneToMany
+    @Size(max = 1000)
+    @Column(length = 1000)
+    private String comment;
+
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(nullable = true)
     private Set<AssortmentNature> assortments = new HashSet<>();
 
@@ -52,6 +55,14 @@ public class TraderCategory implements Serializable {
         this.assortments = assortments;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,18 +70,13 @@ public class TraderCategory implements Serializable {
 
         TraderCategory that = (TraderCategory) o;
 
-        if (assortments != null ? !assortments.equals(that.assortments) : that.assortments != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (assortments != null ? assortments.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 }
