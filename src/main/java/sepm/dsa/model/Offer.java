@@ -18,8 +18,10 @@ public class Offer implements Serializable {
     @Column(nullable = false)
     private Integer amount;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
+//    @ManyToOne
+//    @JoinColumn(name="product_id", nullable = false, insertable=false, updatable=false)   // not owning side
+    @ManyToOne()
+    @JoinColumn(name="product_id", nullable = false)
     private Product product;
 
     @NotNull
@@ -30,8 +32,8 @@ public class Offer implements Serializable {
     @Column(nullable = false)
     private Integer qualityId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "trader_id", nullable = false, insertable=false, updatable=false)
     private Trader trader;
 
     public Integer getId() {

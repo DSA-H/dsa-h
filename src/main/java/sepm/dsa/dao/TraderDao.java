@@ -35,7 +35,7 @@ public interface TraderDao {
     /**
      * Finds all Traders
      *
-     * @return the trader or throw a DSARuntimeException;
+     * @return the trader or null if the Trader does not exist
      */
     public Trader get(int id);
 

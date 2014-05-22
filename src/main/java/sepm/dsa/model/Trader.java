@@ -63,7 +63,9 @@ public class Trader implements Serializable {
     @JoinColumn(nullable = false)
     private Location location;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "trader", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToMany(mappedBy = "trader", cascade = CascadeType.REMOVE) //TODO would be for offer is owning side
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)//, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "trader_id", nullable = false)
     private Set<Offer> offers = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "trader", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -46,13 +46,13 @@ public class TraderDaoHbmImpl implements TraderDao {
     }
 
     @Override
-    public Trader get(int id) throws DSARegionNotExistingException {
+    public Trader get(int id) {
         log.debug("calling get(" + id + ")");
 
         Object result = sessionFactory.getCurrentSession().get(Trader.class, id);
 
         if (result == null) {
-            throw new DSARuntimeException("Für diese ID existiert leider kein Trader");
+            return null;
         }
         log.trace("returning " + result);
         return (Trader) result;

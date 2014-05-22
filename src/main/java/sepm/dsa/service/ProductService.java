@@ -21,7 +21,7 @@ public interface ProductService {
      * Add a new product to DB
      * @param p product (not null)
      */
-    int add(Product p);
+    void add(Product p);
 
     /**
      * Update a product

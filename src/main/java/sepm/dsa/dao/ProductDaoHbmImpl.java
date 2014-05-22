@@ -26,10 +26,9 @@ public class ProductDaoHbmImpl implements ProductDao {
 
     @Override
     @Transactional(readOnly = false)
-    public int add(Product product) {
+    public void add(Product product) {
         log.debug("calling add(" + product + ")");
         sessionFactory.getCurrentSession().save(product);
-        return product.getId();
     }
 
     @Override
@@ -43,6 +42,7 @@ public class ProductDaoHbmImpl implements ProductDao {
     @Transactional(readOnly = false)
     public void remove(Product product) {
         log.debug("calling remove(" + product + ")");
+//        product.get
         sessionFactory.getCurrentSession().delete(product);
     }
 
