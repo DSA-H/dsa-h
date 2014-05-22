@@ -6,14 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.exceptions.DSARuntimeException;
-import sepm.dsa.model.Offer;
 import sepm.dsa.model.Product;
-import sepm.dsa.model.ProductCategory;
-import sepm.dsa.model.Region;
-
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 
 /**

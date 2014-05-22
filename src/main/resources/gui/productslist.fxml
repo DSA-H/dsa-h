@@ -5,33 +5,19 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.ProductListController">
-<center><GridPane BorderPane.alignment="CENTER">
-  <columnConstraints>
-<ColumnConstraints hgrow="SOMETIMES" maxWidth="147.0" minWidth="10.0" prefWidth="33.0" />
-<ColumnConstraints hgrow="SOMETIMES" maxWidth="147.0" minWidth="10.0" prefWidth="92.0" />
-<ColumnConstraints hgrow="SOMETIMES" maxWidth="147.0" minWidth="10.0" prefWidth="90.0" />
-<ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="79.0" />
-<ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="10.0" prefWidth="68.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="156.0" minWidth="10.0" prefWidth="78.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="148.0" minWidth="10.0" prefWidth="146.0" />
-<ColumnConstraints hgrow="SOMETIMES" maxWidth="135.0" minWidth="10.0" prefWidth="32.0" />
-  </columnConstraints>
-  <rowConstraints>
-<RowConstraints maxHeight="51.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
-<RowConstraints maxHeight="95.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="261.0" minHeight="10.0" prefHeight="261.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-<children><Label alignment="CENTER" contentDisplay="CENTER" text="Waren" textAlignment="CENTER" GridPane.columnIndex="4">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.ProductListController">
+<children><TableView fx:id="productTable" layoutX="11.0" layoutY="86.0" onMouseClicked="#checkFocus" prefHeight="338.0" prefWidth="577.0">
+<columns>
+<TableColumn fx:id="productColumn" prefWidth="151.0" text="Ware" />
+<TableColumn fx:id="costColumn" minWidth="0.0" prefWidth="78.0" text="Basispreis" />
+<TableColumn fx:id="attributeColumn" prefWidth="106.0" text="Attribut" />
+<TableColumn fx:id="productionRegionColumn" prefWidth="241.0" text="Produktionsgebiete" />
+</columns>
+</TableView><Label alignment="CENTER" contentDisplay="CENTER" layoutX="272.0" layoutY="6.0" prefHeight="47.0" prefWidth="56.0" text="Waren" textAlignment="CENTER">
 <font>
 <Font name="System Bold" size="18.0" />
-</font></Label><Button fx:id="button_create" mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Erstellen" GridPane.columnIndex="1" GridPane.rowIndex="1" /><Button fx:id="button_edit" mnemonicParsing="false" onAction="#onEditButtonPressed" text="Bearbeiten" GridPane.columnIndex="2" GridPane.rowIndex="1" /><Button fx:id="button_remove" mnemonicParsing="false" text="Löschen" GridPane.columnIndex="3" GridPane.rowIndex="1" /><TableView fx:id="tableview_product" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="2">
-  <columns>
-    <TableColumn fx:id="tablecolumn_product" prefWidth="54.0" text="Ware" />
-    <TableColumn fx:id="tablecolumn_cost" prefWidth="53.0" text="Preis" /><TableColumn fx:id="tablecolumn_unit" prefWidth="62.0" text="Unit" /><TableColumn fx:id="tablecolumn_productions" prefWidth="126.0" text="Produktionsgebiete" /><TableColumn fx:id="tablecolumn_categories" prefWidth="114.0" text="Warenkategorien" /><TableColumn fx:id="tablecolumn_attribute" prefWidth="56.0" text="Attribut" /><TableColumn fx:id="tablecolumn_comment" prefWidth="74.0" text="Kommentar" />
-  </columns>
-</TableView>
-</children>
-</GridPane>
-</center></BorderPane>
+</font>
+</Label><HBox layoutX="12.0" layoutY="53.0" prefHeight="27.0" prefWidth="577.0" spacing="10.0">
+<children><Button layoutX="98.0" layoutY="39.0" mnemonicParsing="false" onAction="#onCreateButtonPressed" onMouseClicked="#onCreateButtonPressed" prefHeight="25.0" prefWidth="85.0" text="Erstellen" /><Button fx:id="editButton" mnemonicParsing="false" onAction="#onEditButtonPressed" onMouseClicked="#onEditButtonPressed" prefHeight="25.0" prefWidth="83.0" text="Bearbeiten" /><Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDeleteButtonPressed" onMouseClicked="#onDeleteButtonPressed" text="Löschen" />
+</children></HBox>
+</children></Pane>

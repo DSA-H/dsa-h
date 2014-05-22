@@ -82,9 +82,8 @@ public class MainMenuController implements Initializable {
     private void onWarenClicked() {
         log.debug("onWarenClicked - open Waren Window");
         Stage stage = new Stage();
-        Parent scene = (Parent) loader.load("/gui/productslist.fxml");
 
-        scene = (Parent) loader.load("/gui/productslist.fxml");
+        Parent scene = (Parent) loader.load("/gui/productslist.fxml");
 
         stage.setTitle("Waren");
         stage.setScene(new Scene(scene, 600, 438));

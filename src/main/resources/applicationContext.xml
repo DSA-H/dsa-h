@@ -140,36 +140,44 @@
     <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController">
 	    <property name="loader" ref="loader"/>
     </bean>
+
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
 	    <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
     </bean>
+
     <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
 	    <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
     </bean>
+
     <bean id="LocationListController" class="sepm.dsa.gui.LocationListController">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
     </bean>
+
     <bean id="EditLocationController" class="sepm.dsa.gui.EditLocationController">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
         <property name="regionService" ref="regionService"/>
     </bean>
+
     <bean id="ProductListController" class="sepm.dsa.gui.ProductListController">
+        <property name="sessionFactory" ref="sessionFactory"/>
         <property name="loader" ref="loader"/>
         <property name="productService" ref="productService"/>
     </bean>
-    <bean id="editProductController" class="sepm.dsa.gui.EditProductController">
+
+    <bean id="EditProductController" class="sepm.dsa.gui.EditProductController">
         <property name="loader" ref="loader"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
         <property name="productService" ref="productService"/>
         <property name="productCategoryService" ref="productCategoryService"/>
-        <property name="productUnitService" ref="productUnitService"/>
         <property name="regionService" ref="regionService"/>
     </bean>
+
     <bean id="TraderCategoryList" class="sepm.dsa.gui.TraderCategoryListController">
         <property name="loader" ref="loader"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
