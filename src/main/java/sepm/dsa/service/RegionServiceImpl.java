@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.RegionBorderDao;
 import sepm.dsa.dao.RegionDao;
 import sepm.dsa.exceptions.DSAValidationException;
+import sepm.dsa.model.Location;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 
@@ -28,6 +29,7 @@ public class RegionServiceImpl implements RegionService {
 
     private RegionDao regionDao;
     private RegionBorderDao regionBorderDao;
+    private LocationService locationService;
 
     @Override
     public Region get(int id) {
@@ -57,11 +59,13 @@ public class RegionServiceImpl implements RegionService {
     @Transactional(readOnly = false)
     public void remove(Region r) {
         log.debug("calling remove(" + r + ")");
-        List<RegionBorder> borders = regionBorderDao.getAllByRegion(r.getId());
-        for (RegionBorder border : borders) {
-            regionBorderDao.remove(border);
-        }
-        regionDao.remove(get(r.getId()));
+//        List<RegionBorder> borders = regionBorderDao.getAllByRegion(r.getId());
+//        List<Location> locations = locationService.getAllByRegion(r.getId());
+
+//        borders.forEach(regionBorderDao::remove);
+//        locations.forEach(locationService::remove);
+
+        regionDao.remove(r);
     }
 
     @Override
@@ -95,4 +99,7 @@ public class RegionServiceImpl implements RegionService {
     }
 
 
+    public void setLocationService(LocationService locationService) {
+        this.locationService = locationService;
+    }
 }

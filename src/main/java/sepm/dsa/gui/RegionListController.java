@@ -22,8 +22,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.model.Location;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
+import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
 
@@ -36,6 +38,8 @@ public class RegionListController implements Initializable {
 	private SpringFxmlLoader loader;
 
 	private RegionService regionService;
+
+    private LocationService locationService;
 
     private RegionBorderService regionBorderService;
 	@FXML
@@ -143,10 +147,17 @@ public class RegionListController implements Initializable {
 
         if (selectedRegion != null) {
             log.debug("open Confirm-Delete-Region Dialog");
+            int connectedLocations = locationService.getAllByRegion(selectedRegion.getId()).size();
+            int regionalProductions = 0;
+            String connectedEntries = "";
+            connectedEntries += "\n" + connectedLocations + " Orte";
+            connectedEntries += "\n" + regionalProductions + " Zuordnungen von Produkt zu Produktionsort";    // TODO RegionalProduction (m:n)
+
             Action response = Dialogs.create()
                     .title("Löschen?")
                     .masthead(null)
-                    .message("Wollen Sie die Region '" + selectedRegion.getName() + "' und alle zugehörigen Grenzen wirklich löschen?")
+                    .message("Wollen Sie die Region '" + selectedRegion.getName() + "' und alle zugehörigen Grenzen wirklich löschen? " +
+                            "Folgende verbundenden Einträge würden ebenfalls gelöscht werden:" + connectedEntries)
                     .showConfirm();
             if(response == Dialog.Actions.YES) {
                 for(RegionBorder regionBorder : selectedRegion.getAllBorders()) {
@@ -185,4 +196,8 @@ public class RegionListController implements Initializable {
 	public void setLoader(SpringFxmlLoader loader) {
 		this.loader = loader;
 	}
+
+    public void setLocationService(LocationService locationService) {
+        this.locationService = locationService;
+    }
 }

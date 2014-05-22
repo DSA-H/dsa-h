@@ -66,13 +66,13 @@ public class TraderServiceTest extends TestCase {
         assertTrue(persistedTrader != null);
     }
 
-    @Test(expected = DSARuntimeException.class)
+    @Test
     @DatabaseSetup("/testData.xml")
     public void testRemove() throws Exception {
         Trader trader = traderService.get(2);
         traderService.remove(trader);
 
-        traderService.get(2);
+        assertNull(traderService.get(2));
     }
 
     @Test
