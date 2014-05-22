@@ -16,7 +16,9 @@ import sepm.dsa.dao.ProductDao;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.*;
 
+import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -48,14 +50,14 @@ public class ProductDaoTest {
         productDao.add(product);
 
         Product persistedproduct = productDao.get(product.getId());
-        assertTrue(persistedproduct != null);
+        assertNotNull(persistedproduct);
     }
 
     @Test
     @DatabaseSetup("/testData.xml")
     public void testGetProduct() {
-        Product p = productDao.get(2);
-        assertEquals(new Integer(2), p.getId());
+        Product p = productDao.get(1);
+        assertEquals(new Integer(1), p.getId());
     }
 
     @Test(expected = org.hibernate.PropertyValueException.class)

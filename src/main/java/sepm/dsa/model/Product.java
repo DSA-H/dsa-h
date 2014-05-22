@@ -56,6 +56,10 @@ public class Product implements Serializable {
     @JoinTable(name = "product_regions", joinColumns = { @JoinColumn(name = "productId") }, inverseJoinColumns = { @JoinColumn(name = "regionId") })
     private Set<Region> productionRegions = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Set<Offer> offer = new HashSet<>();
+
     public Integer getId() {
         return id;
     }
@@ -79,6 +83,14 @@ public class Product implements Serializable {
 
     public void setCost(Integer cost) {
         this.cost = cost;
+    }
+
+    public Set<Offer> getOffer() {
+        return offer;
+    }
+
+    public void setOffer(Set<Offer> offer) {
+        this.offer = offer;
     }
 
     public ProductAttribute getAttribute() {
