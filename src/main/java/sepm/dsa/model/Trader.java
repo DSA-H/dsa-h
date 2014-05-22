@@ -29,10 +29,10 @@ public class Trader implements Serializable {
     @Column(nullable = false)
     private Integer size;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer xPos;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer yPos;
 
     @Size(max = 1000)
@@ -199,4 +199,7 @@ public class Trader implements Serializable {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
+	@Override
+	public String toString() { return name; }
 }

@@ -130,6 +130,19 @@ public class MainMenuController implements Initializable {
         }
     }
 
+	@FXML
+	private void onTradersPressed() {
+
+		log.debug("called onTradersPressed");
+		Stage stage = new Stage();
+		Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
+		stage.setTitle("Händlerverwaltung");
+		stage.setScene(new Scene(scene, 600, 400));
+		stage.setResizable(false);
+		stage.show();
+
+	}
+
     @FXML
     private void onWeltkarteImportierenPressed() {
         log.debug("onWeltkarteImportierenPressed called");

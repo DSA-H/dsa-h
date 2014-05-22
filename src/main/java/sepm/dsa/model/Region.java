@@ -48,10 +48,20 @@ public class Region implements Serializable, PathNode {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region2", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RegionBorder> borders2 = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "region", cascade = CascadeType.REMOVE)
+    private Set<Location> locations = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "product_regions", joinColumns = { @JoinColumn(name = "regionId") }, inverseJoinColumns = { @JoinColumn(name = "productId") })
     private Set<Product> products = new HashSet<>();
+
+//    public Set<Location> getLocations() {
+//        return locations;
+//    }
+//
+//    public void setLocations(Set<Location> locations) {
+//        this.locations = locations;
+//    }
 
     public Set<Product> getProducts() {
         return products;

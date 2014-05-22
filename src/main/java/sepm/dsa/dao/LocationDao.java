@@ -39,6 +39,14 @@ public interface LocationDao {
     public List<Location> getAll();
 
     /**
+     * Get all locations in a region
+     * @param regionId the {@code Region}'s ID
+     * @return a list of locations in the region, or an emtpy list if no location is in the region (not null)
+     */
+    public List<Location> getAllByRegion(int regionId);
+
+
+    /**
      * Gets a list of locations near a given location.
      * @param location the location
      * @param withinDistance the distance in [??] around the location

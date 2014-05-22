@@ -52,6 +52,7 @@ public class TraderDaoHbmImpl implements TraderDao {
         Object result = sessionFactory.getCurrentSession().get(Trader.class, id);
 
         if (result == null) {
+            log.trace("returning " + null);
             return null;
         }
         log.trace("returning " + result);

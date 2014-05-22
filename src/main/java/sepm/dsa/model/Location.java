@@ -69,6 +69,9 @@ public class Location implements Serializable {
     @OneToMany(mappedBy = "pk.location2", fetch = FetchType.EAGER)
     private Set<LocationConnection> connections2 = new HashSet<>();
 
+    @OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) // no getter+setter to avoid lazy loading exceptions :)
+    private Set<Trader> traders;
+
     public Integer getId() {
         return id;
     }
@@ -204,6 +207,12 @@ public class Location implements Serializable {
         return id != null ? id.hashCode() : 0;
     }
 
+	@Override
+	public String toString() {
+		return name;
+	}
+
+	/*
     @Override
     public String toString() {
         return "Location{" +
@@ -212,6 +221,8 @@ public class Location implements Serializable {
                 ", region=" + region +
                 '}';
     }
+    */
+
 
 	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
 	private Collection<Tavern> taverns;

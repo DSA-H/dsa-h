@@ -20,6 +20,7 @@ import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.AssortmentNature;
 import sepm.dsa.model.RegionBorder;
@@ -49,11 +50,11 @@ public class TraderCategoryListController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise TraderCategoryListController");
-
         // init table
         traderCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         prodcutCategoryColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TraderCategory, String>, ObservableValue<String>>() {
             @Override
+            @Transactional(readOnly = true)
             public ObservableValue<String> call(TableColumn.CellDataFeatures<TraderCategory, String> r) {
                 if (r.getValue() != null) {
                    StringBuilder sb = new StringBuilder();

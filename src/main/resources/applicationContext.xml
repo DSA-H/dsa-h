@@ -107,6 +107,7 @@
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
         <property name="regionBorderDao" ref="regionBorderDao"/>
+        <property name="locationService" ref="locationService"/>
     </bean>
 
     <bean id="regionBorderService" class="sepm.dsa.service.RegionBorderServiceImpl">
@@ -115,6 +116,7 @@
 
     <bean id="locationService" class="sepm.dsa.service.LocationServiceImpl">
         <property name="locationDao" ref="locationDao"/>
+        <property name="traderService" ref="traderService"/>
     </bean>
 
     <bean id="locationConnectionService" class="sepm.dsa.service.LocationConnectionServiceImpl">
@@ -164,6 +166,7 @@
 	    <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
+        <property name="locationService" ref="locationService" />
     </bean>
 
     <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
@@ -175,6 +178,7 @@
     <bean id="LocationListController" class="sepm.dsa.gui.LocationListController">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
+        <property name="traderService" ref="traderService"/>
     </bean>
 
     <bean id="EditLocationController" class="sepm.dsa.gui.EditLocationController">
@@ -207,6 +211,20 @@
         <property name="traderCategoryService" ref="traderCategoryService"/>
         <property name="productCategoryService" ref="productCategoryService"/>
         <property name="assortmentNatureService" ref="assortmentNatureService"/>
+    </bean>
+    <bean id="traderList" class="sepm.dsa.gui.TraderListController">
+        <property name="loader" ref="loader"/>
+        <property name="traderService" ref="traderService"/>
+        <property name="locationService" ref="locationService"/>
+    </bean>
+    <bean id="editTrader" class="sepm.dsa.gui.EditTraderController">
+        <property name="loader" ref="loader"/>
+        <property name="traderService" ref="traderService"/>
+        <property name="traderCategoryService" ref="traderCategoryService"/>
+        <property name="locationService" ref="locationService"/>
+    </bean>
+    <bean id="traderDetails" class="sepm.dsa.gui.TraderDetailsController">
+        <property name="loader" ref="loader"/>
     </bean>
     <bean id="EditLocationConnectionsController" class="sepm.dsa.gui.EditLocationConnectionsController">
         <property name="loader" ref="loader"/>

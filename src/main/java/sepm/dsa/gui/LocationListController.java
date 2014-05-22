@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
 import sepm.dsa.service.LocationService;
+import sepm.dsa.service.TraderService;
 
 @Service("LocationListController")
 public class LocationListController implements Initializable {
@@ -28,6 +29,8 @@ public class LocationListController implements Initializable {
     private SpringFxmlLoader loader;
 
     private LocationService locationService;
+
+    private TraderService traderService;
 
     @FXML
     private TableView<Location> locationTable;
@@ -91,10 +94,17 @@ public class LocationListController implements Initializable {
 
         if (selectedLocation != null) {
             log.debug("open Confirm-Delete-Location Dialog");
+            int traderSize = traderService.getAllForLocation(selectedLocation).size();
+            int tavernsSize = 0;    // TODO get taverns connected to location
+            String connectedEntries = "";
+            connectedEntries += "\n" + traderSize + " Händler";
+            connectedEntries += "\n" + tavernsSize + " Wirtshäuser";
+            // TODO ? make a 'DeleteService' to providing information of all entities, which connected entities exist
+
             Action response = Dialogs.create()
                     .title("Löschen?")
                     .masthead(null)
-                    .message("Wollen Sie den Ort '" + selectedLocation.getName() + "' löschen")
+                    .message("Wollen Sie den Ort '" + selectedLocation.getName() + "' wirklich löschen? Folgende verbundenden Einträge würden ebenfalls gelöscht werden:" + connectedEntries)
                     .showConfirm(); // TODO was ist hier sinnvoll?
             if (response == Dialog.Actions.YES) {
                 locationService.remove(selectedLocation);
@@ -124,5 +134,9 @@ public class LocationListController implements Initializable {
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
+    }
+
+    public void setTraderService(TraderService traderService) {
+        this.traderService = traderService;
     }
 }

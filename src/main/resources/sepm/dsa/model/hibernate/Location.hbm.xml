@@ -31,4 +31,8 @@
                     ORDER BY l.name asc]]>
     </query>
 
+    <query name="Location.findAllByRegion">
+        <![CDATA[FROM Location WHERE region.id = :regionId ORDER BY name asc]]>
+    </query>
+
 </hibernate-mapping>

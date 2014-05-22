@@ -12,13 +12,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import sepm.dsa.dao.LocationDao;
+import sepm.dsa.dao.TraderDao;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.TownSize;
 import sepm.dsa.service.LocationService;
+import sepm.dsa.model.Trader;
 import sepm.dsa.service.RegionService;
+import sepm.dsa.service.TraderService;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 import static org.junit.matchers.JUnitMatchers.hasItems;
@@ -69,7 +73,7 @@ public class LocationDaoTest{
         locationDao.remove(location);
 
         //TODO oder sollte das eine Exception sein??
-        assertEquals(null,locationDao.get(location.getId()));
+        assertNull(locationDao.get(location.getId()));
     }
 
     @Test
@@ -163,4 +167,7 @@ public class LocationDaoTest{
         int sizeAllNotConnected = locationDao.getAllByNameNotConnectedTo(location, "%_LoConTest%").size();
         assertEquals(4, sizeAllNotConnected);
     }
+
+
+
 }

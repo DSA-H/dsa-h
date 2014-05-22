@@ -36,6 +36,22 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
+    public List<Location> getAllByRegion(int regionId) {
+        log.debug("calling getAll()");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("Location.findAllByRegion");
+        query.setParameter("regionId", regionId);
+        List<?> list = query.list();
+
+        List<Location> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((Location) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public void remove(Location location) {
         log.debug("calling remove(" + location + ")");

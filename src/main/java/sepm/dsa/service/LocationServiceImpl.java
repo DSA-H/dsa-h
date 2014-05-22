@@ -6,9 +6,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.LocationDao;
+import sepm.dsa.dao.TraderDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
+import sepm.dsa.model.Trader;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -26,6 +28,7 @@ public class LocationServiceImpl implements LocationService {
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private LocationDao locationDao;
+    private TraderService traderService;
 
     @Override
     @Transactional(readOnly = false)
@@ -44,9 +47,21 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    public List<Location> getAllByRegion(int regionId) {
+        log.debug("calling getAllByRegion(" + regionId + ")");
+        List<Location> result = locationDao.getAllByRegion(regionId);
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public void remove(Location location) {
         log.debug("calling remove(" + location + ")");
+//        List<Trader> tradersInTown = traderService.getAllForLocation(location);
+
+//        tradersInTown.forEach(traderService::remove);
+
         locationDao.remove(location);
     }
 
@@ -81,5 +96,9 @@ public class LocationServiceImpl implements LocationService {
         if (violations.size() > 0) {
             throw new DSAValidationException("Ort ist nicht valide.", violations);
         }
+    }
+
+    public void setTraderService(TraderService traderService) {
+        this.traderService = traderService;
     }
 }
