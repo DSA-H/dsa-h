@@ -4,11 +4,16 @@ package sepm.dsa.gui;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.*;
 import sepm.dsa.service.LocationService;
@@ -92,10 +97,144 @@ public class EditTraderController implements Initializable {
 	}
 
 	@FXML
-	private void onSavePressed() {}
+	private void onSavePressed() {
+		log.debug("called onSavePressed");
+
+		/*
+		//name
+		int count = StringUtils.countOccurrencesOf(nameField.getText(), " ");
+		if (count != nameField.getText().length()) {
+			selectedTrader.setName(nameField.getText());
+		} else {
+			Dialogs.create()
+					.title("Ungültige Eingabe")
+					.masthead(null)
+					.message("Der Name des Händlers darf nicht nur aus Leerzeichen bestehen!")
+					.showWarning();
+			return;
+		}
+
+		//size
+		try {
+			selectedTrader.setSize(Integer.parseInt(sizeField.getText()));
+		} catch (NumberFormatException e) {
+			Dialogs.create()
+					.title("Ungültige Eingabe")
+					.masthead(null)
+					.message("Die Größe des Händler muss eine Zahl sein, die die Anzahl an seiner Waren darstellt!")
+					.showWarning();
+			return;
+		}
+
+		//mut
+		try {
+			selectedTrader.setMut(Integer.parseInt(muField.getText()));
+		} catch (NumberFormatException e) {
+			Dialogs.create()
+					.title("Ungültige Eingabe")
+					.masthead(null)
+					.message("Der Mut-Wert des Händler muss eine Zahl sein!")
+					.showWarning();
+			return;
+		}
+
+		//intelligenz
+		try {
+			selectedTrader.setIntelligence(Integer.parseInt(inField.getText()));
+		} catch (NumberFormatException e) {
+			Dialogs.create()
+					.title("Ungültige Eingabe")
+					.masthead(null)
+					.message("Der Intelligenz-Wert des Händler muss eine Zahl sein!")
+					.showWarning();
+			return;
+		}
+
+		//charisma
+		try {
+			selectedTrader.setCharisma(Integer.parseInt(chField.getText()));
+		} catch (NumberFormatException e) {
+			Dialogs.create()
+					.title("Ungültige Eingabe")
+					.masthead(null)
+					.message("Der Charisma-Wert des Händler muss eine Zahl sein!")
+					.showWarning();
+			return;
+		}
+
+		//convince
+		try {
+			selectedTrader.setConvince(Integer.parseInt(convinceField.getText()));
+		} catch (NumberFormatException e) {
+			Dialogs.create()
+					.title("Ungültige Eingabe")
+					.masthead(null)
+					.message("Der Überreden-Wert des Händler muss eine Zahl sein!")
+					.showWarning();
+			return;
+		}
+
+		//location
+		Location location = (Location) locationBox.getSelectionModel().getSelectedItem();
+		if (location != null) {
+			selectedTrader.setLocation(location);
+		} else {
+			Dialogs.create()
+					.title("Ungültige Eingabe")
+					.masthead(null)
+					.message("Ein Ort muss ausgewählt werden!")
+					.showWarning();
+			return;
+		}
+
+		//category
+		TraderCategory category = (TraderCategory) categoryBox.getSelectionModel().getSelectedItem();
+		if (category != null) {
+			selectedTrader.setCategory(category);
+		} else {
+			Dialogs.create()
+					.title("Ungültige Eingabe")
+					.masthead(null)
+					.message("Eine Händlerkategorie muss ausgewählt werden!")
+					.showWarning();
+			return;
+		}
+
+		//comment
+		selectedTrader.setComment(commentArea.getText());
+		*/
+
+		selectedTrader.setName(nameField.getText());
+		selectedTrader.setSize(Integer.parseInt(sizeField.getText()));
+		selectedTrader.setMut(Integer.parseInt(muField.getText()));
+		selectedTrader.setIntelligence(Integer.parseInt(inField.getText()));
+		selectedTrader.setCharisma(Integer.parseInt(chField.getText()));
+		selectedTrader.setConvince(Integer.parseInt(convinceField.getText()));
+		selectedTrader.setLocation((Location) locationBox.getSelectionModel().getSelectedItem());
+		selectedTrader.setCategory((TraderCategory) categoryBox.getSelectionModel().getSelectedItem());
+
+
+		if (isNewTrader) {
+			traderService.add(selectedTrader);
+		} else {
+			traderService.update(selectedTrader);
+		}
+
+		Stage stage = (Stage) nameField.getScene().getWindow();
+		Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
+		stage.setScene(new Scene(scene, 600, 438));
+
+
+	}
 
 	@FXML
-	private void onCancelPressed() {}
+	private void onCancelPressed() {
+		log.debug("called onCancelPressed");
+
+		Stage stage = (Stage) nameField.getScene().getWindow();
+		Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
+		stage.setScene(new Scene(scene, 600, 438));
+	}
 
 	public void setTraderService(TraderService traderService) {
 		log.debug("calling setTraderService(" + traderService + ")");
@@ -117,6 +256,7 @@ public class EditTraderController implements Initializable {
 		selectedTrader = trader;
 		if (trader == null) {
 			isNewTrader = true;
+			selectedTrader = new Trader();
 		} else {
 			isNewTrader = false;
 		}
