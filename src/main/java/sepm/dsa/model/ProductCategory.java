@@ -23,16 +23,30 @@ public class ProductCategory implements Serializable {
     @Column(nullable = false, length = 60)
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
     private ProductCategory parent;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "parent", orphanRemoval = true)
     private Set<ProductCategory> childs = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "product_categories", joinColumns = { @JoinColumn(name = "categoryId") }, inverseJoinColumns = { @JoinColumn(name = "productId") })
+    @JoinTable(name = "product_categories",
+            joinColumns = { @JoinColumn(name = "categoryId") },
+            inverseJoinColumns = { @JoinColumn(name = "productId") })
     private Set<Product> products = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "productcategory_id", nullable = false)
+    private Set<AssortmentNature> assortmentNatures = new HashSet<>();
+
+    public Set<AssortmentNature> getAssortmentNatures() {
+        return assortmentNatures;
+    }
+
+    public void setAssortmentNatures(Set<AssortmentNature> assortmentNatures) {
+        this.assortmentNatures = assortmentNatures;
+    }
 
     public Integer getId() {
         return id;

@@ -49,7 +49,9 @@ public class Product implements Serializable {
     private Boolean quality;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "product_categories", joinColumns = { @JoinColumn(name = "productId") }, inverseJoinColumns = { @JoinColumn(name = "categoryId") })
+    @JoinTable(name = "product_categories",
+            joinColumns = { @JoinColumn(name = "productId") },
+            inverseJoinColumns = { @JoinColumn(name = "categoryId") })
     private Set<ProductCategory> categories = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)

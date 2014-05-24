@@ -18,10 +18,11 @@ public class AssortmentNature implements Serializable {
     private Integer id;
 
     @ManyToOne
+    @JoinColumn(name = "productcategory_id", nullable = false, insertable=false, updatable=false)
     private ProductCategory productCategory;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "tradercategory_id", nullable = false, insertable = false, updatable = false)
     private TraderCategory traderCategory;
 
     @Override

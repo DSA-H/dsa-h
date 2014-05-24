@@ -3,12 +3,14 @@ package sepm.dsa.service;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.ProductCategoryDao;
 import sepm.dsa.dao.ProductCategoryDaoHbmImpl;
 import sepm.dsa.dao.ProductDao;
 import sepm.dsa.exceptions.DSAValidationException;
+import sepm.dsa.model.AssortmentNature;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
 
@@ -29,6 +31,8 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     private static final Logger log = LoggerFactory.getLogger(RegionServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
     private ProductCategoryDao productCategoryDao;
+    @Autowired
+    private ProductService productService;
 
     @Override
     public ProductCategory get(Integer id) {
@@ -58,7 +62,13 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Transactional(readOnly = false)
     public void remove(ProductCategory p) {
         log.debug("calling remove(" + p + ")");
-        productCategoryDao.remove(get(p.getId()));
+        p = get(p.getId());
+        productCategoryDao.remove(p);
+        for (Product product : p.getProducts()) {
+            product.getCategories().remove(p);
+//            productService.update(product);
+        }
+//        p.getProducts().clear();
     }
 
     @Override

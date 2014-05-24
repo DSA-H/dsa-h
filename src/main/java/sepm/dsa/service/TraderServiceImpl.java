@@ -132,7 +132,7 @@ public class TraderServiceImpl implements TraderService {
 				// random picked found
 				if(random < weight) {
 					if(productAmmountMap.containsKey(weightProducts.get(j))) {
-						int amount = productAmmountMap.get(productAmmountMap);
+						int amount = productAmmountMap.get(weightProducts.get(j));// TODO @johannes here was: int amount = productAmmountMap.get(productAmmountMap);
 						amount++;
 						productAmmountMap.put(weightProducts.get(j), amount);
 					}else {
