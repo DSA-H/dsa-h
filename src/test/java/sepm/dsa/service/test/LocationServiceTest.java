@@ -1,50 +1,24 @@
 package sepm.dsa.service.test;
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import junit.framework.TestCase;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.dao.LocationDao;
 import sepm.dsa.dao.TraderDao;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Location;
-import sepm.dsa.model.LocationConnection;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.TownSize;
 import sepm.dsa.model.Trader;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionService;
 
-import javax.validation.constraints.AssertTrue;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
 @Transactional
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:testContext.xml"})
-@TestExecutionListeners({
-        DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionDbUnitTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
-})
-public class LocationServiceTest extends TestCase {
+public class LocationServiceTest extends AbstractDatabaseTest {
 
     @Autowired
     private LocationService locationService;
@@ -55,9 +29,7 @@ public class LocationServiceTest extends TestCase {
     @Autowired
     private TraderDao traderDao;
 
-
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testAdd() throws Exception {
         Location location = new Location();
         location.setComment("foo comment");
@@ -76,7 +48,6 @@ public class LocationServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testRemove() throws Exception {
         Location location = locationService.get(2);
         locationService.remove(location);
@@ -84,14 +55,12 @@ public class LocationServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testGet() throws Exception {
         Location location = locationService.get(2);
         assertNotNull(location);
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testGetAll() throws Exception {
         Location l1 = locationService.get(1);
         Location l2 = locationService.get(2);
@@ -99,7 +68,6 @@ public class LocationServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void remove_TradersInTown_ShouldCascadeTraderRemoval() {
         Location location = locationService.get(1);
         Collection<Trader> tradersBefore = traderDao.getAllByLocation(location);
@@ -116,7 +84,6 @@ public class LocationServiceTest extends TestCase {
     }
 
 //    @Test
-//    @DatabaseSetup("/testData.xml")
 //    public void update_removesConnections() throws Exception {
 //        Location location = locationService.get(4);
 //        assertEquals(2, location.getConnections1().size());

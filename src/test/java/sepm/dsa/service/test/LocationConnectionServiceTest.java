@@ -1,23 +1,11 @@
 package sepm.dsa.service.test;
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import junit.framework.TestCase;
-import org.hibernate.Hibernate;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.dao.LocationConnectionDao;
 import sepm.dsa.dao.LocationDao;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
 import sepm.dsa.service.LocationConnectionService;
@@ -25,18 +13,10 @@ import sepm.dsa.service.LocationService;
 
 import java.util.List;
 
+import static org.junit.Assert.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:testContext.xml"})
-@TestExecutionListeners({
-        DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionDbUnitTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
-})
 @Transactional
-public class LocationConnectionServiceTest extends TestCase {
+public class LocationConnectionServiceTest extends AbstractDatabaseTest {
 
     @Autowired
     private LocationConnectionService locationConnectionService;
@@ -58,7 +38,6 @@ public class LocationConnectionServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void add_shouldPersistEntity() throws Exception {
         Location location1 = locationService.get(7);
         Location location2 = locationService.get(8);
@@ -73,7 +52,6 @@ public class LocationConnectionServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void remove_shouldRemoveEntity1() throws Exception {
         Location location1 = locationService.get(4);
         Location location2 = locationService.get(5);
@@ -85,9 +63,8 @@ public class LocationConnectionServiceTest extends TestCase {
         assertNull(locationConnectionService.get(location1, location2));
     }
 
-    
+
     @Test
-    @DatabaseSetup("/testData.xml")
     public void remove_shouldRemoveEntity2() throws Exception {
         Location location1 = locationService.get(5);
         Location location2 = locationService.get(4); // swapped 4 and 5
@@ -100,7 +77,6 @@ public class LocationConnectionServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void get_shouldRetrieveEntity1() throws Exception {
         Location location1 = new Location();
         location1.setId(4);
@@ -112,7 +88,6 @@ public class LocationConnectionServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void get_shouldRetrieveEntity2() throws Exception {
         Location location1 = new Location();
         location1.setId(5);     // swapped 4 and 5
@@ -124,7 +99,6 @@ public class LocationConnectionServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void get_shouldNotFindEntity1() throws Exception {
         Location location1 = new Location();
         location1.setId(4);     // swapped 4 and 5
@@ -136,7 +110,6 @@ public class LocationConnectionServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void get_shouldNotFindEntity2() throws Exception {
         Location location1 = new Location();
         location1.setId(8);     // swapped 4 and 5
@@ -149,7 +122,6 @@ public class LocationConnectionServiceTest extends TestCase {
 
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void suggestConnectionsAround_locationsAround() throws Exception {
         Location location = locationService.get(4);
         List<LocationConnection> suggestions = locationConnectionService.suggestLocationConnectionsAround(location, 100);
@@ -157,7 +129,6 @@ public class LocationConnectionServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void suggestConnectionsAround_noLocationsAround() throws Exception {
         Location location = locationService.get(4);
         List<LocationConnection> suggestions = locationConnectionService.suggestLocationConnectionsAround(location, 0);
@@ -165,7 +136,6 @@ public class LocationConnectionServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void suggestConnectionsAround_locationsAreNotEqual() {
         Location location = locationService.get(4);
         List<LocationConnection> suggestions = locationConnectionService.suggestLocationConnectionsAround(location, 100);
@@ -175,7 +145,6 @@ public class LocationConnectionServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void suggestConnectionsAround_locationIsLocation1() {
         Location location = locationService.get(4);
         List<LocationConnection> suggestions = locationConnectionService.suggestLocationConnectionsAround(location, 100);
@@ -185,7 +154,6 @@ public class LocationConnectionServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void suggestedDistanceBetween_positive() {
         Location location = locationService.get(6);
         List<LocationConnection> suggestions = locationConnectionService.suggestLocationConnectionsAround(location, 100);
@@ -197,7 +165,6 @@ public class LocationConnectionServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void suggestedDistanceBetween_GtOrEqDirectDistance() {
         Location location = locationService.get(6);
         List<LocationConnection> suggestions = locationConnectionService.suggestLocationConnectionsAround(location, 100);
@@ -213,7 +180,6 @@ public class LocationConnectionServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void suggestLocationConnectionsByFilter_nullFilterReturnsAllButLocationItself() {
         Location location = locationService.get(8); // 8 does not have locations connected
         int sizeUnfiltered = locationConnectionService.suggestLocationConnectionsByFilter(location, null).size();
@@ -222,12 +188,9 @@ public class LocationConnectionServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void suggestLocationConnectionsByFilter_returnsFilteredByName() {
         Location location = locationService.get(8); // 8 does not have locations connected
         List<LocationConnection> conn = locationConnectionService.suggestLocationConnectionsByFilter(location, "_LoConTest");
         assertEquals(5, conn.size());
     }
-
-
 }

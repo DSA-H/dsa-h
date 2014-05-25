@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.*;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
@@ -13,9 +14,7 @@ import sepm.dsa.service.RegionService;
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:testContext.xml"})
-public class RegionBorderServiceTest {
+public class RegionBorderServiceTest extends AbstractDatabaseTest {
 
     @Autowired
     private RegionBorderService rbs;

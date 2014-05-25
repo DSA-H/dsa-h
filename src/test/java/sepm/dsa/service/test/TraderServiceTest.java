@@ -1,21 +1,11 @@
 package sepm.dsa.service.test;
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import junit.framework.TestCase;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.exceptions.DSARuntimeException;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.*;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.ProductService;
@@ -25,17 +15,13 @@ import sepm.dsa.service.TraderService;
 import java.util.List;
 import java.util.Set;
 
+import static junit.framework.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 
 @Transactional
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:testContext.xml"})
-@TestExecutionListeners({
-        DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionDbUnitTestExecutionListener.class
-})
-public class TraderServiceTest extends TestCase {
+public class TraderServiceTest extends AbstractDatabaseTest {
 
     private static final Logger log = LoggerFactory.getLogger(TraderServiceTest.class);
 
@@ -53,7 +39,6 @@ public class TraderServiceTest extends TestCase {
 
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testAdd() throws Exception {
         Trader trader = new Trader();
         trader.setName("TestTrader1");
@@ -78,7 +63,6 @@ public class TraderServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testRemove() throws Exception {
         Trader trader = traderService.get(2);
         traderService.remove(trader);
@@ -87,14 +71,12 @@ public class TraderServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testGet() throws Exception {
         Trader trader = traderService.get(2);
         assertNotNull(trader);
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testGetAllForLocation() throws Exception {
         Location location = locationService.get(1);
 
@@ -106,7 +88,6 @@ public class TraderServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testGetAllbyCategory() throws Exception {
         TraderCategory traderCategory = traderCategoryService.get(1);
 
@@ -116,7 +97,6 @@ public class TraderServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void calculatePriceForProduct_alwaysPositive() {
         Trader trader = traderService.get(1);
         Set<AssortmentNature> assortments = trader.getCategory().getAssortments();
@@ -129,7 +109,6 @@ public class TraderServiceTest extends TestCase {
     }
 
 //    @Test
-//    @DatabaseSetup("/testData.xml")
 //    public void calculateOffers_OffersShouldNotExceedTraderSpace() {
 //        Trader trader = traderService.get(2);
 //        int traderSize = trader.getSize();
@@ -144,7 +123,6 @@ public class TraderServiceTest extends TestCase {
 //    }
 //
 //    @Test
-//    @DatabaseSetup("/testData.xml")
 //    public void calculateOffers_OffersShouldNotExceedTraderSpace2() {
 //        Trader trader = traderService.get(2);
 //

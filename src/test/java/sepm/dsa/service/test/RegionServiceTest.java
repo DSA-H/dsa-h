@@ -1,16 +1,10 @@
 package sepm.dsa.service.test;
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import org.junit.*;
-import org.junit.runner.RunWith;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.*;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionService;
@@ -20,15 +14,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:testContext.xml"})
-@TestExecutionListeners({
-        DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionDbUnitTestExecutionListener.class
-})
-public class RegionServiceTest {
+public class RegionServiceTest extends AbstractDatabaseTest {
 
 	@Autowired
 	private RegionService rs;
@@ -102,7 +88,6 @@ public class RegionServiceTest {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testXML(){
         System.out.println(rs.get(1));
     }
@@ -139,7 +124,6 @@ public class RegionServiceTest {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void add_withBorder_shouldPersist() {
         int size = rs.getAll().size();
 
@@ -169,7 +153,6 @@ public class RegionServiceTest {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void oneToMany_hasValues() {
         Region region = rs.get(1);
         assertTrue(region.getAllBorders().size() == 3);
@@ -179,7 +162,6 @@ public class RegionServiceTest {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void remove_LocationsInside_ShouldCascadeDeleteLocations() {
         Region region = rs.get(1);
         List<Location> locationsInside = locationService.getAllByRegion(region.getId());
