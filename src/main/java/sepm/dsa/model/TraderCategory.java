@@ -4,8 +4,8 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Table(name = "traderCategories")
@@ -26,9 +26,14 @@ public class TraderCategory implements BaseModel {
     @Column(length = 1000)
     private String comment;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "tradercategory_id", nullable = false)
-    private Set<AssortmentNature> assortments = new HashSet<>();
+//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "tradercategory_id", nullable = false)
+//    private Set<AssortmentNature> assortments = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "pk.traderCategory", cascade = CascadeType.ALL, orphanRemoval = true)
+    @MapKey(name="pk.productCategory")
+    private Map<ProductCategory, AssortmentNature> assortments = new HashMap<>();
 
     public Integer getId() {
         return id;
@@ -46,12 +51,16 @@ public class TraderCategory implements BaseModel {
         this.name = name;
     }
 
-    public Set<AssortmentNature> getAssortments() {
+    public Map<ProductCategory, AssortmentNature> getAssortments() {
         return assortments;
     }
 
-    public void setAssortments(Set<AssortmentNature> assortments) {
+    public void setAssortments(Map<ProductCategory, AssortmentNature> assortments) {
         this.assortments = assortments;
+    }
+
+    public void putAssortment(AssortmentNature assortment) {
+        this.assortments.put(assortment.getProductCategory(), assortment);
     }
 
     public String getComment() {

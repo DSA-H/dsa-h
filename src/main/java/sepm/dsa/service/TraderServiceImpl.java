@@ -93,7 +93,7 @@ public class TraderServiceImpl implements TraderService {
         List<Float> weights = new ArrayList<>();
         float topWeight = 0;
         // calculate weight for each product
-        for (AssortmentNature assortmentNature : trader.getCategory().getAssortments()) {
+        for(AssortmentNature assortmentNature : trader.getCategory().getAssortments().values()) {
             int defaultOccurence = assortmentNature.getDefaultOccurence();
             ProductCategory productCategory = assortmentNature.getProductCategory();
             // get all products from this and the sub Categories

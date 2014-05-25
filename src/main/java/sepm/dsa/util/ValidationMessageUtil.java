@@ -1,4 +1,4 @@
-package sepm.dsa.sepm.dsa.util;
+package sepm.dsa.util;
 
 import javax.validation.ConstraintViolation;
 
