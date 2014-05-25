@@ -44,39 +44,7 @@ public class CurrencyListController implements Initializable {
         log.debug("initialize CurrencyListController");
         // init table
         currencyColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        valueToBaseRateColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
-//        attributeColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
-//            @Override
-//            public ObservableValue<String> call(TableColumn.CellDataFeatures<Product, String> r) {
-//                if (r.getValue() == null) {
-//                    return new SimpleStringProperty("");
-//                }
-//                Product product = r.getValue();
-//                return new SimpleStringProperty(product.getAttribute().getName());
-//            }
-//        });
-//        productionRegionColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
-//            @Override
-//            public ObservableValue<String> call(TableColumn.CellDataFeatures<Product, String> r) {
-//                Session session = sessionFactory.openSession();
-//                if (r.getValue() == null) {
-//                    return new SimpleStringProperty("");
-//                }
-//                Product product = r.getValue();
-//                session.refresh(product);
-//                StringBuilder sb = new StringBuilder();
-//                Set<Region> regions = product.getRegions();
-//                for (Region region : regions) {
-//                    sb.append(region.getName()).append(", ");
-//                }
-//                if (sb.length() >= 2) {
-//                    sb.delete(sb.length() - 2, sb.length());
-//                }
-//                session.close();
-//                return new SimpleStringProperty(sb.toString());
-//            }
-//        });
-
+        valueToBaseRateColumn.setCellValueFactory(new PropertyValueFactory<>("valueToBaseRate"));
 
         ObservableList<Currency> data = FXCollections.observableArrayList(currencyService.getAll());
         currencyTable.setItems(data);
@@ -88,19 +56,19 @@ public class CurrencyListController implements Initializable {
     private void onCreateButtonPressed() {
         log.debug("onCreateClicked - open Currency Window");
 
-        EditProductController.setProduct(null);
+	    EditCurrencyController.setCurrency(null);
 
         Stage stage = (Stage) currencyTable.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/editcurrency.fxml");
 
-        stage.setTitle("Waren");
+        stage.setTitle("Währungen");
         stage.setScene(new Scene(scene, 600, 414));
         stage.show();
     }
 
     @FXML
     private void onEditButtonPressed() {
-        log.debug("onWarenClicked - open Waren Window");
+        log.debug("onEditButtonPressed - open Currency Window");
 
         EditCurrencyController.setCurrency(currencyTable.getFocusModel().getFocusedItem());
 
@@ -118,7 +86,7 @@ public class CurrencyListController implements Initializable {
         Currency selectedCurrency = (currencyTable.getSelectionModel().getSelectedItem());
 
         if (selectedCurrency != null) {
-            log.debug("open Confirm-Delete-Product Dialog");
+            log.debug("open Confirm-Delete-Currency Dialog");
             org.controlsfx.control.action.Action response = Dialogs.create()
                     .title("Löschen?")
                     .masthead(null)
