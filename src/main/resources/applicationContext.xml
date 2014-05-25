@@ -176,7 +176,7 @@
         <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
-        <property name="locationService" ref="locationService" />
+        <property name="locationService" ref="locationService"/>
     </bean>
 
     <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
@@ -247,9 +247,18 @@
         <property name="locationConnectionService" ref="locationConnectionService"/>
         <property name="locationService" ref="locationService"/>
     </bean>
-
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="currencyList" class="sepm.dsa.gui.CurrencyListController">
+        <property name="loader" ref="loader"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="currencyService" ref="currencyService"/>
+    </bean>
+    <bean id="editCurrency" class="sepm.dsa.gui.EditCurrencyController">
+        <property name="loader" ref="loader"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="currencyService" ref="currencyService"/>
     </bean>
 </beans>
