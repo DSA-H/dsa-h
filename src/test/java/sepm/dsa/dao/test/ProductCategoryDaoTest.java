@@ -9,10 +9,14 @@ import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class ProductCategoryDaoTest extends AbstractDatabaseTest {
     @Autowired
@@ -80,5 +84,18 @@ public class ProductCategoryDaoTest extends AbstractDatabaseTest {
         ProductCategory p = productCategoryDao.get(2);
         productCategoryDao.remove(p);
         assertNull(productCategoryDao.get(2));
+    }
+
+    @Test
+    public void getAll_getsAll() {
+        ProductCategory c1 = productCategoryDao.get(1);
+        ProductCategory c2 = productCategoryDao.get(2);
+        ProductCategory c3 = productCategoryDao.get(3);
+        ProductCategory c4 = productCategoryDao.get(4);
+        ProductCategory c5 = productCategoryDao.get(5);
+
+        List<ProductCategory> all = productCategoryDao.getAll();
+        assertThat(all, hasItems(c1, c2, c3, c4, c5));
+        assertEquals(5, all.size());
     }
 }

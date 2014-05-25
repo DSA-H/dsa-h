@@ -38,7 +38,7 @@ public class ProductCategory implements Serializable {
             inverseJoinColumns = { @JoinColumn(name = "productId") })
     private Set<Product> products = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.productCategory", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.productCategory", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @MapKey(name="pk.traderCategory")
     private Map<TraderCategory, AssortmentNature> assortments = new HashMap<>();
 

@@ -1,10 +1,12 @@
 package sepm.dsa.dao;
 
+import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.exceptions.DSAValidationException;
+import sepm.dsa.model.AssortmentNature;
 import sepm.dsa.model.Trader;
 import sepm.dsa.model.TraderCategory;
 
@@ -45,6 +47,11 @@ public class TraderCategoryDaoImpl implements TraderCategoryDao {
         } else {
             throw new DSAValidationException("Löschen nicht möglich. Zu dieser Kategorie sind noch Händler vorhanden.");
         }
+        for (AssortmentNature a : traderCategory.getAssortments().values()) {
+            Hibernate.initialize(a.getProductCategory());
+            a.getProductCategory().getAssortments().remove(traderCategory);
+        }
+        traderCategory.getAssortments().clear();
     }
 
     @Override

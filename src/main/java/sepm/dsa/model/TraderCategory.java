@@ -35,7 +35,7 @@ public class TraderCategory implements Serializable {
 //    private Set<AssortmentNature> assortments = new HashSet<>();
 
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.traderCategory", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.traderCategory", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @MapKey(name="pk.productCategory")
     private Map<ProductCategory, AssortmentNature> assortments = new HashMap<>();
 
