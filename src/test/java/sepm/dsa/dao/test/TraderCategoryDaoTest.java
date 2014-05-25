@@ -66,7 +66,7 @@ public class TraderCategoryDaoTest extends AbstractDatabaseTest {
         cat.getAssortments().put(pc, a1);
         cat = traderCategoryDao.get(cat.getId());
         assertNotNull(cat);
-        assertTrue(cat.getAssortments().size() == 1);
+        assertTrue("assortments didn't cascade persist", cat.getAssortments().size() == 1);
     }
 
 }
