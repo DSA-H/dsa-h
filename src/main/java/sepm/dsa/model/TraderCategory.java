@@ -1,11 +1,14 @@
 package sepm.dsa.model;
 
+import org.hibernate.engine.spi.EntityKey;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -27,9 +30,14 @@ public class TraderCategory implements Serializable {
     @Column(length = 1000)
     private String comment;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "tradercategory_id", nullable = false)
-    private Set<AssortmentNature> assortments = new HashSet<>();
+//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "tradercategory_id", nullable = false)
+//    private Set<AssortmentNature> assortments = new HashSet<>();
+
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.traderCategory", cascade = CascadeType.ALL, orphanRemoval = true)
+    @MapKey(name="pk.productCategory")
+    private Map<ProductCategory, AssortmentNature> assortments = new HashMap<>();
 
     public Integer getId() {
         return id;
@@ -37,6 +45,7 @@ public class TraderCategory implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+//        EntityKey foo;
     }
 
     public String getName() {
@@ -47,12 +56,16 @@ public class TraderCategory implements Serializable {
         this.name = name;
     }
 
-    public Set<AssortmentNature> getAssortments() {
+    public Map<ProductCategory, AssortmentNature> getAssortments() {
         return assortments;
     }
 
-    public void setAssortments(Set<AssortmentNature> assortments) {
+    public void setAssortments(Map<ProductCategory, AssortmentNature> assortments) {
         this.assortments = assortments;
+    }
+
+    public void putAssortment(AssortmentNature assortment) {
+        this.assortments.put(assortment.getProductCategory(), assortment);
     }
 
     public String getComment() {

@@ -52,13 +52,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Transactional(readOnly = false)
     public void remove(ProductCategory p) {
         log.debug("calling remove(" + p + ")");
-        p = get(p.getId());
         productCategoryDao.remove(p);
-        for (Product product : p.getProducts()) {
-            product.getCategories().remove(p);
-//            productService.update(product);
-        }
-//        p.getProducts().clear();
     }
 
     @Override

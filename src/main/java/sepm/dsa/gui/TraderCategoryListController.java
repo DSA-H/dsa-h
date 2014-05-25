@@ -56,13 +56,13 @@ public class TraderCategoryListController implements Initializable {
             @Transactional(readOnly = true)
             public ObservableValue<String> call(TableColumn.CellDataFeatures<TraderCategory, String> r) {
                 if (r.getValue() != null) {
-                    Session session = sessionFactory.openSession();
-                    StringBuilder sb = new StringBuilder();
-                    TraderCategory tc = r.getValue();
-                    session.refresh(tc);
-                    for (AssortmentNature assortmentNature : tc.getAssortments()) {
-                        String productCategoryName = assortmentNature.getProductCategory().getName();
-                        sb.append(productCategoryName + ", ");
+                   Session session = sessionFactory.openSession();
+                   StringBuilder sb = new StringBuilder();
+                   TraderCategory tc = r.getValue();
+                   session.refresh(tc);
+                   for(AssortmentNature assortmentNature : tc.getAssortments().values()) {
+                       String productCategorieName = assortmentNature.getProductCategory().getName();
+                       sb.append(productCategorieName + ", ");
                     }
                     if (sb.length() >= 2) {
                         sb.delete(sb.length() - 2, sb.length());

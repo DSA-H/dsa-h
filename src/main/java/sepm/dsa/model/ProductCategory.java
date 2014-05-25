@@ -5,7 +5,9 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -36,17 +38,29 @@ public class ProductCategory implements Serializable {
             inverseJoinColumns = { @JoinColumn(name = "productId") })
     private Set<Product> products = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "productcategory_id", nullable = false)
-    private Set<AssortmentNature> assortmentNatures = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.productCategory", cascade = CascadeType.ALL, orphanRemoval = true)
+    @MapKey(name="pk.traderCategory")
+    private Map<TraderCategory, AssortmentNature> assortments = new HashMap<>();
 
-    public Set<AssortmentNature> getAssortmentNatures() {
-        return assortmentNatures;
+    public Map<TraderCategory, AssortmentNature> getAssortments() {
+        return assortments;
     }
 
-    public void setAssortmentNatures(Set<AssortmentNature> assortmentNatures) {
-        this.assortmentNatures = assortmentNatures;
+    public void setAssortments(Map<TraderCategory, AssortmentNature> assortments) {
+        this.assortments = assortments;
     }
+
+    //    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "productcategory_id", nullable = false)
+//    private Set<AssortmentNature> assortmentNatures = new HashSet<>();
+
+//    public Set<AssortmentNature> getAssortmentNatures() {
+//        return assortmentNatures;
+//    }
+//
+//    public void setAssortmentNatures(Set<AssortmentNature> assortmentNatures) {
+//        this.assortmentNatures = assortmentNatures;
+//    }
 
     public Integer getId() {
         return id;

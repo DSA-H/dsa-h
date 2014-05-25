@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.model.AssortmentNature;
+import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
 
 import java.util.List;
@@ -40,7 +42,15 @@ public class ProductCategoryDaoHbmImpl implements ProductCategoryDao {
     @Transactional(readOnly = false)
     public void remove(ProductCategory category) {
         log.debug("calling remove(" + category + ")");
+        category = get(category.getId());
         sessionFactory.getCurrentSession().delete(category);
+        for (Product product : category.getProducts()) {
+            product.getCategories().remove(category);
+        }
+        for (AssortmentNature a : category.getAssortments().values()) {
+            a.getTraderCategory().getAssortments().remove(category);
+        }
+        category.getAssortments().clear();
     }
 
     @Override

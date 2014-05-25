@@ -19,6 +19,7 @@ import sepm.dsa.service.AssortmentNatureService;
 import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.TraderCategoryService;
 
+import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
