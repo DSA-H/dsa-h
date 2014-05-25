@@ -38,7 +38,6 @@ public class ProductServiceTest extends AbstractDatabaseTest {
     @Test
     public void testAdd()
     {
-        System.out.println(productService.getAll().toString());
         Product p = new Product();
         p.setName("tester2");
         p.setQuality(false);

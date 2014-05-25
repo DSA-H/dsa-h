@@ -1,6 +1,5 @@
 package sepm.dsa.service.test;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,24 +76,10 @@ public class RegionServiceTest extends AbstractDatabaseTest {
 //        regionBorder1.setRegion2(addRegion3);
 //        addRegion2.getBorders1().add(regionBorder1);
 //        addRegion3.getBorders2().add(regionBorder1);
-
-        System.out.println("testSetup");
-    }
-
-    @After
-    public void teardown() {
-
-        // Teardown for data used by the unit tests
-    }
-
-    @Test
-    public void testXML(){
-        System.out.println(rs.get(1));
     }
 
     @Test
     public void testAdd() {
-//        System.out.println(rs.get(0));
         int size = rs.getAll().size();
         rs.add(addRegion);
 
