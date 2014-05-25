@@ -6,32 +6,38 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.MainMenuController">
-<top><Pane prefHeight="608.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-<children>
-        <MenuBar fx:id="menuBar" prefHeight="25.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-            <menus>
-                <Menu fx:id="dateiMenu" mnemonicParsing="false" text="Datei">
-                    <items>
-                        <MenuItem fx:id="dateiImport" disable="true" mnemonicParsing="false" text="Import" />
-                        <MenuItem fx:id="dateiExport" disable="true" mnemonicParsing="false" text="Export" />
-                        <MenuItem fx:id="dateiExit" mnemonicParsing="false" onAction="#onExitClicked" text="Beenden" />
-                    </items>
-                </Menu>
-                <Menu fx:id="dateiVerwaltenMenu" mnemonicParsing="false" text="Daten verwalten">
-                    <items><Menu fx:id="verwaltenWeltkarte" mnemonicParsing="false" text="Weltkarte">
-  <items>
-    <MenuItem fx:id="weltkarteImportieren" mnemonicParsing="false" onAction="#onWeltkarteImportierenPressed" text="Importieren" /><MenuItem fx:id="weltkarteExportieren" mnemonicParsing="false" onAction="#onWeltkarteExportierenPressed" text="Exportieren" />
-  </items>
-</Menu>
-                        <MenuItem fx:id="verwaltenHaendlerKategorie" mnemonicParsing="false" onAction="#onTraderCategoriesClicked" text="Händlerkategorie" />
-                        <MenuItem fx:id="verwaltenGebieteGrenzen" mnemonicParsing="false" onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen" />
-                        <MenuItem fx:id="verwaltenWaehrungen" disable="true" mnemonicParsing="false" text="Währungen" />
-                        <MenuItem fx:id="verwaltenWaren" disable="false" mnemonicParsing="false" text="Waren" onAction="#onWarenClicked"/>
-                        <MenuItem mnemonicParsing="false" onAction="#onShowLocationsClicked" text="Orte" /><MenuItem mnemonicParsing="false" onAction="#onTradersPressed" text="Händlerverwaltung" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar><ImageView fx:id="worldMapImageView" fitHeight="550.0" fitWidth="400.0" layoutX="14.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" />
-</children></Pane>
-</top>
+    <top>
+        <Pane prefHeight="608.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+            <children>
+                <MenuBar fx:id="menuBar" prefHeight="25.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+                    <menus>
+                        <Menu fx:id="dateiMenu" mnemonicParsing="false" text="Datei">
+                            <items>
+                                <MenuItem fx:id="dateiImport" disable="true" mnemonicParsing="false" text="Import" />
+                                <MenuItem fx:id="dateiExport" disable="true" mnemonicParsing="false" text="Export" />
+                                <MenuItem fx:id="dateiExit" mnemonicParsing="false" onAction="#onExitClicked" text="Beenden" />
+                            </items>
+                        </Menu>
+                        <Menu fx:id="dateiVerwaltenMenu" mnemonicParsing="false" text="Daten verwalten">
+                            <items>
+                                <Menu fx:id="verwaltenWeltkarte" mnemonicParsing="false" text="Weltkarte">
+                                    <items>
+                                        <MenuItem fx:id="weltkarteImportieren" mnemonicParsing="false" onAction="#onWeltkarteImportierenPressed" text="Importieren" />
+                                        <MenuItem fx:id="weltkarteExportieren" mnemonicParsing="false" onAction="#onWeltkarteExportierenPressed" text="Exportieren" />
+                                    </items>
+                                </Menu>
+                                <MenuItem fx:id="verwaltenHaendlerKategorie" mnemonicParsing="false" onAction="#onTraderCategoriesClicked" text="Händlerkategorie" />
+                                <MenuItem fx:id="verwaltenGebieteGrenzen" mnemonicParsing="false" onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen" />
+                                <MenuItem fx:id="verwaltenWaehrungen" mnemonicParsing="false" onAction="#onCurrencyClicked" text="Währungen" />
+                                <MenuItem fx:id="verwaltenWaren" disable="false" mnemonicParsing="false" onAction="#onWarenClicked" text="Waren" />
+                                <MenuItem mnemonicParsing="false" onAction="#onShowLocationsClicked" text="Orte" />
+                                <MenuItem mnemonicParsing="false" onAction="#onTradersPressed" text="Händlerverwaltung" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+                <ImageView fx:id="worldMapImageView" fitHeight="550.0" fitWidth="400.0" layoutX="14.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" />
+            </children>
+        </Pane>
+    </top>
 </BorderPane>

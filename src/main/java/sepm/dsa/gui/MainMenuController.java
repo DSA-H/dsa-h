@@ -118,6 +118,19 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
+    private void onCurrencyClicked() {
+        log.debug("onWarenClicked - open Currency Window");
+        Stage stage = new Stage();
+
+        Parent scene = (Parent) loader.load("/gui/currencyList.fxml");
+
+        stage.setTitle("Währungen");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
     private void onExitClicked() {
         log.debug("onExitClicked - exit Programm Request");
         if (exitProgramm()) {
