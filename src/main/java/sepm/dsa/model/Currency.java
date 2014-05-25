@@ -1,5 +1,6 @@
 package sepm.dsa.model;
 
+import javax.persistence.Entity;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+@Entity
 @Table(name = "currencies")
 public class Currency implements Serializable {
 
