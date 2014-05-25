@@ -29,7 +29,11 @@
                         <MenuItem fx:id="verwaltenWaren" disable="true" mnemonicParsing="false" text="Waren" />
                         <MenuItem mnemonicParsing="false" onAction="#onShowLocationsClicked" text="Orte" />
                     </items>
-                </Menu>
+                </Menu><Menu mnemonicParsing="false" text="Game">
+  <items>
+    <MenuItem mnemonicParsing="false" onAction="#onPlayerClicked" text="Spieler" />
+  </items>
+</Menu>
             </menus>
         </MenuBar><ImageView fx:id="worldMapImageView" fitHeight="550.0" fitWidth="400.0" layoutX="14.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" />
 </children></Pane>

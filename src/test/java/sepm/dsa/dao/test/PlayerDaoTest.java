@@ -17,6 +17,7 @@ import sepm.dsa.model.Player;
 
 import java.util.List;
 
+import static org.hibernate.validator.internal.util.Contracts.assertTrue;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -45,6 +46,7 @@ public class PlayerDaoTest {
 
 		Player persistedPlayer = playerDao.get(player.getId());
 		assertNotNull("Expected player to be persisted", persistedPlayer);
+        assertTrue(false, "todo impl"); //TODO
 	}
 
 	@Test
