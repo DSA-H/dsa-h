@@ -33,8 +33,6 @@ public class EditCurrencyController implements Initializable {
     @FXML
     private TextField valueToBaseRateField;
     @FXML
-    private TextArea commentField;
-    @FXML
     private Button cancelButton;
     @FXML
     private Button saveButton;
@@ -46,7 +44,6 @@ public class EditCurrencyController implements Initializable {
         if (selectedCurrency != null) {
             isNewCurrency = false;
             nameField.setText(selectedCurrency.getName());
-//            commentField.setText(selectedCurrency.getComment().toString());
             valueToBaseRateField.setText(selectedCurrency.getValueToBaseRate().toString());
         } else {
             isNewCurrency = true;
@@ -72,7 +69,7 @@ public class EditCurrencyController implements Initializable {
             throw new DSAValidationException("Bitte Namen eingeben");
         }
         String name = nameField.getText();
-        BigDecimal exchangeToBase = new BigDecimal(1);
+        BigDecimal exchangeToBase;
         try {
             exchangeToBase = new BigDecimal(valueToBaseRateField.getText());
 
@@ -82,7 +79,6 @@ public class EditCurrencyController implements Initializable {
 
         selectedCurrency.setName(name);
         selectedCurrency.setValueToBaseRate(exchangeToBase);
-//        selectedCurrency.setComment(commentField.getText());
 
         if (isNewCurrency) {
             currencyService.add(selectedCurrency);
@@ -95,7 +91,6 @@ public class EditCurrencyController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/currencyList.fxml");
         stage.setScene(new Scene(scene, 600, 438));
     }
-
 
     public static void setCurrency(Currency currency) {
         selectedCurrency = currency;
