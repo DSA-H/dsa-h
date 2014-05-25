@@ -20,6 +20,7 @@ import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.service.MapService;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -31,6 +32,7 @@ public class MainMenuController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(MainMenuController.class);
     private SpringFxmlLoader loader;
+	private MapService mapService;
 
     @FXML
     private MenuBar menuBar;
@@ -143,87 +145,9 @@ public class MainMenuController implements Initializable {
     private void onWeltkarteImportierenPressed() {
         log.debug("onWeltkarteImportierenPressed called");
 
-        File alternativeDir = new File("maps/alternative");
-        File activeDir = new File("maps/active");
-
-        //choose new File
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Weltkarte auswählen");
-        if (alternativeDir.isDirectory()) {
-            if (alternativeDir.list().length > 0) {
-                fileChooser.setInitialDirectory(new File("maps/alternative"));
-            }
-        }
-        List<String> extensions = new ArrayList<String>();
-        extensions.add("*.jpg");
-        extensions.add("*.png");
-        extensions.add("*.gif");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All Images", extensions),
-                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                new FileChooser.ExtensionFilter("GIF", "*.gif"),
-                new FileChooser.ExtensionFilter("PNG", "*.png")
-        );
-        File newMap = fileChooser.showOpenDialog(new Stage());
-
-        if (newMap == null) {
-            return;
-        }
-
-        //check if old File exists
-        File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.startsWith("worldMap");
-            }
-        });
-
-        //copy old file to temp
-        if (matchingFiles != null && matchingFiles.length >= 1) {
-            File oldMap = matchingFiles[0];
-            String extOld = FilenameUtils.getExtension(oldMap.getAbsolutePath());
-            File temp = new File("maps/alternative/lastWorldMapTemp." + extOld);
-            try {
-                FileUtils.copyFile(oldMap, temp);
-                log.debug("copied old map to alternative (temp)");
-                oldMap.delete();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        //copy new File to dir
-        String extNew = FilenameUtils.getExtension(newMap.getAbsolutePath());
-        File worldMap = new File("maps/active/worldMap." + extNew);
-        try {
-            FileUtils.copyFile(newMap, worldMap);
-            log.debug("copied new map");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //rename temp
-        matchingFiles = alternativeDir.listFiles(new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.startsWith("lastWorldMapTemp");
-            }
-        });
-        if (matchingFiles != null && matchingFiles.length >= 1) {
-            File oldMap = matchingFiles[0];
-            String extOld = FilenameUtils.getExtension(oldMap.getAbsolutePath());
-            File dest = new File("maps/alternative/ehemaligeWeltkarte." + extOld);
-            int k = 1;
-            while (dest.exists() && !dest.isDirectory()) {
-                dest = new File("maps/alternative/ehemaligeWeltkarte(" + k + ")." + extOld);
-                k++;
-            }
-            try {
-                FileUtils.copyFile(oldMap, dest);
-                log.debug("copied temp to alternative");
-                oldMap.delete();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        File newmap = mapService.chooseMap();
+	    if (newmap == null) { return; }
+	    mapService.setWorldMap(newmap);
 
         updateWorldMap();
     }
@@ -338,4 +262,6 @@ public class MainMenuController implements Initializable {
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
     }
+
+	public void setMapService(MapService mapService) { this.mapService = mapService; }
 }

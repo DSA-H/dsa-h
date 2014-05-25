@@ -157,9 +157,13 @@
     <bean id="assortmentNatureService" class="sepm.dsa.service.AssortmentNatureServiceImpl">
     </bean>
 
+    <bean id="mapService" class="sepm.dsa.service.MapServiceImpl">
+    </bean>
+
     <!-- GUI DI -->
     <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController">
 	    <property name="loader" ref="loader"/>
+        <property name="mapService" ref="mapService"/>
     </bean>
 
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
