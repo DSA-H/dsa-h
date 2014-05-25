@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
     <regions id="1" name="fooRegion" color="FFFFFF" temperatureId="0" rainfallChanceId="0"/>
-    <currency id="1" name="firstCurrency" valueToBaseRate="3"/>
-    <currency id="2" name="secondCurrency" valueToBaseRate="1"/>
+    <currencies id="1" name="firstCurrency" valueToBaseRate="3"/>
+    <currencies id="2" name="secondCurrency" valueToBaseRate="1"/>
 </dataset>

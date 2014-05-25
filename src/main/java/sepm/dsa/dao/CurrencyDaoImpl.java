@@ -46,7 +46,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
         Object result = sessionFactory.getCurrentSession().get(Currency.class, id);
 
         if (result == null) {
-            throw new DSAValidationException("No Currency exists");
+            return null;
         }
         log.trace("returning " + result);
         return (Currency) result;
