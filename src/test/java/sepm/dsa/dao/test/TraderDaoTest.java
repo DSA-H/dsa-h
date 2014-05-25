@@ -7,11 +7,12 @@ import sepm.dsa.dao.LocationDao;
 import sepm.dsa.dao.ProductDao;
 import sepm.dsa.dao.TraderCategoryDao;
 import sepm.dsa.dao.TraderDao;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.*;
 
 import static org.junit.Assert.*;
 
-public class TraderDaoTest extends AbstractDaoTest {
+public class TraderDaoTest extends AbstractDatabaseTest {
 
     @Autowired
     private TraderDao traderDao;

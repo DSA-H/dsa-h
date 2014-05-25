@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import sepm.dsa.dao.ProductCategoryDao;
 import sepm.dsa.dao.ProductDao;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
 
@@ -13,7 +14,7 @@ import java.util.Set;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 
-public class ProductCategoryDaoTest extends AbstractDaoTest {
+public class ProductCategoryDaoTest extends AbstractDatabaseTest {
     @Autowired
     private ProductCategoryDao productCategoryDao;
     @Autowired

@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import sepm.dsa.dao.LocationConnectionDao;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
 import sepm.dsa.service.LocationService;
@@ -12,7 +13,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class LocationConnectionDaoTest extends AbstractDaoTest {
+public class LocationConnectionDaoTest extends AbstractDatabaseTest {
 
     @Autowired
     private LocationConnectionDao locationConnectionDao;

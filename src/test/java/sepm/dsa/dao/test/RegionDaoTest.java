@@ -3,6 +3,7 @@ package sepm.dsa.dao.test;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import sepm.dsa.dao.RegionDao;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.RainfallChance;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.Temperature;
@@ -10,7 +11,7 @@ import sepm.dsa.model.Temperature;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class RegionDaoTest extends AbstractDaoTest {
+public class RegionDaoTest extends AbstractDatabaseTest {
 
 	@Autowired
 	private RegionDao regionDao;

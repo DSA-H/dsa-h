@@ -3,6 +3,7 @@ package sepm.dsa.dao.test;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import sepm.dsa.dao.ProductDao;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductAttribute;
 
@@ -10,7 +11,7 @@ import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ProductDaoTest extends AbstractDaoTest {
+public class ProductDaoTest extends AbstractDatabaseTest {
 
     @Autowired
     private ProductDao productDao;

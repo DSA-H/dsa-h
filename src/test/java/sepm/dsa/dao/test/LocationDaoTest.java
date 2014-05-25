@@ -3,6 +3,7 @@ package sepm.dsa.dao.test;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import sepm.dsa.dao.LocationDao;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.TownSize;
@@ -14,7 +15,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
-public class LocationDaoTest extends AbstractDaoTest {
+public class LocationDaoTest extends AbstractDatabaseTest {
 
     @Autowired
     private LocationDao locationDao;

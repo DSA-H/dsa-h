@@ -4,13 +4,14 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import sepm.dsa.dao.LocationDao;
 import sepm.dsa.dao.TavernDao;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Tavern;
 
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class TavernDaoTest extends AbstractDaoTest {
+public class TavernDaoTest extends AbstractDatabaseTest {
 
 	@Autowired
 	private TavernDao tavernDao;

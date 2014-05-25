@@ -3,13 +3,14 @@ package sepm.dsa.dao.test;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import sepm.dsa.dao.TraderCategoryDao;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.TraderCategory;
 
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class TraderCategoryDaoTest extends AbstractDaoTest {
+public class TraderCategoryDaoTest extends AbstractDatabaseTest {
 
     @Autowired
     private TraderCategoryDao traderCategoryDao;

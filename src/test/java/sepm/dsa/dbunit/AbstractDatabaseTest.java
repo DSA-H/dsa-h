@@ -1,4 +1,4 @@
-package sepm.dsa.dao.test;
+package sepm.dsa.dbunit;
 
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
@@ -23,5 +23,5 @@ import sepm.dsa.dbunit.dataset.FlatXmlDataSetLoader;
 })
 @DbUnitConfiguration(dataSetLoader = FlatXmlDataSetLoader.class)
 @DatabaseSetup("/testData.xml")
-abstract public class AbstractDaoTest {
+abstract public class AbstractDatabaseTest {
 }
