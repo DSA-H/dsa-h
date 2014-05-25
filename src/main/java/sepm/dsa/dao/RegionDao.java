@@ -1,6 +1,5 @@
 package sepm.dsa.dao;
 
-import sepm.dsa.exceptions.DSARegionNotExistingException;
 import sepm.dsa.model.Region;
 
 import java.util.List;
@@ -31,7 +30,6 @@ public interface RegionDao {
     /**
      * Gives you the {@code Region} for the supplied id. If invalid a exception is thrown.
      *
-     * @return Region with given id
      * @return null if no fitting id found
      */
     public Region get(int id);
