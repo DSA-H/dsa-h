@@ -32,7 +32,7 @@ public class CurrencyServiceTest extends TestCase {
     @DatabaseSetup("/testCurrency.xml")
     public void testGet() throws Exception {
         assertNotNull(currencyDao.get(1));
-        assert (false);
+        assertTrue("TODO: mock mockito", false);
         //TODO mock mockito
     }
 
@@ -46,7 +46,6 @@ public class CurrencyServiceTest extends TestCase {
         currencyDao.add(c1);
 
         assertNotNull(c1.getId());
-        assert (false);
     }
 
     @Test
@@ -54,7 +53,6 @@ public class CurrencyServiceTest extends TestCase {
     public void testRemove() throws Exception {
         currencyDao.remove(currencyDao.get(1));
         assertNull(currencyDao.get(1));
-        assert (false);
     }
 
     @Test
@@ -71,6 +69,6 @@ public class CurrencyServiceTest extends TestCase {
         Currency c2 = currencyDao.get(2);
 
         //TODO Absprechen was passieren soll
-        assert (false);
+        assertTrue("TODO: implement what is the expected behavior here?", false);
     }
 }
