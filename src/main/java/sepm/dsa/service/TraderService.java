@@ -3,6 +3,7 @@ package sepm.dsa.service;
 
 import sepm.dsa.model.*;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface TraderService {
@@ -69,4 +70,12 @@ public interface TraderService {
      * @return the price in default (base-rate) currency
      */
     int calculatePriceForProduct(Product product, Trader trader);
+
+	/**
+	 * Returns a list of Offers of the specified trader.
+	 *
+	 * @param trader the trader whose offers are requested.
+	 * @return a list of the trader's offers.
+	 */
+	Collection<Offer> getOffers(Trader trader);
 }
