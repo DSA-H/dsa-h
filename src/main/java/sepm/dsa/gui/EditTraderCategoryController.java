@@ -17,6 +17,7 @@ import sepm.dsa.model.ProductCategory;
 import sepm.dsa.model.TraderCategory;
 import sepm.dsa.service.AssortmentNatureService;
 import sepm.dsa.service.ProductCategoryService;
+import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TraderCategoryService;
 
 import java.util.*;
@@ -29,6 +30,8 @@ public class EditTraderCategoryController implements Initializable {
     private TraderCategoryService traderCategoryService;
     private ProductCategoryService productCategoryService;
     private AssortmentNatureService assortmentNatureService;
+    private SaveCancelService saveCancelService;
+
 
     private static TraderCategory traderCategory;
 
@@ -170,6 +173,8 @@ public class EditTraderCategoryController implements Initializable {
             traderCategoryService.update(traderCategory);
         }
 
+        saveCancelService.save();
+
         // return to traderCategoryList
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml");
@@ -206,5 +211,9 @@ public class EditTraderCategoryController implements Initializable {
 
     public void setAssortmentNatureService(AssortmentNatureService assortmentNatureService) {
         this.assortmentNatureService = assortmentNatureService;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

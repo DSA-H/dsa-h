@@ -38,12 +38,24 @@ public class ProductCategory implements BaseModel {
             inverseJoinColumns = { @JoinColumn(name = "productId") })
     private Set<Product> products = new HashSet<>();
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.productCategory", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.productCategory", cascade = CascadeType.REMOVE, orphanRemoval = true)
 //    @MapKey(name="pk.traderCategory")
 //    private Map<TraderCategory, AssortmentNature> assortments = new HashMap<>();
 //
 //    public Map<TraderCategory, AssortmentNature> getAssortments() {
 //        return assortments;
+//    }
+//
+//    public void setAssortments(Map<TraderCategory, AssortmentNature> assortments) {
+//        this.assortments = assortments;
+//    }
+
+    //    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "productcategory_id", nullable = false)
+//    private Set<AssortmentNature> assortmentNatures = new HashSet<>();
+
+//    public Set<AssortmentNature> getAssortmentNatures() {
+//        return assortmentNatures;
 //    }
 //
 //    public void setAssortments(Map<TraderCategory, AssortmentNature> assortments) {

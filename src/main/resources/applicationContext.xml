@@ -249,6 +249,7 @@
         <property name="traderCategoryService" ref="traderCategoryService"/>
         <property name="productCategoryService" ref="productCategoryService"/>
         <property name="assortmentNatureService" ref="assortmentNatureService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
     <bean id="traderList" class="sepm.dsa.gui.TraderListController">
         <property name="loader" ref="loader"/>
