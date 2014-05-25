@@ -82,6 +82,10 @@
         <property name="regionBorderDao" ref="regionBorderDao"/>
     </bean>
 
+    <bean id="playerService" class="sepm.dsa.service.PlayerServiceImpl">
+        <property name="playerDao" ref="playerDao"/>
+    </bean>
+
     <bean id="regionBorderService" class="sepm.dsa.service.RegionBorderServiceImpl">
         <property name="regionBorderDao" ref="regionBorderDao"/>
     </bean>

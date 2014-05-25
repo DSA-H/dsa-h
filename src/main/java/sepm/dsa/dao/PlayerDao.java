@@ -1,6 +1,5 @@
 package sepm.dsa.dao;
 
-import sepm.dsa.exceptions.DSAModelNotFoundException;
 import sepm.dsa.model.Player;
 
 import java.util.List;
@@ -34,7 +33,7 @@ public interface PlayerDao {
 
 	/**
 	 * Retrieves a list of all players from the database.
-	 * @return list of all players
+	 * @return list of all players or empty list if no players exist
 	 */
 	List<Player> getAll();
 }
