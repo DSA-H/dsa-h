@@ -44,7 +44,7 @@ public class EditPlayerController implements Initializable {
         if (selectedPlayer != null) {
             isNewPlaper = false;
             nameField.setText(selectedPlayer.getName());
-            commentField.setText(selectedPlayer.getComment().toString());
+            commentField.setText(selectedPlayer.getComment());
         } else {
             isNewPlaper = true;
             selectedPlayer = new Player();
@@ -71,6 +71,7 @@ public class EditPlayerController implements Initializable {
         String name = nameField.getText();
 
         selectedPlayer.setName(name);
+        selectedPlayer.setComment(commentField.getText());
 
         if (isNewPlaper) {
             playerService.add(selectedPlayer);
