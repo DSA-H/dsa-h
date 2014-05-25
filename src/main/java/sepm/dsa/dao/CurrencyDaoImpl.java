@@ -3,15 +3,12 @@ package sepm.dsa.dao;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Currency;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
 @Transactional(readOnly = true)
 public class CurrencyDaoImpl implements CurrencyDao {
 

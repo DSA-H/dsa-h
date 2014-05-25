@@ -3,7 +3,6 @@ package sepm.dsa.service;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.dao.CurrencyDao;
@@ -16,7 +15,6 @@ import javax.validation.Validator;
 import java.util.List;
 import java.util.Set;
 
-@Service("CurrencyService")
 @Transactional(readOnly = true)
 public class CurrencyServiceImpl implements CurrencyService {
 
