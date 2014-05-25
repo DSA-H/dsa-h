@@ -11,9 +11,6 @@ import sepm.dsa.model.AssortmentNature;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service("AssortmentNatureService")

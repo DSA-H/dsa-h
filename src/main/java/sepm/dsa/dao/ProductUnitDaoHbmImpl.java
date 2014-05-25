@@ -66,7 +66,7 @@ public class ProductUnitDaoHbmImpl implements ProductUnitDao {
             result.add((ProductUnit) o);
         }
 
-	    log.trace("returning " + result);
+        log.trace("returning " + result);
         return result;
     }
 

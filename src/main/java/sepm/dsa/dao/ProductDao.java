@@ -1,8 +1,6 @@
 package sepm.dsa.dao;
 
 import sepm.dsa.model.Product;
-import sepm.dsa.model.ProductCategory;
-import sepm.dsa.model.Region;
 
 import java.util.List;
 

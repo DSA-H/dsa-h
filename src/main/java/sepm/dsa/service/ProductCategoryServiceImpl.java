@@ -82,11 +82,11 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         }
     }
 
-    public void setProductCategoryDao(ProductCategoryDao productCategoryDao) {
-        this.productCategoryDao = productCategoryDao;
-    }
-
     public ProductCategoryDao getProductCategoryDao() {
         return productCategoryDao;
+    }
+
+    public void setProductCategoryDao(ProductCategoryDao productCategoryDao) {
+        this.productCategoryDao = productCategoryDao;
     }
 }

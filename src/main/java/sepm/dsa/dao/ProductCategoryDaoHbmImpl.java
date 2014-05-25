@@ -66,7 +66,7 @@ public class ProductCategoryDaoHbmImpl implements ProductCategoryDao {
             result.add((ProductCategory) o);
         }
 
-	    log.trace("returning " + result);
+        log.trace("returning " + result);
         return result;
     }
 

@@ -4,7 +4,7 @@ import sepm.dsa.model.Currency;
 
 import java.util.List;
 
-public class CurrencyDaoImpl implements CurrencyDao{
+public class CurrencyDaoImpl implements CurrencyDao {
     @Override
     public void add(Currency currency) {
 

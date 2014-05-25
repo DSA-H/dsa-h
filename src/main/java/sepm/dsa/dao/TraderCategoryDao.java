@@ -31,7 +31,6 @@ public interface TraderCategoryDao {
     /**
      * Searches for the {@code TraderCategory} by a given id
      *
-     * @return the traderCategory with given id
      * @return null if no fitting TraderCategory found
      */
     public TraderCategory get(int id);

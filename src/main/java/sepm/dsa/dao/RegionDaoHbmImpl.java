@@ -4,7 +4,6 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.exceptions.DSARegionNotExistingException;
 import sepm.dsa.model.Region;
 
 import java.util.List;
@@ -60,7 +59,7 @@ public class RegionDaoHbmImpl implements RegionDao {
             result.add((Region) o);
         }
 
-	    log.trace("returning " + result);
+        log.trace("returning " + result);
         return result;
     }
 

@@ -46,7 +46,6 @@ public interface LocationConnectionDao {
     public List<LocationConnection> getAll();
 
     /**
-     *
      * @param location
      * @param locationName
      * @return

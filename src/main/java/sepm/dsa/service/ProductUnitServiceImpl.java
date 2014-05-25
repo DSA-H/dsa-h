@@ -68,6 +68,7 @@ public class ProductUnitServiceImpl implements ProductUnitService {
 
     /**
      * Validates a product
+     *
      * @param product
      * @throws sepm.dsa.exceptions.DSAValidationException if product is not valid
      */
@@ -78,11 +79,11 @@ public class ProductUnitServiceImpl implements ProductUnitService {
         }
     }
 
-    public void setProductUnitDao(ProductUnitDao productUnitDao) {
-        this.productUnitDao = productUnitDao;
-    }
-
     public ProductUnitDao getProductUnitDao() {
         return productUnitDao;
+    }
+
+    public void setProductUnitDao(ProductUnitDao productUnitDao) {
+        this.productUnitDao = productUnitDao;
     }
 }

@@ -5,8 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.Product;
+
 import java.util.List;
 import java.util.Vector;
 
@@ -69,7 +69,7 @@ public class ProductDaoHbmImpl implements ProductDao {
             result.add((Product) o);
         }
 
-	    log.trace("returning " + result);
+        log.trace("returning " + result);
         return result;
     }
 

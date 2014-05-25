@@ -81,6 +81,7 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * Validates a product
+     *
      * @param product
      * @throws sepm.dsa.exceptions.DSAValidationException if product is not valid
      */

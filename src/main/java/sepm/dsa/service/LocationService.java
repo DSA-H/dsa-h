@@ -30,6 +30,7 @@ public interface LocationService {
 
     /**
      * Gets a location by it's id
+     *
      * @param id
      * @return the location, or null if it does not exist
      */
@@ -40,10 +41,11 @@ public interface LocationService {
      *
      * @return the locations or empty list of no locations exist (not null)
      */
-    public  List<Location> getAll();
+    public List<Location> getAll();
 
     /**
      * Get all locations in a region
+     *
      * @param regionId the {@code Region}'s ID
      * @return a list of locations in the region, or an emtpy list if no location is in the region (not null)
      */

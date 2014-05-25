@@ -7,11 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Location;
-import sepm.dsa.model.LocationConnection;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 
 @Repository
@@ -47,7 +44,7 @@ public class LocationDaoImpl implements LocationDao {
             result.add((Location) o);
         }
 
-	    log.trace("returning " + result);
+        log.trace("returning " + result);
         return result;
     }
 
@@ -59,7 +56,7 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public Location get(int id){
+    public Location get(int id) {
         log.debug("calling get(" + id + ")");
 
         Object result = sessionFactory.getCurrentSession().get(Location.class, id);
@@ -86,7 +83,7 @@ public class LocationDaoImpl implements LocationDao {
             result.add((Location) o);
         }
 
-	    log.trace("returning " + result);
+        log.trace("returning " + result);
         return result;
     }
 
@@ -100,7 +97,7 @@ public class LocationDaoImpl implements LocationDao {
             result.add((Location) o);
         }
 
-	    log.trace("returning " + result);
+        log.trace("returning " + result);
         return result;
     }
 
@@ -114,12 +111,12 @@ public class LocationDaoImpl implements LocationDao {
         query.setParameter("distance", withinDistance);
         List<?> list = query.list();
 
-                List<Location> result = new Vector<>(list.size());
+        List<Location> result = new Vector<>(list.size());
         for (Object o : list) {
             result.add((Location) o);
         }
 
-	    log.trace("returning " + result);
+        log.trace("returning " + result);
         return result;
     }
 
@@ -139,7 +136,7 @@ public class LocationDaoImpl implements LocationDao {
             result.add((Location) o);
         }
 
-	    log.trace("returning " + result);
+        log.trace("returning " + result);
         return result;
     }
 

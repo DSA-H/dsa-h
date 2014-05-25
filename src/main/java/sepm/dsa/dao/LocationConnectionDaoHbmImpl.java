@@ -4,7 +4,6 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
@@ -76,7 +75,7 @@ public class LocationConnectionDaoHbmImpl implements LocationConnectionDao {
             result.add((LocationConnection) o);
         }
 
-	    log.trace("returning " + result);
+        log.trace("returning " + result);
         return result;
     }
 
@@ -92,7 +91,7 @@ public class LocationConnectionDaoHbmImpl implements LocationConnectionDao {
             result.add((LocationConnection) o);
         }
 
-	    log.trace("returning " + result);
+        log.trace("returning " + result);
         return result;
     }
 

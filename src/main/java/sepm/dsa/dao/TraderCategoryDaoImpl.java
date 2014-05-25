@@ -4,7 +4,6 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Trader;
 import sepm.dsa.model.TraderCategory;
@@ -71,7 +70,7 @@ public class TraderCategoryDaoImpl implements TraderCategoryDao {
             result.add((TraderCategory) o);
         }
 
-	    log.trace("returning " + result);
+        log.trace("returning " + result);
         return result;
     }
 
