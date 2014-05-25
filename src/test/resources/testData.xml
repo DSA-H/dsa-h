@@ -32,4 +32,7 @@
 
     <taverns id="1" name="Zum Wegstein" location_id="1" xPos="42" yPos="12" usage="12"/>
     <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="42" yPos="12" usage="12"/>
+
+    <currencies id="1" name="firstCurrency" valueToBaseRate="3"/>
+    <currencies id="2" name="secondCurrency" valueToBaseRate="2"/>
 </dataset>

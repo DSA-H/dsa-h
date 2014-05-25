@@ -1,15 +1,12 @@
 package sepm.dsa.model;
 
-import javax.persistence.Entity;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "currencies")
@@ -28,9 +25,8 @@ public class Currency implements Serializable {
     private String name;
 
     @NotNull
-    @Column(nullable = false)
-    //TODO check this @Johannes
-    private Integer valueToBaseRate;  // relative value to base rate
+    @Column(nullable = false, precision = 9, scale = 3)
+    private BigDecimal valueToBaseRate;  // relative value to base rate
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -52,11 +48,11 @@ public class Currency implements Serializable {
         this.name = name;
     }
 
-    public Integer getValueToBaseRate() {
+    public BigDecimal getValueToBaseRate() {
         return valueToBaseRate;
     }
 
-    public void setValueToBaseRate(Integer valueToBaseRate) {
+    public void setValueToBaseRate(BigDecimal valueToBaseRate) {
         this.valueToBaseRate = valueToBaseRate;
     }
 
@@ -72,18 +68,19 @@ public class Currency implements Serializable {
 
         Currency currency = (Currency) o;
 
-        if (!id.equals(currency.id)) return false;
-        if (!name.equals(currency.name)) return false;
-        if (!valueToBaseRate.equals(currency.valueToBaseRate)) return false;
+        if (id != null ? !id.equals(currency.id) : currency.id != null) return false;
+        if (name != null ? !name.equals(currency.name) : currency.name != null) return false;
+        if (valueToBaseRate != null ? !valueToBaseRate.equals(currency.valueToBaseRate) : currency.valueToBaseRate != null)
+            return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + name.hashCode();
-        result = 31 * result + valueToBaseRate.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (valueToBaseRate != null ? valueToBaseRate.hashCode() : 0);
         return result;
     }
 }

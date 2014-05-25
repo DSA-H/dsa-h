@@ -12,8 +12,11 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import sepm.dsa.dao.CurrencyDao;
+import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.model.Currency;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:testContext.xml"})
@@ -26,49 +29,52 @@ import sepm.dsa.model.Currency;
 public class CurrencyServiceTest extends TestCase {
 
     @Autowired
-    private CurrencyDao currencyDao;
+    private CurrencyService currencyService;
 
     @Test
-    @DatabaseSetup("/testCurrency.xml")
+    @DatabaseSetup("/testData.xml")
     public void testGet() throws Exception {
-        assertNotNull(currencyDao.get(1));
-        assertTrue("TODO: mock mockito", false);
-        //TODO mock mockito
+        assertNotNull(currencyService.get(1));
     }
 
     @Test
-    @DatabaseSetup("/testCurrency.xml")
+    @DatabaseSetup("/testData.xml")
     public void testAdd() throws Exception {
         Currency c1 = new Currency();
         c1.setName("fofods");
-        c1.setValueToBaseRate(1);
+        c1.setValueToBaseRate(new BigDecimal(3));
 
-        currencyDao.add(c1);
+        currencyService.add(c1);
 
         assertNotNull(c1.getId());
     }
 
     @Test
-    @DatabaseSetup("/testCurrency.xml")
+    @DatabaseSetup("/testData.xml")
     public void testRemove() throws Exception {
-        currencyDao.remove(currencyDao.get(1));
-        assertNull(currencyDao.get(1));
+        currencyService.remove(currencyService.get(1));
+        assertNull(currencyService.get(1));
     }
 
     @Test
-    @DatabaseSetup("/testCurrency.xml")
+    @DatabaseSetup("/testData.xml")
     public void testGetAll() throws Exception {
-        assertEquals(currencyDao.getAll().size(), 2);
+        assertEquals(currencyService.getAll().size(), 2);
     }
 
     @Test
-    @DatabaseSetup("/testCurrency.xml")
+    @DatabaseSetup("/testData.xml")
     public void testExchange() throws Exception {
 
-        Currency c1 = currencyDao.get(1);
-        Currency c2 = currencyDao.get(2);
+        Currency c1 = currencyService.get(1); //to base rate: 3
+        Currency c2 = currencyService.get(2);// to base rate: 2
+        //exchange from c1 to c2 --> via base rate --> divide by first & multiply second
 
-        //TODO Absprechen was passieren soll
-        assertTrue("TODO: implement what is the expected behavior here?", false);
+        BigDecimal amountToExchange = new BigDecimal(100);
+        BigDecimal referenceCalculation = amountToExchange.multiply(c2.getValueToBaseRate()).divide(c1.getValueToBaseRate(), 4, RoundingMode.HALF_UP);
+        CurrencyAmount currencyAmount = new CurrencyAmount();
+        currencyAmount.setAmount(referenceCalculation);
+        currencyAmount.setCurrency(c2);
+        assertEquals(currencyAmount, currencyService.exchange(c1, c2, new BigDecimal(100)));
     }
 }

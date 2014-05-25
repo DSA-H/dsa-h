@@ -2,12 +2,14 @@ package sepm.dsa.dao;
 
 import sepm.dsa.model.Currency;
 
+import java.math.BigDecimal;
+
 public class CurrencyAmount {
 
     private Currency currency;
-    private int amount;
+    private BigDecimal amount;
 
-    public CurrencyAmount(Currency currency, int amount) {
+    public CurrencyAmount(Currency currency, BigDecimal amount) {
         this.currency = currency;
         this.amount = amount;
     }
@@ -15,11 +17,11 @@ public class CurrencyAmount {
     public CurrencyAmount() {
     }
 
-    public int getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -30,7 +32,7 @@ public class CurrencyAmount {
 
         CurrencyAmount that = (CurrencyAmount) o;
 
-        if (amount != that.amount) return false;
+        if (!amount.equals(that.amount)) return false;
         if (currency != null ? !currency.equals(that.currency) : that.currency != null) return false;
 
         return true;
@@ -39,7 +41,7 @@ public class CurrencyAmount {
     @Override
     public int hashCode() {
         int result = currency != null ? currency.hashCode() : 0;
-        result = 31 * result + amount;
+        result = 31 * result + amount.hashCode();
         return result;
     }
 
@@ -49,5 +51,9 @@ public class CurrencyAmount {
                 "currency=" + currency +
                 ", amount=" + amount +
                 '}';
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 }

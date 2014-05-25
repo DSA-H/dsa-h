@@ -14,6 +14,8 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import sepm.dsa.model.Currency;
 
+import java.math.BigDecimal;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:testContext.xml"})
 @TestExecutionListeners({
@@ -31,7 +33,7 @@ public class CurrencyDaoTest extends TestCase {
     public void testAdd() throws Exception {
         Currency c1 = new Currency();
         c1.setName("fofods");
-        c1.setValueToBaseRate(1);
+        c1.setValueToBaseRate(new BigDecimal(1));
 
         currencyDao.add(c1);
 

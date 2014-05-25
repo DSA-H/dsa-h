@@ -12,6 +12,8 @@ import sepm.dsa.model.Currency;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Set;
 
@@ -32,6 +34,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void add(Currency r) {
         log.debug("calling add(" + r + ")");
         validate(r);
@@ -39,6 +42,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void update(Currency r) {
         log.debug("calling update(" + r + ")");
         validate(r);
@@ -46,6 +50,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void remove(Currency r) {
         log.debug("calling remove(" + r + ")");
         currencyDao.remove(r);
@@ -60,22 +65,21 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public CurrencyAmount exchange(Currency from, Currency to) {
-        return null;
+    public CurrencyAmount exchange(Currency from, Currency to, BigDecimal amount) {
+        CurrencyAmount result = new CurrencyAmount();
+        result.setAmount(amount.multiply(to.getValueToBaseRate()).divide(from.getValueToBaseRate(),4, RoundingMode.HALF_UP));
+        result.setCurrency(to);
+        return result;
     }
 
     public void setCurrencyDao(CurrencyDao currencyDao) {
         this.currencyDao = currencyDao;
     }
 
-    public CurrencyDao getCurrencyDao() {
-        return currencyDao;
-    }
-
     /**
      * Validates a currency
      *
-     * @param currency
+     * @param currency the currency to be validated
      * @throws DSAValidationException if currency is not valid
      */
     private void validate(Currency currency) throws DSAValidationException {

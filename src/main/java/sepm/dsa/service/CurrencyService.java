@@ -3,6 +3,7 @@ package sepm.dsa.service;
 import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.model.Currency;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface CurrencyService {
@@ -44,9 +45,10 @@ public interface CurrencyService {
     /**
      * Exchanges / converts from one to the other currency
      *
-     * @param from the original Currency must not be null
-     * @param to   the foreign currency must not be null
+     * @param from   the original Currency must not be null
+     * @param to     the foreign currency must not be null
+     * @param amount amount of from {@code Currency} to be exchanged
      * @return the value / amount of the original currency expressed by / in the foreign currency
      */
-    CurrencyAmount exchange(Currency from, Currency to);
+    CurrencyAmount exchange(Currency from, Currency to, BigDecimal amount);
 }
