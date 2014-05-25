@@ -20,9 +20,7 @@ import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.model.Location;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 import sepm.dsa.service.LocationService;
@@ -31,33 +29,32 @@ import sepm.dsa.service.RegionService;
 
 import java.util.List;
 
-@Service("RegionListController")
 public class RegionListController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(RegionListController.class);
-	private SpringFxmlLoader loader;
+    private SpringFxmlLoader loader;
 
-	private RegionService regionService;
+    private RegionService regionService;
 
     private LocationService locationService;
 
     private RegionBorderService regionBorderService;
-	@FXML
+    @FXML
     private TableView<Region> regionTable;
-	@FXML
+    @FXML
     private TableColumn regionColumn;
-	@FXML
+    @FXML
     private TableColumn borderColumn;
-	@FXML
+    @FXML
     private TableColumn colorColumn;
-	@FXML
+    @FXML
     private Button createButton;
-	@FXML
+    @FXML
     private Button editButton;
     @FXML
     private Button deleteButton;
 
-	@Override
+    @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise RegionListController");
 
@@ -99,7 +96,7 @@ public class RegionListController implements Initializable {
                         if (!empty) {
                             color = "#" + color;
                             setStyle("-fx-background-color:" + color);
-                        }else {
+                        } else {
                             setStyle("-fx-background-color:#FFFFFF");
                         }
                     }
@@ -117,8 +114,8 @@ public class RegionListController implements Initializable {
 
         EditRegionController.setRegion(null);
 
-	    Stage stage = (Stage) regionTable.getScene().getWindow();
-	    Parent root = (Parent) loader.load("/gui/editregion.fxml");
+        Stage stage = (Stage) regionTable.getScene().getWindow();
+        Parent root = (Parent) loader.load("/gui/editregion.fxml");
 
         stage.setTitle("Gebiet-Details");
         stage.setScene(new Scene(root, 600, 438));
@@ -132,8 +129,8 @@ public class RegionListController implements Initializable {
         Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
         EditRegionController.setRegion(selectedRegion);
 
-	    Stage stage = (Stage) regionTable.getScene().getWindow();
-	    Parent root = (Parent) loader.load("/gui/editregion.fxml");
+        Stage stage = (Stage) regionTable.getScene().getWindow();
+        Parent root = (Parent) loader.load("/gui/editregion.fxml");
 
         stage.setTitle("Gebiet-Details");
         stage.setScene(new Scene(root, 600, 438));
@@ -159,8 +156,8 @@ public class RegionListController implements Initializable {
                     .message("Wollen Sie die Region '" + selectedRegion.getName() + "' und alle zugehörigen Grenzen wirklich löschen? " +
                             "Folgende verbundenden Einträge würden ebenfalls gelöscht werden:" + connectedEntries)
                     .showConfirm();
-            if(response == Dialog.Actions.YES) {
-                for(RegionBorder regionBorder : selectedRegion.getAllBorders()) {
+            if (response == Dialog.Actions.YES) {
+                for (RegionBorder regionBorder : selectedRegion.getAllBorders()) {
                     regionBorderService.remove(regionBorder);
                 }
                 regionService.remove(selectedRegion);
@@ -177,8 +174,7 @@ public class RegionListController implements Initializable {
         if (selectedRegion == null) {
             deleteButton.setDisable(true);
             editButton.setDisable(true);
-        }
-        else{
+        } else {
             deleteButton.setDisable(false);
             editButton.setDisable(false);
         }
@@ -193,9 +189,9 @@ public class RegionListController implements Initializable {
         this.regionBorderService = regionBorderService;
     }
 
-	public void setLoader(SpringFxmlLoader loader) {
-		this.loader = loader;
-	}
+    public void setLoader(SpringFxmlLoader loader) {
+        this.loader = loader;
+    }
 
     public void setLocationService(LocationService locationService) {
         this.locationService = locationService;

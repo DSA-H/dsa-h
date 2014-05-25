@@ -16,13 +16,11 @@ import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.TraderService;
 
-@Service("LocationListController")
 public class LocationListController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(LocationListController.class);

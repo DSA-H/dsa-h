@@ -4,28 +4,18 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.ProductCategoryDao;
-import sepm.dsa.dao.ProductCategoryDaoHbmImpl;
-import sepm.dsa.dao.ProductDao;
 import sepm.dsa.exceptions.DSAValidationException;
-import sepm.dsa.model.AssortmentNature;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-
-/**
- * Created by Chris on 17.05.2014.
- */
-@Service("ProductCategoryService")
 @Transactional(readOnly = true)
 public class ProductCategoryServiceImpl implements ProductCategoryService {
     private static final Logger log = LoggerFactory.getLogger(RegionServiceImpl.class);
@@ -81,6 +71,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     /**
      * Validates a product
+     *
      * @param product
      * @throws sepm.dsa.exceptions.DSAValidationException if product is not valid
      */

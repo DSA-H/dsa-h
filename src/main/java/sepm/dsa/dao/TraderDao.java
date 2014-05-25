@@ -6,9 +6,6 @@ import sepm.dsa.model.TraderCategory;
 
 import java.util.List;
 
-/**
- * Created by Jotschi on 18.05.2014.
- */
 public interface TraderDao {
 
     /**
@@ -46,5 +43,11 @@ public interface TraderDao {
      */
     public List<Trader> getAllByLocation(Location location);
 
+    /**
+     * Get all traders for a specified category.
+     *
+     * @param category the filter string (TraderCategory name), must not be null
+     * @return the list of traders matching this category or empty list if nothing found
+     */
     public List<Trader> getAllByCategory(TraderCategory category);
 }

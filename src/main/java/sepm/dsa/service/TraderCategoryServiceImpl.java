@@ -11,13 +11,9 @@ import sepm.dsa.model.TraderCategory;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by Jotschi on 19.05.2014.
- */
 public class TraderCategoryServiceImpl implements TraderCategoryService {
     private static final Logger log = LoggerFactory.getLogger(TraderCategoryServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();

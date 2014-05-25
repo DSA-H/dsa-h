@@ -6,21 +6,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.LocationDao;
-import sepm.dsa.dao.TraderDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Location;
-import sepm.dsa.model.LocationConnection;
-import sepm.dsa.model.Trader;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Service("LocationService")
+@Service("locationService")
 @Transactional(readOnly = true)
 public class LocationServiceImpl implements LocationService {
 

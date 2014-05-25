@@ -12,7 +12,6 @@ import sepm.dsa.model.LocationConnection;
 import java.util.List;
 import java.util.Vector;
 
-@Repository
 @Transactional(readOnly = true)
 public class LocationConnectionDaoHbmImpl implements LocationConnectionDao {
 

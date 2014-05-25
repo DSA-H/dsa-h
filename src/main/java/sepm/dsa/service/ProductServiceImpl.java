@@ -13,14 +13,10 @@ import sepm.dsa.model.ProductCategory;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
 
-/**
- * Created by Chris on 17.05.2014.
- */
 @Service("ProductService")
 @Transactional(readOnly = true)
 public class ProductServiceImpl implements ProductService {

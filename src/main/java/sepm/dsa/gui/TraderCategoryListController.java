@@ -21,16 +21,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.AssortmentNature;
-import sepm.dsa.model.RegionBorder;
 import sepm.dsa.model.TraderCategory;
-import sepm.dsa.service.AssortmentNatureService;
 import sepm.dsa.service.TraderCategoryService;
 
-@Service("TraderCategoryService")
 public class TraderCategoryListController implements Initializable {
     private TraderCategoryService traderCategoryService;
     private static final Logger log = LoggerFactory.getLogger(TraderCategoryListController.class);
@@ -60,13 +56,13 @@ public class TraderCategoryListController implements Initializable {
             @Transactional(readOnly = true)
             public ObservableValue<String> call(TableColumn.CellDataFeatures<TraderCategory, String> r) {
                 if (r.getValue() != null) {
-                   Session session = sessionFactory.openSession();
-                   StringBuilder sb = new StringBuilder();
-                   TraderCategory tc = r.getValue();
-                   session.refresh(tc);
-                   for(AssortmentNature assortmentNature : tc.getAssortments()) {
-                       String productCategorieName = assortmentNature.getProductCategory().getName();
-                       sb.append(productCategorieName + ", ");
+                    Session session = sessionFactory.openSession();
+                    StringBuilder sb = new StringBuilder();
+                    TraderCategory tc = r.getValue();
+                    session.refresh(tc);
+                    for (AssortmentNature assortmentNature : tc.getAssortments()) {
+                        String productCategorieName = assortmentNature.getProductCategory().getName();
+                        sb.append(productCategorieName + ", ");
                     }
                     if (sb.length() >= 2) {
                         sb.delete(sb.length() - 2, sb.length());

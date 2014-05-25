@@ -8,22 +8,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.stage.DirectoryChooser;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.Image;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.controlsfx.control.action.Action;
-import org.controlsfx.dialog.*;
 import org.controlsfx.dialog.Dialog;
+import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
-
-import java.net.URL;
-import java.util.List;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -76,7 +72,7 @@ public class MainMenuController implements Initializable {
     private void onGrenzenGebieteClicked() {
         log.debug("onGrenzenGebieteClicked - open Grenzen und Gebiete Window");
         Stage stage = new Stage();
-	    Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
+        Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
 
         stage.setTitle("Grenzen und Gebiete");
         stage.setScene(new Scene(scene, 600, 438));
@@ -130,18 +126,18 @@ public class MainMenuController implements Initializable {
         }
     }
 
-	@FXML
-	private void onTradersPressed() {
+    @FXML
+    private void onTradersPressed() {
 
-		log.debug("called onTradersPressed");
-		Stage stage = new Stage();
-		Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
-		stage.setTitle("Händlerverwaltung");
-		stage.setScene(new Scene(scene, 600, 400));
-		stage.setResizable(false);
-		stage.show();
+        log.debug("called onTradersPressed");
+        Stage stage = new Stage();
+        Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
+        stage.setTitle("Händlerverwaltung");
+        stage.setScene(new Scene(scene, 600, 400));
+        stage.setResizable(false);
+        stage.show();
 
-	}
+    }
 
     @FXML
     private void onWeltkarteImportierenPressed() {
@@ -181,7 +177,7 @@ public class MainMenuController implements Initializable {
             }
         });
 
-	    //copy old file to temp
+        //copy old file to temp
         if (matchingFiles != null && matchingFiles.length >= 1) {
             File oldMap = matchingFiles[0];
             String extOld = FilenameUtils.getExtension(oldMap.getAbsolutePath());
@@ -205,7 +201,7 @@ public class MainMenuController implements Initializable {
             e.printStackTrace();
         }
 
-	    //rename temp
+        //rename temp
         matchingFiles = alternativeDir.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 return name.startsWith("lastWorldMapTemp");
@@ -214,10 +210,10 @@ public class MainMenuController implements Initializable {
         if (matchingFiles != null && matchingFiles.length >= 1) {
             File oldMap = matchingFiles[0];
             String extOld = FilenameUtils.getExtension(oldMap.getAbsolutePath());
-            File dest =  new File("maps/alternative/ehemaligeWeltkarte." + extOld);
-            int k=1;
-            while(dest.exists() && !dest.isDirectory()){
-                dest =  new File("maps/alternative/ehemaligeWeltkarte("+k+")." + extOld);
+            File dest = new File("maps/alternative/ehemaligeWeltkarte." + extOld);
+            int k = 1;
+            while (dest.exists() && !dest.isDirectory()) {
+                dest = new File("maps/alternative/ehemaligeWeltkarte(" + k + ")." + extOld);
                 k++;
             }
             try {
@@ -265,7 +261,7 @@ public class MainMenuController implements Initializable {
             File worldMap = matchingFiles[0];
             String extSource = FilenameUtils.getExtension(worldMap.getAbsolutePath());
             String extTarget = FilenameUtils.getExtension(exportFile.getAbsolutePath());
-            if(exportFile.exists() && !exportFile.isDirectory()){
+            if (exportFile.exists() && !exportFile.isDirectory()) {
             }
             try {
                 if (extTarget == "") {
@@ -274,7 +270,7 @@ public class MainMenuController implements Initializable {
                 } else {
                     FileUtils.copyFile(worldMap, exportFile);
                 }
-                    log.debug("exported worldMap");
+                log.debug("exported worldMap");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -293,7 +289,7 @@ public class MainMenuController implements Initializable {
         if (matchingFiles != null && matchingFiles.length >= 1) {
             File worldMap = matchingFiles[0];
             String ext = FilenameUtils.getExtension(worldMap.getAbsolutePath());
-            Image image = new Image("file:"+worldMap.getAbsolutePath(), true);
+            Image image = new Image("file:" + worldMap.getAbsolutePath(), true);
             worldMapImageView.setImage(image);
             worldMapImageView.setFitHeight(550);
             worldMapImageView.setFitWidth(400);
@@ -304,10 +300,11 @@ public class MainMenuController implements Initializable {
 
     /**
      * Shows a exit-confirm-dialog if more than the primaryStage are open and close all other stages if confirmed
+     *
      * @return false if the user cancle or refuse the dialog, otherwise true
      */
     public boolean exitProgramm() {
-        Stage primaryStage = (Stage)menuBar.getScene().getWindow();
+        Stage primaryStage = (Stage) menuBar.getScene().getWindow();
         List<Stage> stages = new ArrayList<Stage>(StageHelper.getStages());
 
         // only primaryStage
@@ -332,7 +329,7 @@ public class MainMenuController implements Initializable {
             }
             return true;
 
-        }else {
+        } else {
             log.debug("Confirm-Exit-Dialog refused");
             return false;
         }

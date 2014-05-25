@@ -10,7 +10,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.AssortmentNature;
@@ -21,11 +20,9 @@ import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.TraderCategoryService;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Service("EditTraderCategoryController")
 public class EditTraderCategoryController implements Initializable {
 
     private TraderCategoryService traderCategoryService;

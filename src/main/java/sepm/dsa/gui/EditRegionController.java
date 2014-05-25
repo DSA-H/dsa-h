@@ -15,21 +15,22 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
-import sepm.dsa.model.*;
+import sepm.dsa.model.RainfallChance;
+import sepm.dsa.model.Region;
+import sepm.dsa.model.RegionBorder;
+import sepm.dsa.model.Temperature;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service("EditRegionController")
 public class EditRegionController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(EditRegionController.class);
-	private SpringFxmlLoader loader;
+    private SpringFxmlLoader loader;
 
     private static Region selectedRegion;
 
@@ -64,7 +65,7 @@ public class EditRegionController implements Initializable {
     private Button removeBorderButton;
 
 
-	@Override
+    @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise EditRegionController");
 
@@ -128,7 +129,7 @@ public class EditRegionController implements Initializable {
         // init border choice box
         List<Region> otherRegions = regionService.getAll();
         otherRegions.remove(selectedRegion);
-        if(!isNewRegion) {
+        if (!isNewRegion) {
             for (RegionBorder borders : regionBorderService.getAllByRegion(selectedRegion.getId())) {
                 if (borders.getRegion1().equals(selectedRegion)) {
                     otherRegions.remove(borders.getRegion2());
@@ -160,7 +161,7 @@ public class EditRegionController implements Initializable {
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
         Stage stage = (Stage) nameField.getScene().getWindow();
-	Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
+        Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
 
         stage.setScene(new Scene(scene, 600, 438));
     }
@@ -194,7 +195,7 @@ public class EditRegionController implements Initializable {
 
         // save borders
         List<RegionBorder> localBorderList = borderTable.getItems();
-        for(RegionBorder border : regionBorderService.getAllByRegion(selectedRegion.getId())) {
+        for (RegionBorder border : regionBorderService.getAllByRegion(selectedRegion.getId())) {
             boolean contain = false;
             for (RegionBorder localBorder : localBorderList) {
                 if (localBorder.equalsById(border)) {
@@ -214,7 +215,7 @@ public class EditRegionController implements Initializable {
 
         // return to regionlist
         Stage stage = (Stage) cancelButton.getScene().getWindow();
-	Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
+        Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
 
         stage.setScene(new Scene(scene, 600, 438));
     }
@@ -273,7 +274,7 @@ public class EditRegionController implements Initializable {
         selectedRegion = region;
     }
 
-	public void setLoader(SpringFxmlLoader loader) {
-		this.loader = loader;
-	}
+    public void setLoader(SpringFxmlLoader loader) {
+        this.loader = loader;
+    }
 }

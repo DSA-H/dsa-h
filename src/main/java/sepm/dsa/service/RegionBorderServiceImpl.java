@@ -3,7 +3,6 @@ package sepm.dsa.service;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.RegionBorderDao;
 import sepm.dsa.exceptions.DSARuntimeException;
@@ -13,12 +12,10 @@ import sepm.dsa.model.RegionBorder;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Service("RegionBorderService")
 @Transactional(readOnly = true)
 public class RegionBorderServiceImpl implements RegionBorderService {
 

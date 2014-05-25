@@ -3,8 +3,6 @@ package sepm.dsa.dao;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
@@ -14,7 +12,6 @@ import sepm.dsa.model.TraderCategory;
 import java.util.List;
 import java.util.Vector;
 
-@Repository
 @Transactional(readOnly = true)
 public class TraderCategoryDaoImpl implements TraderCategoryDao {
 
@@ -40,7 +37,7 @@ public class TraderCategoryDaoImpl implements TraderCategoryDao {
 
     @Override
     @Transactional(readOnly = false)
-    public void remove(TraderCategory traderCategory) throws DSAValidationException{
+    public void remove(TraderCategory traderCategory) throws DSAValidationException {
         log.debug("calling remove(" + traderCategory + ")");
 
         List<Trader> traders = traderDao.getAllByCategory(traderCategory);

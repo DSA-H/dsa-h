@@ -20,19 +20,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.Region;
-import sepm.dsa.model.RegionBorder;
 import sepm.dsa.service.ProductService;
-import sepm.dsa.service.RegionService;
 
-import java.util.List;
 import java.util.Set;
 
-@Service("ProductListController")
 public class ProductListController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(ProductListController.class);
@@ -83,7 +77,7 @@ public class ProductListController implements Initializable {
                 session.refresh(product);
                 StringBuilder sb = new StringBuilder();
                 Set<Region> regions = product.getRegions();
-                for(Region region : regions) {
+                for (Region region : regions) {
                     sb.append(region.getName()).append(", ");
                 }
                 if (sb.length() >= 2) {
@@ -141,7 +135,7 @@ public class ProductListController implements Initializable {
                     .masthead(null)
                     .message("Wollen Sie die Ware '" + selectedProduct.getName() + "' wirklich endgültig löschen?")
                     .showConfirm();
-            if(response == Dialog.Actions.YES) {
+            if (response == Dialog.Actions.YES) {
                 productService.remove(selectedProduct);
                 productTable.getItems().remove(selectedProduct);
             }
@@ -156,7 +150,7 @@ public class ProductListController implements Initializable {
         if (selectedProduct == null) {
             deleteButton.setDisable(true);
             editButton.setDisable(true);
-        } else{
+        } else {
             deleteButton.setDisable(false);
             editButton.setDisable(false);
         }

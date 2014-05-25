@@ -3,24 +3,18 @@ package sepm.dsa.service;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.RegionBorderDao;
 import sepm.dsa.dao.RegionDao;
 import sepm.dsa.exceptions.DSAValidationException;
-import sepm.dsa.model.Location;
 import sepm.dsa.model.Region;
-import sepm.dsa.model.RegionBorder;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-
-@Service("RegionService")
 @Transactional(readOnly = true)
 public class RegionServiceImpl implements RegionService {
 
@@ -88,6 +82,7 @@ public class RegionServiceImpl implements RegionService {
 
     /**
      * Validates a region
+     *
      * @param region
      * @throws DSAValidationException if region is not valid
      */

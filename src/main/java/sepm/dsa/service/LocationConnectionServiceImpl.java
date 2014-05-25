@@ -1,24 +1,19 @@
 package sepm.dsa.service;
 
-import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.LocationConnectionDao;
 import sepm.dsa.dao.LocationDao;
-import sepm.dsa.dao.LocationDaoImpl;
 import sepm.dsa.exceptions.DSAAlreadyExistsException;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
 
-import javax.naming.OperationNotSupportedException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Transactional(readOnly = true)
-@Service("LocationConnectionService")
 public class LocationConnectionServiceImpl implements LocationConnectionService {
 
     private static final Logger log = LoggerFactory.getLogger(LocationConnectionServiceImpl.class);

@@ -12,21 +12,21 @@ public interface TraderCategoryDao {
      *
      * @param traderCategory to be persisted must not be null
      */
-   public void add(TraderCategory traderCategory);
+    public void add(TraderCategory traderCategory);
 
     /**
      * Updates a already existing {@code TraderCategory} in the database
      *
      * @param traderCategory to update must not be null
      */
-   public void update(TraderCategory traderCategory);
+    public void update(TraderCategory traderCategory);
 
     /**
      * Delete a traderCategory permanently
      *
      * @param traderCategory to be deleted must not be null
      */
-   public void remove(TraderCategory traderCategory);
+    public void remove(TraderCategory traderCategory);
 
     /**
      * Searches for the {@code TraderCategory} by a given id
@@ -34,12 +34,12 @@ public interface TraderCategoryDao {
      * @return the traderCategory with given id
      * @return null if no fitting TraderCategory found
      */
-  public   TraderCategory get(int id);
+    public TraderCategory get(int id);
 
     /**
      * Finds all TraderCategories
      *
      * @return the traderCategories or empty list of no traderCategorys exist (not null)
      */
-   public List<TraderCategory> getAll();
+    public List<TraderCategory> getAll();
 }
