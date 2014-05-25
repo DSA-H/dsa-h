@@ -4,9 +4,6 @@ import sepm.dsa.model.ProductCategory;
 
 import java.util.List;
 
-/**
- * Created by Chris on 17.05.2014.
- */
 public interface ProductCategoryService {
     /**
      * Get a productcategory by its ID

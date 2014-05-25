@@ -2,13 +2,9 @@ package sepm.dsa.service;
 
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
-import sepm.dsa.model.Region;
 
 import java.util.List;
 
-/**
- * Created by Chris on 17.05.2014.
- */
 public interface ProductService {
     /**
      * Get a product by its ID

@@ -1,13 +1,9 @@
 package sepm.dsa.service;
 
-import sepm.dsa.model.ProductCategory;
 import sepm.dsa.model.ProductUnit;
 
 import java.util.List;
 
-/**
- * Created by Chris on 17.05.2014.
- */
 public interface ProductUnitService {
     /**
      * Get a productcategory by its ID
