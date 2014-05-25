@@ -53,7 +53,7 @@ public class ProductDaoHbmImpl implements ProductDao {
         Object result = sessionFactory.getCurrentSession().get(Product.class, id);
 
         if (result == null) {
-            throw new DSARuntimeException("Leider existiert für diese ID kein Produkt");
+            return null;
         }
         log.trace("returning " + result);
         return (Product) result;
@@ -69,7 +69,7 @@ public class ProductDaoHbmImpl implements ProductDao {
             result.add((Product) o);
         }
 
-        log.trace("returning " + result);
+	    log.trace("returning " + result);
         return result;
     }
 

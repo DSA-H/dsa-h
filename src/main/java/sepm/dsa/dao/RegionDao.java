@@ -31,10 +31,10 @@ public interface RegionDao {
     /**
      * Gives you the {@code Region} for the supplied id. If invalid a exception is thrown.
      *
-     * @return not null otherwise exception is thrown
-     * @throws sepm.dsa.exceptions.DSARegionNotExistingException
+     * @return Region with given id
+     * @return null if no fitting id found
      */
-    public Region get(int id) throws DSARegionNotExistingException;
+    public Region get(int id);
 
     /**
      * Hands you a list of all regions in the database.

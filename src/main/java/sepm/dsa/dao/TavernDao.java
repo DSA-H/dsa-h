@@ -29,9 +29,9 @@ public interface TavernDao {
 	 * Retrieves a tavern from the database.
 	 * @param id Identifier of the tavern.
 	 * @return the requested tavern
-	 * @throws DSAModelNotFoundException if the tavern can not be found in the database
+	 * @return null if no fitting tavern found
 	 */
-	Tavern get(int id) throws DSAModelNotFoundException;
+	Tavern get(int id);
 
 	/**
 	 * Retrieves a list of all taverns from the database.

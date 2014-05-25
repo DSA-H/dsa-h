@@ -40,13 +40,13 @@ public class RegionDaoHbmImpl implements RegionDao {
     }
 
     @Override
-    public Region get(int id) throws DSARegionNotExistingException {
+    public Region get(int id) {
         log.debug("calling get(" + id + ")");
 
         Object result = sessionFactory.getCurrentSession().get(Region.class, id);
 
         if (result == null) {
-            throw new DSARegionNotExistingException();
+            return null;
         }
         log.trace("returning " + result);
         return (Region) result;
@@ -62,7 +62,7 @@ public class RegionDaoHbmImpl implements RegionDao {
             result.add((Region) o);
         }
 
-        log.trace("returning " + result);
+	    log.trace("returning " + result);
         return result;
     }
 

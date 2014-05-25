@@ -35,9 +35,13 @@ public class TavernDaoImpl implements TavernDao {
 	}
 
 	@Override
-	public Tavern get(int id) throws DSAModelNotFoundException {
-		log.debug("calling get("+id+")");
-		return (Tavern) sessionFactory.getCurrentSession().get(Tavern.class, id);
+	public Tavern get(int id) {
+		log.debug("calling get(" + id + ")");
+		Object o = sessionFactory.getCurrentSession().get(Tavern.class, id);
+		if (o == null) {
+			return null;
+		}
+		return (Tavern) o;
 	}
 
 	@Override

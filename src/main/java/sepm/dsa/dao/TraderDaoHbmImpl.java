@@ -71,7 +71,7 @@ public class TraderDaoHbmImpl implements TraderDao {
             result.add((Trader) o);
         }
 
-        log.trace("returning " + result);
+	    log.trace("returning " + result);
         return result;
     }
 
@@ -87,7 +87,7 @@ public class TraderDaoHbmImpl implements TraderDao {
             result.add((Trader) o);
         }
 
-        log.trace("returning " + result);
+	    log.trace("returning " + result);
         return result;
     }
 

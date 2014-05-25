@@ -51,13 +51,14 @@ public class TraderCategoryServiceTest extends TestCase {
         assertTrue(persistedTraderCategory != null);
     }
 
-    @Test(expected = DSARuntimeException.class)
+    @Test
     @DatabaseSetup("/testData.xml")
     public void testRemove() throws Exception {
         TraderCategory traderCategory = traderCategoryService.get(3);
         traderCategoryService.remove(traderCategory);
 
-        traderCategoryService.get(3);
+        TraderCategory cat = traderCategoryService.get(3);
+	    assertTrue(cat == null);
     }
 
     @Test(expected = DSAValidationException.class)

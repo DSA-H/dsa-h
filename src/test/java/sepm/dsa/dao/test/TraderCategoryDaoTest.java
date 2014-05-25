@@ -3,6 +3,8 @@ package sepm.dsa.dao.test;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Assert;
@@ -52,14 +54,15 @@ public class TraderCategoryDaoTest {
         traderCategoryDao.add(null);
     }
 
-    @Test(expected = sepm.dsa.exceptions.DSARuntimeException.class)
+    @Test
     @DatabaseSetup("/testData.xml")
     public void testRemove() throws Exception {
         TraderCategory myCategory = new TraderCategory();
         myCategory.setName("fooTrader");
         traderCategoryDao.add(myCategory);
         traderCategoryDao.remove(myCategory);
-        traderCategoryDao.get(myCategory.getId());
+        TraderCategory cat = traderCategoryDao.get(myCategory.getId());
+	    assertTrue(cat == null);
     }
 
     @Test

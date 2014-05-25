@@ -49,7 +49,8 @@ public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
         for (Object o : list) {
             result.add((RegionBorder) o);
         }
-        log.trace("returning " + result);
+
+	    log.trace("returning " + result);
         return result;
     }
 
@@ -64,7 +65,8 @@ public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
         for (Object o : list) {
             result.add((RegionBorder) o);
         }
-        log.trace("returning " + result);
+
+	    log.trace("returning " + result);
         return result;
     }
 

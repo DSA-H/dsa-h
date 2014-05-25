@@ -77,7 +77,7 @@ public class LocationConnectionDaoHbmImpl implements LocationConnectionDao {
             result.add((LocationConnection) o);
         }
 
-        log.trace("returning " + result);
+	    log.trace("returning " + result);
         return result;
     }
 
@@ -93,7 +93,7 @@ public class LocationConnectionDaoHbmImpl implements LocationConnectionDao {
             result.add((LocationConnection) o);
         }
 
-        log.trace("returning " + result);
+	    log.trace("returning " + result);
         return result;
     }
 

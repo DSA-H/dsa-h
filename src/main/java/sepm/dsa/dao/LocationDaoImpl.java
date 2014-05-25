@@ -47,7 +47,7 @@ public class LocationDaoImpl implements LocationDao {
             result.add((Location) o);
         }
 
-        log.trace("returning " + result);
+	    log.trace("returning " + result);
         return result;
     }
 
@@ -86,7 +86,7 @@ public class LocationDaoImpl implements LocationDao {
             result.add((Location) o);
         }
 
-        log.trace("returning " + result);
+	    log.trace("returning " + result);
         return result;
     }
 
@@ -100,7 +100,7 @@ public class LocationDaoImpl implements LocationDao {
             result.add((Location) o);
         }
 
-        log.trace("returning " + result);
+	    log.trace("returning " + result);
         return result;
     }
 
@@ -119,7 +119,7 @@ public class LocationDaoImpl implements LocationDao {
             result.add((Location) o);
         }
 
-        log.trace("returning " + result);
+	    log.trace("returning " + result);
         return result;
     }
 
@@ -139,7 +139,7 @@ public class LocationDaoImpl implements LocationDao {
             result.add((Location) o);
         }
 
-        log.trace("returning " + result);
+	    log.trace("returning " + result);
         return result;
     }
 
