@@ -27,6 +27,12 @@ public interface CurrencyDao {
      */
     void remove(Currency currency);
 
+    /**
+     * Finds a {@code Currency} by its ID
+     *
+     * @param id the primay key
+     * @return the currency, or null, if no such currency exists
+     */
     Currency get(int id);
 
     /**
