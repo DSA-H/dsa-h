@@ -212,6 +212,18 @@
         <property name="regionService" ref="regionService"/>
     </bean>
 
+    <bean id="ProductCategoryListController" class="sepm.dsa.gui.ProductCategoryListController">
+        <property name="loader" ref="loader"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="productCategoryService" ref="productCategoryService"/>
+    </bean>
+
+    <bean id="EditProductCategoryController" class="sepm.dsa.gui.EditProductCategoryController">
+        <property name="loader" ref="loader"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="productCategoryService" ref="productCategoryService"/>
+    </bean>
+
     <bean id="TraderCategoryList" class="sepm.dsa.gui.TraderCategoryListController">
         <property name="loader" ref="loader"/>
         <property name="sessionFactory" ref="sessionFactory"/>

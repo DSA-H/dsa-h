@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.ProductCategoryListController">
+<children><Label layoutX="226.0" layoutY="25.0" text="Warenkategorien">
+<font>
+<Font name="System Bold" size="18.0" />
+</font></Label><HBox alignment="CENTER_LEFT" layoutX="316.0" layoutY="339.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="61.0" prefWidth="248.0" spacing="10.0">
+<children>
+<Button mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10" /><Button mnemonicParsing="false" onAction="#onEditButtonPressed" text="Editieren" /><Button mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Hinzufügen" />
+</children>
+<opaqueInsets>
+<Insets />
+</opaqueInsets>
+</HBox><TreeView fx:id="treeview" layoutX="35.0" layoutY="65.0" prefHeight="265.0" prefWidth="391.0" /><TableView fx:id="tableview" layoutX="453.0" layoutY="64.0" prefHeight="265.0" prefWidth="131.0">
+  <columns>
+    <TableColumn fx:id="productcolumn" prefWidth="130.0" text="Products" />
+  </columns>
+</TableView>
+</children></Pane>
