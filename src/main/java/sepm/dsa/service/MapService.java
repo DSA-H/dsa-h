@@ -16,5 +16,11 @@ public interface MapService {
 	 */
 	public void setWorldMap(File newmap);
 
+	public File getActiveDir();
+
+	public File getAlternativeDir();
+
+	public File getWorldMap();
+
 
 }

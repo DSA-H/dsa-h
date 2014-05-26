@@ -103,4 +103,20 @@ public class MapServiceImpl implements MapService {
 		}
 
 	}
+
+	public File getActiveDir() { return activeDir; }
+
+	public File getAlternativeDir() { return alternativeDir; }
+
+	public File getWorldMap() {
+		File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return name.startsWith("worldMap");
+			}
+		});
+		if (matchingFiles != null && matchingFiles.length >= 1) {
+			return matchingFiles[0];
+		}
+		return null;
+	}
 }

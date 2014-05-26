@@ -1,13 +1,19 @@
 package sepm.dsa.gui;
 
 import com.sun.javafx.stage.StageHelper;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -22,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.service.MapService;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -33,6 +40,7 @@ public class MainMenuController implements Initializable {
     private static final Logger log = LoggerFactory.getLogger(MainMenuController.class);
     private SpringFxmlLoader loader;
 	private MapService mapService;
+	private boolean dragging = false;
 
     @FXML
     private MenuBar menuBar;
@@ -62,11 +70,30 @@ public class MainMenuController implements Initializable {
     private MenuItem weltkarteExportieren;
     @FXML
     private MenuItem location;
-    @FXML
-    private ImageView worldMapImageView;
+
+    private ImageView mapImageView = new ImageView();
+	@FXML
+	private ScrollPane scrollPane;
+	@FXML
+	private Label xlabel;
+	@FXML
+	private Label ylabel;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
+	    scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
+		    public void changed(ObservableValue<? extends Number> ov,
+		                        Number old_val, Number new_val) {
+			    ylabel.setText(""+ new_val.doubleValue()*100);
+		    }
+	    });
+	    scrollPane.hvalueProperty().addListener(new ChangeListener<Number>() {
+		    public void changed(ObservableValue<? extends Number> ov,
+		                        Number old_val, Number new_val) {
+			    xlabel.setText(""+ new_val.doubleValue()*100);
+		    }
+	    });
+
         updateWorldMap();
     }
 
@@ -203,22 +230,14 @@ public class MainMenuController implements Initializable {
 
     private void updateWorldMap() {
         log.debug("updateWorldMap called");
-        File activeDir = new File("maps/active");
-        File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.startsWith("worldMap");
-            }
-        });
+        File worldMap = mapService.getWorldMap();
 
-        if (matchingFiles != null && matchingFiles.length >= 1) {
-            File worldMap = matchingFiles[0];
-            String ext = FilenameUtils.getExtension(worldMap.getAbsolutePath());
+        if (worldMap != null) {
             Image image = new Image("file:" + worldMap.getAbsolutePath(), true);
-            worldMapImageView.setImage(image);
-            worldMapImageView.setFitHeight(550);
-            worldMapImageView.setFitWidth(400);
-            worldMapImageView.setSmooth(true);
-            worldMapImageView.setPreserveRatio(false);
+            mapImageView.setImage(image);
+            mapImageView.setSmooth(true);
+            mapImageView.setPreserveRatio(true);
+	        scrollPane.setContent(mapImageView);
         }
     }
 
