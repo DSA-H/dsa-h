@@ -24,7 +24,6 @@ public class LocationServiceImpl implements LocationService {
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private LocationDao locationDao;
-    private TraderService traderService;
 
     @Override
     @Transactional(readOnly = false)
@@ -93,7 +92,4 @@ public class LocationServiceImpl implements LocationService {
         }
     }
 
-    public void setTraderService(TraderService traderService) {
-        this.traderService = traderService;
-    }
 }
