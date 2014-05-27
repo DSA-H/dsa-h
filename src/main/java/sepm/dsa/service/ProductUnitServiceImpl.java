@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.dao.ProductUnitAmount;
 import sepm.dsa.dao.ProductUnitDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.ProductUnit;
@@ -12,6 +13,8 @@ import sepm.dsa.model.ProductUnit;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Set;
 
@@ -58,6 +61,14 @@ public class ProductUnitServiceImpl implements ProductUnitService {
         log.debug("calling getAll()");
         List<ProductUnit> result = productUnitDao.getAll();
         log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public ProductUnitAmount exchange(ProductUnit from, ProductUnit to, BigDecimal amount) {
+        ProductUnitAmount result = new ProductUnitAmount();
+        result.setAmount(amount.multiply(to.getValueToBaseRate()).divide(from.getValueToBaseRate(), 4, RoundingMode.HALF_UP));
+        result.setProductUnit(to);
         return result;
     }
 
