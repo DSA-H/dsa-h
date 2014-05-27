@@ -1,6 +1,5 @@
 package sepm.dsa.service;
 
-import sepm.dsa.dao.ProductUnitAmount;
 import sepm.dsa.model.ProductUnit;
 
 import java.math.BigDecimal;
@@ -49,5 +48,5 @@ public interface ProductUnitService {
      * @param amount amount of from {@code Currency} to be exchanged
      * @return the value / amount of the original ProductUnit expressed by / in the foreign ProductUnit
      */
-    ProductUnitAmount exchange(ProductUnit from, ProductUnit to, BigDecimal amount);
+    ProductUnit exchange(ProductUnit from, ProductUnit to, BigDecimal amount);
 }

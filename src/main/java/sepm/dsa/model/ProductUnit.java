@@ -4,8 +4,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Set;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "ProductUnit")
@@ -27,8 +26,8 @@ public class ProductUnit {
     private String unitType;
 
     @NotBlank
-    @Column(nullable = false)
-    private Integer value;
+    @Column(nullable = false, precision = 9, scale = 3)
+    private BigDecimal value;
 
     public Integer getId() {
         return id;
@@ -54,11 +53,11 @@ public class ProductUnit {
         this.unitType = unitType;
     }
 
-    public Integer getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 
