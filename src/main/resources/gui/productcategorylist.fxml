@@ -10,7 +10,7 @@
 <children><Label layoutX="226.0" layoutY="25.0" text="Warenkategorien">
 <font>
 <Font name="System Bold" size="18.0" />
-</font></Label><HBox alignment="CENTER_LEFT" layoutX="316.0" layoutY="339.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="61.0" prefWidth="248.0" spacing="10.0">
+</font></Label><HBox alignment="CENTER_LEFT" layoutX="338.0" layoutY="339.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="61.0" prefWidth="248.0" spacing="10.0">
 <children>
 <Button mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10" /><Button mnemonicParsing="false" onAction="#onEditButtonPressed" text="Editieren" /><Button mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Hinzufügen" />
 </children>
