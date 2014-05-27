@@ -47,7 +47,7 @@ public class CurrencyServiceTest extends AbstractDatabaseTest {
     }
 
     @Test
-    public void testExchange() throws Exception {
+    public void testExchange_roundUp() throws Exception {
 
         Currency c1 = currencyService.get(1); //to base rate: 3
         Currency c2 = currencyService.get(2);// to base rate: 2
@@ -60,4 +60,20 @@ public class CurrencyServiceTest extends AbstractDatabaseTest {
         currencyAmount.setCurrency(c2);
         assertEquals(currencyAmount, currencyService.exchange(c1, c2, new BigDecimal(100)));
     }
+
+    @Test
+    public void testExchange_roundDown() throws Exception {
+
+        Currency c1 = currencyService.get(1); //to base rate: 3
+        Currency c2 = currencyService.get(2);// to base rate: 2
+        //exchange from c1 to c2 --> via base rate --> divide by first & multiply second
+
+        BigDecimal amountToExchange = new BigDecimal(50);
+        BigDecimal referenceCalculation = amountToExchange.multiply(c2.getValueToBaseRate()).divide(c1.getValueToBaseRate(), 4, RoundingMode.HALF_UP);
+        CurrencyAmount currencyAmount = new CurrencyAmount();
+        currencyAmount.setAmount(referenceCalculation);
+        currencyAmount.setCurrency(c2);
+        assertEquals(currencyAmount, currencyService.exchange(c1, c2, new BigDecimal(50)));
+    }
+
 }
