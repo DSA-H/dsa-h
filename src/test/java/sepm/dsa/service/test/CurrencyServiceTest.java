@@ -1,10 +1,11 @@
-package sepm.dsa.service;
+package sepm.dsa.service.test;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Currency;
+import sepm.dsa.service.CurrencyService;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
