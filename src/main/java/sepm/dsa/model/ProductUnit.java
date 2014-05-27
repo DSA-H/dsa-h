@@ -3,6 +3,7 @@ package sepm.dsa.model;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
@@ -25,7 +26,7 @@ public class ProductUnit {
     @Column(nullable = false, length = 60)
     private String unitType;
 
-    @NotBlank
+    @NotNull
     @Column(nullable = false, precision = 9, scale = 3)
     private BigDecimal value;
 

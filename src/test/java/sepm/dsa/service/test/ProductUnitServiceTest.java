@@ -26,6 +26,7 @@ public class ProductUnitServiceTest extends AbstractDatabaseTest {
         ProductUnit p1 = new ProductUnit();
         p1.setName("foo 1");
         p1.setValue(BigDecimal.valueOf(100));
+        p1.setUnitType("type45435");
         productUnitService.add(p1);
         assertNotNull(p1.getId());
     }
@@ -35,6 +36,7 @@ public class ProductUnitServiceTest extends AbstractDatabaseTest {
         ProductUnit p1 = new ProductUnit();
         p1.setName("foo 1");
         p1.setValue(BigDecimal.valueOf(100));
+        p1.setUnitType("type45435");
         productUnitService.add(p1);
 
         ProductUnit foundUnit = productUnitService.get(p1.getId());
