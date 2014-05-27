@@ -12,12 +12,14 @@
 <Font name="System Bold" size="18.0" />
 </font></Label><HBox alignment="CENTER_LEFT" layoutX="338.0" layoutY="339.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="61.0" prefWidth="248.0" spacing="10.0">
 <children>
-<Button mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10" /><Button mnemonicParsing="false" onAction="#onEditButtonPressed" text="Editieren" /><Button mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Hinzufügen" />
+<Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
+    <Button fx:id="editButton" mnemonicParsing="false" onAction="#onEditButtonPressed" text="Editieren" />
+    <Button mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Hinzufügen" />
 </children>
 <opaqueInsets>
 <Insets />
 </opaqueInsets>
-</HBox><TreeView fx:id="treeview" layoutX="35.0" layoutY="65.0" prefHeight="265.0" prefWidth="391.0" /><TableView fx:id="tableview" layoutX="453.0" layoutY="64.0" prefHeight="265.0" prefWidth="131.0">
+</HBox><TreeView fx:id="treeview" onMouseClicked="#checkFocus" layoutX="35.0" layoutY="65.0" prefHeight="265.0" prefWidth="391.0" /><TableView fx:id="tableview" layoutX="453.0" layoutY="64.0" prefHeight="265.0" prefWidth="131.0">
   <columns>
     <TableColumn fx:id="productcolumn" prefWidth="130.0" text="Products" />
   </columns>

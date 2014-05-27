@@ -9,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.controlsfx.dialog.Dialog;
+import org.controlsfx.dialog.Dialogs;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +32,15 @@ public class ProductCategoryListController implements Initializable {
     private SessionFactory sessionFactory;
 
     @FXML
-    private TreeView<String> treeview;
+    private TreeView<ProductCategory> treeview;
     @FXML
     private TableView<Product> tableview;
     @FXML
     private TableColumn productColumn;
-
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button editButton;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
@@ -47,18 +52,20 @@ public class ProductCategoryListController implements Initializable {
         productTable.setItems(data);
         */
 
+        initializeTreeView();
+    }
+
+    private void initializeTreeView(){
         List<ProductCategory> productCategoryList = productCategoryService.getAll();
 
 
-        TreeItem<String> root = new TreeItem<String>("root");
+        TreeItem<ProductCategory> root = new TreeItem<ProductCategory>(new ProductCategory());
         root.setExpanded(true);
-
-        //createNode(productCategoryList);
-        //getTreeChildren(productCategoryList, root);
         getTreeChildren(productCategoryList, root);
 
         treeview.setRoot(root);
-
+        treeview.setShowRoot(false);
+        checkFocus();
     }
 
     private void getTreeChildren(List<ProductCategory> productCategoryList, TreeItem root){
@@ -69,36 +76,16 @@ public class ProductCategoryListController implements Initializable {
         }
     }
 
-    /*private void getTreeChildren(List<ProductCategory> productCategoryList, TreeItem root){
-
-        for (ProductCategory item: productCategoryList) {
-            TreeItem<ProductCategory> node = new TreeItem<ProductCategory>((ProductCategory)item);
-
-            if (item.getChilds()!=null){
-                Set<ProductCategory> childs = item.getChilds();
-                Iterator i = childs.iterator();
-                while (i.hasNext()){
-                    ProductCategory nextElem = (ProductCategory)i.next();
-                    node.getChildren().add(getTreeChildren(nextElem));
-                }
-            }
-
-            root.getChildren().add(node);
+    @FXML
+    private void checkFocus() {
+        if (treeview.getFocusModel().getFocusedItem() == null) {
+            deleteButton.setDisable(true);
+            editButton.setDisable(true);
+        } else {
+            deleteButton.setDisable(false);
+            editButton.setDisable(false);
         }
-    }*/
-
-    private TreeItem<ProductCategory> getTreeChildren(ProductCategory elem){
-        TreeItem<ProductCategory> node = new TreeItem<ProductCategory>(elem);//.getName());
-
-        Set<ProductCategory> childs = elem.getChilds();
-        Iterator i = childs.iterator();
-        while (i.hasNext()){
-            ProductCategory nextElem = (ProductCategory)i.next();
-            node.getChildren().add(getTreeChildren(nextElem));
-        }
-        return node;
     }
-
 
     @FXML
     private void onCreateButtonPressed() {
@@ -118,7 +105,7 @@ public class ProductCategoryListController implements Initializable {
     private void onEditButtonPressed() {
         log.debug("onWarenClicked - open Waren Window");
 
-        //EditProductCategoryController.setProductCategory(tableview.getFocusModel().getFocusedCell());
+        EditProductCategoryController.setProductCategory(treeview.getSelectionModel().getSelectedItem().getValue());
 
         Stage stage = (Stage) tableview.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/editproductcategory.fxml");
@@ -131,20 +118,24 @@ public class ProductCategoryListController implements Initializable {
     @FXML
     private void onDeleteButtonPressed() {
         log.debug("onDeleteButtonPressed - deleting selected Region");
-        /*Product selectedProduct = (productTable.getSelectionModel().getSelectedItem());
+        ProductCategory selectedProductCategory = (treeview.getSelectionModel().getSelectedItem().getValue());
 
-        if (selectedProduct != null) {
+        if (selectedProductCategory != null) {
             log.debug("open Confirm-Delete-Product Dialog");
             org.controlsfx.control.action.Action response = Dialogs.create()
                     .title("Löschen?")
                     .masthead(null)
-                    .message("Wollen Sie die Ware '" + selectedProduct.getName() + "' wirklich endgültig löschen?")
+                    .message("Wollen Sie die Warenkategorie '" + selectedProductCategory.getName() + "' wirklich endgültig löschen?")
                     .showConfirm();
             if (response == Dialog.Actions.YES) {
-                productService.remove(selectedProduct);
-                productTable.getItems().remove(selectedProduct);
+                productCategoryService.remove(selectedProductCategory);
+
+                //could be replaced with a search-through-all-elements-childs algorithm
+                initializeTreeView();
             }
-        }*/
+        }
+
+        checkFocus();
     }
 
     public void setProductCategoryService(ProductCategoryService productCategoryService) {
