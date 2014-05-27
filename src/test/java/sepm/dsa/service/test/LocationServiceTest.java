@@ -29,6 +29,7 @@ public class LocationServiceTest extends AbstractDatabaseTest {
     @Autowired
     private TraderDao traderDao;
 
+
     @Test
     public void testAdd() throws Exception {
         Location location = new Location();
@@ -45,6 +46,21 @@ public class LocationServiceTest extends AbstractDatabaseTest {
         Location persistedLocation = locationService.get(location.getId());
         assertTrue(persistedLocation != null);
         locationService.remove(location);
+    }
+
+    @Test
+    public void update_shouldPersistChanges() throws Exception {
+
+        Location location = locationService.get(2);
+        String newName = location.getName() + "_changed";
+        Integer newXCoord = location.getxCoord() + 15;
+        location.setName(newName);
+        location.setxCoord(newXCoord);
+        locationService.update(location);
+        Location updatedLocation = locationService.get(location.getId());
+        assertEquals(newName, updatedLocation.getName());
+        assertEquals(newXCoord, updatedLocation.getxCoord());
+
     }
 
     @Test
@@ -83,16 +99,5 @@ public class LocationServiceTest extends AbstractDatabaseTest {
         assertEquals(0, tradersForLocationNow);
     }
 
-//    @Test
-//    public void update_removesConnections() throws Exception {
-//        Location location = locationService.get(4);
-//        assertEquals(2, location.getConnections1().size());
-//        assertEquals(1, location.getConnections2().size());
-//        location.getConnections1().clear();
-//        locationService.update(location);
-//        Location newLocation = locationService.get(location.getId());
-//        assertEquals(0, newLocation.getConnections1().size());
-//        assertEquals(1, newLocation.getConnections2().size());
-//
-//    }
+
 }
