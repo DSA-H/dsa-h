@@ -18,7 +18,6 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.Set;
 
-@Service("ProductUnitService")
 @Transactional(readOnly = true)
 public class ProductUnitServiceImpl implements ProductUnitService {
     private static final Logger log = LoggerFactory.getLogger(RegionServiceImpl.class);
