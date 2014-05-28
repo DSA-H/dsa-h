@@ -7,6 +7,7 @@ import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Unit;
 import sepm.dsa.model.UnitType;
 import sepm.dsa.service.UnitService;
+import sepm.dsa.service.UnitTypeService;
 
 import static org.junit.Assert.*;
 
@@ -14,6 +15,9 @@ public class UnitServiceTest extends AbstractDatabaseTest {
 
     @Autowired
     private UnitService unitService;
+
+    @Autowired
+    private UnitTypeService unitTypeService;
 
     @Test
     public void testGet() throws Exception {
@@ -32,6 +36,7 @@ public class UnitServiceTest extends AbstractDatabaseTest {
         kiloGramm.setUnitType(gewicht);
         kiloGramm.setValueToBaseUnit(Double.valueOf(1000));
 
+        unitTypeService.add(gewicht);
         unitService.add(kiloGramm);
         assertNotNull(kiloGramm.getId());
     }
@@ -47,6 +52,8 @@ public class UnitServiceTest extends AbstractDatabaseTest {
 
         kiloGramm.setUnitType(gewicht);
         kiloGramm.setValueToBaseUnit(Double.valueOf(1000));
+
+        unitTypeService.add(gewicht);
         unitService.add(kiloGramm);
 
         Unit foundUnit = unitService.get(kiloGramm.getId());
