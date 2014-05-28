@@ -19,6 +19,8 @@ public class HbmConversationInterceptor implements MethodInterceptor {
 
     public Object invoke(MethodInvocation invocation) throws Throwable {
 
+        log.info("invoke method '" + invocation.getMethod().toGenericString() + "'");
+
         Session currentSession = null;
 
         if (disconnectedSession == null) {

@@ -27,7 +27,7 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public Region get(int id) {
-        log.debug("calling get(" + id + ")");
+        log.info("calling get(" + id + ")");
         Region result = regionDao.get(id);
         log.trace("returning " + result);
         return result;
@@ -36,7 +36,7 @@ public class RegionServiceImpl implements RegionService {
     @Override
     @Transactional(readOnly = false)
     public void add(Region r) {
-        log.debug("calling add(" + r + ")");
+        log.info("calling add(" + r + ")");
         validate(r);
         regionDao.add(r);
     }
@@ -44,7 +44,7 @@ public class RegionServiceImpl implements RegionService {
     @Override
     @Transactional(readOnly = false)
     public void update(Region r) {
-        log.debug("calling update(" + r + ")");
+        log.info("calling update(" + r + ")");
         validate(r);
         regionDao.update(r);
     }
@@ -52,7 +52,7 @@ public class RegionServiceImpl implements RegionService {
     @Override
     @Transactional(readOnly = false)
     public void remove(Region r) {
-        log.debug("calling remove(" + r + ")");
+        log.info("calling remove(" + r + ")");
 //        List<RegionBorder> borders = regionBorderDao.getAllByRegion(r.getId());
 //        List<Location> locations = locationService.getAllByRegion(r.getId());
 
@@ -64,7 +64,7 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public List<Region> getAll() {
-        log.debug("calling getAll()");
+        log.info("calling getAll()");
         List<Region> result = regionDao.getAll();
         log.trace("returning " + result);
         return result;
@@ -102,6 +102,7 @@ public class RegionServiceImpl implements RegionService {
      * @throws DSAValidationException if region is not valid
      */
     private void validate(Region region) throws DSAValidationException {
+        log.info("calling validate(" + region + ")");
         Set<ConstraintViolation<Region>> violations = validator.validate(region);
         if (violations.size() > 0) {
             throw new DSAValidationException("Gebiet ist nicht valide.", violations);

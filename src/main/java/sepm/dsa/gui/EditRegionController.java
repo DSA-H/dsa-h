@@ -130,11 +130,12 @@ public class EditRegionController implements Initializable {
         List<Region> otherRegions = regionService.getAll();
         otherRegions.remove(selectedRegion);
         if (!isNewRegion) {
-            for (RegionBorder borders : regionBorderService.getAllByRegion(selectedRegion.getId())) {
-                if (borders.getRegion1().equals(selectedRegion)) {
-                    otherRegions.remove(borders.getRegion2());
+            List<RegionBorder> borders = regionBorderService.getAllByRegion(selectedRegion.getId());
+            for (RegionBorder border : borders) {
+                if (border.getRegion1().equals(selectedRegion)) {
+                    otherRegions.remove(border.getRegion2());
                 } else {
-                    otherRegions.remove(borders.getRegion1());
+                    otherRegions.remove(border.getRegion1());
                 }
             }
         }
