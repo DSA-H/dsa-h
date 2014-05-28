@@ -26,16 +26,6 @@ public class LocationServiceImpl implements LocationService {
     private TraderService traderService;
 
     @Override
-    public void save() {
-        log.info("calling save()");
-    }
-
-    @Override
-    public void cancel() {
-        log.info("calling cancel()");
-    }
-
-    @Override
     @Transactional(readOnly = false)
     public void add(Location location) {
         log.debug("calling addConnection(" + location + ")");

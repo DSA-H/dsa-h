@@ -41,8 +41,4 @@ public interface RegionService {
      */
     List<Region> getAll();
 
-    void save();
-
-    void cancel();
-
 }

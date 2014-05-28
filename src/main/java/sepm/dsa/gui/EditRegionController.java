@@ -23,6 +23,7 @@ import sepm.dsa.model.RegionBorder;
 import sepm.dsa.model.Temperature;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
+import sepm.dsa.service.SaveCancelService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ public class EditRegionController implements Initializable {
 
     private RegionService regionService;
     private RegionBorderService regionBorderService;
+    private SaveCancelService saveCancelService;
     // true if the region is not editing
     private boolean isNewRegion;
 
@@ -162,7 +164,7 @@ public class EditRegionController implements Initializable {
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
 
-        regionService.cancel();
+        saveCancelService.cancel();
 
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
@@ -217,7 +219,7 @@ public class EditRegionController implements Initializable {
             regionBorderService.add(border);
         }
 
-        regionService.save();
+        saveCancelService.save();
 
         // return to regionlist
         Stage stage = (Stage) cancelButton.getScene().getWindow();
@@ -282,5 +284,9 @@ public class EditRegionController implements Initializable {
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

@@ -51,8 +51,4 @@ public interface LocationService {
      */
     public List<Location> getAllByRegion(int regionId);
 
-    void save();
-
-    void cancel();
-
 }

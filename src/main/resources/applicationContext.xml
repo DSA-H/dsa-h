@@ -74,6 +74,10 @@
         <aop:advisor advice-ref="hbmConversationInterceptor" pointcut="within(sepm.dsa.service..*)" />
     </aop:config>
 
+    <bean id="saveCancelService" class="sepm.dsa.service.SaveCancelServiceImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
     <bean id="loader" class="sepm.dsa.application.SpringFxmlLoader">
     </bean>
 
@@ -196,6 +200,7 @@
         <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
     <bean id="LocationListController" class="sepm.dsa.gui.LocationListController">
@@ -208,6 +213,7 @@
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
         <property name="regionService" ref="regionService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
     <bean id="ProductListController" class="sepm.dsa.gui.ProductListController">

@@ -25,6 +25,7 @@ import sepm.dsa.model.*;
 import sepm.dsa.service.LocationConnectionService;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionService;
+import sepm.dsa.service.SaveCancelService;
 
 import java.io.File;
 import java.util.*;
@@ -39,6 +40,7 @@ public class EditLocationController implements Initializable {
 
     private LocationService locationService;
     private RegionService regionService;
+    private SaveCancelService saveCancelService;
     // true if the location is not editing
     private boolean isNewLocation;
 
@@ -185,7 +187,8 @@ public class EditLocationController implements Initializable {
     @FXML
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
-        locationService.cancel();
+        saveCancelService.cancel();
+        saveCancelService.reset(selectedLocation);
         log.info("before: connections.size=" + selectedLocation.getAllConnections().size());
         selectedLocation = locationService.get(selectedLocation.getId());
         log.info("after: connections.size=" + selectedLocation.getAllConnections().size());
@@ -252,7 +255,7 @@ public class EditLocationController implements Initializable {
 
         applyLocationChanges();
 
-        locationService.save();
+        saveCancelService.save();
 //        locationService.update(selectedLocation);
 
 
@@ -315,6 +318,10 @@ public class EditLocationController implements Initializable {
         stage.setTitle("Reiseverbindungen für Ort '" + selectedLocation.getName() + "' bearbeiten");
         stage.setScene(new Scene(root, 900, 500));
         stage.show();
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 
 //    @FXML
