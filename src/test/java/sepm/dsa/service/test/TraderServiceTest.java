@@ -15,6 +15,7 @@ import sepm.dsa.service.TraderService;
 import java.util.List;
 import java.util.Set;
 
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -108,37 +109,68 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         assertTrue("There were no assortments set in test data", assortments.size() > 0);
     }
 
-//    @Test
-//    public void calculateOffers_OffersShouldNotExceedTraderSpace() {
-//        Trader trader = traderService.get(2);
-//        int traderSize = trader.getSize();
-//
-//        int offersAmount = 0;
-//        List<Offer> offers = traderService.calculateOffers(trader);
-//        for (Offer o : offers) {
-//            offersAmount += o.getAmount();
-//        }
-//        assertTrue("TraderService didn't find a offer to suggest, update test data", offers.size() > 0);
-//        assertTrue(offersAmount <= traderSize);
-//    }
-//
-//    @Test
-//    public void calculateOffers_OffersShouldNotExceedTraderSpace2() {
-//        Trader trader = traderService.get(2);
-//
-//        List<Offer> offers = traderService.calculateOffers(trader);
-//        for (Offer o : offers) {
-//            Product p = o.getProduct();
-//            boolean contains = false;
-//            for (AssortmentNature a : trader.getCategory().getAssortments()) {
-//                if (a.getProductCategory().getProducts().contains(p)) {
-//                    contains = true;
-//                    break;
-//                }
-//            }
-//            assertTrue("Product in Trader Offer ist not in connected to the trader categories normal product categories", contains);
-//        }
-//        assertTrue("TraderService didn't find a offer to suggest, update test data", offers.size() > 0);
-//
-//    }
+    @Test
+    public void calculateOffers_OffersShouldNotExceedTraderSpace() {
+        Trader trader = traderService.get(2);
+        int traderSize = trader.getSize();
+
+        int offersAmount = 0;
+        List<Offer> offers = traderService.calculateOffers(trader);
+        for (Offer o : offers) {
+            offersAmount += o.getAmount();
+        }
+        assertTrue("TraderService didn't find a offer to suggest, update test data", offers.size() > 0);
+        assertTrue(offersAmount == traderSize);
+    }
+
+    @Test
+    public void calculateOffers_OffersShouldNotExceedTraderSpace2() {
+        Trader trader = traderService.get(2);
+
+        List<Offer> offers = traderService.calculateOffers(trader);
+        for (Offer o : offers) {
+            Product p = o.getProduct();
+            boolean contains = false;
+            for (AssortmentNature a : trader.getCategory().getAssortments()) {
+                if (a.getProductCategory().getProducts().contains(p)) {
+                    contains = true;
+                    break;
+                }
+            }
+            assertTrue("Product in Trader Offer ist not in connected to the trader categories normal product categories", contains);
+        }
+        assertTrue("TraderService didn't find a offer to suggest, update test data", offers.size() > 0);
+    }
+
+    @Test
+    public void calculateOffers_OffersShouldbeEmpty() {
+        Trader trader = traderService.get(3);
+
+        List<Offer> offers = traderService.calculateOffers(trader);
+
+        assertTrue("TraderService find a offer to suggest, update test data", offers.isEmpty());
+    }
+
+    /**
+     * Trader 4 has a own TraderCategory with 2 ProductCategories: Categorie1 (normal), Categorie6 which contains only
+     * product8 which is producted only in region7 which has no borders. That means although prodcut8 is in the
+     * tradercategory "template" there is no way to the product and it should not appear in the offer. The offer should
+     * be filled with products from Categorie1.
+     */
+    @Test
+    public void calculateOffers_NotReachableRegion() {
+        Trader trader = traderService.get(4);
+        int traderSize = trader.getSize();
+
+        List<Offer> offers = traderService.calculateOffers(trader);
+
+        int offersAmount = 0;
+        for (Offer o : offers) {
+            offersAmount += o.getAmount();
+            Product p = o.getProduct();
+            assertFalse(p.getId() == 8);
+        }
+        assertTrue("TraderService didn't find a offer to suggest, update test data", offers.size() > 0);
+        assertTrue(offersAmount == traderSize);
+    }
 }

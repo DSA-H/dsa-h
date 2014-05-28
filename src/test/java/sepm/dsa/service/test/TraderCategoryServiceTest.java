@@ -34,10 +34,10 @@ public class TraderCategoryServiceTest extends AbstractDatabaseTest {
 
     @Test
     public void testRemove() throws Exception {
-        TraderCategory traderCategory = traderCategoryService.get(3);
+        TraderCategory traderCategory = traderCategoryService.get(5);
         traderCategoryService.remove(traderCategory);
 
-        TraderCategory cat = traderCategoryService.get(3);
+        TraderCategory cat = traderCategoryService.get(5);
 	    assertTrue(cat == null);
     }
 

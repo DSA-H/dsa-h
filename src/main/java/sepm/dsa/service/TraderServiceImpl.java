@@ -115,7 +115,7 @@ public class TraderServiceImpl implements TraderService {
                 for (RegionBorder border : borders) {
                     float x = border.getBorderCost()
                             / (800f - product.getAttribute().getProductTranporabilitySubtrahend());
-                    weight -= 1 - x;
+                    weight -= x;
                 }
                 weight *= (defaultOccurence / 100f);
 
@@ -155,10 +155,10 @@ public class TraderServiceImpl implements TraderService {
             // random quality distribution
             int amountQualities[] = new int[ProductQuality.values().length];
             if (product.getQuality()) {
-                double random = Math.random();
                 for (int i = 0; i < ammount; i++) {
                     int j = 0;
                     for (ProductQuality productQuality : ProductQuality.values()) {
+                        double random = Math.random();
                         if (random < productQuality.getQualityProbabilityValue()) {
                             amountQualities[j]++;
                             break;
