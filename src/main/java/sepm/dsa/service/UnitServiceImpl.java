@@ -17,14 +17,14 @@ import java.util.Set;
 
 @Transactional(readOnly = true)
 public class UnitServiceImpl implements UnitService {
-    private static final Logger log = LoggerFactory.getLogger(RegionServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(UnitServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
-    private UnitDao productUnitDao;
+    private UnitDao unitDao;
 
     @Override
     public Unit get(Integer id) {
         log.debug("calling get(" + id + ")");
-        Unit result = productUnitDao.get(id);
+        Unit result = unitDao.get(id);
         log.trace("returning " + result);
         return result;
     }
@@ -34,7 +34,7 @@ public class UnitServiceImpl implements UnitService {
     public int add(Unit p) {
         log.debug("calling add(" + p + ")");
         validate(p);
-        return productUnitDao.add(p);
+        return unitDao.add(p);
     }
 
     @Override
@@ -42,20 +42,20 @@ public class UnitServiceImpl implements UnitService {
     public void update(Unit p) {
         log.debug("calling update(" + p + ")");
         validate(p);
-        productUnitDao.update(p);
+        unitDao.update(p);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void remove(Unit p) {
         log.debug("calling remove(" + p + ")");
-        productUnitDao.remove(get(p.getId()));
+        unitDao.remove(get(p.getId()));
     }
 
     @Override
     public List<Unit> getAll() {
         log.debug("calling getAll()");
-        List<Unit> result = productUnitDao.getAll();
+        List<Unit> result = unitDao.getAll();
         log.trace("returning " + result);
         return result;
     }
@@ -70,12 +70,7 @@ public class UnitServiceImpl implements UnitService {
         return result;
     }
 
-    public void setProductDao(UnitDao productUnitDao) {
-        log.debug("calling setProductDao(" + productUnitDao + ")");
-        this.productUnitDao = productUnitDao;
-    }
-
-    /**
+     /**
      * Validates a product
      *
      * @param product
@@ -88,11 +83,8 @@ public class UnitServiceImpl implements UnitService {
         }
     }
 
-    public UnitDao getProductUnitDao() {
-        return productUnitDao;
-    }
-
-    public void setProductUnitDao(UnitDao productUnitDao) {
-        this.productUnitDao = productUnitDao;
+    public void setUnitDao(UnitDao unitDao) {
+        log.debug("calling setUnitTypeDao(" + unitDao + ")");
+        this.unitDao = unitDao;
     }
 }

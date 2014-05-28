@@ -34,7 +34,7 @@ public class Unit {
     @Column(nullable = false)
     private Double valueToBaseUnit;  // relative value to base unit
 
-    //exchange direkt im Modell
+    //TODO besprechen exchange direkt im Modell -> @Michael will das gerne
 
     public Integer getId() {
         return id;

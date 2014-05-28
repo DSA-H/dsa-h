@@ -3,7 +3,6 @@ package sepm.dsa.dao;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Unit;
 
@@ -14,7 +13,6 @@ import java.util.Vector;
 public class UnitDaoImpl implements UnitDao {
 
     private static final Logger log = LoggerFactory.getLogger(RegionDaoHbmImpl.class);
-
     private SessionFactory sessionFactory;
 
     @Override
@@ -55,7 +53,7 @@ public class UnitDaoImpl implements UnitDao {
     @Override
     public List<Unit> getAll() {
         log.debug("calling getAll()");
-        List<?> list = sessionFactory.getCurrentSession().getNamedQuery("ProductUnit.findAll").list();
+        List<?> list = sessionFactory.getCurrentSession().getNamedQuery("Unit.findAll").list();
 
         List<Unit> result = new Vector<>(list.size());
         for (Object o : list) {

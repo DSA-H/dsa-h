@@ -7,31 +7,31 @@ import java.util.List;
 
 public interface UnitService {
     /**
-     * Get a productcategory by its ID
+     * Get a Unit by its ID
      *
      * @param id the id
-     * @return the productcategory
+     * @return the Unit
      */
     Unit get(Integer id);
 
     /**
-     * Add a new productcategory to DB
+     * Add a new Unit to DB
      *
-     * @param p productcategory (not null)
+     * @param p Unit (not null)
      */
     int add(Unit p);
 
     /**
-     * Update a product
+     * Update a Unit
      *
-     * @param p product (not null)
+     * @param p Unit (not null)
      */
     void update(Unit p);
 
     /**
-     * Removes a productcategory from DB
+     * Removes a Unit from DB
      *
-     * @param p productcategory (not null)
+     * @param p Unit (not null)
      */
     void remove(Unit p);
 
@@ -41,12 +41,12 @@ public interface UnitService {
     List<Unit> getAll();
 
     /**
-     * Exchanges / converts from one to the other ProductUnit
+     * Exchanges / converts from one to the other Unit
      *
-     * @param from   the original Currency must not be null
-     * @param to     the foreign ProductUnit must not be null
-     * @param amount amount of from {@code Currency} to be exchanged
-     * @return the value / amount of the original ProductUnit expressed by / in the foreign ProductUnit
+     * @param from   the original Unit must not be null
+     * @param to     the foreign Unit must not be null
+     * @param amount amount of from {@code Unit} to be exchanged
+     * @return the value / amount of the original Unit expressed by / in the foreign Unit
      */
     UnitAmount exchange(Unit from, Unit to, Double amount);
 }

@@ -13,11 +13,11 @@ import static org.junit.Assert.*;
 public class UnitServiceTest extends AbstractDatabaseTest {
 
     @Autowired
-    private UnitService productUnitService;
+    private UnitService unitService;
 
     @Test
     public void testGet() throws Exception {
-        assertNotNull(productUnitService.get(1));
+        assertNotNull(unitService.get(1));
     }
 
     @Test
@@ -25,56 +25,61 @@ public class UnitServiceTest extends AbstractDatabaseTest {
         Unit kiloGramm = new Unit();
         kiloGramm.setName("Kilogramm");
         kiloGramm.setShortName("KG");
+
         UnitType gewicht = new UnitType();
         gewicht.setName("Gewicht");
-        gewicht.setBaseUnit(kiloGramm);
 
         kiloGramm.setUnitType(gewicht);
         kiloGramm.setValueToBaseUnit(Double.valueOf(1000));
 
-        productUnitService.add(kiloGramm);
+        unitService.add(kiloGramm);
         assertNotNull(kiloGramm.getId());
     }
 
     @Test
     public void testUpdate() throws Exception {
-        Unit p1 = new Unit();
-        p1.setName("foo 1");
-        p1.setValue(Double.valueOf(100));
-        p1.setUnitType("type45435");
-        productUnitService.add(p1);
+        Unit kiloGramm = new Unit();
+        kiloGramm.setName("Kilogramm");
+        kiloGramm.setShortName("KG");
 
-        Unit foundUnit = productUnitService.get(p1.getId());
+        UnitType gewicht = new UnitType();
+        gewicht.setName("Gewicht");
+
+        kiloGramm.setUnitType(gewicht);
+        kiloGramm.setValueToBaseUnit(Double.valueOf(1000));
+        unitService.add(kiloGramm);
+
+        Unit foundUnit = unitService.get(kiloGramm.getId());
         foundUnit.setName("fooasdfd");
-        productUnitService.update(foundUnit);
+        unitService.update(foundUnit);
 
-        assertEquals("fooasdfd", productUnitService.get(p1.getId()).getName());
+        assertEquals("fooasdfd", unitService.get(kiloGramm.getId()).getName());
     }
 
     @Test
     public void testRemove() throws Exception {
-        productUnitService.remove(productUnitService.get(1));
-        assertNull(productUnitService.get(1));
+        unitService.remove(unitService.get(1));
+        assertNull(unitService.get(1));
     }
 
     @Test
     public void testGetAll() throws Exception {
-        assertEquals(productUnitService.getAll().size(), 2);
+        assertEquals(unitService.getAll().size(), 2);
     }
 
     @Test
     public void testExchange() throws Exception {
 
-        Unit p1 = productUnitService.get(1);
-        Unit p2 = productUnitService.get(2);
+        Unit p1 = unitService.get(1);
+        Unit p2 = unitService.get(2);
 
         Double amount = new Double(100);
         UnitAmount result = new UnitAmount();
 
-        //exchange from c1 to c2 --> via base rate --> divide by first & multiply second
-        result.setAmount(amount * p2.getValue() / p1.getValue());
+        //exchange from p1 to p2 --> via base rate --> divide by first & multiply second
+        result.setAmount(amount * p2.getValueToBaseUnit() / p1.getValueToBaseUnit());
         result.setUnit(p2);
-
-        assertEquals(result, productUnitService.exchange(p1, p2, new Double(100)));
+        assertTrue(false); //todo check impl;
+        assertEquals(result, unitService.exchange(p1, p2, new Double(100)));
     }
 }
