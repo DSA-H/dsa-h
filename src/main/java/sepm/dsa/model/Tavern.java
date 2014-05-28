@@ -32,6 +32,8 @@ public class Tavern implements Serializable {
 	@Column(nullable = false)
 	private Integer usage;
 
+    //TODO: free beds, comment, ...
+
 	// @TODO ??
 //    private ??? overnightStayPrice;
 //    private DSADate onDate;
