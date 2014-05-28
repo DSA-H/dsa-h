@@ -26,8 +26,12 @@ public class UnitTypeDaoTest extends AbstractDatabaseTest {
 
     @Test
     public void testRemove() throws Exception {
-        unitTypeDao.remove(unitTypeDao.get(1));
-        assertNull(unitTypeDao.get(1));
+        UnitType unitType = new UnitType();
+        unitType.setName("fooRem");
+        unitTypeDao.add(unitType);
+
+        unitTypeDao.remove(unitType);
+        assertNull(unitTypeDao.get(unitType.getId()));
     }
 
     @Test

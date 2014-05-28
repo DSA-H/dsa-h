@@ -33,8 +33,12 @@ public class UnitTypeServiceTest extends AbstractDatabaseTest {
 
     @Test
     public void testRemove() throws Exception {
-        unitTypeService.remove(unitTypeService.get(1));
-        assertNull(unitTypeService.get(1));
+        UnitType unitType = new UnitType();
+        unitType.setName("fooRem");
+        unitTypeService.add(unitType);
+
+        unitTypeService.remove(unitType);
+        assertNull(unitTypeService.get(unitType.getId()));
     }
 
     @Test
