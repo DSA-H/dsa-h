@@ -131,6 +131,19 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
+    private void onCalculateCurrencyClicked(){
+        log.debug("onCalculateCurrencyClicked - open Calculate Currency Window");
+        Stage stage = new Stage();
+
+        Parent scene = (Parent) loader.load("/gui/calculatecurrency.fxml");
+
+        stage.setTitle("Währung umrechnen");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
     private void onExitClicked() {
         log.debug("onExitClicked - exit Programm Request");
         if (exitProgramm()) {

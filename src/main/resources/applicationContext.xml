@@ -263,4 +263,9 @@
         <property name="sessionFactory" ref="sessionFactory"/>
         <property name="currencyService" ref="currencyService"/>
     </bean>
+    <bean id="calculateCurrency" class="sepm.dsa.gui.CurrencyCalculateController">
+        <property name="loader" ref="loader"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="currencyService" ref="currencyService"/>
+    </bean>
 </beans>

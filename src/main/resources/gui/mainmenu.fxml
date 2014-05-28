@@ -32,6 +32,7 @@
                                 <MenuItem fx:id="verwaltenWaren" disable="false" mnemonicParsing="false" onAction="#onWarenClicked" text="Waren" />
                                 <MenuItem mnemonicParsing="false" onAction="#onShowLocationsClicked" text="Orte" />
                                 <MenuItem mnemonicParsing="false" onAction="#onTradersPressed" text="Händlerverwaltung" />
+                                <MenuItem fx:id="berechneWährung" disable="false" mnemonicParsing="false" onAction="#onCalculateCurrencyClicked" text="Währung umrechnen" />
                             </items>
                         </Menu>
                     </menus>
