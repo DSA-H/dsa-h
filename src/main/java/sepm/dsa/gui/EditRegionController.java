@@ -160,6 +160,9 @@ public class EditRegionController implements Initializable {
     @FXML
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
+
+        regionService.cancel();
+
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
 
@@ -212,6 +215,8 @@ public class EditRegionController implements Initializable {
         for (RegionBorder border : localBorderList) {
             regionBorderService.add(border);
         }
+
+        regionService.save();
 
         // return to regionlist
         Stage stage = (Stage) cancelButton.getScene().getWindow();

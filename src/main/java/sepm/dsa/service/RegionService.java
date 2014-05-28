@@ -40,4 +40,11 @@ public interface RegionService {
      * @return all entries, might be an empty list (not null)
      */
     List<Region> getAll();
+
+    void save();
+
+    void cancel();
+
+    void close();
+
 }

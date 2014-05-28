@@ -70,6 +70,21 @@ public class RegionServiceImpl implements RegionService {
         return result;
     }
 
+    @Override
+    public void save() {
+        log.info("calling save()");
+    }
+
+    @Override
+    public void cancel() {
+        log.info("calling cancel()");
+    }
+
+    @Override
+    public void close() {
+        log.info("calling close()");
+    }
+
     public void setRegionDao(RegionDao regionDao) {
         log.debug("calling setRegionDao(" + regionDao + ")");
         this.regionDao = regionDao;

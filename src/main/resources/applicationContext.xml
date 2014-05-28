@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/tx
-                           http://www.springframework.org/schema/tx/spring-tx.xsd">
+                           http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd" >
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.hsqldb.jdbc.JDBCDriver"/>
@@ -58,9 +61,18 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="javax.persistence.validation.mode">none</prop>
+                <prop key="hibernate.current_session_context_class">managed</prop>
             </props>
         </property>
     </bean>
+
+    <bean id="hbmConversationInterceptor" class="sepm.dsa.interceptor.HbmConversationInterceptor">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <aop:config>
+        <aop:advisor advice-ref="hbmConversationInterceptor" pointcut="within(sepm.dsa.service..*)" />
+    </aop:config>
 
     <bean id="loader" class="sepm.dsa.application.SpringFxmlLoader">
     </bean>
