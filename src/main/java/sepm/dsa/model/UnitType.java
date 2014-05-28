@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "UnitType")
+@Table(name = "unittypes")
 public class UnitType {
 
     @Id

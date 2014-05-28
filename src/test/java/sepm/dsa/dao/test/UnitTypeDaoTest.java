@@ -32,6 +32,6 @@ public class UnitTypeDaoTest extends AbstractDatabaseTest {
 
     @Test
     public void testGetAll() throws Exception {
-        assertEquals(unitTypeDao.getAll().size(), 2);
+        assertEquals(2, unitTypeDao.getAll().size());
     }
 }

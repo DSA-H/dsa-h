@@ -85,6 +85,8 @@
 
     <currencies id="1" name="firstCurrency" valueToBaseRate="3"/>
     <currencies id="2" name="secondCurrency" valueToBaseRate="2"/>
-    <productUnit id="1" name="foo333" unittype="unit1" value="3"/>
-    <productUnit id="2" name="foo444" unittype="unit2" value="4"/>
+    <units id="1" name="foo333" unittype="unit1" value="3"/>
+    <units id="2" name="foo444" unittype="unit2" value="4"/>
+    <unittypes id="1" name="erster"/>
+    <unittypes id="2" name="zweiter"/>
 </dataset>

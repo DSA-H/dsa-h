@@ -47,7 +47,6 @@
                 <value>sepm/dsa/model/hibernate/Location.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Product.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/ProductCategory.hbm.xml</value>
-                <value>sepm/dsa/model/hibernate/ProductUnit.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/AssortmentNature.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/LocationConnection.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Tavern.hbm.xml</value>
@@ -158,7 +157,7 @@
     </bean>
 
     <bean id="unitTypeService" class="sepm.dsa.service.UnitTypeServiceImpl">
-        <property name="unitTypeDao" ref="unitDao"/>
+        <property name="unitTypeDao" ref="unitTypeDao"/>
     </bean>
 
     <bean id="traderCategoryService" class="sepm.dsa.service.TraderCategoryServiceImpl">

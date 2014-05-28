@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "Unit")
+@Table(name = "units")
 public class Unit {
 
     @Id
@@ -27,7 +27,6 @@ public class Unit {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(nullable = false)
     private UnitType unitType;
 
     @NotNull
