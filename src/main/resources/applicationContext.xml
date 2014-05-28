@@ -242,6 +242,7 @@
     <bean id="editTavern" class="sepm.dsa.gui.EditTavernController">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
+        <property name="tavernService" ref="tavernService"/>
     </bean>
     <bean id="tavernList" class="sepm.dsa.gui.TavernListController">
         <property name="loader" ref="loader"/>

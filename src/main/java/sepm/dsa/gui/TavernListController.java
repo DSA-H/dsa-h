@@ -54,8 +54,8 @@ public class TavernListController implements Initializable {
                 new ChangeListener<Location>() {
                     @Override
                     public void changed(ObservableValue<? extends Location> selected, Location oldLoc, Location newLoc) {
-                        List<Trader> traders = tavernService.getAllForLocation((Location) locationBox.getSelectionModel().getSelectedItem());
-                        tavernList.setItems(FXCollections.observableArrayList(traders));
+                        //List<Tavern> taverns = tavernService.getAllForLocation((Location) locationBox.getSelectionModel().getSelectedItem());
+                        //tavernList.setItems(FXCollections.observableArrayList(taverns));
                         checkFocus();
                     }
                 }
@@ -63,8 +63,8 @@ public class TavernListController implements Initializable {
         tavernList.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Trader>() {
                     @Override
-                    public void changed(ObservableValue<? extends Trader> selected, Trader oldTra, Trader newTra) {
-                        selectedTavern = newTra;
+                    public void changed(ObservableValue<? extends Trader> selected, Trader oldTavern, Trader newTavern) {
+                        selectedTavern = newTavern;
                         if (selectedTavern == null) {
                             editButton.setDisable(true);
                             deleteButton.setDisable(true);
@@ -82,9 +82,9 @@ public class TavernListController implements Initializable {
         log.debug("called onCreateButtonPressed");
 
         Stage stage = (Stage) locationBox.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
-        EditTraderController controller = loader.getController();
-        controller.setTrader(null);
+        Parent scene = (Parent) loader.load("/gui/edittavern.fxml");
+        EditTavernController controller = loader.getController();
+        controller.setTavern(null);
         stage.setScene(new Scene(scene, 600, 400));
     }
 
