@@ -2,19 +2,18 @@ package sepm.dsa.service.test;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import sepm.dsa.dao.UnitAmount;
 import sepm.dsa.dbunit.AbstractDatabaseTest;
-import sepm.dsa.model.ProductUnit;
-import sepm.dsa.service.ProductUnitService;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import sepm.dsa.model.Unit;
+import sepm.dsa.model.UnitType;
+import sepm.dsa.service.UnitService;
 
 import static org.junit.Assert.*;
 
-public class ProductUnitServiceTest extends AbstractDatabaseTest {
+public class UnitServiceTest extends AbstractDatabaseTest {
 
     @Autowired
-    private ProductUnitService productUnitService;
+    private UnitService productUnitService;
 
     @Test
     public void testGet() throws Exception {
@@ -23,23 +22,29 @@ public class ProductUnitServiceTest extends AbstractDatabaseTest {
 
     @Test
     public void testAdd() throws Exception {
-        ProductUnit p1 = new ProductUnit();
-        p1.setName("foo 1");
-        p1.setValue(BigDecimal.valueOf(100));
-        p1.setUnitType("type45435");
-        productUnitService.add(p1);
-        assertNotNull(p1.getId());
+        Unit kiloGramm = new Unit();
+        kiloGramm.setName("Kilogramm");
+        kiloGramm.setShortName("KG");
+        UnitType gewicht = new UnitType();
+        gewicht.setName("Gewicht");
+        gewicht.setBaseUnit(kiloGramm);
+
+        kiloGramm.setUnitType(gewicht);
+        kiloGramm.setValueToBaseUnit(Double.valueOf(1000));
+
+        productUnitService.add(kiloGramm);
+        assertNotNull(kiloGramm.getId());
     }
 
     @Test
     public void testUpdate() throws Exception {
-        ProductUnit p1 = new ProductUnit();
+        Unit p1 = new Unit();
         p1.setName("foo 1");
-        p1.setValue(BigDecimal.valueOf(100));
+        p1.setValue(Double.valueOf(100));
         p1.setUnitType("type45435");
         productUnitService.add(p1);
 
-        ProductUnit foundUnit = productUnitService.get(p1.getId());
+        Unit foundUnit = productUnitService.get(p1.getId());
         foundUnit.setName("fooasdfd");
         productUnitService.update(foundUnit);
 
@@ -60,16 +65,16 @@ public class ProductUnitServiceTest extends AbstractDatabaseTest {
     @Test
     public void testExchange() throws Exception {
 
-        ProductUnit p1 = productUnitService.get(1);
-        ProductUnit p2 = productUnitService.get(2);
+        Unit p1 = productUnitService.get(1);
+        Unit p2 = productUnitService.get(2);
 
-        BigDecimal amount = new BigDecimal(100);
-        ProductUnit result = new ProductUnit();
+        Double amount = new Double(100);
+        UnitAmount result = new UnitAmount();
 
         //exchange from c1 to c2 --> via base rate --> divide by first & multiply second
-        result.setValue(amount.multiply(p2.getValue()).divide(p1.getValue(), 4, RoundingMode.HALF_UP));
-        result.setUnitType(p2.getUnitType());
+        result.setAmount(amount * p2.getValue() / p1.getValue());
+        result.setUnit(p2);
 
-        assertEquals(result, productUnitService.exchange(p1, p2, new BigDecimal(100)));
+        assertEquals(result, productUnitService.exchange(p1, p2, new Double(100)));
     }
 }

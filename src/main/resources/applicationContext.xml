@@ -32,7 +32,7 @@
                 <value>sepm.dsa.model.Location</value>
                 <value>sepm.dsa.model.LocationConnection</value>
                 <value>sepm.dsa.model.Tavern</value>
-                <value>sepm.dsa.model.ProductUnit</value>
+                <value>sepm.dsa.model.Unit</value>
                 <value>sepm.dsa.model.Currency</value>
             </list>
         </property>
@@ -102,7 +102,7 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="productUnitDao" class="sepm.dsa.dao.ProductUnitDaoHbmImpl">
+    <bean id="productUnitDao" class="sepm.dsa.dao.UnitDao">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
     <bean id="currencyDao" class="sepm.dsa.dao.CurrencyDaoImpl">
@@ -145,7 +145,7 @@
         <property name="productCategoryDao" ref="productCategoryDao"/>
     </bean>
 
-    <bean id="productUnitService" class="sepm.dsa.service.ProductUnitServiceImpl">
+    <bean id="productUnitService" class="sepm.dsa.service.UnitServiceImpl">
         <property name="productUnitDao" ref="productUnitDao"/>
     </bean>
 

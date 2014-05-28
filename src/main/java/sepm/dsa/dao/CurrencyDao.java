@@ -38,7 +38,7 @@ public interface CurrencyDao {
     /**
      * Finds all Currencies
      *
-     * @return the currencies or empty list of no currencies exist (not null)
+     * @return the currencies or empty list if no currencies exist (not null)
      */
     List<Currency> getAll();
 }
