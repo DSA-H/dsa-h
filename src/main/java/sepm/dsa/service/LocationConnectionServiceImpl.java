@@ -30,7 +30,7 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
     @Transactional(readOnly = false)
     @Override
     public void add(LocationConnection locationConnection) {
-        log.debug("calling add(" + locationConnection + ")");
+        log.debug("calling addConnection(" + locationConnection + ")");
         if (get(locationConnection.getLocation1(), locationConnection.getLocation2()) != null) {
             throw new DSAAlreadyExistsException();
         }
@@ -52,10 +52,10 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
     @Transactional(readOnly = false)
     @Override
     public void remove(LocationConnection locationConnection) {
-        log.debug("calling remove(" + locationConnection + ")");
+        log.debug("calling removeConnection(" + locationConnection + ")");
         LocationConnection trueConn = locationConnectionDao.get(locationConnection.getLocation1(), locationConnection.getLocation2());
         if (trueConn != null) {
-            log.debug(" really remove " + trueConn);
+            log.debug(" really removeConnection " + trueConn);
             locationConnectionDao.remove(trueConn);
         }
         log.info("removed " + trueConn);

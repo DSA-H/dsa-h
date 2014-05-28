@@ -21,17 +21,17 @@ public class LocationConnectionDaoHbmImpl implements LocationConnectionDao {
     @Transactional(readOnly = false)
     @Override
     public void add(LocationConnection locationConnection) {
-        log.debug("calling add(" + locationConnection + ")");
+        log.debug("calling addConnection(" + locationConnection + ")");
         sessionFactory.getCurrentSession().save(locationConnection);
-        sessionFactory.getCurrentSession().flush();
+        locationConnection.getLocation1().addConnection(locationConnection);
+        locationConnection.getLocation2().addConnection(locationConnection);
     }
 
     @Transactional(readOnly = false)
     @Override
     public void update(LocationConnection locationConnection) {
         log.debug("calling update(" + locationConnection + ")");
-        sessionFactory.getCurrentSession().merge(locationConnection);       // previously: update
-        sessionFactory.getCurrentSession().flush();
+        sessionFactory.getCurrentSession().update(locationConnection);       // previously: update
     }
 
     @Transactional(readOnly = false)
@@ -39,7 +39,10 @@ public class LocationConnectionDaoHbmImpl implements LocationConnectionDao {
     public void remove(LocationConnection locationConnection) {
         log.debug("calling delete(" + locationConnection + ")");
         sessionFactory.getCurrentSession().delete(locationConnection);
-        sessionFactory.getCurrentSession().flush();
+        locationConnection.getLocation1().removeConnection(locationConnection);
+        locationConnection.getLocation2().removeConnection(locationConnection);
+//        sessionFactory.getCurrentSession().refresh(locationConnection.getLocation1());
+//        sessionFactory.getCurrentSession().refresh(locationConnection.getLocation2());
     }
 
     @Override

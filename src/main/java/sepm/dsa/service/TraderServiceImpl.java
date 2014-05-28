@@ -41,7 +41,7 @@ public class TraderServiceImpl implements TraderService {
     @Override
     @Transactional(readOnly = false)
     public void add(Trader t) {
-        log.debug("calling add(" + t + ")");
+        log.debug("calling addConnection(" + t + ")");
         validate(t);
         traderDao.add(t);
         HashSet<Offer> offers = new HashSet<>(calculateOffers(t));
@@ -61,7 +61,7 @@ public class TraderServiceImpl implements TraderService {
     @Override
     @Transactional(readOnly = false)
     public void remove(Trader t) {
-        log.debug("calling remove(" + t + ")");
+        log.debug("calling removeConnection(" + t + ")");
         traderDao.remove(t);
     }
 

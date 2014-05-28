@@ -26,9 +26,19 @@ public class LocationServiceImpl implements LocationService {
     private TraderService traderService;
 
     @Override
+    public void save() {
+        log.info("calling save()");
+    }
+
+    @Override
+    public void cancel() {
+        log.info("calling cancel()");
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public void add(Location location) {
-        log.debug("calling add(" + location + ")");
+        log.debug("calling addConnection(" + location + ")");
         validate(location);
         locationDao.add(location);
     }
@@ -52,10 +62,10 @@ public class LocationServiceImpl implements LocationService {
     @Override
     @Transactional(readOnly = false)
     public void remove(Location location) {
-        log.debug("calling remove(" + location + ")");
+        log.debug("calling removeConnection(" + location + ")");
 //        List<Trader> tradersInTown = traderService.getAllForLocation(location);
 
-//        tradersInTown.forEach(traderService::remove);
+//        tradersInTown.forEach(traderService::removeConnection);
 
         locationDao.remove(location);
     }

@@ -35,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = false)
     public void add(Product p) {
-        log.debug("calling add(" + p + ")");
+        log.debug("calling addConnection(" + p + ")");
         validate(p);
         productDao.add(p);
     }
@@ -51,8 +51,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = false)
     public void remove(Product p) {
-        log.debug("calling remove(" + p + ")");
-        //productDao.remove(get(p.getId()));
+        log.debug("calling removeConnection(" + p + ")");
+        //productDao.removeConnection(get(p.getId()));
         productDao.remove(p);
     }
 

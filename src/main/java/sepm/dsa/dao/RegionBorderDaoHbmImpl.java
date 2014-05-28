@@ -21,7 +21,7 @@ public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
     @Override
     @Transactional(readOnly = false)
     public void add(RegionBorder regionBorder) {
-        log.debug("calling add(" + regionBorder + ")");
+        log.debug("calling addConnection(" + regionBorder + ")");
         sessionFactory.getCurrentSession().save(regionBorder);
     }
 
@@ -35,7 +35,7 @@ public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
     @Override
     @Transactional(readOnly = false)
     public void remove(RegionBorder regionBorder) {
-        log.debug("calling remove(" + regionBorder + ")");
+        log.debug("calling removeConnection(" + regionBorder + ")");
         sessionFactory.getCurrentSession().delete(regionBorder);
     }
 

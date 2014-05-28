@@ -26,7 +26,7 @@ public class RegionBorderServiceImpl implements RegionBorderService {
     @Override
     @Transactional(readOnly = false)
     public void add(RegionBorder regionBorder) {
-        log.debug("calling add(" + regionBorder + ")");
+        log.debug("calling addConnection(" + regionBorder + ")");
         validate(regionBorder);
         regionBorderDao.add(regionBorder);
     }
@@ -42,7 +42,7 @@ public class RegionBorderServiceImpl implements RegionBorderService {
     @Override
     @Transactional(readOnly = false)
     public void remove(RegionBorder regionBorder) {
-        log.debug("calling remove(" + regionBorder + ")");
+        log.debug("calling removeConnection(" + regionBorder + ")");
         regionBorderDao.remove(regionBorder);
     }
 

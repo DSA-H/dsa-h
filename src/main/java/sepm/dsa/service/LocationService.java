@@ -50,4 +50,9 @@ public interface LocationService {
      * @return a list of locations in the region, or an emtpy list if no location is in the region (not null)
      */
     public List<Location> getAllByRegion(int regionId);
+
+    void save();
+
+    void cancel();
+
 }

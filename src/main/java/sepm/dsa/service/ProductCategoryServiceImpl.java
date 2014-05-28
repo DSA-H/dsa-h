@@ -35,7 +35,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Override
     @Transactional(readOnly = false)
     public int add(ProductCategory p) {
-        log.debug("calling add(" + p + ")");
+        log.debug("calling addConnection(" + p + ")");
         validate(p);
         return productCategoryDao.add(p);
     }
@@ -51,7 +51,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Override
     @Transactional(readOnly = false)
     public void remove(ProductCategory p) {
-        log.debug("calling remove(" + p + ")");
+        log.debug("calling removeConnection(" + p + ")");
         p = get(p.getId());
         productCategoryDao.remove(p);
         for (Product product : p.getProducts()) {

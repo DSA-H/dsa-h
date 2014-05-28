@@ -36,7 +36,7 @@ public class RegionServiceImpl implements RegionService {
     @Override
     @Transactional(readOnly = false)
     public void add(Region r) {
-        log.info("calling add(" + r + ")");
+        log.info("calling addConnection(" + r + ")");
         validate(r);
         regionDao.add(r);
     }
@@ -52,12 +52,12 @@ public class RegionServiceImpl implements RegionService {
     @Override
     @Transactional(readOnly = false)
     public void remove(Region r) {
-        log.info("calling remove(" + r + ")");
+        log.info("calling removeConnection(" + r + ")");
 //        List<RegionBorder> borders = regionBorderDao.getAllByRegion(r.getId());
 //        List<Location> locations = locationService.getAllByRegion(r.getId());
 
-//        borders.forEach(regionBorderDao::remove);
-//        locations.forEach(locationService::remove);
+//        borders.forEach(regionBorderDao::removeConnection);
+//        locations.forEach(locationService::removeConnection);
 
         regionDao.remove(r);
     }
@@ -78,11 +78,6 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public void cancel() {
         log.info("calling cancel()");
-    }
-
-    @Override
-    public void close() {
-        log.info("calling close()");
     }
 
     public void setRegionDao(RegionDao regionDao) {

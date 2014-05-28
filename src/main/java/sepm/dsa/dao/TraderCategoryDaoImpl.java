@@ -23,7 +23,7 @@ public class TraderCategoryDaoImpl implements TraderCategoryDao {
     @Override
     @Transactional(readOnly = false)
     public void add(TraderCategory traderCategory) {
-        log.debug("calling add(" + traderCategory + ")");
+        log.debug("calling addConnection(" + traderCategory + ")");
         sessionFactory.getCurrentSession().save(traderCategory);
     }
 
@@ -37,7 +37,7 @@ public class TraderCategoryDaoImpl implements TraderCategoryDao {
     @Override
     @Transactional(readOnly = false)
     public void remove(TraderCategory traderCategory) throws DSAValidationException {
-        log.debug("calling remove(" + traderCategory + ")");
+        log.debug("calling removeConnection(" + traderCategory + ")");
 
         List<Trader> traders = traderDao.getAllByCategory(traderCategory);
         if (traders.isEmpty()) {

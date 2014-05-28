@@ -36,7 +36,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     @Transactional(readOnly = false)
     public void add(Currency r) {
-        log.debug("calling add(" + r + ")");
+        log.debug("calling addConnection(" + r + ")");
         validate(r);
         currencyDao.add(r);
     }
@@ -52,7 +52,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     @Transactional(readOnly = false)
     public void remove(Currency r) {
-        log.debug("calling remove(" + r + ")");
+        log.debug("calling removeConnection(" + r + ")");
         currencyDao.remove(r);
     }
 

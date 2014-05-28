@@ -23,7 +23,7 @@ public class TraderDaoHbmImpl implements TraderDao {
     @Override
     @Transactional(readOnly = false)
     public void add(Trader trader) {
-        log.debug("calling add(" + trader + ")");
+        log.debug("calling addConnection(" + trader + ")");
         sessionFactory.getCurrentSession().save(trader);
     }
 
@@ -37,7 +37,7 @@ public class TraderDaoHbmImpl implements TraderDao {
     @Override
     @Transactional(readOnly = false)
     public void remove(Trader trader) {
-        log.debug("calling remove(" + trader + ")");
+        log.debug("calling removeConnection(" + trader + ")");
         sessionFactory.getCurrentSession().delete(trader);
     }
 

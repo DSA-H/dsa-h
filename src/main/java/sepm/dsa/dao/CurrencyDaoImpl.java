@@ -18,7 +18,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
     @Override
     @Transactional(readOnly = false)
     public void add(Currency currency) {
-        log.debug("calling add(" + currency + ")");
+        log.debug("calling addConnection(" + currency + ")");
         sessionFactory.getCurrentSession().save(currency);
     }
 
@@ -32,7 +32,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
     @Override
     @Transactional(readOnly = false)
     public void remove(Currency currency) {
-        log.debug("calling remove(" + currency + ")");
+        log.debug("calling removeConnection(" + currency + ")");
         sessionFactory.getCurrentSession().delete(currency);
     }
 

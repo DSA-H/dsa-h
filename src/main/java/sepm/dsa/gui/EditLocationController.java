@@ -122,7 +122,7 @@ public class EditLocationController implements Initializable {
 
         // init region choice box
         List<Region> otherRegions = regionService.getAll();
-//        otherRegions.remove(selectedLocation.getRegion());
+//        otherRegions.removeConnection(selectedLocation.getRegion());
         regionChoiceBox.setItems(FXCollections.observableArrayList(otherRegions));
 
         travelTimeColumn.setCellValueFactory(new PropertyValueFactory<>("travelTime"));
@@ -185,13 +185,18 @@ public class EditLocationController implements Initializable {
     @FXML
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
+        locationService.cancel();
+        log.info("before: connections.size=" + selectedLocation.getAllConnections().size());
+        selectedLocation = locationService.get(selectedLocation.getId());
+        log.info("after: connections.size=" + selectedLocation.getAllConnections().size());
+
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/locationlist.fxml");
 
         stage.setScene(new Scene(scene, 600, 438));
     }
 
-    private void saveLocation() {
+    private void applyLocationChanges() {
         // save region
         String name = nameField.getText();
         Weather weather = Weather.parse(weatherChoiceBox.getSelectionModel().getSelectedIndex());
@@ -229,22 +234,25 @@ public class EditLocationController implements Initializable {
         }
 
         if (isNewLocation) {
-            log.info("add location");
+            log.info("addConnection location");
             locationService.add(selectedLocation);
         } else {
             log.info("update location");
             locationService.update(selectedLocation);
         }
 
-        selectedLocation = locationService.get(selectedLocation.getId());
+        log.info("selectedLocation.id = " + selectedLocation.getId());
+//        selectedLocation = locationService.get(selectedLocation.getId());
+
     }
 
     @FXML
     private void onSavePressed() {
         log.debug("calling SaveButtonPressed");
 
-        saveLocation();
+        applyLocationChanges();
 
+        locationService.save();
 //        locationService.update(selectedLocation);
 
 
@@ -297,7 +305,7 @@ public class EditLocationController implements Initializable {
     public void onEditConnectionsClicked() {
         log.debug("calling onEditConnectionsClicked");
 
-        saveLocation();
+        applyLocationChanges();
 
         EditLocationConnectionsController.setSelectedLocation(selectedLocation);
 
@@ -335,10 +343,10 @@ public class EditLocationController implements Initializable {
 //        ArrayList<String> errorMsgs = new ArrayList<>();
 //        for (LocationConnection c : suggestedConnections) {
 //            try {
-//                locationConnectionService.add(c);
-//                locationConnectionsTable.getItems().add(c);
+//                locationConnectionService.addConnection(c);
+//                locationConnectionsTable.getItems().addConnection(c);
 //            } catch (DSARuntimeException ex) {
-//                errorMsgs.add(ex.getMessage());
+//                errorMsgs.addConnection(ex.getMessage());
 //            }
 //        }
 //        if (errorMsgs.size() > 0) {
@@ -359,8 +367,8 @@ public class EditLocationController implements Initializable {
 //    @FXML
 //    public void onRemoveConnectionBtnClicked() {
 //        LocationConnection selected = locationConnectionsTable.getSelectionModel().getSelectedItem();
-//        locationConnectionService.remove(selected);
-//        locationConnectionsTable.getItems().remove(selected);
+//        locationConnectionService.removeConnection(selected);
+//        locationConnectionsTable.getItems().removeConnection(selected);
 //    }
 
 //    public void setLocationConnectionService(LocationConnectionService locationConnectionService) {

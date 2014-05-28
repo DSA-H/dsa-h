@@ -33,7 +33,7 @@ public class ProductUnitServiceImpl implements ProductUnitService {
     @Override
     @Transactional(readOnly = false)
     public int add(ProductUnit p) {
-        log.debug("calling add(" + p + ")");
+        log.debug("calling addConnection(" + p + ")");
         validate(p);
         return productUnitDao.add(p);
     }
@@ -49,7 +49,7 @@ public class ProductUnitServiceImpl implements ProductUnitService {
     @Override
     @Transactional(readOnly = false)
     public void remove(ProductUnit p) {
-        log.debug("calling remove(" + p + ")");
+        log.debug("calling removeConnection(" + p + ")");
         productUnitDao.remove(get(p.getId()));
     }
 

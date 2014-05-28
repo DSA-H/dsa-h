@@ -17,7 +17,7 @@ public class Location implements Serializable {
     private static final long serialVersionUID = 1616654812413948966L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 
@@ -63,10 +63,10 @@ public class Location implements Serializable {
     @Column(nullable = true, length = 1000)
     private String comment;
 
-    @OneToMany(mappedBy = "pk.location1", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "pk.location1", fetch = FetchType.LAZY)
     private Set<LocationConnection> connections1 = new HashSet<>();
 
-    @OneToMany(mappedBy = "pk.location2", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "pk.location2", fetch = FetchType.LAZY)
     private Set<LocationConnection> connections2 = new HashSet<>();
 
     @OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) // no getter+setter to avoid lazy loading exceptions :)
@@ -181,6 +181,19 @@ public class Location implements Serializable {
         result.addAll(connections1);
         result.addAll(connections2);
         return result;
+    }
+
+    public void addConnection(LocationConnection locationConnection) {
+        if (this.equals(locationConnection.getLocation1())) {
+            connections1.add(locationConnection);
+        } else if (this.equals(locationConnection.getLocation2())) {
+            connections2.add(locationConnection);
+        }
+    }
+
+    public void removeConnection(LocationConnection locationConnection) {
+        connections1.remove(locationConnection);
+        connections2.remove(locationConnection);
     }
 
     public boolean equalsByPk(Location location) {

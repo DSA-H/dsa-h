@@ -24,7 +24,7 @@ public class ProductCategoryDaoHbmImpl implements ProductCategoryDao {
     @Override
     @Transactional(readOnly = false)
     public int add(ProductCategory category) {
-        log.debug("calling add(" + category + ")");
+        log.debug("calling addConnection(" + category + ")");
         sessionFactory.getCurrentSession().save(category);
         return category.getId();
     }
@@ -39,7 +39,7 @@ public class ProductCategoryDaoHbmImpl implements ProductCategoryDao {
     @Override
     @Transactional(readOnly = false)
     public void remove(ProductCategory category) {
-        log.debug("calling remove(" + category + ")");
+        log.debug("calling removeConnection(" + category + ")");
         sessionFactory.getCurrentSession().delete(category);
     }
 

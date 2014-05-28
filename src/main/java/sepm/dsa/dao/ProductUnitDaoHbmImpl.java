@@ -24,7 +24,7 @@ public class ProductUnitDaoHbmImpl implements ProductUnitDao {
     @Override
     @Transactional(readOnly = false)
     public int add(ProductUnit Unit) {
-        log.debug("calling add(" + Unit + ")");
+        log.debug("calling addConnection(" + Unit + ")");
         sessionFactory.getCurrentSession().save(Unit);
         return Unit.getId();
     }
@@ -39,7 +39,7 @@ public class ProductUnitDaoHbmImpl implements ProductUnitDao {
     @Override
     @Transactional(readOnly = false)
     public void remove(ProductUnit Unit) {
-        log.debug("calling remove(" + Unit + ")");
+        log.debug("calling removeConnection(" + Unit + ")");
         sessionFactory.getCurrentSession().delete(Unit);
     }
 

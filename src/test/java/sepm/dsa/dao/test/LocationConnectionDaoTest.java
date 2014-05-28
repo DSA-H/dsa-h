@@ -64,7 +64,7 @@ public class LocationConnectionDaoTest extends AbstractDatabaseTest {
 //        Location location2 = locationService.get(4);    //swapped 1 and 2
 //        locationConnection.setLocation1(location1);
 //        locationConnection.setLocation2(location2);
-//        locationConnectionDao.remove(locationConnection);
+//        locationConnectionDao.removeConnection(locationConnection);
 //        int sizeNow = locationConnectionDao.getAll().size();
 //        assertEquals(sizeBefore - 1, sizeNow);
 //        assertNull(locationConnectionDao.get(location1, location2));

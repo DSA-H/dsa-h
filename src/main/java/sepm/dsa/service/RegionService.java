@@ -45,6 +45,4 @@ public interface RegionService {
 
     void cancel();
 
-    void close();
-
 }

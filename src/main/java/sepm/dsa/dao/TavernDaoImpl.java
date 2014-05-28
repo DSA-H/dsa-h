@@ -17,7 +17,7 @@ public class TavernDaoImpl implements TavernDao {
     @Override
     @Transactional(readOnly = false)
     public void add(Tavern tavern) {
-        log.debug("calling add(" + tavern + ")");
+        log.debug("calling addConnection(" + tavern + ")");
         sessionFactory.getCurrentSession().save(tavern);
     }
 
@@ -29,7 +29,7 @@ public class TavernDaoImpl implements TavernDao {
 
     @Override
     public void remove(Tavern tavern) {
-        log.debug("calling remove(" + tavern + ")");
+        log.debug("calling removeConnection(" + tavern + ")");
         sessionFactory.getCurrentSession().delete(tavern);
     }
 

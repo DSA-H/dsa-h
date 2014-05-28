@@ -18,7 +18,7 @@ public class RegionDaoHbmImpl implements RegionDao {
     @Override
     @Transactional(readOnly = false)
     public void add(Region region) {
-        log.debug("calling add(" + region + ")");
+        log.debug("calling addConnection(" + region + ")");
         sessionFactory.getCurrentSession().save(region);
     }
 
@@ -32,7 +32,7 @@ public class RegionDaoHbmImpl implements RegionDao {
     @Override
     @Transactional(readOnly = false)
     public void remove(Region region) {
-        log.debug("calling remove(" + region + ")");
+        log.debug("calling removeConnection(" + region + ")");
         sessionFactory.getCurrentSession().delete(region);
     }
 

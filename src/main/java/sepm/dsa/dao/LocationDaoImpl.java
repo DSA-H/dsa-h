@@ -21,7 +21,7 @@ public class LocationDaoImpl implements LocationDao {
     @Override
     @Transactional(readOnly = false)
     public void add(Location location) {
-        log.debug("calling add(" + location + ")");
+        log.debug("calling addConnection(" + location + ")");
         sessionFactory.getCurrentSession().save(location);
     }
 
@@ -51,7 +51,7 @@ public class LocationDaoImpl implements LocationDao {
     @Override
     @Transactional(readOnly = false)
     public void remove(Location location) {
-        log.debug("calling remove(" + location + ")");
+        log.debug("calling removeConnection(" + location + ")");
         sessionFactory.getCurrentSession().delete(location);
     }
 

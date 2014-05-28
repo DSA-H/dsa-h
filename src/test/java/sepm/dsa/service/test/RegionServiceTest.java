@@ -74,8 +74,8 @@ public class RegionServiceTest extends AbstractDatabaseTest {
 //        regionBorder1.setBorderCost(8);
 //        regionBorder1.setRegion1(addRegion2);
 //        regionBorder1.setRegion2(addRegion3);
-//        addRegion2.getBorders1().add(regionBorder1);
-//        addRegion3.getBorders2().add(regionBorder1);
+//        addRegion2.getBorders1().addConnection(regionBorder1);
+//        addRegion3.getBorders2().addConnection(regionBorder1);
     }
 
     @Test
@@ -115,14 +115,14 @@ public class RegionServiceTest extends AbstractDatabaseTest {
         // must exist
         rs.add(addRegion2);
 
-        // add region border
+        // addConnection region border
         RegionBorder regionBorder1 = new RegionBorder();
         regionBorder1.setBorderCost(8);
         addRegion3.getBorders2().add(regionBorder1);
         regionBorder1.setRegion1(addRegion2);
         regionBorder1.setRegion2(addRegion3);
 
-        // now add the region
+        // now addConnection the region
         rs.add(addRegion3);
 
         List<Region> listLater = rs.getAll();
