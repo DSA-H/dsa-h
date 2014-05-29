@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @Table(name = "traders")
 public class Trader implements Serializable {

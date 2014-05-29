@@ -34,6 +34,7 @@
                 <value>sepm.dsa.model.Tavern</value>
                 <value>sepm.dsa.model.ProductUnit</value>
                 <value>sepm.dsa.model.Currency</value>
+                <value>sepm.dsa.model.MovingTrader</value>
             </list>
         </property>
         <property name="mappingResources">

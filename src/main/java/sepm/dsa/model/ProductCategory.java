@@ -36,7 +36,7 @@ public class ProductCategory implements Serializable {
             inverseJoinColumns = { @JoinColumn(name = "productId") })
     private Set<Product> products = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+/*    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "productcategory_id", nullable = false)
     private Set<AssortmentNature> assortmentNatures = new HashSet<>();
 
@@ -46,7 +46,7 @@ public class ProductCategory implements Serializable {
 
     public void setAssortmentNatures(Set<AssortmentNature> assortmentNatures) {
         this.assortmentNatures = assortmentNatures;
-    }
+    }*/
 
     public Integer getId() {
         return id;

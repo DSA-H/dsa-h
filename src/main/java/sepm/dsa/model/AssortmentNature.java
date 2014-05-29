@@ -17,6 +17,12 @@ public class AssortmentNature implements Serializable {
     @Column(nullable = false, unique = true)
     private Integer id;
 
+    @NotNull
+    @Min(value = 1)
+    @Max(value = 100)
+    @Column(nullable = false)
+    private Integer defaultOccurence;
+
     @ManyToOne
     @JoinColumn(name = "productcategory_id", nullable = false, insertable=false, updatable=false)
     private ProductCategory productCategory;
@@ -25,28 +31,6 @@ public class AssortmentNature implements Serializable {
     @JoinColumn(name = "tradercategory_id", nullable = false, insertable = false, updatable = false)
     private TraderCategory traderCategory;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        AssortmentNature that = (AssortmentNature) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
-
-    @NotNull
-    @Min(value = 1)
-    @Max(value = 100)
-    @Column(nullable = false)
-    private Integer defaultOccurence;
 
     public Integer getId() {
         return id;
