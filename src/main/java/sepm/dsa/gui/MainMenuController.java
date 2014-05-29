@@ -54,6 +54,7 @@ public class MainMenuController implements Initializable {
 	private double scrollPositionX;
 	private double scrollPositionY;
 	private Location selectedLocation;
+	private Trader selectedTrader;
 	private int mode;   // 0..worldMode(default) 1..locationMode
 
 	@FXML
@@ -150,14 +151,42 @@ public class MainMenuController implements Initializable {
 			}
 		});
 
+		traderList.getFocusModel().focusedItemProperty().addListener(new ChangeListener() {
+			@Override
+			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				selectedTrader = (Trader) traderList.getFocusModel().getFocusedItem();
+				if (selectedTrader == null) {
+					deleteButton.setDisable(true);
+					editButton.setDisable(true);
+					chooseButton.setDisable(true);
+				} else {
+					deleteButton.setDisable(false);
+					editButton.setDisable(false);
+					chooseButton.setDisable(false);
+				}
+			}
+		});
+
 		mode = 0;
 	}
 
 	private void changeMode() {
+		if (selectedLocation == null) {
+			Dialogs.create()
+					.title("Fehler")
+					.masthead(null)
+					.message("Es muss ein Ort ausgewählt sein!")
+					.showWarning();
+			return;
+		}
 		if (mode == 0) {
 			mode = 1;
 			locationTable.setVisible(false);
 			traderList.setVisible(true);
+
+			selectedTrader = null;
+			deleteButton.setDisable(true);
+			editButton.setDisable(true);
 
 			ObservableList<Trader> data = FXCollections.observableArrayList(traderService.getAllForLocation(selectedLocation));
 			traderList.setItems(data);
