@@ -186,9 +186,7 @@ public class EditLocationController implements Initializable {
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/locationlist.fxml");
-
-        stage.setScene(new Scene(scene, 600, 438));
+	    stage.close();
     }
 
     private void saveLocation() {
@@ -245,16 +243,13 @@ public class EditLocationController implements Initializable {
 
         saveLocation();
 
+
 //        locationService.update(selectedLocation);
 
 
         // return to locationlist
         Stage stage = (Stage) cancelButton.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/locationlist.fxml");
-
-
-        //TODO ist das so gut immer eine NEUE scene zu öffnen?
-        stage.setScene(new Scene(scene, 600, 438));
+	    stage.close();
     }
 
     @FXML

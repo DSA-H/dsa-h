@@ -164,6 +164,8 @@
     <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController">
 	    <property name="loader" ref="loader"/>
         <property name="mapService" ref="mapService"/>
+        <property name="locationService" ref="locationService"/>
+        <property name="traderService" ref="traderService"/>
     </bean>
 
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">

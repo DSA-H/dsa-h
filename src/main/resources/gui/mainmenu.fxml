@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.MainMenuController">
-<top><Pane prefHeight="608.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+<bottom><Pane prefHeight="608.0" prefWidth="800.0" BorderPane.alignment="CENTER">
 <children>
         <MenuBar fx:id="menuBar" prefHeight="25.0" prefWidth="800.0" BorderPane.alignment="CENTER">
             <menus>
@@ -30,7 +31,17 @@
                     </items>
                 </Menu>
             </menus>
-        </MenuBar><ScrollPane fx:id="scrollPane" layoutX="14.0" layoutY="36.0" prefHeight="550.0" prefWidth="400.0" /><Label layoutX="431.0048828125" layoutY="48.5" text="xValue:" /><Label layoutX="431.0" layoutY="74.0" text="yValue:" /><Label layoutX="486.0" layoutY="49.0" text="XXX" fx:id="xlabel" /><Label fx:id="ylabel" layoutX="486.0" layoutY="74.0" text="YYY" />
+        </MenuBar><ScrollPane fx:id="scrollPane" layoutX="14.0" layoutY="36.0" onMouseClicked="#onScrollPaneClicked" prefHeight="550.0" prefWidth="400.0" /><TableView fx:id="dataTable" layoutX="433.0" layoutY="36.0" prefHeight="500.0" prefWidth="350.0">
+  <columns>
+    <TableColumn fx:id="firstColumn" prefWidth="175.0" text="Ort" />
+    <TableColumn fx:id="secondColumn" prefWidth="175.0" text="Gebiet" />
+  </columns>
+</TableView><HBox layoutX="433.0" layoutY="561.0" prefHeight="25.0" prefWidth="230.0" spacing="10.0">
+<children><Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Erstellen" /><Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#onEditButtonPressed" text="Bearbeiten" /><Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" />
+</children></HBox><Button fx:id="chooseButton" layoutX="709.0" layoutY="561.0" mnemonicParsing="false" onAction="#onChooseButtonPressed" text="Auswählen">
+<HBox.margin>
+<Insets />
+</HBox.margin></Button>
 </children></Pane>
-</top>
+</bottom>
 </BorderPane>
