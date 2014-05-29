@@ -32,7 +32,10 @@
                 <value>sepm.dsa.model.Location</value>
                 <value>sepm.dsa.model.LocationConnection</value>
                 <value>sepm.dsa.model.Tavern</value>
-                <value>sepm.dsa.model.ProductUnit</value>
+                <value>sepm.dsa.model.Player</value>
+                <value>sepm.dsa.model.Unit</value>
+                <value>sepm.dsa.model.UnitType</value>
+                <value>sepm.dsa.model.Currency</value>
             </list>
         </property>
         <property name="mappingResources">
@@ -45,10 +48,13 @@
                 <value>sepm/dsa/model/hibernate/Location.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Product.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/ProductCategory.hbm.xml</value>
-                <value>sepm/dsa/model/hibernate/ProductUnit.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/AssortmentNature.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/LocationConnection.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Tavern.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Currency.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Player.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/UnitType.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Unit.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -100,14 +106,31 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="productUnitDao" class="sepm.dsa.dao.ProductUnitDaoHbmImpl">
+    <bean id="playerDao" class="sepm.dsa.dao.PlayerDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+
+    <bean id="unitDao" class="sepm.dsa.dao.UnitDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="unitTypeDao" class="sepm.dsa.dao.UnitTypeDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="currencyDao" class="sepm.dsa.dao.CurrencyDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
         <property name="regionBorderDao" ref="regionBorderDao"/>
         <property name="locationService" ref="locationService"/>
+    </bean>
+
+    <bean id="playerService" class="sepm.dsa.service.PlayerServiceImpl">
+        <property name="playerDao" ref="playerDao"/>
     </bean>
 
     <bean id="regionBorderService" class="sepm.dsa.service.RegionBorderServiceImpl">
@@ -117,6 +140,10 @@
     <bean id="locationService" class="sepm.dsa.service.LocationServiceImpl">
         <property name="locationDao" ref="locationDao"/>
         <property name="traderService" ref="traderService"/>
+    </bean>
+
+    <bean id="currencyService" class="sepm.dsa.service.CurrencyServiceImpl">
+        <property name="currencyDao" ref="currencyDao"/>
     </bean>
 
     <bean id="locationConnectionService" class="sepm.dsa.service.LocationConnectionServiceImpl">
@@ -135,8 +162,12 @@
         <property name="productCategoryDao" ref="productCategoryDao"/>
     </bean>
 
-    <bean id="productUnitService" class="sepm.dsa.service.ProductUnitServiceImpl">
-        <property name="productUnitDao" ref="productUnitDao"/>
+    <bean id="unitService" class="sepm.dsa.service.UnitServiceImpl">
+        <property name="unitDao" ref="unitDao"/>
+    </bean>
+
+    <bean id="unitTypeService" class="sepm.dsa.service.UnitTypeServiceImpl">
+        <property name="unitTypeDao" ref="unitTypeDao"/>
     </bean>
 
     <bean id="traderCategoryService" class="sepm.dsa.service.TraderCategoryServiceImpl">
@@ -149,6 +180,7 @@
         <property name="pathService" ref="pathService"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
     <bean id="pathService" class="sepm.dsa.service.path.PathServiceDijkstraJGraphImpl">
@@ -170,14 +202,14 @@
     </bean>
 
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
-	    <property name="loader" ref="loader"/>
+        <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
-        <property name="locationService" ref="locationService" />
+        <property name="locationService" ref="locationService"/>
     </bean>
 
     <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
-	    <property name="loader" ref="loader"/>
+        <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
     </bean>
@@ -223,6 +255,7 @@
     </bean>
     <bean id="traderDetails" class="sepm.dsa.gui.TraderDetailsController">
         <property name="loader" ref="loader"/>
+        <property name="traderService" ref="traderService"/>
     </bean>
     <bean id="EditLocationConnectionsController" class="sepm.dsa.gui.EditLocationConnectionsController">
         <property name="loader" ref="loader"/>
@@ -240,9 +273,31 @@
         <property name="locationService" ref="locationService"/>
         <property name="traderService" ref="traderService"/>
     </bean>
-
+    <bean id="PlayerListController" class="sepm.dsa.gui.PlayerListController">
+        <property name="loader" ref="loader"/>
+        <property name="playerService" ref="playerService"/>
+    </bean>
+    <bean id="EditPlayerController" class="sepm.dsa.gui.EditPlayerController">
+        <property name="loader" ref="loader"/>
+        <property name="playerService" ref="playerService"/>
+    </bean>
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="currencyList" class="sepm.dsa.gui.CurrencyListController">
+        <property name="loader" ref="loader"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="currencyService" ref="currencyService"/>
+    </bean>
+    <bean id="editCurrency" class="sepm.dsa.gui.EditCurrencyController">
+        <property name="loader" ref="loader"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="currencyService" ref="currencyService"/>
+    </bean>
+    <bean id="calculateCurrency" class="sepm.dsa.gui.CurrencyCalculateController">
+        <property name="loader" ref="loader"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="currencyService" ref="currencyService"/>
     </bean>
 </beans>

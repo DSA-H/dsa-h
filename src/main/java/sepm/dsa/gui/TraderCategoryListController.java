@@ -61,8 +61,8 @@ public class TraderCategoryListController implements Initializable {
                     TraderCategory tc = r.getValue();
                     session.refresh(tc);
                     for (AssortmentNature assortmentNature : tc.getAssortments()) {
-                        String productCategorieName = assortmentNature.getProductCategory().getName();
-                        sb.append(productCategorieName + ", ");
+                        String productCategoryName = assortmentNature.getProductCategory().getName();
+                        sb.append(productCategoryName + ", ");
                     }
                     if (sb.length() >= 2) {
                         sb.delete(sb.length() - 2, sb.length());

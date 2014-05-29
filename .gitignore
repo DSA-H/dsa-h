@@ -1,8 +1,7 @@
 out/*
 .idea
 target
-fooDB.*
-testDB.*
+database/*
 DSA-H.iml
 log/*
 logs/*

@@ -5,6 +5,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -170,6 +171,53 @@ public class MainMenuController implements Initializable {
 			locationTable.setVisible(false);
 			traderList.setVisible(true);
 
+    @FXML
+    public void onPlayerClicked(ActionEvent event) {
+
+        log.debug("onPlayerClicked - open Player Window");
+        Stage stage = new Stage();
+        Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
+
+        stage.setTitle("Spieler verwalten");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
+    private void onCurrencyClicked() {
+        log.debug("onWarenClicked - open Currency Window");
+        Stage stage = new Stage();
+
+        Parent scene = (Parent) loader.load("/gui/currencyList.fxml");
+
+        stage.setTitle("Währungen");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
+    private void onCalculateCurrencyClicked(){
+        log.debug("onCalculateCurrencyClicked - open Calculate Currency Window");
+        Stage stage = new Stage();
+
+        Parent scene = (Parent) loader.load("/gui/calculatecurrency.fxml");
+
+        stage.setTitle("Währung umrechnen");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
+    private void onExitClicked() {
+        log.debug("onExitClicked - exit Programm Request");
+        if (exitProgramm()) {
+            Stage primaryStage = (Stage) menuBar.getScene().getWindow();
+            primaryStage.close();
+        }
+    }
 			selectedTrader = null;
 			deleteButton.setDisable(true);
 			editButton.setDisable(true);
@@ -692,5 +740,9 @@ public class MainMenuController implements Initializable {
 	public void setLocationService(LocationService locationService) {
 		this.locationService = locationService;
 	}
+
+    public void setLoader(SpringFxmlLoader loader) {
+        this.loader = loader;
+    }
 
 }

@@ -1,7 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,25 +8,25 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
-import sepm.dsa.model.*;
-import sepm.dsa.service.*;
+import sepm.dsa.model.Product;
+import sepm.dsa.model.ProductAttribute;
+import sepm.dsa.model.ProductCategory;
+import sepm.dsa.model.Region;
+import sepm.dsa.service.ProductCategoryService;
+import sepm.dsa.service.ProductService;
+import sepm.dsa.service.RegionService;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Service("EditProductController")
 public class EditProductController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(EditProductController.class);

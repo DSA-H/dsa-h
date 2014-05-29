@@ -10,9 +10,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Offer;
 import sepm.dsa.model.Trader;
+import sepm.dsa.service.TraderService;
+import sepm.dsa.service.TraderServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,7 @@ public class TraderDetailsController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(TraderDetailsController.class);
     private SpringFxmlLoader loader;
+	private TraderService traderService;
 
     private Trader trader;
     private Offer selectedOffer;
@@ -49,7 +53,7 @@ public class TraderDetailsController implements Initializable {
     private TextArea commentArea;
 
 
-    @Override
+	@Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize TraderDetailsController");
 
@@ -109,11 +113,15 @@ public class TraderDetailsController implements Initializable {
         categoryLabel.setText(trader.getCategory().getName());
         commentArea.setText(trader.getComment());
 
-        List<Offer> offers = new ArrayList<>(trader.getOffers());
+        List<Offer> offers = new ArrayList<>(traderService.getOffers(trader));
         offerTable.setItems(FXCollections.observableArrayList(offers));
     }
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
     }
+
+	public void setTraderService(TraderService traderService) {
+		this.traderService = traderService;
+	}
 }

@@ -4,10 +4,23 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="applicationContext.xml"/>
+
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.hsqldb.jdbc.JDBCDriver"/>
         <property name="url" value="jdbc:hsqldb:file:database/testDB"/>
         <property name="username" value="sa"/>
         <property name="password" value=""/>
+    </bean>
+
+    <bean id="dbUnitDataTypeFactory" class="org.dbunit.ext.hsqldb.HsqldbDataTypeFactory">
+    </bean>
+
+    <bean id="dbUnitDatabaseConfig" class="com.github.springtestdbunit.bean.DatabaseConfigBean">
+	<property name="datatypeFactory" ref="dbUnitDataTypeFactory"/>
+    </bean>
+
+    <bean id="dbUnitDatabaseConnection" class="com.github.springtestdbunit.bean.DatabaseDataSourceConnectionFactoryBean">
+	<property name="databaseConfig" ref="dbUnitDatabaseConfig"/>
+	<property name="dataSource" ref="dataSource"/>
     </bean>
 </beans>

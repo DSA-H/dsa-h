@@ -1,46 +1,22 @@
 package sepm.dsa.dao.test;
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.dao.LocationDao;
 import sepm.dsa.dao.ProductDao;
-import sepm.dsa.exceptions.DSARuntimeException;
-import sepm.dsa.model.*;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
+import sepm.dsa.model.Product;
+import sepm.dsa.model.ProductAttribute;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by Jotschi on 18.05.2014.
- */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:testContext.xml"})
-@TestExecutionListeners({
-        DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionDbUnitTestExecutionListener.class
-})
-public class ProductDaoTest {
+public class ProductDaoTest extends AbstractDatabaseTest {
 
     @Autowired
     private ProductDao productDao;
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void add_shouldPersistEntity() {
         Product product = new Product();
         product.setName("Testproduct1");
@@ -56,7 +32,6 @@ public class ProductDaoTest {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testGetProduct() {
         Product p = productDao.get(1);
         assertEquals(new Integer(1), p.getId());
@@ -64,7 +39,6 @@ public class ProductDaoTest {
 
     @Test(expected = org.hibernate.PropertyValueException.class)
     public void add_incompleteProduct_shouldNOTPersistEntity() {
-
         Product product = new Product();
         productDao.add(product);
         Product persistedProduct = productDao.get(product.getId());
@@ -72,12 +46,10 @@ public class ProductDaoTest {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testRemoveProduct() {
         Product p = productDao.get(2);
         int size = productDao.getAll().size();
         productDao.remove(p);
         assertEquals(size - 1, productDao.getAll().size());
     }
-
 }

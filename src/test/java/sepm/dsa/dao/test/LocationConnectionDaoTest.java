@@ -1,44 +1,19 @@
 package sepm.dsa.dao.test;
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.LocationConnectionDao;
-import sepm.dsa.dao.LocationDao;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
-import sepm.dsa.model.Region;
-import sepm.dsa.model.TownSize;
 import sepm.dsa.service.LocationService;
-import sepm.dsa.service.RegionService;
 
 import java.util.List;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.matchers.JUnitMatchers.hasItems;
+import static org.junit.Assert.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:testContext.xml"})
-@TestExecutionListeners({
-        DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionDbUnitTestExecutionListener.class
-})
-public class LocationConnectionDaoTest extends TestCase {
+public class LocationConnectionDaoTest extends AbstractDatabaseTest {
 
     @Autowired
     private LocationConnectionDao locationConnectionDao;
@@ -54,8 +29,6 @@ public class LocationConnectionDaoTest extends TestCase {
     }
 
     @Test
-//    @Transactional(readOnly = false)
-    @DatabaseSetup("/testData.xml")
     public void add_shouldPersistEntity() throws Exception {
         int sizeBefore = locationConnectionDao.getAll().size();
         Location location1 = locationService.get(7);
@@ -71,7 +44,6 @@ public class LocationConnectionDaoTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml") //todo setup xml file
     public void remove_shouldRemoveEntity1() throws Exception {
         int sizeBefore = locationConnectionDao.getAll().size();
         Location location1 = locationService.get(4);
@@ -86,7 +58,6 @@ public class LocationConnectionDaoTest extends TestCase {
     }
 
 //    @Test
-//    @DatabaseSetup("/testData.xml") //todo setup xml file
 //    public void remove_shouldRemoveEntity2() throws Exception {
 //        int sizeBefore = locationConnectionDao.getAll().size();
 //        Location location1 = locationService.get(5);
@@ -100,7 +71,6 @@ public class LocationConnectionDaoTest extends TestCase {
 //    }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void get_shouldRetrieveEntity1() throws Exception {
         Location location1 = new Location();
         location1.setId(4);
@@ -112,7 +82,6 @@ public class LocationConnectionDaoTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void get_shouldRetrieveEntity2() throws Exception {
         Location location1 = new Location();
         location1.setId(5);     // swapped 4 and 5
@@ -124,7 +93,6 @@ public class LocationConnectionDaoTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void get_shouldNotFindEntity1() throws Exception {
         Location location1 = new Location();
         location1.setId(4);     // swapped 4 and 5
@@ -136,7 +104,6 @@ public class LocationConnectionDaoTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void get_shouldNotFindEntity2() throws Exception {
         Location location1 = new Location();
         location1.setId(8);     // swapped 4 and 5
@@ -148,10 +115,8 @@ public class LocationConnectionDaoTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void getAll_shouldRetrieveEntities() throws Exception {
         List<LocationConnection> allFoundConnections = locationConnectionDao.getAll();
         assertTrue(allFoundConnections.size() >= 3);
     }
-
 }

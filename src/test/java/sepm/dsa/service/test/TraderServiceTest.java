@@ -1,21 +1,11 @@
 package sepm.dsa.service.test;
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import junit.framework.TestCase;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.exceptions.DSARuntimeException;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.*;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.ProductService;
@@ -25,17 +15,14 @@ import sepm.dsa.service.TraderService;
 import java.util.List;
 import java.util.Set;
 
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 
 @Transactional
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:testContext.xml"})
-@TestExecutionListeners({
-        DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionDbUnitTestExecutionListener.class
-})
-public class TraderServiceTest extends TestCase {
+public class TraderServiceTest extends AbstractDatabaseTest {
 
     private static final Logger log = LoggerFactory.getLogger(TraderServiceTest.class);
 
@@ -53,7 +40,6 @@ public class TraderServiceTest extends TestCase {
 
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testAdd() throws Exception {
         Trader trader = new Trader();
         trader.setName("TestTrader1");
@@ -78,7 +64,6 @@ public class TraderServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testRemove() throws Exception {
         Trader trader = traderService.get(2);
         traderService.remove(trader);
@@ -87,14 +72,12 @@ public class TraderServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testGet() throws Exception {
         Trader trader = traderService.get(2);
         assertNotNull(trader);
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testGetAllForLocation() throws Exception {
         Location location = locationService.get(1);
 
@@ -106,7 +89,6 @@ public class TraderServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testGetAllbyCategory() throws Exception {
         TraderCategory traderCategory = traderCategoryService.get(1);
 
@@ -116,7 +98,6 @@ public class TraderServiceTest extends TestCase {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void calculatePriceForProduct_alwaysPositive() {
         Trader trader = traderService.get(1);
         Set<AssortmentNature> assortments = trader.getCategory().getAssortments();
@@ -128,39 +109,68 @@ public class TraderServiceTest extends TestCase {
         assertTrue("There were no assortments set in test data", assortments.size() > 0);
     }
 
-//    @Test
-//    @DatabaseSetup("/testData.xml")
-//    public void calculateOffers_OffersShouldNotExceedTraderSpace() {
-//        Trader trader = traderService.get(2);
-//        int traderSize = trader.getSize();
-//
-//        int offersAmount = 0;
-//        List<Offer> offers = traderService.calculateOffers(trader);
-//        for (Offer o : offers) {
-//            offersAmount += o.getAmount();
-//        }
-//        assertTrue("TraderService didn't find a offer to suggest, update test data", offers.size() > 0);
-//        assertTrue(offersAmount <= traderSize);
-//    }
-//
-//    @Test
-//    @DatabaseSetup("/testData.xml")
-//    public void calculateOffers_OffersShouldNotExceedTraderSpace2() {
-//        Trader trader = traderService.get(2);
-//
-//        List<Offer> offers = traderService.calculateOffers(trader);
-//        for (Offer o : offers) {
-//            Product p = o.getProduct();
-//            boolean contains = false;
-//            for (AssortmentNature a : trader.getCategory().getAssortments()) {
-//                if (a.getProductCategory().getProducts().contains(p)) {
-//                    contains = true;
-//                    break;
-//                }
-//            }
-//            assertTrue("Product in Trader Offer ist not in connected to the trader categories normal product categories", contains);
-//        }
-//        assertTrue("TraderService didn't find a offer to suggest, update test data", offers.size() > 0);
-//
-//    }
+    @Test
+    public void calculateOffers_OffersShouldNotExceedTraderSpace() {
+        Trader trader = traderService.get(2);
+        int traderSize = trader.getSize();
+
+        int offersAmount = 0;
+        List<Offer> offers = traderService.calculateOffers(trader);
+        for (Offer o : offers) {
+            offersAmount += o.getAmount();
+        }
+        assertTrue("TraderService didn't find a offer to suggest, update test data", offers.size() > 0);
+        assertTrue(offersAmount == traderSize);
+    }
+
+    @Test
+    public void calculateOffers_OffersShouldNotExceedTraderSpace2() {
+        Trader trader = traderService.get(2);
+
+        List<Offer> offers = traderService.calculateOffers(trader);
+        for (Offer o : offers) {
+            Product p = o.getProduct();
+            boolean contains = false;
+            for (AssortmentNature a : trader.getCategory().getAssortments()) {
+                if (a.getProductCategory().getProducts().contains(p)) {
+                    contains = true;
+                    break;
+                }
+            }
+            assertTrue("Product in Trader Offer ist not in connected to the trader categories normal product categories", contains);
+        }
+        assertTrue("TraderService didn't find a offer to suggest, update test data", offers.size() > 0);
+    }
+
+    @Test
+    public void calculateOffers_OffersShouldbeEmpty() {
+        Trader trader = traderService.get(3);
+
+        List<Offer> offers = traderService.calculateOffers(trader);
+
+        assertTrue("TraderService find a offer to suggest, update test data", offers.isEmpty());
+    }
+
+    /**
+     * Trader 4 has a own TraderCategory with 2 ProductCategories: Categorie1 (normal), Categorie6 which contains only
+     * product8 which is producted only in region7 which has no borders. That means although prodcut8 is in the
+     * tradercategory "template" there is no way to the product and it should not appear in the offer. The offer should
+     * be filled with products from Categorie1.
+     */
+    @Test
+    public void calculateOffers_NotReachableRegion() {
+        Trader trader = traderService.get(4);
+        int traderSize = trader.getSize();
+
+        List<Offer> offers = traderService.calculateOffers(trader);
+
+        int offersAmount = 0;
+        for (Offer o : offers) {
+            offersAmount += o.getAmount();
+            Product p = o.getProduct();
+            assertFalse(p.getId() == 8);
+        }
+        assertTrue("TraderService didn't find a offer to suggest, update test data", offers.size() > 0);
+        assertTrue(offersAmount == traderSize);
+    }
 }

@@ -1,6 +1,8 @@
 package sepm.dsa.service;
 
 import org.apache.commons.collections.IteratorUtils;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +28,9 @@ public class TraderServiceImpl implements TraderService {
     private RegionService regionService;
     private RegionBorderService regionBorderService;
 
-    @Override
+	private SessionFactory sessionFactory;
+
+	@Override
     public Trader get(int id) {
         log.debug("calling get(" + id + ")");
         Trader result = traderDao.get(id);
@@ -89,6 +93,7 @@ public class TraderServiceImpl implements TraderService {
         List<Float> weights = new ArrayList<>();
         float topWeight = 0;
         // calculate weight for each product
+	    sessionFactory.getCurrentSession().refresh(trader);
         for (AssortmentNature assortmentNature : trader.getCategory().getAssortments()) {
             int defaultOccurence = assortmentNature.getDefaultOccurence();
             ProductCategory productCategory = assortmentNature.getProductCategory();
@@ -110,7 +115,7 @@ public class TraderServiceImpl implements TraderService {
                 for (RegionBorder border : borders) {
                     float x = border.getBorderCost()
                             / (800f - product.getAttribute().getProductTranporabilitySubtrahend());
-                    weight -= 1 - x;
+                    weight -= x;
                 }
                 weight *= (defaultOccurence / 100f);
 
@@ -150,10 +155,10 @@ public class TraderServiceImpl implements TraderService {
             // random quality distribution
             int amountQualities[] = new int[ProductQuality.values().length];
             if (product.getQuality()) {
-                double random = Math.random();
                 for (int i = 0; i < ammount; i++) {
                     int j = 0;
                     for (ProductQuality productQuality : ProductQuality.values()) {
+                        double random = Math.random();
                         if (random < productQuality.getQualityProbabilityValue()) {
                             amountQualities[j]++;
                             break;
@@ -253,4 +258,25 @@ public class TraderServiceImpl implements TraderService {
             throw new DSAValidationException("Händler ist nicht valide.", violations);
         }
     }
+
+	/**
+	 * Returns a list of Offers of the specified trader.
+	 *
+	 * @param trader the trader whose offers are requested.
+	 * @return a list of the trader's offers.
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public Collection<Offer> getOffers(Trader trader) {
+		sessionFactory.getCurrentSession().refresh(trader);
+
+		// Initialize the set the mëh way
+		trader.getOffers().size();
+
+		return trader.getOffers();
+	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 }

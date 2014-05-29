@@ -1,17 +1,9 @@
 package sepm.dsa.service.test;
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductAttribute;
 import sepm.dsa.model.ProductCategory;
@@ -20,24 +12,14 @@ import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.ProductService;
 import sepm.dsa.service.RegionService;
 
-import javax.validation.constraints.AssertTrue;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:testContext.xml"})
-@TestExecutionListeners({
-        DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionDbUnitTestExecutionListener.class
-})
-public class ProductServiceTest {
+public class ProductServiceTest extends AbstractDatabaseTest {
 
     @Autowired
     private ProductService productService;
@@ -48,17 +30,14 @@ public class ProductServiceTest {
 
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testGet()  {
         Product p = productService.get(1);
         assertTrue(p != null);
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testAdd()
     {
-        System.out.println(productService.getAll().toString());
         Product p = new Product();
         p.setName("tester2");
         p.setQuality(false);
@@ -73,7 +52,6 @@ public class ProductServiceTest {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     @Transactional(readOnly = false)
     public void testAddRegions()  {
         Product p = new Product();
@@ -96,7 +74,6 @@ public class ProductServiceTest {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testAddCategories()
     {
         Product p = new Product();
@@ -123,7 +100,6 @@ public class ProductServiceTest {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testRemove()
     {
         int size = productService.getAll().size();
@@ -133,7 +109,6 @@ public class ProductServiceTest {
     }
 
     @Test
-    @DatabaseSetup("/testData.xml")
     public void testUpdate()
     {
         int size = productService.getAll().size();
