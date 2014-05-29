@@ -56,6 +56,7 @@ public class MainMenuController implements Initializable {
 	private Location selectedLocation;
 	private Trader selectedTrader;
 	private int mode;   // 0..worldMode(default) 1..locationMode
+	private Boolean creationMode = false;
 
 	@FXML
 	private MenuBar menuBar;
@@ -268,25 +269,45 @@ public class MainMenuController implements Initializable {
 		log.debug("onCreateButtonPressed - open Details Window");
 
 		if (mode == 0) {
-			EditLocationController.setLocation(null);
+			if (mapService.getWorldMap() == null) {
+				EditLocationController.setLocation(null);
 
-			Stage stage = new Stage();
-			Parent scene = (Parent) loader.load("/gui/editlocation.fxml");
+				Stage stage = new Stage();
+				Parent scene = (Parent) loader.load("/gui/editlocation.fxml");
 
-			stage.setTitle("Ort erstellen");
-			stage.setScene(new Scene(scene, 900, 438));
-			stage.setResizable(false);
-			stage.showAndWait();
+				stage.setTitle("Ort erstellen");
+				stage.setScene(new Scene(scene, 900, 438));
+				stage.setResizable(false);
+				stage.showAndWait();
+			} else {
+				locationTable.setDisable(true);
+				createButton.setDisable(true);
+				editButton.setDisable(true);
+				deleteButton.setDisable(true);
+				chooseButton.setText("Zurück");
+				chooseButton.setDisable(false);
+				creationMode = true;
+			}
 		} else {
-			Stage stage = new Stage();
-			Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
-			stage.setTitle("Händler erstellen");
+			if (mapService.getLocationMap(selectedLocation) == null) {
+				Stage stage = new Stage();
+				Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
+				stage.setTitle("Händler erstellen");
 
-			EditTraderController controller = loader.getController();
-			controller.setTrader(null);
-			stage.setScene(new Scene(scene, 600, 400));
-			stage.setResizable(false);
-			stage.showAndWait();
+				EditTraderController controller = loader.getController();
+				controller.setTrader(null);
+				stage.setScene(new Scene(scene, 600, 400));
+				stage.setResizable(false);
+				stage.showAndWait();
+			} else {
+				traderList.setDisable(true);
+				createButton.setDisable(true);
+				editButton.setDisable(true);
+				deleteButton.setDisable(true);
+				chooseButton.setText("Zurück");
+				chooseButton.setDisable(false);
+				creationMode = true;
+			}
 		}
 
 		ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
@@ -295,7 +316,23 @@ public class MainMenuController implements Initializable {
 
 	@FXML
 	private void onChooseButtonPressed() {
-		changeMode();
+		if (creationMode) {
+			createButton.setDisable(false);
+			editButton.setDisable(false);
+			deleteButton.setDisable(false);
+			creationMode = false;
+			if (mode == 0) {
+				chooseButton.setText("Auswählen");
+				checkLocationFocus();
+				locationTable.setDisable(false);
+			} else {
+				chooseButton.setText("Zurück");
+				checkTraderFocus();
+				traderList.setDisable(false);
+			}
+		} else {
+			changeMode();
+		}
 	}
 
 	private void setSPLocation() {

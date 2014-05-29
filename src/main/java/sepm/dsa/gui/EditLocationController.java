@@ -44,6 +44,9 @@ public class EditLocationController implements Initializable {
     // true if the location is not editing
     private boolean isNewLocation;
 
+	private int xCoord = 0;
+	private int yCoord = 0;
+
     @FXML
     private TextField nameField;
     @FXML
@@ -54,10 +57,6 @@ public class EditLocationController implements Initializable {
     private ChoiceBox sizeChoiceBox;
     @FXML
     private ChoiceBox regionChoiceBox;
-    @FXML
-    private TextField xCoord;
-    @FXML
-    private TextField yCoord;
     @FXML
     private TextField height;
     @FXML
@@ -111,8 +110,8 @@ public class EditLocationController implements Initializable {
             weatherChoiceBox.getSelectionModel().select(selectedLocation.getWeather().getValue());
             sizeChoiceBox.getSelectionModel().select(selectedLocation.getSize().getValue());
             commentArea.setText(selectedLocation.getComment());
-            xCoord.setText(selectedLocation.getxCoord().toString());
-            yCoord.setText(selectedLocation.getyCoord().toString());
+	        xCoord = selectedLocation.getxCoord();
+	        yCoord = selectedLocation.getyCoord();
             height.setText(selectedLocation.getHeight().toString());
             regionChoiceBox.getSelectionModel().select(selectedLocation.getRegion());
         } else {
@@ -207,16 +206,8 @@ public class EditLocationController implements Initializable {
         selectedLocation.setWeather(weather);
         selectedLocation.setSize(townSize);
         selectedLocation.setRegion(seletcedRegionForLocation);
-        try {
-            selectedLocation.setxCoord(Integer.parseInt(xCoord.getText()));
-        } catch (NumberFormatException e) {
-            throw new DSAValidationException("xCoord muss eine Zahl sein.");
-        }
-        try {
-            selectedLocation.setyCoord(Integer.parseInt(yCoord.getText()));
-        } catch (NumberFormatException e) {
-            throw new DSAValidationException("yCoord muss eine Zahl sein.");
-        }
+        selectedLocation.setxCoord(xCoord);
+        selectedLocation.setyCoord(yCoord);
         try {
             selectedLocation.setHeight(Integer.parseInt(height.getText()));
         } catch (NumberFormatException e) {

@@ -43,7 +43,7 @@ public class Location implements Serializable {
     private Integer sizeId;
 
     @Column(nullable = true)
-    private String planFileName;
+    private String planFileName;    //TODO not needed
 
     @NotNull
     @Column(nullable = false)
