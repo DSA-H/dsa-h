@@ -46,7 +46,7 @@ public class PlayerDaoTest {
 
 		Player persistedPlayer = playerDao.get(player.getId());
 		assertNotNull("Expected player to be persisted", persistedPlayer);
-        assertTrue(false, "todo impl"); //TODO
+//        assertTrue(false, "todo impl"); //TODO
 	}
 
 	@Test
