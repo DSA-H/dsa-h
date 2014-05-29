@@ -131,8 +131,47 @@
                         </resources>
                     </configuration>
                 </execution>
+                <execution>
+                    <id>copy-errorMap</id>
+                    <phase>generate-resources</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>/maps/ressource</outputDirectory>
+                        <!--<overwrite>true</overwrite>-->
+                        <resources>
+                            <resource>
+                                <directory>maps.dist</directory>
+                                <includes>
+                                    <include>noMapFound.*</include>
+                                </includes>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>copy-initial-wolrdMap</id>
+                    <phase>generate-resources</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>/maps/active</outputDirectory>
+                        <!--<overwrite>true</overwrite>-->
+                        <resources>
+                            <resource>
+                                <directory>maps.dist</directory>
+                                <includes>
+                                    <include>worldMap.*</include>
+                                </includes>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution>
             </executions>
         </plugin>
+
 	</plugins>
     </build>
 
