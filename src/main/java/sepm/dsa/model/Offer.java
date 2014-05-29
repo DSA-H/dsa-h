@@ -2,11 +2,10 @@ package sepm.dsa.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "offers")
-public class Offer implements Serializable {
+public class Offer implements BaseModel {
     private static final long serialVersionUID = 2957223850231481777L;
 
     @Id

@@ -4,14 +4,13 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "ProductUnit")
-public class ProductUnit {
+public class ProductUnit implements BaseModel {
+	private static final long serialVersionUID = 5225840601793293885L;
 
-    @Id
+	@Id
     @GeneratedValue
     @Column(nullable = false, unique = true)
     private Integer id;

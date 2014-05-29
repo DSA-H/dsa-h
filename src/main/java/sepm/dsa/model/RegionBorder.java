@@ -14,7 +14,7 @@ import java.io.Serializable;
         @AssociationOverride(name = "pk.region1", joinColumns = @JoinColumn(name = "region1")),
         @AssociationOverride(name = "pk.region2", joinColumns = @JoinColumn(name = "region2"))
 })
-public class RegionBorder implements Serializable, PathEdge {
+public class RegionBorder implements BaseModel, PathEdge {
 
     private static final long serialVersionUID = -5121547134534726826L;
 

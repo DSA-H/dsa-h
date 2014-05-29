@@ -10,7 +10,7 @@ import java.io.Serializable;
         @AssociationOverride(name = "pk.location1", joinColumns = @JoinColumn(name = "location1")),
         @AssociationOverride(name = "pk.location2", joinColumns = @JoinColumn(name = "location2"))
 })
-public class LocationConnection implements Serializable {
+public class LocationConnection implements BaseModel {
 
     private static final long serialVersionUID = 5915927914933432772L;
 

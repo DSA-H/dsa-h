@@ -6,13 +6,12 @@ import sepm.dsa.service.path.PathNode;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "regions")
-public class Region implements Serializable, PathNode {
+public class Region implements BaseModel, PathNode {
     private static final long serialVersionUID = 5890354733231481712L;
 
     @Id

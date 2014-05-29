@@ -3,11 +3,10 @@ package sepm.dsa.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "taverns")
-public class Tavern implements Serializable {
+public class Tavern implements BaseModel {
 
     private static final long serialVersionUID = -2259554288598225744L;
 
