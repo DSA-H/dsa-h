@@ -29,24 +29,26 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
 
     @Transactional(readOnly = false)
     @Override
-    public void add(LocationConnection locationConnection) {
+    public LocationConnection add(LocationConnection locationConnection) {
         log.debug("calling addConnection(" + locationConnection + ")");
         if (get(locationConnection.getLocation1(), locationConnection.getLocation2()) != null) {
             throw new DSAAlreadyExistsException();
         }
-        locationConnectionDao.add(locationConnection);
-        log.info("added " + locationConnection);
+        LocationConnection lc = locationConnectionDao.add(locationConnection);
+        log.info("added " + lc);
+	    return lc;
     }
 
     @Transactional(readOnly = false)
     @Override
-    public void update(LocationConnection locationConnection) {
+    public LocationConnection update(LocationConnection locationConnection) {
         log.debug("calling update(" + locationConnection + ")");
         LocationConnection trueConn = get(locationConnection.getLocation1(), locationConnection.getLocation2());
         locationConnection.setLocation1(trueConn.getLocation1());
         locationConnection.setLocation2(trueConn.getLocation2());
-        locationConnectionDao.update(locationConnection);
-        log.info("updated " + locationConnection);
+        LocationConnection lc = locationConnectionDao.update(locationConnection);
+        log.info("updated " + lc);
+	    return lc;
     }
 
     @Transactional(readOnly = false)

@@ -17,15 +17,17 @@ public interface TraderCategoryService {
      * Persists a {@code TraderCategory} in the Database
      *
      * @param t to be persisted must not be null
+     * @return The added traderCategory model.
      */
-    void add(TraderCategory t);
+    TraderCategory add(TraderCategory t);
 
     /**
      * Updates a already existing {@code TraderCategory} in the database
      *
      * @param t to update must not be null
+     * @return The updated traderCategory model.
      */
-    void update(TraderCategory t);
+    TraderCategory update(TraderCategory t);
 
     /**
      * Delete a traderCategory permanently

@@ -6,31 +6,33 @@ import java.util.List;
 
 public interface ProductUnitService {
     /**
-     * Get a productcategory by its ID
+     * Get a productUnit by its ID
      *
      * @param id the id
-     * @return the productcategory
+     * @return the productUnit
      */
     ProductUnit get(Integer id);
 
     /**
-     * Add a new productcategory to DB
+     * Add a new productUnit to DB
      *
-     * @param p productcategory (not null)
+     * @param p productUnit (not null)
+     * @return The added productUnit model.
      */
-    void add(ProductUnit p);
+    ProductUnit add(ProductUnit p);
 
     /**
      * Update a product
      *
      * @param p product (not null)
+     * @return The updated productUnit model.
      */
-    void update(ProductUnit p);
+    ProductUnit update(ProductUnit p);
 
     /**
-     * Removes a productcategory from DB
+     * Removes a productUnit from DB
      *
-     * @param p productcategory (not null)
+     * @param p productUnit (not null)
      */
     void remove(ProductUnit p);
 

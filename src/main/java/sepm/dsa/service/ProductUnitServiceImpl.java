@@ -32,18 +32,18 @@ public class ProductUnitServiceImpl implements ProductUnitService {
 
     @Override
     @Transactional(readOnly = false)
-    public void add(ProductUnit p) {
+    public ProductUnit add(ProductUnit p) {
         log.debug("calling addConnection(" + p + ")");
         validate(p);
-        productUnitDao.add(p);
+        return productUnitDao.add(p);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void update(ProductUnit p) {
+    public ProductUnit update(ProductUnit p) {
         log.debug("calling update(" + p + ")");
         validate(p);
-        productUnitDao.update(p);
+        return productUnitDao.update(p);
     }
 
     @Override

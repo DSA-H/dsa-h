@@ -11,15 +11,17 @@ public interface RegionBorderService {
      * Persists the regionBorder in te database. Bean Validation on Modelclass is performed
      *
      * @param regionBorder must not be null
+     * @return The added regionBorder model.
      */
-    void add(RegionBorder regionBorder);
+    RegionBorder add(RegionBorder regionBorder);
 
     /**
      * Updates existing {@code regionBorder} in te Database
      *
      * @param regionBorder must not be null
+     * @return The updated regionBorder model.
      */
-    void update(RegionBorder regionBorder);
+    RegionBorder update(RegionBorder regionBorder);
 
     /**
      * Deletes the handed {@code regionBorder} permanently from the database

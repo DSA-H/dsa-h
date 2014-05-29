@@ -36,18 +36,18 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     @Transactional(readOnly = false)
-    public void add(Region r) {
+    public Region add(Region r) {
         log.info("calling addConnection(" + r + ")");
         validate(r);
-        regionDao.add(r);
+        return regionDao.add(r);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void update(Region r) {
+    public Region update(Region r) {
         log.info("calling update(" + r + ")");
         validate(r);
-        regionDao.update(r);
+        return regionDao.update(r);
     }
 
     @Override

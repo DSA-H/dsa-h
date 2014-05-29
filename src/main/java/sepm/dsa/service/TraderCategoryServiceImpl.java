@@ -33,18 +33,18 @@ public class TraderCategoryServiceImpl implements TraderCategoryService {
 
     @Override
     @Transactional(readOnly = false)
-    public void add(TraderCategory t) {
+    public TraderCategory add(TraderCategory t) {
         log.debug("calling addConnection(" + t + ")");
         validate(t);
-        traderCategoryDao.add(t);
+        return traderCategoryDao.add(t);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void update(TraderCategory t) {
+    public TraderCategory update(TraderCategory t) {
         log.debug("calling update(" + t + ")");
         validate(t);
-        traderCategoryDao.update(t);
+        return traderCategoryDao.update(t);
     }
 
     @Override

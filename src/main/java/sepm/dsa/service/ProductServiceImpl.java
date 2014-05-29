@@ -34,18 +34,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = false)
-    public void add(Product p) {
+    public Product add(Product p) {
         log.debug("calling addConnection(" + p + ")");
         validate(p);
-        productDao.add(p);
+        return productDao.add(p);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void update(Product p) {
+    public Product update(Product p) {
         log.debug("calling update(" + p + ")");
         validate(p);
-        productDao.update(p);
+        return productDao.update(p);
     }
 
     @Override

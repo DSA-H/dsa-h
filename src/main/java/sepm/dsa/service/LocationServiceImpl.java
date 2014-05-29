@@ -27,18 +27,18 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional(readOnly = false)
-    public void add(Location location) {
+    public Location add(Location location) {
         log.debug("calling addConnection(" + location + ")");
         validate(location);
-        locationDao.add(location);
+        return locationDao.add(location);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void update(Location location) {
+    public Location update(Location location) {
         log.debug("calling update(" + location + ")");
         validate(location);
-        locationDao.update(location);
+        return locationDao.update(location);
     }
 
     @Override

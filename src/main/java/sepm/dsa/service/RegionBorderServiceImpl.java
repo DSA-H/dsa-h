@@ -25,18 +25,18 @@ public class RegionBorderServiceImpl implements RegionBorderService {
 
     @Override
     @Transactional(readOnly = false)
-    public void add(RegionBorder regionBorder) {
+    public RegionBorder add(RegionBorder regionBorder) {
         log.debug("calling addConnection(" + regionBorder + ")");
         validate(regionBorder);
-        regionBorderDao.add(regionBorder);
+        return regionBorderDao.add(regionBorder);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void update(RegionBorder regionBorder) {
+    public RegionBorder update(RegionBorder regionBorder) {
         log.debug("calling update(" + regionBorder + ")");
         validate(regionBorder);
-        regionBorderDao.update(regionBorder);
+        return regionBorderDao.update(regionBorder);
     }
 
     @Override

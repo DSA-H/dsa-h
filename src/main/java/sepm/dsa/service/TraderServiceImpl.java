@@ -40,22 +40,22 @@ public class TraderServiceImpl implements TraderService {
 
     @Override
     @Transactional(readOnly = false)
-    public void add(Trader t) {
+    public Trader add(Trader t) {
         log.debug("calling addConnection(" + t + ")");
         validate(t);
-        traderDao.add(t);
+        Trader trader = traderDao.add(t);
         HashSet<Offer> offers = new HashSet<>(calculateOffers(t));
         t.setOffers(offers);
-        update(t);
-
+        update(t); // @TODO refactor!
+		return trader;
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void update(Trader t) {
+    public Trader update(Trader t) {
         log.debug("calling update(" + t + ")");
         validate(t);
-        traderDao.update(t);
+        return traderDao.update(t);
     }
 
     @Override

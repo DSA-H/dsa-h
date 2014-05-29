@@ -18,15 +18,17 @@ public interface RegionService {
      * Add a new region to DB
      *
      * @param r region (not null)
+     * @return The added region model.
      */
-    void add(Region r);
+    Region add(Region r);
 
     /**
      * Update a region
      *
      * @param r region (must not be null)
+     * @return The updated region model.
      */
-    void update(Region r);
+    Region update(Region r);
 
     /**
      * Removes a region from DB and also all connected region borders

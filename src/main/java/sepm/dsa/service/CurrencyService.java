@@ -20,15 +20,17 @@ public interface CurrencyService {
      * Add a new currency to DB
      *
      * @param r currency (not null)
+     * @return The created currency model.
      */
-    void add(Currency r);
+    Currency add(Currency r);
 
     /**
      * Update a currency
      *
      * @param r currency (must not be null)
+     * @return The updated currency model.
      */
-    void update(Currency r);
+    Currency update(Currency r);
 
     /**
      * Removes a currency from DB
