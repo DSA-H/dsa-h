@@ -19,6 +19,13 @@ public interface MapService {
 	public void setWorldMap(File newmap);
 
 	/**
+	 * Copies the given File to the active-path
+	 * If there is a Location Map set it will be placed in the alternative-path
+	 * @param newmap must be a valid image
+	 */
+	public void setLocationMap(Location location, File newmap);
+
+	/**
 	 * exports the map with the given name
 	 * @param map the name of the map to be exported
 	 */

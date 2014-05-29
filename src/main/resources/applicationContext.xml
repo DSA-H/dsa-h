@@ -191,6 +191,7 @@
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
         <property name="regionService" ref="regionService"/>
+        <property name="mapService" ref="mapService"/>
     </bean>
 
     <bean id="ProductListController" class="sepm.dsa.gui.ProductListController">

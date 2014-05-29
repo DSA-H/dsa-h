@@ -138,16 +138,7 @@ public class MainMenuController implements Initializable {
 		locationTable.getFocusModel().focusedItemProperty().addListener(new ChangeListener<Location>() {
 			@Override
 			public void changed(ObservableValue<? extends Location> observable, Location oldValue, Location newValue) {
-				selectedLocation = locationTable.getFocusModel().getFocusedItem();
-				if (selectedLocation == null) {
-					deleteButton.setDisable(true);
-					editButton.setDisable(true);
-					chooseButton.setDisable(true);
-				} else {
-					deleteButton.setDisable(false);
-					editButton.setDisable(false);
-					chooseButton.setDisable(false);
-				}
+				checkLocationFocus();
 			}
 		});
 
@@ -155,15 +146,7 @@ public class MainMenuController implements Initializable {
 			@Override
 			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
 				selectedTrader = (Trader) traderList.getFocusModel().getFocusedItem();
-				if (selectedTrader == null) {
-					deleteButton.setDisable(true);
-					editButton.setDisable(true);
-					chooseButton.setDisable(true);
-				} else {
-					deleteButton.setDisable(false);
-					editButton.setDisable(false);
-					chooseButton.setDisable(false);
-				}
+				checkTraderFocus();
 			}
 		});
 
@@ -193,12 +176,15 @@ public class MainMenuController implements Initializable {
 
 			chooseButton.setText("Zurück");
 			editButton.setText("Details");
+
+			checkTraderFocus();
 		} else {
 			mode = 0;
 			locationTable.setVisible(true);
 			traderList.setVisible(false);
 			chooseButton.setText("Auswählen");
 			editButton.setText("Bearbeiten");
+			checkLocationFocus();
 		}
 
 		updateMap();
@@ -497,6 +483,31 @@ public class MainMenuController implements Initializable {
 			log.debug("Confirm-Exit-Dialog refused");
 			return false;
 		}
+	}
+
+	private void checkLocationFocus() {
+		selectedLocation = locationTable.getFocusModel().getFocusedItem();
+		if (selectedLocation == null) {
+			deleteButton.setDisable(true);
+			editButton.setDisable(true);
+			chooseButton.setDisable(true);
+		} else {
+			deleteButton.setDisable(false);
+			editButton.setDisable(false);
+			chooseButton.setDisable(false);
+		}
+	}
+
+	private void checkTraderFocus() {
+		selectedTrader = (Trader) traderList.getFocusModel().getFocusedItem();
+		if (selectedTrader == null) {
+			deleteButton.setDisable(true);
+			editButton.setDisable(true);
+		} else {
+			deleteButton.setDisable(false);
+			editButton.setDisable(false);
+		}
+		chooseButton.setDisable(false);
 	}
 
 	public void setLoader(SpringFxmlLoader loader) {

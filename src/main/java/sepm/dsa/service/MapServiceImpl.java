@@ -107,6 +107,66 @@ public class MapServiceImpl implements MapService {
 	}
 
 	@Override
+	public void setLocationMap(Location location, File newMap) {
+
+		//check if old File exists
+		File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return name.startsWith("" + location.getName() + location.getId() + "map");
+			}
+		});
+
+		//copy old file to temp
+		if (matchingFiles != null && matchingFiles.length >= 1) {
+			File oldMap = matchingFiles[0];
+			String extOld = FilenameUtils.getExtension(oldMap.getAbsolutePath());
+			File temp = new File(alternativeDir + "/lastMapTemp." + extOld);
+			try {
+				FileUtils.copyFile(oldMap, temp);
+				log.debug("copied old map to alternative (temp)");
+				oldMap.delete();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		//copy new File to dir
+		String extNew = FilenameUtils.getExtension(newMap.getAbsolutePath());
+		File locMap = new File(activeDir + "/" + location.getName() + location.getId() + "map." + extNew);
+		try {
+			FileUtils.copyFile(newMap, locMap);
+			log.debug("copied new map");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		//rename temp
+		matchingFiles = alternativeDir.listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return name.startsWith("lastMapTemp");
+			}
+		});
+		if (matchingFiles != null && matchingFiles.length >= 1) {
+			File oldMap = matchingFiles[0];
+			String extOld = FilenameUtils.getExtension(oldMap.getAbsolutePath());
+			File dest = new File(alternativeDir + "/" + location.getName() + location.getId() + "map." + extOld);
+			int k = 1;
+			while (dest.exists() && !dest.isDirectory()) {
+				dest = new File(alternativeDir + "/" + location.getName() + location.getId() + "map(" + k + ")." + extOld);
+				k++;
+			}
+			try {
+				FileUtils.copyFile(oldMap, dest);
+				log.debug("copied temp to alternative");
+				oldMap.delete();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	@Override
 	public void exportMap(String mapName) {
 		//choose File to export
 		FileChooser fileChooser = new FileChooser();

@@ -24,6 +24,7 @@ import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.LocationConnectionService;
 import sepm.dsa.service.LocationService;
+import sepm.dsa.service.MapService;
 import sepm.dsa.service.RegionService;
 
 import java.io.File;
@@ -39,6 +40,7 @@ public class EditLocationController implements Initializable {
 
     private LocationService locationService;
     private RegionService regionService;
+	private MapService mapService;
     // true if the location is not editing
     private boolean isNewLocation;
 
@@ -255,27 +257,9 @@ public class EditLocationController implements Initializable {
     @FXML
     public void chooseBackground() {
         log.info("Select Backgroundimage Location");
-//choose File to export
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Ort Karte wählen");
-        List<String> extensions = new ArrayList<String>();
-        extensions.add("*.jpg");
-        extensions.add("*.png");
-        extensions.add("*.gif");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All Images", extensions),
-                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                new FileChooser.ExtensionFilter("GIF", "*.gif"),
-                new FileChooser.ExtensionFilter("PNG", "*.png")
-        );
-
-        //look for location map
-        File newlocationMap = fileChooser.showOpenDialog(new Stage());
-
-        if (newlocationMap == null) {
-            return;
-        }
-        this.backgroundMapName = newlocationMap.getAbsolutePath();
+	    File newMap = mapService.chooseMap();
+	    if (newMap == null) { return; }
+	    mapService.setLocationMap(selectedLocation, newMap);
     }
 
 
@@ -303,6 +287,10 @@ public class EditLocationController implements Initializable {
         stage.setScene(new Scene(root, 900, 500));
         stage.show();
     }
+
+	public void setMapService(MapService mapService) {
+		this.mapService = mapService;
+	}
 
 //    @FXML
 //    public void onSuggestConnectionsBtnClicked() {
