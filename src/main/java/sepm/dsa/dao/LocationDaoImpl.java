@@ -13,24 +13,9 @@ import java.util.Vector;
 
 @Repository
 @Transactional(readOnly = true)
-public class LocationDaoImpl implements LocationDao {
-
-    private static final Logger log = LoggerFactory.getLogger(LocationDaoImpl.class);
-    private SessionFactory sessionFactory;
-
-    @Override
-    @Transactional(readOnly = false)
-    public void add(Location location) {
-        log.debug("calling addConnection(" + location + ")");
-        sessionFactory.getCurrentSession().save(location);
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public void update(Location location) {
-        log.debug("calling update(" + location + ")");
-        sessionFactory.getCurrentSession().update(location);
-    }
+public class LocationDaoImpl
+	extends BaseDaoHbmImpl<Location>
+	implements LocationDao {
 
     @Override
     public List<Location> getAllByRegion(int regionId) {
@@ -49,27 +34,6 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    @Transactional(readOnly = false)
-    public void remove(Location location) {
-        log.debug("calling removeConnection(" + location + ")");
-        sessionFactory.getCurrentSession().delete(location);
-    }
-
-    @Override
-    public Location get(int id) {
-        log.debug("calling get(" + id + ")");
-
-        Object result = sessionFactory.getCurrentSession().get(Location.class, id);
-
-        if (result == null) {
-            log.trace("returning " + result);
-            return null;
-        }
-        log.trace("returning " + result);
-        return (Location) result;
-    }
-
-    @Override
     public List<Location> getAllByNameNotConnectedTo(Location location, String locationName) {
         log.debug("calling getAllByNameNotConnectedTo(" + location + "," + locationName + ")");
 
@@ -77,20 +41,6 @@ public class LocationDaoImpl implements LocationDao {
         query.setParameter("ownLocationId", location.getId());
         query.setParameter("locationName", locationName);
         List<?> list = query.list();
-
-        List<Location> result = new Vector<>(list.size());
-        for (Object o : list) {
-            result.add((Location) o);
-        }
-
-        log.trace("returning " + result);
-        return result;
-    }
-
-    @Override
-    public List<Location> getAll() {
-        log.debug("calling getAll()");
-        List<?> list = sessionFactory.getCurrentSession().getNamedQuery("Location.findAll").list();
 
         List<Location> result = new Vector<>(list.size());
         for (Object o : list) {
@@ -138,10 +88,5 @@ public class LocationDaoImpl implements LocationDao {
 
         log.trace("returning " + result);
         return result;
-    }
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        log.debug("calling setSessionFactory(" + sessionFactory + ")");
-        this.sessionFactory = sessionFactory;
     }
 }

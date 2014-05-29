@@ -5,16 +5,6 @@ import sepm.dsa.model.RegionBorder;
 import java.util.List;
 
 
-public interface RegionBorderDao {
-
-    void add(RegionBorder regionBorder);
-
-    void update(RegionBorder regionBorder);
-
-    void remove(RegionBorder regionBorder);
-
-    List<RegionBorder> getAll();
-
+public interface RegionBorderDao extends BaseDao<RegionBorder> {
     List<RegionBorder> getAllByRegion(int regionId);
-
 }

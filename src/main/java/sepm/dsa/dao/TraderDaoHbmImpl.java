@@ -1,9 +1,5 @@
 package sepm.dsa.dao;
 
-
-import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Trader;
@@ -14,46 +10,9 @@ import java.util.List;
 import java.util.Vector;
 
 @Transactional(readOnly = true)
-public class TraderDaoHbmImpl implements TraderDao {
-
-    private static final Logger log = LoggerFactory.getLogger(TraderDaoHbmImpl.class);
-
-    private SessionFactory sessionFactory;
-
-    @Override
-    @Transactional(readOnly = false)
-    public void add(Trader trader) {
-        log.debug("calling addConnection(" + trader + ")");
-        sessionFactory.getCurrentSession().save(trader);
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public void update(Trader trader) {
-        log.debug("calling update(" + trader + ")");
-        sessionFactory.getCurrentSession().update(trader);
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public void remove(Trader trader) {
-        log.debug("calling removeConnection(" + trader + ")");
-        sessionFactory.getCurrentSession().delete(trader);
-    }
-
-    @Override
-    public Trader get(int id) {
-        log.debug("calling get(" + id + ")");
-
-        Object result = sessionFactory.getCurrentSession().get(Trader.class, id);
-
-        if (result == null) {
-            log.trace("returning " + null);
-            return null;
-        }
-        log.trace("returning " + result);
-        return (Trader) result;
-    }
+public class TraderDaoHbmImpl
+	extends BaseDaoHbmImpl<Trader>
+	implements TraderDao {
 
     @Override
     public List<Trader> getAllByLocation(Location location) {
@@ -85,10 +44,5 @@ public class TraderDaoHbmImpl implements TraderDao {
 
         log.trace("returning " + result);
         return result;
-    }
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        log.debug("calling setSessionFactory");
-        this.sessionFactory = sessionFactory;
     }
 }
