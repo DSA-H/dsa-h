@@ -205,6 +205,8 @@ public class MainMenuController implements Initializable {
 			stage.setScene(new Scene(scene, 900, 438));
 			stage.setResizable(false);
 			stage.showAndWait();
+			ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
+			locationTable.setItems(data);
 		} else {
 			Stage stage = new Stage();
 			Parent scene = (Parent) loader.load("/gui/traderdetails.fxml");
@@ -215,10 +217,10 @@ public class MainMenuController implements Initializable {
 			stage.setScene(new Scene(scene, 800, 400));
 			stage.setResizable(false);
 			stage.showAndWait();
+			ObservableList<Trader> data = FXCollections.observableArrayList(traderService.getAllForLocation(selectedLocation));
+			traderList.setItems(data);
 		}
 
-		ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
-		locationTable.setItems(data);
 	}
 
 	@FXML
@@ -279,6 +281,8 @@ public class MainMenuController implements Initializable {
 				stage.setScene(new Scene(scene, 900, 438));
 				stage.setResizable(false);
 				stage.showAndWait();
+				ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
+				locationTable.setItems(data);
 			} else {
 				locationTable.setDisable(true);
 				createButton.setDisable(true);
@@ -296,9 +300,12 @@ public class MainMenuController implements Initializable {
 
 				EditTraderController controller = loader.getController();
 				controller.setTrader(null);
+				controller.setLocation(selectedLocation);
 				stage.setScene(new Scene(scene, 600, 400));
 				stage.setResizable(false);
 				stage.showAndWait();
+				ObservableList<Trader> data = FXCollections.observableArrayList(traderService.getAllForLocation(selectedLocation));
+				traderList.setItems(data);
 			} else {
 				traderList.setDisable(true);
 				createButton.setDisable(true);
@@ -310,16 +317,12 @@ public class MainMenuController implements Initializable {
 			}
 		}
 
-		ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
-		locationTable.setItems(data);
 	}
 
 	@FXML
 	private void onChooseButtonPressed() {
 		if (creationMode) {
 			createButton.setDisable(false);
-			editButton.setDisable(false);
-			deleteButton.setDisable(false);
 			creationMode = false;
 			if (mode == 0) {
 				chooseButton.setText("Auswählen");
@@ -345,20 +348,60 @@ public class MainMenuController implements Initializable {
 
 	@FXML
 	private void onScrollPaneClicked() {
-		setSPLocation();
-		Point mousePosition = MouseInfo.getPointerInfo().getLocation();
+		if (creationMode) {
+			setSPLocation();
+			Point mousePosition = MouseInfo.getPointerInfo().getLocation();
 
-		double scrollableX = mapImageView.getImage().getWidth() - scrollPane.getWidth();
-		double scrollableY = mapImageView.getImage().getHeight() - scrollPane.getHeight();
-		if (mapImageView.getImage().getWidth() > scrollPane.getWidth()) {
-			scrollableX += 12;
-		}
-		if (mapImageView.getImage().getHeight() > scrollPane.getHeight()) {
-			scrollableY += 12;
-		}
+			double scrollableX = mapImageView.getImage().getWidth() - scrollPane.getWidth();
+			double scrollableY = mapImageView.getImage().getHeight() - scrollPane.getHeight();
+			if (mapImageView.getImage().getWidth() > scrollPane.getWidth()) {
+				scrollableX += 12;
+			}
+			if (mapImageView.getImage().getHeight() > scrollPane.getHeight()) {
+				scrollableY += 12;
+			}
 
-		int xPos = (int) (mousePosition.getX() - SPLocation.getX() + scrollPositionX * scrollableX);
-		int yPos = (int) (mousePosition.getY() - SPLocation.getY() + scrollPositionY * scrollableY);
+			int xPos = (int) (mousePosition.getX() - SPLocation.getX() + scrollPositionX * scrollableX);
+			int yPos = (int) (mousePosition.getY() - SPLocation.getY() + scrollPositionY * scrollableY);
+
+			Point2D pos = new Point2D(xPos, yPos);
+
+
+			Stage stage = new Stage();
+			Parent scene = (Parent) loader.load("/gui/placement.fxml");
+			PlacementController controller = loader.getController();
+			if (mode == 0) {
+				stage.setTitle("Ort platzieren");
+				controller.setUp(null, pos);
+			} else {
+				stage.setTitle("Händler platzieren");
+				controller.setUp(selectedLocation, pos);
+			}
+			stage.setScene(new Scene(scene, 350, 160));
+			stage.setResizable(false);
+			stage.showAndWait();
+
+			if (mode == 0) {
+				checkLocationFocus();
+			} else {
+				checkTraderFocus();
+			}
+
+			creationMode = false;
+			createButton.setDisable(false);
+			if (mode == 0) {
+				chooseButton.setText("Auswählen");
+				checkLocationFocus();
+				locationTable.setDisable(false);
+			} else {
+				chooseButton.setText("Zurück");
+				checkTraderFocus();
+				traderList.setDisable(false);
+			}
+
+			ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
+			locationTable.setItems(data);
+		}
 	}
 
 	@FXML

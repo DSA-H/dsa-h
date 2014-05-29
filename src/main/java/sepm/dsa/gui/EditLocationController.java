@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -46,6 +47,7 @@ public class EditLocationController implements Initializable {
 
 	private int xCoord = 0;
 	private int yCoord = 0;
+	private File newMap;
 
     @FXML
     private TextField nameField;
@@ -235,7 +237,9 @@ public class EditLocationController implements Initializable {
         log.debug("calling SaveButtonPressed");
 
         saveLocation();
-
+	    if (newMap != null) {
+		    mapService.setLocationMap(selectedLocation, newMap);
+	    }
 
 //        locationService.update(selectedLocation);
 
@@ -248,9 +252,7 @@ public class EditLocationController implements Initializable {
     @FXML
     public void chooseBackground() {
         log.info("Select Backgroundimage Location");
-	    File newMap = mapService.chooseMap();
-	    if (newMap == null) { return; }
-	    mapService.setLocationMap(selectedLocation, newMap);
+	    newMap = mapService.chooseMap();
     }
 
 
@@ -278,6 +280,11 @@ public class EditLocationController implements Initializable {
         stage.setScene(new Scene(root, 900, 500));
         stage.show();
     }
+
+	public void setPosition(Point2D pos) {
+		this.yCoord = (int) pos.getY();
+		this.xCoord = (int) pos.getX();
+	}
 
 	public void setMapService(MapService mapService) {
 		this.mapService = mapService;

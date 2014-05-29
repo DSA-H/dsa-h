@@ -37,7 +37,7 @@
     <TableColumn fx:id="regionColumn" prefWidth="175.0" text="Gebiet" />
   </columns>
 </TableView><HBox layoutX="433.0" layoutY="561.0" prefHeight="25.0" prefWidth="230.0" spacing="10.0">
-<children><Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Erstellen" /><Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#onEditButtonPressed" text="Bearbeiten" /><Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" />
+<children><Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Platzieren" /><Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#onEditButtonPressed" text="Bearbeiten" /><Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" />
 </children></HBox><Button fx:id="chooseButton" alignment="CENTER" disable="true" layoutX="708.0" layoutY="561.0" mnemonicParsing="false" onAction="#onChooseButtonPressed" prefWidth="75.0" text="Auswählen">
 <HBox.margin>
 <Insets />
