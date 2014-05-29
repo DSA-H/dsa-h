@@ -4,13 +4,14 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.model.BaseModel;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 @Transactional
-abstract class BaseDaoHbmImpl<Model> implements BaseDao<Model> {
+abstract class BaseDaoHbmImpl<Model extends BaseModel> implements BaseDao<Model> {
 	protected SessionFactory sessionFactory;
 	protected static Logger log;
 
@@ -42,16 +43,17 @@ abstract class BaseDaoHbmImpl<Model> implements BaseDao<Model> {
 	// ------------- Generic DAO methods ---------------------------
 
 	@Transactional(readOnly = false)
-	public void add(Model model) {
+	public Model add(Model model) {
 		log.debug("calling add(" + model + ")");
 		sessionFactory.getCurrentSession().save(model);
+		return model;
 	}
 
 	@Transactional(readOnly = false)
-	public void update(Model model) {
+	@SuppressWarnings("unchecked")
+	public Model update(Model model) {
 		log.debug("calling update(" + model + ")");
-		sessionFactory.getCurrentSession().update(model);
-//		sessionFactory.getCurrentSession().merge(model); @TODO
+		return (Model) sessionFactory.getCurrentSession().merge(model);
 	}
 
 	@Transactional(readOnly = false)

@@ -1,23 +1,27 @@
 package sepm.dsa.dao;
 
+import sepm.dsa.model.BaseModel;
+
 import java.io.Serializable;
 import java.util.List;
 
-public interface BaseDao<Model> {
+public interface BaseDao<Model extends BaseModel> {
 
 	/**
 	 * Adds the given model to the persistence context and the database.
 	 *
 	 * @param model The model to be added.
+	 * @return The persisted model.
 	 */
-	void add(Model model);
+	Model add(Model model);
 
 	/**
 	 * Merges the given model into the persistence context and updated its database entry.
 	 *
 	 * @param model The model to be updated.
+	 * @return The persisted model.
 	 */
-	void update(Model model);
+	Model update(Model model);
 
 	/**
 	 * Deletes the given model from the persistence context and from the database.
