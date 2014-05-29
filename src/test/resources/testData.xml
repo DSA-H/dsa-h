@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <regions id="1" name="fooRegion" color="FFFFFF" temperatureId="0" rainfallChanceId="0"/>
+    <regions id="1" name="region1" color="FFFFFF" temperatureId="0" rainfallChanceId="0"/>
     <regions id="2" name="region2" color="ED8311" temperatureId="1" rainfallChanceId="2"/>
     <regions id="3" name="region3" color="1C11ED" temperatureId="2" rainfallChanceId="3"/>
     <regions id="4" name="region4" color="ED8311" temperatureId="3" rainfallChanceId="4"/>
@@ -33,6 +33,9 @@
 
     <taverns id="1" name="Zum Wegstein" location_id="1" xPos="42" yPos="12" usage="12"/>
     <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="42" yPos="12" usage="12"/>
+
+    <players id="1" name="Mr X" comment="no comment"/>
+    <players id="2" name="Mr Z" comment="A test comment"/>
     <traderCategories id="1" name="category1" />
     <traderCategories id="2" name="category2" />
     <traderCategories id="3" name="category3" />

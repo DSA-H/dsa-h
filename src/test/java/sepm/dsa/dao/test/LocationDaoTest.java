@@ -1,5 +1,6 @@
 package sepm.dsa.dao.test;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import sepm.dsa.dao.LocationDao;
@@ -67,6 +68,7 @@ public class LocationDaoTest extends AbstractDatabaseTest {
     }
 
 //    @Test
+//    @DatabaseSetup("/testData.xml")
 //    public void update_removesConnections() throws Exception {
 //        Location location = locationDao.get(4);
 //        location.getConnections1().remove(location.getConnections1().iterator().next());

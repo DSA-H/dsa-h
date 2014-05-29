@@ -32,6 +32,7 @@
                 <value>sepm.dsa.model.Location</value>
                 <value>sepm.dsa.model.LocationConnection</value>
                 <value>sepm.dsa.model.Tavern</value>
+                <value>sepm.dsa.model.Player</value>
                 <value>sepm.dsa.model.ProductUnit</value>
                 <value>sepm.dsa.model.Currency</value>
             </list>
@@ -51,6 +52,7 @@
                 <value>sepm/dsa/model/hibernate/LocationConnection.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Tavern.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Currency.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Player.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -102,6 +104,10 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="playerDao" class="sepm.dsa.dao.PlayerDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <bean id="productUnitDao" class="sepm.dsa.dao.ProductUnitDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
@@ -114,6 +120,10 @@
         <property name="regionDao" ref="regionDao"/>
         <property name="regionBorderDao" ref="regionBorderDao"/>
         <property name="locationService" ref="locationService"/>
+    </bean>
+
+    <bean id="playerService" class="sepm.dsa.service.PlayerServiceImpl">
+        <property name="playerDao" ref="playerDao"/>
     </bean>
 
     <bean id="regionBorderService" class="sepm.dsa.service.RegionBorderServiceImpl">
@@ -248,6 +258,14 @@
         <property name="loader" ref="loader"/>
         <property name="locationConnectionService" ref="locationConnectionService"/>
         <property name="locationService" ref="locationService"/>
+    </bean>
+    <bean id="PlayerListController" class="sepm.dsa.gui.PlayerListController">
+        <property name="loader" ref="loader"/>
+        <property name="playerService" ref="playerService"/>
+    </bean>
+    <bean id="EditPlayerController" class="sepm.dsa.gui.EditPlayerController">
+        <property name="loader" ref="loader"/>
+        <property name="playerService" ref="playerService"/>
     </bean>
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">

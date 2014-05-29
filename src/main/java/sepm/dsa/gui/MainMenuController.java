@@ -1,6 +1,7 @@
 package sepm.dsa.gui;
 
 import com.sun.javafx.stage.StageHelper;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -112,6 +113,19 @@ public class MainMenuController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/locationlist.fxml");
 
         stage.setTitle("Orte verwalten");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
+    public void onPlayerClicked(ActionEvent event) {
+
+        log.debug("onPlayerClicked - open Player Window");
+        Stage stage = new Stage();
+        Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
+
+        stage.setTitle("Spieler verwalten");
         stage.setScene(new Scene(scene, 600, 438));
         stage.setResizable(false);
         stage.show();
@@ -351,4 +365,5 @@ public class MainMenuController implements Initializable {
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
     }
+
 }
