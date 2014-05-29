@@ -267,8 +267,7 @@ public class EditTraderController implements Initializable {
         }
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
-        stage.setScene(new Scene(scene, 600, 400));
+	    stage.close();
 
 
     }
@@ -278,8 +277,7 @@ public class EditTraderController implements Initializable {
         log.debug("called onCancelPressed");
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
-        stage.setScene(new Scene(scene, 600, 400));
+	    stage.close();
     }
 
     public void setTraderService(TraderService traderService) {

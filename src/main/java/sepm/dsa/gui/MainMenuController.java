@@ -192,26 +192,24 @@ public class MainMenuController implements Initializable {
 			traderList.setItems(data);
 
 			chooseButton.setText("Zurück");
+			editButton.setText("Details");
 		} else {
 			mode = 0;
 			locationTable.setVisible(true);
 			traderList.setVisible(false);
 			chooseButton.setText("Auswählen");
+			editButton.setText("Bearbeiten");
 		}
 
 		updateMap();
 	}
 
-
 	@FXML
 	private void onEditButtonPressed() {
 		log.debug("onEditButtonPressed - open Details Window");
 
-		//TODO schön machen
 		if (mode == 0) {
-			Location selectedLocation = locationTable.getFocusModel().getFocusedItem();
 			EditLocationController.setLocation(selectedLocation);
-
 
 			Stage stage = new Stage();
 			Parent scene = (Parent) loader.load("/gui/editlocation.fxml");
@@ -220,7 +218,17 @@ public class MainMenuController implements Initializable {
 			stage.setScene(new Scene(scene, 900, 438));
 			stage.setResizable(false);
 			stage.showAndWait();
-		} else {}
+		} else {
+			Stage stage = new Stage();
+			Parent scene = (Parent) loader.load("/gui/traderdetails.fxml");
+			stage.setTitle("Händler-Details");
+
+			TraderDetailsController controller = loader.getController();
+			controller.setTrader(selectedTrader);
+			stage.setScene(new Scene(scene, 800, 400));
+			stage.setResizable(false);
+			stage.showAndWait();
+		}
 
 		ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
 		locationTable.setItems(data);
@@ -252,7 +260,20 @@ public class MainMenuController implements Initializable {
 					locationTable.getItems().remove(selectedLocation);
 				}
 			}
-		} else {}
+		} else {
+			if (selectedTrader != null) {
+				log.debug("open Confirm-Delete-Trader Dialog");
+				Action response = Dialogs.create()
+						.title("Löschen?")
+						.masthead(null)
+						.message("Wollen Sie den Händer '" + selectedTrader.getName() + "' wirklich löschen")
+						.showConfirm();
+				if (response == Dialog.Actions.YES) {
+					traderService.remove(selectedTrader);
+					traderList.getItems().remove(selectedTrader);
+				}
+			}
+		}
 
 	}
 
@@ -270,7 +291,17 @@ public class MainMenuController implements Initializable {
 			stage.setScene(new Scene(scene, 900, 438));
 			stage.setResizable(false);
 			stage.showAndWait();
-		} else {}
+		} else {
+			Stage stage = new Stage();
+			Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
+			stage.setTitle("Händler erstellen");
+
+			EditTraderController controller = loader.getController();
+			controller.setTrader(null);
+			stage.setScene(new Scene(scene, 600, 400));
+			stage.setResizable(false);
+			stage.showAndWait();
+		}
 
 		ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
 		locationTable.setItems(data);

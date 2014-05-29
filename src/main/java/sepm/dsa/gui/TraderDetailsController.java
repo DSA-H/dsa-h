@@ -65,8 +65,7 @@ public class TraderDetailsController implements Initializable {
         log.debug("called onBackPressed");
 
         Stage stage = (Stage) offerTable.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
-        stage.setScene(new Scene(scene, 600, 400));
+	    stage.close();
     }
 
     @FXML
