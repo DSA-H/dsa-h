@@ -166,6 +166,7 @@
         <property name="mapService" ref="mapService"/>
         <property name="locationService" ref="locationService"/>
         <property name="traderService" ref="traderService"/>
+        <property name="tavernService" ref="tavernService"/>
     </bean>
 
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">

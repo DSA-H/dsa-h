@@ -10,6 +10,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.*;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -20,6 +22,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
@@ -31,12 +35,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
+import sepm.dsa.model.LocationConnection;
+import sepm.dsa.model.Tavern;
 import sepm.dsa.model.Trader;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.MapService;
+import sepm.dsa.service.TavernService;
 import sepm.dsa.service.TraderService;
 
-import java.awt.*;
+import java.awt.Point;
+import java.awt.MouseInfo;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -49,6 +57,7 @@ public class MainMenuController implements Initializable {
 	private SpringFxmlLoader loader;
 	private LocationService locationService;
 	private TraderService traderService;
+	private TavernService tavernService;
 	private MapService mapService;
 	private Point2D SPLocation;
 	private double scrollPositionX;
@@ -348,25 +357,26 @@ public class MainMenuController implements Initializable {
 
 	@FXML
 	private void onScrollPaneClicked() {
+
+		setSPLocation();
+		Point mousePosition = MouseInfo.getPointerInfo().getLocation();
+
+		Canvas canvas = (Canvas) scrollPane.getContent();
+		double scrollableX = canvas.getWidth() - scrollPane.getWidth();
+		double scrollableY = canvas.getHeight() - scrollPane.getHeight();
+		if (canvas.getWidth() > scrollPane.getWidth()) {
+			scrollableX += 12;
+		}
+		if (canvas.getHeight() > scrollPane.getHeight()) {
+			scrollableY += 12;
+		}
+
+		int xPos = (int) (mousePosition.getX() - SPLocation.getX() + scrollPositionX * scrollableX);
+		int yPos = (int) (mousePosition.getY() - SPLocation.getY() + scrollPositionY * scrollableY);
+
+		Point2D pos = new Point2D(xPos, yPos);
+
 		if (creationMode) {
-			setSPLocation();
-			Point mousePosition = MouseInfo.getPointerInfo().getLocation();
-
-			double scrollableX = mapImageView.getImage().getWidth() - scrollPane.getWidth();
-			double scrollableY = mapImageView.getImage().getHeight() - scrollPane.getHeight();
-			if (mapImageView.getImage().getWidth() > scrollPane.getWidth()) {
-				scrollableX += 12;
-			}
-			if (mapImageView.getImage().getHeight() > scrollPane.getHeight()) {
-				scrollableY += 12;
-			}
-
-			int xPos = (int) (mousePosition.getX() - SPLocation.getX() + scrollPositionX * scrollableX);
-			int yPos = (int) (mousePosition.getY() - SPLocation.getY() + scrollPositionY * scrollableY);
-
-			Point2D pos = new Point2D(xPos, yPos);
-
-
 			Stage stage = new Stage();
 			Parent scene = (Parent) loader.load("/gui/placement.fxml");
 			PlacementController controller = loader.getController();
@@ -401,6 +411,30 @@ public class MainMenuController implements Initializable {
 
 			ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
 			locationTable.setItems(data);
+		} else {
+			if (mode == 0) {
+				int locX;
+				int locY;
+				List<Location> locations = locationService.getAll();
+				for (Location l : locations) {
+					locX = l.getxCoord();
+					locY = l.getyCoord();
+					if (xPos > locX - 10 && xPos < locX + 10 && yPos > locY - 10 && yPos < locY + 10) {
+						locationTable.getSelectionModel().select(l);
+					}
+				}
+			} else {
+				int locX;
+				int locY;
+				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+				for (Trader t : traders) {
+					locX = t.getxPos();
+					locY = t.getyPos();
+					if (xPos > locX - 10 && xPos < locX + 10 && yPos > locY - 10 && yPos < locY + 10) {
+						traderList.getSelectionModel().select(t);
+					}
+				}
+			}
 		}
 	}
 
@@ -510,21 +544,99 @@ public class MainMenuController implements Initializable {
 			if (worldMap == null) {
 				worldMap = mapService.getNoMapImage();
 			}
-			Image image = new Image("file:" + worldMap.getAbsolutePath(), true);
-			mapImageView.setImage(image);
-			mapImageView.setSmooth(true);
-			mapImageView.setPreserveRatio(true);
-			scrollPane.setContent(mapImageView);
+			Image image = new Image("file:" + worldMap.getAbsolutePath());
+			Canvas canvas = new Canvas(image.getWidth(), image.getHeight());
+			GraphicsContext gc = canvas.getGraphicsContext2D();
+			gc.drawImage(image, 0, 0);
+			drawLocations(gc);
+			scrollPane.setContent(canvas);
 		} else {
 			File map = mapService.getLocationMap(selectedLocation);
 			if (map == null) {
 				map = mapService.getNoMapImage();
 			}
-			Image image = new Image("file:" + map.getAbsolutePath(), true);
-			mapImageView.setImage(image);
-			mapImageView.setSmooth(true);
-			mapImageView.setPreserveRatio(true);
-			scrollPane.setContent(mapImageView);
+			Image image = new Image("file:" + map.getAbsolutePath());
+			Canvas canvas = new Canvas(image.getWidth(), image.getHeight());
+			GraphicsContext gc = canvas.getGraphicsContext2D();
+			gc.drawImage(image, 0, 0);
+			drawTraders(gc);
+			scrollPane.setContent(canvas);
+		}
+	}
+
+	private void drawLocations(GraphicsContext gc) {
+		int posX1;
+		int posY1;
+		int posX2;
+		int posY2;
+		List<Location> locations = locationService.getAll();
+		gc.setLineWidth(3);
+		for (Location l : locations) {
+			gc.setFill(new Color(
+					(double) Integer.valueOf(l.getRegion().getColor().substring(0, 2), 16) / 255,
+					(double) Integer.valueOf(l.getRegion().getColor().substring(2, 4), 16) / 255,
+					(double) Integer.valueOf(l.getRegion().getColor().substring(4, 6), 16) / 255,
+					1.0));
+			gc.setStroke(new Color(
+					(double) Integer.valueOf(l.getRegion().getColor().substring(0, 2), 16) / 255,
+					(double) Integer.valueOf(l.getRegion().getColor().substring(2, 4), 16) / 255,
+					(double) Integer.valueOf(l.getRegion().getColor().substring(4, 6), 16) / 255,
+					1.0));
+			posX1 = l.getxCoord();
+			posY1 = l.getyCoord();
+			if (posX1 != 0 && posY1 != 0) {
+				gc.fillRoundRect(posX1 - 10, posY1 - 10, 20, 20, 10, 10);
+				for (LocationConnection lc : l.getAllConnections()) {
+					posX1 = lc.getLocation1().getxCoord();
+					posY1 = lc.getLocation1().getyCoord();
+					posX2 = lc.getLocation2().getxCoord();
+					posY2 = lc.getLocation2().getyCoord();
+					gc.strokeLine(posX1, posY1, posX2, posY2);
+				}
+
+			}
+		}
+		gc.setStroke(Color.BLACK);
+		gc.setLineWidth(0.6);
+		for (Location l : locations) {
+			posX1 = l.getxCoord();
+			posY1 = l.getyCoord();
+			gc.strokeText(l.getName(), posX1 + 10, posY1 - 10);
+		}
+	}
+
+
+	private void drawTraders(GraphicsContext gc) {
+		int posX;
+		int posY;
+		gc.setLineWidth(5);
+		gc.setStroke(Color.RED);
+		List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+		for (Trader t : traders) {
+			posX = t.getxPos();
+			posY = t.getyPos();
+			gc.strokeLine(posX - 5, posY - 5, posX + 5, posY + 5);
+			gc.strokeLine(posX - 5, posY + 5, posX + 5, posY - 5);
+		}
+		gc.setStroke(Color.YELLOW);
+		List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+		for (Tavern t : taverns) {
+			posX = t.getxPos();
+			posY = t.getyPos();
+			gc.strokeLine(posX - 5, posY - 5, posX + 5, posY + 5);
+			gc.strokeLine(posX - 5, posY + 5, posX + 5, posY - 5);
+		}
+		gc.setStroke(Color.BLACK);
+		gc.setLineWidth(0.6);
+		for (Trader t : traders) {
+			posX = t.getxPos();
+			posY = t.getyPos();
+			gc.strokeText(t.getName(), posX + 10, posY - 10);
+		}
+		for (Tavern t : taverns) {
+			posX = t.getxPos();
+			posY = t.getyPos();
+			gc.strokeText(t.getName(), posX + 10, posY - 10);
 		}
 	}
 
@@ -600,6 +712,10 @@ public class MainMenuController implements Initializable {
 
 	public void setTraderService(TraderService traderService) {
 		this.traderService = traderService;
+	}
+
+	public void setTavernService(TavernService tavernService) {
+		this.tavernService = tavernService;
 	}
 
 	public void setLocationService(LocationService locationService) {

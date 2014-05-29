@@ -1,6 +1,10 @@
 package sepm.dsa.service;
 
+import sepm.dsa.model.Location;
 import sepm.dsa.model.Tavern;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TavernServiceImpl implements TavernService {
 
@@ -11,4 +15,10 @@ public class TavernServiceImpl implements TavernService {
         // guaranteed to be random.
         // http://xkcd.com/221/
     }
+
+	@Override
+	public List<Tavern> getAllForLocation(Location location) {
+		// TODO implement
+		return new ArrayList<Tavern>();
+	}
 }
