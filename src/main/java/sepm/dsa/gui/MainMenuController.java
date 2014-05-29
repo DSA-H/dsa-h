@@ -23,11 +23,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.controlsfx.control.action.Action;
 import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
@@ -42,12 +38,9 @@ import sepm.dsa.service.LocationService;
 import sepm.dsa.service.MapService;
 import sepm.dsa.service.TavernService;
 import sepm.dsa.service.TraderService;
-
 import java.awt.Point;
 import java.awt.MouseInfo;
 import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -230,6 +223,8 @@ public class MainMenuController implements Initializable {
 			traderList.setItems(data);
 		}
 
+		updateMap();
+
 	}
 
 	@FXML
@@ -411,6 +406,8 @@ public class MainMenuController implements Initializable {
 
 			ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
 			locationTable.setItems(data);
+
+			updateMap();
 		} else {
 			if (mode == 0) {
 				int locX;
@@ -476,37 +473,12 @@ public class MainMenuController implements Initializable {
 	}
 
 	@FXML
-	private void onShowLocationsClicked() {
-		log.debug("onShowLocationsClicked - open Location Window");
-		Stage stage = new Stage();
-		Parent scene = (Parent) loader.load("/gui/locationlist.fxml");
-
-		stage.setTitle("Orte verwalten");
-		stage.setScene(new Scene(scene, 600, 438));
-		stage.setResizable(false);
-		stage.show();
-	}
-
-	@FXML
 	private void onExitClicked() {
 		log.debug("onExitClicked - exit Programm Request");
 		if (exitProgramm()) {
 			Stage primaryStage = (Stage) menuBar.getScene().getWindow();
 			primaryStage.close();
 		}
-	}
-
-	@FXML
-	private void onTradersPressed() {
-
-		log.debug("called onTradersPressed");
-		Stage stage = new Stage();
-		Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
-		stage.setTitle("Händlerverwaltung");
-		stage.setScene(new Scene(scene, 600, 400));
-		stage.setResizable(false);
-		stage.show();
-
 	}
 
 	@FXML
@@ -604,7 +576,6 @@ public class MainMenuController implements Initializable {
 			gc.strokeText(l.getName(), posX1 + 10, posY1 - 10);
 		}
 	}
-
 
 	private void drawTraders(GraphicsContext gc) {
 		int posX;

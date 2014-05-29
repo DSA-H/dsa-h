@@ -27,7 +27,6 @@
                         <MenuItem fx:id="verwaltenGebieteGrenzen" mnemonicParsing="false" onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen" />
                         <MenuItem fx:id="verwaltenWaehrungen" disable="true" mnemonicParsing="false" text="Währungen" />
                         <MenuItem fx:id="verwaltenWaren" disable="false" mnemonicParsing="false" onAction="#onWarenClicked" text="Waren" />
-                        <MenuItem mnemonicParsing="false" onAction="#onShowLocationsClicked" text="Orte" /><MenuItem mnemonicParsing="false" onAction="#onTradersPressed" text="Händlerverwaltung" />
                     </items>
                 </Menu>
             </menus>
