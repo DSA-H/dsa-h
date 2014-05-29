@@ -169,6 +169,9 @@
     <bean id="assortmentNatureService" class="sepm.dsa.service.AssortmentNatureServiceImpl">
     </bean>
 
+    <bean id="timeService" class="sepm.dsa.service.TimeServiceImpl">
+    </bean>
+
     <!-- GUI DI -->
     <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController">
         <property name="loader" ref="loader"/>
