@@ -14,7 +14,7 @@ import sepm.dsa.service.LocationServiceImpl;
 
 import static org.mockito.Mockito.*;
 
-@Transactional
+
 public class IsolatedLocationServiceTest extends AbstractDatabaseTest {
 
     private LocationService isolatedLocationService;
