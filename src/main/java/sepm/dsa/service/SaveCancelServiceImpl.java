@@ -1,11 +1,8 @@
 package sepm.dsa.service;
 
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.dao.SaveCancelDao;
-
-import java.util.Collection;
 
 public class SaveCancelServiceImpl implements SaveCancelService {
 
@@ -32,9 +29,9 @@ public class SaveCancelServiceImpl implements SaveCancelService {
     }
 
     @Override
-    public void reset(Object... objects) {
+    public void refresh(Object... objects) {
         log.debug("calling save(" + objects + ")");
-        saveCancelDao.reset(objects);
+        saveCancelDao.refresh(objects);
     }
 
     public void setSaveCancelDao(SaveCancelDao saveCancelDao) {

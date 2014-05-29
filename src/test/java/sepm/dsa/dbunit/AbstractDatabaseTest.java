@@ -34,7 +34,7 @@ abstract public class AbstractDatabaseTest {
 
     @Before
     public void setUp() {
-        saveCancelService.save();
+        saveCancelService.cancel();
     }
 
     @After

@@ -16,7 +16,7 @@ public class Region implements Serializable, PathNode {
     private static final long serialVersionUID = 5890354733231481712L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 

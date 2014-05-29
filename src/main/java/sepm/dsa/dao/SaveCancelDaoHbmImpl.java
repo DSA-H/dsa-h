@@ -25,16 +25,16 @@ public class SaveCancelDaoHbmImpl implements SaveCancelDao {
     }
 
     @Override
-    public void reset(Object... objects) {
-        log.info("calling reset(" + objects + ")");
+    public void refresh(Object... objects) {
+        log.info("calling refresh(" + objects + ")");
         for (Object o : objects) {
             sessionFactory.getCurrentSession().refresh(o);
         }
     }
 
 //    @Override
-//    public void reset(Collection<?> objects) {
-//        log.info("calling reset(" + objects + ")");
+//    public void refresh(Collection<?> objects) {
+//        log.info("calling refresh(" + objects + ")");
 //        for (Object o : objects) {
 //            sessionFactory.getCurrentSession().refresh(o);
 //        }

@@ -13,16 +13,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
-import sepm.dsa.service.LocationConnectionService;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionService;
 import sepm.dsa.service.SaveCancelService;
@@ -188,7 +184,7 @@ public class EditLocationController implements Initializable {
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
         saveCancelService.cancel();
-        saveCancelService.reset(selectedLocation);
+        saveCancelService.refresh(selectedLocation);
         log.info("before: connections.size=" + selectedLocation.getAllConnections().size());
         selectedLocation = locationService.get(selectedLocation.getId());
         log.info("after: connections.size=" + selectedLocation.getAllConnections().size());
