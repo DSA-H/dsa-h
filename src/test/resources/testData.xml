@@ -96,4 +96,8 @@
 
     <currencies id="1" name="firstCurrency" valueToBaseRate="3"/>
     <currencies id="2" name="secondCurrency" valueToBaseRate="2"/>
+    <unittypes id="1" name="erster"/>
+    <unittypes id="2" name="zweiter"/>
+    <units id="1" name="foo333" unittype_id="1" valueToBaseUnit="3" shortname="s1"/>
+    <units id="2" name="foo444" unittype_id="2" valueToBaseUnit="4" shortname="s2"/>
 </dataset>

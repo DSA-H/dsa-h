@@ -33,7 +33,8 @@
                 <value>sepm.dsa.model.LocationConnection</value>
                 <value>sepm.dsa.model.Tavern</value>
                 <value>sepm.dsa.model.Player</value>
-                <value>sepm.dsa.model.ProductUnit</value>
+                <value>sepm.dsa.model.Unit</value>
+                <value>sepm.dsa.model.UnitType</value>
                 <value>sepm.dsa.model.Currency</value>
             </list>
         </property>
@@ -47,12 +48,13 @@
                 <value>sepm/dsa/model/hibernate/Location.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Product.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/ProductCategory.hbm.xml</value>
-                <value>sepm/dsa/model/hibernate/ProductUnit.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/AssortmentNature.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/LocationConnection.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Tavern.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Currency.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Player.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/UnitType.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Unit.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -108,9 +110,14 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="productUnitDao" class="sepm.dsa.dao.ProductUnitDaoHbmImpl">
+    <bean id="unitDao" class="sepm.dsa.dao.UnitDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+
+    <bean id="unitTypeDao" class="sepm.dsa.dao.UnitTypeDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <bean id="currencyDao" class="sepm.dsa.dao.CurrencyDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
@@ -155,8 +162,12 @@
         <property name="productCategoryDao" ref="productCategoryDao"/>
     </bean>
 
-    <bean id="productUnitService" class="sepm.dsa.service.ProductUnitServiceImpl">
-        <property name="productUnitDao" ref="productUnitDao"/>
+    <bean id="unitService" class="sepm.dsa.service.UnitServiceImpl">
+        <property name="unitDao" ref="unitDao"/>
+    </bean>
+
+    <bean id="unitTypeService" class="sepm.dsa.service.UnitTypeServiceImpl">
+        <property name="unitTypeDao" ref="unitTypeDao"/>
     </bean>
 
     <bean id="traderCategoryService" class="sepm.dsa.service.TraderCategoryServiceImpl">
@@ -277,6 +288,11 @@
         <property name="currencyService" ref="currencyService"/>
     </bean>
     <bean id="editCurrency" class="sepm.dsa.gui.EditCurrencyController">
+        <property name="loader" ref="loader"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="currencyService" ref="currencyService"/>
+    </bean>
+    <bean id="calculateCurrency" class="sepm.dsa.gui.CurrencyCalculateController">
         <property name="loader" ref="loader"/>
         <property name="sessionFactory" ref="sessionFactory"/>
         <property name="currencyService" ref="currencyService"/>

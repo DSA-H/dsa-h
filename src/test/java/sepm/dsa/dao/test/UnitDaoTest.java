@@ -1,7 +1,8 @@
-package sepm.dsa.dao;
+package sepm.dsa.dao.test;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import sepm.dsa.dao.CurrencyDao;
 import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Currency;
 
@@ -11,7 +12,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
 
-public class CurrencyDaoTest extends AbstractDatabaseTest {
+public class UnitDaoTest extends AbstractDatabaseTest {
 
     @Autowired
     private CurrencyDao currencyDao;
