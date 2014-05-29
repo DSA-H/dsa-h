@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.LocationDao;
+import sepm.dsa.exceptions.DSAModelNotFoundException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Location;
 
@@ -23,7 +24,6 @@ public class LocationServiceImpl implements LocationService {
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private LocationDao locationDao;
-    private TraderService traderService;
 
     @Override
     @Transactional(readOnly = false)
@@ -53,10 +53,9 @@ public class LocationServiceImpl implements LocationService {
     @Transactional(readOnly = false)
     public void remove(Location location) {
         log.debug("calling remove(" + location + ")");
-//        List<Trader> tradersInTown = traderService.getAllForLocation(location);
-
-//        tradersInTown.forEach(traderService::remove);
-
+        if (location.getId() == null) {
+            throw new DSAValidationException("Ort muss eine ID haben");
+        }
         locationDao.remove(location);
     }
 
@@ -93,7 +92,4 @@ public class LocationServiceImpl implements LocationService {
         }
     }
 
-    public void setTraderService(TraderService traderService) {
-        this.traderService = traderService;
-    }
 }
