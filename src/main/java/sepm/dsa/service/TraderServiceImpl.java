@@ -1,7 +1,6 @@
 package sepm.dsa.service;
 
 import org.apache.commons.collections.IteratorUtils;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
@@ -18,6 +17,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.*;
 
+@Transactional(readOnly = true)
 public class TraderServiceImpl implements TraderService {
     private static final Logger log = LoggerFactory.getLogger(TraderServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
@@ -93,7 +93,6 @@ public class TraderServiceImpl implements TraderService {
         List<Float> weights = new ArrayList<>();
         float topWeight = 0;
         // calculate weight for each product
-	    sessionFactory.getCurrentSession().refresh(trader);
         for (AssortmentNature assortmentNature : trader.getCategory().getAssortments()) {
             int defaultOccurence = assortmentNature.getDefaultOccurence();
             ProductCategory productCategory = assortmentNature.getProductCategory();
@@ -268,8 +267,6 @@ public class TraderServiceImpl implements TraderService {
 	@Override
 	@Transactional(readOnly = true)
 	public Collection<Offer> getOffers(Trader trader) {
-		sessionFactory.getCurrentSession().refresh(trader);
-
 		// Initialize the set the mëh way
 		trader.getOffers().size();
 

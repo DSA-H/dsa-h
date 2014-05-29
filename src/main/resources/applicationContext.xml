@@ -106,7 +106,6 @@
 
     <bean id="traderCategoryDao" class="sepm.dsa.dao.TraderCategoryDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
-        <property name="traderDao" ref="traderDao"/>
     </bean>
 
     <bean id="locationDao" class="sepm.dsa.dao.LocationDaoImpl">
@@ -173,6 +172,7 @@
 
     <bean id="traderCategoryService" class="sepm.dsa.service.TraderCategoryServiceImpl">
         <property name="traderCategoryDao" ref="traderCategoryDao"/>
+        <property name="traderService" ref="traderService"/>
     </bean>
 
     <bean id="traderService" class="sepm.dsa.service.TraderServiceImpl">
@@ -200,7 +200,7 @@
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
         <property name="locationService" ref="locationService"/>
-	<property name="saveCancelService" ref="saveCancelService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 
     <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
@@ -214,7 +214,7 @@
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
         <property name="traderService" ref="traderService"/>
-	<property name="saveCancelService" ref="saveCancelService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 
     <bean id="EditLocationController" class="sepm.dsa.gui.EditLocationController">

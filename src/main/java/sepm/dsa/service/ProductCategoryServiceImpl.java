@@ -34,10 +34,10 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     @Transactional(readOnly = false)
-    public int add(ProductCategory p) {
+    public void add(ProductCategory p) {
         log.debug("calling addConnection(" + p + ")");
         validate(p);
-        return productCategoryDao.add(p);
+        productCategoryDao.add(p);
     }
 
     @Override

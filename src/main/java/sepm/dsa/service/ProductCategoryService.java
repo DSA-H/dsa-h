@@ -18,7 +18,7 @@ public interface ProductCategoryService {
      *
      * @param p productcategory (not null)
      */
-    int add(ProductCategory p);
+    void add(ProductCategory p);
 
     /**
      * Update a product

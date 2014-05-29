@@ -8,6 +8,7 @@ import sepm.dsa.dao.RegionBorderDao;
 import sepm.dsa.dao.RegionDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Region;
+import sepm.dsa.model.RegionBorder;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
