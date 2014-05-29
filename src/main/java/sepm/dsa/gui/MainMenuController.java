@@ -170,54 +170,6 @@ public class MainMenuController implements Initializable {
 			mode = 1;
 			locationTable.setVisible(false);
 			traderList.setVisible(true);
-
-    @FXML
-    public void onPlayerClicked(ActionEvent event) {
-
-        log.debug("onPlayerClicked - open Player Window");
-        Stage stage = new Stage();
-        Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
-
-        stage.setTitle("Spieler verwalten");
-        stage.setScene(new Scene(scene, 600, 438));
-        stage.setResizable(false);
-        stage.show();
-    }
-
-    @FXML
-    private void onCurrencyClicked() {
-        log.debug("onWarenClicked - open Currency Window");
-        Stage stage = new Stage();
-
-        Parent scene = (Parent) loader.load("/gui/currencyList.fxml");
-
-        stage.setTitle("Währungen");
-        stage.setScene(new Scene(scene, 600, 438));
-        stage.setResizable(false);
-        stage.show();
-    }
-
-    @FXML
-    private void onCalculateCurrencyClicked(){
-        log.debug("onCalculateCurrencyClicked - open Calculate Currency Window");
-        Stage stage = new Stage();
-
-        Parent scene = (Parent) loader.load("/gui/calculatecurrency.fxml");
-
-        stage.setTitle("Währung umrechnen");
-        stage.setScene(new Scene(scene, 600, 438));
-        stage.setResizable(false);
-        stage.show();
-    }
-
-    @FXML
-    private void onExitClicked() {
-        log.debug("onExitClicked - exit Programm Request");
-        if (exitProgramm()) {
-            Stage primaryStage = (Stage) menuBar.getScene().getWindow();
-            primaryStage.close();
-        }
-    }
 			selectedTrader = null;
 			deleteButton.setDisable(true);
 			editButton.setDisable(true);
@@ -483,6 +435,46 @@ public class MainMenuController implements Initializable {
 		}
 	}
 
+
+	@FXML
+	public void onPlayerClicked(ActionEvent event) {
+
+		log.debug("onPlayerClicked - open Player Window");
+		Stage stage = new Stage();
+		Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
+
+		stage.setTitle("Spieler verwalten");
+		stage.setScene(new Scene(scene, 600, 438));
+		stage.setResizable(false);
+		stage.show();
+	}
+
+	@FXML
+	private void onCurrencyClicked() {
+		log.debug("onWarenClicked - open Currency Window");
+		Stage stage = new Stage();
+
+		Parent scene = (Parent) loader.load("/gui/currencyList.fxml");
+
+		stage.setTitle("Währungen");
+		stage.setScene(new Scene(scene, 600, 438));
+		stage.setResizable(false);
+		stage.show();
+	}
+
+	@FXML
+	private void onCalculateCurrencyClicked(){
+		log.debug("onCalculateCurrencyClicked - open Calculate Currency Window");
+		Stage stage = new Stage();
+
+		Parent scene = (Parent) loader.load("/gui/calculatecurrency.fxml");
+
+		stage.setTitle("Währung umrechnen");
+		stage.setScene(new Scene(scene, 600, 438));
+		stage.setResizable(false);
+		stage.show();
+	}
+
 	@FXML
 	private void onGrenzenGebieteClicked() {
 		log.debug("onGrenzenGebieteClicked - open Grenzen und Gebiete Window");
@@ -719,10 +711,6 @@ public class MainMenuController implements Initializable {
 			editButton.setDisable(false);
 		}
 		chooseButton.setDisable(false);
-	}
-
-	public void setLoader(SpringFxmlLoader loader) {
-		this.loader = loader;
 	}
 
 	public void setMapService(MapService mapService) {

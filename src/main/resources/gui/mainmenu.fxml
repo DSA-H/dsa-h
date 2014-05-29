@@ -24,10 +24,14 @@
 </Menu>
                         <MenuItem fx:id="verwaltenHaendlerKategorie" mnemonicParsing="false" onAction="#onTraderCategoriesClicked" text="Händlerkategorie" />
                         <MenuItem fx:id="verwaltenGebieteGrenzen" mnemonicParsing="false" onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen" />
-                        <MenuItem fx:id="verwaltenWaehrungen" disable="true" mnemonicParsing="false" text="Währungen" />
+                        <MenuItem fx:id="verwaltenWaehrungen" mnemonicParsing="false" onAction="#onCurrencyClicked" text="Währungen" /><MenuItem fx:id="berechneWährung" mnemonicParsing="false" onAction="#onCalculateCurrencyClicked" text="Währung umrechnen" />
                         <MenuItem fx:id="verwaltenWaren" disable="false" mnemonicParsing="false" onAction="#onWarenClicked" text="Waren" />
                     </items>
-                </Menu>
+                </Menu><Menu mnemonicParsing="false" text="Spiel">
+  <items>
+    <MenuItem mnemonicParsing="false" onAction="#onPlayerClicked" text="Spieler" />
+  </items>
+</Menu>
             </menus>
         </MenuBar><ScrollPane fx:id="scrollPane" layoutX="14.0" layoutY="36.0" onMouseClicked="#onScrollPaneClicked" prefHeight="550.0" prefWidth="400.0" /><TableView fx:id="locationTable" layoutX="433.0" layoutY="36.0" prefHeight="500.0" prefWidth="350.0">
   <columns>
@@ -38,7 +42,6 @@
 <children><Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Platzieren" /><Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#onEditButtonPressed" text="Bearbeiten" /><Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" />
 </children></HBox><Button fx:id="chooseButton" alignment="CENTER" disable="true" layoutX="708.0" layoutY="561.0" mnemonicParsing="false" onAction="#onChooseButtonPressed" prefWidth="75.0" text="Auswählen">
 <HBox.margin>
-<Insets />
 </HBox.margin></Button><ListView fx:id="traderList" layoutX="433.0" layoutY="36.0" prefHeight="500.0" prefWidth="350.0" visible="false" />
 </children></Pane>
 </bottom>

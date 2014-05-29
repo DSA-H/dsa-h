@@ -51,11 +51,15 @@ public class CurrencyCalculateController implements Initializable {
         choiceFirst.setItems(FXCollections.observableArrayList(currencies));
         choiceSecond.setItems(FXCollections.observableArrayList(currencies));
 
-        choiceFirst.getSelectionModel().select(0);
-        choiceSecond.getSelectionModel().select(0);
+	    if (currencies.isEmpty()) {
+		    //TODO what to do?
+	    } else {
+		    choiceFirst.getSelectionModel().select(0);
+		    choiceSecond.getSelectionModel().select(0);
 
-        labelvon.setText(choiceFirst.getSelectionModel().getSelectedItem().getName());
-        labelin.setText(choiceSecond.getSelectionModel().getSelectedItem().getName());
+		    labelvon.setText(choiceFirst.getSelectionModel().getSelectedItem().getName());
+		    labelin.setText(choiceSecond.getSelectionModel().getSelectedItem().getName());
+	    }
     }
 
     @FXML
