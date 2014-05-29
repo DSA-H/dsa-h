@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
 import sepm.dsa.service.LocationService;
+import sepm.dsa.service.SaveCancelService;
+import sepm.dsa.service.SaveCancelServiceImpl;
 import sepm.dsa.service.TraderService;
 
 public class LocationListController implements Initializable {
@@ -29,6 +31,7 @@ public class LocationListController implements Initializable {
     private LocationService locationService;
 
     private TraderService traderService;
+	private SaveCancelService saveCancelService;
 
     @FXML
     private TableView<Location> locationTable;
@@ -43,7 +46,7 @@ public class LocationListController implements Initializable {
     @FXML
     private Button deleteButton;
 
-    @Override
+	@Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize LocationListController");
 
@@ -107,6 +110,7 @@ public class LocationListController implements Initializable {
             if (response == Dialog.Actions.YES) {
                 locationService.remove(selectedLocation);
                 locationTable.getItems().remove(selectedLocation);
+	            saveCancelService.save();
             }
         }
 
@@ -137,4 +141,8 @@ public class LocationListController implements Initializable {
     public void setTraderService(TraderService traderService) {
         this.traderService = traderService;
     }
+
+	public void setSaveCancelService(SaveCancelService saveCancelService) {
+		this.saveCancelService = saveCancelService;
+	}
 }

@@ -200,6 +200,7 @@
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
         <property name="locationService" ref="locationService"/>
+	<property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 
     <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
@@ -213,6 +214,7 @@
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
         <property name="traderService" ref="traderService"/>
+	<property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 
     <bean id="EditLocationController" class="sepm.dsa.gui.EditLocationController">
