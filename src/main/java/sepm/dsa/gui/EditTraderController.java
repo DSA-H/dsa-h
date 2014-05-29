@@ -4,6 +4,7 @@ package sepm.dsa.gui;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
@@ -267,8 +268,7 @@ public class EditTraderController implements Initializable {
         }
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
-        stage.setScene(new Scene(scene, 600, 400));
+	    stage.close();
 
 
     }
@@ -278,8 +278,7 @@ public class EditTraderController implements Initializable {
         log.debug("called onCancelPressed");
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
-        stage.setScene(new Scene(scene, 600, 400));
+	    stage.close();
     }
 
     public void setTraderService(TraderService traderService) {
@@ -308,6 +307,16 @@ public class EditTraderController implements Initializable {
         }
         setUp();
     }
+
+	public void setLocation(Location location) {
+		locationBox.getSelectionModel().select(location);
+		locationBox.setDisable(true);
+	}
+
+	public void setPosition(Point2D pos) {
+		selectedTrader.setyPos((int) pos.getY());
+		selectedTrader.setxPos((int) pos.getX());
+	}
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;

@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -24,6 +25,7 @@ import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.LocationConnectionService;
 import sepm.dsa.service.LocationService;
+import sepm.dsa.service.MapService;
 import sepm.dsa.service.RegionService;
 
 import java.io.File;
@@ -39,8 +41,13 @@ public class EditLocationController implements Initializable {
 
     private LocationService locationService;
     private RegionService regionService;
+	private MapService mapService;
     // true if the location is not editing
     private boolean isNewLocation;
+
+	private int xCoord = 0;
+	private int yCoord = 0;
+	private File newMap;
 
     @FXML
     private TextField nameField;
@@ -52,10 +59,6 @@ public class EditLocationController implements Initializable {
     private ChoiceBox sizeChoiceBox;
     @FXML
     private ChoiceBox regionChoiceBox;
-    @FXML
-    private TextField xCoord;
-    @FXML
-    private TextField yCoord;
     @FXML
     private TextField height;
     @FXML
@@ -109,8 +112,8 @@ public class EditLocationController implements Initializable {
             weatherChoiceBox.getSelectionModel().select(selectedLocation.getWeather().getValue());
             sizeChoiceBox.getSelectionModel().select(selectedLocation.getSize().getValue());
             commentArea.setText(selectedLocation.getComment());
-            xCoord.setText(selectedLocation.getxCoord().toString());
-            yCoord.setText(selectedLocation.getyCoord().toString());
+	        xCoord = selectedLocation.getxCoord();
+	        yCoord = selectedLocation.getyCoord();
             height.setText(selectedLocation.getHeight().toString());
             regionChoiceBox.getSelectionModel().select(selectedLocation.getRegion());
         } else {
@@ -186,9 +189,7 @@ public class EditLocationController implements Initializable {
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/locationlist.fxml");
-
-        stage.setScene(new Scene(scene, 600, 438));
+	    stage.close();
     }
 
     private void saveLocation() {
@@ -207,16 +208,8 @@ public class EditLocationController implements Initializable {
         selectedLocation.setWeather(weather);
         selectedLocation.setSize(townSize);
         selectedLocation.setRegion(seletcedRegionForLocation);
-        try {
-            selectedLocation.setxCoord(Integer.parseInt(xCoord.getText()));
-        } catch (NumberFormatException e) {
-            throw new DSAValidationException("xCoord muss eine Zahl sein.");
-        }
-        try {
-            selectedLocation.setyCoord(Integer.parseInt(yCoord.getText()));
-        } catch (NumberFormatException e) {
-            throw new DSAValidationException("yCoord muss eine Zahl sein.");
-        }
+        selectedLocation.setxCoord(xCoord);
+        selectedLocation.setyCoord(yCoord);
         try {
             selectedLocation.setHeight(Integer.parseInt(height.getText()));
         } catch (NumberFormatException e) {
@@ -244,43 +237,22 @@ public class EditLocationController implements Initializable {
         log.debug("calling SaveButtonPressed");
 
         saveLocation();
+	    if (newMap != null) {
+		    mapService.setLocationMap(selectedLocation, newMap);
+	    }
 
 //        locationService.update(selectedLocation);
 
 
         // return to locationlist
         Stage stage = (Stage) cancelButton.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/locationlist.fxml");
-
-
-        //TODO ist das so gut immer eine NEUE scene zu öffnen?
-        stage.setScene(new Scene(scene, 600, 438));
+	    stage.close();
     }
 
     @FXML
     public void chooseBackground() {
         log.info("Select Backgroundimage Location");
-//choose File to export
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Ort Karte wählen");
-        List<String> extensions = new ArrayList<String>();
-        extensions.add("*.jpg");
-        extensions.add("*.png");
-        extensions.add("*.gif");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All Images", extensions),
-                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                new FileChooser.ExtensionFilter("GIF", "*.gif"),
-                new FileChooser.ExtensionFilter("PNG", "*.png")
-        );
-
-        //look for location map
-        File newlocationMap = fileChooser.showOpenDialog(new Stage());
-
-        if (newlocationMap == null) {
-            return;
-        }
-        this.backgroundMapName = newlocationMap.getAbsolutePath();
+	    newMap = mapService.chooseMap();
     }
 
 
@@ -308,6 +280,15 @@ public class EditLocationController implements Initializable {
         stage.setScene(new Scene(root, 900, 500));
         stage.show();
     }
+
+	public void setPosition(Point2D pos) {
+		this.yCoord = (int) pos.getY();
+		this.xCoord = (int) pos.getX();
+	}
+
+	public void setMapService(MapService mapService) {
+		this.mapService = mapService;
+	}
 
 //    @FXML
 //    public void onSuggestConnectionsBtnClicked() {

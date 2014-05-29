@@ -61,11 +61,6 @@
                         <Insets />
                     </opaqueInsets>
                 </HBox>
-                <Label alignment="CENTER" text="xCoord" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
-                <Label text="yCoord" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
-                <TextField GridPane.columnIndex="3" GridPane.rowIndex="9" fx:id="xCoord" />
-                <TextField fx:id="yCoord" GridPane.columnIndex="3" GridPane.rowIndex="10" />
-                <Button fx:id="mapCoordSelection" mnemonicParsing="false" prefHeight="26.0" prefWidth="152.0" text="Auf Karte wählen" GridPane.columnIndex="3" GridPane.rowIndex="8" />
                 <Label text="Höhe" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11" />
                 <TextField fx:id="height" GridPane.columnIndex="3" GridPane.rowIndex="11" />
                 <Button mnemonicParsing="false" onAction="#chooseBackground" prefHeight="26.0" prefWidth="262.0" text="Ortskarte wählen" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="2" />
@@ -75,7 +70,7 @@
    <right>
       <BorderPane prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER">
          <center>
-            <TableView fx:id="locationConnectionsTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <TableView fx:id="locationConnectionsTable" prefHeight="413.0" prefWidth="198.0" BorderPane.alignment="CENTER">
               <columns>
                 <TableColumn fx:id="connectionToColumn" prefWidth="212.0" text="Reiseverbindung zu" />
                   <TableColumn fx:id="travelTimeColumn" minWidth="0.0" prefWidth="139.0" text="Reisedauer" />
