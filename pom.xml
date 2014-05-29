@@ -119,7 +119,7 @@
                         <goal>copy-resources</goal>
                     </goals>
                     <configuration>
-                        <outputDirectory>database</outputDirectory>
+                        <outputDirectory>${project.build.directory}/release/database</outputDirectory>
                         <!--<overwrite>true</overwrite>-->
                         <resources>
                             <resource>
