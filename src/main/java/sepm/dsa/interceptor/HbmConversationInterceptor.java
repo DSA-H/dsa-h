@@ -33,8 +33,9 @@ public class HbmConversationInterceptor implements MethodInterceptor {
         }
 
         ManagedSessionContext.bind(currentSession);
-        currentSession.beginTransaction();
-
+	    if (! currentSession.getTransaction().isActive()) {
+		    currentSession.beginTransaction();
+	    }
 
         Object returnVal = invocation.proceed();
 
