@@ -18,13 +18,35 @@ public interface MapService {
 	 */
 	public void setWorldMap(File newmap);
 
+	/**
+	 * exports the map with the given name
+	 * @param map the name of the map to be exported
+	 */
+	public void exportMap(String map);
+
+	/**
+	 * @return the directory where the active maps are stored
+	 */
 	public File getActiveDir();
 
+	/**
+	 * @return the directory where previous maps are stored
+	 */
 	public File getAlternativeDir();
 
+	/**
+	 * @return the current world map or null if none exists
+	 */
 	public File getWorldMap();
 
+	/**
+	 * @param location the location the map is wanted from
+	 * @return the location's map or null if none exists
+	 */
 	public File getLocationMap(Location location);
 
-
+	/**
+	 * @return an Error Image or null if none exists
+	 */
+	public File getNoMapImage();
 }

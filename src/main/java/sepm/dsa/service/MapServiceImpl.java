@@ -22,6 +22,7 @@ public class MapServiceImpl implements MapService {
 	private static final Logger log = LoggerFactory.getLogger(MapServiceImpl.class);
 	private File alternativeDir = new File("maps/alternative");
 	private File activeDir = new File("maps/active");
+	private File ressourceDir = new File("maps/ressource");
 
 	@Override
 	public File chooseMap() {
@@ -105,6 +106,54 @@ public class MapServiceImpl implements MapService {
 
 	}
 
+	@Override
+	public void exportMap(String mapName) {
+		//choose File to export
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Export-Datei auswählen");
+		List<String> extensions = new ArrayList<String>();
+		extensions.add("*.jpg");
+		extensions.add("*.png");
+		extensions.add("*.gif");
+		fileChooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("All Images", extensions),
+				new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+				new FileChooser.ExtensionFilter("GIF", "*.gif"),
+				new FileChooser.ExtensionFilter("PNG", "*.png")
+		);
+		File exportFile = fileChooser.showSaveDialog(new Stage());
+
+		if (exportFile == null) {
+			return;
+		}
+
+		//look for world map
+		File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return name.startsWith(mapName);
+			}
+		});
+
+		if (matchingFiles != null && matchingFiles.length >= 1) {
+			File worldMap = matchingFiles[0];
+			String extSource = FilenameUtils.getExtension(worldMap.getAbsolutePath());
+			String extTarget = FilenameUtils.getExtension(exportFile.getAbsolutePath());
+			if (exportFile.exists() && !exportFile.isDirectory()) {
+			}
+			try {
+				if (extTarget == "") {
+					FileUtils.copyFile(worldMap, new File(exportFile.getAbsolutePath() + "." + extSource));
+					exportFile.delete();
+				} else {
+					FileUtils.copyFile(worldMap, exportFile);
+				}
+				log.debug("exported Map " + mapName);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public File getActiveDir() { return activeDir; }
 
 	public File getAlternativeDir() { return alternativeDir; }
@@ -126,6 +175,19 @@ public class MapServiceImpl implements MapService {
 		File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String name) {
 				return name.startsWith("" + location.getName() + location.getId() + "map");
+			}
+		});
+		if (matchingFiles != null && matchingFiles.length >= 1) {
+			return matchingFiles[0];
+		}
+		return null;
+	}
+
+	@Override
+	public File getNoMapImage() {
+		File[] matchingFiles = ressourceDir.listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return name.startsWith("noMapFound");
 			}
 		});
 		if (matchingFiles != null && matchingFiles.length >= 1) {

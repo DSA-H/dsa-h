@@ -328,10 +328,10 @@ public class MainMenuController implements Initializable {
 		double scrollableX = mapImageView.getImage().getWidth() - scrollPane.getWidth();
 		double scrollableY = mapImageView.getImage().getHeight() - scrollPane.getHeight();
 		if (mapImageView.getImage().getWidth() > scrollPane.getWidth()) {
-			scrollableX += 15;
+			scrollableX += 12;
 		}
 		if (mapImageView.getImage().getHeight() > scrollPane.getHeight()) {
-			scrollableY += 15;
+			scrollableY += 12;
 		}
 
 		int xPos = (int) (mousePosition.getX() - SPLocation.getX() + scrollPositionX * scrollableX);
@@ -424,50 +424,16 @@ public class MainMenuController implements Initializable {
 
 	@FXML
 	private void onWeltkarteExportierenPressed() {
-		//choose File to export
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Export-Datei auswählen");
-		List<String> extensions = new ArrayList<String>();
-		extensions.add("*.jpg");
-		extensions.add("*.png");
-		extensions.add("*.gif");
-		fileChooser.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("All Images", extensions),
-				new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-				new FileChooser.ExtensionFilter("GIF", "*.gif"),
-				new FileChooser.ExtensionFilter("PNG", "*.png")
-		);
-		File exportFile = fileChooser.showSaveDialog(new Stage());
+		log.debug("onWeltkarteExportierenPressed called");
 
-		if (exportFile == null) {
-			return;
-		}
-
-		//look for world map
-		File activeDir = new File("maps/active");
-		File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				return name.startsWith("worldMap");
-			}
-		});
-
-		if (matchingFiles != null && matchingFiles.length >= 1) {
-			File worldMap = matchingFiles[0];
-			String extSource = FilenameUtils.getExtension(worldMap.getAbsolutePath());
-			String extTarget = FilenameUtils.getExtension(exportFile.getAbsolutePath());
-			if (exportFile.exists() && !exportFile.isDirectory()) {
-			}
-			try {
-				if (extTarget == "") {
-					FileUtils.copyFile(worldMap, new File(exportFile.getAbsolutePath() + "." + extSource));
-					exportFile.delete();
-				} else {
-					FileUtils.copyFile(worldMap, exportFile);
-				}
-				log.debug("exported worldMap");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		if (mapService.getWorldMap() != null) {
+			mapService.exportMap("worldMap");
+		} else {
+			Dialogs.create()
+					.title("Fehler")
+					.masthead(null)
+					.message("Es wurde keine Ortskarte gefunden!")
+					.showWarning();
 		}
 	}
 
@@ -475,24 +441,24 @@ public class MainMenuController implements Initializable {
 		log.debug("updateMap called");
 		if (mode == 0) {
 			File worldMap = mapService.getWorldMap();
-
-			if (worldMap != null) {
-				Image image = new Image("file:" + worldMap.getAbsolutePath(), true);
-				mapImageView.setImage(image);
-				mapImageView.setSmooth(true);
-				mapImageView.setPreserveRatio(true);
-				scrollPane.setContent(mapImageView);
+			if (worldMap == null) {
+				worldMap = mapService.getNoMapImage();
 			}
+			Image image = new Image("file:" + worldMap.getAbsolutePath(), true);
+			mapImageView.setImage(image);
+			mapImageView.setSmooth(true);
+			mapImageView.setPreserveRatio(true);
+			scrollPane.setContent(mapImageView);
 		} else {
 			File map = mapService.getLocationMap(selectedLocation);
-
-			if (map != null) {
-				Image image = new Image("file:" + map.getAbsolutePath(), true);
-				mapImageView.setImage(image);
-				mapImageView.setSmooth(true);
-				mapImageView.setPreserveRatio(true);
-				scrollPane.setContent(mapImageView);
+			if (map == null) {
+				map = mapService.getNoMapImage();
 			}
+			Image image = new Image("file:" + map.getAbsolutePath(), true);
+			mapImageView.setImage(image);
+			mapImageView.setSmooth(true);
+			mapImageView.setPreserveRatio(true);
+			scrollPane.setContent(mapImageView);
 		}
 	}
 
