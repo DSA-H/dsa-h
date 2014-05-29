@@ -76,6 +76,8 @@ public class RegionServiceTest extends AbstractDatabaseTest {
 //        regionBorder1.setRegion2(addRegion3);
 //        addRegion2.getBorders1().addConnection(regionBorder1);
 //        addRegion3.getBorders2().addConnection(regionBorder1);
+
+	    saveCancelService.save();
     }
 
     @Test
@@ -83,7 +85,9 @@ public class RegionServiceTest extends AbstractDatabaseTest {
         int size = rs.getAll().size();
         rs.add(addRegion);
 
-        assertTrue(rs.getAll().size() - 1 == size);
+	    saveCancelService.save();
+
+        assertEquals(size + 1, rs.getAll().size());
         //TODO: equals is not working right now => DONE
         assertTrue(rs.get(addRegion.getId()).equals(addRegion));
         assertEquals(rs.get(addRegion.getId()), addRegion);
@@ -93,7 +97,10 @@ public class RegionServiceTest extends AbstractDatabaseTest {
     public void testRemove() {
         int size = rs.getAll().size();
         rs.remove(deleteRegion);
-        assertTrue(rs.getAll().size() + 1 == size);
+
+	    saveCancelService.save();
+
+        assertEquals(size - 1, rs.getAll().size());
     }
 
     @Test
@@ -125,9 +132,12 @@ public class RegionServiceTest extends AbstractDatabaseTest {
         // now addConnection the region
         rs.add(addRegion3);
 
+	    saveCancelService.save();
+	    saveCancelService.closeSession();
+
         List<Region> listLater = rs.getAll();
         int sizeLater = listLater.size();
-        assertTrue(sizeLater == size + 2);
+        assertEquals(size + 2, sizeLater);
         assertTrue(listLater.contains(addRegion2));
         assertTrue(listLater.contains(addRegion3));
         addRegion2 = rs.get(addRegion2.getId());
@@ -153,9 +163,11 @@ public class RegionServiceTest extends AbstractDatabaseTest {
         int totalLocations = locationService.getAll().size();
 
         rs.remove(region);
+	    saveCancelService.save();
 
         List<Location> locationsInsideNow = locationService.getAllByRegion(region.getId());
         int totalLocationsNow = locationService.getAll().size();
+
 
         assertTrue("Must have at least one location inside to get a reasonable test result", locationsInside.size() > 0);
         assertEquals(totalLocations - 1, totalLocationsNow);

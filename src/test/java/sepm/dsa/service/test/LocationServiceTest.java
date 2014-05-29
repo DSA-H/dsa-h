@@ -78,9 +78,6 @@ public class LocationServiceTest extends AbstractDatabaseTest {
 
         locationService.remove(location);
         getSaveCancelService().save();
-//        getSaveCancelService().closeSession();
-//        getSaveCancelService().cancel();
-//        saveCancelService.closeSession();
 
         int tradersForLocationNow = traderDao.getAllByLocation(location).size();
 
