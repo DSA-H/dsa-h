@@ -66,7 +66,6 @@ public class UnitServiceImpl implements UnitService {
         result.setAmount(amount * to.getValueToBaseUnit() / from.getValueToBaseUnit());
         result.setUnit(to);
 
-        //TODO do in model --> means do in dao and model
         return result;
     }
 

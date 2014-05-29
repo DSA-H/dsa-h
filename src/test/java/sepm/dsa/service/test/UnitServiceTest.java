@@ -86,7 +86,7 @@ public class UnitServiceTest extends AbstractDatabaseTest {
         //exchange from p1 to p2 --> via base rate --> divide by first & multiply second
         result.setAmount(amount * p2.getValueToBaseUnit() / p1.getValueToBaseUnit());
         result.setUnit(p2);
-        assertTrue(false); //todo check impl;
+
         assertEquals(result, unitService.exchange(p1, p2, new Double(100)));
     }
 }
