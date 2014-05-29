@@ -50,7 +50,7 @@ public class HbmConversationInterceptor implements MethodInterceptor {
             currentSession.getTransaction().rollback();
             disconnectedSession = currentSession;
         } else if (invocation.getMethod().getName().equals("close")) {
-            log.info("close");
+            log.info("closeSession");
             currentSession.close();
             disconnectedSession = null;
         } else {

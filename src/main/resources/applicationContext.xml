@@ -71,12 +71,18 @@
     </bean>
 
     <aop:config>
-        <aop:advisor advice-ref="hbmConversationInterceptor" pointcut="within(sepm.dsa.service..*)" />
+        <aop:advisor advice-ref="hbmConversationInterceptor" pointcut="within(sepm.dsa.dao..*)" />
+        <!--<aop:advisor advice-ref="hbmConversationInterceptor" pointcut="execution(* sepm.dsa.service.SaveCancelService.*(..))" />-->
     </aop:config>
 
     <bean id="saveCancelService" class="sepm.dsa.service.SaveCancelServiceImpl">
+        <property name="saveCancelDao" ref="saveCancelDao" />
+    </bean>
+
+    <bean id="saveCancelDao" class="sepm.dsa.dao.SaveCancelDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
+
 
     <bean id="loader" class="sepm.dsa.application.SpringFxmlLoader">
     </bean>

@@ -3,41 +3,42 @@ package sepm.dsa.service;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sepm.dsa.dao.SaveCancelDao;
 
 import java.util.Collection;
 
 public class SaveCancelServiceImpl implements SaveCancelService {
 
     private static final Logger log = LoggerFactory.getLogger(SaveCancelServiceImpl.class);
-    private SessionFactory sessionFactory;
+
+    private SaveCancelDao saveCancelDao;
 
     @Override
     public void save() {
-        log.info("calling save()");
+        log.debug("calling save()");
+        saveCancelDao.save();
     }
 
     @Override
     public void cancel() {
-        log.info("calling cancel()");
+        log.debug("calling cancel()");
+        saveCancelDao.cancel();
+    }
+
+    @Override
+    public void closeSession() {
+        log.debug("calling closeSession()");
+        saveCancelDao.closeSession();
     }
 
     @Override
     public void reset(Object... objects) {
-        log.info("calling reset(" + objects + ")");
-        for (Object o : objects) {
-            sessionFactory.getCurrentSession().refresh(o);
-        }
+        log.debug("calling save(" + objects + ")");
+        saveCancelDao.reset(objects);
     }
 
-//    @Override
-//    public void reset(Collection<?> objects) {
-//        log.info("calling reset(" + objects + ")");
-//        for (Object o : objects) {
-//            sessionFactory.getCurrentSession().refresh(o);
-//        }
-//    }
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public void setSaveCancelDao(SaveCancelDao saveCancelDao) {
+        log.debug("calling setSaveCancelDao()");
+        this.saveCancelDao = saveCancelDao;
     }
 }

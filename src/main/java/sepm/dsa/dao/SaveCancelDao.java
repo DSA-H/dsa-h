@@ -1,8 +1,6 @@
-package sepm.dsa.service;
+package sepm.dsa.dao;
 
-import java.util.Collection;
-
-public interface SaveCancelService {
+public interface SaveCancelDao {
 
     void save();
 
