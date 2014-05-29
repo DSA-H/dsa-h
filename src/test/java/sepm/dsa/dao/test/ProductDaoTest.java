@@ -50,6 +50,7 @@ public class ProductDaoTest extends AbstractDatabaseTest {
         Product p = productDao.get(2);
         int size = productDao.getAll().size();
         productDao.remove(p);
+	    saveCancelService.save();
         assertEquals(size - 1, productDao.getAll().size());
     }
 }

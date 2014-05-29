@@ -30,7 +30,7 @@ import sepm.dsa.service.SaveCancelService;
 abstract public class AbstractDatabaseTest {
 
     @Autowired
-    private SaveCancelService saveCancelService;
+    protected SaveCancelService saveCancelService;
 
     @Before
     public void setUp() {
@@ -39,7 +39,7 @@ abstract public class AbstractDatabaseTest {
 
     @After
     public void tearDown() {
-        saveCancelService.save();
+        saveCancelService.cancel();
         saveCancelService.closeSession();
     }
 
