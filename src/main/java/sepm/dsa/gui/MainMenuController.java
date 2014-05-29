@@ -483,7 +483,17 @@ public class MainMenuController implements Initializable {
 				mapImageView.setPreserveRatio(true);
 				scrollPane.setContent(mapImageView);
 			}
-		} else {}
+		} else {
+			File map = mapService.getLocationMap(selectedLocation);
+
+			if (map != null) {
+				Image image = new Image("file:" + map.getAbsolutePath(), true);
+				mapImageView.setImage(image);
+				mapImageView.setSmooth(true);
+				mapImageView.setPreserveRatio(true);
+				scrollPane.setContent(mapImageView);
+			}
+		}
 	}
 
 	/**

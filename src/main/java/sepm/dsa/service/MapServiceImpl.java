@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.model.Location;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -112,6 +113,19 @@ public class MapServiceImpl implements MapService {
 		File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String name) {
 				return name.startsWith("worldMap");
+			}
+		});
+		if (matchingFiles != null && matchingFiles.length >= 1) {
+			return matchingFiles[0];
+		}
+		return null;
+	}
+
+	@Override
+	public File getLocationMap(Location location) {
+		File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				return name.startsWith("" + location.getName() + location.getId() + "map");
 			}
 		});
 		if (matchingFiles != null && matchingFiles.length >= 1) {

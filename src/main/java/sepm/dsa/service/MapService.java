@@ -1,5 +1,7 @@
 package sepm.dsa.service;
 
+import sepm.dsa.model.Location;
+
 import java.io.File;
 
 public interface MapService {
@@ -21,6 +23,8 @@ public interface MapService {
 	public File getAlternativeDir();
 
 	public File getWorldMap();
+
+	public File getLocationMap(Location location);
 
 
 }
