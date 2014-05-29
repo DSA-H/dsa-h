@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
+import sepm.dsa.model.Trader;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.MapService;
 import sepm.dsa.service.TraderService;
@@ -52,7 +53,8 @@ public class MainMenuController implements Initializable {
 	private Point2D SPLocation;
 	private double scrollPositionX;
 	private double scrollPositionY;
-	private int mode;
+	private Location selectedLocation;
+	private int mode;   // 0..worldMode(default) 1..locationMode
 
 	@FXML
 	private MenuBar menuBar;
@@ -84,11 +86,11 @@ public class MainMenuController implements Initializable {
 	private MenuItem location;
 
 	@FXML
-	private TableView<Location> dataTable;
+	private TableView<Location> locationTable;
 	@FXML
-	private TableColumn firstColumn;
+	private TableColumn locationColumn;
 	@FXML
-	private TableColumn secondColumn;
+	private TableColumn regionColumn;
 	@FXML
 	private Button createButton;
 	@FXML
@@ -97,6 +99,8 @@ public class MainMenuController implements Initializable {
 	private Button deleteButton;
 	@FXML
 	private Button chooseButton;
+	@FXML
+	private ListView traderList;
 
 	private ImageView mapImageView = new ImageView();
 	@FXML
@@ -108,8 +112,6 @@ public class MainMenuController implements Initializable {
 
 	@Override
 	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-		mode = 0;
-
 		scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> ov,
 			                    Number old_val, Number new_val) {
@@ -126,16 +128,16 @@ public class MainMenuController implements Initializable {
 		updateMap();
 
 		// init table
-		firstColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-		secondColumn.setCellValueFactory(new PropertyValueFactory<>("region"));
+		locationColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+		regionColumn.setCellValueFactory(new PropertyValueFactory<>("region"));
 
 		ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
-		dataTable.setItems(data);
+		locationTable.setItems(data);
 
-		dataTable.getFocusModel().focusedItemProperty().addListener(new ChangeListener<Location>() {
+		locationTable.getFocusModel().focusedItemProperty().addListener(new ChangeListener<Location>() {
 			@Override
 			public void changed(ObservableValue<? extends Location> observable, Location oldValue, Location newValue) {
-				Location selectedLocation = dataTable.getFocusModel().getFocusedItem();
+				selectedLocation = locationTable.getFocusModel().getFocusedItem();
 				if (selectedLocation == null) {
 					deleteButton.setDisable(true);
 					editButton.setDisable(true);
@@ -147,11 +149,30 @@ public class MainMenuController implements Initializable {
 				}
 			}
 		});
+
+		mode = 0;
 	}
 
 	private void changeMode() {
+		if (mode == 0) {
+			mode = 1;
+			locationTable.setVisible(false);
+			traderList.setVisible(true);
 
+			ObservableList<Trader> data = FXCollections.observableArrayList(traderService.getAllForLocation(selectedLocation));
+			traderList.setItems(data);
+
+			chooseButton.setText("Zurück");
+		} else {
+			mode = 0;
+			locationTable.setVisible(true);
+			traderList.setVisible(false);
+			chooseButton.setText("Auswählen");
+		}
+
+		updateMap();
 	}
+
 
 	@FXML
 	private void onEditButtonPressed() {
@@ -159,7 +180,7 @@ public class MainMenuController implements Initializable {
 
 		//TODO schön machen
 		if (mode == 0) {
-			Location selectedLocation = dataTable.getFocusModel().getFocusedItem();
+			Location selectedLocation = locationTable.getFocusModel().getFocusedItem();
 			EditLocationController.setLocation(selectedLocation);
 
 
@@ -173,7 +194,7 @@ public class MainMenuController implements Initializable {
 		} else {}
 
 		ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
-		dataTable.setItems(data);
+		locationTable.setItems(data);
 	}
 
 	@FXML
@@ -181,7 +202,7 @@ public class MainMenuController implements Initializable {
 		log.debug("onDeleteButtonPressed - deleting selected Data");
 
 		if (mode == 0) {
-			Location selectedLocation = dataTable.getFocusModel().getFocusedItem();
+			Location selectedLocation = locationTable.getFocusModel().getFocusedItem();
 
 			if (selectedLocation != null) {
 				log.debug("open Confirm-Delete-Location Dialog");
@@ -199,7 +220,7 @@ public class MainMenuController implements Initializable {
 						.showConfirm(); // TODO was ist hier sinnvoll?
 				if (response == Dialog.Actions.YES) {
 					locationService.remove(selectedLocation);
-					dataTable.getItems().remove(selectedLocation);
+					locationTable.getItems().remove(selectedLocation);
 				}
 			}
 		} else {}
@@ -223,7 +244,7 @@ public class MainMenuController implements Initializable {
 		} else {}
 
 		ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
-		dataTable.setItems(data);
+		locationTable.setItems(data);
 	}
 
 	@FXML
