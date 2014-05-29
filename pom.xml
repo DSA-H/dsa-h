@@ -138,7 +138,7 @@
                         <goal>copy-resources</goal>
                     </goals>
                     <configuration>
-                        <outputDirectory>/maps/ressource</outputDirectory>
+                        <outputDirectory>${project.build.directory}/release/maps/ressource</outputDirectory>
                         <!--<overwrite>true</overwrite>-->
                         <resources>
                             <resource>
@@ -157,7 +157,7 @@
                         <goal>copy-resources</goal>
                     </goals>
                     <configuration>
-                        <outputDirectory>/maps/active</outputDirectory>
+                        <outputDirectory>${project.build.directory}/release/maps/active</outputDirectory>
                         <!--<overwrite>true</overwrite>-->
                         <resources>
                             <resource>
