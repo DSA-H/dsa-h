@@ -78,6 +78,7 @@ public class LocationListController implements Initializable {
 
         //TODO schön machen
         Location selectedLocation = locationTable.getFocusModel().getFocusedItem();
+        saveCancelService.refresh(selectedLocation);
         EditLocationController.setLocation(selectedLocation);
 
         Stage stage = (Stage) locationTable.getScene().getWindow();
