@@ -24,6 +24,10 @@ public class LocationConnection implements BaseModel {
     @Column(nullable = true)
     private String comment;
 
+    public Pk getPk() {
+        return pk;
+    }
+
     public Location getLocation1() {
         return pk.location1;
     }
@@ -96,7 +100,7 @@ public class LocationConnection implements BaseModel {
     }
 
     @Embeddable
-    protected static class Pk implements Serializable {
+    public static class Pk implements Serializable {
 
         private static final long serialVersionUID = 5989205421915335466L;
 
@@ -113,6 +117,19 @@ public class LocationConnection implements BaseModel {
         private Location location2;
 
         public Pk() {}
+
+        public Pk(Location location1, Location location2) {
+            this.location1 = location1;
+            this.location2 = location2;
+        }
+
+        public Location getLocation1() {
+            return location1;
+        }
+
+        public Location getLocation2() {
+            return location2;
+        }
 
         @Override
         public boolean equals(Object o) {

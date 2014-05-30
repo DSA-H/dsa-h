@@ -30,7 +30,7 @@ public class LocationConnectionDaoTest extends AbstractDatabaseTest {
         locationConnection = new LocationConnection();
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void add_shouldPersistEntity() throws Exception {
         int sizeBefore = locationConnectionDao.getAll().size();
@@ -42,11 +42,13 @@ public class LocationConnectionDaoTest extends AbstractDatabaseTest {
 
         locationConnectionDao.add(locationConnection);
 
+        getSaveCancelService().save();
+
         int sizeAfter = locationConnectionDao.getAll().size();
         assertEquals(sizeBefore + 1, sizeAfter);
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void remove_shouldRemoveEntity1() throws Exception {
         int sizeBefore = locationConnectionDao.getAll().size();
@@ -58,71 +60,68 @@ public class LocationConnectionDaoTest extends AbstractDatabaseTest {
         locationConnectionDao.remove(locationConnection);
         int sizeNow = locationConnectionDao.getAll().size();
         assertEquals(sizeBefore - 1, sizeNow);
-//        assertEquals(null, locationConnectionDao.get(location1, location2)); @TODO Fix to use composite identifier
+        assertEquals(null, locationConnectionDao.get(new LocationConnection.Pk(location1, location2)));
     }
 
-//    @Test
-//    public void remove_shouldRemoveEntity2() throws Exception {
-//        int sizeBefore = locationConnectionDao.getAll().size();
-//        Location location1 = locationService.get(5);
-//        Location location2 = locationService.get(4);    //swapped 1 and 2
-//        locationConnection.setLocation1(location1);
-//        locationConnection.setLocation2(location2);
-//        locationConnectionDao.removeConnection(locationConnection);
-//        int sizeNow = locationConnectionDao.getAll().size();
-//        assertEquals(sizeBefore - 1, sizeNow);
-//        assertNull(locationConnectionDao.get(location1, location2));
-//    }
+    @Test
+    public void remove_shouldRemoveEntity2() throws Exception {
+        int sizeBefore = locationConnectionDao.getAll().size();
+        Location location1 = locationService.get(5);
+        Location location2 = locationService.get(4);    // swapped 4 and 5
+        locationConnection.setLocation1(location1);
+        locationConnection.setLocation2(location2);
+        locationConnection.setTravelTime(5);
+        locationConnectionDao.remove(locationConnection);
+        int sizeNow = locationConnectionDao.getAll().size();
+        assertEquals(sizeBefore - 1, sizeNow);
+        assertEquals(null, locationConnectionDao.get(new LocationConnection.Pk(location1, location2)));
+    }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void get_shouldRetrieveEntity1() throws Exception {
-        Location location1 = new Location();
-        location1.setId(4);
-        Location location2 = new Location();
-        location2.setId(5);
+        Location location1 = locationService.get(4);
+        Location location2 = locationService.get(5);
 
-        LocationConnection connection = null; // locationConnectionDao.get(location1, location2); //  @TODO Fix to use composite identifier
+        LocationConnection.Pk pk = new LocationConnection.Pk(location1, location2);
+        LocationConnection connection = locationConnectionDao.get(pk);
         assertNotNull(connection);
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void get_shouldRetrieveEntity2() throws Exception {
-        Location location1 = new Location();
-        location1.setId(5);     // swapped 4 and 5
-        Location location2 = new Location();
-        location2.setId(4);
+        Location location1 = locationService.get(5);
+        Location location2 = locationService.get(4); // swapped 4 and 5
 
-        LocationConnection connection = null; // locationConnectionDao.get(location1, location2); //  @TODO Fix to use composite identifier
+        LocationConnection.Pk pk = new LocationConnection.Pk(location1, location2);
+        LocationConnection connection = locationConnectionDao.get(pk);
         assertNotNull(connection);
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void get_shouldNotFindEntity1() throws Exception {
-        Location location1 = new Location();
-        location1.setId(4);     // swapped 4 and 5
-        Location location2 = new Location();
-        location2.setId(8);
+        Location location1 = locationService.get(4);
+        Location location2 = locationService.get(8);
 
-        LocationConnection connection = null; // locationConnectionDao.get(location1, location2);  @TODO Fix to use composite identifier
+        LocationConnection.Pk pk = new LocationConnection.Pk(location1, location2);
+        LocationConnection connection = locationConnectionDao.get(pk);
         assertNull(connection);
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void get_shouldNotFindEntity2() throws Exception {
-        Location location1 = new Location();
-        location1.setId(8);     // swapped 4 and 5
-        Location location2 = new Location();
-        location2.setId(4);
+        Location location1 = locationService.get(8);
+        Location location2 = locationService.get(4);    // swapped 4 and 8
 
-        LocationConnection connection = null; // locationConnectionDao.get(location1, location2);  @TODO Fix to use composite identifier
+        LocationConnection.Pk pk = new LocationConnection.Pk(location1, location2);
+        LocationConnection connection = locationConnectionDao.get(pk);
         assertNull(connection);
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void getAll_shouldRetrieveEntities() throws Exception {
         List<LocationConnection> allFoundConnections = locationConnectionDao.getAll();

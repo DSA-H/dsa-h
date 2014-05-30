@@ -38,7 +38,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         locationConnection = new LocationConnection();
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void add_shouldPersistEntity() throws Exception {
         Location location1 = locationService.get(7);
@@ -53,7 +53,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         assertNotNull(locationConnectionService.get(location1, location2));
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void remove_shouldRemoveEntity1() throws Exception {
         Location location1 = locationService.get(4);
@@ -67,7 +67,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
     }
 
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void remove_shouldRemoveEntity2() throws Exception {
         Location location1 = locationService.get(5);
@@ -80,7 +80,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         assertNull(locationConnectionService.get(location1, location2));
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void get_shouldRetrieveEntity1() throws Exception {
         Location location1 = new Location();
@@ -92,7 +92,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         assertNotNull(connection);
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void get_shouldRetrieveEntity2() throws Exception {
         Location location1 = new Location();
@@ -104,7 +104,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         assertNotNull(connection);
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void get_shouldNotFindEntity1() throws Exception {
         Location location1 = new Location();
@@ -116,7 +116,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         assertNull(connection);
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void get_shouldNotFindEntity2() throws Exception {
         Location location1 = new Location();
@@ -129,7 +129,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
     }
 
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void suggestConnectionsAround_locationsAround() throws Exception {
         Location location = locationService.get(4);
@@ -137,7 +137,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         assertEquals(1, suggestions.size());
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void suggestConnectionsAround_noLocationsAround() throws Exception {
         Location location = locationService.get(4);
@@ -145,7 +145,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         assertEquals(0, suggestions.size());
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void suggestConnectionsAround_locationsAreNotEqual() {
         Location location = locationService.get(4);
@@ -155,7 +155,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         }
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void suggestConnectionsAround_locationIsLocation1() {
         Location location = locationService.get(4);
@@ -165,7 +165,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         }
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void suggestedDistanceBetween_positive() {
         Location location = locationService.get(6);
@@ -177,7 +177,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         }
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void suggestedDistanceBetween_GtOrEqDirectDistance() {
         Location location = locationService.get(6);
@@ -193,7 +193,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         }
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void suggestLocationConnectionsByFilter_nullFilterReturnsAllButLocationItself() {
         Location location = locationService.get(8); // 8 does not have locations connected
@@ -202,7 +202,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         assertEquals(sizeAll - 1, sizeUnfiltered);
     }
 
-	@Ignore("Composite identifier must be fixed")
+//	@Ignore("Composite identifier must be fixed")
     @Test
     public void suggestLocationConnectionsByFilter_returnsFilteredByName() {
         Location location = locationService.get(8); // 8 does not have locations connected
