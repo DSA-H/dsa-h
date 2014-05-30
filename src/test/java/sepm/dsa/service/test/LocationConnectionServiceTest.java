@@ -49,6 +49,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         locationConnection.setTravelTime(5);
 
         locationConnectionService.add(locationConnection);
+        getSaveCancelService().save();
 
         assertNotNull(locationConnectionService.get(location1, location2));
     }
@@ -83,10 +84,8 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
 //	@Ignore("Composite identifier must be fixed")
     @Test
     public void get_shouldRetrieveEntity1() throws Exception {
-        Location location1 = new Location();
-        location1.setId(4);
-        Location location2 = new Location();
-        location2.setId(5);
+        Location location1 = locationService.get(4);
+        Location location2 = locationService.get(5);
 
         LocationConnection connection = locationConnectionService.get(location1, location2);
         assertNotNull(connection);
@@ -95,10 +94,8 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
 //	@Ignore("Composite identifier must be fixed")
     @Test
     public void get_shouldRetrieveEntity2() throws Exception {
-        Location location1 = new Location();
-        location1.setId(5);     // swapped 4 and 5
-        Location location2 = new Location();
-        location2.setId(4);
+        Location location1 = locationService.get(5);
+        Location location2 = locationService.get(4); // swapped 4 and 5
 
         LocationConnection connection = locationConnectionService.get(location1, location2);
         assertNotNull(connection);
@@ -107,10 +104,8 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
 //	@Ignore("Composite identifier must be fixed")
     @Test
     public void get_shouldNotFindEntity1() throws Exception {
-        Location location1 = new Location();
-        location1.setId(4);     // swapped 4 and 5
-        Location location2 = new Location();
-        location2.setId(8);
+        Location location1 = locationService.get(4);
+        Location location2 = locationService.get(8); // swapped 4 and 5
 
         LocationConnection connection = locationConnectionService.get(location1, location2);
         assertNull(connection);
@@ -119,10 +114,8 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
 //	@Ignore("Composite identifier must be fixed")
     @Test
     public void get_shouldNotFindEntity2() throws Exception {
-        Location location1 = new Location();
-        location1.setId(8);     // swapped 4 and 5
-        Location location2 = new Location();
-        location2.setId(4);
+        Location location1 = locationService.get(8);
+        Location location2 = locationService.get(4);   // swapped 4 and 5
 
         LocationConnection connection = locationConnectionService.get(location1, location2);
         assertNull(connection);

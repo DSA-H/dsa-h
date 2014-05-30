@@ -55,20 +55,15 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
     @Override
     public void remove(LocationConnection locationConnection) {
         log.debug("calling removeConnection(" + locationConnection + ")");
-//        LocationConnection trueConn = locationConnectionDao.get(locationConnection.getLocation1(), locationConnection.getLocation2());
-        LocationConnection trueConn = null; // @TODO Fix to use composite identifier
-	    if (trueConn != null) {
-            log.debug(" really removeConnection " + trueConn);
-            locationConnectionDao.remove(trueConn);
-        }
-        log.info("removed " + trueConn);
+        locationConnectionDao.remove(locationConnection);
+        log.info("removed " + locationConnection);
     }
 
     @Override
     public LocationConnection get(Location location1, Location location2) {
         log.debug("calling get(" + location1 + ", " + location2 + ")");
-//        return locationConnectionDao.get(location1, location2);
-	    return null; // @TODO Fix to use composite identifier
+        LocationConnection.Pk pk = new LocationConnection.Pk(location1, location2);
+        return locationConnectionDao.get(pk);
     }
 
     @Override
