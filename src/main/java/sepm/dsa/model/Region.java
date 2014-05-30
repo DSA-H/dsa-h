@@ -41,10 +41,10 @@ public class Region implements BaseModel, PathNode {
     @Column(nullable = false)
     private Integer rainfallChanceId;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region1", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.region1", cascade = CascadeType.REMOVE)
     private Set<RegionBorder> borders1 = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region2", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.region2", cascade = CascadeType.REMOVE)
     private Set<RegionBorder> borders2 = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "region", cascade = CascadeType.REMOVE)

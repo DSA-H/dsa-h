@@ -58,6 +58,7 @@ public class LocationConnectionDaoTest extends AbstractDatabaseTest {
         locationConnection.setLocation2(location2);
         locationConnection.setTravelTime(5);
         locationConnectionDao.remove(locationConnection);
+        getSaveCancelService().save();
         int sizeNow = locationConnectionDao.getAll().size();
         assertEquals(sizeBefore - 1, sizeNow);
         assertEquals(null, locationConnectionDao.get(new LocationConnection.Pk(location1, location2)));
@@ -72,6 +73,8 @@ public class LocationConnectionDaoTest extends AbstractDatabaseTest {
         locationConnection.setLocation2(location2);
         locationConnection.setTravelTime(5);
         locationConnectionDao.remove(locationConnection);
+        getSaveCancelService().save();
+
         int sizeNow = locationConnectionDao.getAll().size();
         assertEquals(sizeBefore - 1, sizeNow);
         assertEquals(null, locationConnectionDao.get(new LocationConnection.Pk(location1, location2)));

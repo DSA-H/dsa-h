@@ -62,10 +62,10 @@ public class Location implements BaseModel {
     @Column(nullable = true, length = 1000)
     private String comment;
 
-    @OneToMany(mappedBy = "pk.location1", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pk.location1", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<LocationConnection> connections1 = new HashSet<>();
 
-    @OneToMany(mappedBy = "pk.location2", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pk.location2", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<LocationConnection> connections2 = new HashSet<>();
 
     @OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) // no getter+setter to avoid lazy loading exceptions :)

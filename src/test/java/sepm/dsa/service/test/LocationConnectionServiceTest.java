@@ -64,6 +64,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         locationConnection.setLocation2(location2);
         locationConnection.setTravelTime(5);
         locationConnectionService.remove(locationConnection);
+        getSaveCancelService().save();
         assertNull(locationConnectionService.get(location1, location2));
     }
 
@@ -78,6 +79,8 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
         locationConnection.setLocation2(location2);
         locationConnection.setTravelTime(5);
         locationConnectionService.remove(locationConnection);
+        getSaveCancelService().save();
+
         assertNull(locationConnectionService.get(location1, location2));
     }
 

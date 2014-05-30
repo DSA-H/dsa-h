@@ -1,6 +1,7 @@
 package sepm.dsa.service;
 
 import sepm.dsa.exceptions.DSARuntimeException;
+import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 
 import java.util.List;
@@ -45,5 +46,14 @@ public interface RegionBorderService {
      * @throws sepm.dsa.exceptions.DSARuntimeException
      */
     List<RegionBorder> getAllByRegion(int regionId) throws DSARuntimeException;
+
+    /**
+     * Gets the RegionBorder between region1 and region2
+     *
+     * @param region1
+     * @param region2
+     * @return the RegionBorder, or null, if no such border exists between region1 and region2
+     */
+    RegionBorder get(Region region1, Region region2);
 
 }

@@ -1,84 +1,73 @@
 package sepm.dsa.service.test;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.*;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class RegionBorderServiceTest extends AbstractDatabaseTest {
 
     @Autowired
-    private RegionBorderService rbs;
+    private RegionBorderService regionBorderService;
 
     @Autowired
-    private RegionService rs;
+    private RegionService regionService;
 
-    private RegionBorder regionBorder;
 
-    @Before
-    public void testSetup() {
-        Region r1 = new Region();
-        Region r2 = new Region();
-        r1.setColor("000000");
-        r2.setColor("999999");
-        r1.setName("r1");
-        r2.setName("r2");
-        r1.setComment("comment");
-        r2.setComment("comment");
-	    r1.setRainfallChance(RainfallChance.HIGH);
-	    r2.setRainfallChance(RainfallChance.HIGH);
-	    r1.setTemperature(Temperature.ARCTIC);
-	    r2.setTemperature(Temperature.ARCTIC);
-
-        regionBorder = new RegionBorder();
-        regionBorder.setBorderCost(1);
-        regionBorder.setRegion1(r1);
-        regionBorder.setRegion2(r2);
-
-        rs.add(r1);
-        rs.add(r2);
-    }
-
-	@Ignore("Composite identifier must be fixed")
     @Test
     public void testAdd() {
-        int size = rbs.getAll().size();
-        rbs.add(regionBorder);
 
-        assertTrue(rbs.getAll().size() - 1 == size);
+        RegionBorder regionBorder = new RegionBorder();
+        regionBorder.setBorderCost(1);
+        regionBorder.setRegion1(regionService.get(2));
+        regionBorder.setRegion2(regionService.get(3));
 
-//        assertEquals(rbs.get(regionBorder.getPk()), regionBorder);
-        rbs.remove(regionBorder);
+        int size = regionBorderService.getAll().size();
+        regionBorderService.add(regionBorder);
+
+        getSaveCancelService().save();
+
+        assertEquals(size + 1, regionBorderService.getAll().size());
+        assertNotNull(regionBorderService.get(regionBorder.getRegion1(), regionBorder.getRegion2()));
     }
 
-	@Ignore("Composite identifier must be fixed")
     @Test
     public void testRemove() {
-        rbs.add(regionBorder);
-        int size = rbs.getAll().size();
-        rbs.remove(regionBorder);
-        assertTrue(rbs.getAll().size() + 1 == size);
+
+        Region region1 = regionService.get(1);
+        Region region2 = regionService.get(2);
+
+        RegionBorder regionBorder = regionBorderService.get(region1, region2);
+
+        int size = regionBorderService.getAll().size();
+        regionBorderService.remove(regionBorder);
+        getSaveCancelService().save();
+
+        assertEquals(size - 1, regionBorderService.getAll().size());
+        assertNull(regionBorderService.get(region1, region2));
     }
 
-	@Ignore("Composite identifier must be fixed")
     @Test
     public void testUpdate() {
-        rbs.add(regionBorder);
-        int size = rbs.getAll().size();
-        regionBorder.setBorderCost(2);
 
-        rbs.update(regionBorder);
-        assertTrue (rbs.getAll().size() == size);
-        rbs.remove(regionBorder);
+        RegionBorder regionBorder = regionBorderService.get(regionService.get(1), regionService.get(2));
+
+        int size = regionBorderService.getAll().size();
+        regionBorder.setBorderCost(120);
+
+        regionBorderService.update(regionBorder);
+        getSaveCancelService().save();
+
+        assertEquals(regionBorderService.get(regionBorder.getRegion1(), regionBorder.getRegion2()).getBorderCost(),
+                new Integer(120));
+
     }
 }

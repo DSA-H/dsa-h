@@ -25,7 +25,6 @@ public class LocationConnectionDaoHbmImpl
         log.debug("calling delete(" + locationConnection + ")");
         LocationConnection trueLocationConnection = get(locationConnection.getPk());    //
         sessionFactory.getCurrentSession().delete(trueLocationConnection);
-        sessionFactory.getCurrentSession().flush();
     }
 
     @Override
