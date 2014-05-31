@@ -39,10 +39,7 @@ import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
 import sepm.dsa.model.Tavern;
 import sepm.dsa.model.Trader;
-import sepm.dsa.service.LocationService;
-import sepm.dsa.service.MapService;
-import sepm.dsa.service.TavernService;
-import sepm.dsa.service.TraderService;
+import sepm.dsa.service.*;
 
 import javafx.scene.Node;
 import java.awt.Point;
@@ -59,6 +56,7 @@ public class MainMenuController implements Initializable {
 	private TraderService traderService;
 	private TavernService tavernService;
 	private MapService mapService;
+	private SaveCancelService saveCancelService;
 	private Point2D SPLocation;
 	private double scrollPositionX;
 	private double scrollPositionY;
@@ -290,6 +288,7 @@ public class MainMenuController implements Initializable {
 				if (response == Dialog.Actions.YES) {
 					System.out.println("removing: " + selectedLocation);
 					locationService.remove(selectedLocation);
+					saveCancelService.save();
 					locationTable.getItems().remove(selectedLocation);
 				}
 			}
@@ -304,6 +303,7 @@ public class MainMenuController implements Initializable {
 							.showConfirm();
 					if (response == Dialog.Actions.YES) {
 						traderService.remove((Trader) selectedObject);
+						saveCancelService.save();
 						traderList.getItems().remove(selectedObject);
 					}
 				} else {
@@ -315,6 +315,7 @@ public class MainMenuController implements Initializable {
 							.showConfirm();
 					if (response == Dialog.Actions.YES) {
 						tavernService.remove((Tavern) selectedObject);
+						saveCancelService.save();
 						traderList.getItems().remove(selectedObject);
 					}
 				}
@@ -465,15 +466,26 @@ public class MainMenuController implements Initializable {
 				chooseButton.setText("Ortsansicht");
 				checkLocationFocus();
 				locationTable.setDisable(false);
+
+				ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
+				locationTable.setItems(data);
 			} else {
 				chooseButton.setText("Weltansicht");
 				checkTraderFocus();
 				traderList.setDisable(false);
+
+				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+				List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+				List<Object> all = new ArrayList<Object>();
+				for (Trader t: traders) {
+					all.add(t);
+				}
+				for (Tavern t: taverns) {
+					all.add(t);
+				}
+
+				traderList.setItems(FXCollections.observableArrayList(all));
 			}
-
-			ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
-			locationTable.setItems(data);
-
 			updateMap();
 		} else {
 			if (mode == 0) {
@@ -817,16 +829,20 @@ public class MainMenuController implements Initializable {
 		for (Trader t : traders) {
 			posX = t.getxPos();
 			posY = t.getyPos();
-			gc.strokeLine(posX - 5, posY - 5, posX + 5, posY + 5);
-			gc.strokeLine(posX - 5, posY + 5, posX + 5, posY - 5);
+			if (posX != 0 && posY != 0) {
+				gc.strokeLine(posX - 5, posY - 5, posX + 5, posY + 5);
+				gc.strokeLine(posX - 5, posY + 5, posX + 5, posY - 5);
+			}
 		}
 		gc.setStroke(Color.YELLOW);
 		List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
 		for (Tavern t : taverns) {
 			posX = t.getxPos();
 			posY = t.getyPos();
-			gc.strokeLine(posX - 5, posY - 5, posX + 5, posY + 5);
-			gc.strokeLine(posX - 5, posY + 5, posX + 5, posY - 5);
+			if (posX != 0 && posY != 0) {
+				gc.strokeLine(posX - 5, posY - 5, posX + 5, posY + 5);
+				gc.strokeLine(posX - 5, posY + 5, posX + 5, posY - 5);
+			}
 		}
 		gc.setStroke(Color.BLACK);
 		gc.setLineWidth(0.6);
@@ -923,6 +939,10 @@ public class MainMenuController implements Initializable {
 
 	public void setLocationService(LocationService locationService) {
 		this.locationService = locationService;
+	}
+
+	public void setSaveCancelService(SaveCancelService saveCancelService) {
+		this.saveCancelService = saveCancelService;
 	}
 
     public void setLoader(SpringFxmlLoader loader) {

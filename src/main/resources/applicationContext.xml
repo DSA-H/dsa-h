@@ -224,6 +224,7 @@
         <property name="locationService" ref="locationService"/>
         <property name="traderService" ref="traderService"/>
         <property name="tavernService" ref="tavernService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
