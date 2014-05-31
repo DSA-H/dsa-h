@@ -12,5 +12,9 @@
         <![CDATA[from AssortmentNature WHERE pk.traderCategory.id = :traderCategoryId ORDER BY pk.traderCategory.id asc, pk.productCategory.id asc]]>
     </query>
 
+    <query name="AssortmentNature.findAllByProductCategory">
+        <![CDATA[from AssortmentNature WHERE pk.productCategory.id = :productCategoryId ORDER BY pk.traderCategory.id asc, pk.productCategory.id asc]]>
+    </query>
+
 
 </hibernate-mapping>

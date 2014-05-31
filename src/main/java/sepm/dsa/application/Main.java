@@ -90,6 +90,8 @@ public class Main extends Application {
         final MainMenuController ctrl = loader.getController();
         primaryStage.setTitle("DSA-Händlertool");
         primaryStage.setScene(new Scene(root, 1045, 600));
+        primaryStage.setMinWidth(600);
+        primaryStage.setMinHeight(300);
         // close all windows if mainmenu is closed
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override

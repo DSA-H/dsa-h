@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1071.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.MainMenuController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="485.0" prefWidth="1071.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.MainMenuController">
     <top>
         <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
             <menus>
@@ -47,17 +48,20 @@
         <VBox maxWidth="6.0" minWidth="6.0" prefHeight="340.0" prefWidth="6.0" BorderPane.alignment="CENTER" />
     </right>
     <bottom>
-        <HBox prefHeight="31.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="1071.0" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
                 <Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Platzieren" />
                 <Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#onEditButtonPressed" text="Bearbeiten" />
                 <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" />
                 <Button fx:id="chooseButton" alignment="CENTER" disable="true" layoutX="693.0" layoutY="561.0" mnemonicParsing="false" onAction="#onChooseButtonPressed" prefWidth="90.0" text="Ortsansicht" />
             </children>
+<BorderPane.margin>
+<Insets right="10.0" />
+</BorderPane.margin>
         </HBox>
     </bottom>
     <center>
-        <GridPane BorderPane.alignment="CENTER">
+        <GridPane minWidth="500.0" BorderPane.alignment="CENTER">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="811.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="246.0" />
@@ -66,14 +70,14 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <ScrollPane fx:id="scrollPane" minWidth="10.0" onMouseClicked="#onScrollPaneClicked" prefHeight="200.0" prefWidth="200.0" />
-                <TableView fx:id="locationTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                <ScrollPane fx:id="scrollPane" onMouseClicked="#onScrollPaneClicked" prefHeight="369.0" prefWidth="200.0" />
+                <ListView fx:id="traderList" minWidth="200.0" prefHeight="200.0" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.hgrow="NEVER" />
+                <TableView fx:id="locationTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER">
                     <columns>
                         <TableColumn fx:id="locationColumn" prefWidth="120.0" text="Ort" />
                         <TableColumn fx:id="regionColumn" prefWidth="125.0" text="Gebiet" />
                     </columns>
                 </TableView>
-                <ListView fx:id="traderList" prefHeight="200.0" prefWidth="200.0" visible="false" GridPane.columnIndex="1" />
             </children>
         </GridPane>
     </center>

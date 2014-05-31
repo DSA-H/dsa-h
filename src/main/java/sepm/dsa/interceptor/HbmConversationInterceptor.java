@@ -18,8 +18,12 @@ public class HbmConversationInterceptor implements MethodInterceptor {
     private Session disconnectedSession = null;
 
     public Object invoke(MethodInvocation invocation) throws Throwable {
-
-        log.info("invoke method '" + invocation.getMethod().toGenericString() + "'");
+        String args = "[args:";
+        for (Object arg : invocation.getArguments()) {
+            args += (arg == null ? "null" : arg.toString()) + "; ";
+        }
+        args += "]";
+        log.info("invoke method '" + invocation.getMethod().toGenericString() + "' " + args);
 
         Session currentSession = null;
 
