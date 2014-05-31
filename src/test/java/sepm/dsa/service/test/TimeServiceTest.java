@@ -1,4 +1,4 @@
-package sepm.dsa.dao.test;
+package sepm.dsa.service.test;
 
 
 import junit.framework.Assert;

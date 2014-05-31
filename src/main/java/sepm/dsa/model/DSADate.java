@@ -2,6 +2,10 @@ package sepm.dsa.model;
 
 import sepm.dsa.exceptions.DSADateException;
 
+/**
+ * Representing a Date in DSA. In DSA each month has 30 days, each year 12 months, and each year 365 days. The 5 remaining
+ * days ("nameless days") are at the end of the year in a 13. month, which has only 5 days.
+ */
 public final class DSADate {
     private int year;
     private int month;   // every month has 30 days, month 13 has 5 days
@@ -70,10 +74,18 @@ public final class DSADate {
         }
     }
 
+    /**
+     * Returns the timestamp of this dsa Date. The Timestamp is the time in days.
+     * @return timestamp (in days)
+     */
     public long getTimestamp() {
         return year * 365 + (month - 1) * 30 + (day - 1);
     }
 
+    /**
+     *
+     * @param timestamp timestamp in days
+     */
     public void setTimestamp(long timestamp) {
         this.year = (int) timestamp / 365;
         timestamp = timestamp % 365;
