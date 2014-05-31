@@ -176,6 +176,7 @@
     </bean>
 
     <bean id="tavernService" class="sepm.dsa.service.TavernServiceImpl">
+        <property name="tavernDao" ref="tavernDao"/>
     </bean>
 
     <bean id="productService" class="sepm.dsa.service.ProductServiceImpl">
@@ -224,6 +225,7 @@
         <property name="locationService" ref="locationService"/>
         <property name="traderService" ref="traderService"/>
         <property name="tavernService" ref="tavernService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
@@ -309,6 +311,8 @@
     <bean id="tavernList" class="sepm.dsa.gui.TavernListController">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
+        <property name="tavernService" ref="tavernService"/>
     </bean>
     <bean id="EditLocationConnectionsController" class="sepm.dsa.gui.EditLocationConnectionsController">
         <property name="loader" ref="loader"/>

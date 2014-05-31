@@ -63,26 +63,24 @@ public class EditTavernController implements Initializable {
     private void onSavePressed() {
         log.debug("called onSavePressed");
 
-        log.debug("calling SaveButtonPressed");
-
         // save region
         String name = nameField.getText();
         selectedTavern.setName(name);
         selectedTavern.setLocation(locationBox.getSelectionModel().getSelectedItem());
         selectedTavern.setUsage(Integer.parseInt(usageField.getText()));
-        //selectedTaver.setBeds(Integer.parseInt(bedField.getText()));
+//        selectedTaver.setBeds(Integer.parseInt(bedField.getText()));
         selectedTavern.setxPos(Integer.parseInt(xCoordField.getText()));
         selectedTavern.setyPos(Integer.parseInt(yCoordField.getText()));
-        //selectedTavern.setComment(commentArea.getText());
+//        selectedTavern.setComment(commentArea.getText());
 
-        /*
+        Tavern persistedTavern = null;
         if (isNewTavern) {
-            tavernService.add(selectedTavern);
+            persistedTavern = tavernService.add(selectedTavern);
         } else {
-            tavernService.update(selectedTavern);
+            persistedTavern = tavernService.update(selectedTavern);
         }
-        */
         saveCancelService.save();
+        log.info("persistedTavern: " + persistedTavern == null ? "null" : persistedTavern.toString());
 
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/tavernlist.fxml");
@@ -111,10 +109,13 @@ public class EditTavernController implements Initializable {
     }
 
     public void setTavern(Tavern tavern) {
-        this.selectedTavern = tavern;
-	    if (selectedTavern == null) {
-		    selectedTavern = new Tavern();
-	    }
+	    if (tavern == null) {
+            isNewTavern = true;
+            selectedTavern = new Tavern();
+        } else {
+            isNewTavern = false;
+            this.selectedTavern = tavern;
+        }
     }
 
     public void setLoader(SpringFxmlLoader loader) {

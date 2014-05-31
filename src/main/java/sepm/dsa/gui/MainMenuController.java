@@ -25,7 +25,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -39,12 +38,8 @@ import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
 import sepm.dsa.model.Tavern;
 import sepm.dsa.model.Trader;
-import sepm.dsa.service.LocationService;
-import sepm.dsa.service.MapService;
-import sepm.dsa.service.TavernService;
-import sepm.dsa.service.TraderService;
+import sepm.dsa.service.*;
 
-import javafx.scene.Node;
 import java.awt.Point;
 import java.awt.MouseInfo;
 import java.io.File;
@@ -59,6 +54,7 @@ public class MainMenuController implements Initializable {
 	private TraderService traderService;
 	private TavernService tavernService;
 	private MapService mapService;
+    private SaveCancelService saveCancelService;
 	private Point2D SPLocation;
 	private double scrollPositionX;
 	private double scrollPositionY;
@@ -258,6 +254,7 @@ public class MainMenuController implements Initializable {
 						.showConfirm(); // TODO was ist hier sinnvoll?
 				if (response == Dialog.Actions.YES) {
 					locationService.remove(selectedLocation);
+                    saveCancelService.save();
 					locationTable.getItems().remove(selectedLocation);
 				}
 			}
@@ -271,6 +268,7 @@ public class MainMenuController implements Initializable {
 						.showConfirm();
 				if (response == Dialog.Actions.YES) {
 					traderService.remove(selectedTrader);
+                    saveCancelService.save();
 					traderList.getItems().remove(selectedTrader);
 				}
 			}
@@ -642,7 +640,7 @@ public class MainMenuController implements Initializable {
 						@Override
 						public void handle(MouseEvent e) {
 							List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-							List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+							List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
 							boolean onStuff = false;
 							Canvas canvas = (Canvas) pane.getChildren().get(0);
 							for (Trader t : traders) {
@@ -750,7 +748,7 @@ public class MainMenuController implements Initializable {
 			gc.strokeLine(posX - 5, posY + 5, posX + 5, posY - 5);
 		}
 		gc.setStroke(Color.YELLOW);
-		List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+		List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
 		for (Tavern t : taverns) {
 			posX = t.getxPos();
 			posY = t.getyPos();
@@ -853,4 +851,7 @@ public class MainMenuController implements Initializable {
         this.loader = loader;
     }
 
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
+    }
 }

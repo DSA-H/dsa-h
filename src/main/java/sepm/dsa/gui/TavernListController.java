@@ -22,7 +22,7 @@ import sepm.dsa.model.Tavern;
 import sepm.dsa.model.Trader;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.SaveCancelService;
-import sepm.dsa.service.TraderService;
+import sepm.dsa.service.TavernService;
 
 import java.util.List;
 
@@ -31,11 +31,11 @@ public class TavernListController implements Initializable {
     private static final Logger log = LoggerFactory.getLogger(TavernListController.class);
     private SpringFxmlLoader loader;
 
-    private TraderService tavernService;
+    private TavernService tavernService;
     private LocationService locationService;
     private SaveCancelService saveCancelService;
 
-    private Trader selectedTavern;
+    private Tavern selectedTavern;
 
     @FXML
     private ListView tavernList;
@@ -48,7 +48,7 @@ public class TavernListController implements Initializable {
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize TraderListController");
+        log.debug("initialize TavernListController");
 
         List<Location> locations = locationService.getAll();
         locationBox.setItems(FXCollections.observableArrayList(locations));
@@ -56,16 +56,18 @@ public class TavernListController implements Initializable {
                 new ChangeListener<Location>() {
                     @Override
                     public void changed(ObservableValue<? extends Location> selected, Location oldLoc, Location newLoc) {
-                        //List<Tavern> taverns = tavernService.getAllForLocation((Location) locationBox.getSelectionModel().getSelectedItem());
+                        //List<Tavern> taverns = tavernService.getAllByLocation((Location) locationBox.getSelectionModel().getSelectedItem());
                         //tavernList.setItems(FXCollections.observableArrayList(taverns));
                         checkFocus();
+                        List<Tavern> taverns = tavernService.getAllByLocation(selected.getValue().getId());
+                        tavernList.setItems(FXCollections.observableArrayList(taverns));
                     }
                 }
         );
         tavernList.getSelectionModel().selectedItemProperty().addListener(
-                new ChangeListener<Trader>() {
+                new ChangeListener<Tavern>() {
                     @Override
-                    public void changed(ObservableValue<? extends Trader> selected, Trader oldTavern, Trader newTavern) {
+                    public void changed(ObservableValue<? extends Tavern> selected, Tavern oldTavern, Tavern newTavern) {
                         selectedTavern = newTavern;
                         if (selectedTavern == null) {
                             editButton.setDisable(true);
@@ -113,14 +115,22 @@ public class TavernListController implements Initializable {
 
     @FXML
     private void onEditPressed() {
+//        log.debug("called onEditPressed");
+//
+//        Stage stage = (Stage) locationBox.getScene().getWindow();
+//        Parent scene = (Parent) loader.load("/gui/edittavern.fxml");
+//        TraderDetailsController controller = loader.getController();
+//        checkFocus();
+//        controller.setTrader(selectedTavern);
+//        stage.setScene(new Scene(scene, 800, 400));
         log.debug("called onEditPressed");
 
         Stage stage = (Stage) locationBox.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/edittavern.fxml");
-        TraderDetailsController controller = loader.getController();
-        checkFocus();
-        controller.setTrader(selectedTavern);
-        stage.setScene(new Scene(scene, 800, 400));
+        EditTavernController controller = loader.getController();
+//        selectedTavern = (Tavern) tavernList.getFocusModel().getFocusedItem();
+        controller.setTavern(selectedTavern);
+        stage.setScene(new Scene(scene, 600, 400));
     }
 
     @FXML
@@ -134,18 +144,19 @@ public class TavernListController implements Initializable {
 
     @FXML
     private void checkFocus() {
-        Tavern selectedTrader = (Tavern) tavernList.getFocusModel().getFocusedItem();
-        if (selectedTrader == null) {
+        selectedTavern = (Tavern) tavernList.getFocusModel().getFocusedItem();
+        if (selectedTavern == null) {
             editButton.setDisable(true);
             deleteButton.setDisable(true);
         } else {
             editButton.setDisable(false);
             deleteButton.setDisable(false);
+
         }
 
     }
 
-    public void setTraderService(TraderService tavernService) {
+    public void setTavernService(TavernService tavernService) {
         this.tavernService = tavernService;
     }
 

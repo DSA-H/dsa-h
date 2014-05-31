@@ -7,4 +7,8 @@
         <![CDATA[from Tavern ORDER BY name ASC]]>
     </query>
 
+    <query name="Tavern.findAllByLocation">
+        <![CDATA[FROM Tavern WHERE location.id = :locationId ORDER BY name asc]]>
+    </query>
+
 </hibernate-mapping>

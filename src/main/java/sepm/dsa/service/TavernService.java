@@ -7,6 +7,45 @@ import java.util.List;
 
 public interface TavernService {
 
+
+    /**
+     * Asks the DAO to persist a {@code Tavern} in the Database
+     *
+     * @param tavern to be persisted must not be null
+     * @return The added tavern model.
+     */
+    public Tavern add(Tavern tavern);
+
+    /**
+     * Asks the DAO to update a already existing {@code Tavern} in the database
+     *
+     * @param tavern to update must not be null
+     * @return The updated tavern model.
+     */
+    public Tavern update(Tavern tavern);
+
+    /**
+     * Asks the DAO to delete a tavern permanently
+     *
+     * @param tavern to be deleted must not be null
+     */
+    public void remove(Tavern tavern);
+
+    /**
+     * Gets a tavern by its id
+     *
+     * @param id
+     * @return the tavern, or null if it does not exist
+     */
+    Tavern get(int id);
+
+    /**
+     * Asks the DAO to find all Taverns
+     *
+     * @return the taverns or empty list of no taverns exist (not null)
+     */
+    public List<Tavern> getAll();
+
     /**
      * Calculates the price for a night's stay in the given tavern.
      *
@@ -18,8 +57,8 @@ public interface TavernService {
 	/**
 	 * Get all taverns for a specified location or empty List if nothing found
 	 *
-	 * @param location must not be null
+	 * @param locationId
 	 * @return the taverns for the location or empty list
 	 */
-	List<Tavern> getAllForLocation(Location location);
+	List<Tavern> getAllByLocation(int locationId);
 }
