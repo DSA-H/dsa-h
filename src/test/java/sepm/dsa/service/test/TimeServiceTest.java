@@ -9,6 +9,7 @@ import sepm.dsa.dao.OfferDao;
 import sepm.dsa.dao.TraderDao;
 import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.DSADate;
+import sepm.dsa.model.Location;
 import sepm.dsa.model.Offer;
 import sepm.dsa.model.Trader;
 import sepm.dsa.service.TimeService;
@@ -52,6 +53,19 @@ public class TimeServiceTest extends AbstractDatabaseTest {
         dsaDate = timeService.getCurrentDate();
 
         Assert.assertEquals(dsaDate.getTimestamp(), 17);
+    }
+
+    @Test
+    public void forwardTimeTestmovingTrader() {
+        Trader trader = traderDao.get(2);
+        Location oldLocation = trader.getLocation();
+
+        timeService.forwardTime(100);
+
+        trader = traderDao.get(2);
+        Location newLocation = trader.getLocation();
+
+        Assert.assertTrue(!oldLocation.equals(newLocation));
     }
 
     @Test

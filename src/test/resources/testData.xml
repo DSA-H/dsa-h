@@ -32,7 +32,7 @@
     <!-- ======================================================== -->
 
     <taverns id="1" name="Zum Wegstein" location_id="1" xPos="42" yPos="12" usage="12"/>
-    <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="42" yPos="12" usage="12"/>
+    <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="60" yPos="9" usage="12"/>
 
     <players id="1" name="Mr X" comment="no comment"/>
     <players id="2" name="Mr Z" comment="A test comment"/>
@@ -53,8 +53,8 @@
     <traders id="2" name="Megatron" category_id="2" size="200" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13" convince="7" location_id="1" />
     <traders id="3" name="Fluttershy" category_id="3" size="200" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13" convince="7" location_id="1" />
     <traders id="4" name="trader4" category_id="4" size="400" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13" convince="7" location_id="1" />
-    <movingTraders trader="2" lastMoved="100" avgStayDays="3" preferredTownSize="0" preferredDistance="0" />
-    <movingTraders trader="3" lastMoved="200" avgStayDays="11" preferredTownSize="1"  />
+    <movingTraders trader="2" lastMoved="0" avgStayDays="3" preferredDistance="1" />
+    <movingTraders trader="3" lastMoved="0" avgStayDays="11" preferredTownSize="1" preferredDistance="0" />
     <offers id="1" product_id="1" trader_id="1" amount="2" pricePerUnit="50" qualityId="1" />
     <offers id="2" product_id="2" trader_id="1" amount="8" pricePerUnit="10" qualityId="0" />
     <productCategories id="1" name="category1" />

@@ -22,7 +22,7 @@ public class TimeServiceImpl implements TimeService {
     private TraderService traderService;
     private OfferDao offerDao;
     private LocationService locationService;
-    private LocationConnectionService locationConnectionService;
+    private TavernService tavernService;
 
     private DSADate date;
     private Properties properties;
@@ -143,7 +143,7 @@ public class TimeServiceImpl implements TimeService {
         for(MovingTrader movingTrader : movingTraders) {
             long daysSinceMove = date.getTimestamp() - movingTrader.getLastMoved();
             // chance to move 5 days around the average move day
-            double moveCance = (float)(daysSinceMove - movingTrader.getAvgStayDays() + 5) / 100f;
+            double moveCance = (float)(daysSinceMove - movingTrader.getAvgStayDays() + 5) / 10f;
             float random = (float)Math.random();
             // move
             if(random < moveCance) {
@@ -170,10 +170,34 @@ public class TimeServiceImpl implements TimeService {
                     }
                     possibleLocations.remove(removeList);
                 }
+                // no possible Locations -> not moving
+                if(possibleLocations.isEmpty()) {
+                    break;
+                }
                 // take random one of the possible locations
                 int randomIndex = (int)(Math.random()*possibleLocations.size());
                 Location goalLocation = possibleLocations.get(randomIndex);
+                // move trader
+                movingTrader.setLocation(goalLocation);
+                movingTrader.setLastMoved(date.getTimestamp());
+                // calculate new prices
+                for(Offer offer : movingTrader.getOffers()) {
+                    int price = traderService.calculatePriceForProduct(offer.getProduct(), movingTrader);
+                    if(offer.getProduct().getQuality()) {
+                        offer.setPricePerUnit((int)(price*offer.getQuality().getQualityPriceFactor()));
+                        offerDao.update(offer);
+                    }
+                }
+                traderService.update(movingTrader);
             }
+        }
+
+        // new tavern useage and price calculation
+        List<Tavern> taverns = tavernService.getAll();
+        for(Tavern tavern : taverns) {
+            // random useage  (todo: more sophisticated usage calculation?)
+            tavern.setUsage((int)Math.random()*100);
+            tavernService.update(tavern);
         }
     }
 
@@ -183,5 +207,11 @@ public class TimeServiceImpl implements TimeService {
 
     public void setOfferDao(OfferDao offerDao) {
         this.offerDao = offerDao;
+    }
+
+    public void setTavernService(TavernService tavernService) { this.tavernService = tavernService;}
+
+    public void setLocationService(LocationService locationService) {
+        this.locationService = locationService;
     }
 }

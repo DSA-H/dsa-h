@@ -1,6 +1,7 @@
 package sepm.dsa.service;
 
 import sepm.dsa.model.Location;
+import sepm.dsa.model.Region;
 import sepm.dsa.model.Tavern;
 
 import java.util.List;
@@ -22,4 +23,20 @@ public interface TavernService {
 	 * @return the taverns for the location or empty list
 	 */
 	List<Tavern> getAllForLocation(Location location);
+
+    /**
+     * Get all taverns
+     *
+     * @return the taverns for the location or empty list
+     */
+    List<Tavern> getAll();
+
+
+    /**
+     * Update a Tavern
+     *
+     * @param t Tavern (must not be null)
+     * @return The updated tavern model.
+     */
+    Tavern update(Tavern t);
 }
