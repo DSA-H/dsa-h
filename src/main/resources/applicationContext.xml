@@ -265,14 +265,14 @@
 
     <bean id="ProductCategoryListController" class="sepm.dsa.gui.ProductCategoryListController">
         <property name="loader" ref="loader"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
         <property name="productCategoryService" ref="productCategoryService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 
     <bean id="EditProductCategoryController" class="sepm.dsa.gui.EditProductCategoryController">
         <property name="loader" ref="loader"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
         <property name="productCategoryService" ref="productCategoryService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 
     <bean id="TraderCategoryList" class="sepm.dsa.gui.TraderCategoryListController">
@@ -328,10 +328,12 @@
     <bean id="PlayerListController" class="sepm.dsa.gui.PlayerListController">
         <property name="loader" ref="loader"/>
         <property name="playerService" ref="playerService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
     <bean id="EditPlayerController" class="sepm.dsa.gui.EditPlayerController">
         <property name="loader" ref="loader"/>
         <property name="playerService" ref="playerService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
     <bean id="currencyList" class="sepm.dsa.gui.CurrencyListController">
         <property name="loader" ref="loader"/>
@@ -345,7 +347,6 @@
     </bean>
     <bean id="calculateCurrency" class="sepm.dsa.gui.CurrencyCalculateController">
         <property name="loader" ref="loader"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
         <property name="currencyService" ref="currencyService"/>
     </bean>
 

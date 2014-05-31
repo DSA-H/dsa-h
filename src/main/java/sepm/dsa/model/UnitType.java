@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "unittypes")
-public class UnitType {
+public class UnitType implements BaseModel {
 
     @Id
     @GeneratedValue

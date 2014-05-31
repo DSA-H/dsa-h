@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Player;
 import sepm.dsa.service.PlayerService;
+import sepm.dsa.service.SaveCancelService;
 
 public class PlayerListController implements Initializable {
 
@@ -26,9 +27,7 @@ public class PlayerListController implements Initializable {
     SpringFxmlLoader loader;
 
     private PlayerService playerService;
-
-    //TODO: Tricksereien + session Factory in GUI sind BAD BAD style ;)
-    private SessionFactory sessionFactory;
+    private SaveCancelService saveCancelService;
 
     @FXML
     private TableView<Player> playerTable;
@@ -93,6 +92,7 @@ public class PlayerListController implements Initializable {
                     .showConfirm();
             if (response == Dialog.Actions.YES) {
                 playerService.remove(selectedPlayer);
+                saveCancelService.save();
                 playerTable.getItems().remove(selectedPlayer);
             }
         }
@@ -120,7 +120,7 @@ public class PlayerListController implements Initializable {
         this.loader = loader;
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

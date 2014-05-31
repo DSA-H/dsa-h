@@ -34,7 +34,7 @@ public class UnitTypeServiceImpl implements UnitTypeService {
     public int add(UnitType p) {
         log.debug("calling add(" + p + ")");
         validate(p);
-        return unitTypeDao.add(p);
+        return unitTypeDao.add(p).getId();
     }
 
     @Override

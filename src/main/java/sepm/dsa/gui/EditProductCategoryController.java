@@ -22,6 +22,7 @@ import sepm.dsa.model.Region;
 import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.ProductService;
 import sepm.dsa.service.RegionService;
+import sepm.dsa.service.SaveCancelService;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -34,7 +35,7 @@ public class EditProductCategoryController implements Initializable {
     private static final Logger log = LoggerFactory.getLogger(EditProductCategoryController.class);
     private SpringFxmlLoader loader;
     private ProductCategoryService productCategoryService;
-    private SessionFactory sessionFactory;
+    private SaveCancelService saveCancelService;
 
     private static ProductCategory selectedProductCategory;
     private boolean isNewProductCategory;
@@ -67,6 +68,7 @@ public class EditProductCategoryController implements Initializable {
     @FXML
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
+        saveCancelService.cancel();
         Stage stage = (Stage) nameField.getScene().getWindow();
 
         Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml");
@@ -89,7 +91,7 @@ public class EditProductCategoryController implements Initializable {
         }else {
             productCategoryService.update(selectedProductCategory);
         }
-
+        saveCancelService.save();
         // return to productcategorylist
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml");
@@ -109,7 +111,7 @@ public class EditProductCategoryController implements Initializable {
         this.loader = loader;
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

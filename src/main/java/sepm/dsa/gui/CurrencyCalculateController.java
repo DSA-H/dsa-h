@@ -28,7 +28,6 @@ public class CurrencyCalculateController implements Initializable {
     SpringFxmlLoader loader;
 
     private CurrencyService currencyService;
-    private SessionFactory sessionFactory;
 
     @FXML
     private ChoiceBox<Currency> choiceFirst;
@@ -92,7 +91,4 @@ public class CurrencyCalculateController implements Initializable {
         this.loader = loader;
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 }
