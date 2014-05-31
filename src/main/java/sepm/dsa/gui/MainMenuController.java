@@ -591,7 +591,7 @@ public class MainMenuController implements Initializable {
 									onLocation = true;
 								}
 							}
-							if (onLocation == false) {
+							if (!onLocation) {
 								while(pane.getChildren().size() > 1) {
 									pane.getChildren().remove(1);
 								}
@@ -609,7 +609,52 @@ public class MainMenuController implements Initializable {
 			GraphicsContext gc = canvas.getGraphicsContext2D();
 			gc.drawImage(image, 0, 0);
 			drawTraders(gc);
-			scrollPane.setContent(canvas);
+			Pane pane = new Pane(canvas);
+			scrollPane.setContent(pane);
+
+			canvas.addEventHandler(MouseEvent.MOUSE_MOVED,
+					new EventHandler<MouseEvent>() {
+						@Override
+						public void handle(MouseEvent e) {
+							List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+							List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+							boolean onStuff = false;
+							Canvas canvas = (Canvas) pane.getChildren().get(0);
+							for (Trader t : traders) {
+								if (e.getX() > t.getxPos()-10 && e.getX() < t.getxPos()+10 &&
+										e.getY() > t.getyPos()-10 && e.getY() < t.getyPos()+10) {
+									Canvas highlight = new Canvas(30, 30);
+									highlight.getGraphicsContext2D().setLineWidth(7);
+									highlight.getGraphicsContext2D().setStroke(Color.RED);
+									highlight.getGraphicsContext2D().strokeLine(2.5, 2.5, 27.5, 27.5);
+									highlight.getGraphicsContext2D().strokeLine(2.5, 27.5, 27.5, 2.5);
+									highlight.setLayoutX(t.getxPos()-15);
+									highlight.setLayoutY(t.getxPos()-15);
+									pane.getChildren().add(highlight);
+									onStuff = true;
+								}
+							}
+							for (Tavern t : taverns) {
+								if (e.getX() > t.getxPos()-10 && e.getX() < t.getxPos()+10 &&
+										e.getY() > t.getyPos()-10 && e.getY() < t.getyPos()+10) {
+									Canvas highlight = new Canvas(30, 30);
+									highlight.getGraphicsContext2D().setLineWidth(7);
+									highlight.getGraphicsContext2D().setStroke(Color.RED);
+									highlight.getGraphicsContext2D().strokeLine(2.5, 2.5, 27.5, 27.5);
+									highlight.getGraphicsContext2D().strokeLine(2.5, 27.5, 27.5, 2.5);
+									highlight.setLayoutX(t.getxPos()-15);
+									highlight.setLayoutY(t.getxPos()-15);
+									pane.getChildren().add(highlight);
+									onStuff = true;
+								}
+							}
+							if (!onStuff) {
+								while(pane.getChildren().size() > 1) {
+									pane.getChildren().remove(1);
+								}
+							}
+						}
+					});
 		}
 	}
 
@@ -671,7 +716,7 @@ public class MainMenuController implements Initializable {
 		int posX;
 		int posY;
 		gc.setLineWidth(5);
-		gc.setStroke(Color.RED);
+		gc.setStroke(Color.GREEN);
 		List<Trader> traders = traderService.getAllForLocation(selectedLocation);
 		for (Trader t : traders) {
 			posX = t.getxPos();
