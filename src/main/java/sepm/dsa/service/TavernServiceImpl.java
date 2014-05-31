@@ -21,4 +21,9 @@ public class TavernServiceImpl implements TavernService {
 		// TODO implement
 		return new ArrayList<Tavern>();
 	}
+
+	@Override
+	public void remove(Tavern tavern) {
+
+	}
 }

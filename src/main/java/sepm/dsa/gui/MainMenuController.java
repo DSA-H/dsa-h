@@ -63,7 +63,7 @@ public class MainMenuController implements Initializable {
 	private double scrollPositionX;
 	private double scrollPositionY;
 	private Location selectedLocation;
-	private Trader selectedTrader;
+	private Object selectedObject;
 	private int mode;   // 0..worldMode(default) 1..locationMode
 	private Boolean creationMode = false;
 
@@ -155,7 +155,7 @@ public class MainMenuController implements Initializable {
 		traderList.getFocusModel().focusedItemProperty().addListener(new ChangeListener() {
 			@Override
 			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				selectedTrader = (Trader) traderList.getFocusModel().getFocusedItem();
+				selectedObject = traderList.getFocusModel().getFocusedItem();
 				checkTraderFocus();
 			}
 		});
@@ -178,12 +178,21 @@ public class MainMenuController implements Initializable {
 			mode = 1;
 			locationTable.setVisible(false);
 			traderList.setVisible(true);
-			selectedTrader = null;
+			selectedObject = null;
 			deleteButton.setDisable(true);
 			editButton.setDisable(true);
 
-			ObservableList<Trader> data = FXCollections.observableArrayList(traderService.getAllForLocation(selectedLocation));
-			traderList.setItems(data);
+			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+			List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+			List<Object> all = new ArrayList<Object>();
+			for (Trader t: traders) {
+				all.add(t);
+			}
+			for (Tavern t: taverns) {
+				all.add(t);
+			}
+
+			traderList.setItems(FXCollections.observableArrayList(all));
 
 			chooseButton.setText("Weltansicht");
 			editButton.setText("Details");
@@ -223,12 +232,22 @@ public class MainMenuController implements Initializable {
 			stage.setTitle("Händler-Details");
 
 			TraderDetailsController controller = loader.getController();
-			controller.setTrader(selectedTrader);
+			controller.setTrader((Trader) selectedObject);
 			stage.setScene(new Scene(scene, 800, 400));
 			stage.setResizable(false);
 			stage.showAndWait();
-			ObservableList<Trader> data = FXCollections.observableArrayList(traderService.getAllForLocation(selectedLocation));
-			traderList.setItems(data);
+
+			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+			List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+			List<Object> all = new ArrayList<Object>();
+			for (Trader t: traders) {
+				all.add(t);
+			}
+			for (Tavern t: taverns) {
+				all.add(t);
+			}
+
+			traderList.setItems(FXCollections.observableArrayList(all));
 		}
 
 		updateMap();
@@ -236,7 +255,7 @@ public class MainMenuController implements Initializable {
 	}
 
 	@FXML
-	private void onDeleteButtonPressed() {
+	private void onDeleteButtonPressed() { // TODO for taverns
 		log.debug("onDeleteButtonPressed - deleting selected Data");
 
 		if (mode == 0) {
@@ -262,16 +281,29 @@ public class MainMenuController implements Initializable {
 				}
 			}
 		} else {
-			if (selectedTrader != null) {
-				log.debug("open Confirm-Delete-Trader Dialog");
-				Action response = Dialogs.create()
-						.title("Löschen?")
-						.masthead(null)
-						.message("Wollen Sie den Händer '" + selectedTrader.getName() + "' wirklich löschen")
-						.showConfirm();
-				if (response == Dialog.Actions.YES) {
-					traderService.remove(selectedTrader);
-					traderList.getItems().remove(selectedTrader);
+			if (selectedObject != null) {
+				if (selectedObject instanceof Trader) {
+					log.debug("open Confirm-Delete-Trader Dialog");
+					Action response = Dialogs.create()
+							.title("Löschen?")
+							.masthead(null)
+							.message("Wollen Sie den Händer '" + ((Trader)selectedObject).getName() + "' wirklich löschen")
+							.showConfirm();
+					if (response == Dialog.Actions.YES) {
+						traderService.remove((Trader) selectedObject);
+						traderList.getItems().remove(selectedObject);
+					}
+				} else {
+					log.debug("open Confirm-Delete-Tavern Dialog");
+					Action response = Dialogs.create()
+							.title("Löschen?")
+							.masthead(null)
+							.message("Wollen Sie das Wirtshaus '" + ((Tavern)selectedObject).getName() + "' wirklich löschen")
+							.showConfirm();
+					if (response == Dialog.Actions.YES) {
+						tavernService.remove((Tavern) selectedObject);
+						traderList.getItems().remove(selectedObject);
+					}
 				}
 			}
 		}
@@ -316,8 +348,17 @@ public class MainMenuController implements Initializable {
 				stage.setScene(new Scene(scene, 600, 400));
 				stage.setResizable(false);
 				stage.showAndWait();
-				ObservableList<Trader> data = FXCollections.observableArrayList(traderService.getAllForLocation(selectedLocation));
-				traderList.setItems(data);
+				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+				List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+				List<Object> all = new ArrayList<Object>();
+				for (Trader t: traders) {
+					all.add(t);
+				}
+				for (Tavern t: taverns) {
+					all.add(t);
+				}
+
+				traderList.setItems(FXCollections.observableArrayList(all));
 			} else {
 				traderList.setDisable(true);
 				createButton.setDisable(true);
@@ -388,7 +429,7 @@ public class MainMenuController implements Initializable {
 				controller.setUp(null, pos, selectedLocation);
 			} else {
 				stage.setTitle("Händler platzieren");
-				controller.setUp(selectedLocation, pos, selectedTrader);
+				controller.setUp(selectedLocation, pos, selectedObject);
 			}
 			stage.setScene(new Scene(scene, 350, 160));
 			stage.setResizable(false);
@@ -823,8 +864,8 @@ public class MainMenuController implements Initializable {
 	}
 
 	private void checkTraderFocus() {
-		selectedTrader = (Trader) traderList.getFocusModel().getFocusedItem();
-		if (selectedTrader == null) {
+		selectedObject = traderList.getFocusModel().getFocusedItem();
+		if (selectedObject == null) {
 			deleteButton.setDisable(true);
 			editButton.setDisable(true);
 		} else {
