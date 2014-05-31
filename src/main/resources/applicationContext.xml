@@ -305,7 +305,6 @@
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
         <property name="tavernService" ref="tavernService"/>
-        <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
     <bean id="EditLocationConnectionsController" class="sepm.dsa.gui.EditLocationConnectionsController">
         <property name="loader" ref="loader"/>
