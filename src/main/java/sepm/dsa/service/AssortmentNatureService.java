@@ -65,6 +65,13 @@ public interface AssortmentNatureService {
      */
     List<AssortmentNature> getAllByTraderCategory(int traderCategoryId);
 
+    /**
+     * Gets all {@code AssortmentNature}s by its ProductCategory
+     *
+     * @param productCategoryId
+     * @return a list of AssortmentNatures, might be empty (not null).
+     */
+    List<AssortmentNature> getAllByProductCategory(int productCategoryId);
 
 
 }
