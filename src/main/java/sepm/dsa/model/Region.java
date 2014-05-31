@@ -54,13 +54,13 @@ public class Region implements BaseModel, PathNode {
     @JoinTable(name = "product_regions", joinColumns = { @JoinColumn(name = "regionId") }, inverseJoinColumns = { @JoinColumn(name = "productId") })
     private Set<Product> products = new HashSet<>();
 
-//    public Set<Location> getLocations() {
-//        return locations;
-//    }
-//
-//    public void setLocations(Set<Location> locations) {
-//        this.locations = locations;
-//    }
+    public Set<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(Set<Location> locations) {
+        this.locations = locations;
+    }
 
     public Set<Product> getProducts() {
         return products;

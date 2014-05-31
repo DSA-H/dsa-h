@@ -54,20 +54,20 @@ public class Trader implements BaseModel {
     @Column(nullable = false)
     private Integer convince;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(nullable = false)
     private TraderCategory category;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(nullable = false)
     private Location location;
 
-//    @OneToMany(mappedBy = "trader", cascade = CascadeType.REMOVE) //TODO would be for offer is owning side
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)// LAZY, otherwise offer will not be delted cascading!
-    @JoinColumn(name = "trader_id", nullable = false)
+//    @OneToMany(cascade = CascadeType.ALL)// LAZY, otherwise offer will not be delted cascading!
+//    @JoinColumn(nullable = false)
+    @OneToMany(mappedBy = "trader", cascade = CascadeType.REMOVE)
     private Set<Offer> offers = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "trader", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "trader")
     private Set<Deal> deals = new HashSet<>();
 
     public Integer getId() {

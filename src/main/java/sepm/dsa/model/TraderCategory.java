@@ -26,12 +26,7 @@ public class TraderCategory implements BaseModel {
     @Column(length = 1000)
     private String comment;
 
-//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "tradercategory_id", nullable = false)
-//    private Set<AssortmentNature> assortments = new HashSet<>();
-
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.traderCategory", cascade = { CascadeType.REMOVE, CascadeType.ALL }, orphanRemoval = true)
+    @OneToMany(mappedBy = "pk.traderCategory", cascade = CascadeType.REMOVE)
     @MapKey(name="pk.productCategory")
     private Map<ProductCategory, AssortmentNature> assortments = new HashMap<>();
 

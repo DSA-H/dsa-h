@@ -15,6 +15,7 @@ public class Tavern implements BaseModel {
 	@Column(nullable = false, unique = true)
     private Integer id;
 
+    @NotNull
 	@Size(min = 1, max = 100)
 	@Column(nullable = false, length = 100)
     private String name;
@@ -35,6 +36,7 @@ public class Tavern implements BaseModel {
 //    private ??? overnightStayPrice;
 //    private DSADate onDate;
 
+    @NotNull
 	@ManyToOne
 	@JoinColumn(nullable = false)
     private Location location;

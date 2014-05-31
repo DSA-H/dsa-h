@@ -42,22 +42,18 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    @Transactional(readOnly = false)
+    public void remove(Location location) {
+        log.debug("calling removeConnection(" + location + ")");
+        locationDao.remove(location);
+    }
+
+    @Override
     public List<Location> getAllByRegion(int regionId) {
         log.debug("calling getAllByRegion(" + regionId + ")");
         List<Location> result = locationDao.getAllByRegion(regionId);
         log.trace("returning " + result);
         return result;
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public void remove(Location location) {
-        log.debug("calling removeConnection(" + location + ")");
-//        List<Trader> tradersInTown = traderService.getAllForLocation(location);
-
-//        tradersInTown.forEach(traderService::removeConnection);
-
-        locationDao.remove(location);
     }
 
     @Override

@@ -25,22 +25,22 @@ public class ProductCategory implements BaseModel {
     @Column(nullable = false, length = 60)
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn
     private ProductCategory parent;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "parent", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<ProductCategory> childs = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "product_categories",
-            joinColumns = { @JoinColumn(name = "categoryId") },
+            joinColumns = { @JoinColumn(name = "categoryId") },     // is joinColumns/inverse correct here?
             inverseJoinColumns = { @JoinColumn(name = "productId") })
     private Set<Product> products = new HashSet<>();
 
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.productCategory", cascade = CascadeType.REMOVE, orphanRemoval = true)
 //    @MapKey(name="pk.traderCategory")
-//    private Map<TraderCategory, AssortmentNature> assortments = new HashMap<>();
+//    private Map<TraderCategory, AssortmentNature> assortments = new HashMap<>();u
 //
 //    public Map<TraderCategory, AssortmentNature> getAssortments() {
 //        return assortments;

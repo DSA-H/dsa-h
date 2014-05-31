@@ -59,22 +59,22 @@ public class TraderCategoryDaoTest extends AbstractDatabaseTest {
         assertTrue(l1.contains(cat1));
     }
 
-    @Test
-    public void add_withAssortmentNatures_ShouldCascadeAddAssortments() {
-        TraderCategory cat = new TraderCategory();
-        cat.setName("Kat 1");
-        AssortmentNature a1 = new AssortmentNature();
-        a1.setDefaultOccurence(50);
-        ProductCategory pc = productCategoryService.get(1);
-        a1.setProductCategory(pc);
-        a1.setTraderCategory(cat);
-        cat.getAssortments().put(pc, a1);
-        traderCategoryDao.add(cat);
-        getSaveCancelService().save();
-        getSaveCancelService().closeSession();
-        getSaveCancelService().cancel();
-        cat = traderCategoryDao.get(cat.getId());
-        assertNotNull(cat);
-        assertTrue("assortments didn't cascade persist", cat.getAssortments().size() == 1);
-    }
+//    @Test
+//    public void add_withAssortmentNatures_ShouldCascadeAddAssortments() {
+//        TraderCategory cat = new TraderCategory();
+//        cat.setName("Kat 1");
+//        AssortmentNature a1 = new AssortmentNature();
+//        a1.setDefaultOccurence(50);
+//        ProductCategory pc = productCategoryService.get(1);
+//        a1.setProductCategory(pc);
+//        a1.setTraderCategory(cat);
+//        cat.getAssortments().put(pc, a1);
+//        traderCategoryDao.add(cat);
+//        getSaveCancelService().save();
+//        getSaveCancelService().closeSession();
+//        getSaveCancelService().cancel();
+//        cat = traderCategoryDao.get(cat.getId());
+//        assertNotNull(cat);
+//        assertTrue("assortments didn't cascade persist", cat.getAssortments().size() == 1);
+//    }
 }

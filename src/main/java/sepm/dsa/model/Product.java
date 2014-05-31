@@ -60,7 +60,7 @@ public class Product implements BaseModel {
 //    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)//, cascade = CascadeType.REMOVE) // owning side
 //    @JoinColumn(name = "product_id", nullable = false)
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private Set<Offer> offer = new HashSet<>();
 
     public Integer getId() {

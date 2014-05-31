@@ -20,6 +20,10 @@ public class AssortmentNature implements BaseModel {
     @Column(nullable = false)
     private Integer defaultOccurence;
 
+    public Pk getPk() {
+        return pk;
+    }
+
     public ProductCategory getProductCategory() {
         return pk.productCategory;
     }
@@ -62,15 +66,31 @@ public class AssortmentNature implements BaseModel {
     }
 
     @Embeddable
-    protected static class Pk implements Serializable {
+    public static class Pk implements Serializable {
 
         @ManyToOne
-        @JoinColumn(name = "productcategory_id", nullable = false, insertable=false, updatable=false)
+        @JoinColumn(nullable = false)
         private ProductCategory productCategory;
 
         @ManyToOne
-        @JoinColumn(name = "tradercategory_id", nullable = false, insertable = false, updatable = false)
+        @JoinColumn(nullable = false)
         private TraderCategory traderCategory;
+
+        public Pk() {
+        }
+
+        public Pk(TraderCategory traderCategory, ProductCategory productCategory) {
+            this.traderCategory = traderCategory;
+            this.productCategory = productCategory;
+        }
+
+        public ProductCategory getProductCategory() {
+            return productCategory;
+        }
+
+        public TraderCategory getTraderCategory() {
+            return traderCategory;
+        }
 
         @Override
         public boolean equals(Object o) {

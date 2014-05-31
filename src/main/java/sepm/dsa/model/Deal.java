@@ -33,9 +33,39 @@ public class Deal implements BaseModel {
     @Column
     private Long date;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false)
+    @ManyToOne
+    @JoinColumn     // => nullable = true !!
     private Trader trader;
+
+    @ManyToOne
+    @JoinColumn     // => nullable = true; product can be deleted, therefore store productName to keep history for player
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private ProductUnit unit;
+
+//    private Player player;
+
+//    private String productName;
+//    private String locationName;
+
+
+    public ProductUnit getUnit() {
+        return unit;
+    }
+
+    public void setUnit(ProductUnit unit) {
+        this.unit = unit;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public void setDate(Long date) {
         this.date = date;

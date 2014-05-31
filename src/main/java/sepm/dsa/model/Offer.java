@@ -17,10 +17,8 @@ public class Offer implements BaseModel {
     @Column(nullable = false)
     private Integer amount;
 
-//    @ManyToOne
-//    @JoinColumn(name="product_id", nullable = false, insertable=false, updatable=false)   // not owning side
     @ManyToOne
-    @JoinColumn(name="product_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Product product;
 
     @NotNull
@@ -32,7 +30,7 @@ public class Offer implements BaseModel {
     private Integer qualityId;
 
     @ManyToOne
-    @JoinColumn(name = "trader_id", nullable = false, insertable=false, updatable=false)
+    @JoinColumn(nullable = false)
     private Trader trader;
 
     public Integer getId() {

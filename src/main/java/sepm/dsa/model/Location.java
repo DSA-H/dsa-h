@@ -71,6 +71,17 @@ public class Location implements BaseModel {
     @OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) // no getter+setter to avoid lazy loading exceptions :)
     private Set<Trader> traders;
 
+    @OneToMany(mappedBy = "location", cascade = CascadeType.REMOVE)
+    private Set<Tavern> taverns;
+
+    public Set<Tavern> getTaverns() {
+        return taverns;
+    }
+
+    public void setTaverns(Set<Tavern> taverns) {
+        this.taverns = taverns;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -236,14 +247,4 @@ public class Location implements BaseModel {
     */
 
 
-	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
-	private Collection<Tavern> taverns;
-
-	public Collection<Tavern> getTaverns() {
-		return taverns;
-	}
-
-	public void setTaverns(Collection<Tavern> taverns) {
-		this.taverns = taverns;
-	}
 }
