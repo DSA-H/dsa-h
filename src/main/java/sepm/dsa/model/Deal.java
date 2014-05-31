@@ -1,5 +1,7 @@
 package sepm.dsa.model;
 
+import sepm.dsa.dao.CurrencyAmount;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -50,7 +52,7 @@ public class Deal implements BaseModel {
     private Player player;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false)//product could be null after delete
     private String productName;
 
     @NotNull

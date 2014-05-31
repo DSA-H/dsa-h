@@ -56,4 +56,8 @@ public class CurrencyAmount {
     public void setCurrency(Currency currency) {
         this.currency = currency;
     }
+
+    public Currency getCurrency() {
+        return currency;
+    }
 }

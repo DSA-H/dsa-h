@@ -49,8 +49,15 @@ public class Player implements Serializable, BaseModel {
 		this.comment = comment;
 	}
 
+    public List<Deal> getDeals() {
+        return deals;
+    }
 
-	@Override
+    public void setDeals(List<Deal> deals) {
+        this.deals = deals;
+    }
+
+    @Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (!(o instanceof Player)) return false;

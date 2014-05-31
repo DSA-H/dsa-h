@@ -27,8 +27,7 @@
         <Label layoutX="30.0" layoutY="299.0" text="Kommentar:" />
         <TextArea fx:id="commentField" layoutX="115.0" layoutY="275.0" prefHeight="75.0" prefWidth="726.0" /><TableView fx:id="dealsTable" layoutX="114.0" layoutY="82.0" prefHeight="188.0" prefWidth="726.0">
   <columns>
-    <TableColumn fx:id="merchantColumn" prefWidth="163.0" text="Händler" />
-    <TableColumn fx:id="dateColumn" prefWidth="128.0" text="Datum" /><TableColumn fx:id="priceColumn" prefWidth="65.0" text="Preis" /><TableColumn fx:id="productColumn" prefWidth="209.0" text="Produktname" /><TableColumn fx:id="amountColumn" prefWidth="160.0" text="Menge" />
+    <TableColumn fx:id="dateColumn" prefWidth="194.0" text="Datum" /><TableColumn fx:id="priceColumn" prefWidth="122.0" text="Preis" /><TableColumn fx:id="productColumn" prefWidth="207.0" text="Produktname" /><TableColumn fx:id="amountColumn" prefWidth="202.0" text="Menge" />
   </columns>
 </TableView><Label layoutX="30.0" layoutY="100.0" text="Käufe:" />
     </children>
