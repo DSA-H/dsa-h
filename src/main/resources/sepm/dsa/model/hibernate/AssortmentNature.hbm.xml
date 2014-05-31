@@ -4,7 +4,13 @@
 <hibernate-mapping>
 
     <query name="AssortmentNature.findAll">
-        <![CDATA[from AssortmentNature ORDER BY id ASC]]>
+        <![CDATA[from AssortmentNature ORDER BY pk.traderCategory.id asc, pk.productCategory.id asc]]>
     </query>
+
+
+    <query name="AssortmentNature.findAllByTraderCategory">
+        <![CDATA[from AssortmentNature WHERE pk.traderCategory.id = :traderCategoryId ORDER BY pk.traderCategory.id asc, pk.productCategory.id asc]]>
+    </query>
+
 
 </hibernate-mapping>

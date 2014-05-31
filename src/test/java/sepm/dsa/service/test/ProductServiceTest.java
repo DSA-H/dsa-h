@@ -105,7 +105,10 @@ public class ProductServiceTest extends AbstractDatabaseTest {
         int size = productService.getAll().size();
         Product p = productService.get(1);
         productService.remove(p);
-        assertTrue(size-1 == productService.getAll().size());
+
+	    saveCancelService.save();
+
+        assertEquals(size-1, productService.getAll().size());
     }
 
     @Test

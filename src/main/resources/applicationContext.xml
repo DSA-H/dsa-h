@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/tx
-                           http://www.springframework.org/schema/tx/spring-tx.xsd">
+                           http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd" >
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.hsqldb.jdbc.JDBCDriver"/>
@@ -62,9 +65,28 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="javax.persistence.validation.mode">none</prop>
+                <prop key="hibernate.current_session_context_class">managed</prop>
             </props>
         </property>
     </bean>
+
+    <bean id="hbmConversationInterceptor" class="sepm.dsa.interceptor.HbmConversationInterceptor">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <aop:config>
+        <aop:advisor advice-ref="hbmConversationInterceptor" pointcut="within(sepm.dsa.dao..*)" />
+        <!--<aop:advisor advice-ref="hbmConversationInterceptor" pointcut="execution(* sepm.dsa.service.SaveCancelService.*(..))" />-->
+    </aop:config>
+
+    <bean id="saveCancelService" class="sepm.dsa.service.SaveCancelServiceImpl">
+        <property name="saveCancelDao" ref="saveCancelDao" />
+    </bean>
+
+    <bean id="saveCancelDao" class="sepm.dsa.dao.SaveCancelDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
 
     <bean id="loader" class="sepm.dsa.application.SpringFxmlLoader">
     </bean>
@@ -88,7 +110,6 @@
 
     <bean id="traderCategoryDao" class="sepm.dsa.dao.TraderCategoryDaoImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
-        <property name="traderDao" ref="traderDao"/>
     </bean>
 
     <bean id="locationDao" class="sepm.dsa.dao.LocationDaoImpl">
@@ -110,7 +131,7 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="unitDao" class="sepm.dsa.dao.UnitDaoImpl">
+    <bean id="unitDao" class="sepm.dsa.dao.UnitDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
@@ -119,6 +140,10 @@
     </bean>
 
     <bean id="currencyDao" class="sepm.dsa.dao.CurrencyDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="assortmentNatureDao" class="sepm.dsa.dao.AssortmentNatureDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
@@ -171,6 +196,7 @@
 
     <bean id="traderCategoryService" class="sepm.dsa.service.TraderCategoryServiceImpl">
         <property name="traderCategoryDao" ref="traderCategoryDao"/>
+        <property name="traderService" ref="traderService"/>
     </bean>
 
     <bean id="traderService" class="sepm.dsa.service.TraderServiceImpl">
@@ -179,13 +205,13 @@
         <property name="pathService" ref="pathService"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
     <bean id="pathService" class="sepm.dsa.service.path.PathServiceDijkstraJGraphImpl">
     </bean>
 
     <bean id="assortmentNatureService" class="sepm.dsa.service.AssortmentNatureServiceImpl">
+        <property name="assortmentNatureDao" ref="assortmentNatureDao" />
     </bean>
 
     <bean id="mapService" class="sepm.dsa.service.MapServiceImpl">
@@ -205,12 +231,14 @@
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
         <property name="locationService" ref="locationService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 
     <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
         <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
     <bean id="EditLocationController" class="sepm.dsa.gui.EditLocationController">
@@ -218,20 +246,21 @@
         <property name="locationService" ref="locationService"/>
         <property name="regionService" ref="regionService"/>
         <property name="mapService" ref="mapService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
     <bean id="ProductListController" class="sepm.dsa.gui.ProductListController">
-        <property name="sessionFactory" ref="sessionFactory"/>
         <property name="loader" ref="loader"/>
         <property name="productService" ref="productService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
     <bean id="EditProductController" class="sepm.dsa.gui.EditProductController">
         <property name="loader" ref="loader"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
         <property name="productService" ref="productService"/>
         <property name="productCategoryService" ref="productCategoryService"/>
         <property name="regionService" ref="regionService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
     <bean id="ProductCategoryListController" class="sepm.dsa.gui.ProductCategoryListController">
@@ -248,8 +277,8 @@
 
     <bean id="TraderCategoryList" class="sepm.dsa.gui.TraderCategoryListController">
         <property name="loader" ref="loader"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
     <bean id="editTraderCategory" class="sepm.dsa.gui.EditTraderCategoryController">
@@ -257,12 +286,15 @@
         <property name="traderCategoryService" ref="traderCategoryService"/>
         <property name="productCategoryService" ref="productCategoryService"/>
         <property name="assortmentNatureService" ref="assortmentNatureService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
+
     <bean id="editTrader" class="sepm.dsa.gui.EditTraderController">
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
         <property name="locationService" ref="locationService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
     <bean id="traderDetails" class="sepm.dsa.gui.TraderDetailsController">
         <property name="loader" ref="loader"/>
@@ -301,23 +333,25 @@
         <property name="loader" ref="loader"/>
         <property name="playerService" ref="playerService"/>
     </bean>
-    <tx:annotation-driven transaction-manager="transactionManager"/>
-    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
     <bean id="currencyList" class="sepm.dsa.gui.CurrencyListController">
         <property name="loader" ref="loader"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
         <property name="currencyService" ref="currencyService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
     <bean id="editCurrency" class="sepm.dsa.gui.EditCurrencyController">
         <property name="loader" ref="loader"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
         <property name="currencyService" ref="currencyService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
     <bean id="calculateCurrency" class="sepm.dsa.gui.CurrencyCalculateController">
         <property name="loader" ref="loader"/>
         <property name="sessionFactory" ref="sessionFactory"/>
         <property name="currencyService" ref="currencyService"/>
+    </bean>
+
+    <!-- Transaction -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 </beans>

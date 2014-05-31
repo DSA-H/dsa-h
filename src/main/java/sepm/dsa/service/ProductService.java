@@ -18,15 +18,17 @@ public interface ProductService {
      * Add a new product to DB
      *
      * @param p product (not null)
+     * @return The added category model.
      */
-    void add(Product p);
+    Product add(Product p);
 
     /**
      * Update a product
      *
      * @param p product (not null)
+     * @return The updated category model.
      */
-    void update(Product p);
+    Product update(Product p);
 
     /**
      * Removes a product from DB

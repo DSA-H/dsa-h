@@ -51,8 +51,7 @@ public class TavernDaoTest extends AbstractDatabaseTest {
 	public void testRemove() throws Exception {
 		tavernDao.remove(tavernDao.get(1));
 
-		tavernDao.getAll().
-			forEach(tavern -> assertNotSame("Expected to be rid of the tavern", 1, tavern.getId()));
+		assertNull("Expected to be rid of the tavern", tavernDao.get(1));
 	}
 
 	@Test

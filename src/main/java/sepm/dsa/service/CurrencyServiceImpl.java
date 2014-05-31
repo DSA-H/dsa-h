@@ -35,24 +35,24 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Override
     @Transactional(readOnly = false)
-    public void add(Currency r) {
-        log.debug("calling add(" + r + ")");
+    public Currency add(Currency r) {
+        log.debug("calling addConnection(" + r + ")");
         validate(r);
-        currencyDao.add(r);
+        return currencyDao.add(r);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void update(Currency r) {
+    public Currency update(Currency r) {
         log.debug("calling update(" + r + ")");
         validate(r);
-        currencyDao.update(r);
+        return currencyDao.update(r);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void remove(Currency r) {
-        log.debug("calling remove(" + r + ")");
+        log.debug("calling removeConnection(" + r + ")");
         currencyDao.remove(r);
     }
 

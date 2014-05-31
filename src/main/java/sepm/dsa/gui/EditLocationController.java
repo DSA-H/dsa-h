@@ -14,19 +14,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
-import sepm.dsa.service.LocationConnectionService;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.MapService;
 import sepm.dsa.service.RegionService;
+import sepm.dsa.service.SaveCancelService;
 
 import java.io.File;
 import java.util.*;
@@ -42,6 +39,7 @@ public class EditLocationController implements Initializable {
     private LocationService locationService;
     private RegionService regionService;
 	private MapService mapService;
+    private SaveCancelService saveCancelService;
     // true if the location is not editing
     private boolean isNewLocation;
 
@@ -125,7 +123,7 @@ public class EditLocationController implements Initializable {
 
         // init region choice box
         List<Region> otherRegions = regionService.getAll();
-//        otherRegions.remove(selectedLocation.getRegion());
+//        otherRegions.removeConnection(selectedLocation.getRegion());
         regionChoiceBox.setItems(FXCollections.observableArrayList(otherRegions));
 
         travelTimeColumn.setCellValueFactory(new PropertyValueFactory<>("travelTime"));
@@ -188,11 +186,17 @@ public class EditLocationController implements Initializable {
     @FXML
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
+        saveCancelService.cancel();
+        saveCancelService.refresh(selectedLocation);
+        log.info("before: connections.size=" + selectedLocation.getAllConnections().size());
+        selectedLocation = locationService.get(selectedLocation.getId());
+        log.info("after: connections.size=" + selectedLocation.getAllConnections().size());
+
         Stage stage = (Stage) nameField.getScene().getWindow();
 	    stage.close();
     }
 
-    private void saveLocation() {
+    private void applyLocationChanges() {
         // save region
         String name = nameField.getText();
         Weather weather = Weather.parse(weatherChoiceBox.getSelectionModel().getSelectedIndex());
@@ -222,25 +226,28 @@ public class EditLocationController implements Initializable {
         }
 
         if (isNewLocation) {
-            log.info("add location");
+            log.info("addConnection location");
             locationService.add(selectedLocation);
         } else {
             log.info("update location");
             locationService.update(selectedLocation);
         }
 
-        selectedLocation = locationService.get(selectedLocation.getId());
+        log.info("selectedLocation.id = " + selectedLocation.getId());
+//        selectedLocation = locationService.get(selectedLocation.getId());
+
     }
 
     @FXML
     private void onSavePressed() {
         log.debug("calling SaveButtonPressed");
 
-        saveLocation();
 	    if (newMap != null) {
 		    mapService.setLocationMap(selectedLocation, newMap);
 	    }
+        applyLocationChanges();
 
+        saveCancelService.save();
 //        locationService.update(selectedLocation);
 
 
@@ -269,7 +276,7 @@ public class EditLocationController implements Initializable {
     public void onEditConnectionsClicked() {
         log.debug("calling onEditConnectionsClicked");
 
-        saveLocation();
+        applyLocationChanges();
 
         EditLocationConnectionsController.setSelectedLocation(selectedLocation);
 
@@ -289,6 +296,10 @@ public class EditLocationController implements Initializable {
 	public void setMapService(MapService mapService) {
 		this.mapService = mapService;
 	}
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
+    }
 
 //    @FXML
 //    public void onSuggestConnectionsBtnClicked() {
@@ -316,10 +327,10 @@ public class EditLocationController implements Initializable {
 //        ArrayList<String> errorMsgs = new ArrayList<>();
 //        for (LocationConnection c : suggestedConnections) {
 //            try {
-//                locationConnectionService.add(c);
-//                locationConnectionsTable.getItems().add(c);
+//                locationConnectionService.addConnection(c);
+//                locationConnectionsTable.getItems().addConnection(c);
 //            } catch (DSARuntimeException ex) {
-//                errorMsgs.add(ex.getMessage());
+//                errorMsgs.addConnection(ex.getMessage());
 //            }
 //        }
 //        if (errorMsgs.size() > 0) {
@@ -340,8 +351,8 @@ public class EditLocationController implements Initializable {
 //    @FXML
 //    public void onRemoveConnectionBtnClicked() {
 //        LocationConnection selected = locationConnectionsTable.getSelectionModel().getSelectedItem();
-//        locationConnectionService.remove(selected);
-//        locationConnectionsTable.getItems().remove(selected);
+//        locationConnectionService.removeConnection(selected);
+//        locationConnectionsTable.getItems().removeConnection(selected);
 //    }
 
 //    public void setLocationConnectionService(LocationConnectionService locationConnectionService) {

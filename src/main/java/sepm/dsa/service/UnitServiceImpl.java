@@ -31,14 +31,13 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     @Transactional(readOnly = false)
-    public int add(Unit p) {
+    public Unit add(Unit p) {
         log.debug("calling add(" + p + ")");
         validate(p);
-        return unitDao.add(p);
+	    return unitDao.add(p);
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void update(Unit p) {
         log.debug("calling update(" + p + ")");
         validate(p);

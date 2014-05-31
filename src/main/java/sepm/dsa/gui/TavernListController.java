@@ -21,6 +21,7 @@ import sepm.dsa.model.Location;
 import sepm.dsa.model.Tavern;
 import sepm.dsa.model.Trader;
 import sepm.dsa.service.LocationService;
+import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TraderService;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class TavernListController implements Initializable {
 
     private TraderService tavernService;
     private LocationService locationService;
+    private SaveCancelService saveCancelService;
 
     private Trader selectedTavern;
 
@@ -101,6 +103,7 @@ public class TavernListController implements Initializable {
                     .showConfirm();
             if (response == Dialog.Actions.YES) {
                 tavernService.remove(selectedTavern);
+	            saveCancelService.save();
                 tavernList.getItems().remove(selectedTavern);
             }
         }
@@ -152,5 +155,9 @@ public class TavernListController implements Initializable {
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

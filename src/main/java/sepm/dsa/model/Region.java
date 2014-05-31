@@ -6,17 +6,16 @@ import sepm.dsa.service.path.PathNode;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "regions")
-public class Region implements Serializable, PathNode {
+public class Region implements BaseModel, PathNode {
     private static final long serialVersionUID = 5890354733231481712L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 
@@ -42,10 +41,10 @@ public class Region implements Serializable, PathNode {
     @Column(nullable = false)
     private Integer rainfallChanceId;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region1", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.region1", cascade = CascadeType.REMOVE)
     private Set<RegionBorder> borders1 = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.region2", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.region2", cascade = CascadeType.REMOVE)
     private Set<RegionBorder> borders2 = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "region", cascade = CascadeType.REMOVE)
@@ -55,13 +54,13 @@ public class Region implements Serializable, PathNode {
     @JoinTable(name = "product_regions", joinColumns = { @JoinColumn(name = "regionId") }, inverseJoinColumns = { @JoinColumn(name = "productId") })
     private Set<Product> products = new HashSet<>();
 
-//    public Set<Location> getLocations() {
-//        return locations;
-//    }
-//
-//    public void setLocations(Set<Location> locations) {
-//        this.locations = locations;
-//    }
+    public Set<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(Set<Location> locations) {
+        this.locations = locations;
+    }
 
     public Set<Product> getProducts() {
         return products;
@@ -155,6 +154,20 @@ public class Region implements Serializable, PathNode {
         result.addAll(borders1);
         result.addAll(borders2);
         return result;
+    }
+
+    public void addBorder(RegionBorder regionBorder) {
+        if (this.equals(regionBorder.getRegion1())) {
+            borders1.add(regionBorder);
+        } else if (this.equals(regionBorder.getRegion2())) {
+            borders2.add(regionBorder);
+        }
+    }
+
+
+    public void removeBorder(RegionBorder regionBorder) {
+        borders1.remove(regionBorder);
+        borders2.remove(regionBorder);
     }
 
     @Override

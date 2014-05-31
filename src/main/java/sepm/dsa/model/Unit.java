@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "units")
-public class Unit {
+public class Unit implements BaseModel {
 
     @Id
     @GeneratedValue
