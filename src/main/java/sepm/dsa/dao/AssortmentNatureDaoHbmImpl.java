@@ -30,8 +30,25 @@ public class AssortmentNatureDaoHbmImpl extends BaseDaoHbmImpl<AssortmentNature>
 
 
     @Override
+    public List<AssortmentNature> getAllByProductCategory(int productCategoryId) {
+        log.debug("calling getAllByProductCategory(" + productCategoryId + ")");
+        List<?> list = sessionFactory.getCurrentSession().getNamedQuery("AssortmentNature.findAllByProductCategory")
+                .setParameter("productCategoryId", productCategoryId)
+                .list();
+
+        List<AssortmentNature> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((AssortmentNature) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+
+    }
+
+    @Override
     public List<AssortmentNature> getAllByTraderCategory(int traderCategoryId) {
-        log.debug("calling getAllForRegion(" + traderCategoryId + ")");
+        log.debug("calling getAllByTraderCategory(" + traderCategoryId + ")");
         List<?> list = sessionFactory.getCurrentSession().getNamedQuery("AssortmentNature.findAllByTraderCategory")
                 .setParameter("traderCategoryId", traderCategoryId)
                 .list();

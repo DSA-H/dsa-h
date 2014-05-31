@@ -195,8 +195,8 @@ public class ProductCategoryListController implements Initializable {
             private ObservableList<TreeItem<ProductCategory>> buildChildren(TreeItem<ProductCategory> TreeItem) {
                 ProductCategory f = TreeItem.getValue();
                 if (f != null && f.getChilds() != null) {
-                    ProductCategory[] files = (ProductCategory[]) f.getChilds().toArray();
-                    if (files!=null & files.length>0) {
+                    Set<ProductCategory> files = f.getChilds();
+                    if (files != null & files.size() > 0) {
                         ObservableList<TreeItem<ProductCategory>> children = FXCollections.observableArrayList();
 
                         for (ProductCategory childFile : files) {

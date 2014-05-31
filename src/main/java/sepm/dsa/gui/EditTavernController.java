@@ -16,6 +16,7 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Tavern;
 import sepm.dsa.service.LocationService;
+import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TavernService;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class EditTavernController implements Initializable {
     private Tavern selectedTavern;
     private TavernService tavernService;
     private LocationService locationService;
+    private SaveCancelService saveCancelService;
 
     private boolean isNewTavern;
 
@@ -80,6 +82,7 @@ public class EditTavernController implements Initializable {
             tavernService.update(selectedTavern);
         }
         */
+        saveCancelService.save();
 
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/tavernlist.fxml");
@@ -91,7 +94,7 @@ public class EditTavernController implements Initializable {
     @FXML
     private void onCancelPressed() {
         log.debug("called onCancelPressed");
-
+        saveCancelService.cancel();
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/tavernlist.fxml");
         stage.setScene(new Scene(scene, 600, 400));
@@ -116,5 +119,9 @@ public class EditTavernController implements Initializable {
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }
