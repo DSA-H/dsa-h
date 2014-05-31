@@ -13,7 +13,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
@@ -60,7 +59,7 @@ public class PlayerListController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/editplayer.fxml");
 
         stage.setTitle("Spieler");
-        stage.setScene(new Scene(scene, 600, 414));
+        stage.setScene(new Scene(scene, 850, 414));
         stage.show();
     }
 
@@ -74,7 +73,7 @@ public class PlayerListController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/editplayer.fxml");
 
         stage.setTitle("Spieler bearbeiten");
-        stage.setScene(new Scene(scene, 600, 414));
+        stage.setScene(new Scene(scene, 850, 414));
         stage.show();
     }
 

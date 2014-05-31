@@ -3,6 +3,7 @@ package sepm.dsa.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name="players")
@@ -20,6 +21,9 @@ public class Player implements Serializable, BaseModel {
 
 	@Column
 	private String comment;
+
+    @OneToMany
+    private List<Deal> deals;
 
 	public Integer getId() {
 		return id;
@@ -44,6 +48,7 @@ public class Player implements Serializable, BaseModel {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+
 
 	@Override
 	public boolean equals(Object o) {

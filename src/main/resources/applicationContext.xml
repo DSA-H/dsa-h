@@ -58,6 +58,7 @@
                 <value>sepm/dsa/model/hibernate/Player.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/UnitType.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Unit.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Deal.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -147,6 +148,10 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="dealDao" class="sepm.dsa.dao.DealDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
@@ -215,6 +220,10 @@
     </bean>
 
     <bean id="mapService" class="sepm.dsa.service.MapServiceImpl">
+    </bean>
+
+    <bean id="dealService" class="sepm.dsa.service.DealServiceImpl">
+        <property name="dealDao" ref="dealDao"/>
     </bean>
 
     <!-- GUI DI -->
@@ -331,6 +340,7 @@
     <bean id="EditPlayerController" class="sepm.dsa.gui.EditPlayerController">
         <property name="loader" ref="loader"/>
         <property name="playerService" ref="playerService"/>
+        <property name="dealService" ref="dealService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
     <bean id="currencyList" class="sepm.dsa.gui.CurrencyListController">

@@ -4,16 +4,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
+import sepm.dsa.model.Deal;
 import sepm.dsa.model.Player;
+import sepm.dsa.model.Trader;
+import sepm.dsa.service.DealService;
 import sepm.dsa.service.PlayerService;
 import sepm.dsa.service.SaveCancelService;
 
@@ -23,6 +23,8 @@ public class EditPlayerController implements Initializable {
     private SpringFxmlLoader loader;
 
     private PlayerService playerService;
+    private DealService dealService;
+
     private SaveCancelService saveCancelService;
 
     private static Player selectedPlayer;
@@ -38,6 +40,18 @@ public class EditPlayerController implements Initializable {
     private Button cancelButton;
     @FXML
     private Button saveButton;
+    @FXML
+    private TableView<Deal> dealsTable;
+    @FXML
+    private TableColumn<String, Trader> merchantColumn;
+    @FXML
+    private TableColumn<String, Trader> dateColumn;
+    @FXML
+    private TableColumn<String, Trader> priceColumn;
+    @FXML
+    private TableColumn<String, Trader> productColumn;
+    @FXML
+    private TableColumn<String, Trader> amountColumn;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
@@ -62,7 +76,7 @@ public class EditPlayerController implements Initializable {
 
         Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
 
-        stage.setScene(new Scene(scene, 600, 438));
+        stage.setScene(new Scene(scene, 850, 438));
     }
 
     @FXML
@@ -87,7 +101,7 @@ public class EditPlayerController implements Initializable {
         // return to players-list
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
-        stage.setScene(new Scene(scene, 600, 438));
+        stage.setScene(new Scene(scene, 850, 438));
     }
 
 
@@ -105,5 +119,9 @@ public class EditPlayerController implements Initializable {
 
     public void setSaveCancelService(SaveCancelService saveCancelService) {
         this.saveCancelService = saveCancelService;
+    }
+
+    public void setDealService(DealService dealService) {
+        this.dealService = dealService;
     }
 }
