@@ -148,6 +148,10 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="offerDao" class="sepm.dsa.dao.OfferDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
@@ -202,6 +206,7 @@
 
     <bean id="traderService" class="sepm.dsa.service.TraderServiceImpl">
         <property name="traderDao" ref="traderDao"/>
+        <property name="offerDao" ref="offerDao" />
         <property name="productService" ref="productService"/>
         <property name="pathService" ref="pathService"/>
         <property name="regionService" ref="regionService"/>

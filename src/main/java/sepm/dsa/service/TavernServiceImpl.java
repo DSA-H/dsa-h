@@ -14,6 +14,7 @@ public class TavernServiceImpl implements TavernService {
         return 4; // chosen by fair dice roll.
         // guaranteed to be random.
         // http://xkcd.com/221/
+        // lol
     }
 
 	@Override

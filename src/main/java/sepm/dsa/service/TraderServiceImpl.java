@@ -7,6 +7,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.dao.OfferDao;
 import sepm.dsa.dao.TraderDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
@@ -27,6 +28,7 @@ public class TraderServiceImpl implements TraderService {
     private PathService<RegionBorder> pathService;
     private RegionService regionService;
     private RegionBorderService regionBorderService;
+    private OfferDao offerDao;
 
 	private SessionFactory sessionFactory;
 
@@ -38,15 +40,20 @@ public class TraderServiceImpl implements TraderService {
         return result;
     }
 
+    /**
+     * Adds a new trader and generate and save a set of offers for him
+     * @param t (Trader) to be persisted must not be null
+     * @return
+     */
     @Override
     @Transactional(readOnly = false)
     public Trader add(Trader t) {
         log.debug("calling addConnection(" + t + ")");
         validate(t);
         Trader trader = traderDao.add(t);
-        HashSet<Offer> offers = new HashSet<>(calculateOffers(t));
-        t.setOffers(offers);
-        update(t); // @TODO refactor!
+        List<Offer> offers = calculateOffers(t);
+        trader.setOffers(new HashSet<>(offers));
+        offerDao.addList(offers);
 		return trader;
     }
 
@@ -55,6 +62,7 @@ public class TraderServiceImpl implements TraderService {
     public Trader update(Trader t) {
         log.debug("calling update(" + t + ")");
         validate(t);
+        // todo: offer udpaten?
         return traderDao.update(t);
     }
 
@@ -157,16 +165,16 @@ public class TraderServiceImpl implements TraderService {
         // create Offers
         List<Offer> offers = new ArrayList<>();
         for (Product product : productAmmountMap.keySet()) {
-            int ammount = productAmmountMap.get(product);
+            int amount = productAmmountMap.get(product);
 
             // random quality distribution
             int amountQualities[] = new int[ProductQuality.values().length];
             if (product.getQuality()) {
-                for (int i = 0; i < ammount; i++) {
+                for (int i = 0; i < amount; i++) {
                     int j = 0;
+                    double random = Math.random();
                     for (ProductQuality productQuality : ProductQuality.values()) {
-                        double random = Math.random();
-                        if (random < productQuality.getQualityProbabilityValue()) {
+                        if (random <= productQuality.getQualityProbabilityValue()) {
                             amountQualities[j]++;
                             break;
                         }
@@ -174,22 +182,21 @@ public class TraderServiceImpl implements TraderService {
                     }
                 }
             } else {
-                amountQualities[0] = ammount;
+                amountQualities[0] = amount;
             }
             // create offers
             int i = 0;
             for (ProductQuality productQuality : ProductQuality.values()) {
-                if (amountQualities[i] == 0) {
-                    break;
+                if (amountQualities[i] != 0) {
+                    Offer offer = new Offer();
+                    offer.setTrader(trader);
+                    offer.setQuality(productQuality);
+                    int price = (int) (calculatePriceForProduct(product, trader) * productQuality.getQualityPriceFactor());
+                    offer.setPricePerUnit(price);
+                    offer.setProduct(product);
+                    offer.setAmount(amountQualities[i]);
+                    offers.add(offer);
                 }
-                Offer offer = new Offer();
-                offer.setTrader(trader);
-                offer.setQuality(productQuality);
-                int price = (int) (calculatePriceForProduct(product, trader) * productQuality.getQualityPriceFactor());
-                offer.setPricePerUnit(price);
-                offer.setProduct(product);
-                offer.setAmount(amountQualities[i]);
-                offers.add(offer);
                 i++;
             }
 
@@ -260,6 +267,10 @@ public class TraderServiceImpl implements TraderService {
 
     public void setRegionBorderService(RegionBorderService regionBorderService) {
         this.regionBorderService = regionBorderService;
+    }
+
+    public void setOfferDao(OfferDao offerDao) {
+        this.offerDao = offerDao;
     }
 
     /**

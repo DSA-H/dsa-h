@@ -1,5 +1,7 @@
 package sepm.dsa.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.DSADate;
@@ -12,9 +14,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.FileHandler;
 
 public class TimeServiceImpl implements TimeService {
+    private static final Logger log = LoggerFactory.getLogger(TimeServiceImpl.class);
+
     static private final float PRODUCT_TURNOVER_PERCENT_PER_DAY = 1.5f;   // trader changes x% of his products per day
 
     private TraderService traderService;
@@ -29,11 +34,11 @@ public class TimeServiceImpl implements TimeService {
             if(!Files.exists(path)) {
                 Files.createFile(path);
             }
-            Files.exists(path);
             InputStream is = Files.newInputStream(path);
             properties.load(is);
-            properties.get("time");
+            long timestamp = Long.parseLong(properties.getProperty("time", "0"));
             is.close();
+            date = new DSADate(timestamp);
         } catch (IOException e) {
             throw new DSARuntimeException("Probleme beim Laden der Properties Datei! \n" + e.getMessage());
         }
@@ -46,6 +51,7 @@ public class TimeServiceImpl implements TimeService {
 
     @Override
     public void setCurrentDate(DSADate dsaDate) {
+        log.debug("calling setCurrentDate(" + dsaDate + ")");
         try {
             properties.put("time", dsaDate.getTimestamp()+"");
             OutputStream os = Files.newOutputStream(Paths.get("properties"));
@@ -60,10 +66,14 @@ public class TimeServiceImpl implements TimeService {
     /**
      * Forward time at the given days. Changes offers of all traders (depended on the number of days) and usage of taverns.
      * Moves movingTraders.
-     * @param days
+     * @param days positiv number
      */
     @Override
     public void forwardTime(int days) {
+        log.debug("calling forwardTime(" + days + ")");
+        if(days < 1) {
+            return;
+        }
         // save new time
         date.setTimestamp(date.getTimestamp() + days);
         setCurrentDate(date);
@@ -71,8 +81,12 @@ public class TimeServiceImpl implements TimeService {
         // change sortiment for all traders
         for(Trader trader : traderService.getAll()) {
             int newOffersCount = (int)(PRODUCT_TURNOVER_PERCENT_PER_DAY*trader.getSize()*days);
+            if(newOffersCount > trader.getSize()) {
+                newOffersCount = trader.getSize();
+            }
             int actOffersCount = 0;
-            for(Offer offer : trader.getOffers()) {
+            Set<Offer> offers = trader.getOffers();
+            for(Offer offer : offers) {
                 actOffersCount += offer.getAmount();
             }
             // if to much offers sold, make more new offers
