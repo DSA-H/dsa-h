@@ -101,12 +101,6 @@ public class IsolatedLocationServiceTest extends AbstractDatabaseTest {
         verify(locationDaoMock).remove(any(Location.class));
     }
 
-    @Test(expected = DSAValidationException.class)
-    public void remove_locationWithoutId_shouldThrowException() throws Exception {
-        Location location = new Location();
-        isolatedLocationService.remove(location);
-    }
-
     @Test
     public void get_shouldCallDaoGet() {
         isolatedLocationService.get(1);

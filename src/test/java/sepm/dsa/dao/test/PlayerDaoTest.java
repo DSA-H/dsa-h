@@ -11,8 +11,10 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.LocationDao;
 import sepm.dsa.dao.PlayerDao;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Player;
 
 import java.util.List;
@@ -20,22 +22,11 @@ import java.util.List;
 import static org.hibernate.validator.internal.util.Contracts.assertTrue;
 import static org.junit.Assert.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:testContext.xml"})
-@TestExecutionListeners({
-	DependencyInjectionTestExecutionListener.class,
-	DbUnitTestExecutionListener.class,
-	DirtiesContextTestExecutionListener.class,
-	TransactionDbUnitTestExecutionListener.class
-})
-@DatabaseSetup("/testData.xml")
-public class PlayerDaoTest {
+@Transactional
+public class PlayerDaoTest extends AbstractDatabaseTest {
 
 	@Autowired
 	private PlayerDao playerDao;
-
-	@Autowired
-	private LocationDao locationDao;
 
 	@Test
 	public void testAddShouldPersistEntity() throws Exception {
@@ -43,6 +34,7 @@ public class PlayerDaoTest {
 		player.setName("Test Player");
 		player.setComment("Comment");
 		playerDao.add(player);
+        saveCancelService.save();
 
 		Player persistedPlayer = playerDao.get(player.getId());
 		assertNotNull("Expected player to be persisted", persistedPlayer);
@@ -55,6 +47,7 @@ public class PlayerDaoTest {
 		Player player = playerDao.get(1);
 		player.setName(newPlayerName);
 		playerDao.update(player);
+        saveCancelService.save();
 
 		assertEquals("Expected player name to change", newPlayerName, playerDao.get(1).getName());
 	}
@@ -62,6 +55,8 @@ public class PlayerDaoTest {
 	@Test
 	public void testRemove() throws Exception {
 		playerDao.remove(playerDao.get(1));
+
+        saveCancelService.save();
 
 		playerDao.getAll().
 			forEach(player -> assertNotSame("Expected to be rid of the player", 1, player.getId()));
