@@ -31,6 +31,7 @@ public class PlacementController implements Initializable{
 	private TraderService traderService;
 	private Location selectedLocation;
 	private Point2D pos;
+	private Object selectedObj;
 
 	@FXML
 	private Label headline;
@@ -106,8 +107,9 @@ public class PlacementController implements Initializable{
 		stage.close();
 	}
 
-	public void setUp(Location location, Point2D pos) {
+	public void setUp(Location location, Point2D pos, Object selectedObj) {
 		this.selectedLocation = location;
+		this.selectedObj = selectedObj;
 		this.pos = pos;
 		if (selectedLocation == null) {
 			headline.setText("Ort platzieren");
@@ -120,6 +122,9 @@ public class PlacementController implements Initializable{
 			newButton.setText("Neuer Händler");
 			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
 			choiceBox.setItems(FXCollections.observableArrayList(traders));
+		}
+		if (selectedObj != null) {
+			choiceBox.getSelectionModel().select(selectedObj);
 		}
 	}
 

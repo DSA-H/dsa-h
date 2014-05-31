@@ -6,6 +6,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -23,6 +24,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.controlsfx.control.action.Action;
@@ -39,6 +43,8 @@ import sepm.dsa.service.LocationService;
 import sepm.dsa.service.MapService;
 import sepm.dsa.service.TavernService;
 import sepm.dsa.service.TraderService;
+
+import javafx.scene.Node;
 import java.awt.Point;
 import java.awt.MouseInfo;
 import java.io.File;
@@ -155,6 +161,8 @@ public class MainMenuController implements Initializable {
 		});
 
 		mode = 0;
+
+		chooseButton.setStyle("-fx-font-weight: bold;");
 	}
 
 	private void changeMode() {
@@ -177,7 +185,7 @@ public class MainMenuController implements Initializable {
 			ObservableList<Trader> data = FXCollections.observableArrayList(traderService.getAllForLocation(selectedLocation));
 			traderList.setItems(data);
 
-			chooseButton.setText("Zurück");
+			chooseButton.setText("Weltansicht");
 			editButton.setText("Details");
 
 			checkTraderFocus();
@@ -185,7 +193,7 @@ public class MainMenuController implements Initializable {
 			mode = 0;
 			locationTable.setVisible(true);
 			traderList.setVisible(false);
-			chooseButton.setText("Auswählen");
+			chooseButton.setText("Ortsansicht");
 			editButton.setText("Bearbeiten");
 			checkLocationFocus();
 		}
@@ -292,7 +300,7 @@ public class MainMenuController implements Initializable {
 				createButton.setDisable(true);
 				editButton.setDisable(true);
 				deleteButton.setDisable(true);
-				chooseButton.setText("Zurück");
+				chooseButton.setText("Weltansicht");
 				chooseButton.setDisable(false);
 				creationMode = true;
 			}
@@ -315,7 +323,7 @@ public class MainMenuController implements Initializable {
 				createButton.setDisable(true);
 				editButton.setDisable(true);
 				deleteButton.setDisable(true);
-				chooseButton.setText("Zurück");
+				chooseButton.setText("Weltansicht");
 				chooseButton.setDisable(false);
 				creationMode = true;
 			}
@@ -329,11 +337,11 @@ public class MainMenuController implements Initializable {
 			createButton.setDisable(false);
 			creationMode = false;
 			if (mode == 0) {
-				chooseButton.setText("Auswählen");
+				chooseButton.setText("Ortsansicht");
 				checkLocationFocus();
 				locationTable.setDisable(false);
 			} else {
-				chooseButton.setText("Zurück");
+				chooseButton.setText("Weltansicht");
 				checkTraderFocus();
 				traderList.setDisable(false);
 			}
@@ -355,8 +363,8 @@ public class MainMenuController implements Initializable {
 
 		setSPLocation();
 		Point mousePosition = MouseInfo.getPointerInfo().getLocation();
-
-		Canvas canvas = (Canvas) scrollPane.getContent();
+		Pane pane = (Pane) scrollPane.getContent();
+		Canvas canvas = (Canvas) pane.getChildren().get(0);
 		double scrollableX = canvas.getWidth() - scrollPane.getWidth();
 		double scrollableY = canvas.getHeight() - scrollPane.getHeight();
 		if (canvas.getWidth() > scrollPane.getWidth()) {
@@ -377,10 +385,10 @@ public class MainMenuController implements Initializable {
 			PlacementController controller = loader.getController();
 			if (mode == 0) {
 				stage.setTitle("Ort platzieren");
-				controller.setUp(null, pos);
+				controller.setUp(null, pos, selectedLocation);
 			} else {
 				stage.setTitle("Händler platzieren");
-				controller.setUp(selectedLocation, pos);
+				controller.setUp(selectedLocation, pos, selectedTrader);
 			}
 			stage.setScene(new Scene(scene, 350, 160));
 			stage.setResizable(false);
@@ -395,11 +403,11 @@ public class MainMenuController implements Initializable {
 			creationMode = false;
 			createButton.setDisable(false);
 			if (mode == 0) {
-				chooseButton.setText("Auswählen");
+				chooseButton.setText("Ortsansicht");
 				checkLocationFocus();
 				locationTable.setDisable(false);
 			} else {
-				chooseButton.setText("Zurück");
+				chooseButton.setText("Weltansicht");
 				checkTraderFocus();
 				traderList.setDisable(false);
 			}
@@ -561,7 +569,36 @@ public class MainMenuController implements Initializable {
 			GraphicsContext gc = canvas.getGraphicsContext2D();
 			gc.drawImage(image, 0, 0);
 			drawLocations(gc);
-			scrollPane.setContent(canvas);
+			Pane pane = new Pane(canvas);
+			scrollPane.setContent(pane);
+
+			canvas.addEventHandler(MouseEvent.MOUSE_MOVED,
+					new EventHandler<MouseEvent>() {
+						@Override
+						public void handle(MouseEvent e) {
+							List<Location> locations = locationService.getAll();
+							boolean onLocation = false;
+							Canvas canvas = (Canvas) pane.getChildren().get(0);
+							for (Location l : locations) {
+								if (e.getX() > l.getxCoord()-10 && e.getX() < l.getxCoord()+10 &&
+										e.getY() > l.getyCoord()-10 && e.getY() < l.getyCoord()+10) {
+									Canvas highlight = new Canvas(30, 30);
+									highlight.getGraphicsContext2D().setLineWidth(4);
+									highlight.getGraphicsContext2D().strokeRoundRect(4, 4, 22, 22, 13, 13);
+									highlight.setLayoutX(l.getxCoord()-15);
+									highlight.setLayoutY(l.getyCoord()-15);
+									pane.getChildren().add(highlight);
+									onLocation = true;
+								}
+							}
+							if (onLocation == false) {
+								while(pane.getChildren().size() > 1) {
+									pane.getChildren().remove(1);
+								}
+							}
+						}
+					});
+
 		} else {
 			File map = mapService.getLocationMap(selectedLocation);
 			if (map == null) {
@@ -577,10 +614,8 @@ public class MainMenuController implements Initializable {
 	}
 
 	private void drawLocations(GraphicsContext gc) {
-		int posX1;
-		int posY1;
-		int posX2;
-		int posY2;
+		int posX1, posY1, posX2, posY2, posXm, posYm;
+		Location loc1, loc2;
 		List<Location> locations = locationService.getAll();
 		gc.setLineWidth(3);
 		for (Location l : locations) {
@@ -599,11 +634,26 @@ public class MainMenuController implements Initializable {
 			if (posX1 != 0 && posY1 != 0) {
 				gc.fillRoundRect(posX1 - 10, posY1 - 10, 20, 20, 10, 10);
 				for (LocationConnection lc : l.getAllConnections()) {
-					posX1 = lc.getLocation1().getxCoord();
-					posY1 = lc.getLocation1().getyCoord();
-					posX2 = lc.getLocation2().getxCoord();
-					posY2 = lc.getLocation2().getyCoord();
-					gc.strokeLine(posX1, posY1, posX2, posY2);
+					loc1 = lc.getLocation1();
+					loc2 = lc.getLocation2();
+					posX1 = loc1.getxCoord();
+					posY1 = loc1.getyCoord();
+					posX2 = loc2.getxCoord();
+					posY2 = loc2.getyCoord();
+					posXm = posX1 + (posX2-posX1)/2;
+					posYm = posY1 + (posY2-posY1)/2;
+					gc.setStroke(new Color(
+							(double) Integer.valueOf(loc1.getRegion().getColor().substring(0, 2), 16) / 255,
+							(double) Integer.valueOf(loc1.getRegion().getColor().substring(2, 4), 16) / 255,
+							(double) Integer.valueOf(loc1.getRegion().getColor().substring(4, 6), 16) / 255,
+							1.0));
+					gc.strokeLine(posX1, posY1, posXm, posYm);
+					gc.setStroke(new Color(
+							(double) Integer.valueOf(loc2.getRegion().getColor().substring(0, 2), 16) / 255,
+							(double) Integer.valueOf(loc2.getRegion().getColor().substring(2, 4), 16) / 255,
+							(double) Integer.valueOf(loc2.getRegion().getColor().substring(4, 6), 16) / 255,
+							1.0));
+					gc.strokeLine(posX2, posY2, posXm, posYm);
 				}
 
 			}
