@@ -16,7 +16,7 @@ public class ProductCategory implements BaseModel {
     private static final long serialVersionUID = 2997293850231481717L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 

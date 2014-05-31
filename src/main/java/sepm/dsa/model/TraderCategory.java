@@ -13,7 +13,7 @@ public class TraderCategory implements BaseModel {
     private static final long serialVersionUID = 2957793850231481713L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 
@@ -26,7 +26,7 @@ public class TraderCategory implements BaseModel {
     @Column(length = 1000)
     private String comment;
 
-    @OneToMany(mappedBy = "pk.traderCategory", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "pk.traderCategory", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @MapKey(name="pk.productCategory")
     private Map<ProductCategory, AssortmentNature> assortments = new HashMap<>();
 
@@ -50,12 +50,16 @@ public class TraderCategory implements BaseModel {
         return assortments;
     }
 
-    public void setAssortments(Map<ProductCategory, AssortmentNature> assortments) {
-        this.assortments = assortments;
-    }
+//    public void setAssortments(Map<ProductCategory, AssortmentNature> assortments) {
+//        this.assortments = assortments;
+//    }
 
     public void putAssortment(AssortmentNature assortment) {
         this.assortments.put(assortment.getProductCategory(), assortment);
+    }
+
+    public void removeAssortment(AssortmentNature assortment) {
+        this.assortments.remove(assortment.getProductCategory());
     }
 
     public String getComment() {

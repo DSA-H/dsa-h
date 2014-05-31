@@ -14,6 +14,7 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.AssortmentNature;
 import sepm.dsa.model.ProductCategory;
+import sepm.dsa.model.RegionBorder;
 import sepm.dsa.model.TraderCategory;
 import sepm.dsa.service.AssortmentNatureService;
 import sepm.dsa.service.ProductCategoryService;
@@ -23,7 +24,6 @@ import sepm.dsa.service.TraderCategoryService;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class EditTraderCategoryController implements Initializable {
 
@@ -142,6 +142,10 @@ public class EditTraderCategoryController implements Initializable {
     @FXML
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
+
+        saveCancelService.cancel();
+//        saveCancelService.refresh(assortmentTable.getItems());
+
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml");
 
@@ -156,21 +160,43 @@ public class EditTraderCategoryController implements Initializable {
         traderCategory.setComment(commentField.getText());
         traderCategory.setName(nameField.getText());
 
-        Map<ProductCategory, AssortmentNature> assortmentNatures = traderCategory.getAssortments();
-        assortmentNatures.clear();
+//        traderCategory.getAssortments().clear();
+//        assortmentNatures.clear();
+//
+//        for (AssortmentNature a : assortmentTable.getItems()) {
+//            traderCategory.putAssortment(a);
+//        }
 
-        for (AssortmentNature a : assortmentTable.getItems()) {
-            traderCategory.putAssortment(a);
-        }
-
-        if (assortmentNatures.size() <= 0) {
-            throw new DSAValidationException("Mindestens eine Warenkategorie muss gewählt werden");
-        }
+//        if (assortmentNatures.size() <= 0) {
+//            throw new DSAValidationException("Mindestens eine Warenkategorie muss gewählt werden");
+//        }
 
         if (isNewTraderCategory) {
             traderCategoryService.add(traderCategory);
         } else {
             traderCategoryService.update(traderCategory);
+        }
+
+        traderCategory.getAssortments().clear();
+
+        // TODO assortmentNatures update
+        List<AssortmentNature> localAssortmentsList = assortmentTable.getItems();
+        for (AssortmentNature a : assortmentNatureService.getAllByTraderCategory(traderCategory.getId())) {
+            boolean contain = false;
+            for (AssortmentNature localAssortment : localAssortmentsList) {
+                if (localAssortment.equalsById(a)) {
+                    assortmentNatureService.update(a);
+                    contain = true;
+                    break;
+                }
+            }
+            if (!contain) {
+                assortmentNatureService.remove(a);
+            }
+            localAssortmentsList.remove(a);
+        }
+        for (AssortmentNature assortmentNature : localAssortmentsList) {
+            assortmentNatureService.add(assortmentNature);
         }
 
         saveCancelService.save();

@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.AssortmentNature;
 import sepm.dsa.model.TraderCategory;
+import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TraderCategoryService;
 
 public class TraderCategoryListController implements Initializable {
@@ -32,6 +33,8 @@ public class TraderCategoryListController implements Initializable {
     private static final Logger log = LoggerFactory.getLogger(TraderCategoryListController.class);
     private SpringFxmlLoader loader;
     private SessionFactory sessionFactory;
+
+    private SaveCancelService saveCancelService;
 
     @FXML
     private TableView<TraderCategory> traderCategoryTable;
@@ -124,7 +127,9 @@ public class TraderCategoryListController implements Initializable {
                     .message("Wollen Sie die Händlerkategorie '" + selectedTraderCategory.getName() + "' wirklich löschen?")
                     .showConfirm();
             if (response == Dialog.Actions.YES) {
+                saveCancelService.refresh(selectedTraderCategory);
                 traderCategoryService.remove(selectedTraderCategory);
+                saveCancelService.save();
                 traderCategoryTable.getItems().remove(selectedTraderCategory);
             }
         }
@@ -157,5 +162,9 @@ public class TraderCategoryListController implements Initializable {
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

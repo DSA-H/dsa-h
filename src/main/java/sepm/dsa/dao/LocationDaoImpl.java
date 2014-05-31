@@ -1,9 +1,6 @@
 package sepm.dsa.dao;
 
 import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Location;
@@ -16,6 +13,16 @@ import java.util.Vector;
 public class LocationDaoImpl
 	extends BaseDaoHbmImpl<Location>
 	implements LocationDao {
+
+    @Override
+    public void remove(Location location) {
+        super.remove(location);
+
+        location.getAllConnections().forEach(conn -> {
+            Location l = conn.getLocation1().equals(location) ? conn.getLocation2() : conn.getLocation1();
+            l.removeConnection(conn);
+        });
+    }
 
     @Override
     public List<Location> getAllByRegion(int regionId) {

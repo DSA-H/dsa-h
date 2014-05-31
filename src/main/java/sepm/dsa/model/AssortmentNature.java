@@ -48,6 +48,14 @@ public class AssortmentNature implements BaseModel {
         this.pk.traderCategory = traderCategory;
     }
 
+    public boolean equalsById(AssortmentNature other) {
+        if (other == null) {
+            return false;
+        }
+        return (this.pk.traderCategory.equals(other.getPk().getTraderCategory())
+                && this.pk.productCategory.equals(other.getPk().getProductCategory()));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

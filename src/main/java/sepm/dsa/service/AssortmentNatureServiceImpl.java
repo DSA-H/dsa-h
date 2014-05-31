@@ -69,6 +69,23 @@ public class AssortmentNatureServiceImpl implements AssortmentNatureService {
         return result;
     }
 
+    @Override
+    public List<AssortmentNature> getAll() {
+        log.debug("calling getAll()");
+        List<AssortmentNature> result = assortmentNatureDao.getAll();
+        log.trace("returning " + result);
+        return result;
+
+    }
+
+    @Override
+    public List<AssortmentNature> getAllByTraderCategory(int traderCategoryId) {
+        log.debug("calling getAllByTraderCategory(" + traderCategoryId + ")");
+        List<AssortmentNature> result = assortmentNatureDao.getAllByTraderCategory(traderCategoryId);
+        log.trace("returning " + result);
+        return result;
+    }
+
     public void setAssortmentNatureDao(AssortmentNatureDao assortmentNatureDao) {
         this.assortmentNatureDao = assortmentNatureDao;
     }

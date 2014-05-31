@@ -1,4 +1,4 @@
-package sepm.dsa.service.test;
+package sepm.dsa.dao.test;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +52,21 @@ public class AssortmentNatureDaoTest extends AbstractDatabaseTest {
         assertNotNull(assortmentNatureDao.get(new AssortmentNature.Pk(traderCategory, productCategory)));
 
         assertEquals(sizeBefore + 1, assortmentNatureDao.getAll().size());
+    }
+
+    @Test
+    public void update_shouldUpdateEntity() {
+        TraderCategory traderCategory = traderCategoryService.get(1);
+        ProductCategory productCategory = productCategoryService.get(2);
+        AssortmentNature.Pk pk = new AssortmentNature.Pk(traderCategory, productCategory);
+        AssortmentNature assortmentNature = assortmentNatureDao.get(pk);
+
+        assortmentNature.setDefaultOccurence(200);
+        assortmentNatureDao.update(assortmentNature);
+
+        AssortmentNature assortmentNatureAfter = assortmentNatureDao.get(pk);
+
+        assertEquals(new Integer(200), assortmentNatureAfter.getDefaultOccurence());
     }
 
     @Test

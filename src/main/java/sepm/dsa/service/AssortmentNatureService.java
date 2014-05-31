@@ -50,4 +50,21 @@ public interface AssortmentNatureService {
      */
     AssortmentNature get(TraderCategory traderCategory, ProductCategory productCategory);
 
+    /**
+     * Asks the DAO to find all AssortmentNatures
+     *
+     * @return the assortmentNatures or empty list of no assortmentNatures exist (not null)
+     */
+    List<AssortmentNature> getAll();
+
+    /**
+     * Gets all {@code AssortmentNature}s by its TraderCategory
+     *
+     * @param traderCategoryId
+     * @return a list of AssortmentNatures, might be empty (not null).
+     */
+    List<AssortmentNature> getAllByTraderCategory(int traderCategoryId);
+
+
+
 }

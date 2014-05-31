@@ -192,6 +192,7 @@
     </bean>
 
     <bean id="assortmentNatureService" class="sepm.dsa.service.AssortmentNatureServiceImpl">
+        <property name="assortmentNatureDao" ref="assortmentNatureDao" />
     </bean>
 
     <!-- GUI DI -->
@@ -246,6 +247,7 @@
         <property name="loader" ref="loader"/>
         <property name="sessionFactory" ref="sessionFactory"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
     <bean id="editTraderCategory" class="sepm.dsa.gui.EditTraderCategoryController">
