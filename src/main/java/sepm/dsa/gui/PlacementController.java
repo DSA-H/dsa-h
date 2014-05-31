@@ -66,10 +66,18 @@ public class PlacementController implements Initializable{
 			location.setyCoord((int) pos.getY());
 			locationService.update(location);
 		} else {
-			Trader trader = (Trader) choiceBox.getSelectionModel().getSelectedItem();
-			trader.setxPos((int) pos.getX());
-			trader.setyPos((int) pos.getY());
-			traderService.update(trader);
+			Object obj = choiceBox.getSelectionModel().getSelectedItem();
+			if (obj instanceof Trader) {
+				Trader trader = (Trader) obj;
+				trader.setxPos((int) pos.getX());
+				trader.setyPos((int) pos.getY());
+				traderService.update(trader);
+			} else {
+				Tavern tavern = (Tavern) obj;
+				tavern.setxPos((int) pos.getX());
+				tavern.setyPos((int) pos.getY());
+				tavernService.update(tavern);
+			}
 		}
 		Stage stage = (Stage) choiceBox.getScene().getWindow();
 		stage.close();

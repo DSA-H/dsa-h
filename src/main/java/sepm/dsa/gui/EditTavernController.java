@@ -35,27 +35,16 @@ public class EditTavernController implements Initializable {
     @FXML
     private TextField nameField;
     @FXML
-    private ChoiceBox<Location> locationBox;
-    @FXML
     private TextArea commentArea;
     @FXML
     private TextField usageField;
     @FXML
     private TextField bedsField;
-    @FXML
-    private TextField xCoordField;
-    @FXML
-    private TextField yCoordField;
 
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise EditTavernController");
-
-
-        List<Location> locations = locationService.getAll();
-        locationBox.setItems(FXCollections.observableArrayList(locations));
-
     }
 
     @FXML
@@ -103,6 +92,10 @@ public class EditTavernController implements Initializable {
         this.selectedTavern = tavern;
 	    if (selectedTavern == null) {
 		    selectedTavern = new Tavern();
+	    } else {
+		    nameField.setText(selectedTavern.getName());
+		    //bedsField.setText(selectedTavern.getBeds());
+		    usageField.setText("" + selectedTavern.getUsage());
 	    }
     }
 

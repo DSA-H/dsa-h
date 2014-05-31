@@ -227,15 +227,27 @@ public class MainMenuController implements Initializable {
 			ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
 			locationTable.setItems(data);
 		} else {
-			Stage stage = new Stage();
-			Parent scene = (Parent) loader.load("/gui/traderdetails.fxml");
-			stage.setTitle("Händler-Details");
+			if (selectedObject instanceof Trader) {
+				Stage stage = new Stage();
+				Parent scene = (Parent) loader.load("/gui/traderdetails.fxml");
+				stage.setTitle("Händler-Details");
 
-			TraderDetailsController controller = loader.getController();
-			controller.setTrader((Trader) selectedObject);
-			stage.setScene(new Scene(scene, 800, 400));
-			stage.setResizable(false);
-			stage.showAndWait();
+				TraderDetailsController controller = loader.getController();
+				controller.setTrader((Trader) selectedObject);
+				stage.setScene(new Scene(scene, 800, 400));
+				stage.setResizable(false);
+				stage.showAndWait();
+			} else {
+				Stage stage = new Stage();
+				Parent scene = (Parent) loader.load("/gui/edittavern.fxml");
+				stage.setTitle("Wirtshaus erstellen");
+
+				EditTavernController controller = loader.getController();
+				controller.setTavern((Tavern) selectedObject);
+				stage.setScene(new Scene(scene, 600, 400));
+				stage.setResizable(false);
+				stage.showAndWait();
+			}
 
 			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
 			List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
@@ -255,7 +267,7 @@ public class MainMenuController implements Initializable {
 	}
 
 	@FXML
-	private void onDeleteButtonPressed() { // TODO for taverns
+	private void onDeleteButtonPressed() {
 		log.debug("onDeleteButtonPressed - deleting selected Data");
 
 		if (mode == 0) {
@@ -307,6 +319,8 @@ public class MainMenuController implements Initializable {
 				}
 			}
 		}
+
+		updateMap();
 
 	}
 
@@ -371,6 +385,8 @@ public class MainMenuController implements Initializable {
 				creationMode = true;
 			}
 		}
+
+		updateMap();
 
 	}
 
@@ -475,6 +491,14 @@ public class MainMenuController implements Initializable {
 				int locY;
 				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
 				for (Trader t : traders) {
+					locX = t.getxPos();
+					locY = t.getyPos();
+					if (xPos > locX - 10 && xPos < locX + 10 && yPos > locY - 10 && yPos < locY + 10) {
+						traderList.getSelectionModel().select(t);
+					}
+				}
+				List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+				for (Tavern t : taverns) {
 					locX = t.getxPos();
 					locY = t.getyPos();
 					if (xPos > locX - 10 && xPos < locX + 10 && yPos > locY - 10 && yPos < locY + 10) {
@@ -640,11 +664,12 @@ public class MainMenuController implements Initializable {
 			Pane pane = new Pane(canvas);
 			scrollPane.setContent(pane);
 
+			List<Location> locations = locationService.getAll();
+
 			canvas.addEventHandler(MouseEvent.MOUSE_MOVED,
 					new EventHandler<MouseEvent>() {
 						@Override
 						public void handle(MouseEvent e) {
-							List<Location> locations = locationService.getAll();
 							boolean onLocation = false;
 							Canvas canvas = (Canvas) pane.getChildren().get(0);
 							for (Location l : locations) {
@@ -680,12 +705,13 @@ public class MainMenuController implements Initializable {
 			Pane pane = new Pane(canvas);
 			scrollPane.setContent(pane);
 
+			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+			List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+
 			canvas.addEventHandler(MouseEvent.MOUSE_MOVED,
 					new EventHandler<MouseEvent>() {
 						@Override
 						public void handle(MouseEvent e) {
-							List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-							List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
 							boolean onStuff = false;
 							Canvas canvas = (Canvas) pane.getChildren().get(0);
 							for (Trader t : traders) {
@@ -697,7 +723,7 @@ public class MainMenuController implements Initializable {
 									highlight.getGraphicsContext2D().strokeLine(4, 4, 16, 16);
 									highlight.getGraphicsContext2D().strokeLine(4, 16, 16, 4);
 									highlight.setLayoutX(t.getxPos()-10);
-									highlight.setLayoutY(t.getxPos()-10);
+									highlight.setLayoutY(t.getyPos()-10);
 									pane.getChildren().add(highlight);
 									onStuff = true;
 								}
@@ -711,7 +737,7 @@ public class MainMenuController implements Initializable {
 									highlight.getGraphicsContext2D().strokeLine(4, 4, 16, 16);
 									highlight.getGraphicsContext2D().strokeLine(4, 16, 16, 4);
 									highlight.setLayoutX(t.getxPos()-10);
-									highlight.setLayoutY(t.getxPos()-10);
+									highlight.setLayoutY(t.getyPos()-10);
 									pane.getChildren().add(highlight);
 									onStuff = true;
 								}
@@ -872,6 +898,11 @@ public class MainMenuController implements Initializable {
 		} else {
 			deleteButton.setDisable(false);
 			editButton.setDisable(false);
+			if (selectedObject instanceof Trader) {
+				editButton.setText("Details");
+			} else {
+				editButton.setText("Bearbeiten");
+			}
 		}
 		chooseButton.setDisable(false);
 	}
