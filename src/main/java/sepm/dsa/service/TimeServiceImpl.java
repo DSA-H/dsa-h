@@ -3,6 +3,7 @@ package sepm.dsa.service;
 import org.springframework.stereotype.Service;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.DSADate;
+import sepm.dsa.model.Trader;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -12,6 +13,10 @@ import java.util.Properties;
 import java.util.logging.FileHandler;
 
 public class TimeServiceImpl implements TimeService {
+    static private final float PRODUCT_TURNOVER_PERCENT_PER_DAY = 1.5f;   // trader changes 1.5% of his products per day
+
+    private TraderService traderService;
+
     private DSADate date;
     private Properties properties;
 
@@ -50,8 +55,17 @@ public class TimeServiceImpl implements TimeService {
         }
     }
 
+    /**
+     * Forward time at the given days. Changes offers of all traders (depended on the number of days) and usage of taverns.
+     * Moves movingTraders.
+     * @param days
+     */
     @Override
     public void forwardTime(int days) {
-        // todo
+        // change sortiment for all traders
+        for(Trader trader : traderService.getAll()) {
+
+        }
+
     }
 }

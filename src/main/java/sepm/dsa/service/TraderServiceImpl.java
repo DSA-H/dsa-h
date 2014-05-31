@@ -66,8 +66,16 @@ public class TraderServiceImpl implements TraderService {
     }
 
     @Override
-    public List<Trader> getAllForLocation(Location location) {
+    public List<Trader> getAll() {
         log.debug("calling getAll()");
+        List<Trader> result = traderDao.getAll();
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Trader> getAllForLocation(Location location) {
+        log.debug("calling getAllForLocation()");
         List<Trader> result = traderDao.getAllByLocation(location);
         log.trace("returning " + result);
         return result;
@@ -75,25 +83,19 @@ public class TraderServiceImpl implements TraderService {
 
     @Override
     public List<Trader> getAllByCategory(TraderCategory traderCategory) {
-        log.debug("calling getAll()");
+        log.debug("calling getAllByCategory()");
         List<Trader> result = traderDao.getAllByCategory(traderCategory);
         log.trace("returning " + result);
         return result;
     }
 
-    /**
-     * @param trader
-     * @return a new calculated list of offers this trader at this position has.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<Offer> calculateOffers(Trader trader) {
+    public List<Offer> calculateOffers(Trader trader, int number) {
         log.debug("calling calculateOffers()");
         List<Product> weightProducts = new ArrayList<>();
         List<Float> weights = new ArrayList<>();
         float topWeight = 0;
         // calculate weight for each product
-	    sessionFactory.getCurrentSession().refresh(trader);
+        sessionFactory.getCurrentSession().refresh(trader);
         for (AssortmentNature assortmentNature : trader.getCategory().getAssortments()) {
             int defaultOccurence = assortmentNature.getDefaultOccurence();
             ProductCategory productCategory = assortmentNature.getProductCategory();
@@ -128,14 +130,14 @@ public class TraderServiceImpl implements TraderService {
 
         // random pick a weight product, till the trader is full
         Map<Product, Integer> productAmmountMap = new HashMap<>();
-        for (int i = 0; i < trader.getSize(); i++) {
+        for (int i = 0; i < number; i++) {
             double random = Math.random() * topWeight;
             int j = 0;
             for (float weight : weights) {
                 // random picked found
                 if (random < weight) {
                     if (productAmmountMap.containsKey(weightProducts.get(j))) {
-                        int amount = productAmmountMap.get(weightProducts.get(j));// TODO @johannes here was: int amount = productAmmountMap.get(productAmmountMap);
+                        int amount = productAmmountMap.get(weightProducts.get(j));
                         amount++;
                         productAmmountMap.put(weightProducts.get(j), amount);
                     } else {
@@ -188,6 +190,16 @@ public class TraderServiceImpl implements TraderService {
 
         }
         return offers;
+    }
+
+    /**
+     * @param trader
+     * @return a new calculated list of offers this trader at this position has.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<Offer> calculateOffers(Trader trader) {
+        return calculateOffers(trader, trader.getSize());
     }
 
     /**

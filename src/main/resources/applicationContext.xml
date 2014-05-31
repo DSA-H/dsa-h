@@ -170,6 +170,7 @@
     </bean>
 
     <bean id="timeService" class="sepm.dsa.service.TimeServiceImpl">
+        <property name="traderService" ref="traderService"/>
     </bean>
 
     <!-- GUI DI -->
