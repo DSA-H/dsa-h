@@ -40,6 +40,8 @@
                                           onAction="#onCalculateCurrencyClicked" text="Währung umrechnen"/>
                                 <MenuItem fx:id="verwaltenWaren" disable="false" mnemonicParsing="false"
                                           onAction="#onWarenClicked" text="Waren"/>
+                                <MenuItem fx:id="verwaltenWarenKategorie" disable="false" mnemonicParsing="false"
+                                          text="Warenkategorie" onAction="#onWarenKategorieClicked"/>
                                 <MenuItem fx:id="verwaltenWirtshäuser" disable="false" mnemonicParsing="false"
                                           onAction="#onTavernClicked" text="Wirtshäuser"/>
                             </items>
