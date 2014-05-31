@@ -309,8 +309,6 @@ public class TraderServiceImpl implements TraderService {
 	@Override
 	@Transactional(readOnly = true)
 	public Collection<Offer> getOffers(Trader trader) {
-		sessionFactory.getCurrentSession().refresh(trader);
-
 		// Initialize the set the mëh way
 		trader.getOffers().size();
 
