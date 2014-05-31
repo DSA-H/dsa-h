@@ -4,45 +4,77 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.MainMenuController">
-<bottom><Pane prefHeight="608.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-<children>
-        <MenuBar fx:id="menuBar" prefHeight="25.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-            <menus>
-                <Menu fx:id="dateiMenu" mnemonicParsing="false" text="Datei">
-                    <items>
-                        <MenuItem fx:id="dateiImport" disable="true" mnemonicParsing="false" text="Import" />
-                        <MenuItem fx:id="dateiExport" disable="true" mnemonicParsing="false" text="Export" />
-                        <MenuItem fx:id="dateiExit" mnemonicParsing="false" onAction="#onExitClicked" text="Beenden" />
-                    </items>
-                </Menu>
-                <Menu fx:id="dateiVerwaltenMenu" mnemonicParsing="false" text="Daten verwalten">
-                    <items><Menu fx:id="verwaltenWeltkarte" mnemonicParsing="false" text="Weltkarte">
-  <items>
-    <MenuItem fx:id="weltkarteImportieren" mnemonicParsing="false" onAction="#onWeltkarteImportierenPressed" text="Importieren" /><MenuItem fx:id="weltkarteExportieren" mnemonicParsing="false" onAction="#onWeltkarteExportierenPressed" text="Exportieren" />
-  </items>
-</Menu>
-                        <MenuItem fx:id="verwaltenHaendlerKategorie" mnemonicParsing="false" onAction="#onTraderCategoriesClicked" text="Händlerkategorie" />
-                        <MenuItem fx:id="verwaltenGebieteGrenzen" mnemonicParsing="false" onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen" />
-                        <MenuItem fx:id="verwaltenWaehrungen" mnemonicParsing="false" onAction="#onCurrencyClicked" text="Währungen" /><MenuItem fx:id="berechneWährung" mnemonicParsing="false" onAction="#onCalculateCurrencyClicked" text="Währung umrechnen" />
-                        <MenuItem fx:id="verwaltenWaren" disable="false" mnemonicParsing="false" onAction="#onWarenClicked" text="Waren" />
-                    </items>
-                </Menu><Menu mnemonicParsing="false" text="Spiel">
-  <items>
-    <MenuItem mnemonicParsing="false" onAction="#onPlayerClicked" text="Spieler" />
-  </items>
-</Menu>
-            </menus>
-        </MenuBar><ScrollPane fx:id="scrollPane" layoutX="14.0" layoutY="36.0" onMouseClicked="#onScrollPaneClicked" prefHeight="550.0" prefWidth="400.0" /><TableView fx:id="locationTable" layoutX="433.0" layoutY="36.0" prefHeight="500.0" prefWidth="350.0">
-  <columns>
-    <TableColumn fx:id="locationColumn" prefWidth="175.0" text="Ort" />
-    <TableColumn fx:id="regionColumn" prefWidth="175.0" text="Gebiet" />
-  </columns>
-</TableView><HBox layoutX="433.0" layoutY="561.0" prefHeight="25.0" prefWidth="230.0" spacing="10.0">
-<children><Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Platzieren" /><Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#onEditButtonPressed" text="Bearbeiten" /><Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" />
-</children></HBox><Button fx:id="chooseButton" alignment="CENTER" disable="true" layoutX="693.0" layoutY="561.0" mnemonicParsing="false" onAction="#onChooseButtonPressed" prefWidth="90.0" text="Ortsansicht">
-<HBox.margin>
-</HBox.margin></Button><ListView fx:id="traderList" layoutX="433.0" layoutY="36.0" prefHeight="500.0" prefWidth="350.0" visible="false" />
-</children></Pane>
-</bottom>
+<BorderPane maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="sepm.dsa.gui.MainMenuController">
+    <bottom>
+        <Pane prefHeight="608.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+            <children>
+                <MenuBar fx:id="menuBar" prefHeight="25.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+                    <menus>
+                        <Menu fx:id="dateiMenu" mnemonicParsing="false" text="Datei">
+                            <items>
+                                <MenuItem fx:id="dateiImport" disable="true" mnemonicParsing="false" text="Import"/>
+                                <MenuItem fx:id="dateiExport" disable="true" mnemonicParsing="false" text="Export"/>
+                                <MenuItem fx:id="dateiExit" mnemonicParsing="false" onAction="#onExitClicked"
+                                          text="Beenden"/>
+                            </items>
+                        </Menu>
+                        <Menu fx:id="dateiVerwaltenMenu" mnemonicParsing="false" text="Daten verwalten">
+                            <items>
+                                <Menu fx:id="verwaltenWeltkarte" mnemonicParsing="false" text="Weltkarte">
+                                    <items>
+                                        <MenuItem fx:id="weltkarteImportieren" mnemonicParsing="false"
+                                                  onAction="#onWeltkarteImportierenPressed" text="Importieren"/>
+                                        <MenuItem fx:id="weltkarteExportieren" mnemonicParsing="false"
+                                                  onAction="#onWeltkarteExportierenPressed" text="Exportieren"/>
+                                    </items>
+                                </Menu>
+                                <MenuItem fx:id="verwaltenHaendlerKategorie" mnemonicParsing="false"
+                                          onAction="#onTraderCategoriesClicked" text="Händlerkategorie"/>
+                                <MenuItem fx:id="verwaltenGebieteGrenzen" mnemonicParsing="false"
+                                          onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen"/>
+                                <MenuItem fx:id="verwaltenWaehrungen" mnemonicParsing="false"
+                                          onAction="#onCurrencyClicked" text="Währungen"/>
+                                <MenuItem fx:id="berechneWährung" mnemonicParsing="false"
+                                          onAction="#onCalculateCurrencyClicked" text="Währung umrechnen"/>
+                                <MenuItem fx:id="verwaltenWaren" disable="false" mnemonicParsing="false"
+                                          onAction="#onWarenClicked" text="Waren"/>
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Spiel">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#onPlayerClicked" text="Spieler"/>
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+                <ScrollPane fx:id="scrollPane" layoutX="14.0" layoutY="36.0" onMouseClicked="#onScrollPaneClicked"
+                            prefHeight="550.0" prefWidth="400.0"/>
+                <TableView fx:id="locationTable" layoutX="433.0" layoutY="36.0" prefHeight="500.0" prefWidth="350.0">
+                    <columns>
+                        <TableColumn fx:id="locationColumn" prefWidth="175.0" text="Ort"/>
+                        <TableColumn fx:id="regionColumn" prefWidth="175.0" text="Gebiet"/>
+                    </columns>
+                </TableView>
+                <HBox layoutX="433.0" layoutY="561.0" prefHeight="25.0" prefWidth="230.0" spacing="10.0">
+                    <children>
+                        <Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonPressed"
+                                text="Platzieren"/>
+                        <Button fx:id="editButton" disable="true" mnemonicParsing="false"
+                                onAction="#onEditButtonPressed" text="Bearbeiten"/>
+                        <Button fx:id="deleteButton" disable="true" mnemonicParsing="false"
+                                onAction="#onDeleteButtonPressed" text="Löschen"/>
+                    </children>
+                </HBox>
+                <Button fx:id="chooseButton" alignment="CENTER" disable="true" layoutX="693.0" layoutY="561.0"
+                        mnemonicParsing="false" onAction="#onChooseButtonPressed" prefWidth="90.0" text="Ortsansicht">
+                    <HBox.margin>
+                    </HBox.margin>
+                </Button>
+                <ListView fx:id="traderList" layoutX="433.0" layoutY="36.0" prefHeight="500.0" prefWidth="350.0"
+                          visible="false"/>
+            </children>
+        </Pane>
+    </bottom>
 </BorderPane>
