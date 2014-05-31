@@ -156,6 +156,20 @@ public class Region implements BaseModel, PathNode {
         return result;
     }
 
+    public void addBorder(RegionBorder regionBorder) {
+        if (this.equals(regionBorder.getRegion1())) {
+            borders1.add(regionBorder);
+        } else if (this.equals(regionBorder.getRegion2())) {
+            borders2.add(regionBorder);
+        }
+    }
+
+
+    public void removeBorder(RegionBorder regionBorder) {
+        borders1.remove(regionBorder);
+        borders2.remove(regionBorder);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

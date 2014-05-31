@@ -13,12 +13,20 @@ public class RegionBorderDaoHbmImpl
 	extends BaseDaoHbmImpl<RegionBorder>
 	implements RegionBorderDao {
 
-    @Transactional(readOnly = false)
+    @Override
+    public RegionBorder add(RegionBorder model) {
+        RegionBorder result = super.add(model);
+        model.getRegion1().addBorder(model);
+        model.getRegion2().addBorder(model);
+        return result;
+    }
+
     @Override
     public void remove(RegionBorder regionBorder) {
-        log.debug("calling delete(" + regionBorder + ")");
         RegionBorder trueRegionBorder = get(regionBorder.getPk());    //
         sessionFactory.getCurrentSession().delete(trueRegionBorder);
+        trueRegionBorder.getRegion1().removeBorder(trueRegionBorder);
+        trueRegionBorder.getRegion2().removeBorder(trueRegionBorder);
     }
 
     @Override
