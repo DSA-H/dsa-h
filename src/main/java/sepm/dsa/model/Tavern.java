@@ -3,11 +3,10 @@ package sepm.dsa.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "taverns")
-public class Tavern implements Serializable {
+public class Tavern implements BaseModel {
 
     private static final long serialVersionUID = -2259554288598225744L;
 
@@ -16,6 +15,7 @@ public class Tavern implements Serializable {
 	@Column(nullable = false, unique = true)
     private Integer id;
 
+    @NotNull
 	@Size(min = 1, max = 100)
 	@Column(nullable = false, length = 100)
     private String name;
@@ -32,10 +32,13 @@ public class Tavern implements Serializable {
 	@Column(nullable = false)
 	private Integer usage;
 
+    //TODO: free beds, comment, ...
+
 	// @TODO ??
 //    private ??? overnightStayPrice;
 //    private DSADate onDate;
 
+    @NotNull
 	@ManyToOne
 	@JoinColumn(nullable = false)
     private Location location;

@@ -10,13 +10,10 @@ import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import sepm.dsa.dao.ProductCategoryDao;
-import sepm.dsa.dao.ProductCategoryDaoHbmImpl;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.gui.MainMenuController;
-import sepm.dsa.model.*;
-import sepm.dsa.sepm.dsa.util.ValidationMessageUtil;
+import sepm.dsa.util.ValidationMessageUtil;
 
 import javax.validation.ConstraintViolation;
 
@@ -35,7 +32,6 @@ public class Main extends Application {
 
         Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
 
-            log.info("Uncaught error (details): ", throwable);    // exception trace at info log level
 
             String causeString = "";
             Throwable cause = throwable;
@@ -61,8 +57,11 @@ public class Main extends Application {
                         .masthead(null)
                         .message(sb.toString())
                         .showWarning();
+
             } else if (cause instanceof DSARuntimeException) {
                 // show message with error code in dialog (message is "internal error" by default DSARuntimeException
+                log.info("Uncaught error (details): ", throwable);    // exception trace at info log level
+
                 DSARuntimeException ex = (DSARuntimeException) cause;
 
                 Dialogs.create()
@@ -72,6 +71,8 @@ public class Main extends Application {
                         .showError();
             } else {
                 // show "internal error" message dialog
+                log.info("Uncaught error (details): ", throwable);    // exception trace at info log level
+
                 Dialogs.create()
                         .title("Interner Fehler")
                         .masthead(null)
@@ -82,12 +83,15 @@ public class Main extends Application {
 //                if (e instanceof )
         });
 
-	    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
         final SpringFxmlLoader loader = (SpringFxmlLoader) context.getBean("loader");
-	    Parent root = (Parent) loader.load("/gui/mainmenu.fxml");
+//	    Parent root = (Parent) loader.load("/gui/mainmenu.fxml");
+        Parent root = (Parent) loader.load("/gui/mainmenuResizable.fxml");
         final MainMenuController ctrl = loader.getController();
         primaryStage.setTitle("DSA-Händlertool");
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setScene(new Scene(root, 1045, 600));
+        primaryStage.setMinWidth(600);
+        primaryStage.setMinHeight(300);
         // close all windows if mainmenu is closed
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
@@ -98,7 +102,7 @@ public class Main extends Application {
                 }
             }
         });
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         primaryStage.show();
     }
 }

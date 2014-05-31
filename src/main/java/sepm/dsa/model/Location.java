@@ -5,19 +5,18 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "locations")
-public class Location implements Serializable {
+public class Location implements BaseModel {
 
     private static final long serialVersionUID = 1616654812413948966L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 
@@ -43,7 +42,7 @@ public class Location implements Serializable {
     private Integer sizeId;
 
     @Column(nullable = true)
-    private String planFileName;
+    private String planFileName;    //TODO not needed
 
     @NotNull
     @Column(nullable = false)
@@ -63,14 +62,25 @@ public class Location implements Serializable {
     @Column(nullable = true, length = 1000)
     private String comment;
 
-    @OneToMany(mappedBy = "pk.location1", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "pk.location1", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<LocationConnection> connections1 = new HashSet<>();
 
-    @OneToMany(mappedBy = "pk.location2", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "pk.location2", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<LocationConnection> connections2 = new HashSet<>();
 
     @OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) // no getter+setter to avoid lazy loading exceptions :)
     private Set<Trader> traders;
+
+    @OneToMany(mappedBy = "location", cascade = CascadeType.REMOVE)
+    private Set<Tavern> taverns;
+
+    public Set<Tavern> getTaverns() {
+        return taverns;
+    }
+
+    public void setTaverns(Set<Tavern> taverns) {
+        this.taverns = taverns;
+    }
 
     public Integer getId() {
         return id;
@@ -183,6 +193,19 @@ public class Location implements Serializable {
         return result;
     }
 
+    public void addConnection(LocationConnection locationConnection) {
+        if (this.equals(locationConnection.getLocation1())) {
+            connections1.add(locationConnection);
+        } else if (this.equals(locationConnection.getLocation2())) {
+            connections2.add(locationConnection);
+        }
+    }
+
+    public void removeConnection(LocationConnection locationConnection) {
+        connections1.remove(locationConnection);
+        connections2.remove(locationConnection);
+    }
+
     public boolean equalsByPk(Location location) {
         if (id == null || location.id == null) {
             return false;
@@ -224,14 +247,4 @@ public class Location implements Serializable {
     */
 
 
-	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
-	private Collection<Tavern> taverns;
-
-	public Collection<Tavern> getTaverns() {
-		return taverns;
-	}
-
-	public void setTaverns(Collection<Tavern> taverns) {
-		this.taverns = taverns;
-	}
 }

@@ -4,6 +4,7 @@ package sepm.dsa.gui;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
@@ -19,6 +20,7 @@ import sepm.dsa.model.Location;
 import sepm.dsa.model.Trader;
 import sepm.dsa.model.TraderCategory;
 import sepm.dsa.service.LocationService;
+import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TraderCategoryService;
 import sepm.dsa.service.TraderService;
 
@@ -35,6 +37,7 @@ public class EditTraderController implements Initializable {
     private TraderService traderService;
     private TraderCategoryService categoryService;
     private LocationService locationService;
+    private SaveCancelService saveCancelService;
 
     private boolean isNewTrader;
 
@@ -265,10 +268,10 @@ public class EditTraderController implements Initializable {
         } else {
             traderService.update(selectedTrader);
         }
+        saveCancelService.save();
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
-        stage.setScene(new Scene(scene, 600, 400));
+	    stage.close();
 
 
     }
@@ -276,10 +279,9 @@ public class EditTraderController implements Initializable {
     @FXML
     private void onCancelPressed() {
         log.debug("called onCancelPressed");
-
+        saveCancelService.cancel();
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
-        stage.setScene(new Scene(scene, 600, 400));
+	    stage.close();
     }
 
     public void setTraderService(TraderService traderService) {
@@ -309,7 +311,21 @@ public class EditTraderController implements Initializable {
         setUp();
     }
 
+	public void setLocation(Location location) {
+		locationBox.getSelectionModel().select(location);
+		locationBox.setDisable(true);
+	}
+
+	public void setPosition(Point2D pos) {
+		selectedTrader.setyPos((int) pos.getY());
+		selectedTrader.setxPos((int) pos.getX());
+	}
+
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

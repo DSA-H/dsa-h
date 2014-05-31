@@ -4,17 +4,16 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Table(name = "traderCategories")
-public class TraderCategory implements Serializable {
+public class TraderCategory implements BaseModel {
     private static final long serialVersionUID = 2957793850231481713L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 
@@ -27,9 +26,9 @@ public class TraderCategory implements Serializable {
     @Column(length = 1000)
     private String comment;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "tradercategory_id", nullable = false)
-    private Set<AssortmentNature> assortments = new HashSet<>();
+    @OneToMany(mappedBy = "pk.traderCategory", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @MapKey(name="pk.productCategory")
+    private Map<ProductCategory, AssortmentNature> assortments = new HashMap<>();
 
     public Integer getId() {
         return id;
@@ -47,12 +46,20 @@ public class TraderCategory implements Serializable {
         this.name = name;
     }
 
-    public Set<AssortmentNature> getAssortments() {
+    public Map<ProductCategory, AssortmentNature> getAssortments() {
         return assortments;
     }
 
-    public void setAssortments(Set<AssortmentNature> assortments) {
-        this.assortments = assortments;
+//    public void setAssortments(Map<ProductCategory, AssortmentNature> assortments) {
+//        this.assortments = assortments;
+//    }
+
+    public void putAssortment(AssortmentNature assortment) {
+        this.assortments.put(assortment.getProductCategory(), assortment);
+    }
+
+    public void removeAssortment(AssortmentNature assortment) {
+        this.assortments.remove(assortment.getProductCategory());
     }
 
     public String getComment() {

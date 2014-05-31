@@ -11,16 +11,17 @@ public interface LocationConnectionService {
      * Persists a {@code LocationConnection} in the Database
      *
      * @param locationConnection to be persisted must not be null
-     * @return
+     * @return The created locationConnection model.
      */
-    public void add(LocationConnection locationConnection);
+    public LocationConnection add(LocationConnection locationConnection);
 
     /**
      * Updates a already existing {@code LocationConnection} in the database
      *
      * @param locationConnection to update must not be null
+     * @return The updated locationConnection model.
      */
-    public void update(LocationConnection locationConnection);
+    public LocationConnection update(LocationConnection locationConnection);
 
     /**
      * Delete a locationConnection permanently

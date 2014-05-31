@@ -2,11 +2,10 @@ package sepm.dsa.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "offers")
-public class Offer implements Serializable {
+public class Offer implements BaseModel {
     private static final long serialVersionUID = 2957223850231481777L;
 
     @Id
@@ -18,10 +17,8 @@ public class Offer implements Serializable {
     @Column(nullable = false)
     private Integer amount;
 
-//    @ManyToOne
-//    @JoinColumn(name="product_id", nullable = false, insertable=false, updatable=false)   // not owning side
     @ManyToOne
-    @JoinColumn(name="product_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Product product;
 
     @NotNull
@@ -33,7 +30,7 @@ public class Offer implements Serializable {
     private Integer qualityId;
 
     @ManyToOne
-    @JoinColumn(name = "trader_id", nullable = false, insertable=false, updatable=false)
+    @JoinColumn(nullable = false)
     private Trader trader;
 
     public Integer getId() {

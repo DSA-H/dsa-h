@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.TavernListController">
+<children><Label layoutX="228.0" layoutY="27.0" text="Wirtshaus Übersicht">
+<font>
+<Font name="System Bold" size="18.0" />
+</font>
+</Label><ListView fx:id="tavernList" layoutX="28.0" layoutY="100.0" prefHeight="183.0" prefWidth="545.0" /><Button layoutX="28.0" layoutY="297.0" mnemonicParsing="false" onAction="#onCreatePressed" text="Erstellen" /><Button fx:id="deleteButton" disable="true" layoutX="107.0" layoutY="297.0" mnemonicParsing="false" onAction="#onDeletePressed" text="Löschen" /><Button fx:id="editButton" disable="true" layoutX="185.0" layoutY="297.0" mnemonicParsing="false" onAction="#onEditPressed" text="Editieren" /><Label layoutX="28.0048828125" layoutY="70.5" text="Ort:" /><ChoiceBox fx:id="locationBox" layoutX="61.5859375" layoutY="66.5" prefWidth="150.0" /><Button layoutX="521.1875" layoutY="361.0" mnemonicParsing="false" onAction="#onBackPressed" text="Zurück" />
+</children></Pane>

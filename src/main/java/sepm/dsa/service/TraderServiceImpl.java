@@ -40,28 +40,28 @@ public class TraderServiceImpl implements TraderService {
 
     @Override
     @Transactional(readOnly = false)
-    public void add(Trader t) {
-        log.debug("calling add(" + t + ")");
+    public Trader add(Trader t) {
+        log.debug("calling addConnection(" + t + ")");
         validate(t);
-        traderDao.add(t);
+        Trader trader = traderDao.add(t);
         HashSet<Offer> offers = new HashSet<>(calculateOffers(t));
         t.setOffers(offers);
-        update(t);
-
+        update(t); // @TODO refactor!
+		return trader;
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void update(Trader t) {
+    public Trader update(Trader t) {
         log.debug("calling update(" + t + ")");
         validate(t);
-        traderDao.update(t);
+        return traderDao.update(t);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void remove(Trader t) {
-        log.debug("calling remove(" + t + ")");
+        log.debug("calling removeConnection(" + t + ")");
         traderDao.remove(t);
     }
 
@@ -89,14 +89,19 @@ public class TraderServiceImpl implements TraderService {
         return result;
     }
 
+    /**
+     * @param trader
+     * @return a new calculated list of offers this trader at this position has.
+     */
+    @Override
+    @Transactional(readOnly = true)
     public List<Offer> calculateOffers(Trader trader, int number) {
         log.debug("calling calculateOffers()");
         List<Product> weightProducts = new ArrayList<>();
         List<Float> weights = new ArrayList<>();
         float topWeight = 0;
         // calculate weight for each product
-        sessionFactory.getCurrentSession().refresh(trader);
-        for (AssortmentNature assortmentNature : trader.getCategory().getAssortments()) {
+        for(AssortmentNature assortmentNature : trader.getCategory().getAssortments().values()) {
             int defaultOccurence = assortmentNature.getDefaultOccurence();
             ProductCategory productCategory = assortmentNature.getProductCategory();
             // get all products from this and the sub Categories
@@ -197,7 +202,6 @@ public class TraderServiceImpl implements TraderService {
      * @return a new calculated list of offers this trader at this position has.
      */
     @Override
-    @Transactional(readOnly = true)
     public List<Offer> calculateOffers(Trader trader) {
         return calculateOffers(trader, trader.getSize());
     }

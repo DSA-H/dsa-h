@@ -5,16 +5,18 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
 @Table(name = "productCategories")
-public class ProductCategory implements Serializable {
+public class ProductCategory implements BaseModel {
     private static final long serialVersionUID = 2997293850231481717L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 
@@ -23,30 +25,42 @@ public class ProductCategory implements Serializable {
     @Column(nullable = false, length = 60)
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn
     private ProductCategory parent;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "parent", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<ProductCategory> childs = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "product_categories",
-            joinColumns = { @JoinColumn(name = "categoryId") },
+            joinColumns = { @JoinColumn(name = "categoryId") },     // is joinColumns/inverse correct here?
             inverseJoinColumns = { @JoinColumn(name = "productId") })
     private Set<Product> products = new HashSet<>();
 
-/*    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "productcategory_id", nullable = false)
-    private Set<AssortmentNature> assortmentNatures = new HashSet<>();
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.productCategory", cascade = CascadeType.REMOVE, orphanRemoval = true)
+//    @MapKey(name="pk.traderCategory")
+//    private Map<TraderCategory, AssortmentNature> assortments = new HashMap<>();u
+//
+//    public Map<TraderCategory, AssortmentNature> getAssortments() {
+//        return assortments;
+//    }
+//
+//    public void setAssortments(Map<TraderCategory, AssortmentNature> assortments) {
+//        this.assortments = assortments;
+//    }
 
-    public Set<AssortmentNature> getAssortmentNatures() {
-        return assortmentNatures;
-    }
+    //    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "productcategory_id", nullable = false)
+//    private Set<AssortmentNature> assortmentNatures = new HashSet<>();
 
-    public void setAssortmentNatures(Set<AssortmentNature> assortmentNatures) {
-        this.assortmentNatures = assortmentNatures;
-    }*/
+//    public Set<AssortmentNature> getAssortmentNatures() {
+//        return assortmentNatures;
+//    }
+//
+//    public void setAssortments(Map<TraderCategory, AssortmentNature> assortments) {
+//        this.assortments = assortments;
+//    }
 
     public Integer getId() {
         return id;

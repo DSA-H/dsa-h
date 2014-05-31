@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.RegionBorderDao;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
+import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 
 import javax.validation.ConstraintViolation;
@@ -25,24 +26,24 @@ public class RegionBorderServiceImpl implements RegionBorderService {
 
     @Override
     @Transactional(readOnly = false)
-    public void add(RegionBorder regionBorder) {
-        log.debug("calling add(" + regionBorder + ")");
+    public RegionBorder add(RegionBorder regionBorder) {
+        log.debug("calling addConnection(" + regionBorder + ")");
         validate(regionBorder);
-        regionBorderDao.add(regionBorder);
+        return regionBorderDao.add(regionBorder);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void update(RegionBorder regionBorder) {
+    public RegionBorder update(RegionBorder regionBorder) {
         log.debug("calling update(" + regionBorder + ")");
         validate(regionBorder);
-        regionBorderDao.update(regionBorder);
+        return regionBorderDao.update(regionBorder);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void remove(RegionBorder regionBorder) {
-        log.debug("calling remove(" + regionBorder + ")");
+        log.debug("calling removeConnection(" + regionBorder + ")");
         regionBorderDao.remove(regionBorder);
     }
 
@@ -56,9 +57,17 @@ public class RegionBorderServiceImpl implements RegionBorderService {
 
     @Override
     public List<RegionBorder> getAllByRegion(int regionId) throws DSARuntimeException {
-        log.debug("calling getAll()");
+        log.debug("calling getAllByRegion(" + regionId + ")");
         List<RegionBorder> result = new ArrayList<>();
         result = regionBorderDao.getAllByRegion(regionId);
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public RegionBorder get(Region region1, Region region2) {
+        log.debug("calling get(" + region1 + "," + region2 + ")");
+        RegionBorder result = regionBorderDao.get(new RegionBorder.Pk(region1, region2));
         log.trace("returning " + result);
         return result;
     }

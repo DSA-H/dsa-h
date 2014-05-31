@@ -11,6 +11,7 @@ import sepm.dsa.model.TownSize;
 import sepm.dsa.model.Trader;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionService;
+import sepm.dsa.service.SaveCancelService;
 
 import java.util.Collection;
 
@@ -28,6 +29,7 @@ public class LocationServiceTest extends AbstractDatabaseTest {
 
     @Autowired
     private TraderDao traderDao;
+
 
     @Test
     public void testAdd() throws Exception {
@@ -48,6 +50,21 @@ public class LocationServiceTest extends AbstractDatabaseTest {
     }
 
     @Test
+    public void update_shouldPersistChanges() throws Exception {
+
+        Location location = locationService.get(2);
+        String newName = location.getName() + "_changed";
+        Integer newXCoord = location.getxCoord() + 15;
+        location.setName(newName);
+        location.setxCoord(newXCoord);
+        locationService.update(location);
+        Location updatedLocation = locationService.get(location.getId());
+        assertEquals(newName, updatedLocation.getName());
+        assertEquals(newXCoord, updatedLocation.getxCoord());
+
+    }
+
+    @Test
     public void testRemove() throws Exception {
         Location location = locationService.get(2);
         locationService.remove(location);
@@ -56,7 +73,7 @@ public class LocationServiceTest extends AbstractDatabaseTest {
 
     @Test
     public void testGet() throws Exception {
-        Location location = locationService.get(2);
+        Location location = locationService.get(1);
         assertNotNull(location);
     }
 
@@ -64,6 +81,8 @@ public class LocationServiceTest extends AbstractDatabaseTest {
     public void testGetAll() throws Exception {
         Location l1 = locationService.get(1);
         Location l2 = locationService.get(2);
+        assertNotNull("Location with ID=1 must exist in the database for this test", l1);
+        assertNotNull("Location with ID=2 must exist in the database for this test", l2);
         assertThat(locationService.getAll(), hasItems(l1, l2));
     }
 
@@ -73,6 +92,7 @@ public class LocationServiceTest extends AbstractDatabaseTest {
         Collection<Trader> tradersBefore = traderDao.getAllByLocation(location);
 
         locationService.remove(location);
+        getSaveCancelService().save();
 
         int tradersForLocationNow = traderDao.getAllByLocation(location).size();
 
@@ -83,16 +103,5 @@ public class LocationServiceTest extends AbstractDatabaseTest {
         assertEquals(0, tradersForLocationNow);
     }
 
-//    @Test
-//    public void update_removesConnections() throws Exception {
-//        Location location = locationService.get(4);
-//        assertEquals(2, location.getConnections1().size());
-//        assertEquals(1, location.getConnections2().size());
-//        location.getConnections1().clear();
-//        locationService.update(location);
-//        Location newLocation = locationService.get(location.getId());
-//        assertEquals(0, newLocation.getConnections1().size());
-//        assertEquals(1, newLocation.getConnections2().size());
-//
-//    }
+
 }

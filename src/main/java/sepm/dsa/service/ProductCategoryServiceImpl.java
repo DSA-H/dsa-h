@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.ProductCategoryDao;
 import sepm.dsa.exceptions.DSAValidationException;
+import sepm.dsa.model.AssortmentNature;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
 
@@ -23,6 +24,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     private ProductCategoryDao productCategoryDao;
     @Autowired
     private ProductService productService;
+    private AssortmentNatureService assortmentNatureService;
 
     @Override
     public ProductCategory get(Integer id) {
@@ -34,18 +36,18 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     @Transactional(readOnly = false)
-    public int add(ProductCategory p) {
-        log.debug("calling add(" + p + ")");
+    public ProductCategory add(ProductCategory p) {
+        log.debug("calling addConnection(" + p + ")");
         validate(p);
         return productCategoryDao.add(p);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void update(ProductCategory p) {
+    public ProductCategory update(ProductCategory p) {
         log.debug("calling update(" + p + ")");
         validate(p);
-        productCategoryDao.update(p);
+        return productCategoryDao.update(p);
     }
 
     @Override
@@ -53,12 +55,13 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     public void remove(ProductCategory p) {
         log.debug("calling remove(" + p + ")");
         p = get(p.getId());
+        for (AssortmentNature a : assortmentNatureService.getAllByProductCategory(p.getId())) {
+            assortmentNatureService.remove(a);
+        }
         productCategoryDao.remove(p);
         for (Product product : p.getProducts()) {
             product.getCategories().remove(p);
-//            productService.update(product);
         }
-//        p.getProducts().clear();
     }
 
     @Override
@@ -88,5 +91,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     public void setProductCategoryDao(ProductCategoryDao productCategoryDao) {
         this.productCategoryDao = productCategoryDao;
+    }
+
+    public void setAssortmentNatureService(AssortmentNatureService assortmentNatureService) {
+        this.assortmentNatureService = assortmentNatureService;
     }
 }

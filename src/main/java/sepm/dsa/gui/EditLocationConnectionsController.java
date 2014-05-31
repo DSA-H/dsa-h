@@ -206,7 +206,7 @@ public class EditLocationConnectionsController implements Initializable {
         locationConnectionService.add(selected);
         suggestLocationConnectionsTable.getItems().remove(selected);
         locationConnectionsTable.getItems().add(selected);
-        reloadLocation();
+//        reloadLocation();
     }
 
     public void setLocationService(LocationService locationService) {

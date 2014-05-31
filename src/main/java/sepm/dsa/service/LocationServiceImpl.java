@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.LocationDao;
+import sepm.dsa.exceptions.DSAModelNotFoundException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Location;
 
@@ -23,22 +24,30 @@ public class LocationServiceImpl implements LocationService {
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private LocationDao locationDao;
-    private TraderService traderService;
 
     @Override
     @Transactional(readOnly = false)
-    public void add(Location location) {
-        log.debug("calling add(" + location + ")");
+    public Location add(Location location) {
+        log.debug("calling addConnection(" + location + ")");
         validate(location);
-        locationDao.add(location);
+        return locationDao.add(location);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void update(Location location) {
+    public Location update(Location location) {
         log.debug("calling update(" + location + ")");
         validate(location);
-        locationDao.update(location);
+        return locationDao.update(location);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void remove(Location location) {
+        log.debug("calling removeConnection(" + location + ")");
+
+        // TODO add param 'boolean moveMovingTradersOutOfLocation' true -> move them, don't delete them, false -> delete them
+        locationDao.remove(location);
     }
 
     @Override
@@ -47,17 +56,6 @@ public class LocationServiceImpl implements LocationService {
         List<Location> result = locationDao.getAllByRegion(regionId);
         log.trace("returning " + result);
         return result;
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public void remove(Location location) {
-        log.debug("calling remove(" + location + ")");
-//        List<Trader> tradersInTown = traderService.getAllForLocation(location);
-
-//        tradersInTown.forEach(traderService::remove);
-
-        locationDao.remove(location);
     }
 
     @Override
@@ -93,7 +91,4 @@ public class LocationServiceImpl implements LocationService {
         }
     }
 
-    public void setTraderService(TraderService traderService) {
-        this.traderService = traderService;
-    }
 }
