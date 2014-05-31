@@ -2,11 +2,10 @@ package sepm.dsa.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "deals")
-public class Deal implements Serializable {
+public class Deal implements BaseModel {
     private static final long serialVersionUID = 2957293850231481770L;
 
     @Id
@@ -34,9 +33,39 @@ public class Deal implements Serializable {
     @Column
     private Long date;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false)
+    @ManyToOne
+    @JoinColumn     // => nullable = true !!
     private Trader trader;
+
+    @ManyToOne
+    @JoinColumn     // => nullable = true; product can be deleted, therefore store productName to keep history for player
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Unit unit;
+
+//    private Player player;
+
+//    private String productName;
+//    private String locationName;
+
+
+    public Unit getUnit() {
+        return unit;
+    }
+
+    public void setUnit(Unit unit) {
+        this.unit = unit;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public void setDate(Long date) {
         this.date = date;

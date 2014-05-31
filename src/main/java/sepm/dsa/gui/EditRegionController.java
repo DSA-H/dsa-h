@@ -23,6 +23,7 @@ import sepm.dsa.model.RegionBorder;
 import sepm.dsa.model.Temperature;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
+import sepm.dsa.service.SaveCancelService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ public class EditRegionController implements Initializable {
 
     private RegionService regionService;
     private RegionBorderService regionBorderService;
+    private SaveCancelService saveCancelService;
     // true if the region is not editing
     private boolean isNewRegion;
 
@@ -130,11 +132,12 @@ public class EditRegionController implements Initializable {
         List<Region> otherRegions = regionService.getAll();
         otherRegions.remove(selectedRegion);
         if (!isNewRegion) {
-            for (RegionBorder borders : regionBorderService.getAllByRegion(selectedRegion.getId())) {
-                if (borders.getRegion1().equals(selectedRegion)) {
-                    otherRegions.remove(borders.getRegion2());
+            List<RegionBorder> borders = regionBorderService.getAllByRegion(selectedRegion.getId());
+            for (RegionBorder border : borders) {
+                if (border.getRegion1().equals(selectedRegion)) {
+                    otherRegions.remove(border.getRegion2());
                 } else {
-                    otherRegions.remove(borders.getRegion1());
+                    otherRegions.remove(border.getRegion1());
                 }
             }
         }
@@ -160,6 +163,9 @@ public class EditRegionController implements Initializable {
     @FXML
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
+
+        saveCancelService.cancel();
+
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
 
@@ -212,6 +218,8 @@ public class EditRegionController implements Initializable {
         for (RegionBorder border : localBorderList) {
             regionBorderService.add(border);
         }
+
+        saveCancelService.save();
 
         // return to regionlist
         Stage stage = (Stage) cancelButton.getScene().getWindow();
@@ -276,5 +284,9 @@ public class EditRegionController implements Initializable {
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

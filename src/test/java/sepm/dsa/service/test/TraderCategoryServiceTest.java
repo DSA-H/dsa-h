@@ -11,6 +11,7 @@ import sepm.dsa.service.TraderCategoryService;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class TraderCategoryServiceTest extends AbstractDatabaseTest {
@@ -38,7 +39,7 @@ public class TraderCategoryServiceTest extends AbstractDatabaseTest {
         traderCategoryService.remove(traderCategory);
 
         TraderCategory cat = traderCategoryService.get(5);
-	    assertTrue(cat == null);
+	    assertNull(cat);
     }
 
     @Test(expected = DSAValidationException.class)

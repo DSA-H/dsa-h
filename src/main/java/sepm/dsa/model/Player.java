@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="players")
-public class Player implements Serializable {
+public class Player implements Serializable, BaseModel {
 	private static final long serialVersionUID = 3102323283798472344L;
 
 	@Id

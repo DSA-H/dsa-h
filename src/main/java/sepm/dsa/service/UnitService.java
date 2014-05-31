@@ -19,7 +19,7 @@ public interface UnitService {
      *
      * @param p Unit (not null)
      */
-    int add(Unit p);
+    Unit add(Unit p);
 
     /**
      * Update a Unit

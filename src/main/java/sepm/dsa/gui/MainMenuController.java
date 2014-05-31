@@ -403,7 +403,6 @@ public class MainMenuController implements Initializable {
 
 	@FXML
 	private void onScrollPaneClicked() {
-
 		setSPLocation();
 		Point mousePosition = MouseInfo.getPointerInfo().getLocation();
 		Pane pane = (Pane) scrollPane.getContent();

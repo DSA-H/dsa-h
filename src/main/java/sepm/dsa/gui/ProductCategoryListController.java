@@ -18,6 +18,7 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
 import sepm.dsa.service.ProductCategoryService;
+import sepm.dsa.service.SaveCancelService;
 
 import java.util.Iterator;
 import java.util.List;
@@ -29,7 +30,7 @@ public class ProductCategoryListController implements Initializable {
     SpringFxmlLoader loader;
 
     private ProductCategoryService productCategoryService;
-    private SessionFactory sessionFactory;
+    private SaveCancelService saveCancelService;
 
     @FXML
     private TreeView<ProductCategory> treeview;
@@ -129,7 +130,7 @@ public class ProductCategoryListController implements Initializable {
                     .showConfirm();
             if (response == Dialog.Actions.YES) {
                 productCategoryService.remove(selectedProductCategory);
-
+                saveCancelService.save();
                 //could be replaced with a search-through-all-elements-childs algorithm
                 initializeTreeView();
             }
@@ -144,10 +145,6 @@ public class ProductCategoryListController implements Initializable {
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
-    }
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 
     /**
@@ -213,5 +210,9 @@ public class ProductCategoryListController implements Initializable {
                 return FXCollections.emptyObservableList();
             }
         };
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

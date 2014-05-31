@@ -1,25 +1,22 @@
 package sepm.dsa.gui;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
-import org.controlsfx.dialog.Dialog;
-import org.controlsfx.dialog.Dialogs;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Currency;
 import sepm.dsa.service.CurrencyService;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class CurrencyCalculateController implements Initializable {
@@ -28,7 +25,6 @@ public class CurrencyCalculateController implements Initializable {
     SpringFxmlLoader loader;
 
     private CurrencyService currencyService;
-    private SessionFactory sessionFactory;
 
     @FXML
     private ChoiceBox<Currency> choiceFirst;
@@ -51,38 +47,38 @@ public class CurrencyCalculateController implements Initializable {
         choiceFirst.setItems(FXCollections.observableArrayList(currencies));
         choiceSecond.setItems(FXCollections.observableArrayList(currencies));
 
-	    if (currencies.isEmpty()) {
-		    //TODO what to do?
-	    } else {
-		    choiceFirst.getSelectionModel().select(0);
-		    choiceSecond.getSelectionModel().select(0);
+        if (currencies.isEmpty()) {
+            //TODO what to do?
+        } else {
+            choiceFirst.getSelectionModel().select(0);
+            choiceSecond.getSelectionModel().select(0);
 
-		    labelvon.setText(choiceFirst.getSelectionModel().getSelectedItem().getName());
-		    labelin.setText(choiceSecond.getSelectionModel().getSelectedItem().getName());
-	    }
+            labelvon.setText(choiceFirst.getSelectionModel().getSelectedItem().getName());
+            labelin.setText(choiceSecond.getSelectionModel().getSelectedItem().getName());
+        }
     }
 
     @FXML
     private void onCalculatePressed() {
         log.debug("onCalculateClicked - calculate Currency");
-        BigDecimal first;
+        BigDecimal amountToExchange;
         try {
-            first = new BigDecimal(textFirst.getText());
+            amountToExchange = new BigDecimal(textFirst.getText());
 
         } catch (NumberFormatException ex) {
-            throw new DSAValidationException("Wechselkurs muss eine Zahl sein!");
+            throw new DSAValidationException("Menge von zu Wechselndem Geld muss eine Zahl sein!");
         }
 
-        BigDecimal rate = choiceFirst.getSelectionModel().getSelectedItem().getValueToBaseRate().divide(choiceSecond.getSelectionModel().getSelectedItem().getValueToBaseRate());
-        BigDecimal second = first.multiply(rate);
-        labelresult.setText(second.toString());
+        CurrencyAmount exchangeResult = currencyService.exchange(choiceFirst.getSelectionModel().getSelectedItem(), choiceSecond.getSelectionModel().getSelectedItem(), amountToExchange);
+        BigDecimal exchangeAmount = exchangeResult.getAmount();
 
+        exchangeAmount.setScale(2, BigDecimal.ROUND_DOWN);
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        df.setMinimumFractionDigits(0);
+        df.setGroupingUsed(false);
+        labelresult.setText(String.format(df.format(exchangeAmount)));
     }
-
-    /*@FXML
-    private void checkFocus() {
-
-    }*/
 
     public void setCurrencyService(CurrencyService currencyService) {
         this.currencyService = currencyService;
@@ -92,7 +88,4 @@ public class CurrencyCalculateController implements Initializable {
         this.loader = loader;
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 }

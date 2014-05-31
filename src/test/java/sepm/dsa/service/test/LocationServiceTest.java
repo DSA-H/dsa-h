@@ -11,6 +11,7 @@ import sepm.dsa.model.TownSize;
 import sepm.dsa.model.Trader;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionService;
+import sepm.dsa.service.SaveCancelService;
 
 import java.util.Collection;
 
@@ -72,7 +73,7 @@ public class LocationServiceTest extends AbstractDatabaseTest {
 
     @Test
     public void testGet() throws Exception {
-        Location location = locationService.get(2);
+        Location location = locationService.get(1);
         assertNotNull(location);
     }
 
@@ -80,6 +81,8 @@ public class LocationServiceTest extends AbstractDatabaseTest {
     public void testGetAll() throws Exception {
         Location l1 = locationService.get(1);
         Location l2 = locationService.get(2);
+        assertNotNull("Location with ID=1 must exist in the database for this test", l1);
+        assertNotNull("Location with ID=2 must exist in the database for this test", l2);
         assertThat(locationService.getAll(), hasItems(l1, l2));
     }
 
@@ -89,6 +92,7 @@ public class LocationServiceTest extends AbstractDatabaseTest {
         Collection<Trader> tradersBefore = traderDao.getAllByLocation(location);
 
         locationService.remove(location);
+        getSaveCancelService().save();
 
         int tradersForLocationNow = traderDao.getAllByLocation(location).size();
 

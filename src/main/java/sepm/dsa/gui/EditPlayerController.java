@@ -15,14 +15,16 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Player;
 import sepm.dsa.service.PlayerService;
+import sepm.dsa.service.SaveCancelService;
 
 public class EditPlayerController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(EditPlayerController.class);
     private SpringFxmlLoader loader;
-    private SessionFactory sessionFactory;
 
     private PlayerService playerService;
+    private SaveCancelService saveCancelService;
+
     private static Player selectedPlayer;
     private boolean isNewPlaper;
 
@@ -54,6 +56,8 @@ public class EditPlayerController implements Initializable {
     @FXML
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
+
+        saveCancelService.save();
         Stage stage = (Stage) nameField.getScene().getWindow();
 
         Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
@@ -78,6 +82,7 @@ public class EditPlayerController implements Initializable {
         } else {
             playerService.update(selectedPlayer);
         }
+        saveCancelService.save();
 
         // return to players-list
         Stage stage = (Stage) nameField.getScene().getWindow();
@@ -94,11 +99,11 @@ public class EditPlayerController implements Initializable {
         this.loader = loader;
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
     public static void setPlayer(Player player) {
         selectedPlayer = player;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

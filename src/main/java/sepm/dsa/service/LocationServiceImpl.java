@@ -27,18 +27,27 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional(readOnly = false)
-    public void add(Location location) {
-        log.debug("calling add(" + location + ")");
+    public Location add(Location location) {
+        log.debug("calling addConnection(" + location + ")");
         validate(location);
-        locationDao.add(location);
+        return locationDao.add(location);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void update(Location location) {
+    public Location update(Location location) {
         log.debug("calling update(" + location + ")");
         validate(location);
-        locationDao.update(location);
+        return locationDao.update(location);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void remove(Location location) {
+        log.debug("calling removeConnection(" + location + ")");
+
+        // TODO add param 'boolean moveMovingTradersOutOfLocation' true -> move them, don't delete them, false -> delete them
+        locationDao.remove(location);
     }
 
     @Override
@@ -47,16 +56,6 @@ public class LocationServiceImpl implements LocationService {
         List<Location> result = locationDao.getAllByRegion(regionId);
         log.trace("returning " + result);
         return result;
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public void remove(Location location) {
-        log.debug("calling remove(" + location + ")");
-        if (location.getId() == null) {
-            throw new DSAValidationException("Ort muss eine ID haben");
-        }
-        locationDao.remove(location);
     }
 
     @Override

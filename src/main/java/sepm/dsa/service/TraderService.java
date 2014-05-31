@@ -20,16 +20,17 @@ public interface TraderService {
      * Persists a {@code Trader} in the Database
      *
      * @param t (Trader) to be persisted must not be null
-     * @return
+     * @return The added trader model.
      */
-    void add(Trader t);
+    Trader add(Trader t);
 
     /**
      * Updates a already existing {@code Trader} in the database
      *
      * @param t to update must not be null
+     * @return The updated trader model.
      */
-    void update(Trader t);
+    Trader update(Trader t);
 
     /**
      * Delete a {@code Trader} permanently from the DB

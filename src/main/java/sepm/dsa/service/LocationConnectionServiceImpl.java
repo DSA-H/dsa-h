@@ -1,5 +1,6 @@
 package sepm.dsa.service;
 
+import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,16 +8,23 @@ import sepm.dsa.dao.LocationConnectionDao;
 import sepm.dsa.dao.LocationDao;
 import sepm.dsa.exceptions.DSAAlreadyExistsException;
 import sepm.dsa.exceptions.DSARuntimeException;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
+import sepm.dsa.model.Region;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Transactional(readOnly = true)
 public class LocationConnectionServiceImpl implements LocationConnectionService {
 
     private static final Logger log = LoggerFactory.getLogger(LocationConnectionServiceImpl.class);
+    private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private LocationConnectionDao locationConnectionDao;
 
@@ -29,42 +37,43 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
 
     @Transactional(readOnly = false)
     @Override
-    public void add(LocationConnection locationConnection) {
-        log.debug("calling add(" + locationConnection + ")");
+    public LocationConnection add(LocationConnection locationConnection) {
+        log.debug("calling addConnection(" + locationConnection + ")");
+        validate(locationConnection);
         if (get(locationConnection.getLocation1(), locationConnection.getLocation2()) != null) {
             throw new DSAAlreadyExistsException();
         }
-        locationConnectionDao.add(locationConnection);
-        log.info("added " + locationConnection);
+        LocationConnection lc = locationConnectionDao.add(locationConnection);
+        log.info("added " + lc);
+	    return lc;
     }
 
     @Transactional(readOnly = false)
     @Override
-    public void update(LocationConnection locationConnection) {
+    public LocationConnection update(LocationConnection locationConnection) {
         log.debug("calling update(" + locationConnection + ")");
+        validate(locationConnection);
         LocationConnection trueConn = get(locationConnection.getLocation1(), locationConnection.getLocation2());
         locationConnection.setLocation1(trueConn.getLocation1());
         locationConnection.setLocation2(trueConn.getLocation2());
-        locationConnectionDao.update(locationConnection);
-        log.info("updated " + locationConnection);
+        LocationConnection lc = locationConnectionDao.update(locationConnection);
+        log.info("updated " + lc);
+	    return lc;
     }
 
     @Transactional(readOnly = false)
     @Override
     public void remove(LocationConnection locationConnection) {
-        log.debug("calling remove(" + locationConnection + ")");
-        LocationConnection trueConn = locationConnectionDao.get(locationConnection.getLocation1(), locationConnection.getLocation2());
-        if (trueConn != null) {
-            log.debug(" really remove " + trueConn);
-            locationConnectionDao.remove(trueConn);
-        }
-        log.info("removed " + trueConn);
+        log.debug("calling removeConnection(" + locationConnection + ")");
+        locationConnectionDao.remove(locationConnection);
+        log.info("removed " + locationConnection);
     }
 
     @Override
     public LocationConnection get(Location location1, Location location2) {
         log.debug("calling get(" + location1 + ", " + location2 + ")");
-        return locationConnectionDao.get(location1, location2);
+        LocationConnection.Pk pk = new LocationConnection.Pk(location1, location2);
+        return locationConnectionDao.get(pk);
     }
 
     @Override
@@ -138,5 +147,19 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
 
     public void setLocationDao(LocationDao locationDao) {
         this.locationDao = locationDao;
+    }
+
+    /**
+     * Validates a locationConnection
+     *
+     * @param locationConnection
+     * @throws sepm.dsa.exceptions.DSAValidationException if region is not valid
+     */
+    private void validate(LocationConnection locationConnection) throws DSAValidationException {
+        log.info("calling validate(" + locationConnection + ")");
+        Set<ConstraintViolation<LocationConnection>> violations = validator.validate(locationConnection);
+        if (violations.size() > 0) {
+            throw new DSAValidationException("Gebiet ist nicht valide.", violations);
+        }
     }
 }

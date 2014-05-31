@@ -12,6 +12,7 @@ import sepm.dsa.service.ProductService;
 import sepm.dsa.service.TraderCategoryService;
 import sepm.dsa.service.TraderService;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -100,7 +101,7 @@ public class TraderServiceTest extends AbstractDatabaseTest {
     @Test
     public void calculatePriceForProduct_alwaysPositive() {
         Trader trader = traderService.get(1);
-        Set<AssortmentNature> assortments = trader.getCategory().getAssortments();
+        Collection<AssortmentNature> assortments = trader.getCategory().getAssortments().values();
         for (AssortmentNature a : assortments) {
             for (Product p : a.getProductCategory().getProducts()) {
                 assertTrue("Preis muss positiv sein", traderService.calculatePriceForProduct(p, trader) > 0);
@@ -131,7 +132,7 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         for (Offer o : offers) {
             Product p = o.getProduct();
             boolean contains = false;
-            for (AssortmentNature a : trader.getCategory().getAssortments()) {
+            for (AssortmentNature a : trader.getCategory().getAssortments().values()) {
                 if (a.getProductCategory().getProducts().contains(p)) {
                     contains = true;
                     break;

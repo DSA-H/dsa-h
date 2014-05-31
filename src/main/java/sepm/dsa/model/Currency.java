@@ -5,12 +5,11 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "currencies")
-public class Currency implements Serializable {
+public class Currency implements BaseModel {
 
     private static final long serialVersionUID = 5329256729754963420L;
 

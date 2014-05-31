@@ -71,7 +71,7 @@ public class LocationDaoTest extends AbstractDatabaseTest {
 //    @DatabaseSetup("/testData.xml")
 //    public void update_removesConnections() throws Exception {
 //        Location location = locationDao.get(4);
-//        location.getConnections1().remove(location.getConnections1().iterator().next());
+//        location.getConnections1().removeConnection(location.getConnections1().iterator().next());
 //        location.getConnections2().clear();
 //        locationDao.update(location);
 //        Location newLocation = locationDao.get(location.getId());
