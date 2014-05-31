@@ -81,15 +81,15 @@
     <product_regions productId="5" regionId="3" />
     <product_regions productId="6" regionId="5" />
     <product_regions productId="8" regionId="7" />
-    <assortmentNatures ID="1" DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="1" traderCategory_id="1" />
-    <assortmentNatures ID="2" DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="2" traderCategory_id="1" />
-    <assortmentNatures ID="3" DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="1" traderCategory_id="2" />
-    <assortmentNatures ID="4" DEFAULTOCCURENCE="50" PRODUCTCATEGORY_ID="4" traderCategory_id="2" />
-    <assortmentNatures ID="5" DEFAULTOCCURENCE="20" PRODUCTCATEGORY_ID="5" traderCategory_id="2" />
-    <assortmentNatures ID="6" DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="6" traderCategory_id="4" />
-    <assortmentNatures ID="7" DEFAULTOCCURENCE="20" PRODUCTCATEGORY_ID="1" traderCategory_id="4" />
-    <assortmentNatures ID="8" DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="1" traderCategory_id="5" />
-    <assortmentNatures ID="9" DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="2" traderCategory_id="5" />
+    <assortmentNatures DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="1" traderCategory_id="1" />
+    <assortmentNatures DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="2" traderCategory_id="1" />
+    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="1" traderCategory_id="2" />
+    <assortmentNatures DEFAULTOCCURENCE="50" PRODUCTCATEGORY_ID="4" traderCategory_id="2" />
+    <assortmentNatures DEFAULTOCCURENCE="20" PRODUCTCATEGORY_ID="5" traderCategory_id="2" />
+    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="6" traderCategory_id="4" />
+    <assortmentNatures DEFAULTOCCURENCE="20" PRODUCTCATEGORY_ID="1" traderCategory_id="4" />
+    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="1" traderCategory_id="5" />
+    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="2" traderCategory_id="5" />
     <!-- location cascade deleting test data, don't change this -->
 
     <!-- end of location cascade deleting test data -->

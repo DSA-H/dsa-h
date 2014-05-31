@@ -24,6 +24,7 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.Region;
 import sepm.dsa.service.ProductService;
+import sepm.dsa.service.SaveCancelService;
 
 import java.util.Set;
 
@@ -33,7 +34,7 @@ public class ProductListController implements Initializable {
     SpringFxmlLoader loader;
 
     private ProductService productService;
-    private SessionFactory sessionFactory;
+    private SaveCancelService saveCancelService;
 
     @FXML
     private TableView<Product> productTable;
@@ -69,12 +70,10 @@ public class ProductListController implements Initializable {
         productionRegionColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Product, String> r) {
-                Session session = sessionFactory.openSession();
                 if (r.getValue() == null) {
                     return new SimpleStringProperty("");
                 }
                 Product product = r.getValue();
-                session.refresh(product);
                 StringBuilder sb = new StringBuilder();
                 Set<Region> regions = product.getRegions();
                 for (Region region : regions) {
@@ -83,7 +82,6 @@ public class ProductListController implements Initializable {
                 if (sb.length() >= 2) {
                     sb.delete(sb.length() - 2, sb.length());
                 }
-                session.close();
                 return new SimpleStringProperty(sb.toString());
             }
         });
@@ -137,6 +135,7 @@ public class ProductListController implements Initializable {
                     .showConfirm();
             if (response == Dialog.Actions.YES) {
                 productService.remove(selectedProduct);
+                saveCancelService.save();
                 productTable.getItems().remove(selectedProduct);
             }
         }
@@ -165,7 +164,7 @@ public class ProductListController implements Initializable {
         this.loader = loader;
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

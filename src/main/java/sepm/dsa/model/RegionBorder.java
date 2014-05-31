@@ -14,7 +14,7 @@ import java.io.Serializable;
         @AssociationOverride(name = "pk.region1", joinColumns = @JoinColumn(name = "region1")),
         @AssociationOverride(name = "pk.region2", joinColumns = @JoinColumn(name = "region2"))
 })
-public class RegionBorder implements Serializable, PathEdge {
+public class RegionBorder implements BaseModel, PathEdge {
 
     private static final long serialVersionUID = -5121547134534726826L;
 
@@ -25,6 +25,10 @@ public class RegionBorder implements Serializable, PathEdge {
     @Min(0)
     @Column(nullable = false)
     private Integer borderCost;
+
+    public Pk getPk() {
+        return pk;
+    }
 
     public Integer getBorderCost() {
         return borderCost;
@@ -84,22 +88,38 @@ public class RegionBorder implements Serializable, PathEdge {
     }
 
     @Embeddable
-    private static class Pk implements Serializable {
+    public static class Pk implements Serializable {
 
         private static final long serialVersionUID = 5989205421915335466L;
 
         // TODO BeanValidation for region1 != region2
 
+        @NotNull
         @ManyToOne
         @JoinColumn(name = "region1", nullable = false)
         private Region region1;
 
+        @NotNull
         @ManyToOne
         @JoinColumn(name = "region2", nullable = false)
         private Region region2;
 
         public Pk() {
 
+        }
+
+        public Pk(Region region1, Region region2) {
+            this.region1 = region1;
+            this.region2 = region2;
+        }
+
+
+        public Region getRegion1() {
+            return region1;
+        }
+
+        public Region getRegion2() {
+            return region2;
         }
 
         @Override

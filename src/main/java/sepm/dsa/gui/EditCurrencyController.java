@@ -15,6 +15,7 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Currency;
 import sepm.dsa.service.CurrencyService;
+import sepm.dsa.service.SaveCancelService;
 
 import java.math.BigDecimal;
 
@@ -22,9 +23,10 @@ public class EditCurrencyController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(EditCurrencyController.class);
     private SpringFxmlLoader loader;
-    private SessionFactory sessionFactory;
 
     private CurrencyService currencyService;
+    private SaveCancelService saveCancelService;
+
     private static Currency selectedCurrency;
     private boolean isNewCurrency;
 
@@ -54,6 +56,7 @@ public class EditCurrencyController implements Initializable {
     @FXML
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
+        saveCancelService.cancel();
         Stage stage = (Stage) nameField.getScene().getWindow();
 
         Parent scene = (Parent) loader.load("/gui/currencyList.fxml");
@@ -85,6 +88,7 @@ public class EditCurrencyController implements Initializable {
         } else {
             currencyService.update(selectedCurrency);
         }
+        saveCancelService.save();
 
         // return to currencies-list
         Stage stage = (Stage) nameField.getScene().getWindow();
@@ -104,7 +108,7 @@ public class EditCurrencyController implements Initializable {
         this.loader = loader;
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

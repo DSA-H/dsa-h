@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Currency;
 import sepm.dsa.service.CurrencyService;
+import sepm.dsa.service.SaveCancelService;
 
 public class CurrencyListController implements Initializable {
 
@@ -26,7 +27,8 @@ public class CurrencyListController implements Initializable {
     SpringFxmlLoader loader;
 
     private CurrencyService currencyService;
-    private SessionFactory sessionFactory;
+
+    private SaveCancelService saveCancelService;
 
     @FXML
     private TableView<Currency> currencyTable;
@@ -94,6 +96,7 @@ public class CurrencyListController implements Initializable {
                     .showConfirm();
             if (response == Dialog.Actions.YES) {
                 currencyService.remove(selectedCurrency);
+                saveCancelService.save();
                 currencyTable.getItems().remove(selectedCurrency);
             }
         }
@@ -121,7 +124,7 @@ public class CurrencyListController implements Initializable {
         this.loader = loader;
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

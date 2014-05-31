@@ -10,16 +10,17 @@ public interface LocationService {
      * Asks the DAO to persist a {@code Location} in the Database
      *
      * @param location to be persisted must not be null
-     * @return
+     * @return The added location model.
      */
-    public void add(Location location);
+    public Location add(Location location);
 
     /**
      * Asks the DAO to update a already existing {@code Location} in the database
      *
      * @param location to update must not be null
+     * @return The updated location model.
      */
-    public void update(Location location);
+    public Location update(Location location);
 
     /**
      * Asks the DAO to delete a location permanently
@@ -29,7 +30,7 @@ public interface LocationService {
     public void remove(Location location);
 
     /**
-     * Gets a location by it's id
+     * Gets a location by its id
      *
      * @param id
      * @return the location, or null if it does not exist
@@ -50,4 +51,5 @@ public interface LocationService {
      * @return a list of locations in the region, or an emtpy list if no location is in the region (not null)
      */
     public List<Location> getAllByRegion(int regionId);
+
 }

@@ -1,20 +1,16 @@
 package sepm.dsa.model;
 
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "products")
-public class Product implements Serializable {
+public class Product implements BaseModel {
     private static final long serialVersionUID = 5890354733231481712L;
 
     @Id
@@ -64,7 +60,7 @@ public class Product implements Serializable {
 //    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)//, cascade = CascadeType.REMOVE) // owning side
 //    @JoinColumn(name = "product_id", nullable = false)
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private Set<Offer> offer = new HashSet<>();
 
     public Integer getId() {

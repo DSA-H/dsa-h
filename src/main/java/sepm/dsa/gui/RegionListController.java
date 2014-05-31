@@ -26,6 +26,7 @@ import sepm.dsa.model.RegionBorder;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
+import sepm.dsa.service.SaveCancelService;
 
 import java.util.List;
 
@@ -37,6 +38,8 @@ public class RegionListController implements Initializable {
     private RegionService regionService;
 
     private LocationService locationService;
+
+	private SaveCancelService saveCancelService;
 
     private RegionBorderService regionBorderService;
     @FXML
@@ -162,6 +165,8 @@ public class RegionListController implements Initializable {
                 }
                 regionService.remove(selectedRegion);
                 regionTable.getItems().remove(selectedRegion);
+
+				saveCancelService.save();
             }
         }
 
@@ -196,4 +201,8 @@ public class RegionListController implements Initializable {
     public void setLocationService(LocationService locationService) {
         this.locationService = locationService;
     }
+
+	public void setSaveCancelService(SaveCancelService saveCancelService) {
+		this.saveCancelService = saveCancelService;
+	}
 }
