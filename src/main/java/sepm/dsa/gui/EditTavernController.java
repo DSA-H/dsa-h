@@ -109,6 +109,9 @@ public class EditTavernController implements Initializable {
 
     public void setTavern(Tavern tavern) {
         this.selectedTavern = tavern;
+	    if (selectedTavern == null) {
+		    selectedTavern = new Tavern();
+	    }
     }
 
     public void setLoader(SpringFxmlLoader loader) {
