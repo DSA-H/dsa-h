@@ -19,12 +19,20 @@ public class LocationConnectionDaoHbmImpl
 
     private static final Logger log = LoggerFactory.getLogger(LocationConnectionDaoHbmImpl.class);
 
-    @Transactional(readOnly = false)
+    @Override
+    public LocationConnection add(LocationConnection model) {
+        LocationConnection result =  super.add(model);
+        model.getLocation1().addConnection(result);
+        model.getLocation2().addConnection(result);
+        return result;
+    }
+
     @Override
     public void remove(LocationConnection locationConnection) {
-        log.debug("calling delete(" + locationConnection + ")");
-        LocationConnection trueLocationConnection = get(locationConnection.getPk());    //
-        sessionFactory.getCurrentSession().delete(trueLocationConnection);
+        LocationConnection trueLocationConnection = get(locationConnection.getPk());    // we need this, don't touch
+        super.remove(trueLocationConnection);
+        trueLocationConnection.getLocation1().removeConnection(trueLocationConnection);
+        trueLocationConnection.getLocation2().removeConnection(trueLocationConnection);
     }
 
     @Override
