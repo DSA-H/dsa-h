@@ -45,6 +45,8 @@ public class LocationServiceImpl implements LocationService {
     @Transactional(readOnly = false)
     public void remove(Location location) {
         log.debug("calling removeConnection(" + location + ")");
+
+        // TODO add param 'boolean moveMovingTradersOutOfLocation' true -> move them, don't delete them, false -> delete them
         locationDao.remove(location);
     }
 

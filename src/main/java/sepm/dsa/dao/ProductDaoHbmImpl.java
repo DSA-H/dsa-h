@@ -9,4 +9,11 @@ import sepm.dsa.model.Product;
 public class ProductDaoHbmImpl
 	extends BaseDaoHbmImpl<Product>
 	implements ProductDao {
+
+    @Override
+    public Product add(Product model) {
+        Product result = super.add(model);
+
+        return result;
+    }
 }

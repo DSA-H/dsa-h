@@ -21,6 +21,7 @@ import sepm.dsa.model.Region;
 import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.ProductService;
 import sepm.dsa.service.RegionService;
+import sepm.dsa.service.SaveCancelService;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,9 +34,9 @@ public class EditProductController implements Initializable {
     private SpringFxmlLoader loader;
     private ProductService productService;
     private ProductCategoryService productCategoryService;
-    private SessionFactory sessionFactory;
  //   private ProductUnitService productUnitService;
     private RegionService regionService;
+    private SaveCancelService saveCancelService;
 
     private static Product selectedProduct;
     private boolean isNewProduct;
@@ -104,6 +105,7 @@ public class EditProductController implements Initializable {
             categoryList.removeAll(selectedProduct.getCategories());
             categorieTable.setItems(categoryData);
             commentField.setText(selectedProduct.getComment());
+            qualityBox.setSelected(selectedProduct.getQuality());
         }else {
             isNewProduct = true;
             selectedProduct = new Product();
@@ -188,6 +190,8 @@ public class EditProductController implements Initializable {
     @FXML
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
+        saveCancelService.cancel();
+
         Stage stage = (Stage) nameField.getScene().getWindow();
 
         Parent scene = (Parent) loader.load("/gui/productslist.fxml");
@@ -226,6 +230,7 @@ public class EditProductController implements Initializable {
         }else {
             productService.update(selectedProduct);
         }
+        saveCancelService.save();
 
         // return to productslist
         Stage stage = (Stage) nameField.getScene().getWindow();
@@ -258,7 +263,7 @@ public class EditProductController implements Initializable {
         this.loader = loader;
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

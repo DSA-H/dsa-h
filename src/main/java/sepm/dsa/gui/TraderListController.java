@@ -20,6 +20,7 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Trader;
 import sepm.dsa.service.LocationService;
+import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TraderService;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class TraderListController implements Initializable {
 
     private TraderService traderService;
     private LocationService locationService;
+    private SaveCancelService saveCancelService;
 
     private Trader selectedTrader;
 
@@ -100,6 +102,7 @@ public class TraderListController implements Initializable {
                     .showConfirm();
             if (response == Dialog.Actions.YES) {
                 traderService.remove(selectedTrader);
+                saveCancelService.save();
                 traderList.getItems().remove(selectedTrader);
             }
         }
@@ -151,5 +154,9 @@ public class TraderListController implements Initializable {
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

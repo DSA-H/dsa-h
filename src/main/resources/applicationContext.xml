@@ -185,7 +185,6 @@
         <property name="pathService" ref="pathService"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
     <bean id="pathService" class="sepm.dsa.service.path.PathServiceDijkstraJGraphImpl">
@@ -230,22 +229,21 @@
     </bean>
 
     <bean id="ProductListController" class="sepm.dsa.gui.ProductListController">
-        <property name="sessionFactory" ref="sessionFactory"/>
         <property name="loader" ref="loader"/>
         <property name="productService" ref="productService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
     <bean id="EditProductController" class="sepm.dsa.gui.EditProductController">
         <property name="loader" ref="loader"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
         <property name="productService" ref="productService"/>
         <property name="productCategoryService" ref="productCategoryService"/>
         <property name="regionService" ref="regionService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
     <bean id="TraderCategoryList" class="sepm.dsa.gui.TraderCategoryListController">
         <property name="loader" ref="loader"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
         <property name="saveCancelService" ref="saveCancelService" />
     </bean>
@@ -261,12 +259,14 @@
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>
         <property name="locationService" ref="locationService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
     <bean id="editTrader" class="sepm.dsa.gui.EditTraderController">
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
         <property name="locationService" ref="locationService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
     <bean id="traderDetails" class="sepm.dsa.gui.TraderDetailsController">
         <property name="loader" ref="loader"/>
@@ -282,18 +282,21 @@
         <property name="locationConnectionService" ref="locationConnectionService"/>
         <property name="locationService" ref="locationService"/>
     </bean>
+    <bean id="currencyList" class="sepm.dsa.gui.CurrencyListController">
+        <property name="loader" ref="loader"/>
+        <property name="currencyService" ref="currencyService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
+    </bean>
+    <bean id="editCurrency" class="sepm.dsa.gui.EditCurrencyController">
+        <property name="loader" ref="loader"/>
+        <property name="currencyService" ref="currencyService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
+    </bean>
+
+    <!-- Transaction -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
-    <bean id="currencyList" class="sepm.dsa.gui.CurrencyListController">
-        <property name="loader" ref="loader"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
-        <property name="currencyService" ref="currencyService"/>
-    </bean>
-    <bean id="editCurrency" class="sepm.dsa.gui.EditCurrencyController">
-        <property name="loader" ref="loader"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
-        <property name="currencyService" ref="currencyService"/>
-    </bean>
+
 </beans>

@@ -28,8 +28,6 @@ public class TraderServiceImpl implements TraderService {
     private RegionService regionService;
     private RegionBorderService regionBorderService;
 
-	private SessionFactory sessionFactory;
-
 	@Override
     public Trader get(int id) {
         log.debug("calling get(" + id + ")");
@@ -273,7 +271,4 @@ public class TraderServiceImpl implements TraderService {
 		return trader.getOffers();
 	}
 
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
 }

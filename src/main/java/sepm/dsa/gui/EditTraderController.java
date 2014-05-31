@@ -19,6 +19,7 @@ import sepm.dsa.model.Location;
 import sepm.dsa.model.Trader;
 import sepm.dsa.model.TraderCategory;
 import sepm.dsa.service.LocationService;
+import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TraderCategoryService;
 import sepm.dsa.service.TraderService;
 
@@ -35,6 +36,7 @@ public class EditTraderController implements Initializable {
     private TraderService traderService;
     private TraderCategoryService categoryService;
     private LocationService locationService;
+    private SaveCancelService saveCancelService;
 
     private boolean isNewTrader;
 
@@ -265,6 +267,7 @@ public class EditTraderController implements Initializable {
         } else {
             traderService.update(selectedTrader);
         }
+        saveCancelService.save();
 
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
@@ -276,7 +279,7 @@ public class EditTraderController implements Initializable {
     @FXML
     private void onCancelPressed() {
         log.debug("called onCancelPressed");
-
+        saveCancelService.cancel();
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
         stage.setScene(new Scene(scene, 600, 400));
@@ -311,5 +314,9 @@ public class EditTraderController implements Initializable {
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

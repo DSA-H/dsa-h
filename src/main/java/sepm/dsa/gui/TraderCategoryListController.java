@@ -32,7 +32,6 @@ public class TraderCategoryListController implements Initializable {
     private TraderCategoryService traderCategoryService;
     private static final Logger log = LoggerFactory.getLogger(TraderCategoryListController.class);
     private SpringFxmlLoader loader;
-    private SessionFactory sessionFactory;
 
     private SaveCancelService saveCancelService;
 
@@ -59,10 +58,8 @@ public class TraderCategoryListController implements Initializable {
             @Transactional(readOnly = true)
             public ObservableValue<String> call(TableColumn.CellDataFeatures<TraderCategory, String> r) {
                 if (r.getValue() != null) {
-                   Session session = sessionFactory.openSession();
                    StringBuilder sb = new StringBuilder();
                    TraderCategory tc = r.getValue();
-                   session.refresh(tc);
                    for(AssortmentNature assortmentNature : tc.getAssortments().values()) {
                        String productCategorieName = assortmentNature.getProductCategory().getName();
                        sb.append(productCategorieName + ", ");
@@ -70,7 +67,6 @@ public class TraderCategoryListController implements Initializable {
                     if (sb.length() >= 2) {
                         sb.delete(sb.length() - 2, sb.length());
                     }
-                    session.close();
                     return new SimpleStringProperty(sb.toString());
                 } else {
                     return new SimpleStringProperty("");
@@ -158,10 +154,6 @@ public class TraderCategoryListController implements Initializable {
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
-    }
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 
     public void setSaveCancelService(SaveCancelService saveCancelService) {
