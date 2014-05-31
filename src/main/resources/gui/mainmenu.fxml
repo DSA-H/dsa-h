@@ -69,8 +69,8 @@
                                 onAction="#onDeleteButtonPressed" text="Löschen"/>
                     </children>
                 </HBox>
-                <Button fx:id="chooseButton" alignment="CENTER" disable="true" layoutX="708.0" layoutY="561.0"
-                        mnemonicParsing="false" onAction="#onChooseButtonPressed" prefWidth="75.0" text="Auswählen">
+                <Button fx:id="chooseButton" alignment="CENTER" disable="true" layoutX="693.0" layoutY="561.0"
+                        mnemonicParsing="false" onAction="#onChooseButtonPressed" prefWidth="90.0" text="Ortsansicht">
                     <HBox.margin>
                     </HBox.margin>
                 </Button>
