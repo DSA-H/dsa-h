@@ -83,12 +83,13 @@ public class Main extends Application {
 //                if (e instanceof )
         });
 
-	    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
         final SpringFxmlLoader loader = (SpringFxmlLoader) context.getBean("loader");
-	    Parent root = (Parent) loader.load("/gui/mainmenu.fxml");
+//	    Parent root = (Parent) loader.load("/gui/mainmenu.fxml");
+        Parent root = (Parent) loader.load("/gui/mainmenuResizable.fxml");
         final MainMenuController ctrl = loader.getController();
         primaryStage.setTitle("DSA-Händlertool");
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setScene(new Scene(root, 1045, 600));
         // close all windows if mainmenu is closed
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
@@ -99,7 +100,7 @@ public class Main extends Application {
                 }
             }
         });
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         primaryStage.show();
     }
 }
