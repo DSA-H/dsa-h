@@ -24,6 +24,7 @@ public class MovingTrader extends Trader implements Serializable {
     private Integer preferredTownSize;
 
     @Column
+    @NotNull
     private Integer preferredDistance;
 
     public void setPreferredTownSize(TownSize townSize) {

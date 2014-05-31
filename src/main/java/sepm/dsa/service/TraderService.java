@@ -40,10 +40,16 @@ public interface TraderService {
     void remove(Trader t);
 
     /**
-     * Get all traders for
+     * Get all traders
      * @return the traders or empty list
      */
     List<Trader> getAll();
+
+    /**
+     * Get all moving traders
+     * @return the moving traders or empty list
+     */
+    List<MovingTrader> getAllMovingTraders();
 
     /**
      * Get all traders for a specified location or empty List if nothing found

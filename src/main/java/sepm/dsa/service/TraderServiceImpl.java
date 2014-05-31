@@ -52,9 +52,10 @@ public class TraderServiceImpl implements TraderService {
         validate(t);
         Trader trader = traderDao.add(t);
         List<Offer> offers = calculateOffers(t);
-        trader.setOffers(new HashSet<>(offers));
         offerDao.addList(offers);
-		return trader;
+        trader.setOffers(new HashSet<>(offers));
+
+        return trader;
     }
 
     @Override
@@ -62,7 +63,6 @@ public class TraderServiceImpl implements TraderService {
     public Trader update(Trader t) {
         log.debug("calling update(" + t + ")");
         validate(t);
-        // todo: offer udpaten?
         return traderDao.update(t);
     }
 
@@ -77,6 +77,20 @@ public class TraderServiceImpl implements TraderService {
     public List<Trader> getAll() {
         log.debug("calling getAll()");
         List<Trader> result = traderDao.getAll();
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<MovingTrader> getAllMovingTraders() {
+        log.debug("calling getAllMovingTraders()");
+        List<Trader> traders = traderDao.getAll();
+        List<MovingTrader> result = new ArrayList<>();
+        for(Trader trader : traders) {
+            if(trader instanceof MovingTrader) {
+                result.add((MovingTrader)trader);
+            }
+        }
         log.trace("returning " + result);
         return result;
     }

@@ -225,6 +225,7 @@
 
     <bean id="timeService" class="sepm.dsa.service.TimeServiceImpl">
         <property name="traderService" ref="traderService"/>
+        <property name="offerDao" ref="offerDao" />
     </bean>
 
     <!-- GUI DI -->

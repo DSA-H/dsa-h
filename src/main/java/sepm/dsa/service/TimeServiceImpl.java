@@ -3,18 +3,15 @@ package sepm.dsa.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import sepm.dsa.dao.OfferDao;
 import sepm.dsa.exceptions.DSARuntimeException;
-import sepm.dsa.model.DSADate;
-import sepm.dsa.model.Offer;
-import sepm.dsa.model.Trader;
+import sepm.dsa.model.*;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.FileHandler;
 
 public class TimeServiceImpl implements TimeService {
@@ -23,6 +20,9 @@ public class TimeServiceImpl implements TimeService {
     static private final float PRODUCT_TURNOVER_PERCENT_PER_DAY = 1.5f;   // trader changes x% of his products per day
 
     private TraderService traderService;
+    private OfferDao offerDao;
+    private LocationService locationService;
+    private LocationConnectionService locationConnectionService;
 
     private DSADate date;
     private Properties properties;
@@ -111,6 +111,7 @@ public class TimeServiceImpl implements TimeService {
                         }
                     }
                     if(deleteOffer != null) {
+                        offerDao.remove(deleteOffer);
                         trader.getOffers().remove(deleteOffer);
                     }
                 }
@@ -124,23 +125,63 @@ public class TimeServiceImpl implements TimeService {
                     if(newOffer.getProduct().equals(offer.getProduct()) &&
                        newOffer.getQuality().getValue() == offer.getQuality().getValue()) {
                         offer.setAmount(offer.getAmount() + newOffer.getAmount());
+                        offerDao.update(offer);
                         containing = true;
                         break;
                     }
                 }
-                // if offer nt exits, add it
+                // if offer not exits, add it
                 if(!containing) {
+                    offerDao.add(newOffer);
                     trader.getOffers().add(newOffer);
                 }
             }
-            // persist offers
-            traderService.update(trader);
         }
 
+        // move moving traders
+        List<MovingTrader> movingTraders = traderService.getAllMovingTraders();
+        for(MovingTrader movingTrader : movingTraders) {
+            long daysSinceMove = date.getTimestamp() - movingTrader.getLastMoved();
+            // chance to move 5 days around the average move day
+            double moveCance = (float)(daysSinceMove - movingTrader.getAvgStayDays() + 5) / 100f;
+            float random = (float)Math.random();
+            // move
+            if(random < moveCance) {
+                Location actLocation = movingTrader.getLocation();
 
+                // possible locations
+                List<Location> possibleLocations = null;
+                // distance filter
+                if(movingTrader.getPreferredDistance() == DistancePreferrence.GLOBAL) {
+                    possibleLocations = locationService.getAll();
+                }else if(movingTrader.getPreferredDistance() == DistancePreferrence.REGION) {
+                    possibleLocations = locationService.getAllByRegion(actLocation.getRegion().getId());
+                }
+                // TownSize filter
+                if (movingTrader.getPreferredTownSize() != null) {
+                    List<Location> removeList = new ArrayList<>();
+                    for(Location location : possibleLocations) {
+                        // if not preferred town size, than its a 80% chance to remove the town from the possible goals
+                        if(location.getSize() != movingTrader.getPreferredTownSize()) {
+                            if(Math.random() <= 0.8f) {
+                                removeList.add(location);
+                            }
+                        }
+                    }
+                    possibleLocations.remove(removeList);
+                }
+                // take random one of the possible locations
+                int randomIndex = (int)(Math.random()*possibleLocations.size());
+                Location goalLocation = possibleLocations.get(randomIndex);
+            }
+        }
     }
 
     public void setTraderService(TraderService traderService) {
         this.traderService = traderService;
+    }
+
+    public void setOfferDao(OfferDao offerDao) {
+        this.offerDao = offerDao;
     }
 }

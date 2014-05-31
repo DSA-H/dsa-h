@@ -5,6 +5,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import sepm.dsa.dao.OfferDao;
 import sepm.dsa.dao.TraderDao;
 import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.DSADate;
@@ -24,15 +25,23 @@ public class TimeServiceTest extends AbstractDatabaseTest {
     @Autowired
     private TraderDao traderDao;
     @Autowired
+    private OfferDao offerDao;
+    @Autowired
     private TraderService traderService;
 
     @Before
     public void befor() {
         // init trader 1 with calculated offers
         Trader trader = traderDao.get(1);
+
+        for(Offer offer : trader.getOffers()) {
+            offerDao.remove(offer);
+        }
+        trader.getOffers().clear();
+
         List<Offer> offers = traderService.calculateOffers(trader);
+        offerDao.addList(offers);
         trader.setOffers(new HashSet<>(offers));
-        traderDao.update(trader);
     }
 
     @Test
@@ -88,17 +97,20 @@ public class TimeServiceTest extends AbstractDatabaseTest {
     @Test
     public void forwardTimeTestChangeSortiment3() {
         Trader trader = traderDao.get(1);
-        // delete a offer
+        // edit a offer
         Offer first = trader.getOffers().stream().findFirst().get();
         first.setAmount(first.getAmount() + 10);
-        traderDao.update(trader);
+        offerDao.update(first);
+
+        saveCancelService.save();
 
         int actAmount = 0;
         Set<Offer> offers = trader.getOffers();
         for(Offer offer : offers) {
             actAmount += offer.getAmount();
         }
-        Assert.assertTrue(actAmount+10 == trader.getSize());
+        actAmount -= 10;
+        Assert.assertTrue(actAmount == trader.getSize());
 
         timeService.forwardTime(29);
 
