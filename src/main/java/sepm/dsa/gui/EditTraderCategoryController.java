@@ -171,6 +171,10 @@ public class EditTraderCategoryController implements Initializable {
 //            throw new DSAValidationException("Mindestens eine Warenkategorie muss gewählt werden");
 //        }
 
+        if (assortmentTable.getItems().size() == 0) {
+            throw new DSAValidationException("Mindestens eine Warenkategorie muss zugewiesen sein");
+        }
+
         if (isNewTraderCategory) {
             traderCategoryService.add(traderCategory);
         } else {
