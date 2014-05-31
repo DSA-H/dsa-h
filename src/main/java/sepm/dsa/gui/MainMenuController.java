@@ -276,7 +276,7 @@ public class MainMenuController implements Initializable {
 			if (selectedLocation != null) {
 				log.debug("open Confirm-Delete-Location Dialog");
 				int traderSize = traderService.getAllForLocation(selectedLocation).size();
-				int tavernsSize = 0;    // TODO get taverns connected to location
+				int tavernsSize = tavernService.getAllForLocation(selectedLocation).size();
 				String connectedEntries = "";
 				connectedEntries += "\n" + traderSize + " Händler";
 				connectedEntries += "\n" + tavernsSize + " Wirtshäuser";
@@ -288,6 +288,7 @@ public class MainMenuController implements Initializable {
 						.message("Wollen Sie den Ort '" + selectedLocation.getName() + "' wirklich löschen? Folgende verbundenden Einträge würden ebenfalls gelöscht werden:" + connectedEntries)
 						.showConfirm(); // TODO was ist hier sinnvoll?
 				if (response == Dialog.Actions.YES) {
+					System.out.println("removing: " + selectedLocation);
 					locationService.remove(selectedLocation);
 					locationTable.getItems().remove(selectedLocation);
 				}
@@ -651,6 +652,7 @@ public class MainMenuController implements Initializable {
 
 	private void updateMap() {
 		log.debug("updateMap called");
+
 		if (mode == 0) {
 			File worldMap = mapService.getWorldMap();
 			if (worldMap == null) {
