@@ -22,4 +22,10 @@ public interface TavernService {
 	 * @return the taverns for the location or empty list
 	 */
 	List<Tavern> getAllForLocation(Location location);
+
+	void remove(Tavern tavern);
+
+	void add(Tavern tavern);
+
+	void update(Tavern tavern);
 }

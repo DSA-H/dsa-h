@@ -4,6 +4,7 @@ package sepm.dsa.gui;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
@@ -16,7 +17,6 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Tavern;
 import sepm.dsa.service.LocationService;
-import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TavernService;
 
 import java.util.List;
@@ -29,75 +29,53 @@ public class EditTavernController implements Initializable {
     private Tavern selectedTavern;
     private TavernService tavernService;
     private LocationService locationService;
-    private SaveCancelService saveCancelService;
 
     private boolean isNewTavern;
 
     @FXML
     private TextField nameField;
     @FXML
-    private ChoiceBox<Location> locationBox;
-    @FXML
     private TextArea commentArea;
     @FXML
     private TextField usageField;
     @FXML
     private TextField bedsField;
-    @FXML
-    private TextField xCoordField;
-    @FXML
-    private TextField yCoordField;
 
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise EditTavernController");
-
-
-        List<Location> locations = locationService.getAll();
-        locationBox.setItems(FXCollections.observableArrayList(locations));
-
     }
 
     @FXML
     private void onSavePressed() {
-        log.debug("called onSavePressed");
-
         log.debug("calling SaveButtonPressed");
 
-        // save region
         String name = nameField.getText();
         selectedTavern.setName(name);
-        selectedTavern.setLocation(locationBox.getSelectionModel().getSelectedItem());
-        selectedTavern.setUsage(Integer.parseInt(usageField.getText()));
+	    selectedTavern.setUsage(Integer.parseInt(usageField.getText()));
         //selectedTaver.setBeds(Integer.parseInt(bedField.getText()));
-        selectedTavern.setxPos(Integer.parseInt(xCoordField.getText()));
-        selectedTavern.setyPos(Integer.parseInt(yCoordField.getText()));
         //selectedTavern.setComment(commentArea.getText());
 
-        /*
+
         if (isNewTavern) {
             tavernService.add(selectedTavern);
         } else {
             tavernService.update(selectedTavern);
         }
-        */
-        saveCancelService.save();
+
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/tavernlist.fxml");
-        stage.setScene(new Scene(scene, 600, 400));
-
+        stage.close();
 
     }
 
     @FXML
     private void onCancelPressed() {
         log.debug("called onCancelPressed");
-        saveCancelService.cancel();
+
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/tavernlist.fxml");
-        stage.setScene(new Scene(scene, 600, 400));
+        stage.close();
     }
 
     public void setTavernService(TavernService tavernService) {
@@ -114,14 +92,23 @@ public class EditTavernController implements Initializable {
         this.selectedTavern = tavern;
 	    if (selectedTavern == null) {
 		    selectedTavern = new Tavern();
+	    } else {
+		    nameField.setText(selectedTavern.getName());
+		    //bedsField.setText(selectedTavern.getBeds());
+		    usageField.setText("" + selectedTavern.getUsage());
 	    }
     }
 
+	public void setPosition(Point2D pos) {
+		selectedTavern.setxPos((int) pos.getX());
+		selectedTavern.setyPos((int) pos.getY());
+	}
+
+	public void setLocation(Location location) {
+		selectedTavern.setLocation(location);
+	}
+
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
-    }
-
-    public void setSaveCancelService(SaveCancelService saveCancelService) {
-        this.saveCancelService = saveCancelService;
     }
 }
