@@ -24,4 +24,8 @@ public interface TavernService {
 	List<Tavern> getAllForLocation(Location location);
 
 	void remove(Tavern tavern);
+
+	void add(Tavern tavern);
+
+	void update(Tavern tavern);
 }

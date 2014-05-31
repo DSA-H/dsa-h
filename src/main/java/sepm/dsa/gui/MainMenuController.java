@@ -338,16 +338,18 @@ public class MainMenuController implements Initializable {
 			}
 		} else {
 			if (mapService.getLocationMap(selectedLocation) == null) {
-				Stage stage = new Stage();
-				Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
-				stage.setTitle("Händler erstellen");
 
-				EditTraderController controller = loader.getController();
-				controller.setTrader(null);
-				controller.setLocation(selectedLocation);
-				stage.setScene(new Scene(scene, 600, 400));
+				Stage stage = new Stage();
+				Parent scene = (Parent) loader.load("/gui/placement.fxml");
+				PlacementController controller = loader.getController();
+
+				stage.setTitle("Händler/Wirtshaus platzieren");
+				controller.setUp(selectedLocation, new Point2D(0,0), null, true);
+
+				stage.setScene(new Scene(scene, 350, 190));
 				stage.setResizable(false);
 				stage.showAndWait();
+
 				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
 				List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
 				List<Object> all = new ArrayList<Object>();
@@ -426,12 +428,12 @@ public class MainMenuController implements Initializable {
 			PlacementController controller = loader.getController();
 			if (mode == 0) {
 				stage.setTitle("Ort platzieren");
-				controller.setUp(null, pos, selectedLocation);
+				controller.setUp(null, pos, selectedLocation, false);
 			} else {
-				stage.setTitle("Händler platzieren");
-				controller.setUp(selectedLocation, pos, selectedObject);
+				stage.setTitle("Händler/Wirtshaus platzieren");
+				controller.setUp(selectedLocation, pos, selectedObject, false);
 			}
-			stage.setScene(new Scene(scene, 350, 160));
+			stage.setScene(new Scene(scene, 350, 190));
 			stage.setResizable(false);
 			stage.showAndWait();
 
@@ -690,13 +692,13 @@ public class MainMenuController implements Initializable {
 							for (Trader t : traders) {
 								if (e.getX() > t.getxPos()-10 && e.getX() < t.getxPos()+10 &&
 										e.getY() > t.getyPos()-10 && e.getY() < t.getyPos()+10) {
-									Canvas highlight = new Canvas(30, 30);
-									highlight.getGraphicsContext2D().setLineWidth(7);
+									Canvas highlight = new Canvas(20, 20);
+									highlight.getGraphicsContext2D().setLineWidth(6);
 									highlight.getGraphicsContext2D().setStroke(Color.RED);
-									highlight.getGraphicsContext2D().strokeLine(2.5, 2.5, 27.5, 27.5);
-									highlight.getGraphicsContext2D().strokeLine(2.5, 27.5, 27.5, 2.5);
-									highlight.setLayoutX(t.getxPos()-15);
-									highlight.setLayoutY(t.getxPos()-15);
+									highlight.getGraphicsContext2D().strokeLine(4, 4, 16, 16);
+									highlight.getGraphicsContext2D().strokeLine(4, 16, 16, 4);
+									highlight.setLayoutX(t.getxPos()-10);
+									highlight.setLayoutY(t.getxPos()-10);
 									pane.getChildren().add(highlight);
 									onStuff = true;
 								}
@@ -704,13 +706,13 @@ public class MainMenuController implements Initializable {
 							for (Tavern t : taverns) {
 								if (e.getX() > t.getxPos()-10 && e.getX() < t.getxPos()+10 &&
 										e.getY() > t.getyPos()-10 && e.getY() < t.getyPos()+10) {
-									Canvas highlight = new Canvas(30, 30);
-									highlight.getGraphicsContext2D().setLineWidth(7);
+									Canvas highlight = new Canvas(20, 20);
+									highlight.getGraphicsContext2D().setLineWidth(6);
 									highlight.getGraphicsContext2D().setStroke(Color.RED);
-									highlight.getGraphicsContext2D().strokeLine(2.5, 2.5, 27.5, 27.5);
-									highlight.getGraphicsContext2D().strokeLine(2.5, 27.5, 27.5, 2.5);
-									highlight.setLayoutX(t.getxPos()-15);
-									highlight.setLayoutY(t.getxPos()-15);
+									highlight.getGraphicsContext2D().strokeLine(4, 4, 16, 16);
+									highlight.getGraphicsContext2D().strokeLine(4, 16, 16, 4);
+									highlight.setLayoutX(t.getxPos()-10);
+									highlight.setLayoutY(t.getxPos()-10);
 									pane.getChildren().add(highlight);
 									onStuff = true;
 								}

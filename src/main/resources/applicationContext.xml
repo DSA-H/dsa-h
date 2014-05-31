@@ -273,10 +273,6 @@
         <property name="locationService" ref="locationService"/>
         <property name="tavernService" ref="tavernService"/>
     </bean>
-    <bean id="tavernList" class="sepm.dsa.gui.TavernListController">
-        <property name="loader" ref="loader"/>
-        <property name="locationService" ref="locationService"/>
-    </bean>
     <bean id="EditLocationConnectionsController" class="sepm.dsa.gui.EditLocationConnectionsController">
         <property name="loader" ref="loader"/>
         <property name="locationConnectionService" ref="locationConnectionService"/>
@@ -292,6 +288,7 @@
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
         <property name="traderService" ref="traderService"/>
+        <property name="tavernService" ref="tavernService"/>
     </bean>
     <bean id="PlayerListController" class="sepm.dsa.gui.PlayerListController">
         <property name="loader" ref="loader"/>

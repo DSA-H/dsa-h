@@ -4,6 +4,7 @@ package sepm.dsa.gui;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
@@ -59,32 +60,24 @@ public class EditTavernController implements Initializable {
 
     @FXML
     private void onSavePressed() {
-        log.debug("called onSavePressed");
-
         log.debug("calling SaveButtonPressed");
 
-        // save region
         String name = nameField.getText();
         selectedTavern.setName(name);
-        selectedTavern.setLocation(locationBox.getSelectionModel().getSelectedItem());
-        selectedTavern.setUsage(Integer.parseInt(usageField.getText()));
+	    selectedTavern.setUsage(Integer.parseInt(usageField.getText()));
         //selectedTaver.setBeds(Integer.parseInt(bedField.getText()));
-        selectedTavern.setxPos(Integer.parseInt(xCoordField.getText()));
-        selectedTavern.setyPos(Integer.parseInt(yCoordField.getText()));
         //selectedTavern.setComment(commentArea.getText());
 
-        /*
+
         if (isNewTavern) {
             tavernService.add(selectedTavern);
         } else {
             tavernService.update(selectedTavern);
         }
-        */
+
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/tavernlist.fxml");
-        stage.setScene(new Scene(scene, 600, 400));
-
+        stage.close();
 
     }
 
@@ -93,8 +86,7 @@ public class EditTavernController implements Initializable {
         log.debug("called onCancelPressed");
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/tavernlist.fxml");
-        stage.setScene(new Scene(scene, 600, 400));
+        stage.close();
     }
 
     public void setTavernService(TavernService tavernService) {
@@ -113,6 +105,15 @@ public class EditTavernController implements Initializable {
 		    selectedTavern = new Tavern();
 	    }
     }
+
+	public void setPosition(Point2D pos) {
+		selectedTavern.setxPos((int) pos.getX());
+		selectedTavern.setyPos((int) pos.getY());
+	}
+
+	public void setLocation(Location location) {
+		selectedTavern.setLocation(location);
+	}
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
