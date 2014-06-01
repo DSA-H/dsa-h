@@ -63,8 +63,8 @@ public class LocationConnectionDaoHbmImpl
 
     private LocationConnection loadTrueConnection(LocationConnection.Pk pk) {
         LocationConnection.Pk pkReverse = new LocationConnection.Pk(pk.getLocation2(), pk.getLocation1());
-        LocationConnection con1 = (LocationConnection) sessionFactory.getCurrentSession().load(LocationConnection.class, pk);
-        LocationConnection con2 = (LocationConnection) sessionFactory.getCurrentSession().load(LocationConnection.class, pkReverse);
+        LocationConnection con1 = (LocationConnection) sessionFactory.getCurrentSession().get(LocationConnection.class, pk);
+        LocationConnection con2 = (LocationConnection) sessionFactory.getCurrentSession().get(LocationConnection.class, pkReverse);
         if (con1 != null && con2 != null) {
             log.warn("INCONSISTENT DATA! More than 1 connections between locations " + pk.getLocation1() + " and " + pk.getLocation2());
         }
