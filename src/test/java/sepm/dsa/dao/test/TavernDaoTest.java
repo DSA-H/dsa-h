@@ -27,9 +27,12 @@ public class TavernDaoTest extends AbstractDatabaseTest {
 		tavern.setxPos(42);
 		tavern.setyPos(12);
 		tavern.setUsage(100);
+        tavern.setBeds(9);
 		tavernDao.add(tavern);
 
-		Tavern persistedTavern = null;
+        saveCancelService.save();
+
+        Tavern persistedTavern = null;
 		try {
 			persistedTavern = tavernDao.get(tavern.getId());
 		} catch (NullPointerException ignored) {}
@@ -43,14 +46,15 @@ public class TavernDaoTest extends AbstractDatabaseTest {
 		Tavern tavern = tavernDao.get(1);
 		tavern.setName(newTavernName);
 		tavernDao.update(tavern);
+        saveCancelService.save();
 
-		assertEquals("Expected tavern name to change", newTavernName, tavernDao.get(1).getName());
+        assertEquals("Expected tavern name to change", newTavernName, tavernDao.get(1).getName());
 	}
 
 	@Test
 	public void testRemove() throws Exception {
 		tavernDao.remove(tavernDao.get(1));
-
+        saveCancelService.save();
 		assertNull("Expected to be rid of the tavern", tavernDao.get(1));
 	}
 

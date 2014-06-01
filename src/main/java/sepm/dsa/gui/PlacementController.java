@@ -162,7 +162,7 @@ public class PlacementController implements Initializable{
 				newButton.setText("Neuer Händler");
 				newTavernButton.setVisible(true);
 				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-				List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+				List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
 				List<Object> all = new ArrayList<Object>();
 				for (Trader t : traders) {
 					all.add(t);

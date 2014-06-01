@@ -1,12 +1,68 @@
 package sepm.dsa.service;
 
-import sepm.dsa.model.Location;
+import org.hibernate.validator.HibernateValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.dao.TavernDao;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Tavern;
 
-import java.util.ArrayList;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.util.List;
+import java.util.Set;
 
+@Service("tavernService")
+@Transactional(readOnly = true)
 public class TavernServiceImpl implements TavernService {
+
+    private static final Logger log = LoggerFactory.getLogger(TavernServiceImpl.class);
+    private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
+
+    private TavernDao tavernDao;
+
+    @Override
+    @Transactional(readOnly = false)
+    public Tavern add(Tavern tavern) {
+        log.debug("calling add(" + tavern + ")");
+        validate(tavern);
+        return tavernDao.add(tavern);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public Tavern update(Tavern tavern) {
+        log.debug("calling update(" + tavern + ")");
+        validate(tavern);
+        return tavernDao.update(tavern);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void remove(Tavern tavern) {
+        log.debug("calling removeConnection(" + tavern + ")");
+        tavernDao.remove(tavern);
+    }
+
+    @Override
+    public Tavern get(int id) {
+        log.debug("calling get(" + id + ")");
+        Tavern result = tavernDao.get(id);
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Tavern> getAll() {
+        log.debug("calling getAll()");
+        List<Tavern> result = tavernDao.getAll();
+        log.trace("returning " + result);
+        return result;
+    }
+
 
     @Override
     public int getPriceForStay(Tavern tavern) {
@@ -18,38 +74,27 @@ public class TavernServiceImpl implements TavernService {
     }
 
 	@Override
-	public List<Tavern> getAllForLocation(Location location) {
-		// TODO implement
-		Tavern t = new Tavern();
-		t.setName("TestTavern");
-		t.setLocation(location);
-		t.setxPos(100);
-		t.setyPos(100);
-		t.setId(1);
-		t.setUsage(0);
-		List<Tavern> list = new ArrayList<Tavern>();
-		list.add(t);
-		return list;
+	public List<Tavern> getAllByLocation(int locationId) {
+        log.debug("calling getAllByLocation(" + locationId + ")");
+        List<Tavern> result = tavernDao.getAllByLocation(locationId);
+        log.trace("returning " + result);
+        return result;
 	}
 
-	@Override
-	public void remove(Tavern tavern) {
+    /**
+     * Validates a Tavern
+     *
+     * @param tavern must not be null
+     * @throws sepm.dsa.exceptions.DSAValidationException if tavern is not valid
+     */
+    private void validate(Tavern tavern) throws DSAValidationException {
+        Set<ConstraintViolation<Tavern>> violations = validator.validate(tavern);
+        if (violations.size() > 0) {
+            throw new DSAValidationException("Wirtshaus ist nicht valide.", violations);
+        }
+    }
 
-	}
-
-	@Override
-	public void add(Tavern tavern) {
-
-	}
-
-	@Override
-	public void update(Tavern tavern) {
-
-	}
-
-    @Override
-    public List<Tavern> getAll() {
-        // TODO implement
-        return new ArrayList<Tavern>();
+    public void setTavernDao(TavernDao tavernDao) {
+        this.tavernDao = tavernDao;
     }
 }

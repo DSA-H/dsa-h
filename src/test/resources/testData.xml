@@ -31,8 +31,8 @@
     <!-- end of LocationConnections test data                     -->
     <!-- ======================================================== -->
 
-    <taverns id="1" name="Zum Wegstein" location_id="1" xPos="42" yPos="12" usage="12"/>
-    <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="60" yPos="9" usage="12"/>
+    <taverns id="1" name="Zum Wegstein" location_id="1" xPos="42" yPos="12" usage="12" beds="10"/>
+    <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="60" yPos="9" usage="12" beds="7"/>
 
     <players id="1" name="Mr X" comment="no comment"/>
     <players id="2" name="Mr Z" comment="A test comment"/>

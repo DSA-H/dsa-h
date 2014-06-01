@@ -17,6 +17,7 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Tavern;
 import sepm.dsa.service.LocationService;
+import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TavernService;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class EditTavernController implements Initializable {
     private Tavern selectedTavern;
     private TavernService tavernService;
     private LocationService locationService;
+    private SaveCancelService saveCancelService;
 
     private boolean isNewTavern;
 
@@ -49,31 +51,32 @@ public class EditTavernController implements Initializable {
 
     @FXML
     private void onSavePressed() {
-        log.debug("calling SaveButtonPressed");
+        log.debug("called onSavePressed");
 
+        // save region
         String name = nameField.getText();
         selectedTavern.setName(name);
-	    selectedTavern.setUsage(Integer.parseInt(usageField.getText()));
-        //selectedTaver.setBeds(Integer.parseInt(bedField.getText()));
-        //selectedTavern.setComment(commentArea.getText());
-
+        selectedTavern.setUsage(Integer.parseInt(usageField.getText()));
+        selectedTavern.setBeds(Integer.parseInt(bedsField.getText()));
+        selectedTavern.setComment(commentArea.getText());
 
         if (isNewTavern) {
             tavernService.add(selectedTavern);
         } else {
             tavernService.update(selectedTavern);
         }
-
+        saveCancelService.save();
 
         Stage stage = (Stage) nameField.getScene().getWindow();
         stage.close();
+
 
     }
 
     @FXML
     private void onCancelPressed() {
         log.debug("called onCancelPressed");
-
+        saveCancelService.cancel();
         Stage stage = (Stage) nameField.getScene().getWindow();
         stage.close();
     }
@@ -89,26 +92,40 @@ public class EditTavernController implements Initializable {
     }
 
     public void setTavern(Tavern tavern) {
-        this.selectedTavern = tavern;
-	    if (selectedTavern == null) {
-		    selectedTavern = new Tavern();
-	    } else {
-		    nameField.setText(selectedTavern.getName());
-		    //bedsField.setText(selectedTavern.getBeds());
-		    usageField.setText("" + selectedTavern.getUsage());
-	    }
+	    if (tavern == null) {
+            isNewTavern = true;
+            selectedTavern = new Tavern();
+        } else {
+            isNewTavern = false;
+            this.selectedTavern = tavern;
+            fillGuiWithData(selectedTavern);
+        }
     }
 
-	public void setPosition(Point2D pos) {
-		selectedTavern.setxPos((int) pos.getX());
-		selectedTavern.setyPos((int) pos.getY());
-	}
-
-	public void setLocation(Location location) {
-		selectedTavern.setLocation(location);
-	}
+    /**
+     * @param tavern must be valid and must not be null
+     */
+    private void fillGuiWithData(Tavern tavern) {
+        nameField.setText(tavern.getName());
+        usageField.setText("" + tavern.getUsage());
+        bedsField.setText("" + tavern.getBeds());
+        commentArea.setText(tavern.getComment() == null ? "" : tavern.getComment());
+    }
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
+    }
+
+    public void setPosition(Point2D pos) {
+        selectedTavern.setxPos((int) pos.getX());
+        selectedTavern.setyPos((int) pos.getY());
+    }
+
+    public void setLocation(Location location) {
+        selectedTavern.setLocation(location);
     }
 }

@@ -25,7 +25,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -41,7 +40,6 @@ import sepm.dsa.model.Tavern;
 import sepm.dsa.model.Trader;
 import sepm.dsa.service.*;
 
-import javafx.scene.Node;
 import java.awt.Point;
 import java.awt.MouseInfo;
 import java.io.File;
@@ -184,7 +182,7 @@ public class MainMenuController implements Initializable {
 			editButton.setDisable(true);
 
 			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-			List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+			List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
 			List<Object> all = new ArrayList<Object>();
 			for (Trader t: traders) {
 				all.add(t);
@@ -253,7 +251,7 @@ public class MainMenuController implements Initializable {
 			}
 
 			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-			List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+			List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
 			List<Object> all = new ArrayList<Object>();
 			for (Trader t: traders) {
 				all.add(t);
@@ -279,7 +277,7 @@ public class MainMenuController implements Initializable {
 			if (selectedLocation != null) {
 				log.debug("open Confirm-Delete-Location Dialog");
 				int traderSize = traderService.getAllForLocation(selectedLocation).size();
-				int tavernsSize = tavernService.getAllForLocation(selectedLocation).size();
+				int tavernsSize = tavernService.getAllByLocation(selectedLocation.getId()).size();
 				String connectedEntries = "";
 				connectedEntries += "\n" + traderSize + " Händler";
 				connectedEntries += "\n" + tavernsSize + " Wirtshäuser";
@@ -291,7 +289,6 @@ public class MainMenuController implements Initializable {
 						.message("Wollen Sie den Ort '" + selectedLocation.getName() + "' wirklich löschen? Folgende verbundenden Einträge würden ebenfalls gelöscht werden:" + connectedEntries)
 						.showConfirm(); // TODO was ist hier sinnvoll?
 				if (response == Dialog.Actions.YES) {
-					System.out.println("removing: " + selectedLocation);
 					locationService.remove(selectedLocation);
 					saveCancelService.save();
 					locationTable.getItems().remove(selectedLocation);
@@ -372,7 +369,7 @@ public class MainMenuController implements Initializable {
 				stage.showAndWait();
 
 				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-				List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+				List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
 				List<Object> all = new ArrayList<Object>();
 				for (Trader t: traders) {
 					all.add(t);
@@ -480,7 +477,7 @@ public class MainMenuController implements Initializable {
 				traderList.setDisable(false);
 
 				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-				List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+				List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
 				List<Object> all = new ArrayList<Object>();
 				for (Trader t: traders) {
 					all.add(t);
@@ -515,7 +512,7 @@ public class MainMenuController implements Initializable {
 						traderList.getSelectionModel().select(t);
 					}
 				}
-				List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+				List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
 				for (Tavern t : taverns) {
 					locX = t.getxPos();
 					locY = t.getyPos();
@@ -751,7 +748,7 @@ public class MainMenuController implements Initializable {
 			scrollPane.setContent(pane);
 
 			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-			List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+			List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
 
 			canvas.addEventHandler(MouseEvent.MOUSE_MOVED,
 					new EventHandler<MouseEvent>() {
@@ -866,7 +863,7 @@ public class MainMenuController implements Initializable {
 			}
 		}
 		gc.setStroke(Color.YELLOW);
-		List<Tavern> taverns = tavernService.getAllForLocation(selectedLocation);
+		List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
 		for (Tavern t : taverns) {
 			posX = t.getxPos();
 			posY = t.getyPos();
