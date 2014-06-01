@@ -25,6 +25,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -39,6 +40,7 @@ import sepm.dsa.model.LocationConnection;
 import sepm.dsa.model.Tavern;
 import sepm.dsa.model.Trader;
 import sepm.dsa.service.*;
+import sepm.dsa.service.path.NoPathException;
 
 import java.awt.Point;
 import java.awt.MouseInfo;
@@ -58,13 +60,14 @@ public class MainMenuController implements Initializable {
 	private TavernService tavernService;
 	private MapService mapService;
 	private SaveCancelService saveCancelService;
-	private Point2D SPLocation;
-	private double scrollPositionX;
-	private double scrollPositionY;
+	private LocationConnectionService locationConnectionService;
+	private Canvas mapCanvas, selectionCanvas, pathCanvas;
 	private Location selectedLocation;
 	private Object selectedObject;
+	private Location fromLocation, toLocation;
 	private int mode;   // 0..worldMode(default) 1..locationMode
 	private Boolean creationMode = false;
+	private Boolean nothingChanged = false;
 
 	@FXML
 	private MenuBar menuBar;
@@ -115,26 +118,24 @@ public class MainMenuController implements Initializable {
 	private ImageView mapImageView = new ImageView();
 	@FXML
 	private ScrollPane scrollPane;
+
 	@FXML
-	private Label xlabel;
+	private Button fromButton;
 	@FXML
-	private Label ylabel;
+	private Button toButton;
+	@FXML
+	private Button calcButton;
+	@FXML
+	private Label fromLabel;
+	@FXML
+	private Label toLabel;
+	@FXML
+	private Label resultLabel;
+	@FXML
+	private GridPane pathCalcGrid;
 
 	@Override
 	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-		scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
-			public void changed(ObservableValue<? extends Number> ov,
-			                    Number old_val, Number new_val) {
-				scrollPositionY = new_val.doubleValue();
-			}
-		});
-		scrollPane.hvalueProperty().addListener(new ChangeListener<Number>() {
-			public void changed(ObservableValue<? extends Number> ov,
-			                    Number old_val, Number new_val) {
-				scrollPositionX = new_val.doubleValue();
-			}
-		});
-
 		updateMap();
 
 		// init table
@@ -154,7 +155,6 @@ public class MainMenuController implements Initializable {
 		traderList.getFocusModel().focusedItemProperty().addListener(new ChangeListener() {
 			@Override
 			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				selectedObject = traderList.getFocusModel().getFocusedItem();
 				checkTraderFocus();
 			}
 		});
@@ -175,6 +175,7 @@ public class MainMenuController implements Initializable {
 		}
 		if (mode == 0) {
 			mode = LOCATIONMODE;
+			pathCalcGrid.setVisible(false);
 			locationTable.setVisible(false);
 			traderList.setVisible(true);
 			selectedObject = null;
@@ -200,6 +201,7 @@ public class MainMenuController implements Initializable {
 			checkTraderFocus();
 		} else {
 			mode = WORLDMODE;
+			pathCalcGrid.setVisible(true);
 			locationTable.setVisible(true);
 			traderList.setVisible(false);
 			chooseButton.setText("Ortsansicht");
@@ -292,6 +294,17 @@ public class MainMenuController implements Initializable {
 					locationService.remove(selectedLocation);
 					saveCancelService.save();
 					locationTable.getItems().remove(selectedLocation);
+				}
+
+				if (selectedLocation == fromLocation) {
+					fromLocation = null;
+					fromLabel.setText("kein Ort");
+					calcButton.setDisable(true);
+				}
+				if (selectedLocation == toLocation) {
+					toLocation = null;
+					toLabel.setText("kein Ort");
+					calcButton.setDisable(true);
 				}
 			}
 		} else {
@@ -413,17 +426,15 @@ public class MainMenuController implements Initializable {
 		}
 	}
 
-	private void setSPLocation() {
-		Scene scene = scrollPane.getScene();
-		Point2D windowCoord = new Point2D(scene.getWindow().getX(), scene.getWindow().getY());
-		Point2D sceneCoord = new Point2D(scene.getX(), scene.getY());
-		Point2D nodeCoord = scrollPane.localToScene(0.0, 0.0);
-		SPLocation = new Point2D(windowCoord.getX() + sceneCoord.getX() + nodeCoord.getX(), windowCoord.getY() + sceneCoord.getY() + nodeCoord.getY());
-	}
-
 	@FXML
 	private void onScrollPaneClicked() {
-		setSPLocation();
+
+		Scene SPscene = scrollPane.getScene();
+		Point2D windowCoord = new Point2D(SPscene.getWindow().getX(), SPscene.getWindow().getY());
+		Point2D sceneCoord = new Point2D(SPscene.getX(), SPscene.getY());
+		Point2D nodeCoord = scrollPane.localToScene(0.0, 0.0);
+		Point2D SPLocation = new Point2D(windowCoord.getX() + sceneCoord.getX() + nodeCoord.getX(), windowCoord.getY() + sceneCoord.getY() + nodeCoord.getY());
+
 		Point mousePosition = MouseInfo.getPointerInfo().getLocation();
 		Pane pane = (Pane) scrollPane.getContent();
 		Canvas canvas = (Canvas) pane.getChildren().get(0);
@@ -436,8 +447,8 @@ public class MainMenuController implements Initializable {
 			scrollableY += 12;
 		}
 
-		int xPos = (int) (mousePosition.getX() - SPLocation.getX() + scrollPositionX * scrollableX);
-		int yPos = (int) (mousePosition.getY() - SPLocation.getY() + scrollPositionY * scrollableY);
+		int xPos = (int) (mousePosition.getX() - SPLocation.getX() + scrollPane.getHvalue() * scrollableX);
+		int yPos = (int) (mousePosition.getY() - SPLocation.getY() + scrollPane.getVvalue() * scrollableY);
 
 		Point2D pos = new Point2D(xPos, yPos);
 
@@ -641,19 +652,6 @@ public class MainMenuController implements Initializable {
     }
 
 	@FXML
-	private void onTavernClicked() {
-		log.debug("onTavernClicked - open Tavern Window");
-		Stage stage = new Stage();
-
-		Parent scene = (Parent) loader.load("/gui/tavernList.fxml");
-
-		stage.setTitle("Wirtshäuser");
-		stage.setScene(new Scene(scene, 600, 438));
-		stage.setResizable(false);
-		stage.show();
-	}
-
-	@FXML
 	private void onExitClicked() {
 		log.debug("onExitClicked - exit Programm Request");
 		if (exitProgramm()) {
@@ -690,6 +688,113 @@ public class MainMenuController implements Initializable {
 		}
 	}
 
+	@FXML
+	private void onFromPressed() {
+		if (selectedLocation != null) {
+			fromLocation = selectedLocation;
+			fromLabel.setText(selectedLocation.getName());
+			if (toLocation != null) {
+				calcButton.setDisable(false);
+			}
+			resultLabel.setText("kein Ergebnis");
+			nothingChanged = false;
+			calcButton.setText("Berechnen");
+		}
+	}
+
+	@FXML
+	private void onToPressed() {
+		if (selectedLocation != null) {
+			toLocation = selectedLocation;
+			toLabel.setText(selectedLocation.getName());
+			if (fromLocation != null) {
+				calcButton.setDisable(false);
+			}
+			resultLabel.setText("kein Ergebnis");
+			nothingChanged = false;
+			calcButton.setText("Berechnen");
+		}
+	}
+
+	@FXML
+	private void onCalcPressed() {
+		if (nothingChanged) {
+			Pane pane = (Pane) scrollPane.getContent();
+			pane.getChildren().remove(pathCanvas);
+			pathCanvas = new Canvas(1,1);
+			pane.getChildren().add(pathCanvas);
+			nothingChanged = false;
+			calcButton.setText("Berechnen");
+			return;
+		}
+		List<LocationConnection> path;
+		try {
+			path = locationConnectionService.getShortestPathBetween(fromLocation, toLocation);
+		} catch (NoPathException e) {
+			resultLabel.setText("Keine Verbindung!");
+			return;
+		}
+		int cost = 0;
+		for (LocationConnection l : path) {
+			cost += l.getTravelTime();
+		}
+		resultLabel.setText(""+cost);
+
+		Pane pane = (Pane) scrollPane.getContent();
+		pane.getChildren().remove(pathCanvas);
+		pathCanvas = new Canvas(mapCanvas.getWidth(), mapCanvas.getHeight());
+		GraphicsContext gc = pathCanvas.getGraphicsContext2D();
+		gc.setFill(Color.GREEN);
+		gc.setLineWidth(4);
+		gc.fillRoundRect(fromLocation.getxCoord() - 13, fromLocation.getyCoord() - 13, 26, 26, 15, 15);
+		gc.fillRoundRect(toLocation.getxCoord() - 13, toLocation.getyCoord() - 13, 26, 26, 15, 15);
+
+		Location loc1, loc2;
+		int posX1, posY1, posX2, posY2;
+		for (LocationConnection lc : path) {
+			loc1 = lc.getLocation1();
+			loc2 = lc.getLocation2();
+			posX1 = loc1.getxCoord();
+			posY1 = loc1.getyCoord();
+			posX2 = loc2.getxCoord();
+			posY2 = loc2.getyCoord();
+			gc.setStroke(Color.GREEN);
+			gc.strokeLine(posX1, posY1, posX2, posY2);
+		}
+
+		List<Location> locations = locationService.getAll();
+		pathCanvas.addEventHandler(MouseEvent.MOUSE_MOVED,
+				new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent e) {
+						boolean onLocation = false;
+						for (Location l : locations) {
+							if (e.getX() > l.getxCoord() - 10 && e.getX() < l.getxCoord() + 10 &&
+									e.getY() > l.getyCoord() - 10 && e.getY() < l.getyCoord() + 10) {
+								Canvas highlight = new Canvas(30, 30);
+								highlight.getGraphicsContext2D().setLineWidth(4);
+								highlight.getGraphicsContext2D().strokeRoundRect(4, 4, 22, 22, 13, 13);
+								highlight.setLayoutX(l.getxCoord() - 15);
+								highlight.setLayoutY(l.getyCoord() - 15);
+								pane.getChildren().add(highlight);
+								onLocation = true;
+							}
+						}
+						if (!onLocation) {
+							while (pane.getChildren().size() > 3) {
+								pane.getChildren().remove(3);
+							}
+						}
+					}
+				}
+		);
+
+		calcButton.setText("Ausblenden");
+		nothingChanged = true;
+
+		pane.getChildren().add(pathCanvas);
+	}
+
 	private void updateMap() {
 		log.debug("updateMap called");
 
@@ -699,40 +804,50 @@ public class MainMenuController implements Initializable {
 				worldMap = mapService.getNoMapImage();
 			}
 			Image image = new Image("file:" + worldMap.getAbsolutePath());
-			Canvas canvas = new Canvas(image.getWidth(), image.getHeight());
-			GraphicsContext gc = canvas.getGraphicsContext2D();
+			mapCanvas = new Canvas(image.getWidth(), image.getHeight());
+			if (selectionCanvas == null) {
+				selectionCanvas = new Canvas(1, 1);
+			}
+			pathCanvas = new Canvas(1, 1);
+			nothingChanged = false;
+			calcButton.setText("Berechnen");
+			resultLabel.setText("kein Ergebnis");
+			GraphicsContext gc = mapCanvas.getGraphicsContext2D();
 			gc.drawImage(image, 0, 0);
 			drawLocations(gc);
-			Pane pane = new Pane(canvas);
+			Pane pane = new Pane(mapCanvas);
+			pane.getChildren().add(selectionCanvas);
+			pane.getChildren().add(pathCanvas);
 			scrollPane.setContent(pane);
 
 			List<Location> locations = locationService.getAll();
 
-			canvas.addEventHandler(MouseEvent.MOUSE_MOVED,
+			mapCanvas.addEventHandler(MouseEvent.MOUSE_MOVED,
 					new EventHandler<MouseEvent>() {
 						@Override
 						public void handle(MouseEvent e) {
 							boolean onLocation = false;
 							Canvas canvas = (Canvas) pane.getChildren().get(0);
 							for (Location l : locations) {
-								if (e.getX() > l.getxCoord()-10 && e.getX() < l.getxCoord()+10 &&
-										e.getY() > l.getyCoord()-10 && e.getY() < l.getyCoord()+10) {
+								if (e.getX() > l.getxCoord() - 10 && e.getX() < l.getxCoord() + 10 &&
+										e.getY() > l.getyCoord() - 10 && e.getY() < l.getyCoord() + 10) {
 									Canvas highlight = new Canvas(30, 30);
 									highlight.getGraphicsContext2D().setLineWidth(4);
 									highlight.getGraphicsContext2D().strokeRoundRect(4, 4, 22, 22, 13, 13);
-									highlight.setLayoutX(l.getxCoord()-15);
-									highlight.setLayoutY(l.getyCoord()-15);
+									highlight.setLayoutX(l.getxCoord() - 15);
+									highlight.setLayoutY(l.getyCoord() - 15);
 									pane.getChildren().add(highlight);
 									onLocation = true;
 								}
 							}
 							if (!onLocation) {
-								while(pane.getChildren().size() > 1) {
-									pane.getChildren().remove(1);
+								while (pane.getChildren().size() > 3) {
+									pane.getChildren().remove(3);
 								}
 							}
 						}
-					});
+					}
+			);
 
 		} else {
 			File map = mapService.getLocationMap(selectedLocation);
@@ -741,10 +856,13 @@ public class MainMenuController implements Initializable {
 			}
 			Image image = new Image("file:" + map.getAbsolutePath());
 			Canvas canvas = new Canvas(image.getWidth(), image.getHeight());
+			if (selectionCanvas == null) {
+				Canvas selectionCanvas = new Canvas(30, 30);
+			}
 			GraphicsContext gc = canvas.getGraphicsContext2D();
 			gc.drawImage(image, 0, 0);
 			drawTraders(gc);
-			Pane pane = new Pane(canvas);
+			Pane pane = new Pane(canvas, selectionCanvas);
 			scrollPane.setContent(pane);
 
 			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
@@ -785,8 +903,8 @@ public class MainMenuController implements Initializable {
 								}
 							}
 							if (!onStuff) {
-								while(pane.getChildren().size() > 1) {
-									pane.getChildren().remove(1);
+								while(pane.getChildren().size() > 2) {
+									pane.getChildren().remove(2);
 								}
 							}
 						}
@@ -929,10 +1047,34 @@ public class MainMenuController implements Initializable {
 			deleteButton.setDisable(true);
 			editButton.setDisable(true);
 			chooseButton.setDisable(true);
+			fromButton.setDisable(true);
+			toButton.setDisable(true);
+
+			Pane pane = (Pane) scrollPane.getContent();
+			pane.getChildren().remove(selectionCanvas);
+			selectionCanvas = new Canvas(1, 1);
+			pane.getChildren().add(selectionCanvas);
 		} else {
 			deleteButton.setDisable(false);
 			editButton.setDisable(false);
 			chooseButton.setDisable(false);
+			fromButton.setDisable(false);
+			toButton.setDisable(false);
+
+			Pane pane = (Pane) scrollPane.getContent();
+			if (pane.getChildren().size() > 3) {
+				pane.getChildren().remove(3);
+			}
+			pane.getChildren().remove(selectionCanvas);
+
+			selectionCanvas = new Canvas(30, 30);
+			selectionCanvas.getGraphicsContext2D().setLineWidth(4);
+			selectionCanvas.getGraphicsContext2D().setStroke(Color.GREEN);
+			selectionCanvas.getGraphicsContext2D().strokeRoundRect(4, 4, 22, 22, 13, 13);
+			selectionCanvas.setLayoutX(selectedLocation.getxCoord() - 15);
+			selectionCanvas.setLayoutY(selectedLocation.getyCoord() - 15);
+
+			pane.getChildren().add(selectionCanvas);
 		}
 	}
 
@@ -941,6 +1083,10 @@ public class MainMenuController implements Initializable {
 		if (selectedObject == null) {
 			deleteButton.setDisable(true);
 			editButton.setDisable(true);
+			Pane pane = (Pane) scrollPane.getContent();
+			pane.getChildren().remove(selectionCanvas);
+			selectionCanvas = new Canvas(1, 1);
+			pane.getChildren().add(selectionCanvas);
 		} else {
 			deleteButton.setDisable(false);
 			editButton.setDisable(false);
@@ -949,6 +1095,27 @@ public class MainMenuController implements Initializable {
 			} else {
 				editButton.setText("Bearbeiten");
 			}
+
+			Pane pane = (Pane) scrollPane.getContent();
+			if (pane.getChildren().size() > 2) {
+				pane.getChildren().remove(2);
+			}
+			pane.getChildren().remove(selectionCanvas);
+
+			selectionCanvas = new Canvas(30, 30);
+			selectionCanvas.getGraphicsContext2D().setLineWidth(6);
+			selectionCanvas.getGraphicsContext2D().setStroke(Color.GREEN);
+			selectionCanvas.getGraphicsContext2D().strokeLine(4, 4, 16, 16);
+			selectionCanvas.getGraphicsContext2D().strokeLine(4, 16, 16, 4);
+			if (selectedObject instanceof Trader) {
+				selectionCanvas.setLayoutX(((Trader)selectedObject).getxPos() - 10);
+				selectionCanvas.setLayoutY(((Trader)selectedObject).getyPos() - 10);
+			} else {
+				selectionCanvas.setLayoutX(((Tavern)selectedObject).getxPos() - 10);
+				selectionCanvas.setLayoutY(((Tavern)selectedObject).getyPos() - 10);
+			}
+
+			pane.getChildren().add(selectionCanvas);
 		}
 		chooseButton.setDisable(false);
 	}
@@ -971,6 +1138,10 @@ public class MainMenuController implements Initializable {
 
 	public void setSaveCancelService(SaveCancelService saveCancelService) {
 		this.saveCancelService = saveCancelService;
+	}
+
+	public void setLocationConnectionService(LocationConnectionService locationConnectionService) {
+		this.locationConnectionService = locationConnectionService;
 	}
 
     public void setLoader(SpringFxmlLoader loader) {

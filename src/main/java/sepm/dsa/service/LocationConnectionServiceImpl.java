@@ -12,6 +12,8 @@ import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
 import sepm.dsa.model.Region;
+import sepm.dsa.service.path.NoPathException;
+import sepm.dsa.service.path.PathService;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -25,6 +27,8 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
 
     private static final Logger log = LoggerFactory.getLogger(LocationConnectionServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
+
+	private PathService pathService;
 
     private LocationConnectionDao locationConnectionDao;
 
@@ -77,10 +81,14 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
     }
 
     @Override
-    public List<LocationConnection> getShortestPathBetween(Location location1, Location location2) {
+    public List<LocationConnection> getShortestPathBetween(Location location1, Location location2) throws NoPathException{
         log.debug("calling getShortestPathBetween(" + location1 + ", " + location2 + ")");
 
-        throw new DSARuntimeException("Not yet implemented");
+	    List<Location> allLocations = locationDao.getAll();
+	    List<LocationConnection> allConnections = locationConnectionDao.getAll();
+	    List<Location> endLocation = new ArrayList<>();
+	    endLocation.add(location2);
+	    return pathService.findShortestPath(allLocations, allConnections, location1, endLocation);
     }
 
     @Override
@@ -148,6 +156,10 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
     public void setLocationDao(LocationDao locationDao) {
         this.locationDao = locationDao;
     }
+
+	public void setPathService(PathService pathService) {
+		this.pathService = pathService;
+	}
 
     /**
      * Validates a locationConnection

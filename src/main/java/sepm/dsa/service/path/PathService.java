@@ -10,7 +10,7 @@ public interface PathService<E extends PathEdge> {
      * @param nodes     List of all nodes.
      * @param edges     List of edges.
      * @param startNode Starting node of the search.
-     * @param endNodes  List of end nodes. If to end points are equally distant to the start node, it's not defined
+     * @param endNodes  List of end nodes. If two end points are equally distant to the start node, it's not defined
      *                  which one will be chosen.
      * @return List of edges. May be empty if the starting node is in the list of endNodes.
      * @throws java.lang.IllegalArgumentException    if one of the argument is null or if one of the edge's source or target is not found in the list of nodes.

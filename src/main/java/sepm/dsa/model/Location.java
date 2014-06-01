@@ -1,6 +1,7 @@
 package sepm.dsa.model;
 
 import org.hibernate.validator.constraints.NotBlank;
+import sepm.dsa.service.path.PathNode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,7 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "locations")
-public class Location implements BaseModel {
+public class Location implements BaseModel, PathNode {
 
     private static final long serialVersionUID = 1616654812413948966L;
 

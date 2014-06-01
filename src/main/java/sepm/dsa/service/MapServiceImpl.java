@@ -44,7 +44,7 @@ public class MapServiceImpl implements MapService {
 				new FileChooser.ExtensionFilter("PNG", "*.png")
 		);
 		File newMap = fileChooser.showOpenDialog(new Stage());
-		if (newMap.length() > 11000000) {
+		if (newMap != null && newMap.length() > 11000000) {
 			Dialogs.create()
 					.title("Fehler")
 					.masthead(null)

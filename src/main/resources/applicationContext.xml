@@ -183,6 +183,7 @@
     <bean id="locationConnectionService" class="sepm.dsa.service.LocationConnectionServiceImpl">
         <property name="locationConnectionDao" ref="locationConnectionDao"/>
         <property name="locationDao" ref="locationDao"/>
+        <property name="pathService" ref="pathService"/>
     </bean>
 
     <bean id="tavernService" class="sepm.dsa.service.TavernServiceImpl">
@@ -249,6 +250,7 @@
         <property name="traderService" ref="traderService"/>
         <property name="tavernService" ref="tavernService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
+        <property name="locationConnectionService" ref="locationConnectionService"/>
     </bean>
 
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">

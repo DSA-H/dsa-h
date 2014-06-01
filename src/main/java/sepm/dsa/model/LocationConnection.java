@@ -1,5 +1,8 @@
 package sepm.dsa.model;
 
+import sepm.dsa.service.path.PathEdge;
+import sepm.dsa.service.path.PathNode;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -10,7 +13,7 @@ import java.io.Serializable;
         @AssociationOverride(name = "pk.location1", joinColumns = @JoinColumn(name = "location1")),
         @AssociationOverride(name = "pk.location2", joinColumns = @JoinColumn(name = "location2"))
 })
-public class LocationConnection implements BaseModel {
+public class LocationConnection implements BaseModel, PathEdge {
 
     private static final long serialVersionUID = 5915927914933432772L;
 
@@ -159,5 +162,20 @@ public class LocationConnection implements BaseModel {
                     '}';
         }
     }
+
+	@Override
+	public int getPathCosts() {
+		return getTravelTime();
+	}
+
+	@Override
+	public PathNode getStart() {
+		return getLocation1();
+	}
+
+	@Override
+	public PathNode getEnd() {
+		return getLocation2();
+	}
 
 }
