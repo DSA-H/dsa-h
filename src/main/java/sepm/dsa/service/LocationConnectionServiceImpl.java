@@ -58,8 +58,10 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
         log.debug("calling update(" + locationConnection + ")");
         validate(locationConnection);
         LocationConnection trueConn = get(locationConnection.getLocation1(), locationConnection.getLocation2());
-        locationConnection.setLocation1(trueConn.getLocation1());
-        locationConnection.setLocation2(trueConn.getLocation2());
+        if(trueConn != null) {
+            locationConnection.setLocation1(trueConn.getLocation1());
+            locationConnection.setLocation2(trueConn.getLocation2());
+        }
         LocationConnection lc = locationConnectionDao.update(locationConnection);
         log.info("updated " + lc);
 	    return lc;

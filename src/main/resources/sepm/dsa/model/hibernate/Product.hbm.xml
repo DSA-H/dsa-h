@@ -7,4 +7,12 @@
         <![CDATA[from Product ORDER BY name ASC]]>
     </query>
 
+    <query name="Product.findAllByCategoryPlusChildren">
+        <![CDATA[   FROM Product p
+                    WHERE :categoryId in (SELECT c.id FROM p.categories c)
+                    ORDER BY p.name asc]]>
+    </query>
+<!-- TODO childs also -->
+
+
 </hibernate-mapping>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.EditLocationConnectionsController">
    <left>
@@ -12,8 +12,8 @@
          <center>
             <TableView fx:id="suggestLocationConnectionsTable" onMouseClicked="#onSuggestTableClicked" prefHeight="371.0" prefWidth="351.0" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn fx:id="scConnectedToColumn" prefWidth="231.0" text="Reiseverbindung zu" />
-                <TableColumn fx:id="scTravelTimeColumn" prefWidth="102.0" text="Reisedauer" />
+                <TableColumn fx:id="scConnectedToColumn" prefWidth="240.0" text="Reiseverbindung zu" />
+                <TableColumn fx:id="scTravelTimeColumn" prefWidth="139.0" text="Reisedauer" />
               </columns>
             </TableView>
          </center>
@@ -66,19 +66,19 @@
          <center>
             <TableView fx:id="locationConnectionsTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <columns>
-                  <TableColumn fx:id="connectionToColumn" prefWidth="229.0" text="Reiseverbindung zu" />
-                  <TableColumn fx:id="travelTimeColumn" minWidth="0.0" prefWidth="122.0" text="Reisedauer" />
+                  <TableColumn fx:id="connectionToColumn" prefWidth="244.0" text="Reiseverbindung zu" />
+                  <TableColumn fx:id="travelTimeColumn" minWidth="0.0" prefWidth="135.0" text="Reisedauer" />
                </columns>
             </TableView>
          </center>
          <top>
-            <FlowPane alignment="TOP_CENTER" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <FlowPane alignment="TOP_RIGHT" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#onEditConnectionClicked" text="bearbeiten">
+                  <Button mnemonicParsing="false" onAction="#onEditConnectionClicked" text="Bearbeiten">
                      <FlowPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </FlowPane.margin></Button>
-                  <Button mnemonicParsing="false" onAction="#onRemoveConnectionClicked" text="entfernen">
+                  <Button mnemonicParsing="false" onAction="#onRemoveConnectionClicked" text="Entfernen">
                      <FlowPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </FlowPane.margin>
