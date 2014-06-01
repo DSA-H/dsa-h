@@ -58,7 +58,7 @@ public class PlayerListController implements Initializable {
         Stage stage = (Stage) playerTable.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/editplayer.fxml");
 
-        stage.setTitle("Spieler");
+        stage.setTitle("Spieler Erstellen");
         stage.setScene(new Scene(scene, 850, 414));
         stage.show();
     }
