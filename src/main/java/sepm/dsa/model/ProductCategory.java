@@ -29,7 +29,7 @@ public class ProductCategory implements BaseModel {
     @JoinColumn
     private ProductCategory parent;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "parent", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<ProductCategory> childs = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)

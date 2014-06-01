@@ -55,6 +55,11 @@ public class EditProductCategoryController implements Initializable {
             isNewProductCategory = false;
             nameField.setText(selectedProductCategory.getName());
             categoryList.remove(selectedProductCategory);
+            // remove all childs
+            List<ProductCategory> childs = productCategoryService.getAllChilds(selectedProductCategory);
+            for (ProductCategory child : childs) {
+                categoryList.remove(child);
+            }
             choiceParent.getSelectionModel().select(selectedProductCategory.getParent());
         }else {
             isNewProductCategory = true;
