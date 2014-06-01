@@ -68,10 +68,10 @@ public class EditTavernController implements Initializable {
         selectedTavern.setName(name);
         selectedTavern.setLocation(locationBox.getSelectionModel().getSelectedItem());
         selectedTavern.setUsage(Integer.parseInt(usageField.getText()));
-//        selectedTaver.setBeds(Integer.parseInt(bedField.getText()));
+        selectedTavern.setBeds(Integer.parseInt(bedsField.getText()));
         selectedTavern.setxPos(Integer.parseInt(xCoordField.getText()));
         selectedTavern.setyPos(Integer.parseInt(yCoordField.getText()));
-//        selectedTavern.setComment(commentArea.getText());
+        selectedTavern.setComment(commentArea.getText());
 
         Tavern persistedTavern = null;
         if (isNewTavern) {
@@ -115,7 +115,21 @@ public class EditTavernController implements Initializable {
         } else {
             isNewTavern = false;
             this.selectedTavern = tavern;
+            fillGuiWithData(selectedTavern);
         }
+    }
+
+    /**
+     * @param tavern must be valid and must not be null
+     */
+    private void fillGuiWithData(Tavern tavern) {
+        nameField.setText(tavern.getName());
+        locationBox.getSelectionModel().select(tavern.getLocation());
+        usageField.setText("" + tavern.getUsage());
+        bedsField.setText("" + tavern.getBeds());
+        xCoordField.setText("" + tavern.getxPos());
+        yCoordField.setText("" + tavern.getyPos());
+        commentArea.setText(tavern.getComment() == null ? "" : tavern.getComment());
     }
 
     public void setLoader(SpringFxmlLoader loader) {

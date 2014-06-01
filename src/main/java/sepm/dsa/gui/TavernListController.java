@@ -96,6 +96,7 @@ public class TavernListController implements Initializable {
     private void onDeletePressed() {
         log.debug("called onDeleteButtonPressed");
         checkFocus();
+
         if (selectedTavern != null) {
             log.debug("open Confirm-Delete-Tavern Dialog");
             Action response = Dialogs.create()
@@ -129,6 +130,8 @@ public class TavernListController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/edittavern.fxml");
         EditTavernController controller = loader.getController();
 //        selectedTavern = (Tavern) tavernList.getFocusModel().getFocusedItem();
+        checkFocus();
+        selectedTavern = (Tavern) tavernList.getFocusModel().getFocusedItem();
         controller.setTavern(selectedTavern);
         stage.setScene(new Scene(scene, 600, 400));
     }

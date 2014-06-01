@@ -33,10 +33,32 @@ public class Tavern implements BaseModel {
 	private Integer usage;
 
     //TODO: free beds, comment, ...
+    @NotNull
+    @Column(nullable = false)
+    private Integer beds;
 
+    @Column
+    private String comment;
 	// @TODO ??
 //    private ??? overnightStayPrice;
 //    private DSADate onDate;
+
+
+    public Integer getBeds() {
+        return beds;
+    }
+
+    public void setBeds(Integer beds) {
+        this.beds = beds;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     @NotNull
 	@ManyToOne
