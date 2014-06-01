@@ -68,6 +68,8 @@ public class MainMenuController implements Initializable {
 	private int mode;   // 0..worldMode(default) 1..locationMode
 	private Boolean creationMode = false;
 	private Boolean nothingChanged = false;
+	private double hVal = 0.0;
+	private double vVal = 0.0;
 
 	@FXML
 	private MenuBar menuBar;
@@ -314,7 +316,7 @@ public class MainMenuController implements Initializable {
 		}
 
 		updateMap();
-
+		updateTables();
 	}
 
 	@FXML
@@ -497,7 +499,10 @@ public class MainMenuController implements Initializable {
 		stage.setTitle("Spieler verwalten");
 		stage.setScene(new Scene(scene, 600, 438));
 		stage.setResizable(false);
-		stage.show();
+		stage.showAndWait();
+
+		updateMap();
+		updateTables();
 	}
 
 	@FXML
@@ -510,7 +515,10 @@ public class MainMenuController implements Initializable {
 		stage.setTitle("Währungen");
 		stage.setScene(new Scene(scene, 600, 438));
 		stage.setResizable(false);
-		stage.show();
+		stage.showAndWait();
+
+		updateMap();
+		updateTables();
 	}
 
 	@FXML
@@ -523,7 +531,10 @@ public class MainMenuController implements Initializable {
 		stage.setTitle("Währung umrechnen");
 		stage.setScene(new Scene(scene, 600, 215));
 		stage.setResizable(false);
-		stage.show();
+		stage.showAndWait();
+
+		updateMap();
+		updateTables();
 	}
 
 	@FXML
@@ -538,9 +549,8 @@ public class MainMenuController implements Initializable {
 		stage.setResizable(false);
 		stage.showAndWait();
 
-        Stage primaryStage = (Stage)createButton.getScene().getWindow();
-        Parent root = (Parent) loader.load("/gui/mainmenuResizable.fxml");
-        primaryStage.setScene(new Scene(root, 1045, 600));
+		updateMap();
+		updateTables();
 	}
 
 	@FXML
@@ -552,7 +562,10 @@ public class MainMenuController implements Initializable {
 		stage.setTitle("Händlerkategorien");
 		stage.setScene(new Scene(scene, 600, 438));
 		stage.setResizable(false);
-		stage.show();
+		stage.showAndWait();
+
+		updateMap();
+		updateTables();
 	}
 
 	@FXML
@@ -565,7 +578,10 @@ public class MainMenuController implements Initializable {
 		stage.setTitle("Waren");
 		stage.setScene(new Scene(scene, 600, 438));
 		stage.setResizable(false);
-		stage.show();
+		stage.showAndWait();
+
+		updateMap();
+		updateTables();
 	}
 
 	@FXML
@@ -578,7 +594,10 @@ public class MainMenuController implements Initializable {
 		stage.setTitle("Warenkategorie");
 		stage.setScene(new Scene(scene, 600, 438));
 		stage.setResizable(false);
-		stage.show();
+		stage.showAndWait();
+
+		updateMap();
+		updateTables();
 	}
 
     @FXML
@@ -591,7 +610,10 @@ public class MainMenuController implements Initializable {
         stage.setTitle("Datum umstellen");
         stage.setScene(new Scene(scene, 419, 150));
         stage.setResizable(false);
-        stage.show();
+	    stage.showAndWait();
+
+	    updateMap();
+	    updateTables();
     }
 
     @FXML
@@ -604,7 +626,10 @@ public class MainMenuController implements Initializable {
         stage.setTitle("Zeit vorstellen");
         stage.setScene(new Scene(scene, 462, 217));
         stage.setResizable(false);
-        stage.show();
+	    stage.showAndWait();
+
+	    updateMap();
+	    updateTables();
     }
 
 	@FXML
