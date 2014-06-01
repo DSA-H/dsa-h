@@ -355,6 +355,7 @@
         <property name="locationService" ref="locationService"/>
         <property name="traderService" ref="traderService"/>
         <property name="tavernService" ref="tavernService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
     <bean id="PlayerListController" class="sepm.dsa.gui.PlayerListController">
         <property name="loader" ref="loader"/>
