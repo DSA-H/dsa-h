@@ -235,7 +235,7 @@ public class MainMenuController implements Initializable {
 
 				TraderDetailsController controller = loader.getController();
 				controller.setTrader((Trader) selectedObject);
-				stage.setScene(new Scene(scene, 800, 400));
+				stage.setScene(new Scene(scene, 800, 552));
 				stage.setResizable(false);
 				stage.showAndWait();
 			} else {
@@ -559,7 +559,7 @@ public class MainMenuController implements Initializable {
 		Parent scene = (Parent) loader.load("/gui/calculatecurrency.fxml");
 
 		stage.setTitle("Währung umrechnen");
-		stage.setScene(new Scene(scene, 600, 438));
+		stage.setScene(new Scene(scene, 600, 215));
 		stage.setResizable(false);
 		stage.show();
 	}
@@ -635,7 +635,7 @@ public class MainMenuController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/forwardtime.fxml");
 
         stage.setTitle("Zeit vorstellen");
-        stage.setScene(new Scene(scene, 462, 283));
+        stage.setScene(new Scene(scene, 462, 217));
         stage.setResizable(false);
         stage.show();
     }

@@ -11,8 +11,8 @@
             <menus>
                 <Menu fx:id="dateiMenu" mnemonicParsing="false" text="Datei">
                     <items>
-                        <MenuItem fx:id="dateiImport" mnemonicParsing="false" text="Import" />
-                        <MenuItem fx:id="dateiExport" mnemonicParsing="false" text="Export" />
+                        <MenuItem fx:id="dateiImport" mnemonicParsing="false" text="Import" disable="true" />
+                        <MenuItem fx:id="dateiExport" mnemonicParsing="false" text="Export" disable="true" />
                         <MenuItem fx:id="dateiExit" mnemonicParsing="false" onAction="#onExitClicked" text="Beenden" />
                     </items>
                 </Menu>
@@ -27,16 +27,15 @@
                         <MenuItem fx:id="verwaltenHaendlerKategorie" mnemonicParsing="false" onAction="#onTraderCategoriesClicked" text="Händlerkategorie" />
                         <MenuItem fx:id="verwaltenGebieteGrenzen" mnemonicParsing="false" onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen" />
                         <MenuItem fx:id="verwaltenWaehrungen" mnemonicParsing="false" onAction="#onCurrencyClicked" text="Währungen" />
-                        <MenuItem fx:id="berechneWährung" mnemonicParsing="false" onAction="#onCalculateCurrencyClicked" text="Währungen umrechnen" />
                         <MenuItem fx:id="verwaltenWaren" mnemonicParsing="false" onAction="#onWarenClicked" text="Waren" />
                         <MenuItem fx:id="verwaltenWarenKategorie" mnemonicParsing="false" onAction="#onWarenKategorieClicked" text="Warenkategorie" />
-                        <MenuItem fx:id="verwaltenWirtshäuser" mnemonicParsing="false" onAction="#onTavernClicked" text="Wirtshäuser" />
                         <MenuItem onAction="#onEditDateClicked" text="Datum einstellen" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Spiel">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#onPlayerClicked" text="Spieler" />
+                        <MenuItem fx:id="berechneWährung" mnemonicParsing="false" onAction="#onCalculateCurrencyClicked" text="Währungen umrechnen" />
                     </items>
                 </Menu>
             </menus>
