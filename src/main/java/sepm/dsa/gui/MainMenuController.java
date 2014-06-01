@@ -142,8 +142,8 @@ public class MainMenuController implements Initializable {
 		locationColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 		regionColumn.setCellValueFactory(new PropertyValueFactory<>("region"));
 
-		ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
-		locationTable.setItems(data);
+
+		updateTables();
 
 		locationTable.getFocusModel().focusedItemProperty().addListener(new ChangeListener<Location>() {
 			@Override
@@ -181,19 +181,6 @@ public class MainMenuController implements Initializable {
 			selectedObject = null;
 			deleteButton.setDisable(true);
 			editButton.setDisable(true);
-
-			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-			List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
-			List<Object> all = new ArrayList<Object>();
-			for (Trader t: traders) {
-				all.add(t);
-			}
-			for (Tavern t: taverns) {
-				all.add(t);
-			}
-
-			traderList.setItems(FXCollections.observableArrayList(all));
-
 			chooseButton.setText("Weltansicht");
             createButton.setText("Händler / Wirtshaus platzieren");
 			editButton.setText("Details");
@@ -211,6 +198,7 @@ public class MainMenuController implements Initializable {
 		}
 
 		updateMap();
+		updateTables();
 	}
 
 	@FXML
@@ -227,8 +215,6 @@ public class MainMenuController implements Initializable {
 			stage.setScene(new Scene(scene, 900, 438));
 			stage.setResizable(false);
 			stage.showAndWait();
-			ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
-			locationTable.setItems(data);
 		} else {
 			if (selectedObject instanceof Trader) {
 				Stage stage = new Stage();
@@ -252,20 +238,10 @@ public class MainMenuController implements Initializable {
 				stage.showAndWait();
 			}
 
-			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-			List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
-			List<Object> all = new ArrayList<Object>();
-			for (Trader t: traders) {
-				all.add(t);
-			}
-			for (Tavern t: taverns) {
-				all.add(t);
-			}
-
-			traderList.setItems(FXCollections.observableArrayList(all));
 		}
 
 		updateMap();
+		updateTables();
 
 	}
 
@@ -356,8 +332,8 @@ public class MainMenuController implements Initializable {
 				stage.setScene(new Scene(scene, 900, 438));
 				stage.setResizable(false);
 				stage.showAndWait();
-				ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
-				locationTable.setItems(data);
+
+				updateTables();
 			} else {
 				locationTable.setDisable(true);
 				createButton.setDisable(true);
@@ -381,17 +357,7 @@ public class MainMenuController implements Initializable {
 				stage.setResizable(false);
 				stage.showAndWait();
 
-				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-				List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
-				List<Object> all = new ArrayList<Object>();
-				for (Trader t: traders) {
-					all.add(t);
-				}
-				for (Tavern t: taverns) {
-					all.add(t);
-				}
-
-				traderList.setItems(FXCollections.observableArrayList(all));
+				updateTables();
 			} else {
 				traderList.setDisable(true);
 				createButton.setDisable(true);
@@ -479,27 +445,13 @@ public class MainMenuController implements Initializable {
 				chooseButton.setText("Ortsansicht");
 				checkLocationFocus();
 				locationTable.setDisable(false);
-
-				ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
-				locationTable.setItems(data);
 			} else {
 				chooseButton.setText("Weltansicht");
 				checkTraderFocus();
 				traderList.setDisable(false);
-
-				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-				List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
-				List<Object> all = new ArrayList<Object>();
-				for (Trader t: traders) {
-					all.add(t);
-				}
-				for (Tavern t: taverns) {
-					all.add(t);
-				}
-
-				traderList.setItems(FXCollections.observableArrayList(all));
 			}
 			updateMap();
+			updateTables();
 		} else {
 			if (mode == WORLDMODE) {
 				int locX;
@@ -797,6 +749,24 @@ public class MainMenuController implements Initializable {
 		nothingChanged = true;
 
 		pane.getChildren().add(pathCanvas);
+	}
+
+	private void updateTables() {
+		ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
+		locationTable.setItems(data);
+
+		if (selectedLocation != null) {
+			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+			List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
+			List<Object> all = new ArrayList<Object>();
+			for (Trader t : traders) {
+				all.add(t);
+			}
+			for (Tavern t : taverns) {
+				all.add(t);
+			}
+			traderList.setItems(FXCollections.observableArrayList(all));
+		}
 	}
 
 	private void updateMap() {
