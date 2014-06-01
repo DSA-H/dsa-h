@@ -635,7 +635,7 @@ public class MainMenuController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/forwardtime.fxml");
 
         stage.setTitle("Zeit vorstellen");
-        stage.setScene(new Scene(scene, 419, 222));
+        stage.setScene(new Scene(scene, 462, 283));
         stage.setResizable(false);
         stage.show();
     }
