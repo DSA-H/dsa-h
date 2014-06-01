@@ -20,23 +20,28 @@ import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
+import sepm.dsa.service.LocationService;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
+import sepm.dsa.service.SaveCancelService;
 
 import java.util.List;
 
-@Service("RegionListController")
 public class RegionListController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(RegionListController.class);
+    private SpringFxmlLoader loader;
 
     private RegionService regionService;
-    private RegionBorderService regionBorderService;
 
+    private LocationService locationService;
+
+	private SaveCancelService saveCancelService;
+
+    private RegionBorderService regionBorderService;
     @FXML
     private TableView<Region> regionTable;
     @FXML
@@ -63,14 +68,14 @@ public class RegionListController implements Initializable {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Region, String> r) {
                 if (r.getValue() != null) {
                     int regionId = r.getValue().getId();
-                    List<RegionBorder> borders = regionBorderService.getAllForRegion(regionId);
+                    List<RegionBorder> borders = regionBorderService.getAllByRegion(regionId);
                     StringBuilder sb = new StringBuilder();
                     for (RegionBorder rb : borders) {
                         // not this region
-                        if (rb.getPk().getRegion1().getId() != regionId) {
-                            sb.append(rb.getPk().getRegion1().getName());
+                        if (rb.getRegion1().getId() != regionId) {
+                            sb.append(rb.getRegion1().getName());
                         } else {
-                            sb.append(rb.getPk().getRegion2().getName());
+                            sb.append(rb.getRegion2().getName());
                         }
                         sb.append(", ");
                     }
@@ -94,7 +99,7 @@ public class RegionListController implements Initializable {
                         if (!empty) {
                             color = "#" + color;
                             setStyle("-fx-background-color:" + color);
-                        }else {
+                        } else {
                             setStyle("-fx-background-color:#FFFFFF");
                         }
                     }
@@ -109,13 +114,11 @@ public class RegionListController implements Initializable {
     @FXML
     private void onCreateButtonPressed() {
         log.debug("onCreateButtonPressed - open Gebiet-Details Window");
-        Stage stage =  (Stage) regionTable.getScene().getWindow();
-        Parent root = null;
-        SpringFxmlLoader loader = new SpringFxmlLoader();
 
         EditRegionController.setRegion(null);
 
-        root = (Parent) loader.load("/gui/editregion.fxml");
+        Stage stage = (Stage) regionTable.getScene().getWindow();
+        Parent root = (Parent) loader.load("/gui/editregion.fxml");
 
         stage.setTitle("Gebiet-Details");
         stage.setScene(new Scene(root, 600, 438));
@@ -125,15 +128,12 @@ public class RegionListController implements Initializable {
     @FXML
     private void onEditButtonPressed() {
         log.debug("onEditButtonPressed - open Gebiet-Details Window");
-        Stage stage =  (Stage) regionTable.getScene().getWindow();
 
-        Parent root = null;
-        SpringFxmlLoader loader = new SpringFxmlLoader();
-
-        Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
+        Region selectedRegion = regionTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         EditRegionController.setRegion(selectedRegion);
 
-        root = (Parent) loader.load("/gui/editregion.fxml");
+        Stage stage = (Stage) regionTable.getScene().getWindow();
+        Parent root = (Parent) loader.load("/gui/editregion.fxml");
 
         stage.setTitle("Gebiet-Details");
         stage.setScene(new Scene(root, 600, 438));
@@ -143,18 +143,31 @@ public class RegionListController implements Initializable {
     @FXML
     private void onDeleteButtonPressed() {
         log.debug("onDeleteButtonPressed - deleting selected Region");
-        Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
+        Region selectedRegion = regionTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
 
         if (selectedRegion != null) {
             log.debug("open Confirm-Delete-Region Dialog");
+            int connectedLocations = locationService.getAllByRegion(selectedRegion.getId()).size();
+            int regionalProductions = 0;
+            String connectedEntries = "";
+            connectedEntries += "\n" + connectedLocations + " Orte";
+            connectedEntries += "\n" + regionalProductions + " Zuordnungen von Produkt zu Produktionsort";    // TODO RegionalProduction (m:n)
+
             Action response = Dialogs.create()
                     .title("Löschen?")
                     .masthead(null)
-                    .message("Wollen Sie die Region '" + selectedRegion.getName() + "' und alle zugehörigen Grenzen wirklich löschen?")
+                    .message("Wollen Sie die Region '" + selectedRegion.getName() + "' und alle zugehörigen Grenzen wirklich löschen? " +
+                            "Folgende verbundenden Einträge würden ebenfalls gelöscht werden:" + connectedEntries)
+                    .actions(Dialog.Actions.NO, Dialog.Actions.YES)
                     .showConfirm();
-            if(response == Dialog.Actions.YES) {
+            if (response == Dialog.Actions.YES) {
+                for (RegionBorder regionBorder : selectedRegion.getAllBorders()) {
+                    regionBorderService.remove(regionBorder);
+                }
                 regionService.remove(selectedRegion);
                 regionTable.getItems().remove(selectedRegion);
+
+				saveCancelService.save();
             }
         }
 
@@ -163,12 +176,11 @@ public class RegionListController implements Initializable {
 
     @FXML
     private void checkFocus() {
-        Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
+        Region selectedRegion = regionTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         if (selectedRegion == null) {
             deleteButton.setDisable(true);
             editButton.setDisable(true);
-        }
-        else{
+        } else {
             deleteButton.setDisable(false);
             editButton.setDisable(false);
         }
@@ -182,4 +194,16 @@ public class RegionListController implements Initializable {
     public void setRegionBorderService(RegionBorderService regionBorderService) {
         this.regionBorderService = regionBorderService;
     }
+
+    public void setLoader(SpringFxmlLoader loader) {
+        this.loader = loader;
+    }
+
+    public void setLocationService(LocationService locationService) {
+        this.locationService = locationService;
+    }
+
+	public void setSaveCancelService(SaveCancelService saveCancelService) {
+		this.saveCancelService = saveCancelService;
+	}
 }

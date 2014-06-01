@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <query name="Location.findAll">
+        <![CDATA[from Location ORDER BY name ASC]]>
+    </query>
+
+    <query name="Location.findAllAround">
+        <![CDATA[   FROM Location
+                    WHERE (:ownLocationId is NULL OR id != :ownLocationId) AND sqrt((:xCoord - xCoord) * (:xCoord - xCoord) + (:yCoord - yCoord) * (:yCoord - yCoord)) < :distance
+                    ORDER BY name ASC]]>
+    </query>
+
+    <query name="Location.findAllAroundNotConnected">
+        <![CDATA[   FROM Location l
+                    WHERE (:ownLocationId is null or l.id != :ownLocationId)
+                            and sqrt((:xCoord - l.xCoord) * (:xCoord - l.xCoord) + (:yCoord - l.yCoord) * (:yCoord - l.yCoord)) < :distance
+                            and l.id not in (SELECT c.pk.location2.id FROM LocationConnection c WHERE c.pk.location1.id = :ownLocationId)
+                            and l.id not in (SELECT c.pk.location1.id FROM LocationConnection c WHERE c.pk.location2.id = :ownLocationId)
+                    ORDER BY l.name asc]]>
+    </query>
+
+    <query name="Location.findAllByNameNotConnected">
+        <![CDATA[   FROM Location l
+                    WHERE (:ownLocationId is null or l.id != :ownLocationId)
+                            and l.name like :locationName
+                            and l.id not in (SELECT c.pk.location2.id FROM LocationConnection c WHERE c.pk.location1.id = :ownLocationId)
+                            and l.id not in (SELECT c.pk.location1.id FROM LocationConnection c WHERE c.pk.location2.id = :ownLocationId)
+                    ORDER BY l.name asc]]>
+    </query>
+
+    <query name="Location.findAllByRegion">
+        <![CDATA[FROM Location WHERE region.id = :regionId ORDER BY name asc]]>
+    </query>
+
+</hibernate-mapping>

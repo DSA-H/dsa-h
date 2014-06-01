@@ -11,4 +11,10 @@
         <![CDATA[from RegionBorder WHERE pk.region1.id = :regionId OR pk.region2.id = :regionId]]>
     </query>
 
+    <query name="RegionBorder.findByRegions">
+        <![CDATA[   FROM RegionBorder
+                    WHERE pk.region1.id = :region1ID and pk.region2.id = :region2ID
+                        or pk.region1.id = :region2ID and pk.region2.id = :region1ID    ]]>
+    </query>
+
 </hibernate-mapping>

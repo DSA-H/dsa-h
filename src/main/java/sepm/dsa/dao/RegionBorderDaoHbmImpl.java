@@ -1,67 +1,62 @@
 package sepm.dsa.dao;
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.hibernate.Query;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.RegionBorder;
-import sepm.dsa.model.RegionBorderPk;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
-/**
- * Created by Michael on 11.05.2014.
- */
-@Repository
 @Transactional(readOnly = true)
-public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
-
-    private SessionFactory sessionFactory;
+public class RegionBorderDaoHbmImpl
+	extends BaseDaoHbmImpl<RegionBorder>
+	implements RegionBorderDao {
 
     @Override
-    @Transactional(readOnly = false)
-    public RegionBorderPk add(RegionBorder regionBorder) {
-        sessionFactory.getCurrentSession().save(regionBorder);
-        return regionBorder.getPk();
+    public RegionBorder add(RegionBorder model) {
+        RegionBorder result = super.add(model);
+        model.getRegion1().addBorder(model);
+        model.getRegion2().addBorder(model);
+        return result;
     }
 
     @Override
-    @Transactional(readOnly = false)
-    public void update(RegionBorder regionBorder) {
-        sessionFactory.getCurrentSession().update(regionBorder);
-    }
-
-    @Override
-    @Transactional(readOnly = false)
     public void remove(RegionBorder regionBorder) {
-        sessionFactory.getCurrentSession().delete(regionBorder);
+        RegionBorder trueRegionBorder = get(regionBorder.getPk());    //
+        sessionFactory.getCurrentSession().delete(trueRegionBorder);
+        trueRegionBorder.getRegion1().removeBorder(trueRegionBorder);
+        trueRegionBorder.getRegion2().removeBorder(trueRegionBorder);
     }
 
     @Override
-    public RegionBorder get(RegionBorderPk pk) {
-        Object result = sessionFactory.getCurrentSession().get(RegionBorder.class, pk);
-        if (result == null) {
-            return null;
-        }
-        return (RegionBorder) result;
-    }
-
-    @Override
-    public List<RegionBorder> getAll() {
-        List<?> list = sessionFactory.getCurrentSession().getNamedQuery("RegionBorder.findAll").list();
+    public RegionBorder get(Serializable id) {
+        log.debug("calling get(" + id + ")");
+        RegionBorder.Pk pk = (RegionBorder.Pk) id;
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("RegionBorder.findByRegions");
+        query.setParameter("region1ID", pk.getRegion1().getId());
+        query.setParameter("region2ID", pk.getRegion2().getId());
+        List<?> list = query.list();
 
         List<RegionBorder> result = new Vector<>(list.size());
         for (Object o : list) {
             result.add((RegionBorder) o);
         }
-
-        return result;
+        if (result.size() > 1) {
+            log.warn("INCONSISTENT DATA! More than 1 connections between locations " + pk.getRegion1() + " and " + pk.getRegion2());
+        }
+        if (result.size() == 0) {
+            log.trace("returning null");
+            return null;
+        }
+        log.trace("returning " + result);
+        return result.get(0);
     }
 
+
     @Override
-    public List<RegionBorder> getAllForRegion(int regionId) {
+    public List<RegionBorder> getAllByRegion(int regionId) {
+        log.debug("calling getAllForRegion(" + regionId + ")");
         List<?> list = sessionFactory.getCurrentSession().getNamedQuery("RegionBorder.findAllForRegion")
                 .setParameter("regionId", regionId)
                 .list();
@@ -71,10 +66,7 @@ public class RegionBorderDaoHbmImpl implements RegionBorderDao, Serializable {
             result.add((RegionBorder) o);
         }
 
+        log.trace("returning " + result);
         return result;
-    }
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 }

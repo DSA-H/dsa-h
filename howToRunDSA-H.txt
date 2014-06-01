@@ -1,7 +1,9 @@
 How to run DSA-H
 
-1) maven -Prun
+1) maven install
 
 should run the project
 
-Via XXX one can create a IntelliJ / Eclipse Project
+
+Editing trader and product categories don't work at the moment. During the normal maven run a prefilled database is installed which has some data to test with.
+The packaged build does not contain this dataset at the moment.

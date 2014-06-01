@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <query name="trader.getAllForLocation">
+        <![CDATA[from Trader WHERE location = :location ORDER BY id ASC]]>
+    </query>
+
+    <query name="trader.getAllForCategory">
+        <![CDATA[from Trader WHERE category = :category ORDER BY id ASC]]>
+    </query>
+
+</hibernate-mapping>

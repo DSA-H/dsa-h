@@ -1,104 +1,73 @@
 package sepm.dsa.service.test;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.*;
 import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by Chris on 12.05.2014.
- */
-//@ContextConfiguration(locations = {"classpath:testContext.xml"})
-public class RegionBorderServiceTest {
+public class RegionBorderServiceTest extends AbstractDatabaseTest {
 
     @Autowired
-    private static RegionBorderService rbs;
+    private RegionBorderService regionBorderService;
 
     @Autowired
-    private static RegionService rs;
+    private RegionService regionService;
 
-    private static RegionBorder regionBorder;
-    private static RegionBorderPk regionBorderPK;
-
-    @BeforeClass
-    public static void testSetup() {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("testContext.xml");
-        rbs = (RegionBorderService) ctx.getBean("regionBorderService");
-        RegionService rs = (RegionService) ctx.getBean("regionService");
-
-        Region r1 = new Region();
-        Region r2 = new Region();
-        r1.setColor("000000");
-        r2.setColor("999999");
-        r1.setName("r1");
-        r2.setName("r2");
-        r1.setComment("comment");
-        r2.setComment("comment");
-	    r1.setRainfallChance(RainfallChance.HIGH);
-	    r2.setRainfallChance(RainfallChance.HIGH);
-	    r1.setTemperature(Temperature.ARCTIC);
-	    r2.setTemperature(Temperature.ARCTIC);
-
-        regionBorderPK = new RegionBorderPk();
-        regionBorderPK.setRegion1(r1);
-        regionBorderPK.setRegion2(r2);
-
-        regionBorder = new RegionBorder();
-        regionBorder.setBorderCost(1);
-        regionBorder.setPk(regionBorderPK);
-
-        rs.add(r1);
-        rs.add(r2);
-    }
-
-    @AfterClass
-    public static void testCleanup() {
-        // Teardown for data used by the unit tests
-    }
-
-    /*
-    @Test(expected = IllegalArgumentException.class)
-    public void testExceptionIsThrown() {
-    }
-    */
 
     @Test
     public void testAdd() {
-        int size = rbs.getAll().size();
-        RegionBorderPk rbpk2 = rbs.add(regionBorder);
 
-        assertTrue(rbs.getAll().size() - 1 == size);
+        RegionBorder regionBorder = new RegionBorder();
+        regionBorder.setBorderCost(1);
+        regionBorder.setRegion1(regionService.get(2));
+        regionBorder.setRegion2(regionService.get(3));
 
-        assertTrue(rbs.get(rbpk2).equals(regionBorder));
-        assertEquals(rbs.get(rbpk2), regionBorder);
-        rbs.remove(regionBorder);
+        int size = regionBorderService.getAll().size();
+        regionBorderService.add(regionBorder);
+
+        getSaveCancelService().save();
+
+        assertEquals(size + 1, regionBorderService.getAll().size());
+        assertNotNull(regionBorderService.get(regionBorder.getRegion1(), regionBorder.getRegion2()));
     }
 
     @Test
     public void testRemove() {
-        RegionBorderPk rbpk2 = rbs.add(regionBorder);
-        int size = rbs.getAll().size();
-        rbs.remove(regionBorder);
-        assertTrue(rbs.getAll().size() + 1 == size);
+
+        Region region1 = regionService.get(1);
+        Region region2 = regionService.get(2);
+
+        RegionBorder regionBorder = regionBorderService.get(region1, region2);
+
+        int size = regionBorderService.getAll().size();
+        regionBorderService.remove(regionBorder);
+        getSaveCancelService().save();
+
+        assertEquals(size - 1, regionBorderService.getAll().size());
+        assertNull(regionBorderService.get(region1, region2));
     }
 
     @Test
     public void testUpdate() {
-        RegionBorderPk rbpk2 = rbs.add(regionBorder);
-        int size = rbs.getAll().size();
-        regionBorder.setBorderCost(2);
 
-        rbs.update(regionBorder);
-        assertTrue (rbs.getAll().size() == size);
-        rbs.remove(regionBorder);
+        RegionBorder regionBorder = regionBorderService.get(regionService.get(1), regionService.get(2));
+
+        int size = regionBorderService.getAll().size();
+        regionBorder.setBorderCost(120);
+
+        regionBorderService.update(regionBorder);
+        getSaveCancelService().save();
+
+        assertEquals(regionBorderService.get(regionBorder.getRegion1(), regionBorder.getRegion2()).getBorderCost(),
+                new Integer(120));
+
     }
 }

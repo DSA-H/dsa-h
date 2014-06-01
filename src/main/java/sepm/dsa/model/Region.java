@@ -1,19 +1,21 @@
 package sepm.dsa.model;
 
 import org.hibernate.validator.constraints.NotBlank;
+import sepm.dsa.service.path.PathNode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "regions")
-public class Region implements Serializable {
+public class Region implements BaseModel, PathNode {
     private static final long serialVersionUID = 5890354733231481712L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 
@@ -39,6 +41,34 @@ public class Region implements Serializable {
     @Column(nullable = false)
     private Integer rainfallChanceId;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.region1", cascade = CascadeType.REMOVE)
+    private Set<RegionBorder> borders1 = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.region2", cascade = CascadeType.REMOVE)
+    private Set<RegionBorder> borders2 = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "region", cascade = CascadeType.REMOVE)
+    private Set<Location> locations = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "product_regions", joinColumns = { @JoinColumn(name = "regionId") }, inverseJoinColumns = { @JoinColumn(name = "productId") })
+    private Set<Product> products = new HashSet<>();
+
+    public Set<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(Set<Location> locations) {
+        this.locations = locations;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
 
     public Integer getId() {
         return id;
@@ -82,8 +112,9 @@ public class Region implements Serializable {
     public void setTemperature(Temperature temperature) {
         if (temperature == null) {
             this.temperatureId = null;
+        } else {
+            this.temperatureId = temperature.getValue();
         }
-        this.temperatureId = temperature.getValue();
     }
 
 
@@ -97,8 +128,46 @@ public class Region implements Serializable {
     public void setRainfallChance(RainfallChance rainfallChance) {
         if (rainfallChance == null) {
             this.rainfallChanceId = null;
+        } else {
+            this.rainfallChanceId = rainfallChance.getValue();
+        }    
+    }
+
+    public Set<RegionBorder> getBorders1() {
+        return borders1;
+    }
+
+    public void setBorders1(Set<RegionBorder> borders1) {
+        this.borders1 = borders1;
+    }
+
+    public Set<RegionBorder> getBorders2() {
+        return borders2;
+    }
+
+    public void setBorders2(Set<RegionBorder> borders2) {
+        this.borders2 = borders2;
+    }
+
+    public Set<RegionBorder> getAllBorders() {
+        Set<RegionBorder> result = new HashSet<>(borders1.size() + borders2.size());
+        result.addAll(borders1);
+        result.addAll(borders2);
+        return result;
+    }
+
+    public void addBorder(RegionBorder regionBorder) {
+        if (this.equals(regionBorder.getRegion1())) {
+            borders1.add(regionBorder);
+        } else if (this.equals(regionBorder.getRegion2())) {
+            borders2.add(regionBorder);
         }
-        this.rainfallChanceId = rainfallChance.getValue();
+    }
+
+
+    public void removeBorder(RegionBorder regionBorder) {
+        borders1.remove(regionBorder);
+        borders2.remove(regionBorder);
     }
 
     @Override
@@ -108,25 +177,14 @@ public class Region implements Serializable {
 
         Region region = (Region) o;
 
-        if (color != null ? !color.equals(region.color) : region.color != null) return false;
         if (id != null ? !id.equals(region.id) : region.id != null) return false;
-        if (name != null ? !name.equals(region.name) : region.name != null) return false;
-        if (rainfallChanceId != null ? !rainfallChanceId.equals(region.rainfallChanceId) : region.rainfallChanceId != null)
-            return false;
-        if (temperatureId != null ? !temperatureId.equals(region.temperatureId) : region.temperatureId != null)
-            return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (color != null ? color.hashCode() : 0);
-        result = 31 * result + (temperatureId != null ? temperatureId.hashCode() : 0);
-        result = 31 * result + (rainfallChanceId != null ? rainfallChanceId.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override

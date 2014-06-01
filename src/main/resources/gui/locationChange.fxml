@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="183.0" prefWidth="469.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.LocationChangeController">
+<children><Label layoutX="14.0048828125" layoutY="14.0" text="Der Ort des Händlers hat sich geändert, wie soll vorgegangen werden?" underline="true">
+<font>
+<Font size="14.0" />
+</font></Label><Label layoutX="14.0" layoutY="59.0" text="Händlersortiment:" /><Label layoutX="14.0" layoutY="93.0" text="Warenpreise:" /><ChoiceBox fx:id="sortimentChangeBox" layoutX="157.0" layoutY="55.0" prefWidth="150.0" /><ChoiceBox fx:id="priceChangeBox" layoutX="157.0" layoutY="89.0" prefWidth="150.0" /><Button layoutX="294.0" layoutY="141.0" mnemonicParsing="false" onAction="#onCancelPressed" text="Abbrechen" /><Button layoutX="381.0" layoutY="141.0" mnemonicParsing="false" onAction="#onCommitPressed" text="Bestätigen" />
+</children></Pane>

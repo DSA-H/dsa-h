@@ -1,28 +1,37 @@
 package sepm.dsa.service.test;
 
-import org.junit.*;
-import org.junit.runner.RunWith;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import sepm.dsa.model.RainfallChance;
-import sepm.dsa.model.Region;
-import sepm.dsa.model.Temperature;
+import sepm.dsa.dbunit.AbstractDatabaseTest;
+import sepm.dsa.model.*;
+import sepm.dsa.service.LocationService;
+import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:testContext.xml"})
-public class RegionServiceTest {
+public class RegionServiceTest extends AbstractDatabaseTest {
 
 	@Autowired
-	private RegionService rs;
+	private RegionService regionService;
+
+    @Autowired
+    private RegionBorderService regionBorderService;
+
+    @Autowired
+    private LocationService locationService;
 
     private Region addRegion;
     private Region deleteRegion;
     private Region updateRegion;
+
+    private Region addRegion2;
+    private Region addRegion3;
+//    private RegionBorder regionBorder1;
 
     @Before
     public void setup() {
@@ -41,7 +50,7 @@ public class RegionServiceTest {
         deleteRegion.setComment("comment");
         deleteRegion.setTemperature(Temperature.HIGH);
         deleteRegion.setRainfallChance(RainfallChance.MEDIUM);
-        rs.add(deleteRegion);
+        regionService.add(deleteRegion);
 
         updateRegion = new Region();
         updateRegion.setName("testRegionUpdate");
@@ -49,51 +58,130 @@ public class RegionServiceTest {
         updateRegion.setComment("comment");
         updateRegion.setTemperature(Temperature.MEDIUM);
         updateRegion.setRainfallChance(RainfallChance.HIGH);
-        rs.add(updateRegion);
+        regionService.add(updateRegion);
 
-        System.out.println("testSetup");
-    }
+        addRegion2 = new Region();
+        addRegion2.setName("testRegionAdd 2");
+        addRegion2.setColor("222222");
+        addRegion2.setComment("comment 2");
+        addRegion2.setTemperature(Temperature.VULCANO);
+        addRegion2.setRainfallChance(RainfallChance.HIGH);
 
-    @After
-    public void teardown() {
+        addRegion3 = new Region();
+        addRegion3.setName("testRegionAdd 2");
+        addRegion3.setColor("222222");
+        addRegion3.setComment("comment 2");
+        addRegion3.setTemperature(Temperature.VULCANO);
+        addRegion3.setRainfallChance(RainfallChance.HIGH);
 
-        // Teardown for data used by the unit tests
-    }
+//        regionBorder1 = new RegionBorder();
+//        regionBorder1.setBorderCost(8);
+//        regionBorder1.setRegion1(addRegion2);
+//        regionBorder1.setRegion2(addRegion3);
+//        addRegion2.getBorders1().addConnection(regionBorder1);
+//        addRegion3.getBorders2().addConnection(regionBorder1);
 
-    //@DatabaseSetup("testData.xml")
-    @Test
-    public void testXML(){
-        System.out.println(rs.get(0));
+	    saveCancelService.save();
     }
 
     @Test
     public void testAdd() {
-        System.out.println(rs.get(0));
-        int size = rs.getAll().size();
-        int id = rs.add(addRegion);
+        int size = regionService.getAll().size();
+        regionService.add(addRegion);
 
-        assertTrue(rs.getAll().size() - 1 == size);
+	    saveCancelService.save();
+
+        assertEquals(size + 1, regionService.getAll().size());
         //TODO: equals is not working right now => DONE
-        assertTrue(rs.get(id).equals(addRegion));
-        assertEquals(rs.get(id), addRegion);
+        assertTrue(regionService.get(addRegion.getId()).equals(addRegion));
+        assertEquals(regionService.get(addRegion.getId()), addRegion);
     }
 
     @Test
     public void testRemove() {
-        int size = rs.getAll().size();
-        rs.remove(deleteRegion);
-        assertTrue(rs.getAll().size() + 1 == size);
+        int size = regionService.getAll().size();
+        regionService.remove(deleteRegion);
+
+	    saveCancelService.save();
+
+        assertEquals(size - 1, regionService.getAll().size());
     }
 
     @Test
     public void testUpdate() {
-        int size = rs.getAll().size();
+        int size = regionService.getAll().size();
         updateRegion.setName("testRegion2");
         updateRegion.setColor("999999");
         updateRegion.setComment("comment");
         updateRegion.setTemperature(Temperature.LOW);
 
-        rs.update(updateRegion);
-        assertTrue (rs.getAll().size() == size);
+        regionService.update(updateRegion);
+        assertTrue(regionService.getAll().size() == size);
     }
+
+//    @Test
+//    public void add_withBorder_shouldPersist() {
+//        int size = regionService.getAll().size();
+//
+//        // must exist
+//        regionService.add(addRegion2);
+//        getSaveCancelService().save();
+//
+//        // addConnection region border
+////        addRegion3.getBorders1().add(regionBorder1);
+//
+//        // now addConnection the region
+//        regionService.add(addRegion3);
+//
+//	    saveCancelService.save();
+//
+//        RegionBorder regionBorder1 = new RegionBorder();
+//        regionBorder1.setBorderCost(8);
+//        regionBorder1.setRegion1(addRegion2);
+//        regionBorder1.setRegion2(addRegion3);
+//        regionBorderService.add(regionBorder1);
+//
+//        saveCancelService.save();
+////	    saveCancelService.closeSession();
+//
+//        List<Region> listLater = regionService.getAll();
+//        int sizeLater = listLater.size();
+//        assertEquals(size + 2, sizeLater);
+//        assertTrue(listLater.contains(addRegion2));
+//        assertTrue(listLater.contains(addRegion3));
+//        addRegion2 = regionService.get(addRegion2.getId());
+//        assertTrue(addRegion2.getAllBorders().contains(regionBorder1));
+//        addRegion3 = regionService.get(addRegion3.getId());
+//        assertTrue(addRegion3.getAllBorders().contains(regionBorder1));
+//
+//    }
+
+    @Test
+    public void oneToMany_hasValues() {
+        Region region = regionService.get(1);
+        assertTrue(region.getAllBorders().size() == 3);
+        assertTrue(region.getBorders1().size() == 3);
+        assertTrue(region.getBorders2().size() == 0);
+
+    }
+
+    @Test
+    public void remove_LocationsInside_ShouldCascadeDeleteLocations() {
+        Region region = regionService.get(1);
+        List<Location> locationsInside = locationService.getAllByRegion(region.getId());
+        int totalLocations = locationService.getAll().size();
+
+        regionService.remove(region);
+	    getSaveCancelService().save();
+
+        List<Location> locationsInsideNow = locationService.getAllByRegion(region.getId());
+        int totalLocationsNow = locationService.getAll().size();
+
+
+        assertTrue("Must have at least one location inside to get a reasonable test result", locationsInside.size() > 0);
+        assertEquals(totalLocations - 1, totalLocationsNow);
+        assertEquals(0, locationsInsideNow.size());
+
+    }
+
 }

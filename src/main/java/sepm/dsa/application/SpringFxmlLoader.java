@@ -1,48 +1,48 @@
 package sepm.dsa.application;
 
 import javafx.fxml.FXMLLoader;
-import javafx.util.Callback;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * http://koenserneels.blogspot.co.at/2012/11/javafx-2-with-spring.html
+ * Loader for FXML files capable of Spring
  */
-public class SpringFxmlLoader {
-    private static final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+public class SpringFxmlLoader implements ApplicationContextAware {
 
-    private FXMLLoader loader;
+	private ApplicationContext applicationContext;
+	private FXMLLoader loader;
 
-    public Object load(String url) {
-        try (InputStream fxmlStream = SpringFxmlLoader.class
-                .getResourceAsStream(url)) {
-            System.err.println(SpringFxmlLoader.class
-                    .getResourceAsStream(url));
-            loader = new FXMLLoader();
-            loader.setControllerFactory(new Callback<Class<?>, Object>() {
-                @Override
-                public Object call(Class<?> clazz) {
-                    return context.getBean(clazz);
-                }
-            });
-            return loader.load(fxmlStream);
-        } catch (IOException ioException) {
-            throw new RuntimeException(ioException);
-        }
-    }
+	/**
+	 * Loads a FXML file
+	 * @param url Resource URL
+	 * @return Loaded resource
+	 */
+	public Object load(String url) {
+		try {
+			InputStream fxmlStream = SpringFxmlLoader.class.getResourceAsStream(url);
+			loader = new FXMLLoader();
+			loader.setControllerFactory(clazz -> applicationContext.getBean(clazz));
+			return loader.load(fxmlStream);
+		} catch (IOException ioException) {
+			throw new RuntimeException(ioException);
+		}
+	}
 
-    /**
-     * Returns the Controller of the last loaded Object
-     * @param <T>
-     * @return
-     */
-    public <T> T getController() {
-        if(loader != null) {
-            return loader.getController();
-        }else {
-            return null;
-        }
-    }
+	/**
+	 * Returns the Controller of the last loaded Object
+	 * @param <T>
+	 * @return
+	 */
+	public <T> T getController() {
+		return (loader != null) ? loader.getController() : null;
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+	}
 }
