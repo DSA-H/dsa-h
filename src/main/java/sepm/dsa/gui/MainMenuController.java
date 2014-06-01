@@ -186,7 +186,8 @@ public class MainMenuController implements Initializable {
 			chooseButton.setText("Weltansicht");
             createButton.setText("Händler / Wirtshaus platzieren");
 			editButton.setText("Details");
-
+			Stage stage = (Stage) editButton.getScene().getWindow();
+			stage.setTitle("DSA-Händlertool - "+ selectedLocation.getName());
 			checkTraderFocus();
 		} else {
 			mode = WORLDMODE;
@@ -196,6 +197,8 @@ public class MainMenuController implements Initializable {
 			chooseButton.setText("Ortsansicht");
             createButton.setText("Ort platzieren");
 			editButton.setText("Bearbeiten");
+			Stage stage = (Stage) editButton.getScene().getWindow();
+			stage.setTitle("DSA-Händlertool");
 			checkLocationFocus();
 		}
 
@@ -719,7 +722,10 @@ public class MainMenuController implements Initializable {
 		for (LocationConnection l : path) {
 			cost += l.getTravelTime();
 		}
-		resultLabel.setText(""+cost);
+		resultLabel.setText(cost + " Stunden");
+		if (cost == 1) {
+			resultLabel.setText(cost + " Stunde");
+		}
 
 		Pane pane = (Pane) scrollPane.getContent();
 		pane.getChildren().remove(pathCanvas);
