@@ -51,8 +51,6 @@ public class ProductCategoryListController implements Initializable {
         productColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         reloadAndRefreshGui();
-
-
     }
 
     private void reloadAndRefreshGui() {
@@ -115,7 +113,7 @@ public class ProductCategoryListController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/editproductcategory.fxml");
 
         stage.setTitle("Warenkategorie");
-        stage.setScene(new Scene(scene, 600, 414));
+        stage.setScene(new Scene(scene, 490, 219));
         stage.show();
     }
 
@@ -129,7 +127,7 @@ public class ProductCategoryListController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/editproductcategory.fxml");
 
         stage.setTitle("Warenkategorie");
-        stage.setScene(new Scene(scene, 600, 414));
+        stage.setScene(new Scene(scene, 490, 219));
         stage.show();
     }
 

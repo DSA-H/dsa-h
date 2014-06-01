@@ -1,5 +1,7 @@
 package sepm.dsa.gui;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +61,22 @@ public class TraderDetailsController implements Initializable {
         log.debug("initialize TraderDetailsController");
 
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        productColumn.setCellValueFactory(new PropertyValueFactory<>("product"));
+        productColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Offer, String> r) {
+                if (r.getValue() != null) {
+                    Offer offer = r.getValue();
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(offer.getProduct().getName());
+                    if(offer.getProduct().getQuality()) {
+                        sb.append("(" + r.getValue().getQuality().getName() + ")");
+                    }
+                    return new SimpleStringProperty(sb.toString());
+                }else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
         localPriceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
         standardPriceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
 

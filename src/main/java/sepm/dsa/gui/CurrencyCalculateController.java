@@ -1,5 +1,7 @@
 package sepm.dsa.gui;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -45,7 +47,19 @@ public class CurrencyCalculateController implements Initializable {
         // init table
         List<Currency> currencies = currencyService.getAll();
         choiceFirst.setItems(FXCollections.observableArrayList(currencies));
+        choiceFirst.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Currency>() {
+            @Override
+            public void changed(ObservableValue<? extends Currency> observable, Currency oldValue, Currency newValue) {
+                labelvon.setText(newValue.getName());
+            }
+        });
         choiceSecond.setItems(FXCollections.observableArrayList(currencies));
+        choiceSecond.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Currency>() {
+            @Override
+            public void changed(ObservableValue<? extends Currency> observable, Currency oldValue, Currency newValue) {
+                labelin.setText(newValue.getName());
+            }
+        });
 
         if (currencies.isEmpty()) {
             //TODO what to do?

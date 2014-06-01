@@ -3,7 +3,10 @@ package sepm.dsa.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="players")
@@ -23,7 +26,7 @@ public class Player implements Serializable, BaseModel {
 	private String comment;
 
     @OneToMany
-    private List<Deal> deals;
+    private Set<Deal> deals = new HashSet<>();
 
 	public Integer getId() {
 		return id;
@@ -49,11 +52,11 @@ public class Player implements Serializable, BaseModel {
 		this.comment = comment;
 	}
 
-    public List<Deal> getDeals() {
+    public Set<Deal> getDeals() {
         return deals;
     }
 
-    public void setDeals(List<Deal> deals) {
+    public void setDeals(Set<Deal> deals) {
         this.deals = deals;
     }
 
