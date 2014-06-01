@@ -158,6 +158,7 @@ public class RegionListController implements Initializable {
                     .masthead(null)
                     .message("Wollen Sie die Region '" + selectedRegion.getName() + "' und alle zugehörigen Grenzen wirklich löschen? " +
                             "Folgende verbundenden Einträge würden ebenfalls gelöscht werden:" + connectedEntries)
+                    .actions(Dialog.Actions.NO, Dialog.Actions.YES)
                     .showConfirm();
             if (response == Dialog.Actions.YES) {
                 for (RegionBorder regionBorder : selectedRegion.getAllBorders()) {

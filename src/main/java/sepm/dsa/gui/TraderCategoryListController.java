@@ -17,8 +17,6 @@ import javafx.util.Callback;
 import org.controlsfx.control.action.Action;
 import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -121,6 +119,7 @@ public class TraderCategoryListController implements Initializable {
                     .title("Löschen?")
                     .masthead(null)
                     .message("Wollen Sie die Händlerkategorie '" + selectedTraderCategory.getName() + "' wirklich löschen?")
+                    .actions(Dialog.Actions.NO, Dialog.Actions.YES)
                     .showConfirm();
             if (response == Dialog.Actions.YES) {
                 saveCancelService.refresh(selectedTraderCategory);

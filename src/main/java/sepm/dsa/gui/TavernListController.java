@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Tavern;
-import sepm.dsa.model.Trader;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TavernService;
@@ -103,6 +102,7 @@ public class TavernListController implements Initializable {
                     .title("Löschen?")
                     .masthead(null)
                     .message("Wollen Sie das Wirtshaus '" + selectedTavern.getName() + "' wirklich löschen")
+                    .actions(Dialog.Actions.NO, Dialog.Actions.YES)
                     .showConfirm();
             if (response == Dialog.Actions.YES) {
                 tavernService.remove(selectedTavern);
