@@ -67,7 +67,7 @@ public class PlayerListController implements Initializable {
     private void onEditButtonPressed() {
         log.debug("onWarenClicked - open Player Window");
 
-        EditPlayerController.setPlayer(playerTable.getFocusModel().getFocusedItem());
+        EditPlayerController.setPlayer(playerTable.getSelectionModel().getSelectedItem());//.getFocusModel().getFocusedItem());
 
         Stage stage = (Stage) playerTable.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/editplayer.fxml");

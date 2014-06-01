@@ -129,7 +129,7 @@ public class RegionListController implements Initializable {
     private void onEditButtonPressed() {
         log.debug("onEditButtonPressed - open Gebiet-Details Window");
 
-        Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
+        Region selectedRegion = regionTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         EditRegionController.setRegion(selectedRegion);
 
         Stage stage = (Stage) regionTable.getScene().getWindow();
@@ -143,7 +143,7 @@ public class RegionListController implements Initializable {
     @FXML
     private void onDeleteButtonPressed() {
         log.debug("onDeleteButtonPressed - deleting selected Region");
-        Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
+        Region selectedRegion = regionTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
 
         if (selectedRegion != null) {
             log.debug("open Confirm-Delete-Region Dialog");

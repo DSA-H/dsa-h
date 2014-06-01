@@ -131,7 +131,7 @@ public class TavernListController implements Initializable {
         EditTavernController controller = loader.getController();
 //        selectedTavern = (Tavern) tavernList.getFocusModel().getFocusedItem();
         checkFocus();
-        selectedTavern = (Tavern) tavernList.getFocusModel().getFocusedItem();
+        selectedTavern = (Tavern) tavernList.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         controller.setTavern(selectedTavern);
         stage.setScene(new Scene(scene, 600, 400));
     }

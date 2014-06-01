@@ -109,7 +109,7 @@ public class ProductListController implements Initializable {
     private void onEditButtonPressed() {
         log.debug("onWarenClicked - open Waren Window");
 
-        EditProductController.setProduct(productTable.getFocusModel().getFocusedItem());
+        EditProductController.setProduct(productTable.getSelectionModel().getSelectedItem());//.getFocusModel().getFocusedItem());
 
         Stage stage = (Stage) productTable.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/editproduct.fxml");

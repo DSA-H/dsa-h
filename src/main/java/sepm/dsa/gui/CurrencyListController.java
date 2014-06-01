@@ -72,7 +72,7 @@ public class CurrencyListController implements Initializable {
     private void onEditButtonPressed() {
         log.debug("onEditButtonPressed - open Currency Window");
 
-        EditCurrencyController.setCurrency(currencyTable.getFocusModel().getFocusedItem());
+        EditCurrencyController.setCurrency(currencyTable.getSelectionModel().getSelectedItem());//.getFocusModel().getFocusedItem());
 
         Stage stage = (Stage) currencyTable.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/editcurrency.fxml");

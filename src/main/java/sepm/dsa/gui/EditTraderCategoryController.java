@@ -94,7 +94,7 @@ public class EditTraderCategoryController implements Initializable {
     @FXML
     private void removeSelectedAssortment() {
         log.debug("calling removeSelectedAssortment");
-        AssortmentNature selAssortment = assortmentTable.getFocusModel().getFocusedItem();
+        AssortmentNature selAssortment = assortmentTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         if (selAssortment != null) {
             assortmentTable.getItems().remove(selAssortment);
             productCategoryChoiceBox.getItems().add(selAssortment.getProductCategory());

@@ -255,7 +255,7 @@ public class MainMenuController implements Initializable {
 		log.debug("onDeleteButtonPressed - deleting selected Data");
 
 		if (mode == WORLDMODE) {
-			Location selectedLocation = locationTable.getFocusModel().getFocusedItem();
+			Location selectedLocation = locationTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
 
 			if (selectedLocation != null) {
 				log.debug("open Confirm-Delete-Location Dialog");
@@ -1052,7 +1052,7 @@ public class MainMenuController implements Initializable {
 	}
 
 	private void checkLocationFocus() {
-		selectedLocation = locationTable.getFocusModel().getFocusedItem();
+		selectedLocation = locationTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
 		if (selectedLocation == null) {
 			deleteButton.setDisable(true);
 			editButton.setDisable(true);
@@ -1093,7 +1093,7 @@ public class MainMenuController implements Initializable {
 	}
 
 	private void checkTraderFocus() {
-		selectedObject = traderList.getFocusModel().getFocusedItem();
+		selectedObject = traderList.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
 		if (selectedObject == null) {
 			deleteButton.setDisable(true);
 			editButton.setDisable(true);

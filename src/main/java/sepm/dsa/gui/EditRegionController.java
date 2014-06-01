@@ -265,7 +265,7 @@ public class EditRegionController implements Initializable {
     @FXML
     private void onRemoveBorderPressed() {
         log.debug("calling onRemoveBorderPressed");
-        RegionBorder selectedborder = borderTable.getFocusModel().getFocusedItem();
+        RegionBorder selectedborder = borderTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         if (selectedborder != null) {
             borderTable.getItems().remove(selectedborder);
             if (selectedborder.getRegion1().equals(selectedRegion)) {
