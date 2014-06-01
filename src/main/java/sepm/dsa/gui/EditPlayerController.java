@@ -20,6 +20,7 @@ import sepm.dsa.model.Unit;
 import sepm.dsa.service.DealService;
 import sepm.dsa.service.PlayerService;
 import sepm.dsa.service.SaveCancelService;
+import sepm.dsa.service.TimeService;
 
 public class EditPlayerController implements Initializable {
 
@@ -28,6 +29,7 @@ public class EditPlayerController implements Initializable {
 
     private PlayerService playerService;
     private DealService dealService;
+    private TimeService timeService;
 
     private SaveCancelService saveCancelService;
 
@@ -65,7 +67,9 @@ public class EditPlayerController implements Initializable {
             isNewPlaper = false;
             nameField.setText(selectedPlayer.getName());
             commentField.setText(selectedPlayer.getComment());
-            dealsTable.setItems(FXCollections.observableArrayList(selectedPlayer.getDeals()));
+            if (selectedPlayer.getDeals().size() > 0) {
+                dealsTable.setItems(FXCollections.observableArrayList(selectedPlayer.getDeals()));
+            }
         } else {
             isNewPlaper = true;
             selectedPlayer = new Player();
@@ -114,10 +118,13 @@ public class EditPlayerController implements Initializable {
         //Todo relative DATE & abs date
         dateColumn.setCellValueFactory(d -> {
             DSADate date = d.getValue().getDate();
+            long timestamp = d.getValue().getDate().getTimestamp();
+
+            long current = timeService.getCurrentDate().getTimestamp();
 
             //TODO date before days
             StringBuilder sb = new StringBuilder();
-            sb.append("vor ").append("TODO").append(" Tagen").append("(").append(date).append(")");
+            sb.append("vor ").append(current - timestamp).append(" Tagen").append("(").append(date).append(")");
             return new SimpleStringProperty(sb.toString());
         });
 
