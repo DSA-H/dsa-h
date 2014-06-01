@@ -22,8 +22,6 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     private static final Logger log = LoggerFactory.getLogger(RegionServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
     private ProductCategoryDao productCategoryDao;
-    @Autowired
-    private ProductService productService;
     private AssortmentNatureService assortmentNatureService;
 
     @Override
@@ -48,6 +46,14 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         log.debug("calling update(" + p + ")");
         validate(p);
         return productCategoryDao.update(p);
+    }
+
+    @Override
+    public List<ProductCategory> getAllRoot() {
+        log.debug("calling getAll()");
+        List<ProductCategory> result = productCategoryDao.getAllByParent(null);
+        log.trace("returning " + result);
+        return result;
     }
 
     @Override

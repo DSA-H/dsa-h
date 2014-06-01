@@ -19,9 +19,9 @@
 <opaqueInsets>
 <Insets />
 </opaqueInsets>
-</HBox><TreeView fx:id="treeview" layoutX="35.0" layoutY="65.0" onMouseClicked="#checkFocus" prefHeight="265.0" prefWidth="391.0" /><TableView fx:id="tableview" layoutX="453.0" layoutY="64.0" prefHeight="265.0" prefWidth="131.0">
+</HBox><TreeView fx:id="treeview" layoutX="35.0" layoutY="65.0" onMouseClicked="#onTreeviewClicked" prefHeight="265.0" prefWidth="391.0" /><TableView fx:id="tableview" layoutX="453.0" layoutY="64.0" prefHeight="265.0" prefWidth="131.0">
   <columns>
-    <TableColumn fx:id="productcolumn" prefWidth="130.0" text="Products" />
+    <TableColumn fx:id="productColumn" prefWidth="130.0" text="Products" />
   </columns>
 </TableView>
 </children></Pane>

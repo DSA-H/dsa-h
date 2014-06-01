@@ -40,4 +40,10 @@ public interface ProductCategoryService {
      * @return all entries, might be an empty list (not null)
      */
     List<ProductCategory> getAll();
+
+    /**
+     * @return all {@code ProductCategory}s without parent, might be an empty list (not null)
+     */
+    List<ProductCategory> getAllRoot();
+
 }

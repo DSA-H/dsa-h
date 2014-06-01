@@ -195,6 +195,7 @@
 
     <bean id="productCategoryService" class="sepm.dsa.service.ProductCategoryServiceImpl">
         <property name="productCategoryDao" ref="productCategoryDao"/>
+        <property name="assortmentNatureService" ref="assortmentNatureService"/>
     </bean>
 
     <bean id="unitService" class="sepm.dsa.service.UnitServiceImpl">

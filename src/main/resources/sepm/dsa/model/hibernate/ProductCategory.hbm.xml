@@ -7,4 +7,11 @@
         <![CDATA[from ProductCategory ORDER BY name ASC]]>
     </query>
 
+    <query name="ProductCategory.findAllByParent">
+        <![CDATA[   FROM ProductCategory
+                    WHERE (:parentId is null and parent is null) or (parent is not null and :parentId is not null and parent.id = :parentId)
+                    ORDER BY name asc]]>
+    </query>
+
+
 </hibernate-mapping>
