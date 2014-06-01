@@ -147,17 +147,17 @@ public class MainMenuController implements Initializable {
 
 		updateTables();
 
-		locationTable.getFocusModel().focusedItemProperty().addListener(new ChangeListener<Location>() {
+		locationTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Location>() {
 			@Override
 			public void changed(ObservableValue<? extends Location> observable, Location oldValue, Location newValue) {
-				checkLocationFocus();
+				if (mode == WORLDMODE) checkLocationFocus();
 			}
 		});
 
-		traderList.getFocusModel().focusedItemProperty().addListener(new ChangeListener() {
+		traderList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
 			@Override
 			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				checkTraderFocus();
+				if (mode == LOCATIONMODE) checkTraderFocus();
 			}
 		});
 
@@ -1052,6 +1052,9 @@ public class MainMenuController implements Initializable {
 	private void checkLocationFocus() {
 		selectedLocation = locationTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
 		if (selectedLocation == null) {
+			selectedLocation = locationTable.getFocusModel().getFocusedItem();
+		}
+		if (selectedLocation == null) {
 			deleteButton.setDisable(true);
 			editButton.setDisable(true);
 			chooseButton.setDisable(true);
@@ -1092,6 +1095,9 @@ public class MainMenuController implements Initializable {
 
 	private void checkTraderFocus() {
 		selectedObject = traderList.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
+		if (selectedObject == null) {
+			selectedObject = traderList.getFocusModel().getFocusedItem();
+		}
 		if (selectedObject == null) {
 			deleteButton.setDisable(true);
 			editButton.setDisable(true);
