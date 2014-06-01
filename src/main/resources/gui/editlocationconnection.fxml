@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-
+<?import javafx.scene.text.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="380.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.EditLocationConnectionController">
    <top>
@@ -43,11 +42,6 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </Label>
-            <TextField fx:id="tf_TravelTime" promptText="Stunden" GridPane.columnIndex="1" GridPane.rowIndex="2">
-               <GridPane.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </GridPane.margin>
-            </TextField>
             <Label fx:id="lbl_Location1" text="Ort 1" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -67,16 +61,26 @@
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
-            </Label>
+            </Label><HBox alignment="CENTER_LEFT" prefHeight="29.0" prefWidth="342.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+<children>
+            <TextField fx:id="tf_TravelTime" prefHeight="25.0" prefWidth="254.0" promptText="Stunden" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </TextField><Label text="Stunden" />
+</children></HBox>
          </children>
       </GridPane>
    </center>
    <bottom>
-      <FlowPane alignment="CENTER_RIGHT" prefHeight="50.0" BorderPane.alignment="CENTER_RIGHT">
+      <FlowPane alignment="CENTER_RIGHT" hgap="10.0" prefHeight="50.0" BorderPane.alignment="CENTER_RIGHT">
          <children>
-            <Button mnemonicParsing="false" onAction="#onSaveClicked" text="Speichern" />
             <Button mnemonicParsing="false" onAction="#onAbortClicked" text="Abbrechen" />
+            <Button mnemonicParsing="false" onAction="#onSaveClicked" text="Speichern" />
          </children>
+<BorderPane.margin>
+<Insets />
+</BorderPane.margin>
       </FlowPane>
    </bottom>
    <padding>

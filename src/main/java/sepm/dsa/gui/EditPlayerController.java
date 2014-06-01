@@ -124,7 +124,7 @@ public class EditPlayerController implements Initializable {
 
             //TODO date before days
             StringBuilder sb = new StringBuilder();
-            sb.append("vor ").append(current - timestamp).append(" Tagen").append("(").append(date).append(")");
+            sb.append("vor ").append(current - timestamp).append(" Tagen").append(" (").append(date).append(")");
             return new SimpleStringProperty(sb.toString());
         });
 
@@ -161,5 +161,9 @@ public class EditPlayerController implements Initializable {
 
     public void setDealService(DealService dealService) {
         this.dealService = dealService;
+    }
+
+    public void setTimeService(TimeService timeService) {
+        this.timeService = timeService;
     }
 }

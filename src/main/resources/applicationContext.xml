@@ -363,6 +363,7 @@
         <property name="loader" ref="loader"/>
         <property name="playerService" ref="playerService"/>
         <property name="dealService" ref="dealService"/>
+        <property name="timeService" ref="timeService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
     <bean id="currencyList" class="sepm.dsa.gui.CurrencyListController">

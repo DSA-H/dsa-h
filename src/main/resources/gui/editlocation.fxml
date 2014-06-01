@@ -31,15 +31,21 @@
                 <RowConstraints maxHeight="119.0" minHeight="0.0" prefHeight="25.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="84.0" minHeight="0.0" prefHeight="37.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="193.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="136.0" minHeight="0.0" prefHeight="34.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="112.0" minHeight="0.0" prefHeight="108.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Label text="Ortsname" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                <Label text="Größe" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-                <Label text="Wetter" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-                <Label text="Kommentar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+                <Label text="Ortsname:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+<GridPane.margin>
+<Insets right="5.0" />
+</GridPane.margin></Label>
+                <Label text="Größe:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+<GridPane.margin>
+<Insets right="5.0" />
+</GridPane.margin></Label>
+                <Label text="Wetter:" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+                <Label text="Kommentar:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+<GridPane.margin>
+<Insets right="5.0" />
+</GridPane.margin></Label>
                 <TextField fx:id="nameField" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                 <TextArea fx:id="commentArea" prefHeight="62.0" prefWidth="134.0" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="4" GridPane.rowSpan="2" />
                 <ChoiceBox fx:id="weatherChoiceBox" prefWidth="150.0" GridPane.columnIndex="7" GridPane.rowIndex="3" />
@@ -50,9 +56,12 @@
                     </font>
                 </Label>
                 <Separator prefHeight="3.0" prefWidth="491.0" GridPane.columnIndex="1" GridPane.columnSpan="7" GridPane.rowIndex="6" />
-                <Label text="Gebiet auswählen" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
+                <Label text="Gebiet auswählen:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
+<GridPane.margin>
+<Insets right="5.0" />
+</GridPane.margin></Label>
                 <ChoiceBox fx:id="regionChoiceBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="7" />
-                <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="11">
+                <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="9">
                     <children>
                         <Button fx:id="save" mnemonicParsing="false" onAction="#onSavePressed" text="Speichern" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
                         <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="25.0" prefWidth="94.0" text="Abbrechen" GridPane.columnIndex="10" GridPane.halignment="RIGHT" GridPane.rowIndex="11" />
@@ -61,29 +70,38 @@
                         <Insets />
                     </opaqueInsets>
                 </HBox>
-                <Label text="Höhe" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11" />
-                <TextField fx:id="height" GridPane.columnIndex="3" GridPane.rowIndex="11" />
-                <Button mnemonicParsing="false" onAction="#chooseBackground" prefHeight="26.0" prefWidth="262.0" text="Ortskarte wählen" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="2" />
+                <Label text="Höhe:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="8">
+<GridPane.margin>
+<Insets right="5.0" />
+</GridPane.margin></Label>
+                <TextField fx:id="height" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+                <Button mnemonicParsing="false" onAction="#chooseBackground" prefHeight="26.0" prefWidth="262.0" text="Ortskarte wählen" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="2" /><Label text="Schritt" GridPane.columnIndex="5" GridPane.rowIndex="8" />
             </children>
         </GridPane>
     </center>
    <right>
       <BorderPane prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER">
          <center>
-            <TableView fx:id="locationConnectionsTable" prefHeight="413.0" prefWidth="198.0" BorderPane.alignment="CENTER">
+            <TableView fx:id="locationConnectionsTable" prefHeight="341.0" prefWidth="400.0" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn fx:id="connectionToColumn" prefWidth="212.0" text="Reiseverbindung zu" />
-                  <TableColumn fx:id="travelTimeColumn" minWidth="0.0" prefWidth="139.0" text="Reisedauer" />
+                <TableColumn fx:id="connectionToColumn" prefWidth="251.0" text="Reiseverbindung zu" />
+                  <TableColumn fx:id="travelTimeColumn" minWidth="0.0" prefWidth="148.0" text="Reisedauer" />
               </columns>
             </TableView>
          </center>
          <top>
-            <FlowPane alignment="TOP_CENTER" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="33.0" prefWidth="380.0" BorderPane.alignment="CENTER_RIGHT">
                <children>
-                  <Button fx:id="editConnectionsBtn" mnemonicParsing="false" onAction="#onEditConnectionsClicked" text="Reiseverbindungen bearbeiten" />
+                  <Button fx:id="editConnectionsBtn" alignment="CENTER" mnemonicParsing="false" onAction="#onEditConnectionsClicked" text="Reiseverbindungen bearbeiten" textAlignment="CENTER" />
                </children>
             </FlowPane>
          </top>
+<BorderPane.margin>
+<Insets />
+</BorderPane.margin>
+<padding>
+<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+</padding>
       </BorderPane>
    </right>
 </BorderPane>

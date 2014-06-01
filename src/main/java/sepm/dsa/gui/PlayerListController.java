@@ -88,6 +88,7 @@ public class PlayerListController implements Initializable {
                     .title("Löschen?")
                     .masthead(null)
                     .message("Wollen Sie die Spieler '" + selectedPlayer.getName() + "' wirklich endgültig löschen?")
+                    .actions(Dialog.Actions.NO, Dialog.Actions.YES)
                     .showConfirm();
             if (response == Dialog.Actions.YES) {
                 playerService.remove(selectedPlayer);
