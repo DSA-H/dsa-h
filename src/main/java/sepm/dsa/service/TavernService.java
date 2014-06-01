@@ -31,14 +31,7 @@ public interface TavernService {
      */
     List<Tavern> getAll();
 
-
-    /**
-     * Update a Tavern
-     *
-     * @param t Tavern (must not be null)
-     * @return The updated tavern model.
-     */
-    Tavern update(Tavern t);
+    void update(Tavern t);
 
 	void remove(Tavern tavern);
 

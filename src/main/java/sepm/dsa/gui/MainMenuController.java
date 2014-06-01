@@ -51,6 +51,9 @@ import java.util.List;
 public class MainMenuController implements Initializable {
 
 	private static final Logger log = LoggerFactory.getLogger(MainMenuController.class);
+    private static final int WORLDMODE = 0;
+    private static final int LOCATIONMODE = 1;
+
 	private SpringFxmlLoader loader;
 	private LocationService locationService;
 	private TraderService traderService;
@@ -158,7 +161,7 @@ public class MainMenuController implements Initializable {
 			}
 		});
 
-		mode = 0;
+		mode = WORLDMODE;
 
 		chooseButton.setStyle("-fx-font-weight: bold;");
 	}
@@ -173,7 +176,7 @@ public class MainMenuController implements Initializable {
 			return;
 		}
 		if (mode == 0) {
-			mode = 1;
+			mode = LOCATIONMODE;
 			locationTable.setVisible(false);
 			traderList.setVisible(true);
 			selectedObject = null;
@@ -193,14 +196,16 @@ public class MainMenuController implements Initializable {
 			traderList.setItems(FXCollections.observableArrayList(all));
 
 			chooseButton.setText("Weltansicht");
+            createButton.setText("Händler / Wirtshaus platzieren");
 			editButton.setText("Details");
 
 			checkTraderFocus();
 		} else {
-			mode = 0;
+			mode = WORLDMODE;
 			locationTable.setVisible(true);
 			traderList.setVisible(false);
 			chooseButton.setText("Ortsansicht");
+            createButton.setText("Ort platzieren");
 			editButton.setText("Bearbeiten");
 			checkLocationFocus();
 		}
@@ -212,7 +217,7 @@ public class MainMenuController implements Initializable {
 	private void onEditButtonPressed() {
 		log.debug("onEditButtonPressed - open Details Window");
 
-		if (mode == 0) {
+		if (mode == WORLDMODE) {
 			EditLocationController.setLocation(selectedLocation);
 
 			Stage stage = new Stage();
@@ -268,7 +273,7 @@ public class MainMenuController implements Initializable {
 	private void onDeleteButtonPressed() {
 		log.debug("onDeleteButtonPressed - deleting selected Data");
 
-		if (mode == 0) {
+		if (mode == WORLDMODE) {
 			Location selectedLocation = locationTable.getFocusModel().getFocusedItem();
 
 			if (selectedLocation != null) {
@@ -330,7 +335,7 @@ public class MainMenuController implements Initializable {
 	private void onCreateButtonPressed() {
 		log.debug("onCreateButtonPressed - open Details Window");
 
-		if (mode == 0) {
+		if (mode == WORLDMODE) {
 			if (mapService.getWorldMap() == null) {
 				EditLocationController.setLocation(null);
 
@@ -397,7 +402,7 @@ public class MainMenuController implements Initializable {
 		if (creationMode) {
 			createButton.setDisable(false);
 			creationMode = false;
-			if (mode == 0) {
+			if (mode == WORLDMODE) {
 				chooseButton.setText("Ortsansicht");
 				checkLocationFocus();
 				locationTable.setDisable(false);
@@ -443,7 +448,7 @@ public class MainMenuController implements Initializable {
 			Stage stage = new Stage();
 			Parent scene = (Parent) loader.load("/gui/placement.fxml");
 			PlacementController controller = loader.getController();
-			if (mode == 0) {
+			if (mode == WORLDMODE) {
 				stage.setTitle("Ort platzieren");
 				controller.setUp(null, pos, selectedLocation, false);
 			} else {
@@ -454,7 +459,7 @@ public class MainMenuController implements Initializable {
 			stage.setResizable(false);
 			stage.showAndWait();
 
-			if (mode == 0) {
+			if (mode == WORLDMODE) {
 				checkLocationFocus();
 			} else {
 				checkTraderFocus();
@@ -462,7 +467,7 @@ public class MainMenuController implements Initializable {
 
 			creationMode = false;
 			createButton.setDisable(false);
-			if (mode == 0) {
+			if (mode == WORLDMODE) {
 				chooseButton.setText("Ortsansicht");
 				checkLocationFocus();
 				locationTable.setDisable(false);
@@ -488,7 +493,7 @@ public class MainMenuController implements Initializable {
 			}
 			updateMap();
 		} else {
-			if (mode == 0) {
+			if (mode == WORLDMODE) {
 				int locX;
 				int locY;
 				List<Location> locations = locationService.getAll();
@@ -691,7 +696,7 @@ public class MainMenuController implements Initializable {
 	private void updateMap() {
 		log.debug("updateMap called");
 
-		if (mode == 0) {
+		if (mode == WORLDMODE) {
 			File worldMap = mapService.getWorldMap();
 			if (worldMap == null) {
 				worldMap = mapService.getNoMapImage();

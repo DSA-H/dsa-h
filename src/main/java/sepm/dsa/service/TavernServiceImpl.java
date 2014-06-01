@@ -52,10 +52,4 @@ public class TavernServiceImpl implements TavernService {
         // TODO implement
         return new ArrayList<Tavern>();
     }
-
-    @Override
-    public Tavern update(Tavern t) {
-        // TODO implement
-        return new Tavern();
-    }
 }
