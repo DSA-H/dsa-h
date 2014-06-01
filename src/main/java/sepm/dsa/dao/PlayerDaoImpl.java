@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.exceptions.DSAModelNotFoundException;
+import sepm.dsa.model.Deal;
 import sepm.dsa.model.Player;
 
 import java.util.ArrayList;
@@ -17,4 +18,11 @@ public class PlayerDaoImpl
         extends BaseDaoHbmImpl<Player>
         implements PlayerDao {
 
+    @Override
+    public void remove(Player model) {
+        super.remove(model);
+        for(Deal deal : model.getDeals()) {
+            deal.setPlayer(null);
+        }
+    }
 }
