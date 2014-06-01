@@ -1,7 +1,6 @@
 package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
@@ -114,32 +112,26 @@ public class EditPlayerController implements Initializable {
     private void initialzeTableWithColums() {
 
         //Todo relative DATE & abs date
-        dateColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> d) {
-                DSADate date = d.getValue().getDate();
+        dateColumn.setCellValueFactory(d -> {
+            DSADate date = d.getValue().getDate();
 
-                //TODO date before days
-                StringBuilder sb = new StringBuilder();
-                sb.append("vor ").append("TODO").append(" Tagen").append("(").append(date).append(")");
-                return new SimpleStringProperty(sb.toString());
-            }
+            //TODO date before days
+            StringBuilder sb = new StringBuilder();
+            sb.append("vor ").append("TODO").append(" Tagen").append("(").append(date).append(")");
+            return new SimpleStringProperty(sb.toString());
         });
 
         priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
         productColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("productName"));
 
         //TODO check unit and amount
-        amountColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> d) {
-                Unit unit = d.getValue().getUnit();
-                Integer amount = d.getValue().getAmount();
+        amountColumn.setCellValueFactory(d -> {
+            Unit unit = d.getValue().getUnit();
+            Integer amount = d.getValue().getAmount();
 
-                StringBuilder sb = new StringBuilder();
-                sb.append(amount).append(" ").append(unit.getShortName());
-                return new SimpleStringProperty(sb.toString());
-            }
+            StringBuilder sb = new StringBuilder();
+            sb.append(amount).append(" ").append(unit.getShortName());
+            return new SimpleStringProperty(sb.toString());
         });
     }
 
