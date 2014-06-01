@@ -67,7 +67,9 @@ public class EditPlayerController implements Initializable {
             isNewPlaper = false;
             nameField.setText(selectedPlayer.getName());
             commentField.setText(selectedPlayer.getComment());
-            dealsTable.setItems(FXCollections.observableArrayList(selectedPlayer.getDeals()));
+            if (selectedPlayer.getDeals().size() > 0) {
+                dealsTable.setItems(FXCollections.observableArrayList(selectedPlayer.getDeals()));
+            }
         } else {
             isNewPlaper = true;
             selectedPlayer = new Player();
