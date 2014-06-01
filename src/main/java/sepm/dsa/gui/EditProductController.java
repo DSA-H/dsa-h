@@ -92,6 +92,10 @@ public class EditProductController implements Initializable {
         categorieColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
+        attributeBox.setItems(FXCollections.observableArrayList(ProductAttribute.values()));
+        categorieChoiceBox.setItems(FXCollections.observableArrayList(categoryList));
+        regionChoiceBox.setItems(FXCollections.observableArrayList(regionList));
+
         if (selectedProduct != null){
             isNewProduct = false;
             nameField.setText(selectedProduct.getName());
@@ -109,11 +113,8 @@ public class EditProductController implements Initializable {
         }else {
             isNewProduct = true;
             selectedProduct = new Product();
+            attributeBox.getSelectionModel().select(0);
         }
-
-        attributeBox.setItems(FXCollections.observableArrayList(ProductAttribute.values()));
-        categorieChoiceBox.setItems(FXCollections.observableArrayList(categoryList));
-        regionChoiceBox.setItems(FXCollections.observableArrayList(regionList));
     }
 
     @FXML
