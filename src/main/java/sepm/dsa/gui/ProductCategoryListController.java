@@ -11,7 +11,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
@@ -20,7 +19,6 @@ import sepm.dsa.model.ProductCategory;
 import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.SaveCancelService;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -32,12 +30,14 @@ public class ProductCategoryListController implements Initializable {
     private ProductCategoryService productCategoryService;
     private SaveCancelService saveCancelService;
 
+    private ProductCategory selectedProcutCategory;
+
     @FXML
     private TreeView<ProductCategory> treeview;
     @FXML
     private TableView<Product> tableview;
     @FXML
-    private TableColumn productColumn;
+    private TableColumn<Product, String> productColumn;
     @FXML
     private Button deleteButton;
     @FXML
@@ -48,28 +48,38 @@ public class ProductCategoryListController implements Initializable {
         log.debug("initialize ProductListController");
         // init table
 
-        /*productColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        ObservableList<Product> data = FXCollections.observableArrayList(productService.getAll());
-        productTable.setItems(data);
-        */
+        productColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        initializeTreeView();
+        reloadAndRefreshGui();
+
+
     }
 
-    private void initializeTreeView(){
-        List<ProductCategory> productCategoryList = productCategoryService.getAll();
-
-
+    private void reloadAndRefreshGui() {
+        List<ProductCategory> rootProductCategoryList = productCategoryService.getAllRoot();
         TreeItem<ProductCategory> root = new TreeItem<ProductCategory>(new ProductCategory());
         root.setExpanded(true);
-        getTreeChildren(productCategoryList, root);
+        addTreeChildren(rootProductCategoryList, root);
 
         treeview.setRoot(root);
         treeview.setShowRoot(false);
         checkFocus();
+
+        refreshGui();
     }
 
-    private void getTreeChildren(List<ProductCategory> productCategoryList, TreeItem root){
+    private void refreshGui() {
+        log.debug("refreshGui");
+        ObservableList<Product> data = null;
+        if (selectedProcutCategory == null) {
+            data = FXCollections.observableArrayList();
+        } else {
+            data = FXCollections.observableArrayList(selectedProcutCategory.getProducts());
+        }
+        tableview.setItems(data);
+    }
+
+    private void addTreeChildren(List<ProductCategory> productCategoryList, TreeItem root){
 
         for (ProductCategory item: productCategoryList) {
             TreeItem<ProductCategory> node = createNode(item);
@@ -79,13 +89,20 @@ public class ProductCategoryListController implements Initializable {
 
     @FXML
     private void checkFocus() {
-        if (treeview.getFocusModel().getFocusedItem() == null) {
+        selectedProcutCategory = treeview.getFocusModel().getFocusedItem() != null ? treeview.getFocusModel().getFocusedItem().getValue() : null;
+        if (selectedProcutCategory == null) {
             deleteButton.setDisable(true);
             editButton.setDisable(true);
         } else {
             deleteButton.setDisable(false);
             editButton.setDisable(false);
         }
+    }
+
+    @FXML
+    private void onTreeviewClicked() {
+        checkFocus();
+        refreshGui();
     }
 
     @FXML
@@ -132,7 +149,7 @@ public class ProductCategoryListController implements Initializable {
                 productCategoryService.remove(selectedProductCategory);
                 saveCancelService.save();
                 //could be replaced with a search-through-all-elements-childs algorithm
-                initializeTreeView();
+                reloadAndRefreshGui();
             }
         }
 

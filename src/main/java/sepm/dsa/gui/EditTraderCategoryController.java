@@ -160,17 +160,6 @@ public class EditTraderCategoryController implements Initializable {
         traderCategory.setComment(commentField.getText());
         traderCategory.setName(nameField.getText());
 
-//        traderCategory.getAssortments().clear();
-//        assortmentNatures.clear();
-//
-//        for (AssortmentNature a : assortmentTable.getItems()) {
-//            traderCategory.putAssortment(a);
-//        }
-
-//        if (assortmentNatures.size() <= 0) {
-//            throw new DSAValidationException("Mindestens eine Warenkategorie muss gewählt werden");
-//        }
-
         if (assortmentTable.getItems().size() == 0) {
             throw new DSAValidationException("Mindestens eine Warenkategorie muss zugewiesen sein");
         }
@@ -181,26 +170,31 @@ public class EditTraderCategoryController implements Initializable {
             traderCategoryService.update(traderCategory);
         }
 
-        traderCategory.getAssortments().clear();
-
-        // TODO assortmentNatures update
         List<AssortmentNature> localAssortmentsList = assortmentTable.getItems();
-        for (AssortmentNature a : assortmentNatureService.getAllByTraderCategory(traderCategory.getId())) {
+        List<AssortmentNature> removeList = new ArrayList<>();
+        Collection<AssortmentNature> assortmentNatures = traderCategory.getAssortments().values();
+        for (AssortmentNature a : assortmentNatures) {
             boolean contain = false;
             for (AssortmentNature localAssortment : localAssortmentsList) {
-                if (localAssortment.equalsById(a)) {
+                if (localAssortment.getProductCategory().equals(a.getProductCategory())) {
+                    a.setDefaultOccurence(localAssortment.getDefaultOccurence());
                     assortmentNatureService.update(a);
                     contain = true;
                     break;
                 }
             }
             if (!contain) {
-                assortmentNatureService.remove(a);
+                removeList.add(a);
             }
             localAssortmentsList.remove(a);
         }
+        for(AssortmentNature a : removeList) {
+            assortmentNatureService.remove(a);
+            traderCategory.getAssortments().remove(a);
+        }
         for (AssortmentNature assortmentNature : localAssortmentsList) {
             assortmentNatureService.add(assortmentNature);
+            traderCategory.getAssortments().put(assortmentNature.getProductCategory(), assortmentNature);
         }
 
         saveCancelService.save();

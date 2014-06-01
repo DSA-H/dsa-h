@@ -62,4 +62,9 @@ public class MovingTrader extends Trader implements Serializable {
     public Integer getAvgStayDays() {
         return avgStayDays;
     }
+
+    @Override
+    public String toString() {
+        return "fahrender Händler " + getName();
+    }
 }
