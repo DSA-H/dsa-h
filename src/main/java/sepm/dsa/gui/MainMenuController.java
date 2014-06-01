@@ -270,7 +270,8 @@ public class MainMenuController implements Initializable {
 						.title("Löschen?")
 						.masthead(null)
 						.message("Wollen Sie den Ort '" + selectedLocation.getName() + "' wirklich löschen? Folgende verbundenden Einträge würden ebenfalls gelöscht werden:" + connectedEntries)
-						.showConfirm(); // TODO was ist hier sinnvoll?
+                        .actions(Dialog.Actions.NO, Dialog.Actions.YES)
+                        .showConfirm(); // TODO was ist hier sinnvoll?
 				if (response == Dialog.Actions.YES) {
 					locationService.remove(selectedLocation);
 					saveCancelService.save();
@@ -296,7 +297,8 @@ public class MainMenuController implements Initializable {
 							.title("Löschen?")
 							.masthead(null)
 							.message("Wollen Sie den Händer '" + ((Trader)selectedObject).getName() + "' wirklich löschen")
-							.showConfirm();
+                            .actions(Dialog.Actions.NO, Dialog.Actions.YES)
+                            .showConfirm();
 					if (response == Dialog.Actions.YES) {
 						traderService.remove((Trader) selectedObject);
 						saveCancelService.save();
@@ -308,7 +310,8 @@ public class MainMenuController implements Initializable {
 							.title("Löschen?")
 							.masthead(null)
 							.message("Wollen Sie das Wirtshaus '" + ((Tavern)selectedObject).getName() + "' wirklich löschen")
-							.showConfirm();
+                            .actions(Dialog.Actions.NO, Dialog.Actions.YES)
+                            .showConfirm();
 					if (response == Dialog.Actions.YES) {
 						tavernService.remove((Tavern) selectedObject);
 						saveCancelService.save();
@@ -1030,7 +1033,8 @@ public class MainMenuController implements Initializable {
 				.title("Programm beenden?")
 				.masthead(null)
 				.message("Wollen Sie das Händlertool wirklich beenden? Nicht gespeicherte Änderungen gehen dabei verloren.")
-				.showConfirm();
+                .actions(Dialog.Actions.NO, Dialog.Actions.YES)
+                .showConfirm();
 
 		if (response == Dialog.Actions.YES) {
 			log.debug("Confirm-Exit-Dialog confirmed");

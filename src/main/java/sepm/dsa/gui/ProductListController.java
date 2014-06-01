@@ -16,8 +16,6 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
@@ -132,6 +130,7 @@ public class ProductListController implements Initializable {
                     .title("Löschen?")
                     .masthead(null)
                     .message("Wollen Sie die Ware '" + selectedProduct.getName() + "' wirklich endgültig löschen?")
+                    .actions(Dialog.Actions.NO, Dialog.Actions.YES)
                     .showConfirm();
             if (response == Dialog.Actions.YES) {
                 productService.remove(selectedProduct);
