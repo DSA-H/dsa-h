@@ -132,6 +132,6 @@ public class Tavern implements BaseModel {
 
     @Override
     public String toString() {
-        return name;
+        return "Wirtshaus " + name;
     }
 }
