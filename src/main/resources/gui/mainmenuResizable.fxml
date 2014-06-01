@@ -5,22 +5,20 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="485.0" prefWidth="1071.0"
-            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="sepm.dsa.gui.MainMenuController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="485.0" prefWidth="1071.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.MainMenuController">
     <top>
         <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
             <menus>
-                <Menu fx:id="dateiMenu" mnemonicParsing="false" text="Datei">
+                <Menu mnemonicParsing="false" text="Datei" fx:id="dateiMenu">
                     <items>
                         <MenuItem fx:id="dateiImport" mnemonicParsing="false" text="Import" disable="true"/>
                         <MenuItem fx:id="dateiExport" mnemonicParsing="false" text="Export" disable="true"/>
                         <MenuItem fx:id="dateiExit" mnemonicParsing="false" onAction="#onExitClicked" text="Beenden"/>
                     </items>
                 </Menu>
-                <Menu fx:id="dateiVerwaltenMenu" mnemonicParsing="false" text="Daten Verwalten">
+                <Menu mnemonicParsing="false" text="Daten Verwalten" fx:id="dateiVerwaltenMenu">
                     <items>
-                        <Menu fx:id="verwaltenWeltkarte" mnemonicParsing="false" text="Weltkarte">
+                        <Menu mnemonicParsing="false" text="Weltkarte" fx:id="verwaltenWeltkarte">
                             <items>
                                 <MenuItem fx:id="weltkarteImportieren" mnemonicParsing="false"
                                           onAction="#onWeltkarteImportierenPressed" text="Importieren"/>
@@ -78,26 +76,56 @@
     </bottom>
     <center>
         <GridPane minWidth="500.0" BorderPane.alignment="CENTER">
+            <children>
+                <ScrollPane fx:id="scrollPane" onMouseClicked="#onScrollPaneClicked" prefHeight="541.0"
+                            prefWidth="811.0" GridPane.rowSpan="2"/>
+                <ListView fx:id="traderList" minWidth="200.0" prefHeight="200.0" prefWidth="200.0" visible="false"
+                          GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowSpan="2"/>
+                <TableView fx:id="locationTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
+                           GridPane.hgrow="NEVER">
+                    <columns>
+                        <TableColumn prefWidth="120.0" text="Ort" fx:id="locationColumn"/>
+                        <TableColumn prefWidth="125.0" text="Gebiet" fx:id="regionColumn"/>
+                    </columns>
+                </TableView>
+                <GridPane fx:id="pathCalcGrid" disable="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <children>
+                        <Label text="Wegberechnung" underline="true" GridPane.columnIndex="0"
+                               GridPane.halignment="CENTER" GridPane.rowIndex="0"/>
+                        <Button fx:id="fromButton" disable="true" mnemonicParsing="false" onAction="#onFromPressed"
+                                prefWidth="100.0" text="von" GridPane.columnIndex="0" GridPane.halignment="CENTER"
+                                GridPane.rowIndex="1"/>
+                        <Button fx:id="toButton" disable="true" mnemonicParsing="false" onAction="#onToPressed"
+                                prefWidth="100.0" text="nach" GridPane.columnIndex="0" GridPane.halignment="CENTER"
+                                GridPane.rowIndex="2"/>
+                        <Label fx:id="fromLabel" text="kein Ort" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <Label fx:id="toLabel" text="kein Ort" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <Button fx:id="calcButton" contentDisplay="LEFT" disable="true" mnemonicParsing="false"
+                                onAction="#onCalcPressed" prefHeight="-1.0" prefWidth="100.0" text="Berechnen"
+                                textAlignment="LEFT" GridPane.columnIndex="0" GridPane.halignment="CENTER"
+                                GridPane.rowIndex="3"/>
+                        <Label fx:id="resultLabel" text="kein Ergebnis" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    </children>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="46.0" minHeight="46.0" prefHeight="46.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="46.0" minHeight="46.0" prefHeight="46.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                </GridPane>
+            </children>
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="811.0"/>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="246.0"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="384.0" minHeight="10.0" prefHeight="357.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="152.0" minHeight="152.0" prefHeight="152.0" vgrow="SOMETIMES"/>
             </rowConstraints>
-            <children>
-                <ScrollPane fx:id="scrollPane" onMouseClicked="#onScrollPaneClicked" prefHeight="369.0"
-                            prefWidth="200.0"/>
-                <ListView fx:id="traderList" minWidth="200.0" prefHeight="200.0" prefWidth="200.0" visible="false"
-                          GridPane.columnIndex="1" GridPane.hgrow="NEVER"/>
-                <TableView fx:id="locationTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
-                           GridPane.hgrow="NEVER">
-                    <columns>
-                        <TableColumn fx:id="locationColumn" prefWidth="120.0" text="Ort"/>
-                        <TableColumn fx:id="regionColumn" prefWidth="125.0" text="Gebiet"/>
-                    </columns>
-                </TableView>
-            </children>
         </GridPane>
     </center>
 </BorderPane>

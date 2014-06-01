@@ -2,6 +2,7 @@ package sepm.dsa.service;
 
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
+import sepm.dsa.service.path.NoPathException;
 
 import java.util.List;
 
@@ -53,7 +54,7 @@ public interface LocationConnectionService {
      * @return a list of connections, or null, if no such path exists
      * @throws sepm.dsa.exceptions.DSALocationNotExistingException
      */
-    List<LocationConnection> getShortestPathBetween(Location location1, Location location2);
+    List<LocationConnection> getShortestPathBetween(Location location1, Location location2) throws NoPathException;
 
     /**
      * @param location the location

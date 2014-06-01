@@ -28,34 +28,32 @@ public class MapServiceImpl implements MapService {
     @Override
     public File chooseMap() {
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Karte auswählen");
-        if (alternativeDir.isDirectory() && alternativeDir.list().length > 0) {
-            fileChooser.setInitialDirectory(new File("maps/alternative"));
-        }
-        List<String> extensions = new ArrayList<String>();
-        extensions.add("*.jpg");
-        extensions.add("*.png");
-        extensions.add("*.gif");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All Images", extensions),
-                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                new FileChooser.ExtensionFilter("GIF", "*.gif"),
-                new FileChooser.ExtensionFilter("PNG", "*.png")
-        );
-        File newMap = fileChooser.showOpenDialog(new Stage());
-        if (newMap != null) {
-            if (newMap.length() > 11000000) {
-                Dialogs.create()
-                        .title("Fehler")
-                        .masthead(null)
-                        .message("Die Datei darf maximal 10 MB groß sein!")
-                        .showWarning();
-                return null;
-            }
-        }
-        return newMap;
-    }
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Karte auswählen");
+		if (alternativeDir.isDirectory() && alternativeDir.list().length > 0) {
+				fileChooser.setInitialDirectory(new File("maps/alternative"));
+		}
+		List<String> extensions = new ArrayList<String>();
+		extensions.add("*.jpg");
+		extensions.add("*.png");
+		extensions.add("*.gif");
+		fileChooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("All Images", extensions),
+				new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+				new FileChooser.ExtensionFilter("GIF", "*.gif"),
+				new FileChooser.ExtensionFilter("PNG", "*.png")
+		);
+		File newMap = fileChooser.showOpenDialog(new Stage());
+		if (newMap != null && newMap.length() > 11000000) {
+			Dialogs.create()
+					.title("Fehler")
+					.masthead(null)
+					.message("Die Datei darf maximal 10 MB groß sein!")
+					.showWarning();
+			return null;
+		}
+		return newMap;
+	}
 
     @Override
     public void setWorldMap(File newMap) {
