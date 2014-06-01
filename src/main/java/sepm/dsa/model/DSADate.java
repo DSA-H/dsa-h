@@ -1,6 +1,10 @@
 package sepm.dsa.model;
 
 import sepm.dsa.exceptions.DSADateException;
+import sepm.dsa.exceptions.DSAValidationException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Representing a Date in DSA. In DSA each month has 30 days, each year 12 months, and each year 365 days. The 5 remaining
@@ -35,10 +39,10 @@ public final class DSADate {
 
     public void setMonth(int month) {
         if (month > 13 || month < 1) {
-            throw new DSADateException("Invalid Month '" + month + "'. Month has to be between 1 and 13");
+            throw new DSAValidationException("Ungültiger Monat '" + month + "'. Monat muss zwischen 1 und 13 liegen.");
         }
         if (month == 13 && day > 5) {
-            throw new DSADateException("Invalid Day in Month 13 '" + day + "'. Month 13 has only 5 days");
+            throw new DSAValidationException("Ungültiger Tag im Namenlosen Monat! Es gibt nur 5 Namenlose Tage.");
         }
         this.month = month;
     }
@@ -49,7 +53,7 @@ public final class DSADate {
 
     public void setDay(int day) {
         if (day > 30 || day < 1) {
-            throw new DSADateException("Invalid Day '" + day + "'. Day has to be between 1 and 30");
+            throw new DSAValidationException("Ungültiger Tag '" + day + "'. Tag muss zwischen 1 und 30 liegen");
         }
         this.day = day;
     }
@@ -114,5 +118,51 @@ public final class DSADate {
         result = 31 * result + month;
         result = 31 * result + day;
         return result;
+    }
+
+    public String getMonthName() {
+        return getMonthNames().get(month-1);
+    }
+
+    public int parseMonthName(String month) {
+        switch (month) {
+            case "Firun": return 1;
+            case "Tsa": return 2;
+            case "Phex": return 3;
+            case "Peraine": return 4;
+            case "Ingerimm": return 5;
+            case "Rahja": return 6;
+            case "Praios": return 7;
+            case "Rondra": return 8;
+            case "Efferd": return 9;
+            case "Travia": return 10;
+            case "Boron": return 11;
+            case "Hesinde": return 12;
+            case "Namenloser": return 13;
+            default: throw new DSADateException("Kein entsprechender Monat gefunden");
+        }
+    }
+
+    public static List<String> getMonthNames() {
+        List<String> result = new ArrayList<>();
+        result.add("Firun");
+        result.add("Tsa");
+        result.add("Phex");
+        result.add("Peraine");
+        result.add("Ingerimm");
+        result.add("Rahja");
+        result.add("Praios");
+        result.add("Rondra");
+        result.add("Efferd");
+        result.add("Travia");
+        result.add("Boron");
+        result.add("Hesinde");
+        result.add("Namenloser");
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return day + ". " + getMonthName() + "[" + month + "]" + " " + year + " BF";
     }
 }

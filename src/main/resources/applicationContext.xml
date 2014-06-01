@@ -363,7 +363,14 @@
         <property name="loader" ref="loader"/>
         <property name="currencyService" ref="currencyService"/>
     </bean>
-
+    <bean id="editDate" class="sepm.dsa.gui.EditDateController">
+        <property name="loader" ref="loader"/>
+        <property name="timeService" ref="timeService"/>
+    </bean>
+    <bean id="forwardDate" class="sepm.dsa.gui.ForwardDateController">
+        <property name="loader" ref="loader"/>
+        <property name="timeService" ref="timeService"/>
+    </bean>
     <!-- Transaction -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import sepm.dsa.dao.OfferDao;
 import sepm.dsa.exceptions.DSARuntimeException;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 
 import java.io.*;
@@ -72,7 +73,7 @@ public class TimeServiceImpl implements TimeService {
     public void forwardTime(int days) {
         log.debug("calling forwardTime(" + days + ")");
         if(days < 1) {
-            return;
+            throw new DSAValidationException("Das Datum muss mindestens einen Tag nach vorne gestellt werden!");
         }
         // save new time
         date.setTimestamp(date.getTimestamp() + days);
