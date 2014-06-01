@@ -527,7 +527,6 @@ public class MainMenuController implements Initializable {
 
 	@FXML
 	public void onPlayerClicked(ActionEvent event) {
-
 		log.debug("onPlayerClicked - open Player Window");
 		Stage stage = new Stage();
 		Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
@@ -567,13 +566,18 @@ public class MainMenuController implements Initializable {
 	@FXML
 	private void onGrenzenGebieteClicked() {
 		log.debug("onGrenzenGebieteClicked - open Grenzen und Gebiete Window");
+
 		Stage stage = new Stage();
 		Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
 
 		stage.setTitle("Grenzen und Gebiete");
 		stage.setScene(new Scene(scene, 600, 438));
 		stage.setResizable(false);
-		stage.show();
+		stage.showAndWait();
+
+        Stage primaryStage = (Stage)createButton.getScene().getWindow();
+        Parent root = (Parent) loader.load("/gui/mainmenuResizable.fxml");
+        primaryStage.setScene(new Scene(root, 1045, 600));
 	}
 
 	@FXML
@@ -814,6 +818,7 @@ public class MainMenuController implements Initializable {
 			posY1 = l.getyCoord();
 			if (posX1 != 0 && posY1 != 0) {
 				gc.fillRoundRect(posX1 - 10, posY1 - 10, 20, 20, 10, 10);
+                saveCancelService.refresh(l);
 				for (LocationConnection lc : l.getAllConnections()) {
 					loc1 = lc.getLocation1();
 					loc2 = lc.getLocation2();
