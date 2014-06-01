@@ -46,4 +46,9 @@ public interface ProductCategoryService {
      */
     List<ProductCategory> getAllRoot();
 
+    /** Returns all Childs and all Subchilds the tree down.
+     * @return list of childs or empty list if no childs
+     */
+    List<ProductCategory> getAllChilds(ProductCategory productCategory);
+
 }
