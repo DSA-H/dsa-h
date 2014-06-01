@@ -144,7 +144,7 @@ public class ProductListController implements Initializable {
 
     @FXML
     private void checkFocus() {
-        Product selectedProduct = productTable.getFocusModel().getFocusedItem();
+        Product selectedProduct = productTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         if (selectedProduct == null) {
             deleteButton.setDisable(true);
             editButton.setDisable(true);

@@ -106,7 +106,7 @@ public class CurrencyListController implements Initializable {
 
     @FXML
     private void checkFocus() {
-        Currency selectedCurrency = currencyTable.getFocusModel().getFocusedItem();
+        Currency selectedCurrency = currencyTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         if (selectedCurrency == null) {
             deleteButton.setDisable(true);
             editButton.setDisable(true);

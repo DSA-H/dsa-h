@@ -176,7 +176,7 @@ public class RegionListController implements Initializable {
 
     @FXML
     private void checkFocus() {
-        Region selectedRegion = regionTable.getFocusModel().getFocusedItem();
+        Region selectedRegion = regionTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         if (selectedRegion == null) {
             deleteButton.setDisable(true);
             editButton.setDisable(true);

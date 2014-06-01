@@ -280,7 +280,7 @@ public class EditRegionController implements Initializable {
     @FXML
     private void checkFocus() {
         log.debug("calling checkFocus()");
-        RegionBorder selected = borderTable.getFocusModel().getFocusedItem();
+        RegionBorder selected = borderTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         if (selected == null) {
             removeBorderButton.setDisable(true);
         } else {

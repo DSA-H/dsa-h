@@ -209,7 +209,7 @@ public class EditTraderCategoryController implements Initializable {
     @FXML
     private void checkFocus() {
         log.debug("calling checkFocus()");
-        AssortmentNature selected = assortmentTable.getFocusModel().getFocusedItem();
+        AssortmentNature selected = assortmentTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         if (selected == null) {
             removeAssortButton.setDisable(true);
         } else {

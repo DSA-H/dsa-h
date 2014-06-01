@@ -147,7 +147,7 @@ public class TavernListController implements Initializable {
 
     @FXML
     private void checkFocus() {
-        selectedTavern = (Tavern) tavernList.getFocusModel().getFocusedItem();
+        selectedTavern = (Tavern) tavernList.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         if (selectedTavern == null) {
             editButton.setDisable(true);
             deleteButton.setDisable(true);

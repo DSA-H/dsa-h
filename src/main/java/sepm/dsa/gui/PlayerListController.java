@@ -101,7 +101,7 @@ public class PlayerListController implements Initializable {
 
     @FXML
     private void checkFocus() {
-        Player selectedPlayer = playerTable.getFocusModel().getFocusedItem();
+        Player selectedPlayer = playerTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         if (selectedPlayer == null) {
             deleteButton.setDisable(true);
             editButton.setDisable(true);

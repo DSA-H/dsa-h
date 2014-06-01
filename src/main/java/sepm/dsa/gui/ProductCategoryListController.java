@@ -87,7 +87,8 @@ public class ProductCategoryListController implements Initializable {
 
     @FXML
     private void checkFocus() {
-        selectedProcutCategory = treeview.getFocusModel().getFocusedItem() != null ? treeview.getFocusModel().getFocusedItem().getValue() : null;
+        //selectedProcutCategory = treeview.getFocusModel().getFocusedItem() != null ? treeview.getFocusModel().getFocusedItem().getValue() : null;
+        selectedProcutCategory = treeview.getSelectionModel().getSelectedItem() != null ? treeview.getSelectionModel().getSelectedItem().getValue() : null;
         if (selectedProcutCategory == null) {
             deleteButton.setDisable(true);
             editButton.setDisable(true);
