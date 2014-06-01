@@ -5,7 +5,7 @@ public enum ProductAttribute {
     NORMAL(0, "normal"),
     VERDERBLICH(1, "verderblich"),
     LAGERBAR(2, "lagerbar"),
-    ZERBRECHLICH(3, "zerbrichlich");
+    ZERBRECHLICH(3, "zerbrechlich");
 
     private int value;
     private String name;
@@ -58,7 +58,7 @@ public enum ProductAttribute {
 
     @Override
     public String toString() {
-        return name() + "(" + this.getValue() + ")";
+        return getName();
     }
 
     public String getName() {
