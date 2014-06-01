@@ -13,6 +13,6 @@
             </font>
         </Label><Label layoutX="7.0" layoutY="86.0" prefHeight="17.0" prefWidth="112.0" text="Aktuelles Datum:" /><Label fx:id="actDate" layoutX="121.0" layoutY="86.0" prefHeight="17.0" prefWidth="171.0" text="1. asdadadsd 1223 BF" /><Label layoutX="14.0" layoutY="131.0" text="Tage seitdem vergangen:" /><TextField fx:id="day" layoutX="193.0" layoutY="126.0" prefHeight="25.0" prefWidth="45.0" /><HBox alignment="TOP_RIGHT" layoutX="38.0" layoutY="178.0" prefHeight="25.0" prefWidth="410.0" spacing="10.0">
 <children><Button mnemonicParsing="false" onAction="#cancelClicked" text="Abbrechen" /><Button mnemonicParsing="false" onAction="#saveClicked" prefHeight="26.0" prefWidth="84.0" text="Speichern" />
-</children></HBox><Label alignment="TOP_LEFT" layoutX="292.0" layoutY="50.0" prefHeight="123.0" prefWidth="153.0" text="Beim Vorstellen der Zeit verändert sich das Sortiment aller Händler (Fluktration), Fahrende Händler ziehen gegebenenfalls um und die Auslastung von Tavernen kann sich ändern." textFill="#868686" wrapText="true" />
+</children></HBox><Label alignment="TOP_LEFT" layoutX="292.0" layoutY="50.0" prefHeight="123.0" prefWidth="153.0" text="Beim Vorstellen der Zeit verändert sich das Sortiment aller Händler (Fluktuation), Fahrende Händler ziehen gegebenenfalls um und die Auslastung von Tavernen kann sich ändern." textFill="#868686" wrapText="true" />
     </children>
 </Pane>
