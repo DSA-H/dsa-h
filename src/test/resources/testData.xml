@@ -60,8 +60,8 @@
     <productCategories id="1" name="category1" />
     <productCategories id="2" name="category2" />
     <productCategories id="3" name="category3" parent_id="2"/>
-    <productCategories id="4" name="category4" parent_id="2"/>
-    <productCategories id="5" name="category5" parent_id="1"/>
+    <productCategories id="4" name="category4" parent_id="3"/>
+    <productCategories id="5" name="category5" parent_id="3"/>
     <productCategories id="6" name="category6" />
     <product_categories productId="1" categoryId="1" />
     <product_categories productId="1" categoryId="2" />

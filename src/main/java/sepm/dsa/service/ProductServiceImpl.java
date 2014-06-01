@@ -13,6 +13,8 @@ import sepm.dsa.model.ProductCategory;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -65,13 +67,33 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getAllFromProductcategory(ProductCategory productCategory) {
+    public Set<Product> getAllFromProductcategory(ProductCategory productCategory) {
         log.debug("calling getAllFromProductcategory");
-        List<Product> result = productDao.getAllByCategoryPlusChildren(productCategory);
-//        traderDao.getAllByCategory(traderCategory);
+//        List<Product> result = productDao.getAllByCategoryPlusChildren(productCategory);  // TODO this will be used when solved the (n+1) problem when changing ProductCategory.products to fetch=LAZY again
+
+        LinkedList<ProductCategory> categories = new LinkedList<>();
+        int productCount = addAllProductCategoryChildren(productCategory, categories);
+
+        Set<Product> result = new HashSet<Product>(productCount);
+
+        for (ProductCategory c : categories) {
+            result.addAll(c.getProducts());
+        }
         log.trace("returning " + result);
-//        Set<Product> result = productDao.getAllByCategories(productCategory.getChilds());
         return result;
+    }
+
+    private int addAllProductCategoryChildren(ProductCategory productCategory, List<ProductCategory> target) {
+        int productCount = 0;
+        target.add(productCategory);
+
+        productCount += productCategory.getProducts().size();
+
+        for (ProductCategory child : productCategory.getChilds()) {
+            productCount += addAllProductCategoryChildren(child, target);
+        }
+
+        return productCount;
     }
 
     public void setProductDao(ProductDao productDao) {
