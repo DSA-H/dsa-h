@@ -80,11 +80,16 @@ public class EditProductCategoryController implements Initializable {
     private void onSavePressed() {
         log.debug("SaveButtonPressed");
 
-        // save product
         String name = nameField.getText();
         ProductCategory parent = choiceParent.getSelectionModel().getSelectedItem();
         selectedProductCategory.setName(name);
         selectedProductCategory.setParent(parent);
+
+        // save product
+//        ProductCategory p = new ProductCategory();
+//        p.setName(name);
+//        p.setId(selectedProductCategory.getId());
+//        p.setParent(choiceParent.getSelectionModel().getSelectedItem());
 
         if(isNewProductCategory) {
             productCategoryService.add(selectedProductCategory);
@@ -92,6 +97,9 @@ public class EditProductCategoryController implements Initializable {
             productCategoryService.update(selectedProductCategory);
         }
         saveCancelService.save();
+        // TODO remove this, need to implement this references change on update -> parent changed in DAO.update
+//        saveCancelService.refresh(selectedProductCategory.getParent());
+
         // return to productcategorylist
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml");

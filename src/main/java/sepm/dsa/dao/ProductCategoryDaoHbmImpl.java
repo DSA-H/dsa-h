@@ -26,11 +26,19 @@ public class ProductCategoryDaoHbmImpl
 
     @Override
     public ProductCategory update(ProductCategory model) {
-        ProductCategory result = super.update(model);
-//        if (model.getParent() != null) {
-//            result.getParent().getChilds().add(model);
+
+        // this should work if a transient model (not in the persistence context) is the parameter
+//        ProductCategory p = (ProductCategory) sessionFactory.getCurrentSession().load(ProductCategory.class, model.getId());
+//        if (p.getParent() != null) {
+//            p.getParent().getChilds().remove(model);
 //        }
-//        TODO make correct references of parent.childs if parent changed
+//        if (model.getParent() != null) {
+//            ProductCategory newParent = (ProductCategory) sessionFactory.getCurrentSession().load(ProductCategory.class, model.getParent().getId());
+//            newParent.getChilds().add(model);
+//        }
+
+        ProductCategory result = super.update(model);
+
         return result;
     }
 
