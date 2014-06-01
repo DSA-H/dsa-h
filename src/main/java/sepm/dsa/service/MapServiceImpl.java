@@ -4,6 +4,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,14 @@ public class MapServiceImpl implements MapService {
 				new FileChooser.ExtensionFilter("PNG", "*.png")
 		);
 		File newMap = fileChooser.showOpenDialog(new Stage());
+		if (newMap.length() > 11000000) {
+			Dialogs.create()
+					.title("Fehler")
+					.masthead(null)
+					.message("Die Datei darf maximal 10 MB groß sein!")
+					.showWarning();
+			return null;
+		}
 		return newMap;
 	}
 
