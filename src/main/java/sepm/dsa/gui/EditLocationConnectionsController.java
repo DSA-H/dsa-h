@@ -1,6 +1,7 @@
 package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
+import sepm.dsa.model.RegionBorder;
 import sepm.dsa.service.LocationConnectionService;
 import sepm.dsa.service.LocationService;
 
@@ -63,6 +66,12 @@ public class EditLocationConnectionsController implements Initializable {
     @FXML
     private TextField locationNameFilter;
 
+    @FXML
+    private Button removeButton;
+
+    @FXML
+    private Button editButton;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         log.debug("initialize");
@@ -99,6 +108,13 @@ public class EditLocationConnectionsController implements Initializable {
             }
         });
 
+        locationConnectionsTable.getFocusModel().focusedItemProperty().addListener(new ChangeListener<LocationConnection>() {
+            @Override
+            public void changed(ObservableValue<? extends LocationConnection> observable, LocationConnection oldValue, LocationConnection newValue) {
+                checkFocus();
+            }
+        });
+        checkFocus();
         // TODO suggest connections click
     }
 
@@ -207,6 +223,19 @@ public class EditLocationConnectionsController implements Initializable {
         suggestLocationConnectionsTable.getItems().remove(selected);
         locationConnectionsTable.getItems().add(selected);
 //        reloadLocation();
+    }
+
+    @FXML
+    private void checkFocus() {
+        log.debug("calling checkFocus()");
+        LocationConnection selected = locationConnectionsTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
+        if (selected == null) {
+            removeButton.setDisable(true);
+            editButton.setDisable(true);
+        } else {
+            removeButton.setDisable(false);
+            editButton.setDisable(false);
+        }
     }
 
     public void setLocationService(LocationService locationService) {
