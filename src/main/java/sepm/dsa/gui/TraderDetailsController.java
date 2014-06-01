@@ -21,7 +21,10 @@ import sepm.dsa.service.TraderService;
 import sepm.dsa.service.TraderServiceImpl;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class TraderDetailsController implements Initializable {
 
@@ -132,6 +135,18 @@ public class TraderDetailsController implements Initializable {
         commentArea.setText(trader.getComment());
 
         List<Offer> offers = new ArrayList<>(traderService.getOffers(trader));
+        offers = offers.stream().sorted(new Comparator<Offer>() {
+            @Override
+            public int compare(Offer o1, Offer o2) {
+                int result = o1.getProduct().getId() - o2.getProduct().getId();
+                if(result != 0) {
+                    return result;
+                }
+                result = o1.getQualityId() - o2.getQualityId();
+                return result;
+            }
+        }).collect(Collectors.toList());
+
         offerTable.setItems(FXCollections.observableArrayList(offers));
     }
 
