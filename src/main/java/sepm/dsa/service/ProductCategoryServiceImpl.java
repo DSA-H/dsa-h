@@ -64,6 +64,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         for (AssortmentNature a : assortmentNatureService.getAllByProductCategory(p.getId())) {
             assortmentNatureService.remove(a);
         }
+        for (ProductCategory productCategoryChild: p.getChilds()) {
+            this.remove( productCategoryChild);
+        }
         productCategoryDao.remove(p);
         for (Product product : p.getProducts()) {
             product.getCategories().remove(p);

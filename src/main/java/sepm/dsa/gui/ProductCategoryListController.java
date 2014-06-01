@@ -78,8 +78,8 @@ public class ProductCategoryListController implements Initializable {
     }
 
     private void addTreeChildren(List<ProductCategory> productCategoryList, TreeItem root){
-
         for (ProductCategory item: productCategoryList) {
+            saveCancelService.refresh(item);
             TreeItem<ProductCategory> node = createNode(item);
             root.getChildren().add(node);
         }
