@@ -184,19 +184,19 @@ public class EditRegionController implements Initializable {
         Color selectedColor = colorPicker.getValue();
         String colorString = "";
         String red = Integer.toHexString((int) (selectedColor.getRed() * 255));
-        if(red.length() == 1) {
+        if (red.length() == 1) {
             red = "0" + red;
         }
         String green = Integer.toHexString((int) (selectedColor.getGreen() * 255));
-        if(green.length() == 1) {
+        if (green.length() == 1) {
             green = "0" + green;
         }
         String blue = Integer.toHexString((int) (selectedColor.getBlue() * 255));
-        if(blue.length() == 1) {
+        if (blue.length() == 1) {
             blue = "0" + blue;
         }
 
-        colorString = red+green+blue;
+        colorString = red + green + blue;
 
         selectedRegion.setColor(colorString);
         selectedRegion.setName(name);
@@ -244,6 +244,7 @@ public class EditRegionController implements Initializable {
         log.debug("calling AddBorderPressed");
 
         RegionBorder border = new RegionBorder();
+        int bcost = 1;
 
         try {
             border.setRegion1(selectedRegion);
@@ -252,14 +253,20 @@ public class EditRegionController implements Initializable {
                 throw new DSAValidationException("Wählen sie ein Gebiet aus, welches an dieses Gebiet grenzen soll.");
             }
             border.setRegion2(borderTo);
-            border.setBorderCost(Integer.parseInt(borderCost.getText()));
-            borderTable.getItems().add(border);
-
-            borderChoiceBox.getItems().remove(border.getRegion2());
-            borderChoiceBox.getSelectionModel().selectFirst();
+            bcost = (Integer.parseInt(borderCost.getText()));
         } catch (NumberFormatException ex) {
             throw new DSAValidationException("Grenzkosten müssen eine Zahl sein.");
         }
+        if (bcost < 1) {
+            throw new DSAValidationException("Grenzkosten von <1 sind nicht gültig");
+        }
+        border.setBorderCost(bcost);
+
+        borderTable.getItems().add(border);
+
+        borderChoiceBox.getItems().remove(border.getRegion2());
+        borderChoiceBox.getSelectionModel().selectFirst();
+
     }
 
     @FXML

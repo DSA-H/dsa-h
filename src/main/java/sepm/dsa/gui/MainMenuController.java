@@ -377,8 +377,6 @@ public class MainMenuController implements Initializable {
 			}
 		}
 
-		updateMap();
-
 	}
 
 	@FXML
