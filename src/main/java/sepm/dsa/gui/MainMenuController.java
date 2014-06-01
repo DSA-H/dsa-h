@@ -1072,12 +1072,16 @@ public class MainMenuController implements Initializable {
 			}
 			pane.getChildren().remove(selectionCanvas);
 
-			selectionCanvas = new Canvas(30, 30);
-			selectionCanvas.getGraphicsContext2D().setLineWidth(4);
-			selectionCanvas.getGraphicsContext2D().setStroke(Color.GREEN);
-			selectionCanvas.getGraphicsContext2D().strokeRoundRect(4, 4, 22, 22, 13, 13);
-			selectionCanvas.setLayoutX(selectedLocation.getxCoord() - 15);
-			selectionCanvas.setLayoutY(selectedLocation.getyCoord() - 15);
+			if (selectedLocation.getxCoord() > 0 && selectedLocation.getyCoord() > 0) {
+				selectionCanvas = new Canvas(30, 30);
+				selectionCanvas.getGraphicsContext2D().setLineWidth(4);
+				selectionCanvas.getGraphicsContext2D().setStroke(Color.GREEN);
+				selectionCanvas.getGraphicsContext2D().strokeRoundRect(4, 4, 22, 22, 13, 13);
+				selectionCanvas.setLayoutX(selectedLocation.getxCoord() - 15);
+				selectionCanvas.setLayoutY(selectedLocation.getyCoord() - 15);
+			} else {
+				selectionCanvas = new Canvas(1,1);
+			}
 
 			pane.getChildren().add(selectionCanvas);
 		}
@@ -1107,17 +1111,22 @@ public class MainMenuController implements Initializable {
 			}
 			pane.getChildren().remove(selectionCanvas);
 
-			selectionCanvas = new Canvas(30, 30);
-			selectionCanvas.getGraphicsContext2D().setLineWidth(6);
-			selectionCanvas.getGraphicsContext2D().setStroke(Color.GREEN);
-			selectionCanvas.getGraphicsContext2D().strokeLine(4, 4, 16, 16);
-			selectionCanvas.getGraphicsContext2D().strokeLine(4, 16, 16, 4);
-			if (selectedObject instanceof Trader) {
-				selectionCanvas.setLayoutX(((Trader)selectedObject).getxPos() - 10);
-				selectionCanvas.setLayoutY(((Trader)selectedObject).getyPos() - 10);
+			if ( (selectedObject instanceof Trader && ((Trader)selectedObject).getxPos() > 0 && ((Trader)selectedObject).getyPos() > 0) ||
+					(selectedObject instanceof Tavern && ((Tavern)selectedObject).getxPos() > 0 && ((Tavern)selectedObject).getyPos() > 0)) {
+				selectionCanvas = new Canvas(30, 30);
+				selectionCanvas.getGraphicsContext2D().setLineWidth(6);
+				selectionCanvas.getGraphicsContext2D().setStroke(Color.GREEN);
+				selectionCanvas.getGraphicsContext2D().strokeLine(4, 4, 16, 16);
+				selectionCanvas.getGraphicsContext2D().strokeLine(4, 16, 16, 4);
+				if (selectedObject instanceof Trader) {
+					selectionCanvas.setLayoutX(((Trader) selectedObject).getxPos() - 10);
+					selectionCanvas.setLayoutY(((Trader) selectedObject).getyPos() - 10);
+				} else {
+					selectionCanvas.setLayoutX(((Tavern) selectedObject).getxPos() - 10);
+					selectionCanvas.setLayoutY(((Tavern) selectedObject).getyPos() - 10);
+				}
 			} else {
-				selectionCanvas.setLayoutX(((Tavern)selectedObject).getxPos() - 10);
-				selectionCanvas.setLayoutY(((Tavern)selectedObject).getyPos() - 10);
+				selectionCanvas = new Canvas(1,1);
 			}
 
 			pane.getChildren().add(selectionCanvas);
