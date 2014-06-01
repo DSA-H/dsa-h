@@ -1014,7 +1014,7 @@ public class MainMenuController implements Initializable {
 	/**
 	 * Shows a exit-confirm-dialog if more than the primaryStage are open and close all other stages if confirmed
 	 *
-	 * @return false if the user cancle or refuse the dialog, otherwise true
+	 * @return false if the user cancels or refuses the dialog, otherwise true
 	 */
 	public boolean exitProgramm() {
 		Stage primaryStage = (Stage) menuBar.getScene().getWindow();
