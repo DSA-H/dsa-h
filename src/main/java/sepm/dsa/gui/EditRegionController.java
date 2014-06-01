@@ -182,10 +182,21 @@ public class EditRegionController implements Initializable {
         RainfallChance rainfallChance = RainfallChance.parse(rainfallChoiceBox.getSelectionModel().getSelectedIndex());
         String comment = commentArea.getText();
         Color selectedColor = colorPicker.getValue();
-        String colorString =
-                Integer.toHexString((int) (selectedColor.getRed() * 255)) + "" +
-                        Integer.toHexString((int) (selectedColor.getGreen() * 255)) + "" +
-                        Integer.toHexString((int) (selectedColor.getBlue() * 255));
+        String colorString = "";
+        String red = Integer.toHexString((int) (selectedColor.getRed() * 255));
+        if(red.length() == 1) {
+            red = "0" + red;
+        }
+        String green = Integer.toHexString((int) (selectedColor.getGreen() * 255));
+        if(green.length() == 1) {
+            green = "0" + green;
+        }
+        String blue = Integer.toHexString((int) (selectedColor.getBlue() * 255));
+        if(blue.length() == 1) {
+            blue = "0" + blue;
+        }
+
+        colorString = red+green+blue;
 
         selectedRegion.setColor(colorString);
         selectedRegion.setName(name);
