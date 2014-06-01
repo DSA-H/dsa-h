@@ -68,7 +68,7 @@ public class EditLocationConnectionsController implements Initializable {
         log.debug("initialize");
         log.info("--- going to edit location connections for location '" + selectedLocation + "'");
 
-        reloadLocation();
+//        reloadLocation();
 
         travelTimeColumn.setCellValueFactory(new PropertyValueFactory<>("travelTime"));
         connectionToColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LocationConnection, String>, ObservableValue<String>>() {
