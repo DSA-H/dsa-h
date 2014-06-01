@@ -39,6 +39,7 @@
                 <value>sepm.dsa.model.Unit</value>
                 <value>sepm.dsa.model.UnitType</value>
                 <value>sepm.dsa.model.Currency</value>
+                <value>sepm.dsa.model.MovingTrader</value>
             </list>
         </property>
         <property name="mappingResources">
@@ -58,6 +59,7 @@
                 <value>sepm/dsa/model/hibernate/Player.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/UnitType.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Unit.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Deal.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -147,6 +149,14 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="offerDao" class="sepm.dsa.dao.OfferDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="dealDao" class="sepm.dsa.dao.DealDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
@@ -202,6 +212,7 @@
 
     <bean id="traderService" class="sepm.dsa.service.TraderServiceImpl">
         <property name="traderDao" ref="traderDao"/>
+        <property name="offerDao" ref="offerDao" />
         <property name="productService" ref="productService"/>
         <property name="pathService" ref="pathService"/>
         <property name="regionService" ref="regionService"/>
@@ -216,6 +227,17 @@
     </bean>
 
     <bean id="mapService" class="sepm.dsa.service.MapServiceImpl">
+    </bean>
+
+    <bean id="dealService" class="sepm.dsa.service.DealServiceImpl">
+        <property name="dealDao" ref="dealDao"/>
+    </bean>
+
+    <bean id="timeService" class="sepm.dsa.service.TimeServiceImpl">
+        <property name="traderService" ref="traderService"/>
+        <property name="offerDao" ref="offerDao" />
+        <property name="locationService" ref="locationService" />
+        <property name="tavernService" ref="tavernService" />
     </bean>
 
     <!-- GUI DI -->
@@ -329,6 +351,7 @@
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
         <property name="traderService" ref="traderService"/>
+        <property name="tavernService" ref="tavernService"/>
     </bean>
     <bean id="PlayerListController" class="sepm.dsa.gui.PlayerListController">
         <property name="loader" ref="loader"/>
@@ -338,6 +361,7 @@
     <bean id="EditPlayerController" class="sepm.dsa.gui.EditPlayerController">
         <property name="loader" ref="loader"/>
         <property name="playerService" ref="playerService"/>
+        <property name="dealService" ref="dealService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
     <bean id="currencyList" class="sepm.dsa.gui.CurrencyListController">
@@ -354,7 +378,14 @@
         <property name="loader" ref="loader"/>
         <property name="currencyService" ref="currencyService"/>
     </bean>
-
+    <bean id="editDate" class="sepm.dsa.gui.EditDateController">
+        <property name="loader" ref="loader"/>
+        <property name="timeService" ref="timeService"/>
+    </bean>
+    <bean id="forwardDate" class="sepm.dsa.gui.ForwardDateController">
+        <property name="loader" ref="loader"/>
+        <property name="timeService" ref="timeService"/>
+    </bean>
     <!-- Transaction -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">

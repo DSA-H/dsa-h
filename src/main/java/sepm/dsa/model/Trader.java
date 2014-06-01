@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @Table(name = "traders")
 public class Trader implements BaseModel {
@@ -15,7 +16,7 @@ public class Trader implements BaseModel {
     private static final long serialVersionUID = 2857293850231481712L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 

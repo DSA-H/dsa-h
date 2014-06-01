@@ -1,7 +1,10 @@
 package sepm.dsa.model;
 
+import sepm.dsa.dao.CurrencyAmount;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "deals")
@@ -19,7 +22,7 @@ public class Deal implements BaseModel {
 
     @NotNull
     @Column(nullable = false)
-    private Integer price;
+    private BigDecimal price;
 
     @NotNull
     @Column(nullable = false)
@@ -45,10 +48,16 @@ public class Deal implements BaseModel {
     @JoinColumn(nullable = false)
     private Unit unit;
 
-//    private Player player;
+    @ManyToOne
+    private Player player;
 
-//    private String productName;
-//    private String locationName;
+    @NotNull
+    @Column(nullable = false)//product could be null after delete
+    private String productName;
+
+    @NotNull
+    @Column(nullable = false)
+    private String locationName;
 
 
     public Unit getUnit() {
@@ -95,11 +104,11 @@ public class Deal implements BaseModel {
         this.purchase = purchase;
     }
 
-    public Integer getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -131,6 +140,48 @@ public class Deal implements BaseModel {
 
     public void setDate(DSADate date) {
         this.date = date.getTimestamp();
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+
+    @Override
+    public String toString() {
+        return "Deal{" +
+                "id=" + id +
+                ", purchase=" + purchase +
+                ", price=" + price +
+                ", amount=" + amount +
+                ", qualityId=" + qualityId +
+                ", date=" + date +
+                ", trader=" + trader +
+                ", product=" + product +
+                ", unit=" + unit +
+                ", player=" + player +
+                ", productName='" + productName + '\'' +
+                ", locationName='" + locationName + '\'' +
+                '}';
     }
 
     @Override

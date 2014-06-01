@@ -132,10 +132,6 @@ public class Tavern implements BaseModel {
 
     @Override
     public String toString() {
-        return "Tavern{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", location=" + location +
-                '}';
+        return name;
     }
 }

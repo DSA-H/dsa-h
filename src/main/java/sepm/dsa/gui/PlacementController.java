@@ -15,8 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
+import sepm.dsa.model.Tavern;
 import sepm.dsa.model.Trader;
 import sepm.dsa.service.LocationService;
+import sepm.dsa.service.TavernService;
 import sepm.dsa.service.TraderService;
 
 import java.net.URL;
@@ -29,6 +31,7 @@ public class PlacementController implements Initializable{
 	private SpringFxmlLoader loader;
 	private LocationService locationService;
 	private TraderService traderService;
+	private TavernService tavernService;
 	private Location selectedLocation;
 	private Point2D pos;
 	private Object selectedObj;
@@ -39,6 +42,10 @@ public class PlacementController implements Initializable{
 	private ChoiceBox choiceBox;
 	@FXML
 	private Button newButton;
+	@FXML
+	private Button newTavernButton;
+	@FXML
+	private Button commitButton;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {}
@@ -59,10 +66,18 @@ public class PlacementController implements Initializable{
 			location.setyCoord((int) pos.getY());
 			locationService.update(location);
 		} else {
-			Trader trader = (Trader) choiceBox.getSelectionModel().getSelectedItem();
-			trader.setxPos((int) pos.getX());
-			trader.setyPos((int) pos.getY());
-			traderService.update(trader);
+			Object obj = choiceBox.getSelectionModel().getSelectedItem();
+			if (obj instanceof Trader) {
+				Trader trader = (Trader) obj;
+				trader.setxPos((int) pos.getX());
+				trader.setyPos((int) pos.getY());
+				traderService.update(trader);
+			} else {
+				Tavern tavern = (Tavern) obj;
+				tavern.setxPos((int) pos.getX());
+				tavern.setyPos((int) pos.getY());
+				tavernService.update(tavern);
+			}
 		}
 		Stage stage = (Stage) choiceBox.getScene().getWindow();
 		stage.close();
@@ -102,29 +117,64 @@ public class PlacementController implements Initializable{
 	}
 
 	@FXML
+	private void onNewTavernPressed() {
+		Stage stage = new Stage();
+		Parent scene = (Parent) loader.load("/gui/edittavern.fxml");
+		stage.setTitle("Wirtshaus erstellen");
+
+		EditTavernController controller = loader.getController();
+		controller.setTavern(null);
+		controller.setPosition(pos);
+		controller.setLocation(selectedLocation);
+		stage.setScene(new Scene(scene, 600, 400));
+		stage.setResizable(false);
+		stage.showAndWait();
+
+		stage = (Stage) choiceBox.getScene().getWindow();
+		stage.close();
+	}
+
+	@FXML
 	private void onBackPressed() {
 		Stage stage = (Stage) choiceBox.getScene().getWindow();
 		stage.close();
 	}
 
-	public void setUp(Location location, Point2D pos, Object selectedObj) {
+	public void setUp(Location location, Point2D pos, Object selectedObj, boolean noMap) {
 		this.selectedLocation = location;
 		this.selectedObj = selectedObj;
 		this.pos = pos;
-		if (selectedLocation == null) {
-			headline.setText("Ort platzieren");
-			newButton.setText("Neuer Ort");
-			List<Location> locations = locationService.getAll();
-			choiceBox.setItems(FXCollections.observableArrayList(locations));
-		}
-		else {
-			headline.setText("Händler platzieren");
+		if (noMap) {
+			choiceBox.setVisible(false);
+			commitButton.setVisible(false);
+			headline.setText("Händler/Wirtshaus platzieren");
 			newButton.setText("Neuer Händler");
-			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-			choiceBox.setItems(FXCollections.observableArrayList(traders));
-		}
-		if (selectedObj != null) {
-			choiceBox.getSelectionModel().select(selectedObj);
+			newTavernButton.setVisible(true);
+		} else {
+			if (selectedLocation == null) {
+				headline.setText("Ort platzieren");
+				newButton.setText("Neuer Ort");
+				newTavernButton.setVisible(false);
+				List<Location> locations = locationService.getAll();
+				choiceBox.setItems(FXCollections.observableArrayList(locations));
+			} else {
+				headline.setText("Händler/Wirtshaus platzieren");
+				newButton.setText("Neuer Händler");
+				newTavernButton.setVisible(true);
+				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+				List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
+				List<Object> all = new ArrayList<Object>();
+				for (Trader t : traders) {
+					all.add(t);
+				}
+				for (Tavern t : taverns) {
+					all.add(t);
+				}
+				choiceBox.setItems(FXCollections.observableArrayList(all));
+			}
+			if (selectedObj != null) {
+				choiceBox.getSelectionModel().select(selectedObj);
+			}
 		}
 	}
 
@@ -138,5 +188,9 @@ public class PlacementController implements Initializable{
 
 	public void setTraderService(TraderService traderService) {
 		this.traderService = traderService;
+	}
+
+	public void setTavernService(TavernService tavernService) {
+		this.tavernService = tavernService;
 	}
 }

@@ -56,6 +56,12 @@ public class TraderDaoTest extends AbstractDatabaseTest {
         assertNull(traderDao.get(1));
     }
 
+    @Test
+    public void getMovingTrader() {
+        Trader trader = traderDao.get(2);
+        assertTrue(trader instanceof MovingTrader);
+    }
+
     @Test(expected = org.hibernate.PropertyValueException.class)
     public void add_incompleteShouldNotPersist() {
         Trader trader = new Trader();

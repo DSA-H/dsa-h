@@ -1,11 +1,13 @@
 package sepm.dsa.service;
 
 import org.apache.commons.collections.IteratorUtils;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.dao.OfferDao;
 import sepm.dsa.dao.TraderDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
@@ -17,7 +19,6 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.*;
 
-@Transactional(readOnly = true)
 public class TraderServiceImpl implements TraderService {
     private static final Logger log = LoggerFactory.getLogger(TraderServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
@@ -27,6 +28,9 @@ public class TraderServiceImpl implements TraderService {
     private PathService<RegionBorder> pathService;
     private RegionService regionService;
     private RegionBorderService regionBorderService;
+    private OfferDao offerDao;
+
+	private SessionFactory sessionFactory;
 
 	@Override
     public Trader get(int id) {
@@ -36,16 +40,22 @@ public class TraderServiceImpl implements TraderService {
         return result;
     }
 
+    /**
+     * Adds a new trader and generate and save a set of offers for him
+     * @param t (Trader) to be persisted must not be null
+     * @return
+     */
     @Override
     @Transactional(readOnly = false)
     public Trader add(Trader t) {
         log.debug("calling addConnection(" + t + ")");
         validate(t);
         Trader trader = traderDao.add(t);
-        HashSet<Offer> offers = new HashSet<>(calculateOffers(t));
-        t.setOffers(offers);
-        update(t); // @TODO refactor!
-		return trader;
+        List<Offer> offers = calculateOffers(t);
+        offerDao.addList(offers);
+        trader.setOffers(new HashSet<>(offers));
+
+        return trader;
     }
 
     @Override
@@ -64,8 +74,30 @@ public class TraderServiceImpl implements TraderService {
     }
 
     @Override
-    public List<Trader> getAllForLocation(Location location) {
+    public List<Trader> getAll() {
         log.debug("calling getAll()");
+        List<Trader> result = traderDao.getAll();
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<MovingTrader> getAllMovingTraders() {
+        log.debug("calling getAllMovingTraders()");
+        List<Trader> traders = traderDao.getAll();
+        List<MovingTrader> result = new ArrayList<>();
+        for(Trader trader : traders) {
+            if(trader instanceof MovingTrader) {
+                result.add((MovingTrader)trader);
+            }
+        }
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Trader> getAllForLocation(Location location) {
+        log.debug("calling getAllForLocation()");
         List<Trader> result = traderDao.getAllByLocation(location);
         log.trace("returning " + result);
         return result;
@@ -73,19 +105,20 @@ public class TraderServiceImpl implements TraderService {
 
     @Override
     public List<Trader> getAllByCategory(TraderCategory traderCategory) {
-        log.debug("calling getAll()");
+        log.debug("calling getAllByCategory()");
         List<Trader> result = traderDao.getAllByCategory(traderCategory);
         log.trace("returning " + result);
         return result;
     }
 
     /**
+     * todo: offers have to integrate product-occurerence (in a later ms)
      * @param trader
      * @return a new calculated list of offers this trader at this position has.
      */
     @Override
     @Transactional(readOnly = true)
-    public List<Offer> calculateOffers(Trader trader) {
+    public List<Offer> calculateOffers(Trader trader, int number) {
         log.debug("calling calculateOffers()");
         List<Product> weightProducts = new ArrayList<>();
         List<Float> weights = new ArrayList<>();
@@ -125,14 +158,14 @@ public class TraderServiceImpl implements TraderService {
 
         // random pick a weight product, till the trader is full
         Map<Product, Integer> productAmmountMap = new HashMap<>();
-        for (int i = 0; i < trader.getSize(); i++) {
+        for (int i = 0; i < number; i++) {
             double random = Math.random() * topWeight;
             int j = 0;
             for (float weight : weights) {
                 // random picked found
                 if (random < weight) {
                     if (productAmmountMap.containsKey(weightProducts.get(j))) {
-                        int amount = productAmmountMap.get(weightProducts.get(j));// TODO @johannes here was: int amount = productAmmountMap.get(productAmmountMap);
+                        int amount = productAmmountMap.get(weightProducts.get(j));
                         amount++;
                         productAmmountMap.put(weightProducts.get(j), amount);
                     } else {
@@ -147,16 +180,16 @@ public class TraderServiceImpl implements TraderService {
         // create Offers
         List<Offer> offers = new ArrayList<>();
         for (Product product : productAmmountMap.keySet()) {
-            int ammount = productAmmountMap.get(product);
+            int amount = productAmmountMap.get(product);
 
             // random quality distribution
             int amountQualities[] = new int[ProductQuality.values().length];
             if (product.getQuality()) {
-                for (int i = 0; i < ammount; i++) {
+                for (int i = 0; i < amount; i++) {
                     int j = 0;
+                    double random = Math.random();
                     for (ProductQuality productQuality : ProductQuality.values()) {
-                        double random = Math.random();
-                        if (random < productQuality.getQualityProbabilityValue()) {
+                        if (random <= productQuality.getQualityProbabilityValue()) {
                             amountQualities[j]++;
                             break;
                         }
@@ -164,27 +197,35 @@ public class TraderServiceImpl implements TraderService {
                     }
                 }
             } else {
-                amountQualities[0] = ammount;
+                amountQualities[0] = amount;
             }
             // create offers
             int i = 0;
             for (ProductQuality productQuality : ProductQuality.values()) {
-                if (amountQualities[i] == 0) {
-                    break;
+                if (amountQualities[i] != 0) {
+                    Offer offer = new Offer();
+                    offer.setTrader(trader);
+                    offer.setQuality(productQuality);
+                    int price = (int) (calculatePriceForProduct(product, trader) * productQuality.getQualityPriceFactor());
+                    offer.setPricePerUnit(price);
+                    offer.setProduct(product);
+                    offer.setAmount(amountQualities[i]);
+                    offers.add(offer);
                 }
-                Offer offer = new Offer();
-                offer.setTrader(trader);
-                offer.setQuality(productQuality);
-                int price = (int) (calculatePriceForProduct(product, trader) * productQuality.getQualityPriceFactor());
-                offer.setPricePerUnit(price);
-                offer.setProduct(product);
-                offer.setAmount(amountQualities[i]);
-                offers.add(offer);
                 i++;
             }
 
         }
         return offers;
+    }
+
+    /**
+     * @param trader
+     * @return a new calculated list of offers this trader at this position has.
+     */
+    @Override
+    public List<Offer> calculateOffers(Trader trader) {
+        return calculateOffers(trader, trader.getSize());
     }
 
     /**
@@ -243,6 +284,10 @@ public class TraderServiceImpl implements TraderService {
         this.regionBorderService = regionBorderService;
     }
 
+    public void setOfferDao(OfferDao offerDao) {
+        this.offerDao = offerDao;
+    }
+
     /**
      * Validates a Trader
      *
@@ -271,4 +316,7 @@ public class TraderServiceImpl implements TraderService {
 		return trader.getOffers();
 	}
 
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 }

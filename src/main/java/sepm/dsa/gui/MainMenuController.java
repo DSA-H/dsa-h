@@ -49,17 +49,20 @@ import java.util.List;
 public class MainMenuController implements Initializable {
 
 	private static final Logger log = LoggerFactory.getLogger(MainMenuController.class);
+    private static final int WORLDMODE = 0;
+    private static final int LOCATIONMODE = 1;
+
 	private SpringFxmlLoader loader;
 	private LocationService locationService;
 	private TraderService traderService;
 	private TavernService tavernService;
 	private MapService mapService;
-    private SaveCancelService saveCancelService;
+	private SaveCancelService saveCancelService;
 	private Point2D SPLocation;
 	private double scrollPositionX;
 	private double scrollPositionY;
 	private Location selectedLocation;
-	private Trader selectedTrader;
+	private Object selectedObject;
 	private int mode;   // 0..worldMode(default) 1..locationMode
 	private Boolean creationMode = false;
 
@@ -151,12 +154,12 @@ public class MainMenuController implements Initializable {
 		traderList.getFocusModel().focusedItemProperty().addListener(new ChangeListener() {
 			@Override
 			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				selectedTrader = (Trader) traderList.getFocusModel().getFocusedItem();
+				selectedObject = traderList.getFocusModel().getFocusedItem();
 				checkTraderFocus();
 			}
 		});
 
-		mode = 0;
+		mode = WORLDMODE;
 
 		chooseButton.setStyle("-fx-font-weight: bold;");
 	}
@@ -171,25 +174,36 @@ public class MainMenuController implements Initializable {
 			return;
 		}
 		if (mode == 0) {
-			mode = 1;
+			mode = LOCATIONMODE;
 			locationTable.setVisible(false);
 			traderList.setVisible(true);
-			selectedTrader = null;
+			selectedObject = null;
 			deleteButton.setDisable(true);
 			editButton.setDisable(true);
 
-			ObservableList<Trader> data = FXCollections.observableArrayList(traderService.getAllForLocation(selectedLocation));
-			traderList.setItems(data);
+			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+			List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
+			List<Object> all = new ArrayList<Object>();
+			for (Trader t: traders) {
+				all.add(t);
+			}
+			for (Tavern t: taverns) {
+				all.add(t);
+			}
+
+			traderList.setItems(FXCollections.observableArrayList(all));
 
 			chooseButton.setText("Weltansicht");
+            createButton.setText("Händler / Wirtshaus platzieren");
 			editButton.setText("Details");
 
 			checkTraderFocus();
 		} else {
-			mode = 0;
+			mode = WORLDMODE;
 			locationTable.setVisible(true);
 			traderList.setVisible(false);
 			chooseButton.setText("Ortsansicht");
+            createButton.setText("Ort platzieren");
 			editButton.setText("Bearbeiten");
 			checkLocationFocus();
 		}
@@ -201,7 +215,7 @@ public class MainMenuController implements Initializable {
 	private void onEditButtonPressed() {
 		log.debug("onEditButtonPressed - open Details Window");
 
-		if (mode == 0) {
+		if (mode == WORLDMODE) {
 			EditLocationController.setLocation(selectedLocation);
 
 			Stage stage = new Stage();
@@ -214,17 +228,39 @@ public class MainMenuController implements Initializable {
 			ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
 			locationTable.setItems(data);
 		} else {
-			Stage stage = new Stage();
-			Parent scene = (Parent) loader.load("/gui/traderdetails.fxml");
-			stage.setTitle("Händler-Details");
+			if (selectedObject instanceof Trader) {
+				Stage stage = new Stage();
+				Parent scene = (Parent) loader.load("/gui/traderdetails.fxml");
+				stage.setTitle("Händler-Details");
 
-			TraderDetailsController controller = loader.getController();
-			controller.setTrader(selectedTrader);
-			stage.setScene(new Scene(scene, 800, 400));
-			stage.setResizable(false);
-			stage.showAndWait();
-			ObservableList<Trader> data = FXCollections.observableArrayList(traderService.getAllForLocation(selectedLocation));
-			traderList.setItems(data);
+				TraderDetailsController controller = loader.getController();
+				controller.setTrader((Trader) selectedObject);
+				stage.setScene(new Scene(scene, 800, 400));
+				stage.setResizable(false);
+				stage.showAndWait();
+			} else {
+				Stage stage = new Stage();
+				Parent scene = (Parent) loader.load("/gui/edittavern.fxml");
+				stage.setTitle("Wirtshaus erstellen");
+
+				EditTavernController controller = loader.getController();
+				controller.setTavern((Tavern) selectedObject);
+				stage.setScene(new Scene(scene, 600, 400));
+				stage.setResizable(false);
+				stage.showAndWait();
+			}
+
+			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+			List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
+			List<Object> all = new ArrayList<Object>();
+			for (Trader t: traders) {
+				all.add(t);
+			}
+			for (Tavern t: taverns) {
+				all.add(t);
+			}
+
+			traderList.setItems(FXCollections.observableArrayList(all));
 		}
 
 		updateMap();
@@ -235,13 +271,13 @@ public class MainMenuController implements Initializable {
 	private void onDeleteButtonPressed() {
 		log.debug("onDeleteButtonPressed - deleting selected Data");
 
-		if (mode == 0) {
+		if (mode == WORLDMODE) {
 			Location selectedLocation = locationTable.getFocusModel().getFocusedItem();
 
 			if (selectedLocation != null) {
 				log.debug("open Confirm-Delete-Location Dialog");
 				int traderSize = traderService.getAllForLocation(selectedLocation).size();
-				int tavernsSize = 0;    // TODO get taverns connected to location
+				int tavernsSize = tavernService.getAllByLocation(selectedLocation.getId()).size();
 				String connectedEntries = "";
 				connectedEntries += "\n" + traderSize + " Händler";
 				connectedEntries += "\n" + tavernsSize + " Wirtshäuser";
@@ -254,25 +290,41 @@ public class MainMenuController implements Initializable {
 						.showConfirm(); // TODO was ist hier sinnvoll?
 				if (response == Dialog.Actions.YES) {
 					locationService.remove(selectedLocation);
-                    saveCancelService.save();
+					saveCancelService.save();
 					locationTable.getItems().remove(selectedLocation);
 				}
 			}
 		} else {
-			if (selectedTrader != null) {
-				log.debug("open Confirm-Delete-Trader Dialog");
-				Action response = Dialogs.create()
-						.title("Löschen?")
-						.masthead(null)
-						.message("Wollen Sie den Händer '" + selectedTrader.getName() + "' wirklich löschen")
-						.showConfirm();
-				if (response == Dialog.Actions.YES) {
-					traderService.remove(selectedTrader);
-                    saveCancelService.save();
-					traderList.getItems().remove(selectedTrader);
+			if (selectedObject != null) {
+				if (selectedObject instanceof Trader) {
+					log.debug("open Confirm-Delete-Trader Dialog");
+					Action response = Dialogs.create()
+							.title("Löschen?")
+							.masthead(null)
+							.message("Wollen Sie den Händer '" + ((Trader)selectedObject).getName() + "' wirklich löschen")
+							.showConfirm();
+					if (response == Dialog.Actions.YES) {
+						traderService.remove((Trader) selectedObject);
+						saveCancelService.save();
+						traderList.getItems().remove(selectedObject);
+					}
+				} else {
+					log.debug("open Confirm-Delete-Tavern Dialog");
+					Action response = Dialogs.create()
+							.title("Löschen?")
+							.masthead(null)
+							.message("Wollen Sie das Wirtshaus '" + ((Tavern)selectedObject).getName() + "' wirklich löschen")
+							.showConfirm();
+					if (response == Dialog.Actions.YES) {
+						tavernService.remove((Tavern) selectedObject);
+						saveCancelService.save();
+						traderList.getItems().remove(selectedObject);
+					}
 				}
 			}
 		}
+
+		updateMap();
 
 	}
 
@@ -280,7 +332,7 @@ public class MainMenuController implements Initializable {
 	private void onCreateButtonPressed() {
 		log.debug("onCreateButtonPressed - open Details Window");
 
-		if (mode == 0) {
+		if (mode == WORLDMODE) {
 			if (mapService.getWorldMap() == null) {
 				EditLocationController.setLocation(null);
 
@@ -304,18 +356,29 @@ public class MainMenuController implements Initializable {
 			}
 		} else {
 			if (mapService.getLocationMap(selectedLocation) == null) {
-				Stage stage = new Stage();
-				Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
-				stage.setTitle("Händler erstellen");
 
-				EditTraderController controller = loader.getController();
-				controller.setTrader(null);
-				controller.setLocation(selectedLocation);
-				stage.setScene(new Scene(scene, 600, 400));
+				Stage stage = new Stage();
+				Parent scene = (Parent) loader.load("/gui/placement.fxml");
+				PlacementController controller = loader.getController();
+
+				stage.setTitle("Händler/Wirtshaus platzieren");
+				controller.setUp(selectedLocation, new Point2D(0,0), null, true);
+
+				stage.setScene(new Scene(scene, 350, 190));
 				stage.setResizable(false);
 				stage.showAndWait();
-				ObservableList<Trader> data = FXCollections.observableArrayList(traderService.getAllForLocation(selectedLocation));
-				traderList.setItems(data);
+
+				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+				List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
+				List<Object> all = new ArrayList<Object>();
+				for (Trader t: traders) {
+					all.add(t);
+				}
+				for (Tavern t: taverns) {
+					all.add(t);
+				}
+
+				traderList.setItems(FXCollections.observableArrayList(all));
 			} else {
 				traderList.setDisable(true);
 				createButton.setDisable(true);
@@ -327,6 +390,8 @@ public class MainMenuController implements Initializable {
 			}
 		}
 
+		updateMap();
+
 	}
 
 	@FXML
@@ -334,7 +399,7 @@ public class MainMenuController implements Initializable {
 		if (creationMode) {
 			createButton.setDisable(false);
 			creationMode = false;
-			if (mode == 0) {
+			if (mode == WORLDMODE) {
 				chooseButton.setText("Ortsansicht");
 				checkLocationFocus();
 				locationTable.setDisable(false);
@@ -380,18 +445,18 @@ public class MainMenuController implements Initializable {
 			Stage stage = new Stage();
 			Parent scene = (Parent) loader.load("/gui/placement.fxml");
 			PlacementController controller = loader.getController();
-			if (mode == 0) {
+			if (mode == WORLDMODE) {
 				stage.setTitle("Ort platzieren");
-				controller.setUp(null, pos, selectedLocation);
+				controller.setUp(null, pos, selectedLocation, false);
 			} else {
-				stage.setTitle("Händler platzieren");
-				controller.setUp(selectedLocation, pos, selectedTrader);
+				stage.setTitle("Händler/Wirtshaus platzieren");
+				controller.setUp(selectedLocation, pos, selectedObject, false);
 			}
-			stage.setScene(new Scene(scene, 350, 160));
+			stage.setScene(new Scene(scene, 350, 190));
 			stage.setResizable(false);
 			stage.showAndWait();
 
-			if (mode == 0) {
+			if (mode == WORLDMODE) {
 				checkLocationFocus();
 			} else {
 				checkTraderFocus();
@@ -399,22 +464,33 @@ public class MainMenuController implements Initializable {
 
 			creationMode = false;
 			createButton.setDisable(false);
-			if (mode == 0) {
+			if (mode == WORLDMODE) {
 				chooseButton.setText("Ortsansicht");
 				checkLocationFocus();
 				locationTable.setDisable(false);
+
+				ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
+				locationTable.setItems(data);
 			} else {
 				chooseButton.setText("Weltansicht");
 				checkTraderFocus();
 				traderList.setDisable(false);
+
+				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+				List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
+				List<Object> all = new ArrayList<Object>();
+				for (Trader t: traders) {
+					all.add(t);
+				}
+				for (Tavern t: taverns) {
+					all.add(t);
+				}
+
+				traderList.setItems(FXCollections.observableArrayList(all));
 			}
-
-			ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
-			locationTable.setItems(data);
-
 			updateMap();
 		} else {
-			if (mode == 0) {
+			if (mode == WORLDMODE) {
 				int locX;
 				int locY;
 				List<Location> locations = locationService.getAll();
@@ -430,6 +506,14 @@ public class MainMenuController implements Initializable {
 				int locY;
 				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
 				for (Trader t : traders) {
+					locX = t.getxPos();
+					locY = t.getyPos();
+					if (xPos > locX - 10 && xPos < locX + 10 && yPos > locY - 10 && yPos < locY + 10) {
+						traderList.getSelectionModel().select(t);
+					}
+				}
+				List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
+				for (Tavern t : taverns) {
 					locX = t.getxPos();
 					locY = t.getyPos();
 					if (xPos > locX - 10 && xPos < locX + 10 && yPos > locY - 10 && yPos < locY + 10) {
@@ -530,6 +614,32 @@ public class MainMenuController implements Initializable {
 		stage.show();
 	}
 
+    @FXML
+    private void onEditDateClicked() {
+        log.debug("onEditDateClicked - open EditDate Window");
+        Stage stage = new Stage();
+
+        Parent scene = (Parent) loader.load("/gui/edittime.fxml");
+
+        stage.setTitle("Datum umstellen");
+        stage.setScene(new Scene(scene, 419, 150));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
+    private void onForwardTimeClicked() {
+        log.debug("onForwardTimeClicked - open ForwardTime Window");
+        Stage stage = new Stage();
+
+        Parent scene = (Parent) loader.load("/gui/forwardtime.fxml");
+
+        stage.setTitle("Zeit vorstellen");
+        stage.setScene(new Scene(scene, 419, 222));
+        stage.setResizable(false);
+        stage.show();
+    }
+
 	@FXML
 	private void onTavernClicked() {
 		log.debug("onTavernClicked - open Tavern Window");
@@ -582,7 +692,8 @@ public class MainMenuController implements Initializable {
 
 	private void updateMap() {
 		log.debug("updateMap called");
-		if (mode == 0) {
+
+		if (mode == WORLDMODE) {
 			File worldMap = mapService.getWorldMap();
 			if (worldMap == null) {
 				worldMap = mapService.getNoMapImage();
@@ -595,11 +706,12 @@ public class MainMenuController implements Initializable {
 			Pane pane = new Pane(canvas);
 			scrollPane.setContent(pane);
 
+			List<Location> locations = locationService.getAll();
+
 			canvas.addEventHandler(MouseEvent.MOUSE_MOVED,
 					new EventHandler<MouseEvent>() {
 						@Override
 						public void handle(MouseEvent e) {
-							List<Location> locations = locationService.getAll();
 							boolean onLocation = false;
 							Canvas canvas = (Canvas) pane.getChildren().get(0);
 							for (Location l : locations) {
@@ -635,24 +747,25 @@ public class MainMenuController implements Initializable {
 			Pane pane = new Pane(canvas);
 			scrollPane.setContent(pane);
 
+			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+			List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
+
 			canvas.addEventHandler(MouseEvent.MOUSE_MOVED,
 					new EventHandler<MouseEvent>() {
 						@Override
 						public void handle(MouseEvent e) {
-							List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-							List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
 							boolean onStuff = false;
 							Canvas canvas = (Canvas) pane.getChildren().get(0);
 							for (Trader t : traders) {
 								if (e.getX() > t.getxPos()-10 && e.getX() < t.getxPos()+10 &&
 										e.getY() > t.getyPos()-10 && e.getY() < t.getyPos()+10) {
-									Canvas highlight = new Canvas(30, 30);
-									highlight.getGraphicsContext2D().setLineWidth(7);
+									Canvas highlight = new Canvas(20, 20);
+									highlight.getGraphicsContext2D().setLineWidth(6);
 									highlight.getGraphicsContext2D().setStroke(Color.RED);
-									highlight.getGraphicsContext2D().strokeLine(2.5, 2.5, 27.5, 27.5);
-									highlight.getGraphicsContext2D().strokeLine(2.5, 27.5, 27.5, 2.5);
-									highlight.setLayoutX(t.getxPos()-15);
-									highlight.setLayoutY(t.getxPos()-15);
+									highlight.getGraphicsContext2D().strokeLine(4, 4, 16, 16);
+									highlight.getGraphicsContext2D().strokeLine(4, 16, 16, 4);
+									highlight.setLayoutX(t.getxPos()-10);
+									highlight.setLayoutY(t.getyPos()-10);
 									pane.getChildren().add(highlight);
 									onStuff = true;
 								}
@@ -660,13 +773,13 @@ public class MainMenuController implements Initializable {
 							for (Tavern t : taverns) {
 								if (e.getX() > t.getxPos()-10 && e.getX() < t.getxPos()+10 &&
 										e.getY() > t.getyPos()-10 && e.getY() < t.getyPos()+10) {
-									Canvas highlight = new Canvas(30, 30);
-									highlight.getGraphicsContext2D().setLineWidth(7);
+									Canvas highlight = new Canvas(20, 20);
+									highlight.getGraphicsContext2D().setLineWidth(6);
 									highlight.getGraphicsContext2D().setStroke(Color.RED);
-									highlight.getGraphicsContext2D().strokeLine(2.5, 2.5, 27.5, 27.5);
-									highlight.getGraphicsContext2D().strokeLine(2.5, 27.5, 27.5, 2.5);
-									highlight.setLayoutX(t.getxPos()-15);
-									highlight.setLayoutY(t.getxPos()-15);
+									highlight.getGraphicsContext2D().strokeLine(4, 4, 16, 16);
+									highlight.getGraphicsContext2D().strokeLine(4, 16, 16, 4);
+									highlight.setLayoutX(t.getxPos()-10);
+									highlight.setLayoutY(t.getyPos()-10);
 									pane.getChildren().add(highlight);
 									onStuff = true;
 								}
@@ -744,16 +857,20 @@ public class MainMenuController implements Initializable {
 		for (Trader t : traders) {
 			posX = t.getxPos();
 			posY = t.getyPos();
-			gc.strokeLine(posX - 5, posY - 5, posX + 5, posY + 5);
-			gc.strokeLine(posX - 5, posY + 5, posX + 5, posY - 5);
+			if (posX != 0 && posY != 0) {
+				gc.strokeLine(posX - 5, posY - 5, posX + 5, posY + 5);
+				gc.strokeLine(posX - 5, posY + 5, posX + 5, posY - 5);
+			}
 		}
 		gc.setStroke(Color.YELLOW);
 		List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
 		for (Tavern t : taverns) {
 			posX = t.getxPos();
 			posY = t.getyPos();
-			gc.strokeLine(posX - 5, posY - 5, posX + 5, posY + 5);
-			gc.strokeLine(posX - 5, posY + 5, posX + 5, posY - 5);
+			if (posX != 0 && posY != 0) {
+				gc.strokeLine(posX - 5, posY - 5, posX + 5, posY + 5);
+				gc.strokeLine(posX - 5, posY + 5, posX + 5, posY - 5);
+			}
 		}
 		gc.setStroke(Color.BLACK);
 		gc.setLineWidth(0.6);
@@ -820,13 +937,18 @@ public class MainMenuController implements Initializable {
 	}
 
 	private void checkTraderFocus() {
-		selectedTrader = (Trader) traderList.getFocusModel().getFocusedItem();
-		if (selectedTrader == null) {
+		selectedObject = traderList.getFocusModel().getFocusedItem();
+		if (selectedObject == null) {
 			deleteButton.setDisable(true);
 			editButton.setDisable(true);
 		} else {
 			deleteButton.setDisable(false);
 			editButton.setDisable(false);
+			if (selectedObject instanceof Trader) {
+				editButton.setText("Details");
+			} else {
+				editButton.setText("Bearbeiten");
+			}
 		}
 		chooseButton.setDisable(false);
 	}
@@ -847,11 +969,12 @@ public class MainMenuController implements Initializable {
 		this.locationService = locationService;
 	}
 
+	public void setSaveCancelService(SaveCancelService saveCancelService) {
+		this.saveCancelService = saveCancelService;
+	}
+
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
     }
 
-    public void setSaveCancelService(SaveCancelService saveCancelService) {
-        this.saveCancelService = saveCancelService;
-    }
 }

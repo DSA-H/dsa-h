@@ -13,6 +13,7 @@ import sepm.dsa.service.TraderCategoryService;
 import sepm.dsa.service.TraderService;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -60,8 +61,17 @@ public class TraderServiceTest extends AbstractDatabaseTest {
 
         traderService.add(trader);
 
+        saveCancelService.save();
+
         Trader persistedTrader = traderService.get(trader.getId());
         assertTrue(persistedTrader != null);
+
+        Set<Offer> persistentOffers = persistedTrader.getOffers();
+        int offersAmount = 0;
+        for(Offer offer : persistentOffers) {
+            offersAmount += offer.getAmount();
+        }
+        assertTrue("offersAmount = " + offersAmount + " traderSize = " + trader.getSize() + ", should be equal!", offersAmount == trader.getSize());
     }
 
     @Test
@@ -112,6 +122,20 @@ public class TraderServiceTest extends AbstractDatabaseTest {
 
     @Test
     public void calculateOffers_OffersShouldNotExceedTraderSpace() {
+        Trader trader = traderService.get(1);
+        int traderSize = trader.getSize();
+
+        int offersAmount = 0;
+        List<Offer> offers = traderService.calculateOffers(trader);
+        for (Offer o : offers) {
+            offersAmount += o.getAmount();
+        }
+        assertTrue("TraderService didn't find a offer to suggest, update test data", offers.size() > 0);
+        assertTrue("offersAmount = " + offersAmount + " traderSize = " + traderSize + ", should be equal!", offersAmount == traderSize);
+    }
+
+    @Test
+    public void calculateOffers_OffersShouldNotExceedTraderSpace3() {
         Trader trader = traderService.get(2);
         int traderSize = trader.getSize();
 
@@ -121,7 +145,7 @@ public class TraderServiceTest extends AbstractDatabaseTest {
             offersAmount += o.getAmount();
         }
         assertTrue("TraderService didn't find a offer to suggest, update test data", offers.size() > 0);
-        assertTrue(offersAmount == traderSize);
+        assertTrue("offersAmount = " + offersAmount + " traderSize = " + traderSize + ", should be equal!", offersAmount == traderSize);
     }
 
     @Test

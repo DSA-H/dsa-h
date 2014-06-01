@@ -4,6 +4,7 @@ package sepm.dsa.gui;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
@@ -36,27 +37,16 @@ public class EditTavernController implements Initializable {
     @FXML
     private TextField nameField;
     @FXML
-    private ChoiceBox<Location> locationBox;
-    @FXML
     private TextArea commentArea;
     @FXML
     private TextField usageField;
     @FXML
     private TextField bedsField;
-    @FXML
-    private TextField xCoordField;
-    @FXML
-    private TextField yCoordField;
 
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise EditTavernController");
-
-
-        List<Location> locations = locationService.getAll();
-        locationBox.setItems(FXCollections.observableArrayList(locations));
-
     }
 
     @FXML
@@ -66,25 +56,19 @@ public class EditTavernController implements Initializable {
         // save region
         String name = nameField.getText();
         selectedTavern.setName(name);
-        selectedTavern.setLocation(locationBox.getSelectionModel().getSelectedItem());
         selectedTavern.setUsage(Integer.parseInt(usageField.getText()));
         selectedTavern.setBeds(Integer.parseInt(bedsField.getText()));
-        selectedTavern.setxPos(Integer.parseInt(xCoordField.getText()));
-        selectedTavern.setyPos(Integer.parseInt(yCoordField.getText()));
         selectedTavern.setComment(commentArea.getText());
 
-        Tavern persistedTavern = null;
         if (isNewTavern) {
-            persistedTavern = tavernService.add(selectedTavern);
+            tavernService.add(selectedTavern);
         } else {
-            persistedTavern = tavernService.update(selectedTavern);
+            tavernService.update(selectedTavern);
         }
         saveCancelService.save();
-        log.info("persistedTavern: " + persistedTavern == null ? "null" : persistedTavern.toString());
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/tavernlist.fxml");
-        stage.setScene(new Scene(scene, 600, 400));
+        stage.close();
 
 
     }
@@ -94,8 +78,7 @@ public class EditTavernController implements Initializable {
         log.debug("called onCancelPressed");
         saveCancelService.cancel();
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/tavernlist.fxml");
-        stage.setScene(new Scene(scene, 600, 400));
+        stage.close();
     }
 
     public void setTavernService(TavernService tavernService) {
@@ -124,11 +107,8 @@ public class EditTavernController implements Initializable {
      */
     private void fillGuiWithData(Tavern tavern) {
         nameField.setText(tavern.getName());
-        locationBox.getSelectionModel().select(tavern.getLocation());
         usageField.setText("" + tavern.getUsage());
         bedsField.setText("" + tavern.getBeds());
-        xCoordField.setText("" + tavern.getxPos());
-        yCoordField.setText("" + tavern.getyPos());
         commentArea.setText(tavern.getComment() == null ? "" : tavern.getComment());
     }
 
@@ -138,5 +118,14 @@ public class EditTavernController implements Initializable {
 
     public void setSaveCancelService(SaveCancelService saveCancelService) {
         this.saveCancelService = saveCancelService;
+    }
+
+    public void setPosition(Point2D pos) {
+        selectedTavern.setxPos((int) pos.getX());
+        selectedTavern.setyPos((int) pos.getY());
+    }
+
+    public void setLocation(Location location) {
+        selectedTavern.setLocation(location);
     }
 }
