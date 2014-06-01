@@ -65,9 +65,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Set<Product> getAllFromProductcategory(ProductCategory productCategory) {
+    public List<Product> getAllFromProductcategory(ProductCategory productCategory) {
         log.debug("calling getAllFromProductcategory");
-        Set<Product> result = productCategory.getProducts(); // todo das ist falsch! hier sollten auch alle produkte aus subkategorien geladen werden
+        List<Product> result = productDao.getAllByCategoryPlusChildren(productCategory);
 //        traderDao.getAllByCategory(traderCategory);
         log.trace("returning " + result);
 //        Set<Product> result = productDao.getAllByCategories(productCategory.getChilds());

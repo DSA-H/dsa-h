@@ -43,7 +43,8 @@ public interface ProductService {
     List<Product> getAll();
 
     /**
+     * @param productCategory not null
      * @return all products from a product-category and all of its child categories -- if nothing found empty list is returned
      */
-    java.util.Set<Product> getAllFromProductcategory(ProductCategory productCategory);
+    List<Product> getAllFromProductcategory(ProductCategory productCategory);
 }
