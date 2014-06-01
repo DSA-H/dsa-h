@@ -5,10 +5,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
@@ -78,6 +76,9 @@ public class EditCurrencyController implements Initializable {
 
         } catch (NumberFormatException ex) {
             throw new DSAValidationException("Wechselkurs muss eine Zahl sein!");
+        }
+        if (exchangeToBase.compareTo(BigDecimal.ZERO)<=0){
+            throw new DSAValidationException("Wechselkurs muss Zahl > 0 sein");
         }
 
         selectedCurrency.setName(name);

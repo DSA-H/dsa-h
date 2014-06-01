@@ -128,7 +128,7 @@ public class TraderServiceImpl implements TraderService {
             int defaultOccurence = assortmentNature.getDefaultOccurence();
             ProductCategory productCategory = assortmentNature.getProductCategory();
             // get all products from this and the sub Categories
-            List<Product> products = productService.getAllFromProductcategory(productCategory);
+            Set<Product> products = productService.getAllFromProductcategory(productCategory);
             for (Product product : products) {
                 if (weightProducts.contains(product)) {
                     break;

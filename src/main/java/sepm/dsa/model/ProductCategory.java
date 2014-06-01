@@ -32,7 +32,7 @@ public class ProductCategory implements BaseModel {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<ProductCategory> childs = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "product_categories",
             joinColumns = { @JoinColumn(name = "categoryId") },     // is joinColumns/inverse correct here?
             inverseJoinColumns = { @JoinColumn(name = "productId") })

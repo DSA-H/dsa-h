@@ -4,6 +4,7 @@ import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ProductService {
     /**
@@ -46,5 +47,5 @@ public interface ProductService {
      * @param productCategory not null
      * @return all products from a product-category and all of its child categories -- if nothing found empty list is returned
      */
-    List<Product> getAllFromProductcategory(ProductCategory productCategory);
+    Set<Product> getAllFromProductcategory(ProductCategory productCategory);
 }
