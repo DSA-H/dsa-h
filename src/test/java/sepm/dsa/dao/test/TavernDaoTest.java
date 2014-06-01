@@ -27,6 +27,7 @@ public class TavernDaoTest extends AbstractDatabaseTest {
 		tavern.setxPos(42);
 		tavern.setyPos(12);
 		tavern.setUsage(100);
+        tavern.setBeds(9);
 		tavernDao.add(tavern);
 
         saveCancelService.save();
