@@ -235,6 +235,10 @@ public class EditTraderController implements Initializable {
 
         //location
         Location location = (Location) locationBox.getSelectionModel().getSelectedItem();
+	    if (!isNewTrader && location != selectedTrader.getLocation()) {
+		    selectedTrader.setxPos(0);
+		    selectedTrader.setyPos(0);
+	    }
         if (location != null) {
             selectedTrader.setLocation(location);
         } else {
