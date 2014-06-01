@@ -14,6 +14,7 @@ public class TavernServiceImpl implements TavernService {
         return 4; // chosen by fair dice roll.
         // guaranteed to be random.
         // http://xkcd.com/221/
+        // lol
     }
 
 	@Override
@@ -45,4 +46,16 @@ public class TavernServiceImpl implements TavernService {
 	public void update(Tavern tavern) {
 
 	}
+
+    @Override
+    public List<Tavern> getAll() {
+        // TODO implement
+        return new ArrayList<Tavern>();
+    }
+
+    @Override
+    public Tavern update(Tavern t) {
+        // TODO implement
+        return new Tavern();
+    }
 }

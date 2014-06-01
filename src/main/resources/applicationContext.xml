@@ -39,6 +39,7 @@
                 <value>sepm.dsa.model.Unit</value>
                 <value>sepm.dsa.model.UnitType</value>
                 <value>sepm.dsa.model.Currency</value>
+                <value>sepm.dsa.model.MovingTrader</value>
             </list>
         </property>
         <property name="mappingResources">
@@ -148,6 +149,10 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="offerDao" class="sepm.dsa.dao.OfferDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <bean id="dealDao" class="sepm.dsa.dao.DealDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
@@ -206,6 +211,7 @@
 
     <bean id="traderService" class="sepm.dsa.service.TraderServiceImpl">
         <property name="traderDao" ref="traderDao"/>
+        <property name="offerDao" ref="offerDao" />
         <property name="productService" ref="productService"/>
         <property name="pathService" ref="pathService"/>
         <property name="regionService" ref="regionService"/>
@@ -224,6 +230,13 @@
 
     <bean id="dealService" class="sepm.dsa.service.DealServiceImpl">
         <property name="dealDao" ref="dealDao"/>
+    </bean>
+
+    <bean id="timeService" class="sepm.dsa.service.TimeServiceImpl">
+        <property name="traderService" ref="traderService"/>
+        <property name="offerDao" ref="offerDao" />
+        <property name="locationService" ref="locationService" />
+        <property name="tavernService" ref="tavernService" />
     </bean>
 
     <!-- GUI DI -->
@@ -357,7 +370,14 @@
         <property name="loader" ref="loader"/>
         <property name="currencyService" ref="currencyService"/>
     </bean>
-
+    <bean id="editDate" class="sepm.dsa.gui.EditDateController">
+        <property name="loader" ref="loader"/>
+        <property name="timeService" ref="timeService"/>
+    </bean>
+    <bean id="forwardDate" class="sepm.dsa.gui.ForwardDateController">
+        <property name="loader" ref="loader"/>
+        <property name="timeService" ref="timeService"/>
+    </bean>
     <!-- Transaction -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">

@@ -40,6 +40,18 @@ public interface TraderService {
     void remove(Trader t);
 
     /**
+     * Get all traders
+     * @return the traders or empty list
+     */
+    List<Trader> getAll();
+
+    /**
+     * Get all moving traders
+     * @return the moving traders or empty list
+     */
+    List<MovingTrader> getAllMovingTraders();
+
+    /**
      * Get all traders for a specified location or empty List if nothing found
      *
      * @param location must not be null
@@ -62,6 +74,15 @@ public interface TraderService {
      * @return a list of offers for the specified trader
      */
     List<Offer> calculateOffers(Trader trader);
+
+    /**
+     * Generates the offers and then calculates their pricings for a specified trader (https://sepm.bountin.net/confluence/pages/viewpage.action?pageId=3375469) according to these rules
+     *
+     * @param trader the trader to calculate offers for -- must not be null
+     * @param number the number of Offers that calculated
+     * @return a list of offers for the specified trader
+     */
+    List<Offer> calculateOffers(Trader trader, int number);
 
     /**
      * Calculates the price for a product --> needed for offer calculation

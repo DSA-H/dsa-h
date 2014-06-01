@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="222.0" prefWidth="419.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.ForwardDateController">
+    <children>
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="-2.0" layoutY="6.0" prefHeight="47.0" prefWidth="419.0" text="Zeit vorstellen" textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label><Label layoutX="27.0" layoutY="86.0" prefHeight="17.0" prefWidth="92.0" text="Aktuelles Datum:" /><Label fx:id="actDate" layoutX="121.0" layoutY="86.0" prefHeight="17.0" prefWidth="135.0" text="1. asdadadsd 1223 BF" /><Label layoutX="27.0" layoutY="130.0" text="Tage seitdem vergangen:" /><TextField fx:id="day" layoutX="166.0" layoutY="126.0" prefHeight="25.0" prefWidth="45.0" /><HBox alignment="TOP_RIGHT" layoutX="3.0" layoutY="183.0" prefHeight="25.0" prefWidth="410.0" spacing="10.0">
+<children><Button mnemonicParsing="false" onAction="#cancelClicked" text="Abbrechen" /><Button mnemonicParsing="false" onAction="#saveClicked" prefHeight="25.0" prefWidth="71.0" text="Speichern" />
+</children></HBox><Label alignment="TOP_LEFT" layoutX="256.0" layoutY="53.0" prefHeight="123.0" prefWidth="153.0" text="Beim Vorstellen der Zeit verändert sich das Sortiment aller Händler (Fluktration), Fahrende Händler ziehen gegebenenfalls um und die Auslastung von Tavernen kann sich ändern." textFill="#868686" wrapText="true" />
+    </children>
+</Pane>

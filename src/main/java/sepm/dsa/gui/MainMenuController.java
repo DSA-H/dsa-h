@@ -612,6 +612,32 @@ public class MainMenuController implements Initializable {
 		stage.show();
 	}
 
+    @FXML
+    private void onEditDateClicked() {
+        log.debug("onEditDateClicked - open EditDate Window");
+        Stage stage = new Stage();
+
+        Parent scene = (Parent) loader.load("/gui/edittime.fxml");
+
+        stage.setTitle("Datum umstellen");
+        stage.setScene(new Scene(scene, 419, 150));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
+    private void onForwardTimeClicked() {
+        log.debug("onForwardTimeClicked - open ForwardTime Window");
+        Stage stage = new Stage();
+
+        Parent scene = (Parent) loader.load("/gui/forwardtime.fxml");
+
+        stage.setTitle("Zeit vorstellen");
+        stage.setScene(new Scene(scene, 419, 222));
+        stage.setResizable(false);
+        stage.show();
+    }
+
 	@FXML
 	private void onTavernClicked() {
 		log.debug("onTavernClicked - open Tavern Window");
