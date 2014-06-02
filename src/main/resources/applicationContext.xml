@@ -273,6 +273,7 @@
         <property name="locationService" ref="locationService"/>
         <property name="regionService" ref="regionService"/>
         <property name="mapService" ref="mapService"/>
+        <property name="locationConnectionService" ref="locationConnectionService"/>
         <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 

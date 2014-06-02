@@ -104,4 +104,11 @@ public interface LocationConnectionService {
     int suggestedTravelTimeForDistance(double distance);
 
 
+    /**
+     *
+     * @param locationId
+     * @return all connections of a location
+     */
+    public List<LocationConnection> getAllByLocation(int locationId);
+
 }
