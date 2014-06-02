@@ -164,6 +164,18 @@ public class MainMenuController implements Initializable {
 		mode = WORLDMODE;
 
 		chooseButton.setStyle("-fx-font-weight: bold;");
+
+		scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				if (scrollPane.getVvalue() == 0.0 && scrollPane.getHvalue() == 0.0) {
+					scrollPane.setVvalue(vVal);
+					scrollPane.setHvalue(hVal);
+					vVal = 0;
+					hVal = 0;
+				}
+			}
+		});
 	}
 
 	private void changeMode() {
@@ -803,6 +815,9 @@ public class MainMenuController implements Initializable {
 
 	private void updateMap() {
 		log.debug("updateMap called");
+
+		hVal = scrollPane.getHvalue();
+		vVal = scrollPane.getVvalue();
 
 		if (mode == WORLDMODE) {
 			File worldMap = mapService.getWorldMap();
