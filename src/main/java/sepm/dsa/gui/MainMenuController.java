@@ -71,6 +71,11 @@ public class MainMenuController implements Initializable {
 	private Boolean nothingChanged = false;
 	private double hVal = 0.0;
 	private double vVal = 0.0;
+	private double worldScrollH;
+	private double worldScrollV;
+	private Group zoomGroup;
+	private double scaleFactor = 1.0;
+	private Boolean hasRestored = false;
 
 	@FXML
 	private MenuBar menuBar;
@@ -169,11 +174,16 @@ public class MainMenuController implements Initializable {
 		scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				if (scrollPane.getVvalue() == 0.0 && scrollPane.getHvalue() == 0.0) {
-					scrollPane.setVvalue(vVal);
-					scrollPane.setHvalue(hVal);
-					vVal = 0;
-					hVal = 0;
+				if (!hasRestored) {
+					if (Math.abs(oldValue.doubleValue() - newValue.doubleValue()) > 0.1) {
+						hasRestored = true;
+						scrollPane.setVvalue(vVal);
+						scrollPane.setHvalue(hVal);
+						vVal = 0;
+						hVal = 0;
+					}
+				} else {
+					hasRestored = false;
 				}
 			}
 		});
@@ -189,6 +199,8 @@ public class MainMenuController implements Initializable {
 			return;
 		}
 		if (mode == 0) {
+			worldScrollH = scrollPane.getHvalue();
+			worldScrollV = scrollPane.getVvalue();
 			mode = LOCATIONMODE;
 			pathCalcGrid.setVisible(false);
 			locationTable.setVisible(false);
@@ -203,6 +215,10 @@ public class MainMenuController implements Initializable {
 			stage.setTitle("DSA-Händlertool - "+ selectedLocation.getName());
 			checkTraderFocus();
 		} else {
+			hasRestored = true;
+			scrollPane.setHvalue(worldScrollH);
+			scrollPane.setVvalue(worldScrollV);
+			hasRestored = false;
 			mode = WORLDMODE;
 			pathCalcGrid.setVisible(true);
 			locationTable.setVisible(true);
@@ -421,14 +437,13 @@ public class MainMenuController implements Initializable {
 		Point2D SPLocation = new Point2D(windowCoord.getX() + sceneCoord.getX() + nodeCoord.getX(), windowCoord.getY() + sceneCoord.getY() + nodeCoord.getY());
 
 		Point mousePosition = MouseInfo.getPointerInfo().getLocation();
-		Pane pane = (Pane) scrollPane.getContent();
-		Canvas canvas = (Canvas) pane.getChildren().get(0);
-		double scrollableX = canvas.getWidth() - scrollPane.getWidth();
-		double scrollableY = canvas.getHeight() - scrollPane.getHeight();
-		if (canvas.getWidth() > scrollPane.getWidth()) {
+		Canvas mapCanvas = (Canvas) zoomGroup.getChildren().get(0);
+		double scrollableX = mapCanvas.getWidth()*scaleFactor - scrollPane.getWidth();
+		double scrollableY = mapCanvas.getHeight()*scaleFactor - scrollPane.getHeight();
+		if (mapCanvas.getWidth() > scrollPane.getWidth()) {
 			scrollableX += 12;
 		}
-		if (canvas.getHeight() > scrollPane.getHeight()) {
+		if (mapCanvas.getHeight() > scrollPane.getHeight()) {
 			scrollableY += 12;
 		}
 
@@ -436,6 +451,7 @@ public class MainMenuController implements Initializable {
 		int yPos = (int) (mousePosition.getY() - SPLocation.getY() + scrollPane.getVvalue() * scrollableY);
 
 		Point2D pos = new Point2D(xPos, yPos);
+		Point2D realPos = new Point2D(xPos/scaleFactor, yPos/scaleFactor);
 
 		if (creationMode) {
 			Stage stage = new Stage();
@@ -443,10 +459,10 @@ public class MainMenuController implements Initializable {
 			PlacementController controller = loader.getController();
 			if (mode == WORLDMODE) {
 				stage.setTitle("Ort platzieren");
-				controller.setUp(null, pos, selectedLocation, false);
+				controller.setUp(null, realPos, selectedLocation, false);
 			} else {
 				stage.setTitle("Händler/Wirtshaus platzieren");
-				controller.setUp(selectedLocation, pos, selectedObject, false);
+				controller.setUp(selectedLocation, realPos, selectedObject, false);
 			}
 			stage.setScene(new Scene(scene, 350, 190));
 			stage.setResizable(false);
@@ -477,9 +493,9 @@ public class MainMenuController implements Initializable {
 				int locY;
 				List<Location> locations = locationService.getAll();
 				for (Location l : locations) {
-					locX = l.getxCoord();
-					locY = l.getyCoord();
-					if (xPos > locX - 10 && xPos < locX + 10 && yPos > locY - 10 && yPos < locY + 10) {
+					locX = (int) (l.getxCoord() * scaleFactor);
+					locY = (int) (l.getyCoord() * scaleFactor);
+					if (xPos > locX - 20 && xPos < locX + 20 && yPos > locY - 20 && yPos < locY + 20) {
 						locationTable.getSelectionModel().select(l);
 					}
 				}
@@ -488,17 +504,17 @@ public class MainMenuController implements Initializable {
 				int locY;
 				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
 				for (Trader t : traders) {
-					locX = t.getxPos();
-					locY = t.getyPos();
-					if (xPos > locX - 10 && xPos < locX + 10 && yPos > locY - 10 && yPos < locY + 10) {
+					locX = (int) (t.getxPos() * scaleFactor);
+					locY = (int) (t.getyPos() * scaleFactor);
+					if (xPos > locX - 20 && xPos < locX + 20 && yPos > locY - 20 && yPos < locY + 20) {
 						traderList.getSelectionModel().select(t);
 					}
 				}
 				List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
 				for (Tavern t : taverns) {
-					locX = t.getxPos();
-					locY = t.getyPos();
-					if (xPos > locX - 10 && xPos < locX + 10 && yPos > locY - 10 && yPos < locY + 10) {
+					locX = (int) (t.getxPos() * scaleFactor);
+					locY = (int) (t.getyPos() * scaleFactor);
+					if (xPos > locX - 20 && xPos < locX + 20 && yPos > locY - 20 && yPos < locY + 20) {
 						traderList.getSelectionModel().select(t);
 					}
 				}
@@ -730,11 +746,9 @@ public class MainMenuController implements Initializable {
 
 	@FXML
 	private void onCalcPressed() {
-		if (nothingChanged) {
-			Pane pane = (Pane) scrollPane.getContent();
-			pane.getChildren().remove(pathCanvas);
+		if (nothingChanged) {zoomGroup.getChildren().remove(pathCanvas);
 			pathCanvas = new Canvas(1,1);
-			pane.getChildren().add(pathCanvas);
+			zoomGroup.getChildren().add(pathCanvas);
 			nothingChanged = false;
 			calcButton.setText("Berechnen");
 			return;
@@ -755,8 +769,7 @@ public class MainMenuController implements Initializable {
 			resultLabel.setText(cost + " Stunde");
 		}
 
-		Pane pane = (Pane) scrollPane.getContent();
-		pane.getChildren().remove(pathCanvas);
+		zoomGroup.getChildren().remove(pathCanvas);
 		pathCanvas = new Canvas(mapCanvas.getWidth(), mapCanvas.getHeight());
 		GraphicsContext gc = pathCanvas.getGraphicsContext2D();
 		gc.setFill(Color.GREEN);
@@ -791,13 +804,13 @@ public class MainMenuController implements Initializable {
 								highlight.getGraphicsContext2D().strokeRoundRect(4, 4, 22, 22, 13, 13);
 								highlight.setLayoutX(l.getxCoord() - 15);
 								highlight.setLayoutY(l.getyCoord() - 15);
-								pane.getChildren().add(highlight);
+								zoomGroup.getChildren().add(highlight);
 								onLocation = true;
 							}
 						}
 						if (!onLocation) {
-							while (pane.getChildren().size() > 3) {
-								pane.getChildren().remove(3);
+							while (zoomGroup.getChildren().size() > 3) {
+								zoomGroup.getChildren().remove(3);
 							}
 						}
 					}
@@ -807,7 +820,7 @@ public class MainMenuController implements Initializable {
 		calcButton.setText("Ausblenden");
 		nothingChanged = true;
 
-		pane.getChildren().add(pathCanvas);
+		zoomGroup.getChildren().add(pathCanvas);
 	}
 
 	private void updateTables() {
@@ -851,14 +864,12 @@ public class MainMenuController implements Initializable {
 			GraphicsContext gc = mapCanvas.getGraphicsContext2D();
 			gc.drawImage(image, 0, 0);
 			drawLocations(gc);
-			Pane pane = new Pane(mapCanvas);
-			pane.getChildren().add(selectionCanvas);
-			pane.getChildren().add(pathCanvas);
-			Group contentGroup = new Group();
-			Group zoomGroup = new Group();
-			contentGroup.getChildren().add(zoomGroup);
-			zoomGroup.getChildren().add(pane);
+			zoomGroup = new Group(mapCanvas, selectionCanvas, pathCanvas);
+			Group contentGroup = new Group(zoomGroup);
 			scrollPane.setContent(contentGroup);
+
+			zoomGroup.setScaleX(scaleFactor);
+			zoomGroup.setScaleY(scaleFactor);
 
 			List<Location> locations = locationService.getAll();
 
@@ -867,7 +878,6 @@ public class MainMenuController implements Initializable {
 						@Override
 						public void handle(MouseEvent e) {
 							boolean onLocation = false;
-							Canvas canvas = (Canvas) pane.getChildren().get(0);
 							for (Location l : locations) {
 								if (e.getX() > l.getxCoord() - 10 && e.getX() < l.getxCoord() + 10 &&
 										e.getY() > l.getyCoord() - 10 && e.getY() < l.getyCoord() + 10) {
@@ -876,13 +886,13 @@ public class MainMenuController implements Initializable {
 									highlight.getGraphicsContext2D().strokeRoundRect(4, 4, 22, 22, 13, 13);
 									highlight.setLayoutX(l.getxCoord() - 15);
 									highlight.setLayoutY(l.getyCoord() - 15);
-									pane.getChildren().add(highlight);
+									zoomGroup.getChildren().add(highlight);
 									onLocation = true;
 								}
 							}
 							if (!onLocation) {
-								while (pane.getChildren().size() > 3) {
-									pane.getChildren().remove(3);
+								while (zoomGroup.getChildren().size() > 3) {
+									zoomGroup.getChildren().remove(3);
 								}
 							}
 						}
@@ -895,29 +905,28 @@ public class MainMenuController implements Initializable {
 				map = mapService.getNoMapImage();
 			}
 			Image image = new Image("file:" + map.getAbsolutePath());
-			Canvas canvas = new Canvas(image.getWidth(), image.getHeight());
+			Canvas mapCanvas = new Canvas(image.getWidth(), image.getHeight());
 			if (selectionCanvas == null) {
 				Canvas selectionCanvas = new Canvas(1, 1);
 			}
-			GraphicsContext gc = canvas.getGraphicsContext2D();
+			GraphicsContext gc = mapCanvas.getGraphicsContext2D();
 			gc.drawImage(image, 0, 0);
 			drawTraders(gc);
-			Pane pane = new Pane(canvas, selectionCanvas);
-			Group contentGroup = new Group();
-			Group zoomGroup = new Group();
-			contentGroup.getChildren().add(zoomGroup);
-			zoomGroup.getChildren().add(pane);
+			zoomGroup = new Group(mapCanvas, selectionCanvas);
+			Group contentGroup = new Group(zoomGroup);
 			scrollPane.setContent(contentGroup);
+
+			zoomGroup.setScaleX(scaleFactor);
+			zoomGroup.setScaleY(scaleFactor);
 
 			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
 			List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
 
-			canvas.addEventHandler(MouseEvent.MOUSE_MOVED,
+			mapCanvas.addEventHandler(MouseEvent.MOUSE_MOVED,
 					new EventHandler<MouseEvent>() {
 						@Override
 						public void handle(MouseEvent e) {
 							boolean onStuff = false;
-							Canvas canvas = (Canvas) pane.getChildren().get(0);
 							for (Trader t : traders) {
 								if (e.getX() > t.getxPos()-10 && e.getX() < t.getxPos()+10 &&
 										e.getY() > t.getyPos()-10 && e.getY() < t.getyPos()+10) {
@@ -928,7 +937,7 @@ public class MainMenuController implements Initializable {
 									highlight.getGraphicsContext2D().strokeLine(4, 16, 16, 4);
 									highlight.setLayoutX(t.getxPos()-10);
 									highlight.setLayoutY(t.getyPos()-10);
-									pane.getChildren().add(highlight);
+									zoomGroup.getChildren().add(highlight);
 									onStuff = true;
 								}
 							}
@@ -942,13 +951,13 @@ public class MainMenuController implements Initializable {
 									highlight.getGraphicsContext2D().strokeLine(4, 16, 16, 4);
 									highlight.setLayoutX(t.getxPos()-10);
 									highlight.setLayoutY(t.getyPos()-10);
-									pane.getChildren().add(highlight);
+									zoomGroup.getChildren().add(highlight);
 									onStuff = true;
 								}
 							}
 							if (!onStuff) {
-								while(pane.getChildren().size() > 2) {
-									pane.getChildren().remove(2);
+								while(zoomGroup.getChildren().size() > 2) {
+									zoomGroup.getChildren().remove(2);
 								}
 							}
 						}
@@ -1099,10 +1108,9 @@ public class MainMenuController implements Initializable {
 			fromButton.setDisable(true);
 			toButton.setDisable(true);
 
-			Pane pane = (Pane) scrollPane.getContent();
-			pane.getChildren().remove(selectionCanvas);
+			zoomGroup.getChildren().remove(selectionCanvas);
 			selectionCanvas = new Canvas(1, 1);
-			pane.getChildren().add(selectionCanvas);
+			zoomGroup.getChildren().add(selectionCanvas);
 		} else {
 			deleteButton.setDisable(false);
 			editButton.setDisable(false);
@@ -1110,11 +1118,10 @@ public class MainMenuController implements Initializable {
 			fromButton.setDisable(false);
 			toButton.setDisable(false);
 
-			Pane pane = (Pane) scrollPane.getContent();
-			if (pane.getChildren().size() > 3) {
-				pane.getChildren().remove(3);
+			if (zoomGroup.getChildren().size() > 3) {
+				zoomGroup.getChildren().remove(3);
 			}
-			pane.getChildren().remove(selectionCanvas);
+			zoomGroup.getChildren().remove(selectionCanvas);
 
 			if (selectedLocation.getxCoord() > 0 && selectedLocation.getyCoord() > 0) {
 				selectionCanvas = new Canvas(30, 30);
@@ -1127,7 +1134,9 @@ public class MainMenuController implements Initializable {
 				selectionCanvas = new Canvas(1,1);
 			}
 
-			pane.getChildren().add(selectionCanvas);
+			zoomGroup.getChildren().add(selectionCanvas);
+			zoomGroup.setScaleX(scaleFactor);
+			zoomGroup.setScaleY(scaleFactor);
 		}
 	}
 
@@ -1139,10 +1148,9 @@ public class MainMenuController implements Initializable {
 		if (selectedObject == null) {
 			deleteButton.setDisable(true);
 			editButton.setDisable(true);
-			Pane pane = (Pane) scrollPane.getContent();
-			pane.getChildren().remove(selectionCanvas);
+			zoomGroup.getChildren().remove(selectionCanvas);
 			selectionCanvas = new Canvas(1, 1);
-			pane.getChildren().add(selectionCanvas);
+			zoomGroup.getChildren().add(selectionCanvas);
 		} else {
 			deleteButton.setDisable(false);
 			editButton.setDisable(false);
@@ -1152,11 +1160,10 @@ public class MainMenuController implements Initializable {
 				editButton.setText("Bearbeiten");
 			}
 
-			Pane pane = (Pane) scrollPane.getContent();
-			if (pane.getChildren().size() > 2) {
-				pane.getChildren().remove(2);
+			if (zoomGroup.getChildren().size() > 2) {
+				zoomGroup.getChildren().remove(2);
 			}
-			pane.getChildren().remove(selectionCanvas);
+			zoomGroup.getChildren().remove(selectionCanvas);
 
 			if ( (selectedObject instanceof Trader && ((Trader)selectedObject).getxPos() > 0 && ((Trader)selectedObject).getyPos() > 0) ||
 					(selectedObject instanceof Tavern && ((Tavern)selectedObject).getxPos() > 0 && ((Tavern)selectedObject).getyPos() > 0)) {
@@ -1176,7 +1183,7 @@ public class MainMenuController implements Initializable {
 				selectionCanvas = new Canvas(1,1);
 			}
 
-			pane.getChildren().add(selectionCanvas);
+			zoomGroup.getChildren().add(selectionCanvas);
 		}
 		chooseButton.setDisable(false);
 	}
