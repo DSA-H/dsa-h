@@ -214,8 +214,8 @@ public class MainMenuController implements Initializable {
 			checkLocationFocus();
 		}
 
-		updateMap();
 		updateTables();
+		updateMap();
 	}
 
 	@FXML
@@ -257,8 +257,8 @@ public class MainMenuController implements Initializable {
 
 		}
 
-		updateMap();
 		updateTables();
+		updateMap();
 
 	}
 
@@ -287,7 +287,7 @@ public class MainMenuController implements Initializable {
 				if (response == Dialog.Actions.YES) {
 					locationService.remove(selectedLocation);
 					saveCancelService.save();
-					locationTable.getItems().remove(selectedLocation);
+					//locationTable.getItems().remove(selectedLocation);
 				}
 
 				if (selectedLocation == fromLocation) {
@@ -327,14 +327,14 @@ public class MainMenuController implements Initializable {
 					if (response == Dialog.Actions.YES) {
 						tavernService.remove((Tavern) selectedObject);
 						saveCancelService.save();
-						traderList.getItems().remove(selectedObject);
+						//traderList.getItems().remove(selectedObject);
 					}
 				}
 			}
 		}
 
-		updateMap();
 		updateTables();
+		updateMap();
 	}
 
 	@FXML
@@ -517,8 +517,8 @@ public class MainMenuController implements Initializable {
 		stage.setResizable(false);
 		stage.showAndWait();
 
-		updateMap();
 		updateTables();
+		updateMap();
 	}
 
 	@FXML
@@ -533,8 +533,8 @@ public class MainMenuController implements Initializable {
 		stage.setResizable(false);
 		stage.showAndWait();
 
-		updateMap();
 		updateTables();
+		updateMap();
 	}
 
 	@FXML
@@ -549,8 +549,8 @@ public class MainMenuController implements Initializable {
 		stage.setResizable(false);
 		stage.showAndWait();
 
-		updateMap();
 		updateTables();
+		updateMap();
 	}
 
 	@FXML
@@ -565,8 +565,10 @@ public class MainMenuController implements Initializable {
 		stage.setResizable(false);
 		stage.showAndWait();
 
-		updateMap();
 		updateTables();
+		updateMap();
+		checkLocationFocus();
+		checkTraderFocus();
 	}
 
 	@FXML
@@ -580,8 +582,10 @@ public class MainMenuController implements Initializable {
 		stage.setResizable(false);
 		stage.showAndWait();
 
-		updateMap();
 		updateTables();
+		updateMap();
+		checkLocationFocus();
+		checkTraderFocus();
 	}
 
 	@FXML
@@ -596,8 +600,10 @@ public class MainMenuController implements Initializable {
 		stage.setResizable(false);
 		stage.showAndWait();
 
-		updateMap();
 		updateTables();
+		updateMap();
+		checkLocationFocus();
+		checkTraderFocus();
 	}
 
 	@FXML
@@ -612,8 +618,10 @@ public class MainMenuController implements Initializable {
 		stage.setResizable(false);
 		stage.showAndWait();
 
-		updateMap();
 		updateTables();
+		updateMap();
+		checkLocationFocus();
+		checkTraderFocus();
 	}
 
     @FXML
@@ -628,8 +636,10 @@ public class MainMenuController implements Initializable {
         stage.setResizable(false);
 	    stage.showAndWait();
 
-	    updateMap();
 	    updateTables();
+	    updateMap();
+	    checkLocationFocus();
+	    checkTraderFocus();
     }
 
     @FXML
@@ -644,8 +654,10 @@ public class MainMenuController implements Initializable {
         stage.setResizable(false);
 	    stage.showAndWait();
 
-	    updateMap();
 	    updateTables();
+	    updateMap();
+	    checkLocationFocus();
+	    checkTraderFocus();
     }
 
 	@FXML
@@ -668,6 +680,8 @@ public class MainMenuController implements Initializable {
 		mapService.setWorldMap(newmap);
 
 		updateMap();
+		checkLocationFocus();
+		checkTraderFocus();
 	}
 
 	@FXML
@@ -878,7 +892,7 @@ public class MainMenuController implements Initializable {
 			Image image = new Image("file:" + map.getAbsolutePath());
 			Canvas canvas = new Canvas(image.getWidth(), image.getHeight());
 			if (selectionCanvas == null) {
-				Canvas selectionCanvas = new Canvas(30, 30);
+				Canvas selectionCanvas = new Canvas(1, 1);
 			}
 			GraphicsContext gc = canvas.getGraphicsContext2D();
 			gc.drawImage(image, 0, 0);
