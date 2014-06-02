@@ -93,4 +93,20 @@ public class LocationConnectionDaoHbmImpl
         return result;
     }
 
+    @Override
+    public List<LocationConnection> getAllByLocation(int locationId) {
+        log.debug("calling getAllByLocationName(" + locationId + ")");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("LocationConnection.findAllByLocation");
+        query.setParameter("locationId", locationId);
+
+        List<?> list = query.list();
+        List<LocationConnection> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((LocationConnection) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
+
 }

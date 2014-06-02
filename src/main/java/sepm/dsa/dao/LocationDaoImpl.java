@@ -59,6 +59,24 @@ public class LocationDaoImpl
     }
 
     @Override
+    public List<Location> getAllByNameWithoutLocation(Location location, String locationName) {
+        log.debug("calling getAllByName(" + locationName + ")");
+
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("Location.findAllByNameWithoutLocation");
+        query.setParameter("locationId", location == null ? null : location.getId());
+        query.setParameter("locationName", locationName);
+        List<?> list = query.list();
+
+        List<Location> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((Location) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
     public List<Location> getAllAround(Location location, double withinDistance) {
         log.debug("calling getAllAround(" + location + "," + withinDistance + ")");
         Query query = sessionFactory.getCurrentSession().getNamedQuery("Location.findAllAround");
