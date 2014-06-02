@@ -83,6 +83,14 @@ public class Location implements BaseModel, PathNode {
         this.taverns = taverns;
     }
 
+    public Set<Trader> getTraders() {
+        return traders;
+    }
+
+    public void setTraders(Set<Trader> traders) {
+        this.traders = traders;
+    }
+
     public Integer getId() {
         return id;
     }

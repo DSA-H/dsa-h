@@ -3,12 +3,14 @@ package sepm.dsa.service;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.LocationDao;
 import sepm.dsa.exceptions.DSAModelNotFoundException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Location;
+import sepm.dsa.model.Trader;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -24,6 +26,8 @@ public class LocationServiceImpl implements LocationService {
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private LocationDao locationDao;
+
+    private TraderService traderService;
 
     @Override
     @Transactional(readOnly = false)
@@ -45,6 +49,9 @@ public class LocationServiceImpl implements LocationService {
     @Transactional(readOnly = false)
     public void remove(Location location) {
         log.debug("calling removeConnection(" + location + ")");
+
+//        traderService.getAllForLocation(location).forEach(traderService.remove())
+        traderService.getAllForLocation(location).forEach(traderService::remove);
 
         // TODO add param 'boolean moveMovingTradersOutOfLocation' true -> move them, don't delete them, false -> delete them
         locationDao.remove(location);
@@ -91,4 +98,7 @@ public class LocationServiceImpl implements LocationService {
         }
     }
 
+    public void setTraderService(TraderService traderService) {
+        this.traderService = traderService;
+    }
 }

@@ -174,6 +174,7 @@
 
     <bean id="locationService" class="sepm.dsa.service.LocationServiceImpl">
         <property name="locationDao" ref="locationDao"/>
+        <property name="traderService" ref="traderService"/>
     </bean>
 
     <bean id="currencyService" class="sepm.dsa.service.CurrencyServiceImpl">
