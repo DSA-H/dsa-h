@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.*;
@@ -853,7 +854,11 @@ public class MainMenuController implements Initializable {
 			Pane pane = new Pane(mapCanvas);
 			pane.getChildren().add(selectionCanvas);
 			pane.getChildren().add(pathCanvas);
-			scrollPane.setContent(pane);
+			Group contentGroup = new Group();
+			Group zoomGroup = new Group();
+			contentGroup.getChildren().add(zoomGroup);
+			zoomGroup.getChildren().add(pane);
+			scrollPane.setContent(contentGroup);
 
 			List<Location> locations = locationService.getAll();
 
@@ -898,7 +903,11 @@ public class MainMenuController implements Initializable {
 			gc.drawImage(image, 0, 0);
 			drawTraders(gc);
 			Pane pane = new Pane(canvas, selectionCanvas);
-			scrollPane.setContent(pane);
+			Group contentGroup = new Group();
+			Group zoomGroup = new Group();
+			contentGroup.getChildren().add(zoomGroup);
+			zoomGroup.getChildren().add(pane);
+			scrollPane.setContent(contentGroup);
 
 			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
 			List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
