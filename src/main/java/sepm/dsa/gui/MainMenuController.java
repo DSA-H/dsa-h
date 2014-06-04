@@ -1029,6 +1029,9 @@ public class MainMenuController implements Initializable {
 			posY1 = l.getyCoord();
 			if (posX1 != 0 && posY1 != 0) {
 				gc.fillRoundRect(posX1 - 10, posY1 - 10, 20, 20, 10, 10);
+				gc.setStroke(Color.BLACK);
+				gc.setLineWidth(1);
+				gc.strokeRoundRect(posX1 - 10, posY1 - 10, 20, 20, 10, 10);
                 saveCancelService.refresh(l);
 				for (LocationConnection lc : l.getAllConnections()) {
 					loc1 = lc.getLocation1();
@@ -1039,6 +1042,8 @@ public class MainMenuController implements Initializable {
 					posY2 = loc2.getyCoord();
 					posXm = posX1 + (posX2-posX1)/2;
 					posYm = posY1 + (posY2-posY1)/2;
+
+					gc.setLineWidth(3);
 					gc.setStroke(new Color(
 							(double) Integer.valueOf(loc1.getRegion().getColor().substring(0, 2), 16) / 255,
 							(double) Integer.valueOf(loc1.getRegion().getColor().substring(2, 4), 16) / 255,
