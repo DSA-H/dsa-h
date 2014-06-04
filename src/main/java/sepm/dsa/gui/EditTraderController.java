@@ -11,6 +11,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +35,7 @@ public class EditTraderController implements Initializable {
     private static final Logger log = LoggerFactory.getLogger(EditTraderController.class);
     private SpringFxmlLoader loader;
 
+    private Location oldLocation;
     private Trader selectedTrader;
     private TraderService traderService;
     private TraderCategoryService categoryService;
@@ -89,6 +92,7 @@ public class EditTraderController implements Initializable {
             sizeField.setText("" + selectedTrader.getSize());
             categoryBox.getSelectionModel().select(selectedTrader.getCategory());
             locationBox.getSelectionModel().select(selectedTrader.getLocation());
+            oldLocation = selectedTrader.getLocation();
             muField.setText("" + selectedTrader.getMut());
             inField.setText("" + selectedTrader.getIntelligence());
             chField.setText("" + selectedTrader.getCharisma());
@@ -266,10 +270,45 @@ public class EditTraderController implements Initializable {
         //comment
         selectedTrader.setComment(commentArea.getText());
 
-
         if (isNewTrader) {
             traderService.add(selectedTrader);
         } else {
+            if (!oldLocation.equals(selectedTrader.getLocation())){
+                Action response = Dialogs.create()
+                        .title("Sortiment neu berechnen?")
+                        .masthead(null)
+                        .message("Der Händler hat sich an einen neuen Ort bewegt, soll ein neues Sortiment berechnet werden?")
+                        .showConfirm();
+
+                if (response == Dialog.Actions.OK) {
+                    traderService.calculateOffers(selectedTrader);
+                }else if (response == Dialog.Actions.NO){
+
+                    List<Dialogs.CommandLink> links = Arrays.asList(
+                            new Dialogs.CommandLink("Alle Preise neu berechnen!", "Hierdurch werden die Preise von allen im Sortiment enthaltenen Waren neu berechnet."),
+                            new Dialogs.CommandLink("Nur bestimmte Preise erhöhen!", "Hierdurch werden nur die Preise von Produkten die teurer werden neu berechnet")
+                    );
+
+                    Action response2 = Dialogs.create()
+                            .title("Preise neu berechnen?")
+                            .masthead(null)
+                            .message("Sollen alle Preise neu berechnet werden?")
+                            .showCommandLinks( links.get(1), links );
+
+                    if (response2 == links.get(0)){
+                        //Recalculate pricing
+                        traderService.reCalculatePriceForOffer(/*selectedTrader.getOffers(), */selectedTrader);
+
+                    }else{
+                        //Recalculate pricing if new price is higher
+                        traderService.reCalculatePriceForOfferIfNewPriceIsHigher(/*selectedTrader.getOffers(), */selectedTrader);
+
+                    }
+                }else {
+                    return;
+                }
+            }
+
             traderService.update(selectedTrader);
         }
         saveCancelService.save();

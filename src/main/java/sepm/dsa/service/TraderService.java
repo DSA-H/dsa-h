@@ -100,4 +100,29 @@ public interface TraderService {
 	 * @return a list of the trader's offers.
 	 */
 	Collection<Offer> getOffers(Trader trader);
+
+    /**
+     *
+     * @param productQuality
+     * @param product
+     * @param trader
+     * @return
+     */
+    int calculatePricePerUnit(ProductQuality productQuality, Product product, Trader trader);
+
+    /**
+     * Recalculates the prices for all offers of a trader
+     *
+     * @param trader the trader
+     * @return the price in default (base-rate) currency
+     */
+    void reCalculatePriceForOffer(/*Set<Offer> offers, */Trader trader);
+
+    /**
+     * Recalculates the price for all offers of a trader if the new price of the product is higher
+     *
+     * @param trader the trader
+     * @return the price in default (base-rate) currency
+     */
+    void reCalculatePriceForOfferIfNewPriceIsHigher(/*Set<Offer> offers, */Trader trader);
 }

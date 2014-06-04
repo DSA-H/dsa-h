@@ -574,6 +574,21 @@ public class MainMenuController implements Initializable {
 		updateTables();
 	}
 
+    @FXML
+    private void onTraderClicked() {
+        log.debug("onTraderClicked - open Trader Window");
+        Stage stage = new Stage();
+        Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
+
+        stage.setTitle("Händler");
+        stage.setScene(new Scene(scene, 600, 438));
+        stage.setResizable(false);
+        stage.showAndWait();
+
+        updateMap();
+        updateTables();
+    }
+
 	@FXML
 	private void onWarenClicked() {
 		log.debug("onWarenClicked - open Waren Window");

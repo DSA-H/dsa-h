@@ -206,7 +206,7 @@ public class TraderServiceImpl implements TraderService {
                     Offer offer = new Offer();
                     offer.setTrader(trader);
                     offer.setQuality(productQuality);
-                    int price = (int) (calculatePriceForProduct(product, trader) * productQuality.getQualityPriceFactor());
+                    int price = calculatePricePerUnit(productQuality, product, trader);
                     offer.setPricePerUnit(price);
                     offer.setProduct(product);
                     offer.setAmount(amountQualities[i]);
@@ -226,6 +226,18 @@ public class TraderServiceImpl implements TraderService {
     @Override
     public List<Offer> calculateOffers(Trader trader) {
         return calculateOffers(trader, trader.getSize());
+    }
+    
+
+    /**
+     *
+     * @param productQuality
+     * @param product
+     * @param trader
+     * @return
+     */
+    public int calculatePricePerUnit(ProductQuality productQuality, Product product, Trader trader){
+        return (int) (calculatePriceForProduct(product, trader) * productQuality.getQualityPriceFactor());
     }
 
     /**
@@ -252,6 +264,39 @@ public class TraderServiceImpl implements TraderService {
         }
 
         return price;
+    }
+
+
+    @Override
+    public void reCalculatePriceForOffer(/*Set<Offer> offers, */Trader trader) {
+        Set<Offer> offers = trader.getOffers();
+        if (offers==null){
+            return;
+        }
+        Iterator i = offers.iterator();
+        while(i.hasNext()){
+            Offer offer = (Offer)i.next();
+            int pricePerUnit = calculatePricePerUnit(offer.getQuality(), offer.getProduct(), trader);
+            offer.setPricePerUnit(pricePerUnit);
+        }
+        trader.setOffers(offers);
+    }
+
+    @Override
+    public void reCalculatePriceForOfferIfNewPriceIsHigher(/*Set<Offer> offers, */Trader trader) {
+        Set<Offer> offers = trader.getOffers();
+        if (offers==null){
+            return;
+        }
+        Iterator i = offers.iterator();
+        while(i.hasNext()){
+            Offer offer = (Offer)i.next();
+            int pricePerUnit = calculatePricePerUnit(offer.getQuality(), offer.getProduct(), trader);
+            if (pricePerUnit > offer.getPricePerUnit()){
+                offer.setPricePerUnit(pricePerUnit);
+            }
+        }
+        trader.setOffers(offers);
     }
 
     private List<RegionBorder> getCheapestWayBordersBetween(Set<Region> productionRegions, Region tradeRegion) throws NoPathException {
