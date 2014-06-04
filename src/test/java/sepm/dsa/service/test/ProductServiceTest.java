@@ -11,6 +11,7 @@ import sepm.dsa.model.Region;
 import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.ProductService;
 import sepm.dsa.service.RegionService;
+import sepm.dsa.service.UnitService;
 
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +28,8 @@ public class ProductServiceTest extends AbstractDatabaseTest {
     private ProductCategoryService productCategoryService;
     @Autowired
     private RegionService regionService;
+    @Autowired
+    private UnitService unitService;
 
 
     @Test
@@ -43,6 +46,7 @@ public class ProductServiceTest extends AbstractDatabaseTest {
         p.setQuality(false);
         p.setCost(1);
         p.setAttribute(ProductAttribute.LAGERBAR);
+        p.setUnit(unitService.get(4));
 
         int size = productService.getAll().size();
         productService.add(p);
@@ -59,6 +63,7 @@ public class ProductServiceTest extends AbstractDatabaseTest {
         p.setQuality(false);
         p.setCost(1);
         p.setAttribute(ProductAttribute.LAGERBAR);
+        p.setUnit(unitService.get(7));
 
         Set<Region> regionSet = new HashSet<Region>(regionService.getAll());
         p.getRegions().addAll(regionSet);
@@ -81,6 +86,7 @@ public class ProductServiceTest extends AbstractDatabaseTest {
         p.setQuality(false);
         p.setCost(1);
         p.setAttribute(ProductAttribute.LAGERBAR);
+        p.setUnit(unitService.get(8));
 
         List<ProductCategory> categoryList = productCategoryService.getAll();
         Set<ProductCategory> categorySet = new HashSet<ProductCategory>();
