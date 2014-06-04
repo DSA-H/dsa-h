@@ -76,6 +76,7 @@ public class MainMenuController implements Initializable {
 	private Group zoomGroup;
 	private double scaleFactor = 1.0;
 	private Boolean hasRestored = false;
+	private Boolean setZoomToStandard = true;
 
 	@FXML
 	private MenuBar menuBar;
@@ -142,6 +143,9 @@ public class MainMenuController implements Initializable {
 	@FXML
 	private GridPane pathCalcGrid;
 
+	@FXML
+	private Slider zoomSlider;
+
 	@Override
 	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
 		updateMap();
@@ -187,6 +191,24 @@ public class MainMenuController implements Initializable {
 				}
 			}
 		});
+
+		zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				scaleFactor = newValue.doubleValue();
+				double v = scrollPane.getVvalue();
+				double h = scrollPane.getHvalue();
+				zoomGroup.setScaleX(scaleFactor);
+				zoomGroup.setScaleY(scaleFactor);
+				scrollPane.setVvalue(v);
+				scrollPane.setHvalue(h);
+				updateZoom();
+			}
+		});
+
+		zoomSlider.setMin((536)/mapCanvas.getHeight());
+		zoomSlider.setMax(2.69);
+		zoomSlider.adjustValue(1.0);
 	}
 
 	private void changeMode() {
@@ -233,6 +255,7 @@ public class MainMenuController implements Initializable {
 
 		updateTables();
 		updateMap();
+		updateZoom();
 	}
 
 	@FXML
@@ -823,6 +846,20 @@ public class MainMenuController implements Initializable {
 		zoomGroup.getChildren().add(pathCanvas);
 	}
 
+	@FXML
+	private void onZoomInPressed() {
+		double oldVal = zoomSlider.getValue();
+		double newVal = oldVal + (zoomSlider.getMax()-zoomSlider.getMin())/10;
+		zoomSlider.adjustValue(newVal);
+	}
+
+	@FXML
+	private void onZoomOutPressed() {
+		double oldVal = zoomSlider.getValue();
+		double newVal = oldVal - (zoomSlider.getMax()-zoomSlider.getMin())/10;
+		zoomSlider.adjustValue(newVal);
+	}
+
 	private void updateTables() {
 		ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
 		locationTable.setItems(data);
@@ -839,6 +876,13 @@ public class MainMenuController implements Initializable {
 			}
 			traderList.setItems(FXCollections.observableArrayList(all));
 		}
+	}
+
+	private void updateZoom() {
+		double minScaleX = (scrollPane.getWidth()-2)/mapCanvas.getWidth();
+		double minScaleY = (scrollPane.getHeight()-2)/mapCanvas.getHeight();
+		zoomSlider.setMin(Math.min(minScaleX, minScaleY));
+		zoomSlider.setMax(2.69);
 	}
 
 	private void updateMap() {
@@ -905,7 +949,7 @@ public class MainMenuController implements Initializable {
 				map = mapService.getNoMapImage();
 			}
 			Image image = new Image("file:" + map.getAbsolutePath());
-			Canvas mapCanvas = new Canvas(image.getWidth(), image.getHeight());
+			mapCanvas = new Canvas(image.getWidth(), image.getHeight());
 			if (selectionCanvas == null) {
 				Canvas selectionCanvas = new Canvas(1, 1);
 			}

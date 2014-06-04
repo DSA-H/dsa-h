@@ -5,103 +5,111 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.MainMenuController">
-    <top>
-        <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
-            <menus>
-                <Menu fx:id="dateiMenu" mnemonicParsing="false" text="Datei">
-                    <items>
-                        <MenuItem fx:id="dateiImport" disable="true" mnemonicParsing="false" text="Import" />
-                        <MenuItem fx:id="dateiExport" disable="true" mnemonicParsing="false" text="Export" />
-                        <MenuItem fx:id="dateiExit" mnemonicParsing="false" onAction="#onExitClicked" text="Beenden" />
-                    </items>
-                </Menu>
-                <Menu fx:id="dateiVerwaltenMenu" mnemonicParsing="false" text="Daten Verwalten">
-                    <items>
-                        <Menu fx:id="verwaltenWeltkarte" mnemonicParsing="false" text="Weltkarte">
-                            <items>
-                                <MenuItem fx:id="weltkarteImportieren" mnemonicParsing="false" onAction="#onWeltkarteImportierenPressed" text="Importieren" />
-                                <MenuItem fx:id="weltkarteExportieren" mnemonicParsing="false" onAction="#onWeltkarteExportierenPressed" text="Exportieren" />
-                            </items>
-                        </Menu>
-                        <MenuItem fx:id="verwaltenHaendlerKategorie" mnemonicParsing="false" onAction="#onTraderCategoriesClicked" text="Händlerkategorie" />
-                        <MenuItem fx:id="verwaltenGebieteGrenzen" mnemonicParsing="false" onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen" />
-                        <MenuItem fx:id="verwaltenWaehrungen" mnemonicParsing="false" onAction="#onCurrencyClicked" text="Währungen" />
-                        <MenuItem fx:id="verwaltenWaren" mnemonicParsing="false" onAction="#onWarenClicked" text="Waren" />
-                        <MenuItem fx:id="verwaltenWarenKategorie" mnemonicParsing="false" onAction="#onWarenKategorieClicked" text="Warenkategorie" />
-                        <MenuItem onAction="#onEditDateClicked" text="Datum einstellen" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Spiel">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onPlayerClicked" text="Spieler" />
-                        <MenuItem fx:id="berechneWährung" mnemonicParsing="false" onAction="#onCalculateCurrencyClicked" text="Währungen umrechnen" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
-    </top>
-    <left>
-        <VBox prefWidth="10.0" BorderPane.alignment="CENTER" />
-    </left>
-    <right>
-        <VBox maxWidth="10.0" minWidth="6.0" prefWidth="10.0" BorderPane.alignment="CENTER" />
-    </right>
-    <center>
-        <GridPane BorderPane.alignment="CENTER">
-            <children>
-                <ScrollPane fx:id="scrollPane" onMouseClicked="#onScrollPaneClicked" GridPane.rowSpan="2" />
-                <ListView fx:id="traderList" visible="false" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowSpan="2" />
-                <TableView fx:id="locationTable" GridPane.columnIndex="1" GridPane.hgrow="NEVER">
-                    <columns>
-                        <TableColumn fx:id="locationColumn" prefWidth="120.0" text="Ort" />
-                        <TableColumn fx:id="regionColumn" prefWidth="125.0" text="Gebiet" />
-                    </columns>
-                </TableView>
-                <GridPane fx:id="pathCalcGrid" disable="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <children>
-                        <Label text="Wegberechnung" underline="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" />
-                        <Button fx:id="fromButton" disable="true" mnemonicParsing="false" onAction="#onFromPressed" prefWidth="100.0" text="von" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                        <Button fx:id="toButton" disable="true" mnemonicParsing="false" onAction="#onToPressed" prefWidth="100.0" text="nach" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-                        <Label fx:id="fromLabel" text="kein Ort" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label fx:id="toLabel" text="kein Ort" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Button fx:id="calcButton" contentDisplay="LEFT" disable="true" mnemonicParsing="false" onAction="#onCalcPressed" prefHeight="-1.0" prefWidth="100.0" text="Berechnen" textAlignment="LEFT" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                        <Label fx:id="resultLabel" text="kein Ergebnis" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                    </children>
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints maxHeight="46.0" minHeight="46.0" prefHeight="46.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="46.0" minHeight="46.0" prefHeight="46.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                </GridPane>
-            </children>
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="811.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="246.0" prefWidth="246.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="357.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="152.0" prefHeight="152.0" vgrow="SOMETIMES" />
-            </rowConstraints>
-        </GridPane>
-    </center>
-<bottom>
-        <HBox alignment="CENTER_RIGHT" prefHeight="37.0" prefWidth="685.0" spacing="10.0" BorderPane.alignment="CENTER">
-            <children>
-                <Button mnemonicParsing="false" onAction="#onForwardTimeClicked" text="Zeit vorwärts stellen" />
-                <Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Ort platzieren" />
-                <Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#onEditButtonPressed" text="Bearbeiten" />
-                <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" />
-                <Button fx:id="chooseButton" alignment="CENTER" disable="true" layoutX="693.0" layoutY="561.0" mnemonicParsing="false" onAction="#onChooseButtonPressed" prefWidth="90.0" text="Ortsansicht" />
-            </children>
-            <BorderPane.margin>
-                <Insets right="10.0" />
-            </BorderPane.margin>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="sepm.dsa.gui.MainMenuController">
+  <bottom>
+    <HBox alignment="CENTER_RIGHT" maxWidth="-1.0" prefHeight="37.0" prefWidth="1077.0" spacing="50.0">
+      <children>
+        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="250.0" spacing="10.0">
+          <children>
+            <Button mnemonicParsing="false" onAction="#onZoomOutPressed" text="-" />
+            <Slider fx:id="zoomSlider" />
+            <Button minWidth="-1.0" mnemonicParsing="false" onAction="#onZoomInPressed" prefWidth="-1.0" text="+" />
+          </children>
         </HBox>
-</bottom>
+        <HBox alignment="CENTER_LEFT" maxWidth="500.0" prefHeight="37.0" prefWidth="500.0" spacing="10.0">
+          <children>
+            <Button mnemonicParsing="false" onAction="#onForwardTimeClicked" text="Zeit vorwärts stellen" />
+            <Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Ort platzieren" />
+            <Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#onEditButtonPressed" text="Bearbeiten" />
+            <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" />
+            <Button fx:id="chooseButton" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#onChooseButtonPressed" prefWidth="90.0" text="Ortsansicht" />
+          </children>
+        </HBox>
+      </children>
+    </HBox>
+  </bottom>
+  <center>
+    <GridPane BorderPane.alignment="CENTER">
+      <children>
+        <ScrollPane fx:id="scrollPane" onMouseClicked="#onScrollPaneClicked" GridPane.rowSpan="2" />
+        <ListView fx:id="traderList" visible="false" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowSpan="2" />
+        <TableView fx:id="locationTable" GridPane.columnIndex="1" GridPane.hgrow="NEVER">
+          <columns>
+            <TableColumn prefWidth="120.0" text="Ort" fx:id="locationColumn" />
+            <TableColumn prefWidth="125.0" text="Gebiet" fx:id="regionColumn" />
+          </columns>
+        </TableView>
+        <GridPane fx:id="pathCalcGrid" disable="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
+          <children>
+            <Label text="Wegberechnung" underline="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" />
+            <Button fx:id="fromButton" disable="true" mnemonicParsing="false" onAction="#onFromPressed" prefWidth="100.0" text="von" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <Button fx:id="toButton" disable="true" mnemonicParsing="false" onAction="#onToPressed" prefWidth="100.0" text="nach" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <Label fx:id="fromLabel" text="kein Ort" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="toLabel" text="kein Ort" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button fx:id="calcButton" contentDisplay="LEFT" disable="true" mnemonicParsing="false" onAction="#onCalcPressed" prefHeight="-1.0" prefWidth="100.0" text="Berechnen" textAlignment="LEFT" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+            <Label fx:id="resultLabel" text="kein Ergebnis" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="46.0" minHeight="46.0" prefHeight="46.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="46.0" minHeight="46.0" prefHeight="46.0" vgrow="SOMETIMES" />
+          </rowConstraints>
+        </GridPane>
+      </children>
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="811.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="246.0" prefWidth="246.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="357.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="152.0" prefHeight="152.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+    </GridPane>
+  </center>
+  <left>
+    <VBox prefWidth="10.0" BorderPane.alignment="CENTER" />
+  </left>
+  <right>
+    <VBox maxWidth="10.0" minWidth="6.0" prefWidth="10.0" BorderPane.alignment="CENTER" />
+  </right>
+  <top>
+    <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
+      <menus>
+        <Menu mnemonicParsing="false" text="Datei" fx:id="dateiMenu">
+          <items>
+            <MenuItem disable="true" mnemonicParsing="false" text="Import" fx:id="dateiImport" />
+            <MenuItem disable="true" mnemonicParsing="false" text="Export" fx:id="dateiExport" />
+            <MenuItem mnemonicParsing="false" onAction="#onExitClicked" text="Beenden" fx:id="dateiExit" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Daten Verwalten" fx:id="dateiVerwaltenMenu">
+          <items>
+            <Menu mnemonicParsing="false" text="Weltkarte" fx:id="verwaltenWeltkarte">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#onWeltkarteImportierenPressed" text="Importieren" fx:id="weltkarteImportieren" />
+                <MenuItem mnemonicParsing="false" onAction="#onWeltkarteExportierenPressed" text="Exportieren" fx:id="weltkarteExportieren" />
+              </items>
+            </Menu>
+            <MenuItem mnemonicParsing="false" onAction="#onTraderCategoriesClicked" text="Händlerkategorie" fx:id="verwaltenHaendlerKategorie" />
+            <MenuItem mnemonicParsing="false" onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen" fx:id="verwaltenGebieteGrenzen" />
+            <MenuItem mnemonicParsing="false" onAction="#onCurrencyClicked" text="Währungen" fx:id="verwaltenWaehrungen" />
+            <MenuItem mnemonicParsing="false" onAction="#onWarenClicked" text="Waren" fx:id="verwaltenWaren" />
+            <MenuItem mnemonicParsing="false" onAction="#onWarenKategorieClicked" text="Warenkategorie" fx:id="verwaltenWarenKategorie" />
+            <MenuItem onAction="#onEditDateClicked" text="Datum einstellen" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Spiel">
+          <items>
+            <MenuItem mnemonicParsing="false" onAction="#onPlayerClicked" text="Spieler" />
+            <MenuItem mnemonicParsing="false" onAction="#onCalculateCurrencyClicked" text="Währungen umrechnen" fx:id="berechneWährung" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+  </top>
 </BorderPane>
