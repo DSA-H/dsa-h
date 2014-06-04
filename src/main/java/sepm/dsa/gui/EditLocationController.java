@@ -289,7 +289,9 @@ public class EditLocationController implements Initializable {
     public static void setLocation(Location location) {
         log.debug("calling setLocation(" + location + ")");
         selectedLocation = location;
-        connections = new HashSet<>(selectedLocation.getAllConnections());
+        if (selectedLocation != null) {
+            connections = new HashSet<>(selectedLocation.getAllConnections());
+        }
     }
 
     public void setLoader(SpringFxmlLoader loader) {
