@@ -15,8 +15,11 @@
             <Slider fx:id="zoomSlider" />
             <Button minWidth="-1.0" mnemonicParsing="false" onAction="#onZoomInPressed" prefWidth="-1.0" text="+" />
           </children>
+          <padding>
+            <Insets left="10.0" />
+          </padding>
         </HBox>
-        <HBox alignment="CENTER_LEFT" maxWidth="700.0" prefHeight="37.0" prefWidth="500.0" spacing="10.0">
+        <HBox alignment="CENTER_RIGHT" maxWidth="600.0" prefHeight="37.0" prefWidth="600.0" spacing="10.0">
           <children>
             <Button mnemonicParsing="false" onAction="#onForwardTimeClicked" text="Zeit vorwärts stellen" />
             <Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Ort platzieren" />
@@ -24,6 +27,9 @@
             <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" />
             <Button fx:id="chooseButton" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#onChooseButtonPressed" prefWidth="90.0" text="Ortsansicht" />
           </children>
+          <padding>
+            <Insets right="10.0" />
+          </padding>
         </HBox>
       </children>
     </HBox>
