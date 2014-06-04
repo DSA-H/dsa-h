@@ -11,6 +11,7 @@ import sepm.dsa.model.Region;
 import sepm.dsa.model.TownSize;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.LocationServiceImpl;
+import sepm.dsa.service.TraderService;
 
 import static org.mockito.Mockito.*;
 
@@ -19,6 +20,7 @@ public class IsolatedLocationServiceTest extends AbstractDatabaseTest {
 
     private LocationService isolatedLocationService;
     private LocationDao locationDaoMock;
+    private TraderService traderServiceMock;
 
     private Location location1;
 
@@ -37,11 +39,13 @@ public class IsolatedLocationServiceTest extends AbstractDatabaseTest {
         location1.setRegion(region);
 
         locationDaoMock = mock(LocationDao.class);
-
         when(locationDaoMock.get(1)).thenReturn(location1);
+
+        traderServiceMock = mock(TraderService.class);
 
         LocationServiceImpl locationServiceImpl = new LocationServiceImpl();
         locationServiceImpl.setLocationDao(locationDaoMock);
+        locationServiceImpl.setTraderService(traderServiceMock);
         isolatedLocationService = locationServiceImpl;
     }
 

@@ -31,6 +31,20 @@
     <!-- end of LocationConnections test data                     -->
     <!-- ======================================================== -->
 
+    <unittypes id="1" name="Fläche"/>
+    <unittypes id="2" name="Gewicht"/>
+    <unittypes id="3" name="Länge"/>
+    <unittypes id="4" name="Stück"/>
+    <unittypes id="5" name="Volumen"/>
+    <units id="1" name="Rechtschritt" unittype_id="1" valueToBaseUnit="1" shortname="Rechtschr."/>
+    <units id="2" name="Stein" unittype_id="2" valueToBaseUnit="1" shortname="Stein"/>
+    <units id="3" name="Platz" unittype_id="1" valueToBaseUnit="625" shortname="Platz"/>
+    <units id="4" name="Unze" unittype_id="2" valueToBaseUnit="20" shortname="Unze"/>
+    <units id="5" name="Schritt" unittype_id="3" valueToBaseUnit="1" shortname="Schritt"/>
+    <units id="6" name="Spann" unittype_id="3" valueToBaseUnit="5" shortname="Spann"/>
+    <units id="7" name="Stück" unittype_id="4" valueToBaseUnit="1" shortname="Stück"/>
+    <units id="8" name="Raumschritt" unittype_id="5" valueToBaseUnit="1" shortname="Raumschr."/>
+
     <taverns id="1" name="Zum Wegstein" location_id="1" xPos="42" yPos="12" usage="12" beds="10"/>
     <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="60" yPos="9" usage="12" beds="7"/>
 
@@ -41,14 +55,14 @@
     <traderCategories id="3" name="category3" />
     <traderCategories id="4" name="category4" />
     <traderCategories id="5" name="noTradersToThisCategorie" />
-    <products id="1" name="product1" cost="17" attributeId="1" quality="false" />
-    <products id="2" name="product2" cost="23" attributeId="2" quality="true" />
-    <products id="3" name="product3" cost="29" attributeId="3" quality="true" />
-    <products id="4" name="product4" cost="36" attributeId="0" quality="true" />
-    <products id="5" name="product5" cost="200" attributeId="3" quality="true" />
-    <products id="6" name="product6" cost="450" attributeId="0" quality="true" />
-    <products id="7" name="product7" cost="65" attributeId="2" quality="true" />
-    <products id="8" name="product8" cost="105" attributeId="0" quality="true" />
+    <products id="1" name="product1" unit_id="1" occurence="100" cost="17" attributeId="1" quality="false" />
+    <products id="2" name="product2" unit_id="2" occurence="100" cost="23" attributeId="2" quality="true" />
+    <products id="3" name="product3" unit_id="3" occurence="100" cost="29" attributeId="3" quality="true" />
+    <products id="4" name="product4" unit_id="4" occurence="100" cost="36" attributeId="0" quality="true" />
+    <products id="5" name="product5" unit_id="4" occurence="100" cost="200" attributeId="3" quality="true" />
+    <products id="6" name="product6" unit_id="7" occurence="100" cost="450" attributeId="0" quality="true" />
+    <products id="7" name="product7" unit_id="6" occurence="100" cost="65" attributeId="2" quality="true" />
+    <products id="8" name="product8" unit_id="5" occurence="100" cost="105" attributeId="0" quality="true" />
     <traders id="1" name="Optimus Prime" category_id="1" size="20" xPos="7" yPos="7" mut="14" intelligence="14" charisma="14" convince="5" location_id="1" />
     <traders id="2" name="Megatron" category_id="2" size="200" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13" convince="7" location_id="1" />
     <traders id="3" name="Fluttershy" category_id="3" size="200" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13" convince="7" location_id="1" />
@@ -98,8 +112,4 @@
 
     <currencies id="1" name="firstCurrency" valueToBaseRate="3"/>
     <currencies id="2" name="secondCurrency" valueToBaseRate="2"/>
-    <unittypes id="1" name="erster"/>
-    <unittypes id="2" name="zweiter"/>
-    <units id="1" name="foo333" unittype_id="1" valueToBaseUnit="3" shortname="s1"/>
-    <units id="2" name="foo444" unittype_id="2" valueToBaseUnit="4" shortname="s2"/>
 </dataset>

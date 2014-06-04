@@ -18,6 +18,7 @@ import sepm.dsa.model.Location;
 import sepm.dsa.model.Tavern;
 import sepm.dsa.model.Trader;
 import sepm.dsa.service.LocationService;
+import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TavernService;
 import sepm.dsa.service.TraderService;
 
@@ -32,6 +33,7 @@ public class PlacementController implements Initializable{
 	private LocationService locationService;
 	private TraderService traderService;
 	private TavernService tavernService;
+	private SaveCancelService saveCancelService;
 	private Location selectedLocation;
 	private Point2D pos;
 	private Object selectedObj;
@@ -65,6 +67,8 @@ public class PlacementController implements Initializable{
 			location.setxCoord((int) pos.getX());
 			location.setyCoord((int) pos.getY());
 			locationService.update(location);
+			saveCancelService.save();
+
 		} else {
 			Object obj = choiceBox.getSelectionModel().getSelectedItem();
 			if (obj instanceof Trader) {
@@ -72,11 +76,13 @@ public class PlacementController implements Initializable{
 				trader.setxPos((int) pos.getX());
 				trader.setyPos((int) pos.getY());
 				traderService.update(trader);
+				saveCancelService.save();
 			} else {
 				Tavern tavern = (Tavern) obj;
 				tavern.setxPos((int) pos.getX());
 				tavern.setyPos((int) pos.getY());
 				tavernService.update(tavern);
+				saveCancelService.save();
 			}
 		}
 		Stage stage = (Stage) choiceBox.getScene().getWindow();
@@ -192,5 +198,9 @@ public class PlacementController implements Initializable{
 
 	public void setTavernService(TavernService tavernService) {
 		this.tavernService = tavernService;
+	}
+
+	public void setSaveCancelService(SaveCancelService saveCancelService) {
+		this.saveCancelService = saveCancelService;
 	}
 }

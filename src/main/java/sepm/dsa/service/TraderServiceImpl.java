@@ -160,6 +160,7 @@ public class TraderServiceImpl implements TraderService {
                     weight -= x;
                 }
                 weight *= (defaultOccurence / 100f);
+                weight *= (product.getOccurence() / 100f);
 
                 topWeight += weight;
 

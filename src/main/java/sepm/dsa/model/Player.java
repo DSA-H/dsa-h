@@ -25,7 +25,7 @@ public class Player implements Serializable, BaseModel {
 	@Column
 	private String comment;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
     private Set<Deal> deals = new HashSet<>();
 
 	public Integer getId() {

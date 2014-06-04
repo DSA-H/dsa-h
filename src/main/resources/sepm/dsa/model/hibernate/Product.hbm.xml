@@ -14,4 +14,10 @@
     </query>
 <!-- TODO childs also -->
 
+    <!--<query name="Product.findAllByDeals">-->
+        <!--<![CDATA[   FROM Product p-->
+                    <!--WHERE :categoryId in (SELECT  FROM Deal d)-->
+                    <!--ORDER BY p.name asc]]>-->
+    <!--</query>-->
+
 </hibernate-mapping>

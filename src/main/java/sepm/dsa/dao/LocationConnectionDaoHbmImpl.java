@@ -29,7 +29,7 @@ public class LocationConnectionDaoHbmImpl
 
     @Override
     public void remove(LocationConnection locationConnection) {
-        LocationConnection trueLocationConnection = get(locationConnection.getPk());    // we need this, don't touch
+        LocationConnection trueLocationConnection = loadTrueConnection(locationConnection.getPk()); //get(locationConnection.getPk());    // we need this, don't touch
         super.remove(trueLocationConnection);
         trueLocationConnection.getLocation1().removeConnection(trueLocationConnection);
         trueLocationConnection.getLocation2().removeConnection(trueLocationConnection);
@@ -39,6 +39,7 @@ public class LocationConnectionDaoHbmImpl
     public LocationConnection get(Serializable id) {
         log.debug("calling get(" + id + ")");
         LocationConnection.Pk pk = (LocationConnection.Pk) id;
+
         Query query = sessionFactory.getCurrentSession().getNamedQuery("LocationConnection.findByLocations");
         query.setParameter("location1ID", pk.getLocation1().getId());
         query.setParameter("location2ID", pk.getLocation2().getId());
@@ -55,8 +56,25 @@ public class LocationConnectionDaoHbmImpl
             log.trace("returning null");
             return null;
         }
+
         log.trace("returning " + result);
         return result.get(0);
+    }
+
+    private LocationConnection loadTrueConnection(LocationConnection.Pk pk) {
+        LocationConnection.Pk pkReverse = new LocationConnection.Pk(pk.getLocation2(), pk.getLocation1());
+        LocationConnection con1 = (LocationConnection) sessionFactory.getCurrentSession().get(LocationConnection.class, pk);
+        LocationConnection con2 = (LocationConnection) sessionFactory.getCurrentSession().get(LocationConnection.class, pkReverse);
+        if (con1 != null && con2 != null) {
+            log.warn("INCONSISTENT DATA! More than 1 connections between locations " + pk.getLocation1() + " and " + pk.getLocation2());
+        }
+        if (con1 != null) {
+            return con1;
+        }
+        if (con2 != null) {
+            return con2;
+        }
+        return null;
     }
 
     @Override
@@ -65,6 +83,22 @@ public class LocationConnectionDaoHbmImpl
         Query query = sessionFactory.getCurrentSession().getNamedQuery("LocationConnection.findAllByFilter1");
         query.setParameter("locationId", location.getId());
         query.setParameter("locationName", locationName);
+        List<?> list = query.list();
+        List<LocationConnection> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((LocationConnection) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<LocationConnection> getAllByLocation(int locationId) {
+        log.debug("calling getAllByLocationName(" + locationId + ")");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("LocationConnection.findAllByLocation");
+        query.setParameter("locationId", locationId);
+
         List<?> list = query.list();
         List<LocationConnection> result = new Vector<>(list.size());
         for (Object o : list) {

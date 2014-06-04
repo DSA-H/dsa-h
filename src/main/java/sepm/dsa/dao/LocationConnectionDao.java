@@ -13,4 +13,11 @@ public interface LocationConnectionDao extends BaseDao<LocationConnection> {
      */
     public List<LocationConnection> getAllByLocationName(Location location, String locationName);
 
+    /**
+     *
+     * @param locationId
+     * @return all connections of a location
+     */
+    public List<LocationConnection> getAllByLocation(int locationId);
+
 }

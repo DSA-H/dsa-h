@@ -14,6 +14,7 @@ import sepm.dsa.model.ProductCategory;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -64,6 +65,13 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         for (AssortmentNature a : assortmentNatureService.getAllByProductCategory(p.getId())) {
             assortmentNatureService.remove(a);
         }
+        List<ProductCategory> childs = this.getAllChilds(p);
+         for (ProductCategory productCategoryChild: childs) {
+             productCategoryChild = get(productCategoryChild.getId());
+             for (AssortmentNature a : assortmentNatureService.getAllByProductCategory(productCategoryChild.getId())) {
+                 assortmentNatureService.remove(a);
+             }
+        }
         productCategoryDao.remove(p);
         for (Product product : p.getProducts()) {
             product.getCategories().remove(p);
@@ -77,6 +85,29 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         log.trace("returning " + result);
         return result;
     }
+
+    @Override
+    public List<ProductCategory> getAllChilds(ProductCategory productCategory) {
+        log.debug("calling getAllChilds()");
+        LinkedList<ProductCategory> result = new LinkedList<>();
+
+        addAllProductCategoryChildren(productCategory, result);
+
+        log.trace("returning " + result);
+        return result;
+    }
+
+
+    private List<ProductCategory> addAllProductCategoryChildren(ProductCategory productCategory, List<ProductCategory> target) {
+        target.add(productCategory);
+
+        for (ProductCategory child : productCategory.getChilds()) {
+            addAllProductCategoryChildren(child, target);
+        }
+
+        return target;
+    }
+
 
     /**
      * Validates a product

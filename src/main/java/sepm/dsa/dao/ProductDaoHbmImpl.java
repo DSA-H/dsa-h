@@ -24,6 +24,12 @@ public class ProductDaoHbmImpl
     }
 
     @Override
+    public void remove(Product model) {
+        super.remove(model);
+
+    }
+
+    @Override
     public List<Product> getAllByCategoryPlusChildren(ProductCategory productCategory) {
         log.debug("calling getAllByCategoryPlusChildren(" + productCategory + ")");
         Query query = sessionFactory.getCurrentSession().getNamedQuery("Product.findAllByCategoryPlusChildren");

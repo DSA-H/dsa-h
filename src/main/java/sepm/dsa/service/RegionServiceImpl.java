@@ -59,6 +59,7 @@ public class RegionServiceImpl implements RegionService {
 
 //        borders.forEach(regionBorderDao::removeConnection);
 //        locations.forEach(locationService::removeConnection);
+        locationService.getAllByRegion(r.getId()).forEach(locationService::remove);
 
         regionDao.remove(r);
     }

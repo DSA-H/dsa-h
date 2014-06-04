@@ -74,7 +74,7 @@
 <GridPane.margin>
 <Insets right="5.0" />
 </GridPane.margin></Label>
-                <TextField fx:id="height" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+                <TextField fx:id="height" text="0" GridPane.columnIndex="3" GridPane.rowIndex="8" />
                 <Button mnemonicParsing="false" onAction="#chooseBackground" prefHeight="26.0" prefWidth="262.0" text="Ortskarte wählen" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="2" /><Label text="Schritt" GridPane.columnIndex="5" GridPane.rowIndex="8" />
             </children>
         </GridPane>

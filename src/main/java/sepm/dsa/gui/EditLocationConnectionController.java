@@ -77,7 +77,7 @@ public class EditLocationConnectionController implements Initializable {
 
         locationConnection.setTravelTime(travelTime);
         locationConnection.setComment(ta_Comment.getText());
-        locationConnectionService.update(locationConnection);
+//        locationConnectionService.update(locationConnection);
         goBack();
     }
 
@@ -95,6 +95,8 @@ public class EditLocationConnectionController implements Initializable {
 
         stage.setScene(new Scene(root, 900, 500));
         stage.show();
+
+        EditLocationConnectionsController.setLoadSelectedLocation_Connections_OnInitialize(true);
     }
 
     public static void setLocationConnection(LocationConnection locationConnection) {

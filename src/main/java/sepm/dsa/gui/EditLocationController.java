@@ -11,7 +11,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
@@ -20,10 +19,7 @@ import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
-import sepm.dsa.service.LocationService;
-import sepm.dsa.service.MapService;
-import sepm.dsa.service.RegionService;
-import sepm.dsa.service.SaveCancelService;
+import sepm.dsa.service.*;
 
 import java.io.File;
 import java.util.*;
@@ -35,8 +31,10 @@ public class EditLocationController implements Initializable {
     private SpringFxmlLoader loader;
 
     private static Location selectedLocation;
+    private static Set<LocationConnection> connections = new HashSet<>();
 
     private LocationService locationService;
+    private LocationConnectionService locationConnectionService;
     private RegionService regionService;
 	private MapService mapService;
     private SaveCancelService saveCancelService;
@@ -80,6 +78,10 @@ public class EditLocationController implements Initializable {
 
     @FXML
     private Button editConnectionsBtn;
+
+    public static void setConnections(Set<LocationConnection> connections) {
+        EditLocationController.connections = connections;
+    }
 //    @FXML
 //    private Button suggestConnectionsBtn;
 //    @FXML
@@ -167,9 +169,10 @@ public class EditLocationController implements Initializable {
             }
         });
 
-        Set<LocationConnection> allConnections = selectedLocation.getAllConnections();
+        Set<LocationConnection> allConnections = this.connections;//selectedLocation.getAllConnections();
         ObservableList<LocationConnection> connections = FXCollections.observableArrayList(allConnections);
         locationConnectionsTable.setItems(connections);
+//        this.connections = new HashSet<>(connections);
 
     }
 
@@ -233,6 +236,26 @@ public class EditLocationController implements Initializable {
             locationService.update(selectedLocation);
         }
 
+        Set<LocationConnection> localConnectionList = connections;
+        for (LocationConnection connection : locationConnectionService.getAllByLocation(selectedLocation.getId())) {
+            boolean contain = false;
+            for (LocationConnection localConnection : localConnectionList) {
+                if (localConnection.equalsById(connection)) {
+                    locationConnectionService.update(connection);
+                    contain = true;
+                    break;
+                }
+            }
+            if (!contain) {
+                locationConnectionService.remove(connection);
+            }
+            localConnectionList.remove(connection);
+        }
+        for (LocationConnection connection : localConnectionList) {
+            locationConnectionService.add(connection);
+        }
+
+
         log.info("selectedLocation.id = " + selectedLocation.getId());
 //        selectedLocation = locationService.get(selectedLocation.getId());
 
@@ -249,7 +272,7 @@ public class EditLocationController implements Initializable {
 
         saveCancelService.save();
 //        locationService.update(selectedLocation);
-
+        saveCancelService.refresh(selectedLocation);
 
         // return to locationlist
         Stage stage = (Stage) cancelButton.getScene().getWindow();
@@ -266,6 +289,9 @@ public class EditLocationController implements Initializable {
     public static void setLocation(Location location) {
         log.debug("calling setLocation(" + location + ")");
         selectedLocation = location;
+        if (selectedLocation != null) {
+            connections = new HashSet<>(selectedLocation.getAllConnections());
+        }
     }
 
     public void setLoader(SpringFxmlLoader loader) {
@@ -299,6 +325,10 @@ public class EditLocationController implements Initializable {
 
     public void setSaveCancelService(SaveCancelService saveCancelService) {
         this.saveCancelService = saveCancelService;
+    }
+
+    public void setLocationConnectionService(LocationConnectionService locationConnectionService) {
+        this.locationConnectionService = locationConnectionService;
     }
 
 //    @FXML

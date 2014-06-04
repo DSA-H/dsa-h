@@ -1,6 +1,7 @@
 package sepm.dsa.dao;
 
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.model.Deal;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Trader;
 import sepm.dsa.model.TraderCategory;
@@ -13,6 +14,14 @@ import java.util.Vector;
 public class TraderDaoHbmImpl
 	extends BaseDaoHbmImpl<Trader>
 	implements TraderDao {
+
+    @Override
+    public void remove(Trader model) {
+        super.remove(model);
+        for (Deal d : model.getDeals()) {
+            d.setTrader(null);
+        }
+    }
 
     @Override
     public List<Trader> getAllByLocation(Location location) {

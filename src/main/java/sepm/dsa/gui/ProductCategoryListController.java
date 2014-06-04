@@ -78,7 +78,6 @@ public class ProductCategoryListController implements Initializable {
     }
 
     private void addTreeChildren(List<ProductCategory> productCategoryList, TreeItem root){
-
         for (ProductCategory item: productCategoryList) {
             TreeItem<ProductCategory> node = createNode(item);
             root.getChildren().add(node);
@@ -170,6 +169,7 @@ public class ProductCategoryListController implements Initializable {
      * @return
      */
     private TreeItem<ProductCategory> createNode(final ProductCategory f) {
+        saveCancelService.refresh(f);
         return new TreeItem<ProductCategory>(f) {
             // We cache whether the File is a leaf or not. A File is a leaf if
             // it is not a directory and does not have any files contained within
