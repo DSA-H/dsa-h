@@ -290,6 +290,7 @@
         <property name="productCategoryService" ref="productCategoryService"/>
         <property name="regionService" ref="regionService"/>
         <property name="saveCancelService" ref="saveCancelService" />
+        <property name="unitService" ref="unitService" />
     </bean>
 
     <bean id="ProductCategoryListController" class="sepm.dsa.gui.ProductCategoryListController">

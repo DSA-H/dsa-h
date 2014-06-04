@@ -104,12 +104,6 @@ public class Unit implements BaseModel {
 
     @Override
     public String toString() {
-        return "Unit{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", shortName='" + shortName + '\'' +
-                ", unitType=" + unitType +
-                ", valueToBaseUnit=" + valueToBaseUnit +
-                '}';
+        return name;
     }
 }

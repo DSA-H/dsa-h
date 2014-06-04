@@ -3,6 +3,7 @@ package sepm.dsa.dao.test;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import sepm.dsa.dao.ProductDao;
+import sepm.dsa.dao.UnitDao;
 import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductAttribute;
@@ -15,6 +16,8 @@ public class ProductDaoTest extends AbstractDatabaseTest {
 
     @Autowired
     private ProductDao productDao;
+    @Autowired
+    private UnitDao unitDao;
 
     @Test
     public void add_shouldPersistEntity() {
@@ -24,6 +27,7 @@ public class ProductDaoTest extends AbstractDatabaseTest {
         product.setQuality(false);
         product.setComment("test12345 Kommentar");
         product.setCost(10);
+        product.setUnit(unitDao.get(4));
 
         productDao.add(product);
 

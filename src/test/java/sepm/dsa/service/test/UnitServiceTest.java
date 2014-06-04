@@ -71,7 +71,7 @@ public class UnitServiceTest extends AbstractDatabaseTest {
 
     @Test
     public void testGetAll() throws Exception {
-        assertEquals(unitService.getAll().size(), 2);
+        assertEquals(unitService.getAll().size(), 8);
     }
 
     @Test

@@ -9,19 +9,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.dom4j.Text;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
-import sepm.dsa.model.Product;
-import sepm.dsa.model.ProductAttribute;
-import sepm.dsa.model.ProductCategory;
-import sepm.dsa.model.Region;
-import sepm.dsa.service.ProductCategoryService;
-import sepm.dsa.service.ProductService;
-import sepm.dsa.service.RegionService;
-import sepm.dsa.service.SaveCancelService;
+import sepm.dsa.model.*;
+import sepm.dsa.service.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -34,7 +29,7 @@ public class EditProductController implements Initializable {
     private SpringFxmlLoader loader;
     private ProductService productService;
     private ProductCategoryService productCategoryService;
- //   private ProductUnitService productUnitService;
+    private UnitService unitService;
     private RegionService regionService;
     private SaveCancelService saveCancelService;
 
@@ -75,6 +70,10 @@ public class EditProductController implements Initializable {
     private Button cancelButton;
     @FXML
     private Button saveButton;
+    @FXML
+    private TextField occurenceField;
+    @FXML
+    private ChoiceBox<Unit> unitBox;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
@@ -87,8 +86,8 @@ public class EditProductController implements Initializable {
         List<ProductCategory> categoryList = productCategoryService.getAll();
         List<Region> regionList = regionService.getAll();
 
-    //    List<ProductUnit> unitList = productUnitService.getAll();
-    //    choice_unit.setItems(FXCollections.observableArrayList(unitList));
+        List<Unit> unitList = unitService.getAll();
+        unitBox.setItems(FXCollections.observableArrayList(unitList));
         categorieColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
@@ -110,6 +109,8 @@ public class EditProductController implements Initializable {
             categorieTable.setItems(categoryData);
             commentField.setText(selectedProduct.getComment());
             qualityBox.setSelected(selectedProduct.getQuality());
+            unitBox.getSelectionModel().select(selectedProduct.getUnit());
+            occurenceField.setText(selectedProduct.getOccurence()+"");
         }else {
             isNewProduct = true;
             selectedProduct = new Product();
@@ -210,16 +211,22 @@ public class EditProductController implements Initializable {
         try {
             cost = Integer.parseInt(costField.getText());
         }catch (NumberFormatException ex) {
-            throw new DSAValidationException("Basiskosten müssen eine ganze Zahl sein!");
+            throw new DSAValidationException("Kosten müssen eine ganze Zahl sein!");
         }
-     //   ProductUnit unit = (ProductUnit) choice_unit.getSelectionModel().getSelectedItem();
+        int occurcene = 0;
+        try {
+            occurcene = Integer.parseInt(occurenceField.getText());
+        }catch (NumberFormatException ex) {
+            throw new DSAValidationException("Verbreitung muss eine ganze Prozentzahl (1-100) sein!");
+        }
         ProductAttribute attribute = attributeBox.getValue();
         Set<ProductCategory> localCategoryList = new HashSet<>(categorieTable.getItems());
         Set<Region> localRegionList =  new HashSet<>(regionTable.getItems());
 
         selectedProduct.setName(name);
         selectedProduct.setCost(cost);
-        //selectedProduct.setUnit(unit);
+        selectedProduct.setUnit(unitBox.getValue());
+        selectedProduct.setOccurence(occurcene);
         selectedProduct.setAttribute(attribute);
         selectedProduct.setQuality(qualityBox.isSelected());
         selectedProduct.setComment(costField.getText());
@@ -252,10 +259,6 @@ public class EditProductController implements Initializable {
         this.productCategoryService = productCategoryService;
     }
 
-  /*  public void setProductUnitService(ProductUnitService productUnitService) {
-        this.productUnitService = productUnitService;
-    }*/
-
     public void setRegionService(RegionService regionService) {
         this.regionService = regionService;
     }
@@ -266,5 +269,9 @@ public class EditProductController implements Initializable {
 
     public void setSaveCancelService(SaveCancelService saveCancelService) {
         this.saveCancelService = saveCancelService;
+    }
+
+    public void setUnitService(UnitService unitService) {
+        this.unitService = unitService;
     }
 }
