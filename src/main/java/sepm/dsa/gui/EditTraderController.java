@@ -280,7 +280,7 @@ public class EditTraderController implements Initializable {
                         .message("Der Händler hat sich an einen neuen Ort bewegt, soll ein neues Sortiment berechnet werden?")
                         .showConfirm();
 
-                if (response == Dialog.Actions.OK) {
+                if (response == Dialog.Actions.YES) {
                     traderService.calculateOffers(selectedTrader);
                 }else if (response == Dialog.Actions.NO){
 

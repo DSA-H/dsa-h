@@ -323,6 +323,11 @@
         <property name="locationService" ref="locationService"/>
         <property name="saveCancelService" ref="saveCancelService" />
     </bean>
+    <bean id="traderList" class="sepm.dsa.gui.TraderListController">
+        <property name="loader" ref="loader"/>
+        <property name="traderService" ref="traderService"/>
+        <property name="locationService" ref="locationService"/>
+    </bean>
     <bean id="traderDetails" class="sepm.dsa.gui.TraderDetailsController">
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>

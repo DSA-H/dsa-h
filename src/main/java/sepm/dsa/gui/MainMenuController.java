@@ -578,7 +578,7 @@ public class MainMenuController implements Initializable {
     private void onTraderClicked() {
         log.debug("onTraderClicked - open Trader Window");
         Stage stage = new Stage();
-        Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
+        Parent scene = (Parent) loader.load("/gui/traderlist.fxml");
 
         stage.setTitle("Händler");
         stage.setScene(new Scene(scene, 600, 438));
