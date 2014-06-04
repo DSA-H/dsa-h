@@ -9,14 +9,14 @@
   <bottom>
     <HBox alignment="CENTER_RIGHT" maxWidth="-1.0" prefHeight="37.0" prefWidth="1077.0" spacing="50.0">
       <children>
-        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="250.0" spacing="10.0">
+        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="220.0" spacing="10.0">
           <children>
             <Button mnemonicParsing="false" onAction="#onZoomOutPressed" text="-" />
             <Slider fx:id="zoomSlider" />
             <Button minWidth="-1.0" mnemonicParsing="false" onAction="#onZoomInPressed" prefWidth="-1.0" text="+" />
           </children>
         </HBox>
-        <HBox alignment="CENTER_LEFT" maxWidth="500.0" prefHeight="37.0" prefWidth="500.0" spacing="10.0">
+        <HBox alignment="CENTER_LEFT" maxWidth="700.0" prefHeight="37.0" prefWidth="500.0" spacing="10.0">
           <children>
             <Button mnemonicParsing="false" onAction="#onForwardTimeClicked" text="Zeit vorwärts stellen" />
             <Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Ort platzieren" />

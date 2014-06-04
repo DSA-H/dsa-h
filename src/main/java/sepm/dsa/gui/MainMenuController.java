@@ -1073,7 +1073,7 @@ public class MainMenuController implements Initializable {
 		int posX;
 		int posY;
 		gc.setLineWidth(5);
-		gc.setStroke(Color.GREEN);
+		gc.setStroke(Color.DARKBLUE);
 		List<Trader> traders = traderService.getAllForLocation(selectedLocation);
 		for (Trader t : traders) {
 			posX = t.getxPos();
