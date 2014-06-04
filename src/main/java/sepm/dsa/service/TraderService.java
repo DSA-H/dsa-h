@@ -101,6 +101,8 @@ public interface TraderService {
 	 */
 	Collection<Offer> getOffers(Trader trader);
 
+    Trader recalculateOffers(Trader t);
+
     /**
      *
      * @param productQuality

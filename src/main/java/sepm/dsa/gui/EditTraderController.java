@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
+import sepm.dsa.model.Offer;
 import sepm.dsa.model.Trader;
 import sepm.dsa.model.TraderCategory;
 import sepm.dsa.service.LocationService;
@@ -28,6 +29,7 @@ import sepm.dsa.service.TraderService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class EditTraderController implements Initializable {
@@ -281,7 +283,7 @@ public class EditTraderController implements Initializable {
                         .showConfirm();
 
                 if (response == Dialog.Actions.YES) {
-                    traderService.calculateOffers(selectedTrader);
+                    selectedTrader = traderService.recalculateOffers(selectedTrader);
                 }else if (response == Dialog.Actions.NO){
 
                     List<Dialogs.CommandLink> links = Arrays.asList(

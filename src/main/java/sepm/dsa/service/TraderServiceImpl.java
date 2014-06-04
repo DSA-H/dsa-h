@@ -82,6 +82,18 @@ public class TraderServiceImpl implements TraderService {
     }
 
     @Override
+    @Transactional(readOnly = false)
+    public Trader recalculateOffers(Trader t) {
+        log.debug("calling addConnection(" + t + ")");
+        //offerDao.remove(t.getOffers());
+        List<Offer> offers = calculateOffers(t);
+        offerDao.addList(offers);
+        t.setOffers(new HashSet<>(offers));
+
+        return t;
+    }
+
+    @Override
     public List<MovingTrader> getAllMovingTraders() {
         log.debug("calling getAllMovingTraders()");
         List<Trader> traders = traderDao.getAll();

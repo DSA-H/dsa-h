@@ -28,8 +28,6 @@
                         </Menu>
                         <MenuItem fx:id="verwaltenHaendlerKategorie" mnemonicParsing="false"
                                   onAction="#onTraderCategoriesClicked" text="Händlerkategorie"/>
-                        <MenuItem fx:id="verwaltenHaendler" mnemonicParsing="false"
-                                  onAction="#onTraderClicked" text="Händler"/>
                         <MenuItem fx:id="verwaltenGebieteGrenzen" mnemonicParsing="false"
                                   onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen"/>
                         <MenuItem fx:id="verwaltenWaehrungen" mnemonicParsing="false" onAction="#onCurrencyClicked"
