@@ -319,6 +319,13 @@
         <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
+
+    <bean id="addOffer" class="sepm.dsa.gui.AddOfferController">
+        <property name="loader" ref="loader"/>
+        <property name="saveCancelService" ref="saveCancelService" />
+        <property name="traderService" ref="traderService" />
+        <property name="productService" ref="productService" />
+    </bean>
     <bean id="editTrader" class="sepm.dsa.gui.EditTraderController">
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>

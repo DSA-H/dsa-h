@@ -112,7 +112,11 @@ public class TraderDetailsController implements Initializable {
     @FXML
     private void onAddPressed() {
         log.debug("called onAddPressed");
-        //TODO not part of version 1
+        Stage stage = (Stage) offerTable.getScene().getWindow();
+        Parent scene = (Parent) loader.load("/gui/addoffer.fxml");
+        AddOfferController controller = loader.getController();
+        controller.setTrader(trader);
+        stage.setScene(new Scene(scene, 600, 400));
     }
 
     @FXML
