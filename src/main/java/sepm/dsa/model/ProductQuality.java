@@ -2,12 +2,12 @@ package sepm.dsa.model;
 
 public enum ProductQuality {
 
-    KATASTROPHAL(-2, "katastrophal"),
-    SCHLECHT(-1, "schlecht"),
-    NORMAL(0, "normal"),
-    BESSER(1, "besser"),
-    AUSSERGEWOEHNLICH(2, "ausergewöhnlich"),
-    UEBERRAGEND(3, "überragend");
+    KATASTROPHAL(0, "katastrophal"),
+    SCHLECHT(1, "schlecht"),
+    NORMAL(2, "normal"),
+    BESSER(3, "besser"),
+    AUSSERGEWOEHNLICH(4, "ausergewöhnlich"),
+    UEBERRAGEND(5, "überragend");
 
     private int value;
     private String name;
@@ -34,24 +34,24 @@ public enum ProductQuality {
 
     public float getQualityProbabilityValue() {
         switch (value) {
-            case -2: return 0.05f;
-            case -1: return 0.15f;
-            case 0: return 0.7f;
-            case 1: return 0.9f;
-            case 2: return 0.98f;
-            case 3: return 1f;
+            case 0: return 0.05f;
+            case 1: return 0.15f;
+            case 2: return 0.7f;
+            case 3: return 0.9f;
+            case 4: return 0.98f;
+            case 5: return 1f;
             default: return 0;
         }
     }
 
     public float getQualityPriceFactor() {
         switch (value) {
-            case -2: return 0.5f;
-            case -1: return 0.8f;
-            case 0: return 1f;
-            case 1: return 2f;
-            case 2: return 5f;
-            case 3: return 10f;
+            case 0: return 0.5f;
+            case 1: return 0.8f;
+            case 2: return 1f;
+            case 3: return 2f;
+            case 4: return 5f;
+            case 5: return 10f;
             default: return 0;
         }
     }

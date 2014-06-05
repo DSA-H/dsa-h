@@ -210,7 +210,8 @@ public class TraderServiceImpl implements TraderService {
                     }
                 }
             } else {
-                amountQualities[0] = amount;
+                // if no quality => all to normal
+                amountQualities[ProductQuality.NORMAL.getValue()] = amount;
             }
             // create offers
             int i = 0;
