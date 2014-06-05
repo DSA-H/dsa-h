@@ -77,7 +77,7 @@ public class TraderDetailsController implements Initializable {
 
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         initialzeTableWithColums();
-        dealsTable.setItems(FXCollections.observableArrayList(trader.getDeals()));
+
 
 
         productColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
@@ -199,6 +199,7 @@ public class TraderDetailsController implements Initializable {
         }).collect(Collectors.toList());
 
         offerTable.setItems(FXCollections.observableArrayList(offers));
+	    dealsTable.setItems(FXCollections.observableArrayList(trader.getDeals()));
     }
 
     public void setLoader(SpringFxmlLoader loader) {
