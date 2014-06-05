@@ -85,7 +85,13 @@ public class TraderServiceImpl implements TraderService {
     @Transactional(readOnly = false)
     public Trader recalculateOffers(Trader t) {
         log.debug("calling addConnection(" + t + ")");
-        //offerDao.remove(t.getOffers());
+        Set<Offer> oldOffers = t.getOffers();
+        Iterator i = oldOffers.iterator();
+        while(i.hasNext()){
+            Offer o = (Offer)i.next();
+            offerDao.remove(o);
+        }
+
         List<Offer> offers = calculateOffers(t);
         offerDao.addList(offers);
         t.setOffers(new HashSet<>(offers));
