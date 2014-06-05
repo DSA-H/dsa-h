@@ -280,7 +280,7 @@ public class MainMenuController implements Initializable {
 
 				TraderDetailsController controller = loader.getController();
 				controller.setTrader((Trader) selectedObject);
-				stage.setScene(new Scene(scene, 830, 781));
+				stage.setScene(new Scene(scene, 781, 830));
 				stage.setResizable(false);
 				stage.showAndWait();
 			} else {
