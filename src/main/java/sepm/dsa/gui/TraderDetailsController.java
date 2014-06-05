@@ -178,6 +178,9 @@ public class TraderDetailsController implements Initializable {
     private void onTradePressed() {
         log.debug("called onTradePressed");
         //trader wants to sell stuff to the player
+
+        //TODO as popover
+
     }
 
     @FXML
