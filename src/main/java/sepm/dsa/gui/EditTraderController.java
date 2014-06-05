@@ -1,14 +1,13 @@
 package sepm.dsa.gui;
 
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.controlsfx.control.action.Action;
 import org.controlsfx.dialog.Dialog;
@@ -17,16 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.model.Deal;
-import sepm.dsa.model.Location;
-import sepm.dsa.model.Trader;
-import sepm.dsa.model.TraderCategory;
-import sepm.dsa.service.LocationService;
-import sepm.dsa.service.SaveCancelService;
-import sepm.dsa.service.TraderCategoryService;
-import sepm.dsa.service.TraderService;
+import sepm.dsa.model.*;
+import sepm.dsa.service.*;
 
-import javax.swing.table.TableColumn;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +34,7 @@ public class EditTraderController implements Initializable {
     private TraderCategoryService categoryService;
     private LocationService locationService;
     private SaveCancelService saveCancelService;
+    private TimeService timeService;
 
     private boolean isNewTrader;
 
@@ -72,15 +65,15 @@ public class EditTraderController implements Initializable {
     @FXML
     private TableView<Deal> dealsTable;
     @FXML
-    private TableColumn playerColumn;
+    private TableColumn<Deal, String> playerColumn;
     @FXML
-    private TableColumn productColumn;
+    private TableColumn<Deal, String> productColumn;
     @FXML
-    private TableColumn priceColumn;
+    private TableColumn<Deal, String> priceColumn;
     @FXML
-    private TableColumn amountColumn;
+    private TableColumn<Deal, String> amountColumn;
     @FXML
-    private TableColumn dateColumn;
+    private TableColumn<Deal, String> dateColumn;
 
 
     @Override
@@ -92,6 +85,7 @@ public class EditTraderController implements Initializable {
         List<Location> locations = locationService.getAll();
         categoryBox.setItems(FXCollections.observableArrayList(categories));
         locationBox.setItems(FXCollections.observableArrayList(locations));
+        initialzeTableWithColums();
 
     }
 
@@ -111,7 +105,43 @@ public class EditTraderController implements Initializable {
             chField.setText("" + selectedTrader.getCharisma());
             convinceField.setText("" + selectedTrader.getConvince());
             commentArea.setText(selectedTrader.getComment());
+            dealsTable.setItems(FXCollections.observableArrayList(selectedTrader.getDeals()));
         }
+    }
+
+    private void initialzeTableWithColums() {
+
+        dateColumn.setCellValueFactory(d -> {
+            DSADate date = d.getValue().getDate();
+            long timestamp = d.getValue().getDate().getTimestamp();
+            long current = timeService.getCurrentDate().getTimestamp();
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("vor ").append(current - timestamp).append(" Tagen").append(" (").append(date).append(")");
+            return new SimpleStringProperty(sb.toString());
+        });
+
+        priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
+
+        playerColumn.setCellValueFactory(d -> {
+            Player player = d.getValue().getPlayer();
+            String pName = player.getName();
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(pName);
+            return new SimpleStringProperty(sb.toString());
+        });
+
+        productColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("productName"));
+
+        amountColumn.setCellValueFactory(d -> {
+            Unit unit = d.getValue().getUnit();
+            Integer amount = d.getValue().getAmount();
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(amount).append(" ").append(unit.getShortName());
+            return new SimpleStringProperty(sb.toString());
+        });
     }
 
     private void generateRandoms() {
@@ -252,10 +282,10 @@ public class EditTraderController implements Initializable {
 
         //location
         Location location = (Location) locationBox.getSelectionModel().getSelectedItem();
-	    if (!isNewTrader && location != selectedTrader.getLocation()) {
-		    selectedTrader.setxPos(0);
-		    selectedTrader.setyPos(0);
-	    }
+        if (!isNewTrader && location != selectedTrader.getLocation()) {
+            selectedTrader.setxPos(0);
+            selectedTrader.setyPos(0);
+        }
         if (location != null) {
             selectedTrader.setLocation(location);
         } else {
@@ -286,7 +316,7 @@ public class EditTraderController implements Initializable {
         if (isNewTrader) {
             traderService.add(selectedTrader);
         } else {
-            if (!oldLocation.equals(selectedTrader.getLocation())){
+            if (!oldLocation.equals(selectedTrader.getLocation())) {
                 Action response = Dialogs.create()
                         .title("Sortiment neu berechnen?")
                         .masthead(null)
@@ -295,7 +325,7 @@ public class EditTraderController implements Initializable {
 
                 if (response == Dialog.Actions.YES) {
                     selectedTrader = traderService.recalculateOffers(selectedTrader);
-                }else if (response == Dialog.Actions.NO){
+                } else if (response == Dialog.Actions.NO) {
 
                     List<Dialogs.CommandLink> links = Arrays.asList(
                             new Dialogs.CommandLink("Alle Preise neu berechnen!", "Hierdurch werden die Preise von allen im Sortiment enthaltenen Waren neu berechnet."),
@@ -306,18 +336,18 @@ public class EditTraderController implements Initializable {
                             .title("Preise neu berechnen?")
                             .masthead(null)
                             .message("Sollen alle Preise neu berechnet werden?")
-                            .showCommandLinks( links.get(1), links );
+                            .showCommandLinks(links.get(1), links);
 
-                    if (response2 == links.get(0)){
+                    if (response2 == links.get(0)) {
                         //Recalculate pricing
                         traderService.reCalculatePriceForOffer(/*selectedTrader.getOffers(), */selectedTrader);
 
-                    }else{
+                    } else {
                         //Recalculate pricing if new price is higher
                         traderService.reCalculatePriceForOfferIfNewPriceIsHigher(/*selectedTrader.getOffers(), */selectedTrader);
 
                     }
-                }else {
+                } else {
                     return;
                 }
             }
@@ -327,7 +357,7 @@ public class EditTraderController implements Initializable {
         saveCancelService.save();
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-	    stage.close();
+        stage.close();
 
 
     }
@@ -337,7 +367,7 @@ public class EditTraderController implements Initializable {
         log.debug("called onCancelPressed");
         saveCancelService.cancel();
         Stage stage = (Stage) nameField.getScene().getWindow();
-	    stage.close();
+        stage.close();
     }
 
     public void setTraderService(TraderService traderService) {
@@ -367,15 +397,15 @@ public class EditTraderController implements Initializable {
         setUp();
     }
 
-	public void setLocation(Location location) {
-		locationBox.getSelectionModel().select(location);
-		locationBox.setDisable(true);
-	}
+    public void setLocation(Location location) {
+        locationBox.getSelectionModel().select(location);
+        locationBox.setDisable(true);
+    }
 
-	public void setPosition(Point2D pos) {
-		selectedTrader.setyPos((int) pos.getY());
-		selectedTrader.setxPos((int) pos.getX());
-	}
+    public void setPosition(Point2D pos) {
+        selectedTrader.setyPos((int) pos.getY());
+        selectedTrader.setxPos((int) pos.getX());
+    }
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;

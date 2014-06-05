@@ -115,14 +115,12 @@ public class EditPlayerController implements Initializable {
 
     private void initialzeTableWithColums() {
 
-        //Todo relative DATE & abs date
         dateColumn.setCellValueFactory(d -> {
             DSADate date = d.getValue().getDate();
             long timestamp = d.getValue().getDate().getTimestamp();
 
             long current = timeService.getCurrentDate().getTimestamp();
 
-            //TODO date before days
             StringBuilder sb = new StringBuilder();
             sb.append("vor ").append(current - timestamp).append(" Tagen").append(" (").append(date).append(")");
             return new SimpleStringProperty(sb.toString());
@@ -131,7 +129,6 @@ public class EditPlayerController implements Initializable {
         priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
         productColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("productName"));
 
-        //TODO check unit and amount
         amountColumn.setCellValueFactory(d -> {
             Unit unit = d.getValue().getUnit();
             Integer amount = d.getValue().getAmount();
