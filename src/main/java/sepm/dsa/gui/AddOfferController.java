@@ -96,7 +96,9 @@ public class AddOfferController implements Initializable {
         o.setPricePerUnit(Integer.parseInt(textPrice.getText()));
         o.setTrader(selectedTrader);
         if (!choiceQuality.isDisabled()){
-
+            o.setQuality(ProductQuality.NORMAL); //TODO: to be implemented
+        }else{
+            o.setQuality(ProductQuality.NORMAL);
         }
 
         Set<Offer> offers = selectedTrader.getOffers();
