@@ -56,6 +56,9 @@ public class AddOfferController implements Initializable {
         showProducts(allProducts);
 
         //init choiceBoxes
+        ProductQuality[] productQualities = ProductQuality.values();
+        choiceQuality.setItems(FXCollections.observableArrayList(productQualities));
+        choiceQuality.getSelectionModel().select(ProductQuality.NORMAL);
         checkFocus();
     }
 
@@ -97,10 +100,11 @@ public class AddOfferController implements Initializable {
         o.setPricePerUnit(Integer.parseInt(textPrice.getText()));
         o.setTrader(selectedTrader);
         if (!choiceQuality.isDisabled()){
-            o.setQualityId(0);
-            o.setQuality(ProductQuality.NORMAL); //TODO: to be implemented
+            //o.setQualityId(0);
+            //o.setQuality(ProductQuality.NORMAL); //TODO: to be implemented
+            o.setQuality(choiceQuality.getSelectionModel().getSelectedItem());
         }else{
-            o.setQualityId(0);
+            //o.setQualityId(0);
             o.setQuality(ProductQuality.NORMAL);
         }
 
@@ -120,7 +124,6 @@ public class AddOfferController implements Initializable {
         if (p!=null){
             saveButton.setDisable(false);
             if (p.getQuality()){
-
                 choiceQuality.setDisable(false);
             }
         }
