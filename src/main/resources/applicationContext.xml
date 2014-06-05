@@ -325,6 +325,7 @@
         <property name="traderCategoryService" ref="traderCategoryService"/>
         <property name="locationService" ref="locationService"/>
         <property name="saveCancelService" ref="saveCancelService" />
+        <property name="timeService" ref="timeService"/>
     </bean>
     <bean id="traderDetails" class="sepm.dsa.gui.TraderDetailsController">
         <property name="loader" ref="loader"/>
