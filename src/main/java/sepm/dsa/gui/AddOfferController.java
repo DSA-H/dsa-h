@@ -91,20 +91,20 @@ public class AddOfferController implements Initializable {
     private void onSavePressed() {
         log.debug("called onSavePressed");
         Offer o = new Offer();
-        o.setProduct(productTable.getSelectionModel().getSelectedItem());
+        Product p = productTable.getSelectionModel().getSelectedItem();
+        o.setProduct(p);
         o.setAmount(Integer.parseInt(textAmount.getText()));
         o.setPricePerUnit(Integer.parseInt(textPrice.getText()));
         o.setTrader(selectedTrader);
         if (!choiceQuality.isDisabled()){
+            o.setQualityId(0);
             o.setQuality(ProductQuality.NORMAL); //TODO: to be implemented
         }else{
+            o.setQualityId(0);
             o.setQuality(ProductQuality.NORMAL);
         }
 
-        Set<Offer> offers = selectedTrader.getOffers();
-        offers.add(o);
-        selectedTrader.setOffers(offers);
-        traderService.update(selectedTrader);
+        traderService.addManualOffer(selectedTrader, o);
         Stage stage = (Stage) textName.getScene().getWindow();
         stage.close();
     }

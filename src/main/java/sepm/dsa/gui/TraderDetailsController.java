@@ -142,6 +142,12 @@ public class TraderDetailsController implements Initializable {
         offers = offers.stream().sorted(new Comparator<Offer>() {
             @Override
             public int compare(Offer o1, Offer o2) {
+                /*if (o2==null || o2.getProduct()==null){
+                    return -1;
+                }
+                if (o1==null || o1.getProduct()==null){
+                    return 1;
+                }*/
                 int result = o1.getProduct().getId() - o2.getProduct().getId();
                 if(result != 0) {
                     return result;

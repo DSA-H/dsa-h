@@ -103,6 +103,8 @@ public interface TraderService {
 
     Trader recalculateOffers(Trader t);
 
+    void addManualOffer(Trader trader, Offer offer);
+
     /**
      *
      * @param productQuality

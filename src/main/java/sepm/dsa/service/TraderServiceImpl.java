@@ -32,6 +32,15 @@ public class TraderServiceImpl implements TraderService {
 
 	private SessionFactory sessionFactory;
 
+    @Override
+    public void addManualOffer(Trader trader, Offer offer)
+    {
+        offerDao.add(offer);
+        Set<Offer> offers = trader.getOffers();
+        offers.add(offer);
+        trader.setOffers(offers);
+    }
+
 	@Override
     public Trader get(int id) {
         log.debug("calling get(" + id + ")");
