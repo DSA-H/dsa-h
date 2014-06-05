@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.dao.OfferDao;
 import sepm.dsa.model.Offer;
 import sepm.dsa.model.Trader;
 import sepm.dsa.service.TraderService;
@@ -36,7 +37,7 @@ public class TraderDetailsController implements Initializable {
     private Offer selectedOffer;
 
     @FXML
-    private TableView offerTable;
+    private TableView<Offer> offerTable;
     @FXML
     private TableColumn amountColumn;
     @FXML
@@ -57,6 +58,8 @@ public class TraderDetailsController implements Initializable {
     private Label resultLabel;
     @FXML
     private TextArea commentArea;
+    @FXML
+    private Button removeButton;
 
 
 	@Override
@@ -82,7 +85,7 @@ public class TraderDetailsController implements Initializable {
         });
         localPriceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
         standardPriceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
-
+        checkFocus();
     }
 
     @FXML
@@ -110,6 +113,16 @@ public class TraderDetailsController implements Initializable {
     }
 
     @FXML
+    private void checkFocus(){
+        Offer o = offerTable.getSelectionModel().getSelectedItem();
+        if (o!=null){
+            removeButton.setDisable(false);
+        }else{
+            removeButton.setDisable(true);
+        }
+    }
+
+    @FXML
     private void onAddPressed() {
         log.debug("called onAddPressed");
         Stage stage = (Stage) offerTable.getScene().getWindow();
@@ -122,7 +135,10 @@ public class TraderDetailsController implements Initializable {
     @FXML
     private void onDeletePressed() {
         log.debug("called onDeletePressed");
-        //TODO not part of version 1
+        Offer o = offerTable.getSelectionModel().getSelectedItem();
+        traderService.removeManualOffer(trader, o);
+        offerTable.getItems().remove(o);
+        checkFocus();
     }
 
     @FXML

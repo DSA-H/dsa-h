@@ -41,6 +41,15 @@ public class TraderServiceImpl implements TraderService {
         trader.setOffers(offers);
     }
 
+    @Override
+    public void removeManualOffer(Trader trader, Offer offer)
+    {
+        offerDao.remove(offer);
+        Set<Offer> offers = trader.getOffers();
+        offers.remove(offer);
+        trader.setOffers(offers);
+    }
+
 	@Override
     public Trader get(int id) {
         log.debug("calling get(" + id + ")");
