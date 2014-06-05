@@ -9,7 +9,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +81,6 @@ public class TraderDetailsController implements Initializable {
 
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         initialzeTableWithColums();
-
 
 
         productColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
@@ -178,9 +179,17 @@ public class TraderDetailsController implements Initializable {
     private void onTradePressed() {
         log.debug("called onTradePressed");
         //trader wants to sell stuff to the player
-
         //TODO as popover
+        TradeSellToPlayerController.setTrader(trader);
+        TradeSellToPlayerController.setOffer(offerTable.getSelectionModel().getSelectedItem());
+        Stage dialog = new Stage(StageStyle.DECORATED);
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initOwner(dealsTable.getParent().getScene().getWindow());
+        Parent scene = (Parent) loader.load("/gui/tradeSell.fxml");
 
+        dialog.setTitle("Ware verkaufen an Spieler");
+        dialog.setScene(new Scene(scene, 431, 325));
+        dialog.show();
     }
 
     @FXML
@@ -217,7 +226,7 @@ public class TraderDetailsController implements Initializable {
         }).collect(Collectors.toList());
 
         offerTable.setItems(FXCollections.observableArrayList(offers));
-	    dealsTable.setItems(FXCollections.observableArrayList(trader.getDeals()));
+        dealsTable.setItems(FXCollections.observableArrayList(trader.getDeals()));
     }
 
     public void setLoader(SpringFxmlLoader loader) {
