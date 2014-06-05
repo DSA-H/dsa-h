@@ -27,7 +27,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.controlsfx.control.action.Action;
@@ -75,7 +74,7 @@ public class MainMenuController implements Initializable {
 	private double worldScrollV;
 	private Group zoomGroup;
 	private double scaleFactor = 1.0;
-	private Boolean hasRestored = false;
+	private Boolean dontUpdateScroll = false;
 	private Boolean setZoomToStandard = true;
 
 	@FXML
@@ -178,16 +177,16 @@ public class MainMenuController implements Initializable {
 		scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				if (!hasRestored) {
+				if (!dontUpdateScroll) {
 					if (Math.abs(oldValue.doubleValue() - newValue.doubleValue()) > 0.1) {
-						hasRestored = true;
+						dontUpdateScroll = true;
 						scrollPane.setVvalue(vVal);
 						scrollPane.setHvalue(hVal);
 						vVal = 0;
 						hVal = 0;
 					}
 				} else {
-					hasRestored = false;
+					dontUpdateScroll = false;
 				}
 			}
 		});
@@ -198,10 +197,10 @@ public class MainMenuController implements Initializable {
 				scaleFactor = newValue.doubleValue();
 				double v = scrollPane.getVvalue();
 				double h = scrollPane.getHvalue();
-				hasRestored = true;
+				dontUpdateScroll = true;
 				zoomGroup.setScaleX(scaleFactor);
 				zoomGroup.setScaleY(scaleFactor);
-				hasRestored = true;
+				dontUpdateScroll = true;
 				scrollPane.setVvalue(v);
 				scrollPane.setHvalue(h);
 				updateZoom();
@@ -239,10 +238,10 @@ public class MainMenuController implements Initializable {
 			stage.setTitle("DSA-Händlertool - "+ selectedLocation.getName());
 			checkTraderFocus();
 		} else {
-			hasRestored = true;
+			dontUpdateScroll = true;
 			scrollPane.setHvalue(worldScrollH);
 			scrollPane.setVvalue(worldScrollV);
-			hasRestored = false;
+			dontUpdateScroll = false;
 			mode = WORLDMODE;
 			pathCalcGrid.setVisible(true);
 			locationTable.setVisible(true);
