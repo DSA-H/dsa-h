@@ -329,6 +329,7 @@
     <bean id="traderDetails" class="sepm.dsa.gui.TraderDetailsController">
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>
+        <property name="timeService" ref="timeService"/>
     </bean>
     <bean id="editTavern" class="sepm.dsa.gui.EditTavernController">
         <property name="loader" ref="loader"/>

@@ -13,27 +13,26 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.model.Offer;
-import sepm.dsa.model.Trader;
+import sepm.dsa.model.*;
+import sepm.dsa.service.TimeService;
 import sepm.dsa.service.TraderService;
-import sepm.dsa.service.TraderServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class TraderDetailsController implements Initializable {
 
     private static final Logger log = LoggerFactory.getLogger(TraderDetailsController.class);
     private SpringFxmlLoader loader;
-	private TraderService traderService;
+    private TraderService traderService;
 
     private Trader trader;
     private Offer selectedOffer;
+    private TimeService timeService;
+
 
     @FXML
     private TableView offerTable;
@@ -58,12 +57,29 @@ public class TraderDetailsController implements Initializable {
     @FXML
     private TextArea commentArea;
 
+    @FXML
+    private TableView<Deal> dealsTable;
+    @FXML
+    private TableColumn<Deal, String> playerColumn;
+    @FXML
+    private TableColumn<Deal, String> productDealColumn;
+    @FXML
+    private TableColumn<Deal, String> priceColumn;
+    @FXML
+    private TableColumn<Deal, String> amountDealColumn;
+    @FXML
+    private TableColumn<Deal, String> dateColumn;
 
-	@Override
+
+    @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize TraderDetailsController");
 
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        initialzeTableWithColums();
+        dealsTable.setItems(FXCollections.observableArrayList(trader.getDeals()));
+
+
         productColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Offer, String> r) {
@@ -71,11 +87,11 @@ public class TraderDetailsController implements Initializable {
                     Offer offer = r.getValue();
                     StringBuilder sb = new StringBuilder();
                     sb.append(offer.getProduct().getName());
-                    if(offer.getProduct().getQuality()) {
+                    if (offer.getProduct().getQuality()) {
                         sb.append("(" + r.getValue().getQuality().getName() + ")");
                     }
                     return new SimpleStringProperty(sb.toString());
-                }else {
+                } else {
                     return new SimpleStringProperty("");
                 }
             }
@@ -85,12 +101,47 @@ public class TraderDetailsController implements Initializable {
 
     }
 
+    private void initialzeTableWithColums() {
+
+        dateColumn.setCellValueFactory(d -> {
+            DSADate date = d.getValue().getDate();
+            long timestamp = d.getValue().getDate().getTimestamp();
+            long current = timeService.getCurrentDate().getTimestamp();
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("vor ").append(current - timestamp).append(" Tagen").append(" (").append(date).append(")");
+            return new SimpleStringProperty(sb.toString());
+        });
+
+        priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
+
+        playerColumn.setCellValueFactory(d -> {
+            Player player = d.getValue().getPlayer();
+            String pName = player.getName();
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(pName);
+            return new SimpleStringProperty(sb.toString());
+        });
+
+        productDealColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("productName"));
+
+        amountDealColumn.setCellValueFactory(d -> {
+            Unit unit = d.getValue().getUnit();
+            Integer amount = d.getValue().getAmount();
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(amount).append(" ").append(unit.getShortName());
+            return new SimpleStringProperty(sb.toString());
+        });
+    }
+
     @FXML
     private void onBackPressed() {
         log.debug("called onBackPressed");
 
         Stage stage = (Stage) offerTable.getScene().getWindow();
-	    stage.close();
+        stage.close();
     }
 
     @FXML
@@ -139,7 +190,7 @@ public class TraderDetailsController implements Initializable {
             @Override
             public int compare(Offer o1, Offer o2) {
                 int result = o1.getProduct().getId() - o2.getProduct().getId();
-                if(result != 0) {
+                if (result != 0) {
                     return result;
                 }
                 result = o1.getQualityId() - o2.getQualityId();
@@ -154,7 +205,11 @@ public class TraderDetailsController implements Initializable {
         this.loader = loader;
     }
 
-	public void setTraderService(TraderService traderService) {
-		this.traderService = traderService;
-	}
+    public void setTraderService(TraderService traderService) {
+        this.traderService = traderService;
+    }
+
+    public void setTimeService(TimeService timeService) {
+        this.timeService = timeService;
+    }
 }
