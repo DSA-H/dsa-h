@@ -5,9 +5,8 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -18,8 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.model.Deal;
 import sepm.dsa.model.Location;
-import sepm.dsa.model.Offer;
 import sepm.dsa.model.Trader;
 import sepm.dsa.model.TraderCategory;
 import sepm.dsa.service.LocationService;
@@ -27,9 +26,9 @@ import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TraderCategoryService;
 import sepm.dsa.service.TraderService;
 
+import javax.swing.table.TableColumn;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 public class EditTraderController implements Initializable {
@@ -70,6 +69,18 @@ public class EditTraderController implements Initializable {
     private ChoiceBox categoryBox;
     @FXML
     private TextArea commentArea;
+    @FXML
+    private TableView<Deal> dealsTable;
+    @FXML
+    private TableColumn playerColumn;
+    @FXML
+    private TableColumn productColumn;
+    @FXML
+    private TableColumn priceColumn;
+    @FXML
+    private TableColumn amountColumn;
+    @FXML
+    private TableColumn dateColumn;
 
 
     @Override
