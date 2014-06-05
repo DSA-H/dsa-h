@@ -19,7 +19,6 @@ import sepm.dsa.service.TimeService;
 import sepm.dsa.service.TraderService;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +34,7 @@ public class TraderDetailsController implements Initializable {
 
 
     @FXML
-    private TableView offerTable;
+    private TableView<Offer> offerTable;
     @FXML
     private TableColumn amountColumn;
     @FXML
@@ -56,7 +55,10 @@ public class TraderDetailsController implements Initializable {
     private Label resultLabel;
     @FXML
     private TextArea commentArea;
-
+    @FXML
+    private Button tradeButtonSell;
+    @FXML
+    private Button tradeButtonBuy;
     @FXML
     private TableView<Deal> dealsTable;
     @FXML
@@ -175,7 +177,23 @@ public class TraderDetailsController implements Initializable {
     @FXML
     private void onTradePressed() {
         log.debug("called onTradePressed");
-        //TODO not part of version 1
+        //trader wants to sell stuff to the player
+    }
+
+    @FXML
+    private void onTradeBuyPressed() {
+        log.debug("called onTradeBuyPressed");
+        //Player wants to sell stuff to the trader
+    }
+
+    @FXML
+    private void checkFocus() {
+        Offer selectedOffer = offerTable.getSelectionModel().getSelectedItem();
+        if (selectedOffer == null) {
+            tradeButtonSell.setDisable(true);
+        } else {
+            tradeButtonSell.setDisable(false);
+        }
     }
 
     public void setTrader(Trader trader) {
@@ -186,16 +204,13 @@ public class TraderDetailsController implements Initializable {
         commentArea.setText(trader.getComment());
 
         List<Offer> offers = new ArrayList<>(traderService.getOffers(trader));
-        offers = offers.stream().sorted(new Comparator<Offer>() {
-            @Override
-            public int compare(Offer o1, Offer o2) {
-                int result = o1.getProduct().getId() - o2.getProduct().getId();
-                if (result != 0) {
-                    return result;
-                }
-                result = o1.getQualityId() - o2.getQualityId();
+        offers = offers.stream().sorted((o1, o2) -> {
+            int result = o1.getProduct().getId() - o2.getProduct().getId();
+            if (result != 0) {
                 return result;
             }
+            result = o1.getQualityId() - o2.getQualityId();
+            return result;
         }).collect(Collectors.toList());
 
         offerTable.setItems(FXCollections.observableArrayList(offers));
