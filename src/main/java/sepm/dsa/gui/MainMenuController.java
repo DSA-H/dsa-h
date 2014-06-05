@@ -13,11 +13,11 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.*;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.*;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -42,8 +42,7 @@ import sepm.dsa.model.Trader;
 import sepm.dsa.service.*;
 import sepm.dsa.service.path.NoPathException;
 
-import java.awt.Point;
-import java.awt.MouseInfo;
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -281,7 +280,7 @@ public class MainMenuController implements Initializable {
 
 				TraderDetailsController controller = loader.getController();
 				controller.setTrader((Trader) selectedObject);
-				stage.setScene(new Scene(scene, 800, 552));
+				stage.setScene(new Scene(scene, 830, 781));
 				stage.setResizable(false);
 				stage.showAndWait();
 			} else {
