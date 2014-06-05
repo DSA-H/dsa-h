@@ -198,8 +198,10 @@ public class MainMenuController implements Initializable {
 				scaleFactor = newValue.doubleValue();
 				double v = scrollPane.getVvalue();
 				double h = scrollPane.getHvalue();
+				hasRestored = true;
 				zoomGroup.setScaleX(scaleFactor);
 				zoomGroup.setScaleY(scaleFactor);
+				hasRestored = true;
 				scrollPane.setVvalue(v);
 				scrollPane.setHvalue(h);
 				updateZoom();
