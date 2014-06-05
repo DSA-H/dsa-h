@@ -1,5 +1,6 @@
 package sepm.dsa.model;
 
+import com.sun.istack.internal.Nullable;
 import org.hibernate.validator.constraints.NotBlank;
 import sepm.dsa.service.path.PathNode;
 
@@ -40,6 +41,10 @@ public class Region implements BaseModel, PathNode {
     @NotNull
     @Column(nullable = false)
     private Integer rainfallChanceId;
+
+    @Nullable
+    @ManyToOne
+    private Currency preferredCurrency;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.region1", cascade = CascadeType.REMOVE)
     private Set<RegionBorder> borders1 = new HashSet<>();
@@ -168,6 +173,14 @@ public class Region implements BaseModel, PathNode {
     public void removeBorder(RegionBorder regionBorder) {
         borders1.remove(regionBorder);
         borders2.remove(regionBorder);
+    }
+
+    public Currency getPreferredCurrency() {
+        return preferredCurrency;
+    }
+
+    public void setPreferredCurrency(Currency preferredCurrency) {
+        this.preferredCurrency = preferredCurrency;
     }
 
     @Override

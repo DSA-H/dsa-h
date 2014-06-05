@@ -55,7 +55,7 @@ public class TradeSellToPlayerController implements Initializable {
         //select default unit & currency
 
 //        selectedCurrency.getSelectionModel().select(); TODO set preferred currency
-//        selectedUnit.getSelectionModel().select(offer.getUnit); TODO set preferred unit
+        selectedUnit.getSelectionModel().select(offer.getProduct().getUnit());
     }
 
     @FXML
@@ -83,6 +83,7 @@ public class TradeSellToPlayerController implements Initializable {
 
         //Calculate Price
         BigDecimal price = new BigDecimal(0); //TODO
+
 
         //Unit convert TODO
 
