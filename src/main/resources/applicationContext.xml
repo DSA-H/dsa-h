@@ -220,6 +220,7 @@
         <property name="pathService" ref="pathService"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
+        <property name="timeService" ref="timeService" />
     </bean>
 
     <bean id="pathService" class="sepm.dsa.service.path.PathServiceDijkstraJGraphImpl">
