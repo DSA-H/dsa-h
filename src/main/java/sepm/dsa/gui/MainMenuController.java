@@ -290,11 +290,11 @@ public class MainMenuController implements Initializable {
 			} else {
 				Stage stage = new Stage();
 				Parent scene = (Parent) loader.load("/gui/edittavern.fxml");
-				stage.setTitle("Wirtshaus erstellen");
+				stage.setTitle("Wirtshaus");
 
 				EditTavernController controller = loader.getController();
 				controller.setTavern((Tavern) selectedObject);
-				stage.setScene(new Scene(scene, 600, 400));
+				stage.setScene(new Scene(scene, 383, 400));
 				stage.setResizable(false);
 				stage.showAndWait();
 			}
@@ -1209,8 +1209,6 @@ public class MainMenuController implements Initializable {
 			editButton.setDisable(false);
 			if (selectedObject instanceof Trader) {
 				editButton.setText("Details");
-			} else {
-				editButton.setText("Bearbeiten");
 			}
 
 			if (zoomGroup.getChildren().size() > 2) {

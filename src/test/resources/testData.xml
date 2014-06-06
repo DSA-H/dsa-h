@@ -45,8 +45,8 @@
     <units id="7" name="Stück" unittype_id="4" valueToBaseUnit="1" shortname="Stück"/>
     <units id="8" name="Raumschritt" unittype_id="5" valueToBaseUnit="1" shortname="Raumschr."/>
 
-    <taverns id="1" name="Zum Wegstein" location_id="1" xPos="42" yPos="12" usage="12" beds="10"/>
-    <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="60" yPos="9" usage="12" beds="7"/>
+    <taverns id="1" name="Zum Wegstein" location_id="1" xPos="42" yPos="12" usage="12" price="4" quality="2" beds="10"/>
+    <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="60" yPos="9" usage="12" price="13" quality="1" beds="7"/>
 
     <players id="1" name="Mr X" comment="no comment"/>
     <players id="2" name="Mr Z" comment="A test comment"/>
