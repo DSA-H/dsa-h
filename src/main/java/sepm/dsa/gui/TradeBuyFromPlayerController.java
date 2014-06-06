@@ -115,7 +115,7 @@ public class TradeBuyFromPlayerController implements Initializable {
         //Calculate Price
         BigDecimal price;
         if (selectedPrice.getText().isEmpty()) {
-            throw new DSAValidationException("Bitte Menge eingeben");
+            throw new DSAValidationException("Bitte Preis eingeben");
         }
         try {
             //TODO Kommastellen via locale einlesen

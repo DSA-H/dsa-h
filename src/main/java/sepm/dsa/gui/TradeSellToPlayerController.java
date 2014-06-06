@@ -40,7 +40,6 @@ public class TradeSellToPlayerController implements Initializable {
     private SaveCancelService saveCancelService;
     private UnitService unitService;
     private CurrencyService currencyService;
-    private TimeService timeService;
     private PlayerService playerService;
 
     @Override
@@ -77,6 +76,7 @@ public class TradeSellToPlayerController implements Initializable {
     @FXML
     private void onSavePressed() {
         log.debug("calling SaveButtonPressed");
+        Player playerToCreateDealFor;
 
         if (selectedAmount.getText().isEmpty()) {
             throw new DSAValidationException("Bitte Menge eingeben");
@@ -91,31 +91,38 @@ public class TradeSellToPlayerController implements Initializable {
         if (amount <= 0) {
             throw new DSAValidationException("Menge muss > 0 sein");
         }
+        if (selectedPlayer.getSelectionModel().getSelectedItem() != null) {
+            playerToCreateDealFor = selectedPlayer.getSelectionModel().getSelectedItem();
+        } else {
+            throw new DSAValidationException("Ein Spieler muss gewählt werden!");
+        }
+        if (selectedUnit.getSelectionModel().getSelectedItem() == null) {
+            throw new DSAValidationException("Die Einheit wurde nicht gewählt!");
+        }
+        //PRICE STUFF ###########
+        BigDecimal price;
+        if (selectedPrice.getText().isEmpty()) {
+            throw new DSAValidationException("Bitte Preis eingeben");
+        }
+        try {
+            //TODO Kommastellen via locale einlesen
+//            Locale l = Locale.getDefault();
+//            log.info("Locale " + l);
+//
+//             NumberFormat nf = NumberFormat.getNumberInstance(l);
+//             DecimalFormat df = (DecimalFormat)nf;
 
-//        traderService
+            price = new BigDecimal(selectedPrice.getText());
 
-        //Calculate Price
-        BigDecimal price = new BigDecimal(0); //TODO
+        } catch (NumberFormatException ex) {
+            throw new DSAValidationException("Preis muss eine Zahl sein!");
+        }
+        if (price.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new DSAValidationException("Preis muss > 0 sein");
+        }
 
-
-        //Unit convert TODO
-
-        //Decerement stock at trader TODO
-
-        Deal newDeal = new Deal();
-        newDeal.setAmount(amount);
-        newDeal.setDate(timeService.getCurrentDate());
-        newDeal.setLocationName(trader.getLocation().getName());
-        newDeal.setPlayer(selectedPlayer.getSelectionModel().getSelectedItem());
-        newDeal.setPrice(price);
-        newDeal.setProduct(offer.getProduct());
-        newDeal.setProductName(offer.getProduct().getName());
-        newDeal.setPurchase(true);
-        newDeal.setquality(offer.getQuality());
-        newDeal.setTrader(trader);
-        newDeal.setUnit(selectedUnit.getSelectionModel().getSelectedItem());
-//        newDeal.setCurreny(selectedCurrency.getSelectionModel().getSelectedItem()); TODO implement
-//        saveCancelService.save();
+        traderService.sellToPlayer(trader, playerToCreateDealFor, offer.getProduct(), selectedUnit.getSelectionModel().getSelectedItem(), amount, price);
+        saveCancelService.save();
 
         Stage stage = (Stage) selectedUnit.getScene().getWindow();
         stage.close();
@@ -143,10 +150,6 @@ public class TradeSellToPlayerController implements Initializable {
 
     public void setCurrencyService(CurrencyService currencyService) {
         this.currencyService = currencyService;
-    }
-
-    public void setTimeService(TimeService timeService) {
-        this.timeService = timeService;
     }
 
     public void setPlayerService(PlayerService playerService) {
