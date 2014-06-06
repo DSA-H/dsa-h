@@ -50,9 +50,9 @@ public interface ProductService {
     Set<Product> getAllFromProductcategory(ProductCategory productCategory);
 
     /**
-     * Search for all Products by name (incremental search)
+     * Search for all Products containing the searchTerm in Product.name
      * @param searchTerm must not be null
-     * @return set of products -- or empty set if nothing found
+     * @return set of products -- or empty set if nothing found (not null)
      */
     Set<Product> getBySearchTerm(String searchTerm);
 }

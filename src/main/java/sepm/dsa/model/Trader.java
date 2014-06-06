@@ -183,6 +183,14 @@ public class Trader implements BaseModel {
         this.deals = deals;
     }
 
+    public double usedSpace() {
+        double result = 0;
+        for (Offer o : offers) {
+            result += o.getAmount();
+        }
+        return result;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

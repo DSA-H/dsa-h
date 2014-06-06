@@ -75,6 +75,11 @@ public class Unit implements BaseModel {
         this.valueToBaseUnit = valueToBaseUnit;
     }
 
+    public Double exchange(Double amount, Unit to) {
+        Double result = (amount * to.getValueToBaseUnit() / this.getValueToBaseUnit());
+        return result;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

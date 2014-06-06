@@ -142,10 +142,10 @@ public interface TraderService {
      *
      * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
      *      or the amount is greater than the trader offers <br />
-     *      or unit does does not match the product unit <br />
+     *      or unit type does does not match the product unit type <br />
      *      or totalPrice is negative
      */
-    void sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency);
+    Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency);
 
     /**
      * A trader buys a product from a player. The trader's amount for this product increases
@@ -159,9 +159,9 @@ public interface TraderService {
      *
      * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
      *      or the amount is greater than the trader offers <br />
-     *      or unit does does not match the product unit <br />
+     *      or unit type does does not match the product unit type <br />
      *      or totalPrice is negative
      */
-    void buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency);
+    Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency);
 
 }

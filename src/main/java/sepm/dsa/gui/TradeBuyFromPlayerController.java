@@ -101,7 +101,7 @@ public class TradeBuyFromPlayerController implements Initializable {
 
     @FXML
     private void onSearchPressed() {
-        log.debug("calling onEnableQualityClicked");
+        log.debug("calling onSearchPressed");
         if (searchField.getText().isEmpty()) {
             productsTable.setItems(FXCollections.observableArrayList(productService.getAll()));
         } else {

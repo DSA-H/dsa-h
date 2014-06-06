@@ -221,6 +221,8 @@
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
         <property name="timeService" ref="timeService" />
+        <property name="dealService" ref="dealService" />
+        <property name="currencyService" ref="currencyService"/>
     </bean>
 
     <bean id="pathService" class="sepm.dsa.service.path.PathServiceDijkstraJGraphImpl">

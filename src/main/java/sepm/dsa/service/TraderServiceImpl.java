@@ -19,6 +19,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 public class TraderServiceImpl implements TraderService {
@@ -31,7 +32,11 @@ public class TraderServiceImpl implements TraderService {
     private RegionService regionService;
     private RegionBorderService regionBorderService;
     private TimeService timeService;
+    private DealService dealService;
+    private CurrencyService currencyService;
     private OfferDao offerDao;
+
+    private static final Double EPSILON = 1E-5;
 
 	private SessionFactory sessionFactory;
 
@@ -132,16 +137,49 @@ public class TraderServiceImpl implements TraderService {
         return result;
     }
 
+//     * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
+//     *      or the amount is greater than the trader offers <br />
+//     *      or unit does does not match the product unit <br />
+//     *      or totalPrice is negative
     @Override
-    public void sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency) {
+    public Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, BigDecimal totalPrice, Currency currency) {
         // TODO discuss Currency question with jotschi
 
+        Offer offer = null;
+        Set<Offer> traderOffers = trader.getOffers(); // get from dao
+        for (Offer o : traderOffers) {
+            if (o.getProduct().equals(product) && o.getQuality().equals(productQuality)) {
+                offer = o;
+                break;
+            }
+        }
+        if (offer == null) {
+            throw new DSAValidationException("Der Händler hat die Ware in der gewünschten Qualität nicht.");
+        }
+
+        Double offerAmountDifference = unit.exchange(productAmount.doubleValue(), product.getUnit());
+        Double remainingAmount = offer.getAmount() - offerAmountDifference;
+        if (remainingAmount < 0 || Math.abs(remainingAmount) < EPSILON) {
+            throw new DSAValidationException("Der Händler hat nicht genug Waren dieser Art in dieser Qualitätsstufe");
+        }
+
+        if (totalPrice.doubleValue() < 0) {
+            throw new DSAValidationException("Der Preis darf nicht negativ sein");
+        }
+
+        if (!unit.getUnitType().equals(offer.getProduct().getUnit().getUnitType())) {     // offer needs unit?
+            throw new DSAValidationException("Einheit der Ware " + product.getUnit().getUnitType().getName() + " passt nicht mit " +
+                "angegebener Einheit " + unit.getUnitType().getName() + " zusammen.");
+        }
+
+        BigDecimal priceInBaseRate = currencyService.exchangeToBaseRate(currency, totalPrice);
+
         Deal newDeal = new Deal();
-        newDeal.setAmount(amount);
+        newDeal.setAmount(productAmount);
         newDeal.setDate(timeService.getCurrentDate());
         newDeal.setLocationName(trader.getLocation().getName());
         newDeal.setPlayer(player);
-        newDeal.setPrice(totalPrice);
+        newDeal.setPrice(priceInBaseRate);   // Integer
         newDeal.setProduct(product);
         newDeal.setProductName(product.getName());
         newDeal.setPurchase(false);
@@ -149,11 +187,81 @@ public class TraderServiceImpl implements TraderService {
         newDeal.setTrader(trader);
         newDeal.setUnit(unit);
 
+        Deal result = dealService.add(newDeal);
+
+        offer.addAmount(-offerAmountDifference);
+        if (offer.isEmpty()) {
+            offerDao.remove(offer);
+        } else {
+            offerDao.update(offer);
+        }
+
+        return result;
     }
 
     @Override
-    public void buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency) {
+    public Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, BigDecimal totalPrice, Currency currency) {
+
         // TODO discuss Currency question with jotschi
+
+        Offer offer = null;
+        Set<Offer> traderOffers = trader.getOffers(); // get from dao
+        for (Offer o : traderOffers) {
+            if (o.getProduct().equals(product) && o.getQuality().equals(productQuality)) {
+                offer = o;
+                break;
+            }
+        }
+
+//        TODO Jotschi: Der Haendler hat bekommt ja normalerweise immer ein volles Sortiment wenn Zeit vorwaerts gestellt wird
+//        TODO          wenn jetzt ein Spieler etwas verkaufen will, muss er zuerst was vom Haendler kaufen, sonst hat dieser keinen Platz. Bitte klaeren mit Michael
+        Double offerAmountDifference = unit.exchange(productAmount.doubleValue(), product.getUnit());
+//        double newUsedspace = trader.usedSpace() + offerAmountDifference;
+//        if (newUsedspace > trader.getSize()) {
+//            throw new DSAValidationException("Der Händler kann so viele Waren nicht besitzen");
+//        }
+
+        if (totalPrice.doubleValue() < 0) {
+            throw new DSAValidationException("Der Preis darf nicht negativ sein");
+        }
+
+        if (!unit.getUnitType().equals(product.getUnit().getUnitType())) {     // offer needs unit?
+            throw new DSAValidationException("Einheit der Ware " + product.getUnit().getUnitType().getName() + " passt nicht mit " +
+                    "angegebener Einheit " + unit.getUnitType().getName() + " zusammen.");
+        }
+
+        BigDecimal priceInBaseRate = currencyService.exchangeToBaseRate(currency, totalPrice);
+
+        Deal newDeal = new Deal();
+        newDeal.setAmount(productAmount);
+        newDeal.setDate(timeService.getCurrentDate());
+        newDeal.setLocationName(trader.getLocation().getName());
+        newDeal.setPlayer(player);
+        newDeal.setPrice(priceInBaseRate);   // Integer
+        newDeal.setProduct(product);
+        newDeal.setProductName(product.getName());
+        newDeal.setPurchase(true);
+        newDeal.setquality(productQuality);
+        newDeal.setTrader(trader);
+        newDeal.setUnit(unit);
+
+        Deal result = dealService.add(newDeal);
+
+        if (offer == null) {
+            offer = new Offer();
+            offer.setTrader(trader);
+            offer.setAmount(offerAmountDifference);
+            offer.setPricePerUnit(priceInBaseRate.divide(new BigDecimal(productAmount)).intValue());
+            offer.setProduct(product);
+            offer.setQuality(productQuality);
+            log.info("add " + offer);
+            offerDao.add(offer);
+        } else {
+            offer.addAmount(offerAmountDifference);
+            offerDao.update(offer);
+        }
+
+        return result;
 
     }
 
@@ -166,6 +274,9 @@ public class TraderServiceImpl implements TraderService {
     @Transactional(readOnly = true)
     public List<Offer> calculateOffers(Trader trader, int number) {
         log.debug("calling calculateOffers()");
+
+        // TODO Jotschi: Offer.amount changed from Integer to Double, might cause problems!
+
         List<Product> weightProducts = new ArrayList<>();
         List<Float> weights = new ArrayList<>();
         float topWeight = 0;
@@ -230,7 +341,7 @@ public class TraderServiceImpl implements TraderService {
             int amount = productAmmountMap.get(product);
 
             // random quality distribution
-            int amountQualities[] = new int[ProductQuality.values().length];
+            double amountQualities[] = new double[ProductQuality.values().length];
             if (product.getQuality()) {
                 for (int i = 0; i < amount; i++) {
                     int j = 0;
@@ -415,5 +526,13 @@ public class TraderServiceImpl implements TraderService {
 
     public void setTimeService(TimeService timeService) {
         this.timeService = timeService;
+    }
+
+    public void setDealService(DealService dealService) {
+        this.dealService = dealService;
+    }
+
+    public void setCurrencyService(CurrencyService currencyService) {
+        this.currencyService = currencyService;
     }
 }

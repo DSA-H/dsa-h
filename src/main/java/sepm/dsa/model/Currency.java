@@ -25,7 +25,7 @@ public class Currency implements BaseModel {
 
     @NotNull
     @Column(nullable = false, precision = 9, scale = 3)
-    private BigDecimal valueToBaseRate;  // relative value to base rate
+    private BigDecimal valueToBaseRate;  // relative value to base rate TODO change to Integer
 
     public static long getSerialVersionUID() {
         return serialVersionUID;

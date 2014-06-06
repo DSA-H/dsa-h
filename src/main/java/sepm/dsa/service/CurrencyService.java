@@ -53,4 +53,14 @@ public interface CurrencyService {
      * @return the value / amount of the original currency expressed by / in the foreign currency
      */
     CurrencyAmount exchange(Currency from, Currency to, BigDecimal amount);
+
+    /**
+     * Exchanges / converts from one to the base rate
+     *
+     * @param from      the original Currency must not be null
+     * @param amount    amount of from {@code Currency} to be exchanged
+     * @return the value / amount of the original currency expressed by / in the base rate
+     */
+    BigDecimal exchangeToBaseRate(Currency from, BigDecimal amount);
+
 }

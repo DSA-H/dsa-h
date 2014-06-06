@@ -1,6 +1,5 @@
 package sepm.dsa.model;
 
-import com.sun.istack.internal.Nullable;
 import org.hibernate.validator.constraints.NotBlank;
 import sepm.dsa.service.path.PathNode;
 
@@ -42,7 +41,6 @@ public class Region implements BaseModel, PathNode {
     @Column(nullable = false)
     private Integer rainfallChanceId;
 
-    @Nullable
     @ManyToOne
     @JoinColumn(nullable = true)
     private Currency preferredCurrency;

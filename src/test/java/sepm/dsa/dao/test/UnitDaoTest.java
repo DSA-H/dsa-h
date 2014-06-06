@@ -19,6 +19,7 @@ public class UnitDaoTest extends AbstractDatabaseTest {
 
     @Test
     public void testAdd() throws Exception {
+        // TODO really test unit and not currency
         Currency c1 = new Currency();
         c1.setName("fofods");
         c1.setValueToBaseRate(new BigDecimal(1));

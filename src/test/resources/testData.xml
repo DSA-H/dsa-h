@@ -69,8 +69,8 @@
     <traders id="4" name="trader4" category_id="4" size="400" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13" convince="7" location_id="1" />
     <movingTraders trader="2" lastMoved="0" avgStayDays="3" preferredDistance="1" />
     <movingTraders trader="3" lastMoved="0" avgStayDays="11" preferredTownSize="1" preferredDistance="0" />
-    <offers id="1" product_id="1" trader_id="1" amount="2" pricePerUnit="50" qualityId="1" />
-    <offers id="2" product_id="2" trader_id="1" amount="8" pricePerUnit="10" qualityId="0" />
+    <offers id="1" product_id="1" trader_id="1" amount="20" pricePerUnit="50" qualityId="1" />
+    <offers id="2" product_id="2" trader_id="1" amount="80" pricePerUnit="10" qualityId="0" />
     <productCategories id="1" name="category1" />
     <productCategories id="2" name="category2" />
     <productCategories id="3" name="category3" parent_id="2"/>

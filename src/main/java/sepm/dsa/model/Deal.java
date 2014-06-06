@@ -12,7 +12,7 @@ public class Deal implements BaseModel {
     private static final long serialVersionUID = 2957293850231481770L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 
@@ -40,6 +40,7 @@ public class Deal implements BaseModel {
     @JoinColumn     // => nullable = true !!
     private Trader trader;
 
+    @Transient
     @ManyToOne
     @JoinColumn     // => nullable = true; product can be deleted, therefore store productName to keep history for player
     private transient Product product;
@@ -49,6 +50,7 @@ public class Deal implements BaseModel {
     private Unit unit;
 
     @ManyToOne
+    @JoinColumn
     private Player player;
 
     @NotNull

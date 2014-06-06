@@ -2,6 +2,7 @@ package sepm.dsa.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "offers")
@@ -14,8 +15,8 @@ public class Offer implements BaseModel {
     private Integer id;
 
     @NotNull
-    @Column(nullable = false)
-    private Integer amount;
+    @Column(nullable = false, precision = 9, scale = 3)
+    private Double amount;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -33,6 +34,8 @@ public class Offer implements BaseModel {
     @JoinColumn(nullable = false)
     private Trader trader;
 
+    private transient static final Double EPSILON = 1E-5;
+
     public Integer getId() {
         return id;
     }
@@ -49,12 +52,20 @@ public class Offer implements BaseModel {
         this.product = product;
     }
 
-    public Integer getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    /**
+     * Adds amount to the given amount. A negative value reduces the amount.
+     * @param amount
+     */
+    public void addAmount(Double amount) {
+        this.amount += amount;
     }
 
     public Integer getPricePerUnit() {
@@ -112,4 +123,9 @@ public class Offer implements BaseModel {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
+    public boolean isEmpty() {
+        return amount < 0 || Math.abs(amount) < EPSILON;
+    }
+
 }

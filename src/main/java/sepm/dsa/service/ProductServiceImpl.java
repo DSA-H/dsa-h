@@ -85,8 +85,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Set<Product> getBySearchTerm(String searchTerm) {
-        //TODO
-        return null;
+        log.debug("calling getBySearchTerm(" + searchTerm + ")");
+        Set<Product> result = new HashSet<>(productDao.getAllByName(searchTerm == null ? null : "%" + searchTerm + "%"));
+        log.trace("returning " + result);
+        return result;
     }
 
     private int addAllProductCategoryChildren(ProductCategory productCategory, List<ProductCategory> target) {
