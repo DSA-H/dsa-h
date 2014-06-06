@@ -130,7 +130,7 @@ public class TradeSellToPlayerController implements Initializable {
             throw new DSAValidationException("Preis muss > 0 sein");
         }
 
-        traderService.sellToPlayer(trader, playerToCreateDealFor, offer.getProduct(), selectedUnit.getSelectionModel().getSelectedItem(), amount, price, selectedCurrency.getSelectionModel().getSelectedItem());
+        traderService.sellToPlayer(trader, playerToCreateDealFor, offer.getProduct(), offer.getQuality(), selectedUnit.getSelectionModel().getSelectedItem(), amount, price, selectedCurrency.getSelectionModel().getSelectedItem());
         saveCancelService.save();
 
         Stage stage = (Stage) selectedUnit.getScene().getWindow();
