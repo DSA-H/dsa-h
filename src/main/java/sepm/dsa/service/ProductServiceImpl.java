@@ -83,6 +83,12 @@ public class ProductServiceImpl implements ProductService {
         return result;
     }
 
+    @Override
+    public Set<Product> getBySearchTerm(String searchTerm) {
+        //TODO
+        return null;
+    }
+
     private int addAllProductCategoryChildren(ProductCategory productCategory, List<ProductCategory> target) {
         int productCount = 0;
         target.add(productCategory);

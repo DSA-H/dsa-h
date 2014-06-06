@@ -4,10 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -18,6 +15,8 @@ import sepm.dsa.service.*;
 
 import java.math.BigDecimal;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class TradeBuyFromPlayerController implements Initializable {
@@ -28,6 +27,7 @@ public class TradeBuyFromPlayerController implements Initializable {
     private TraderService traderService;
     private UnitService unitService;
     private CurrencyService currencyService;
+    private ProductService productService;
     private SaveCancelService saveCancelService;
 
     private static Trader trader;
@@ -37,19 +37,24 @@ public class TradeBuyFromPlayerController implements Initializable {
     @FXML
     private ChoiceBox<Player> selectedPlayer;
     @FXML
+    private ChoiceBox selectedQuality;
+    @FXML
     private TextField selectedAmount;
     @FXML
     private ChoiceBox<Currency> selectedCurrency;
     @FXML
     private TextField selectedPrice;
     @FXML
-    private TableView<Deal> dealsTable;
+    private TableView<Product> productsTable;
     @FXML
-    private TableColumn<Deal, String> pricecolumn;
+    private TableColumn<Product, String> pricecolumn;
     @FXML
-    private TableColumn<Deal, String> productColumn;
+    private TableColumn<Product, String> productColumn;
     @FXML
-    private TableColumn<Deal, String> amountColumn;
+    private TextField searchField;
+    @FXML
+    private CheckBox qualityChoice;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -61,17 +66,46 @@ public class TradeBuyFromPlayerController implements Initializable {
         selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAll()));
         selectedPlayer.setItems(FXCollections.observableArrayList(playerService.getAll()));
 
-        selectedPlayer.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> dealsTable.setItems(FXCollections.observableArrayList(newValue.getDeals())));
+        List<String> qualityList = new ArrayList<>();
+        for (ProductQuality q : ProductQuality.values()) {
+            qualityList.add(q.getName());
+        }
+        selectedQuality.setItems(FXCollections.observableArrayList(qualityList));
     }
 
     @FXML
     private void checkFocus() {
-        Deal selectedDeal = dealsTable.getSelectionModel().getSelectedItem();
-        if (selectedDeal != null) {
-            selectedAmount.setText(selectedDeal.getAmount().toString());
-//        selectedCurrency.getSelectionModel().select(selectedDeal.getCurrency());
-            selectedPrice.setText(selectedDeal.getPrice().toPlainString());
-            selectedUnit.getSelectionModel().select(selectedDeal.getUnit());
+        Product selProduct = productsTable.getSelectionModel().getSelectedItem();
+        ProductQuality quality = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
+        if (selProduct != null) {
+            if (quality != null) {
+                int setQuality = traderService.calculatePricePerUnit(quality, productsTable.getSelectionModel().getSelectedItem(), trader);
+                selectedPrice.setText(Integer.toString(setQuality));
+            } else {
+                int priceDefault = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
+                selectedPrice.setText(Integer.toString(priceDefault));
+            }
+            selectedUnit.getSelectionModel().select(selProduct.getUnit());
+        }
+    }
+
+    @FXML
+    private void onEnableQualityClicked() {
+        log.debug("calling onEnableQualityClicked");
+        if (qualityChoice.isSelected()) {
+            selectedQuality.setDisable(false);
+        } else {
+            selectedQuality.setDisable(true);
+        }
+    }
+
+    @FXML
+    private void onSearchPressed() {
+        log.debug("calling onEnableQualityClicked");
+        if (searchField.getText().isEmpty()) {
+            productsTable.setItems(FXCollections.observableArrayList(productService.getAll()));
+        } else {
+            productsTable.setItems(FXCollections.observableArrayList(productService.getBySearchTerm(searchField.getText())));
         }
     }
 
@@ -101,7 +135,7 @@ public class TradeBuyFromPlayerController implements Initializable {
         if (amount <= 0) {
             throw new DSAValidationException("Menge muss > 0 sein");
         }
-        if (dealsTable.getSelectionModel().getSelectedItem() == null) {
+        if (productsTable.getSelectionModel().getSelectedItem() == null) {
             throw new DSAValidationException("Ware muss gewählt werden");
         }
 
@@ -138,7 +172,24 @@ public class TradeBuyFromPlayerController implements Initializable {
             throw new DSAValidationException("Die Währung wurde nicht gewählt!");
         }
 
-        traderService.buyFromPlayer(trader, playerToCreateDealFor, dealsTable.getSelectionModel().getSelectedItem().getProduct(), dealsTable.getSelectionModel().getSelectedItem().getQuality(), selectedUnit.getSelectionModel().getSelectedItem(), amount, price, selectedCurrency.getSelectionModel().getSelectedItem());
+        //######## Quality Stuff ########
+        Product selProduct = productsTable.getSelectionModel().getSelectedItem();
+        ProductQuality quality = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
+        if (selProduct != null) {
+            if (quality != null) { //so quality was SET
+                int setQuality = traderService.calculatePricePerUnit(quality, productsTable.getSelectionModel().getSelectedItem(), trader);
+                selectedPrice.setText(Integer.toString(setQuality));
+            } else {
+                //no quality enabled -- NORMAL price
+                int priceDefault = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
+                selectedPrice.setText(Integer.toString(priceDefault));
+            }
+            selectedUnit.getSelectionModel().select(selProduct.getUnit());
+        } else {
+            throw new DSAValidationException("Bitte Produkt auswählen!!");
+        }
+
+        traderService.buyFromPlayer(trader, playerToCreateDealFor, productsTable.getSelectionModel().getSelectedItem(), quality, selectedUnit.getSelectionModel().getSelectedItem(), amount, price, selectedCurrency.getSelectionModel().getSelectedItem());
         saveCancelService.save();
 
         Stage stage = (Stage) selectedUnit.getScene().getWindow();
@@ -150,23 +201,16 @@ public class TradeBuyFromPlayerController implements Initializable {
         pricecolumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         productColumn.setCellValueFactory(d -> {
             if (d.getValue() != null) {
-                Deal deal = d.getValue();
+                Product product = d.getValue();
                 StringBuilder sb = new StringBuilder();
-                sb.append(deal.getProductName());
-                if (deal.getQuality() != null) {
-                    sb.append(" (").append(d.getValue().getQuality().getName()).append(")");
+                sb.append(product.getName());
+                if (product.getQuality() != null) {
+                    sb.append(" (").append(d.getValue().getQuality()).append(")");
                 }
                 return new SimpleStringProperty(sb.toString());
             } else {
                 return new SimpleStringProperty("");
             }
-        });
-
-        amountColumn.setCellValueFactory(d -> {
-            Unit unit = d.getValue().getUnit();
-            Integer amount = d.getValue().getAmount();
-
-            return new SimpleStringProperty(String.valueOf(amount) + " " + unit.getShortName());
         });
     }
 
@@ -192,5 +236,8 @@ public class TradeBuyFromPlayerController implements Initializable {
 
     public void setPlayerService(PlayerService playerService) {
         this.playerService = playerService;
+    }
+
+    public void setProductService(ProductService productService) {
     }
 }

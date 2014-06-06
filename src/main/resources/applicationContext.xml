@@ -345,6 +345,7 @@
         <property name="currencyService" ref="currencyService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
         <property name="playerService" ref="playerService"/>
+        <property name="productService" ref="productService"/>
     </bean>
     <bean id="editTavern" class="sepm.dsa.gui.EditTavernController">
         <property name="loader" ref="loader"/>
