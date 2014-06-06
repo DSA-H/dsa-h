@@ -59,9 +59,6 @@ public class TradeBuyFromPlayerController implements Initializable {
         //initialize table
         initialzeTableWithColums();
 
-        //TODO price vorschlage change listener * by amount
-
-        //TODO set nice names
         selectedCurrency.setItems(FXCollections.observableArrayList(currencyService.getAll()));
         selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAll()));
         selectedPlayer.setItems(FXCollections.observableArrayList(playerService.getAll()));
