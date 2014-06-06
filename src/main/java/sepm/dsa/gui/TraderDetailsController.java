@@ -5,6 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -104,13 +105,13 @@ public class TraderDetailsController implements Initializable {
     private void initialzeTableWithColums() {
 
         dateColumn.setCellValueFactory(d -> {
-            DSADate date = d.getValue().getDate();
-            long timestamp = d.getValue().getDate().getTimestamp();
-            long current = timeService.getCurrentDate().getTimestamp();
+	        DSADate date = d.getValue().getDate();
+	        long timestamp = d.getValue().getDate().getTimestamp();
+	        long current = timeService.getCurrentDate().getTimestamp();
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("vor ").append(current - timestamp).append(" Tagen").append(" (").append(date).append(")");
-            return new SimpleStringProperty(sb.toString());
+	        StringBuilder sb = new StringBuilder();
+	        sb.append("vor ").append(current - timestamp).append(" Tagen").append(" (").append(date).append(")");
+	        return new SimpleStringProperty(sb.toString());
         });
 
         priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
@@ -127,12 +128,12 @@ public class TraderDetailsController implements Initializable {
         productDealColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("productName"));
 
         amountDealColumn.setCellValueFactory(d -> {
-            Unit unit = d.getValue().getUnit();
-            Integer amount = d.getValue().getAmount();
+	        Unit unit = d.getValue().getUnit();
+	        Integer amount = d.getValue().getAmount();
 
-            StringBuilder sb = new StringBuilder();
-            sb.append(amount).append(" ").append(unit.getShortName());
-            return new SimpleStringProperty(sb.toString());
+	        StringBuilder sb = new StringBuilder();
+	        sb.append(amount).append(" ").append(unit.getShortName());
+	        return new SimpleStringProperty(sb.toString());
         });
     }
 
@@ -150,8 +151,10 @@ public class TraderDetailsController implements Initializable {
         Stage stage = (Stage) offerTable.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
         EditTraderController controller = loader.getController();
-        controller.setTrader(trader);
-        stage.setScene(new Scene(scene, 785, 513));
+		controller.setTrader(trader);
+	    controller.setLocation(trader.getLocation());
+	    controller.setPosition(new Point2D(trader.getxPos(), trader.getyPos()));
+		stage.setScene(new Scene(scene, 785, 513));
     }
 
     @FXML

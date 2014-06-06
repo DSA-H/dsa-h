@@ -37,6 +37,7 @@ public class EditTraderController implements Initializable {
 	private TimeService timeService;
 
     private boolean isNewTrader;
+	private boolean sametype = true;
 
 	private Point2D position;
 	private DSADate lastmoved;
@@ -106,9 +107,12 @@ public class EditTraderController implements Initializable {
 				    daysLabel.setDisable(false);
 				    areaBox.setDisable(false);
 				    areaLabel.setDisable(false);
-				    selectedTrader = new MovingTrader();
+				    if (sametype) {
+					    sametype = false;
+				    } else {
+					    sametype = true;
+				    }
 			    } else {
-
 				    stayTimeField.setDisable(false);
 				    stayTimeLabel.setDisable(false);
 				    citySizeBox.setDisable(false);
@@ -116,7 +120,11 @@ public class EditTraderController implements Initializable {
 				    daysLabel.setDisable(false);
 				    areaBox.setDisable(false);
 				    areaLabel.setDisable(false);
-				    selectedTrader = new Trader();
+				    if (sametype) {
+					    sametype = false;
+				    } else {
+					    sametype = true;
+				    }
 			    }
 		    }
 	    });
@@ -140,10 +148,10 @@ public class EditTraderController implements Initializable {
             commentArea.setText(selectedTrader.getComment());
 
 	        if (selectedTrader instanceof MovingTrader) {
-		        movingCheck.setSelected(true);
-		        stayTimeField.setText(""+((MovingTrader) selectedTrader).getAvgStayDays());
+		        stayTimeField.setText("" + ((MovingTrader) selectedTrader).getAvgStayDays());
 		        citySizeBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredTownSize());
-		        areaBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredDistance());
+				areaBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredDistance());
+		        movingCheck.setSelected(true);
 	        }
         }
     }
@@ -209,6 +217,20 @@ public class EditTraderController implements Initializable {
     @FXML
     private void onSavePressed() {
         log.debug("called onSavePressed");
+
+	    if (!sametype) {
+		    if (selectedTrader instanceof MovingTrader) {
+			    if (!isNewTrader) {
+				    traderService.remove(selectedTrader);
+			    }
+			    selectedTrader = new Trader();
+		    } else {
+			    if (!isNewTrader) {
+				    traderService.remove(selectedTrader);
+			    }
+				selectedTrader = new MovingTrader();
+		    }
+	    }
 
         //name
         int count = StringUtils.countOccurrencesOf(nameField.getText(), " ");
@@ -320,8 +342,7 @@ public class EditTraderController implements Initializable {
 	    selectedTrader.setxPos((int) position.getX());
 	    selectedTrader.setyPos((int) position.getY());
 
-	    if (movingCheck.isSelected()) {
-
+	    if (selectedTrader instanceof MovingTrader) {
 		    //avg. stayTime
 		    try {
 			    ((MovingTrader) selectedTrader).setAvgStayDays(Integer.parseInt(stayTimeField.getText()));
@@ -409,7 +430,11 @@ public class EditTraderController implements Initializable {
                 }
             }
 
-            traderService.update(selectedTrader);
+	        if (sametype) {
+		        traderService.update(selectedTrader);
+	        } else {
+		        traderService.add(selectedTrader);
+	        }
         }
         saveCancelService.save();
 

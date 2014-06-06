@@ -7,6 +7,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.dao.MovingTraderDao;
 import sepm.dsa.dao.OfferDao;
 import sepm.dsa.dao.TraderDao;
 import sepm.dsa.exceptions.DSAValidationException;
@@ -24,6 +25,7 @@ public class TraderServiceImpl implements TraderService {
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private TraderDao traderDao;
+	private MovingTraderDao movingTraderDao;
     private ProductService productService;
     private PathService<RegionBorder> pathService;
     private RegionService regionService;
@@ -36,6 +38,9 @@ public class TraderServiceImpl implements TraderService {
     public Trader get(int id) {
         log.debug("calling get(" + id + ")");
         Trader result = traderDao.get(id);
+		if (result instanceof MovingTrader) {
+			result = movingTraderDao.get(id);
+		}
         log.trace("returning " + result);
         return result;
     }
@@ -48,10 +53,15 @@ public class TraderServiceImpl implements TraderService {
     @Override
     @Transactional(readOnly = false)
     public Trader add(Trader t) {
-        log.debug("calling addConnection(" + t + ")");
+        log.debug("calling addTrader(" + t + ")");
         validate(t);
-        Trader trader = traderDao.add(t);
-        List<Offer> offers = calculateOffers(t);
+	    Trader trader;
+	    if (t instanceof MovingTrader) {
+		    trader = movingTraderDao.add((MovingTrader) t);
+	    } else {
+		    trader = traderDao.add(t);
+	    }
+		List<Offer> offers = calculateOffers(t);
         offerDao.addList(offers);
         trader.setOffers(new HashSet<>(offers));
 
@@ -63,6 +73,9 @@ public class TraderServiceImpl implements TraderService {
     public Trader update(Trader t) {
         log.debug("calling update(" + t + ")");
         validate(t);
+	    if (t instanceof MovingTrader) {
+		    return movingTraderDao.update((MovingTrader) t);
+	    }
         return traderDao.update(t);
     }
 
@@ -70,15 +83,26 @@ public class TraderServiceImpl implements TraderService {
     @Transactional(readOnly = false)
     public void remove(Trader t) {
         log.debug("calling removeConnection(" + t + ")");
+	    if (t instanceof MovingTrader) {
+		    movingTraderDao.remove((MovingTrader) t);
+	    }
         traderDao.remove(t);
     }
 
     @Override
     public List<Trader> getAll() {
         log.debug("calling getAll()");
-        List<Trader> result = traderDao.getAll();
-        log.trace("returning " + result);
-        return result;
+	    List<Trader> traders = traderDao.getAll();
+	    List<MovingTrader> movingTraders = movingTraderDao.getAll();
+	    List<Trader> result = new ArrayList<>();
+	    for (Trader t : traders) {
+		    if (!(t instanceof MovingTrader)) {
+			    result.add(t);
+		    }
+	    }
+	    result.addAll(movingTraders);
+	    log.trace("returning " + result);
+	    return result;
     }
 
     @Override
@@ -102,31 +126,39 @@ public class TraderServiceImpl implements TraderService {
     @Override
     public List<MovingTrader> getAllMovingTraders() {
         log.debug("calling getAllMovingTraders()");
-        List<Trader> traders = traderDao.getAll();
-        List<MovingTrader> result = new ArrayList<>();
-        for(Trader trader : traders) {
-            if(trader instanceof MovingTrader) {
-                result.add((MovingTrader)trader);
-            }
-        }
-        log.trace("returning " + result);
-        return result;
+	    return movingTraderDao.getAll();
     }
 
     @Override
     public List<Trader> getAllForLocation(Location location) {
         log.debug("calling getAllForLocation()");
-        List<Trader> result = traderDao.getAllByLocation(location);
-        log.trace("returning " + result);
-        return result;
+        List<Trader> traders = traderDao.getAllByLocation(location);
+	    List<MovingTrader> movingTraders = movingTraderDao.getAllByLocation(location);
+	    List<Trader> result = new ArrayList<>();
+	    for (Trader t : traders) {
+		    if (!(t instanceof MovingTrader)) {
+			    result.add(t);
+		    }
+	    }
+	    result.addAll(movingTraders);
+	    log.trace("returning " + result);
+	    return result;
     }
 
     @Override
     public List<Trader> getAllByCategory(TraderCategory traderCategory) {
         log.debug("calling getAllByCategory()");
-        List<Trader> result = traderDao.getAllByCategory(traderCategory);
-        log.trace("returning " + result);
-        return result;
+	    List<Trader> traders = traderDao.getAllByCategory(traderCategory);
+	    List<MovingTrader> movingTraders = movingTraderDao.getAllByCategory(traderCategory);
+	    List<Trader> result = new ArrayList<>();
+	    for (Trader t : traders) {
+		    if (!(t instanceof MovingTrader)) {
+			    result.add(t);
+		    }
+	    }
+	    result.addAll(movingTraders);
+	    log.trace("returning " + result);
+	    return result;
     }
 
     /**
@@ -332,6 +364,10 @@ public class TraderServiceImpl implements TraderService {
     public void setTraderDao(TraderDao traderDao) {
         this.traderDao = traderDao;
     }
+
+	public void setMovingTraderDao(MovingTraderDao movingTraderDao) {
+		this.movingTraderDao = movingTraderDao;
+	}
 
     public void setProductService(ProductService productService) {
         this.productService = productService;

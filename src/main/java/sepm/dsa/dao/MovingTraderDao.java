@@ -7,7 +7,7 @@ import sepm.dsa.model.TraderCategory;
 
 import java.util.List;
 
-public interface MovingTraderDao extends BaseDao<Trader> {
+public interface MovingTraderDao extends BaseDao<MovingTrader> {
 	/**
 	 * Finds all MovingTraders for a location
 	 *

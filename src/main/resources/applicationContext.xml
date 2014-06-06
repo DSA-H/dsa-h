@@ -220,6 +220,7 @@
 
     <bean id="traderService" class="sepm.dsa.service.TraderServiceImpl">
         <property name="traderDao" ref="traderDao"/>
+        <property name="movingTraderDao" ref="movingTraderDao"/>
         <property name="offerDao" ref="offerDao" />
         <property name="productService" ref="productService"/>
         <property name="pathService" ref="pathService"/>
@@ -246,6 +247,7 @@
         <property name="offerDao" ref="offerDao" />
         <property name="locationService" ref="locationService" />
         <property name="tavernService" ref="tavernService" />
+        <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 
     <!-- GUI DI -->

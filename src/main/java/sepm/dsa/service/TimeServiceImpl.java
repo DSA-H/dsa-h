@@ -24,6 +24,7 @@ public class TimeServiceImpl implements TimeService {
     private OfferDao offerDao;
     private LocationService locationService;
     private TavernService tavernService;
+	private SaveCancelService saveCancelService;
 
     private DSADate date;
     private Properties properties;
@@ -144,10 +145,10 @@ public class TimeServiceImpl implements TimeService {
         for(MovingTrader movingTrader : movingTraders) {
             long daysSinceMove = date.getTimestamp() - movingTrader.getLastMoved();
             // chance to move 5 days around the average move day
-            double moveCance = (float)(daysSinceMove - movingTrader.getAvgStayDays() + 5) / 10f;
+            double moveChance = (float)(daysSinceMove - movingTrader.getAvgStayDays() + 5) / 10f;
             float random = (float)Math.random();
             // move
-            if(random < moveCance) {
+            if(random < moveChance) {
                 Location actLocation = movingTrader.getLocation();
 
                 // possible locations
@@ -162,6 +163,10 @@ public class TimeServiceImpl implements TimeService {
                 if (movingTrader.getPreferredTownSize() != null) {
                     List<Location> removeList = new ArrayList<>();
                     for(Location location : possibleLocations) {
+	                    // not allowed to move to same location
+	                    if(location == movingTrader.getLocation()) {
+		                    removeList.add(location);
+	                    } else
                         // if not preferred town size, than its a 80% chance to remove the town from the possible goals
                         if(location.getSize() != movingTrader.getPreferredTownSize()) {
                             if(Math.random() <= 0.8f) {
@@ -190,6 +195,7 @@ public class TimeServiceImpl implements TimeService {
                     }
                 }
                 traderService.update(movingTrader);
+	            saveCancelService.save();
             }
         }
 
@@ -215,4 +221,8 @@ public class TimeServiceImpl implements TimeService {
     public void setLocationService(LocationService locationService) {
         this.locationService = locationService;
     }
+
+	public void setSaveCancelService(SaveCancelService saveCancelService) {
+		this.saveCancelService = saveCancelService;
+	}
 }
