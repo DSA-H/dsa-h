@@ -92,6 +92,8 @@ public class TradeSellToPlayerController implements Initializable {
             throw new DSAValidationException("Menge muss > 0 sein");
         }
 
+//        traderService
+
         //Calculate Price
         BigDecimal price = new BigDecimal(0); //TODO
 
