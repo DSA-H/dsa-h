@@ -46,15 +46,16 @@ public class TradeSellToPlayerController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        //TODO set nice names
         selectedCurrency.setItems(FXCollections.observableArrayList(currencyService.getAll()));
         selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAll()));
         selectedPrice.setText(offer.getPricePerUnit().toString());
         selectedPlayer.setItems(FXCollections.observableArrayList(playerService.getAll()));
 
         //select default unit & currency
-
-//        selectedCurrency.getSelectionModel().select(); TODO set preferred currency
+        Currency preferredCurrency = trader.getLocation().getRegion().getPreferredCurrency();
+        if (preferredCurrency != null) {
+            selectedCurrency.getSelectionModel().select(preferredCurrency);
+        }
         selectedUnit.getSelectionModel().select(offer.getProduct().getUnit());
 
         StringBuilder sb = new StringBuilder();
@@ -87,7 +88,7 @@ public class TradeSellToPlayerController implements Initializable {
         } catch (NumberFormatException ex) {
             throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
         }
-        if (amount<= 0){
+        if (amount <= 0) {
             throw new DSAValidationException("Menge muss > 0 sein");
         }
 
@@ -102,11 +103,11 @@ public class TradeSellToPlayerController implements Initializable {
         Deal newDeal = new Deal();
         newDeal.setAmount(amount);
         newDeal.setDate(timeService.getCurrentDate());
-        newDeal.setLocationName(trader.getLocation().getName()); //TODO location vs. location NAME
+        newDeal.setLocationName(trader.getLocation().getName());
         newDeal.setPlayer(selectedPlayer.getSelectionModel().getSelectedItem());
         newDeal.setPrice(price);
-//        newDeal.setProduct(); //TODO check if @deprecated
-        newDeal.setProductName(offer.getProduct().getName());//TODO user PRODUCT instead of name?? DEL??
+        newDeal.setProduct(offer.getProduct());
+        newDeal.setProductName(offer.getProduct().getName());
         newDeal.setPurchase(true);
         newDeal.setquality(offer.getQuality());
         newDeal.setTrader(trader);
