@@ -15,7 +15,7 @@
 <!-- TODO childs also -->
 
     <query name="Product.findAllByName">
-        <![CDATA[from Product WHERE :name is null or name like :name ORDER BY name ASC]]>
+        <![CDATA[from Product WHERE :name is null or lower(name) like lower(:name) ORDER BY name ASC]]>
     </query>
 
     <!--<query name="Product.findAllByDeals">-->

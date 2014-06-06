@@ -80,5 +80,14 @@ public class ProductDaoTest extends AbstractDatabaseTest {
         Assert.assertEquals(1, allByName.size());
     }
 
+    @Test
+    public void getAllByName_shouldIgnoreCase() {
+
+        Set<Product> allByName = new HashSet<>(productDao.getAllByName("%PRODUCT%"));
+        Set<Product> all = new HashSet<>(productDao.getAll());
+
+        Assert.assertEquals(all, allByName);
+    }
+
 
 }
