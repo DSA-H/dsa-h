@@ -235,7 +235,6 @@ public class MainMenuController implements Initializable {
 			editButton.setText("Details");
 			Stage stage = (Stage) editButton.getScene().getWindow();
 			stage.setTitle("DSA-Händlertool - "+ selectedLocation.getName());
-			checkTraderFocus();
 		} else {
 			dontUpdateScroll = true;
 			scrollPane.setHvalue(worldScrollH);
@@ -250,10 +249,15 @@ public class MainMenuController implements Initializable {
 			editButton.setText("Bearbeiten");
 			Stage stage = (Stage) editButton.getScene().getWindow();
 			stage.setTitle("DSA-Händlertool");
-			checkLocationFocus();
 		}
 
 		updateTables();
+		if (mode == LOCATIONMODE) {
+			traderList.getSelectionModel().select(0);
+			checkTraderFocus();
+		} else {
+			checkLocationFocus();
+		}
 		updateMap();
 		updateZoom();
 	}
