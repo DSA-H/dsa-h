@@ -8,13 +8,16 @@ import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Location;
+import sepm.dsa.model.ProductQuality;
 import sepm.dsa.model.Tavern;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.SaveCancelService;
@@ -39,7 +42,11 @@ public class EditTavernController implements Initializable {
     @FXML
     private TextArea commentArea;
     @FXML
-    private TextField usageField;
+    private Label useageLabel;
+    @FXML
+    private ChoiceBox<ProductQuality> qualityCoicheBox;
+    @FXML
+    private Label priceLabel;
     @FXML
     private TextField bedsField;
 
@@ -47,18 +54,39 @@ public class EditTavernController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise EditTavernController");
+        qualityCoicheBox.setItems(FXCollections.observableArrayList(ProductQuality.values()));
     }
 
     @FXML
     private void onSavePressed() {
         log.debug("called onSavePressed");
 
-        // save region
+
         String name = nameField.getText();
-        selectedTavern.setName(name);
-        selectedTavern.setUsage(Integer.parseInt(usageField.getText()));
-        selectedTavern.setBeds(Integer.parseInt(bedsField.getText()));
-        selectedTavern.setComment(commentArea.getText());
+        int beds = 0;
+        try{
+            beds = Integer.parseInt(bedsField.getText());
+        }catch (NumberFormatException ex) {
+            throw new DSAValidationException("Anzahl der Betten muss eine ganze Zahl sein!");
+        }
+        ProductQuality quality = qualityCoicheBox.getValue();
+
+        // beds or quality change --> calulate new
+        if(isNewTavern || beds != selectedTavern.getBeds() || quality != selectedTavern.getQuality()) {
+            selectedTavern.setName(name);
+            selectedTavern.setQuality(quality);
+            selectedTavern.setBeds(beds);
+            selectedTavern.setComment(commentArea.getText());
+            int usage = tavernService.calculateBedsUseage(selectedTavern);
+            selectedTavern.setUsage(usage);
+            int price = tavernService.calculatePrice(selectedTavern);
+            selectedTavern.setPrice(price);
+        }else {
+            selectedTavern.setName(name);
+            selectedTavern.setQuality(quality);
+            selectedTavern.setBeds(beds);
+            selectedTavern.setComment(commentArea.getText());
+        }
 
         if (isNewTavern) {
             tavernService.add(selectedTavern);
@@ -69,8 +97,6 @@ public class EditTavernController implements Initializable {
 
         Stage stage = (Stage) nameField.getScene().getWindow();
         stage.close();
-
-
     }
 
     @FXML
@@ -107,8 +133,10 @@ public class EditTavernController implements Initializable {
      */
     private void fillGuiWithData(Tavern tavern) {
         nameField.setText(tavern.getName());
-        usageField.setText("" + tavern.getUsage());
         bedsField.setText("" + tavern.getBeds());
+        qualityCoicheBox.getSelectionModel().select(tavern.getQuality());
+        useageLabel.setText(tavern.getUsage() + "");
+        priceLabel.setText(tavern.getPrice() + "");
         commentArea.setText(tavern.getComment() == null ? "" : tavern.getComment());
     }
 

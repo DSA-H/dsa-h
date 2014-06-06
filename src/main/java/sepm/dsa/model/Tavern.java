@@ -37,6 +37,10 @@ public class Tavern implements BaseModel {
     private Integer beds;
 
     @NotNull
+    @Column(nullable = false)
+    private Integer price;
+
+    @NotNull
     @Column(nullable =  false)
     private ProductQuality quality;
 
@@ -111,6 +115,14 @@ public class Tavern implements BaseModel {
 	public void setLocation(Location location) {
 		this.location = location;
 	}
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
 
     public ProductQuality getQuality() {
         return quality;

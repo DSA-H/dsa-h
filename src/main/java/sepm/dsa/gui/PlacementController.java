@@ -132,7 +132,7 @@ public class PlacementController implements Initializable{
 		controller.setTavern(null);
 		controller.setPosition(pos);
 		controller.setLocation(selectedLocation);
-		stage.setScene(new Scene(scene, 600, 400));
+		stage.setScene(new Scene(scene, 383, 400));
 		stage.setResizable(false);
 		stage.showAndWait();
 
