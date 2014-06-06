@@ -14,8 +14,12 @@ import sepm.dsa.service.*;
 
 import java.math.BigDecimal;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class TradeBuyFromPlayerController implements Initializable {
@@ -144,17 +148,14 @@ public class TradeBuyFromPlayerController implements Initializable {
             throw new DSAValidationException("Bitte Preis eingeben");
         }
         try {
-            //TODO Kommastellen via locale einlesen
-//            Locale l = Locale.getDefault();
-//            log.info("Locale " + l);
-//
-//             NumberFormat nf = NumberFormat.getNumberInstance(l);
-//             DecimalFormat df = (DecimalFormat)nf;
-
-            price = new BigDecimal(selectedPrice.getText());
+            DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(Locale.GERMAN);
+            df.setParseBigDecimal(true);
+            price = (BigDecimal)df.parse(selectedPrice.getText());
 
         } catch (NumberFormatException ex) {
             throw new DSAValidationException("Preis muss eine Zahl sein!");
+        } catch (ParseException e) {
+            throw new DSAValidationException("Kann Zahl nicht parsen! Probiers mit , statt .");
         }
         if (price.compareTo(BigDecimal.ZERO) <= 0) {
             throw new DSAValidationException("Preis muss > 0 sein");
