@@ -11,6 +11,7 @@ import sepm.dsa.dao.OfferDao;
 import sepm.dsa.dao.TraderDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
+import sepm.dsa.model.Currency;
 import sepm.dsa.service.path.NoPathException;
 import sepm.dsa.service.path.PathService;
 
@@ -29,6 +30,7 @@ public class TraderServiceImpl implements TraderService {
     private PathService<RegionBorder> pathService;
     private RegionService regionService;
     private RegionBorderService regionBorderService;
+    private TimeService timeService;
     private OfferDao offerDao;
 
 	private SessionFactory sessionFactory;
@@ -131,7 +133,27 @@ public class TraderServiceImpl implements TraderService {
     }
 
     @Override
-    public void sellToPlayer(Trader trader, Player player, Product product, Unit unit, Integer amount, BigDecimal totalPrice) {
+    public void sellToPlayer(Trader trader, Player player, Product product, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency) {
+        // TODO discuss Currency question with jotschi
+
+//        Deal newDeal = new Deal();
+//        newDeal.setAmount(amount);
+//        newDeal.setDate(timeService.getCurrentDate());
+//        newDeal.setLocationName(trader.getLocation().getName());
+//        newDeal.setPlayer(selectedPlayer.getSelectionModel().getSelectedItem());
+//        newDeal.setPrice(price);
+//        newDeal.setProduct(dealsTable.getSelectionModel().getSelectedItem().getProduct());
+//        newDeal.setProductName(dealsTable.getSelectionModel().getSelectedItem().getProductName());
+//        newDeal.setPurchase(false);
+//        newDeal.setquality(dealsTable.getSelectionModel().getSelectedItem().getQuality());
+//        newDeal.setTrader(trader);
+//        newDeal.setUnit(selectedUnit.getSelectionModel().getSelectedItem());
+
+    }
+
+    @Override
+    public void buyFromPlayer(Trader trader, Player player, Product product, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency) {
+        // TODO discuss Currency question with jotschi
 
     }
 
@@ -390,4 +412,8 @@ public class TraderServiceImpl implements TraderService {
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
+
+    public void setTimeService(TimeService timeService) {
+        this.timeService = timeService;
+    }
 }

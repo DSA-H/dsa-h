@@ -130,7 +130,8 @@ public interface TraderService {
     void reCalculatePriceForOfferIfNewPriceIsHigher(/*Set<Offer> offers, */Trader trader);
 
     /**
-     * A trader sells a product to a player. The trader's amount for this product decreases
+     * A trader sells a product to a player. The trader's amount for this product decreases. If the amount becomes zero,
+     * then the trader's corresponding offer will be removed.
      *
      * @param trader
      * @param player
@@ -144,6 +145,23 @@ public interface TraderService {
      *      or unit does does not match the product unit <br />
      *      or totalPrice is negative
      */
-    void sellToPlayer(Trader trader, Player player, Product product, Unit unit, Integer amount, BigDecimal totalPrice);
+    void sellToPlayer(Trader trader, Player player, Product product, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency);
+
+    /**
+     * A trader buys a product from a player. The trader's amount for this product increases
+     *
+     * @param trader
+     * @param player
+     * @param product
+     * @param unit the unit of the product
+     * @param amount product amount, > 0
+     * @param totalPrice total price for this deal
+     *
+     * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
+     *      or the amount is greater than the trader offers <br />
+     *      or unit does does not match the product unit <br />
+     *      or totalPrice is negative
+     */
+    void buyFromPlayer(Trader trader, Player player, Product product, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency);
 
 }
