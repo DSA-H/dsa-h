@@ -106,6 +106,9 @@ public class TradeBuyFromPlayerController implements Initializable {
         if (amount<= 0){
             throw new DSAValidationException("Menge muss > 0 sein");
         }
+        if (dealsTable.getSelectionModel().getSelectedItem() == null){
+            throw new DSAValidationException("Ware muss gewählt werden");
+        }
 
         //Calculate Price
         BigDecimal price = new BigDecimal(0); //TODO
