@@ -1209,8 +1209,6 @@ public class MainMenuController implements Initializable {
 			editButton.setDisable(false);
 			if (selectedObject instanceof Trader) {
 				editButton.setText("Details");
-			} else {
-				editButton.setText("Bearbeiten");
 			}
 
 			if (zoomGroup.getChildren().size() > 2) {
