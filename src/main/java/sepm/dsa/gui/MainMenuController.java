@@ -190,6 +190,8 @@ public class MainMenuController implements Initializable {
 		zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				//double currentX = ( (scrollPane.getWidth()/2) + scrollPane.getHvalue()*(mapCanvas.getWidth()*scaleFactor-scrollPane.getWidth()) ) / (mapCanvas.getWidth()*scaleFactor);
+				//double currentY = ( (scrollPane.getHeight()/2) + scrollPane.getVvalue()*(mapCanvas.getHeight()*scaleFactor-scrollPane.getHeight()) ) / (mapCanvas.getHeight()*scaleFactor);
 				scaleFactor = newValue.doubleValue();
 				double v = scrollPane.getVvalue();
 				double h = scrollPane.getHvalue();
