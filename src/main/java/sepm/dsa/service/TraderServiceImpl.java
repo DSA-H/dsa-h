@@ -133,26 +133,26 @@ public class TraderServiceImpl implements TraderService {
     }
 
     @Override
-    public void sellToPlayer(Trader trader, Player player, Product product, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency) {
+    public void sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency) {
         // TODO discuss Currency question with jotschi
 
-//        Deal newDeal = new Deal();
-//        newDeal.setAmount(amount);
-//        newDeal.setDate(timeService.getCurrentDate());
-//        newDeal.setLocationName(trader.getLocation().getName());
-//        newDeal.setPlayer(selectedPlayer.getSelectionModel().getSelectedItem());
-//        newDeal.setPrice(price);
-//        newDeal.setProduct(dealsTable.getSelectionModel().getSelectedItem().getProduct());
-//        newDeal.setProductName(dealsTable.getSelectionModel().getSelectedItem().getProductName());
-//        newDeal.setPurchase(false);
-//        newDeal.setquality(dealsTable.getSelectionModel().getSelectedItem().getQuality());
-//        newDeal.setTrader(trader);
-//        newDeal.setUnit(selectedUnit.getSelectionModel().getSelectedItem());
+        Deal newDeal = new Deal();
+        newDeal.setAmount(amount);
+        newDeal.setDate(timeService.getCurrentDate());
+        newDeal.setLocationName(trader.getLocation().getName());
+        newDeal.setPlayer(player);
+        newDeal.setPrice(totalPrice);
+        newDeal.setProduct(product);
+        newDeal.setProductName(product.getName());
+        newDeal.setPurchase(false);
+        newDeal.setquality(productQuality);
+        newDeal.setTrader(trader);
+        newDeal.setUnit(unit);
 
     }
 
     @Override
-    public void buyFromPlayer(Trader trader, Player player, Product product, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency) {
+    public void buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency) {
         // TODO discuss Currency question with jotschi
 
     }

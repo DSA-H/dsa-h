@@ -145,7 +145,7 @@ public interface TraderService {
      *      or unit does does not match the product unit <br />
      *      or totalPrice is negative
      */
-    void sellToPlayer(Trader trader, Player player, Product product, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency);
+    void sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency);
 
     /**
      * A trader buys a product from a player. The trader's amount for this product increases
@@ -162,6 +162,6 @@ public interface TraderService {
      *      or unit does does not match the product unit <br />
      *      or totalPrice is negative
      */
-    void buyFromPlayer(Trader trader, Player player, Product product, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency);
+    void buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency);
 
 }
