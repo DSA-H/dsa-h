@@ -35,10 +35,7 @@ import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.model.Location;
-import sepm.dsa.model.LocationConnection;
-import sepm.dsa.model.Tavern;
-import sepm.dsa.model.Trader;
+import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 import sepm.dsa.service.path.NoPathException;
 
@@ -1073,9 +1070,15 @@ public class MainMenuController implements Initializable {
 		int posX;
 		int posY;
 		gc.setLineWidth(5);
-		gc.setStroke(Color.DARKBLUE);
 		List<Trader> traders = traderService.getAllForLocation(selectedLocation);
 		for (Trader t : traders) {
+			if (t instanceof MovingTrader) {
+				gc.setStroke(Color.LIGHTBLUE);
+				System.out.println(t);
+			} else {
+				gc.setStroke(Color.DARKBLUE);
+				System.out.println(t);
+			}
 			posX = t.getxPos();
 			posY = t.getyPos();
 			if (posX != 0 && posY != 0) {

@@ -113,13 +113,13 @@ public class EditTraderController implements Initializable {
 					    sametype = true;
 				    }
 			    } else {
-				    stayTimeField.setDisable(false);
-				    stayTimeLabel.setDisable(false);
-				    citySizeBox.setDisable(false);
-				    citySizeLabel.setDisable(false);
-				    daysLabel.setDisable(false);
-				    areaBox.setDisable(false);
-				    areaLabel.setDisable(false);
+				    stayTimeField.setDisable(true);
+				    stayTimeLabel.setDisable(true);
+				    citySizeBox.setDisable(true);
+				    citySizeLabel.setDisable(true);
+				    daysLabel.setDisable(true);
+				    areaBox.setDisable(true);
+				    areaLabel.setDisable(true);
 				    if (sametype) {
 					    sametype = false;
 				    } else {
@@ -224,11 +224,13 @@ public class EditTraderController implements Initializable {
 				    traderService.remove(selectedTrader);
 			    }
 			    selectedTrader = new Trader();
+			    System.out.println("NEW TRADER");
 		    } else {
 			    if (!isNewTrader) {
 				    traderService.remove(selectedTrader);
 			    }
 				selectedTrader = new MovingTrader();
+			    System.out.println("NEW MOVINGTRADER");
 		    }
 	    }
 
@@ -473,6 +475,7 @@ public class EditTraderController implements Initializable {
         if (trader == null) {
             isNewTrader = true;
             selectedTrader = new Trader();
+	        System.out.println("NEW TRADER");
         } else {
             isNewTrader = false;
 	        if (trader instanceof MovingTrader) {

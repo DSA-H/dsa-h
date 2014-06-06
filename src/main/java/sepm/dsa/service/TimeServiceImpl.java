@@ -1,5 +1,6 @@
 package sepm.dsa.service;
 
+import javafx.scene.image.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class TimeServiceImpl implements TimeService {
     private LocationService locationService;
     private TavernService tavernService;
 	private SaveCancelService saveCancelService;
+	private MapService mapService;
 
     private DSADate date;
     private Properties properties;
@@ -163,11 +165,7 @@ public class TimeServiceImpl implements TimeService {
                 if (movingTrader.getPreferredTownSize() != null) {
                     List<Location> removeList = new ArrayList<>();
                     for(Location location : possibleLocations) {
-	                    // not allowed to move to same location
-	                    if(location == movingTrader.getLocation()) {
-		                    removeList.add(location);
-	                    } else
-                        // if not preferred town size, than its a 80% chance to remove the town from the possible goals
+	                    // if not preferred town size, than its a 80% chance to remove the town from the possible goals
                         if(location.getSize() != movingTrader.getPreferredTownSize()) {
                             if(Math.random() <= 0.8f) {
                                 removeList.add(location);
@@ -176,6 +174,8 @@ public class TimeServiceImpl implements TimeService {
                     }
                     possibleLocations.remove(removeList);
                 }
+	            // not allowed to move to same location
+	            possibleLocations.remove(movingTrader.getLocation());
                 // no possible Locations -> not moving
                 if(possibleLocations.isEmpty()) {
                     break;
@@ -194,6 +194,18 @@ public class TimeServiceImpl implements TimeService {
                         offerDao.update(offer);
                     }
                 }
+	            // random position in new location
+	            Image image = new Image("file:" + mapService.getLocationMap(movingTrader.getLocation()));
+	            System.out.println("("+image.getWidth()+"/"+image.getHeight()+")");
+	            if (image != null) {
+		            movingTrader.setxPos((int) (Math.random()*image.getWidth()));
+		            movingTrader.setyPos((int) (Math.random()*image.getHeight()));
+	            } else {
+		            movingTrader.setxPos(0);
+		            movingTrader.setyPos(0);
+	            }
+	            System.out.println("("+movingTrader.getxPos()+"/"+movingTrader.getyPos()+")");
+
                 traderService.update(movingTrader);
 	            saveCancelService.save();
             }
@@ -224,5 +236,9 @@ public class TimeServiceImpl implements TimeService {
 
 	public void setSaveCancelService(SaveCancelService saveCancelService) {
 		this.saveCancelService = saveCancelService;
+	}
+
+	public void setMapService(MapService mapService) {
+		this.mapService = mapService;
 	}
 }
