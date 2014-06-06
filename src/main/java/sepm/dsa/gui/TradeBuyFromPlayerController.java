@@ -138,7 +138,7 @@ public class TradeBuyFromPlayerController implements Initializable {
             throw new DSAValidationException("Die Währung wurde nicht gewählt!");
         }
 
-        traderService.buyFromPlayer(trader, playerToCreateDealFor, dealsTable.getSelectionModel().getSelectedItem().getProduct(), selectedUnit.getSelectionModel().getSelectedItem(), amount, price, selectedCurrency.getSelectionModel().getSelectedItem());
+        traderService.buyFromPlayer(trader, playerToCreateDealFor, dealsTable.getSelectionModel().getSelectedItem().getProduct(), dealsTable.getSelectionModel().getSelectedItem().getQuality(), selectedUnit.getSelectionModel().getSelectedItem(), amount, price, selectedCurrency.getSelectionModel().getSelectedItem());
         saveCancelService.save();
 
         Stage stage = (Stage) selectedUnit.getScene().getWindow();
