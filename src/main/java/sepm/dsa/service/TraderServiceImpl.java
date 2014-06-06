@@ -17,6 +17,7 @@ import sepm.dsa.service.path.PathService;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.math.BigDecimal;
 import java.util.*;
 
 public class TraderServiceImpl implements TraderService {
@@ -127,6 +128,11 @@ public class TraderServiceImpl implements TraderService {
         List<Trader> result = traderDao.getAllByCategory(traderCategory);
         log.trace("returning " + result);
         return result;
+    }
+
+    @Override
+    public void sellToPlayer(Trader trader, Player player, Product product, Unit unit, Integer amount, BigDecimal totalPrice) {
+
     }
 
     /**

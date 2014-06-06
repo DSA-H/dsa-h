@@ -3,6 +3,7 @@ package sepm.dsa.service;
 
 import sepm.dsa.model.*;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -127,4 +128,22 @@ public interface TraderService {
      * @return the price in default (base-rate) currency
      */
     void reCalculatePriceForOfferIfNewPriceIsHigher(/*Set<Offer> offers, */Trader trader);
+
+    /**
+     * A trader sells a product to a player. The trader's amount for this product decreases
+     *
+     * @param trader
+     * @param player
+     * @param product
+     * @param unit the unit of the product
+     * @param amount product amount, > 0
+     * @param totalPrice total price for this deal
+     *
+     * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
+     *      or the amount is greater than the trader offers <br />
+     *      or unit does does not match the product unit <br />
+     *      or totalPrice is negative
+     */
+    void sellToPlayer(Trader trader, Player player, Product product, Unit unit, Integer amount, BigDecimal totalPrice);
+
 }
