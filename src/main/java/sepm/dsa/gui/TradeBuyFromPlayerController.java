@@ -1,7 +1,6 @@
 package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,7 +10,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.exceptions.DSAValidationException;
@@ -150,20 +148,17 @@ public class TradeBuyFromPlayerController implements Initializable {
     private void initialzeTableWithColums() {
 
         pricecolumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        productColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> d) {
-                if (d.getValue() != null) {
-                    Deal deal = d.getValue();
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(deal.getProductName());
-                    if (deal.getQuality() != null) {
-                        sb.append(" (" + d.getValue().getQuality().getName() + ")");
-                    }
-                    return new SimpleStringProperty(sb.toString());
-                } else {
-                    return new SimpleStringProperty("");
+        productColumn.setCellValueFactory(d -> {
+            if (d.getValue() != null) {
+                Deal deal = d.getValue();
+                StringBuilder sb = new StringBuilder();
+                sb.append(deal.getProductName());
+                if (deal.getQuality() != null) {
+                    sb.append(" (").append(d.getValue().getQuality().getName()).append(")");
                 }
+                return new SimpleStringProperty(sb.toString());
+            } else {
+                return new SimpleStringProperty("");
             }
         });
 
