@@ -119,6 +119,12 @@ public class TradeBuyFromPlayerController implements Initializable {
         }
         try {
             //TODO Kommastellen via locale einlesen
+//            Locale l = Locale.getDefault();
+//            log.info("Locale " + l);
+//
+//             NumberFormat nf = NumberFormat.getNumberInstance(l);
+//             DecimalFormat df = (DecimalFormat)nf;
+
             price = new BigDecimal(selectedPrice.getText());
 
         } catch (NumberFormatException ex) {
