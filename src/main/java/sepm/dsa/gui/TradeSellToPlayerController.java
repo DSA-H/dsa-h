@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -118,9 +119,11 @@ public class TradeSellToPlayerController implements Initializable {
 //            df.setGroupingUsed(false);
 
             try {
-                price = new BigDecimal(df.format(selectedPrice.getText()));
+                price = (BigDecimal)df.parse(selectedPrice.getText());
             }catch(IllegalArgumentException e){
-                throw new DSAValidationException("Preis kann so nicht als Zahl eingegewben werden");
+                throw new DSAValidationException("Preis kann so nicht als Zahl eingegeben werden");
+            } catch (ParseException e) {
+                throw new DSAValidationException("Ungültiger Preis. ");
             }
 
         } catch (NumberFormatException ex) {
