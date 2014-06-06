@@ -46,15 +46,16 @@ public class TradeSellToPlayerController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        //TODO set nice names
         selectedCurrency.setItems(FXCollections.observableArrayList(currencyService.getAll()));
         selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAll()));
         selectedPrice.setText(offer.getPricePerUnit().toString());
         selectedPlayer.setItems(FXCollections.observableArrayList(playerService.getAll()));
 
         //select default unit & currency
-
-//        selectedCurrency.getSelectionModel().select(); TODO set preferred currency
+        Currency preferredCurrency = trader.getLocation().getRegion().getPreferredCurrency();
+        if (preferredCurrency != null) {
+            selectedCurrency.getSelectionModel().select(preferredCurrency);
+        }
         selectedUnit.getSelectionModel().select(offer.getProduct().getUnit());
 
         StringBuilder sb = new StringBuilder();
@@ -87,7 +88,7 @@ public class TradeSellToPlayerController implements Initializable {
         } catch (NumberFormatException ex) {
             throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
         }
-        if (amount<= 0){
+        if (amount <= 0) {
             throw new DSAValidationException("Menge muss > 0 sein");
         }
 

@@ -44,6 +44,7 @@ public class Region implements BaseModel, PathNode {
 
     @Nullable
     @ManyToOne
+    @JoinColumn(nullable = true)
     private Currency preferredCurrency;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.region1", cascade = CascadeType.REMOVE)
