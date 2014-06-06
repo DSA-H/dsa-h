@@ -141,11 +141,11 @@ public class TradeBuyFromPlayerController implements Initializable {
         Deal newDeal = new Deal();
         newDeal.setAmount(amount);
         newDeal.setDate(timeService.getCurrentDate());
-        newDeal.setLocationName(trader.getLocation().getName()); //TODO location vs. location NAME
+        newDeal.setLocationName(trader.getLocation().getName());
         newDeal.setPlayer(selectedPlayer.getSelectionModel().getSelectedItem());
         newDeal.setPrice(price);
-//        newDeal.setProduct(); //TODO check if @deprecated
-        newDeal.setProductName(dealsTable.getSelectionModel().getSelectedItem().getProductName());//TODO user PRODUCT instead of name?? DEL??
+        newDeal.setProduct(dealsTable.getSelectionModel().getSelectedItem().getProduct());
+        newDeal.setProductName(dealsTable.getSelectionModel().getSelectedItem().getProductName());
         newDeal.setPurchase(false);
         newDeal.setquality(dealsTable.getSelectionModel().getSelectedItem().getQuality());
         newDeal.setTrader(trader);
