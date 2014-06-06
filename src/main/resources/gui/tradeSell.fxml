@@ -8,12 +8,12 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="275.0" prefWidth="316.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.TradeSellToPlayerController">
    <children>
-      <Label layoutX="40.0" layoutY="51.0" text="gewählte Ware:" />
-      <Label layoutX="45.0" layoutY="84.0" text="gewählte Unit:" />
-      <Label layoutX="89.0" layoutY="117.0" text="Menge:" />
-      <HBox layoutX="58.0" layoutY="241.0" prefHeight="33.0" prefWidth="244.0" spacing="10.0">
+      <Label layoutX="93.0" layoutY="51.0" text="Ware:" />
+      <Label layoutX="79.0" layoutY="84.0" text="Einheit:" />
+      <Label layoutX="80.0" layoutY="117.0" text="Menge:" />
+      <HBox layoutX="15.0" layoutY="241.0" prefHeight="33.0" prefWidth="301.0" spacing="10.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="26.0" prefWidth="91.0" text="Abbrechen">
+            <Button mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="26.0" prefWidth="140.0" text="Abbrechen">
                <HBox.margin>
                   <Insets bottom="4.0" right="3.0" />
                </HBox.margin>
@@ -30,10 +30,10 @@
       <Label fx:id="selectedOffer" layoutX="144.0" layoutY="46.0" prefHeight="26.0" prefWidth="150.0" text="gewählte Ware" />
       <TextField fx:id="selectedAmount" layoutX="144.0" layoutY="112.0" />
       <TextField fx:id="selectedPrice" layoutX="144.0" layoutY="144.0" />
-      <Label layoutX="102.0" layoutY="149.0" text="Preis:" />
+      <Label layoutX="94.0" layoutY="149.0" text="Preis:" />
       <ChoiceBox fx:id="selectedCurrency" layoutX="144.0" layoutY="175.0" prefWidth="150.0" />
-      <Label layoutX="15.0" layoutY="180.0" text="gewählte Währung:" />
-      <Label layoutX="23.0" layoutY="214.0" text="gewählter Spieler:" />
+      <Label layoutX="64.0" layoutY="180.0" text="Währung:" />
+      <Label layoutX="79.0" layoutY="214.0" text="Spieler:" />
       <ChoiceBox fx:id="selectedPlayer" layoutX="144.0" layoutY="209.0" prefWidth="150.0" />
    </children>
 </Pane>
