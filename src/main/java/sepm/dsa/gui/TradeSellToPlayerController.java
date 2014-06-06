@@ -99,6 +99,9 @@ public class TradeSellToPlayerController implements Initializable {
         if (selectedUnit.getSelectionModel().getSelectedItem() == null) {
             throw new DSAValidationException("Die Einheit wurde nicht gewählt!");
         }
+        if (selectedCurrency.getSelectionModel().getSelectedItem() == null) {
+            throw new DSAValidationException("Die Währung wurde nicht gewählt!");
+        }
         //PRICE STUFF ###########
         BigDecimal price;
         if (selectedPrice.getText().isEmpty()) {
