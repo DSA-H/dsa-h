@@ -60,6 +60,8 @@ public class TradeBuyFromPlayerController implements Initializable {
         //initialize table
         initialzeTableWithColums();
 
+        //TODO price vorschlage change listener * by amount
+
         //TODO set nice names
         selectedCurrency.setItems(FXCollections.observableArrayList(currencyService.getAll()));
         selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAll()));
@@ -92,31 +94,43 @@ public class TradeBuyFromPlayerController implements Initializable {
     @FXML
     private void onSavePressed() {
         log.debug("calling SaveButtonPressed");
+        int amount;
 
         if (selectedAmount.getText().isEmpty()) {
             throw new DSAValidationException("Bitte Menge eingeben");
         }
-        int amount;
         try {
             amount = new Integer(selectedAmount.getText());
 
         } catch (NumberFormatException ex) {
             throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
         }
-        if (amount<= 0){
+        if (amount <= 0) {
             throw new DSAValidationException("Menge muss > 0 sein");
         }
-        if (dealsTable.getSelectionModel().getSelectedItem() == null){
+        if (dealsTable.getSelectionModel().getSelectedItem() == null) {
             throw new DSAValidationException("Ware muss gewählt werden");
         }
 
         //Calculate Price
-        BigDecimal price = new BigDecimal(0); //TODO
+        BigDecimal price;
+        if (selectedPrice.getText().isEmpty()) {
+            throw new DSAValidationException("Bitte Menge eingeben");
+        }
+        try {
+            //TODO Kommastellen via locale einlesen
+            price = new BigDecimal(selectedPrice.getText());
 
+        } catch (NumberFormatException ex) {
+            throw new DSAValidationException("Preis muss eine Zahl sein!");
+        }
+        if (price.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new DSAValidationException("Preis muss > 0 sein");
+        }
 
         //Unit convert TODO
 
-        //Decerement stock at player + increment at trader TODO
+        //Decrement stock at player + increment at trader TODO
 
         Deal newDeal = new Deal();
         newDeal.setAmount(amount);
@@ -147,7 +161,7 @@ public class TradeBuyFromPlayerController implements Initializable {
                     Deal deal = d.getValue();
                     StringBuilder sb = new StringBuilder();
                     sb.append(deal.getProductName());
-                    if (deal.getQuality()!= null) {
+                    if (deal.getQuality() != null) {
                         sb.append(" (" + d.getValue().getQuality().getName() + ")");
                     }
                     return new SimpleStringProperty(sb.toString());
