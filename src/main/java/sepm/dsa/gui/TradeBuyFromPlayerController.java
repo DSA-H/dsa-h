@@ -66,8 +66,6 @@ public class TradeBuyFromPlayerController implements Initializable {
         selectedPlayer.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> dealsTable.setItems(FXCollections.observableArrayList(newValue.getDeals())));
     }
 
-    //TODO need some on selection changed
-
     @FXML
     private void checkFocus() {
         Deal selectedDeal = dealsTable.getSelectionModel().getSelectedItem();
