@@ -30,7 +30,6 @@ public class TradeBuyFromPlayerController implements Initializable {
     private TraderService traderService;
     private UnitService unitService;
     private CurrencyService currencyService;
-    private TimeService timeService;
     private SaveCancelService saveCancelService;
 
     private static Trader trader;
@@ -95,6 +94,7 @@ public class TradeBuyFromPlayerController implements Initializable {
     private void onSavePressed() {
         log.debug("calling SaveButtonPressed");
         int amount;
+        Player playerToCreateDealFor;
 
         if (selectedAmount.getText().isEmpty()) {
             throw new DSAValidationException("Bitte Menge eingeben");
@@ -133,25 +133,20 @@ public class TradeBuyFromPlayerController implements Initializable {
         if (price.compareTo(BigDecimal.ZERO) <= 0) {
             throw new DSAValidationException("Preis muss > 0 sein");
         }
+        if (selectedPlayer.getSelectionModel().getSelectedItem() != null) {
+            playerToCreateDealFor = selectedPlayer.getSelectionModel().getSelectedItem();
+        } else {
+            throw new DSAValidationException("Ein Spieler muss gewählt werden!");
+        }
+        if (selectedUnit.getSelectionModel().getSelectedItem() == null) {
+            throw new DSAValidationException("Die Einheit wurde nicht gewählt!");
+        }
+        if (selectedCurrency.getSelectionModel().getSelectedItem() == null) {
+            throw new DSAValidationException("Die Währung wurde nicht gewählt!");
+        }
 
-        //Unit convert TODO
-
-        //Decrement stock at player + increment at trader TODO
-
-        Deal newDeal = new Deal();
-        newDeal.setAmount(amount);
-        newDeal.setDate(timeService.getCurrentDate());
-        newDeal.setLocationName(trader.getLocation().getName());
-        newDeal.setPlayer(selectedPlayer.getSelectionModel().getSelectedItem());
-        newDeal.setPrice(price);
-        newDeal.setProduct(dealsTable.getSelectionModel().getSelectedItem().getProduct());
-        newDeal.setProductName(dealsTable.getSelectionModel().getSelectedItem().getProductName());
-        newDeal.setPurchase(false);
-        newDeal.setquality(dealsTable.getSelectionModel().getSelectedItem().getQuality());
-        newDeal.setTrader(trader);
-        newDeal.setUnit(selectedUnit.getSelectionModel().getSelectedItem());
-//        newDeal.setCurreny(selectedCurrency.getSelectionModel().getSelectedItem()); TODO implement
-//        saveCancelService.save();
+        traderService.buyFromPlayer(trader, playerToCreateDealFor, dealsTable.getSelectionModel().getSelectedItem().getProduct(), selectedUnit.getSelectionModel().getSelectedItem(), amount, price, selectedCurrency.getSelectionModel().getSelectedItem());
+        saveCancelService.save();
 
         Stage stage = (Stage) selectedUnit.getScene().getWindow();
         stage.close();
@@ -191,10 +186,6 @@ public class TradeBuyFromPlayerController implements Initializable {
 
     public void setTraderService(TraderService traderService) {
         this.traderService = traderService;
-    }
-
-    public void setTimeService(TimeService timeService) {
-        this.timeService = timeService;
     }
 
     public void setSaveCancelService(SaveCancelServiceImpl saveCancelService) {

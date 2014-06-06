@@ -344,7 +344,6 @@
         <property name="unitService" ref="unitService"/>
         <property name="currencyService" ref="currencyService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
-        <property name="timeService" ref="timeService"/>
         <property name="playerService" ref="playerService"/>
     </bean>
     <bean id="editTavern" class="sepm.dsa.gui.EditTavernController">
