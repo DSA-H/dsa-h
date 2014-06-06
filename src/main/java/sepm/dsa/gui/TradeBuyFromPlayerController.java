@@ -5,7 +5,6 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,8 +46,6 @@ public class TradeBuyFromPlayerController implements Initializable {
     @FXML
     private TableView<Product> productsTable;
     @FXML
-    private TableColumn<Product, String> pricecolumn;
-    @FXML
     private TableColumn<Product, String> productColumn;
     @FXML
     private TextField searchField;
@@ -59,6 +56,8 @@ public class TradeBuyFromPlayerController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         log.debug("initialize TradeBuyFromPlayerController");
+
+        selectedAmount.setText("1");
         //initialize table
         initialzeTableWithColums();
 
@@ -198,16 +197,10 @@ public class TradeBuyFromPlayerController implements Initializable {
 
     private void initialzeTableWithColums() {
 
-        pricecolumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         productColumn.setCellValueFactory(d -> {
             if (d.getValue() != null) {
                 Product product = d.getValue();
-                StringBuilder sb = new StringBuilder();
-                sb.append(product.getName());
-                if (product.getQuality() != null) {
-                    sb.append(" (").append(d.getValue().getQuality()).append(")");
-                }
-                return new SimpleStringProperty(sb.toString());
+                return new SimpleStringProperty(product.getName());
             } else {
                 return new SimpleStringProperty("");
             }
@@ -239,5 +232,6 @@ public class TradeBuyFromPlayerController implements Initializable {
     }
 
     public void setProductService(ProductService productService) {
+        this.productService = productService;
     }
 }

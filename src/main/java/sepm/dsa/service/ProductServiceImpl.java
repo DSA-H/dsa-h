@@ -85,7 +85,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Set<Product> getBySearchTerm(String searchTerm) {
-        //TODO
+        //TODO @Michael
         return null;
     }
 
