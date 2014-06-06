@@ -103,6 +103,9 @@ public class TradeBuyFromPlayerController implements Initializable {
         } catch (NumberFormatException ex) {
             throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
         }
+        if (amount<= 0){
+            throw new DSAValidationException("Menge muss > 0 sein");
+        }
 
         //Calculate Price
         BigDecimal price = new BigDecimal(0); //TODO
