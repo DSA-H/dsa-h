@@ -42,7 +42,7 @@ public class Tavern implements BaseModel {
 
     @NotNull
     @Column(nullable =  false)
-    private ProductQuality quality;
+    private Integer quality;
 
     @Column
     private String comment;
@@ -125,11 +125,11 @@ public class Tavern implements BaseModel {
     }
 
     public ProductQuality getQuality() {
-        return quality;
+        return ProductQuality.parse(quality);
     }
 
     public void setQuality(ProductQuality quality) {
-        this.quality = quality;
+        this.quality = quality.getValue();
     }
 
     public static long getSerialVersionUID() {

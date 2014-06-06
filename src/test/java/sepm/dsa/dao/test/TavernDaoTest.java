@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import sepm.dsa.dao.LocationDao;
 import sepm.dsa.dao.TavernDao;
 import sepm.dsa.dbunit.AbstractDatabaseTest;
+import sepm.dsa.model.ProductQuality;
 import sepm.dsa.model.Tavern;
 
 import java.util.List;
@@ -28,6 +29,8 @@ public class TavernDaoTest extends AbstractDatabaseTest {
 		tavern.setyPos(12);
 		tavern.setUsage(100);
         tavern.setBeds(9);
+        tavern.setPrice(4);
+        tavern.setQuality(ProductQuality.NORMAL);
 		tavernDao.add(tavern);
 
         saveCancelService.save();
