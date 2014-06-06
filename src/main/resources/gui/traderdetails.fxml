@@ -46,6 +46,6 @@
             <TableColumn fx:id="dateColumn" prefWidth="202.0" text="Datum" />
          </columns>
       </TableView>
-      <Button fx:id="tradeButtonBuy" disable="true" layoutX="656.0" layoutY="267.0" mnemonicParsing="false" onAction="#onTradeBuyPressed" prefHeight="26.0" prefWidth="118.0" text="Verkauf Buchen" />
+      <Button fx:id="tradeButtonBuy" layoutX="656.0" layoutY="267.0" mnemonicParsing="false" onAction="#onTradeBuyPressed" prefHeight="26.0" prefWidth="118.0" text="Verkauf Buchen" />
     </children>
 </Pane>

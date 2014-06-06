@@ -56,6 +56,13 @@ public class TradeSellToPlayerController implements Initializable {
 
 //        selectedCurrency.getSelectionModel().select(); TODO set preferred currency
         selectedUnit.getSelectionModel().select(offer.getProduct().getUnit());
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(offer.getProduct().getName());
+        if (offer.getProduct().getQuality()) {
+            sb.append(" (" + offer.getQuality().getName() + ")");
+        }
+        selectedOffer.setText(sb.toString());
     }
 
     @FXML
@@ -79,6 +86,9 @@ public class TradeSellToPlayerController implements Initializable {
 
         } catch (NumberFormatException ex) {
             throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
+        }
+        if (amount<= 0){
+            throw new DSAValidationException("Menge muss > 0 sein");
         }
 
         //Calculate Price

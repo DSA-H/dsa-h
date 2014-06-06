@@ -35,7 +35,7 @@
       <Label layoutX="79.0" layoutY="149.0" text="Preis" />
       <ChoiceBox fx:id="selectedCurrency" layoutX="144.0" layoutY="175.0" prefWidth="150.0" />
       <Label layoutX="17.0" layoutY="180.0" text="gewählte Währung:" />
-      <Label layoutX="17.0" layoutY="214.0" text="gewählte Spieler:" />
+      <Label layoutX="17.0" layoutY="214.0" text="gewählter Spieler:" />
       <ChoiceBox fx:id="selectedPlayer" layoutX="144.0" layoutY="209.0" prefWidth="150.0" />
    </children>
 </Pane>

@@ -196,6 +196,16 @@ public class TraderDetailsController implements Initializable {
     private void onTradeBuyPressed() {
         log.debug("called onTradeBuyPressed");
         //Player wants to sell stuff to the trader
+        //TODO as popover
+        TradeBuyFromPlayerController.setTrader(trader);
+        Stage dialog = new Stage(StageStyle.DECORATED);
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initOwner(dealsTable.getParent().getScene().getWindow());
+        Parent scene = (Parent) loader.load("/gui/traderBuy.fxml");
+
+        dialog.setTitle("Ware ankaufen von Spieler");
+        dialog.setScene(new Scene(scene, 716, 286));
+        dialog.show();
     }
 
     @FXML
