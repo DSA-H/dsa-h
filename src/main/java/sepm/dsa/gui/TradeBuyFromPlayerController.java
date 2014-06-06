@@ -5,7 +5,6 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +14,12 @@ import sepm.dsa.service.*;
 
 import java.math.BigDecimal;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class TradeBuyFromPlayerController implements Initializable {
@@ -47,8 +50,6 @@ public class TradeBuyFromPlayerController implements Initializable {
     @FXML
     private TableView<Product> productsTable;
     @FXML
-    private TableColumn<Product, String> pricecolumn;
-    @FXML
     private TableColumn<Product, String> productColumn;
     @FXML
     private TextField searchField;
@@ -59,6 +60,8 @@ public class TradeBuyFromPlayerController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         log.debug("initialize TradeBuyFromPlayerController");
+
+        selectedAmount.setText("1");
         //initialize table
         initialzeTableWithColums();
 
@@ -145,17 +148,14 @@ public class TradeBuyFromPlayerController implements Initializable {
             throw new DSAValidationException("Bitte Preis eingeben");
         }
         try {
-            //TODO Kommastellen via locale einlesen
-//            Locale l = Locale.getDefault();
-//            log.info("Locale " + l);
-//
-//             NumberFormat nf = NumberFormat.getNumberInstance(l);
-//             DecimalFormat df = (DecimalFormat)nf;
-
-            price = new BigDecimal(selectedPrice.getText());
+            DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(Locale.GERMAN);
+            df.setParseBigDecimal(true);
+            price = (BigDecimal)df.parse(selectedPrice.getText());
 
         } catch (NumberFormatException ex) {
             throw new DSAValidationException("Preis muss eine Zahl sein!");
+        } catch (ParseException e) {
+            throw new DSAValidationException("Kann Zahl nicht parsen! Probiers mit , statt .");
         }
         if (price.compareTo(BigDecimal.ZERO) <= 0) {
             throw new DSAValidationException("Preis muss > 0 sein");
@@ -198,16 +198,10 @@ public class TradeBuyFromPlayerController implements Initializable {
 
     private void initialzeTableWithColums() {
 
-        pricecolumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         productColumn.setCellValueFactory(d -> {
             if (d.getValue() != null) {
                 Product product = d.getValue();
-                StringBuilder sb = new StringBuilder();
-                sb.append(product.getName());
-                if (product.getQuality() != null) {
-                    sb.append(" (").append(d.getValue().getQuality()).append(")");
-                }
-                return new SimpleStringProperty(sb.toString());
+                return new SimpleStringProperty(product.getName());
             } else {
                 return new SimpleStringProperty("");
             }
@@ -239,5 +233,6 @@ public class TradeBuyFromPlayerController implements Initializable {
     }
 
     public void setProductService(ProductService productService) {
+        this.productService = productService;
     }
 }

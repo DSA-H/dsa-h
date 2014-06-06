@@ -114,9 +114,6 @@ public class TradeSellToPlayerController implements Initializable {
         try {
             DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(Locale.GERMAN);
             df.setParseBigDecimal(true);
-//            df.setMaximumFractionDigits(2);
-//            df.setMinimumFractionDigits(0);
-//            df.setGroupingUsed(false);
 
             try {
                 price = (BigDecimal)df.parse(selectedPrice.getText());
