@@ -48,6 +48,7 @@
                 <value>sepm/dsa/model/hibernate/Region.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/RegionBorder.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Trader.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/MovingTrader.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/TraderCategory.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Location.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Product.hbm.xml</value>
@@ -103,6 +104,10 @@
     </bean>
 
     <bean id="traderDao" class="sepm.dsa.dao.TraderDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="movingTraderDao" class="sepm.dsa.dao.MovingTraderDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
