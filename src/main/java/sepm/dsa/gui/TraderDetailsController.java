@@ -190,7 +190,9 @@ public class TraderDetailsController implements Initializable {
         dialog.setTitle("Ware verkaufen an Spieler");
         dialog.setScene(new Scene(scene, 316, 275));
         dialog.setResizable(false);
-        dialog.show();
+        dialog.showAndWait();
+        checkFocus();
+        refreshView();
     }
 
     @FXML
@@ -208,7 +210,9 @@ public class TraderDetailsController implements Initializable {
         dialog.setScene(new Scene(scene, 565, 317));
         dialog.setResizable(false);
 
-        dialog.show();
+        dialog.showAndWait();
+        checkFocus();
+        refreshView();
     }
 
     @FXML
@@ -221,9 +225,7 @@ public class TraderDetailsController implements Initializable {
         }
     }
 
-    public void setTrader(Trader trader) {
-        this.trader = trader;
-
+    private void refreshView() {
         nameLabel.setText(trader.getName());
         categoryLabel.setText(trader.getCategory().getName());
         commentArea.setText(trader.getComment());
@@ -240,6 +242,11 @@ public class TraderDetailsController implements Initializable {
 
         offerTable.setItems(FXCollections.observableArrayList(offers));
         dealsTable.setItems(FXCollections.observableArrayList(trader.getDeals()));
+    }
+
+    public void setTrader(Trader trader) {
+        this.trader = trader;
+        refreshView(); // in setter not very beautiful, do we need this here?
     }
 
     public void setLoader(SpringFxmlLoader loader) {

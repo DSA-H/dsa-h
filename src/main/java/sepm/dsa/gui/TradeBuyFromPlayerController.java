@@ -116,6 +116,8 @@ public class TradeBuyFromPlayerController implements Initializable {
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
 
+        saveCancelService.refresh(trader);
+
         Stage stage = (Stage) selectedUnit.getScene().getWindow();
         stage.close();
     }
@@ -191,6 +193,9 @@ public class TradeBuyFromPlayerController implements Initializable {
 
         traderService.buyFromPlayer(trader, playerToCreateDealFor, productsTable.getSelectionModel().getSelectedItem(), quality, selectedUnit.getSelectionModel().getSelectedItem(), amount, price, selectedCurrency.getSelectionModel().getSelectedItem());
         saveCancelService.save();
+
+        saveCancelService.refresh(trader);
+        saveCancelService.refresh(trader.getDeals());
 
         Stage stage = (Stage) selectedUnit.getScene().getWindow();
         stage.close();

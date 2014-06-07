@@ -50,7 +50,7 @@ public class Deal implements BaseModel {
     private Unit unit;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(nullable = false)
     private Player player;
 
     @NotNull
