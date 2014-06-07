@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.MovingTraderListController">
+    <children>
+        <Label alignment="CENTER" layoutX="8.0" layoutY="14.0" prefHeight="17.0" prefWidth="584.0" text="Fahrende Händler">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        <TableView fx:id="traderTable" layoutX="12.0" layoutY="102.0" onMousePressed="#checkFocus" prefHeight="289.0" prefWidth="576.0">
+            <columns>
+                <TableColumn fx:id="traderColumn" prefWidth="286.0" text="Händler" />
+                <TableColumn fx:id="locationColumn" prefWidth="289.0" text="Ort" />
+            </columns>
+        </TableView>
+        <HBox alignment="CENTER_LEFT" layoutX="12.0" layoutY="66.0" prefHeight="25.0" prefWidth="576.0" spacing="10.0">
+            <children>
+                <Button fx:id="detailsButton" layoutX="141.1875" layoutY="63.5" mnemonicParsing="false" onAction="#onDetailsButtonPressed" text="Details" />
+            </children>
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+        </HBox>
+      <Label fx:id="locationsLabel" alignment="CENTER" layoutX="8.0" layoutY="41.0" prefHeight="17.0" prefWidth="584.0" text="in den Orten Ort A und Ort B">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+    </children>
+</Pane>

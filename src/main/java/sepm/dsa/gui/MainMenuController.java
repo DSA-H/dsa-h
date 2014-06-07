@@ -35,10 +35,7 @@ import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.model.Location;
-import sepm.dsa.model.LocationConnection;
-import sepm.dsa.model.Tavern;
-import sepm.dsa.model.Trader;
+import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 import sepm.dsa.service.path.NoPathException;
 
@@ -75,6 +72,7 @@ public class MainMenuController implements Initializable {
 	private double scaleFactor = 1.0;
 	private Boolean dontUpdateScroll = false;
 	private Boolean setZoomToStandard = true;
+	private List<LocationConnection> connections;
 
 	@FXML
 	private MenuBar menuBar;
@@ -193,6 +191,8 @@ public class MainMenuController implements Initializable {
 		zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				//double currentX = ( (scrollPane.getWidth()/2) + scrollPane.getHvalue()*(mapCanvas.getWidth()*scaleFactor-scrollPane.getWidth()) ) / (mapCanvas.getWidth()*scaleFactor);
+				//double currentY = ( (scrollPane.getHeight()/2) + scrollPane.getVvalue()*(mapCanvas.getHeight()*scaleFactor-scrollPane.getHeight()) ) / (mapCanvas.getHeight()*scaleFactor);
 				scaleFactor = newValue.doubleValue();
 				double v = scrollPane.getVvalue();
 				double h = scrollPane.getHvalue();
@@ -331,7 +331,6 @@ public class MainMenuController implements Initializable {
 				if (response == Dialog.Actions.YES) {
 					locationService.remove(selectedLocation);
 					saveCancelService.save();
-					//locationTable.getItems().remove(selectedLocation);
 				}
 
 				if (selectedLocation == fromLocation) {
@@ -371,7 +370,6 @@ public class MainMenuController implements Initializable {
 					if (response == Dialog.Actions.YES) {
 						tavernService.remove((Tavern) selectedObject);
 						saveCancelService.save();
-						//traderList.getItems().remove(selectedObject);
 					}
 				}
 			}
@@ -379,6 +377,8 @@ public class MainMenuController implements Initializable {
 
 		updateTables();
 		updateMap();
+		checkLocationFocus();
+		checkTraderFocus();
 	}
 
 	@FXML
@@ -524,6 +524,36 @@ public class MainMenuController implements Initializable {
 					locY = (int) (l.getyCoord() * scaleFactor);
 					if (xPos > locX - 20 && xPos < locX + 20 && yPos > locY - 20 && yPos < locY + 20) {
 						locationTable.getSelectionModel().select(l);
+						return;
+					}
+				}
+				Location loc1;
+				Location loc2;
+				for (LocationConnection lc : connections) {
+					loc1 = lc.getLocation1();
+					loc2 = lc.getLocation2();
+					if ( (xPos < loc1.getxCoord()+10 && xPos > loc2.getxCoord()-10) || (xPos > loc1.getxCoord()-10 && xPos < loc2.getxCoord()+10) ) {
+						if ((yPos < loc1.getyCoord()+10 && yPos > loc2.getyCoord()-10) || (yPos > loc1.getyCoord()-10 && yPos < loc2.getyCoord()+10)) {
+							if (loc1.getxCoord() > loc2.getxCoord()) {
+								Location temp = loc1;
+								loc1 = loc2;
+								loc2 = temp;
+							}
+							double d = loc1.getyCoord();
+							double k = ((double) (loc2.getyCoord()-loc1.getyCoord())) / ((double) (loc2.getxCoord()-loc1.getxCoord()));
+							double x = xPos - loc1.getxCoord();
+							if (yPos-10 < (int) (k * x + d) && yPos+10 > (int) (k * x + d)) {
+								Stage stage = new Stage();
+								Parent scene = (Parent) loader.load("/gui/movingtraderlist.fxml");
+								MovingTraderListController controller = loader.getController();
+								controller.setLocationConnection(lc);
+								stage.setTitle("Fahrende Händler");
+								stage.setScene(new Scene(scene, 600, 400));
+								stage.setResizable(false);
+								stage.showAndWait();
+								return;
+							}
+						}
 					}
 				}
 			} else {
@@ -1039,33 +1069,34 @@ public class MainMenuController implements Initializable {
 				gc.setLineWidth(1);
 				gc.strokeRoundRect(posX1 - 10, posY1 - 10, 20, 20, 10, 10);
 				saveCancelService.refresh(l);
-				for (LocationConnection lc : l.getAllConnections()) {
-					loc1 = lc.getLocation1();
-					loc2 = lc.getLocation2();
-					posX1 = loc1.getxCoord();
-					posY1 = loc1.getyCoord();
-					posX2 = loc2.getxCoord();
-					posY2 = loc2.getyCoord();
-					posXm = posX1 + (posX2 - posX1) / 2;
-					posYm = posY1 + (posY2 - posY1) / 2;
-
-					gc.setLineWidth(3);
-					gc.setStroke(new Color(
-							(double) Integer.valueOf(loc1.getRegion().getColor().substring(0, 2), 16) / 255,
-							(double) Integer.valueOf(loc1.getRegion().getColor().substring(2, 4), 16) / 255,
-							(double) Integer.valueOf(loc1.getRegion().getColor().substring(4, 6), 16) / 255,
-							1.0));
-					gc.strokeLine(posX1, posY1, posXm, posYm);
-					gc.setStroke(new Color(
-							(double) Integer.valueOf(loc2.getRegion().getColor().substring(0, 2), 16) / 255,
-							(double) Integer.valueOf(loc2.getRegion().getColor().substring(2, 4), 16) / 255,
-							(double) Integer.valueOf(loc2.getRegion().getColor().substring(4, 6), 16) / 255,
-							1.0));
-					gc.strokeLine(posX2, posY2, posXm, posYm);
-				}
-
 			}
 		}
+		connections = locationConnectionService.getAll();
+		for (LocationConnection lc : connections) {
+			loc1 = lc.getLocation1();
+			loc2 = lc.getLocation2();
+			posX1 = loc1.getxCoord();
+			posY1 = loc1.getyCoord();
+			posX2 = loc2.getxCoord();
+			posY2 = loc2.getyCoord();
+			posXm = posX1 + (posX2-posX1)/2;
+			posYm = posY1 + (posY2-posY1)/2;
+
+			gc.setLineWidth(3);
+			gc.setStroke(new Color(
+					(double) Integer.valueOf(loc1.getRegion().getColor().substring(0, 2), 16) / 255,
+					(double) Integer.valueOf(loc1.getRegion().getColor().substring(2, 4), 16) / 255,
+					(double) Integer.valueOf(loc1.getRegion().getColor().substring(4, 6), 16) / 255,
+					1.0));
+			gc.strokeLine(posX1, posY1, posXm, posYm);
+			gc.setStroke(new Color(
+					(double) Integer.valueOf(loc2.getRegion().getColor().substring(0, 2), 16) / 255,
+					(double) Integer.valueOf(loc2.getRegion().getColor().substring(2, 4), 16) / 255,
+					(double) Integer.valueOf(loc2.getRegion().getColor().substring(4, 6), 16) / 255,
+					1.0));
+			gc.strokeLine(posX2, posY2, posXm, posYm);
+		}
+
 		gc.setStroke(Color.BLACK);
 		gc.setLineWidth(0.6);
 		for (Location l : locations) {
@@ -1079,9 +1110,13 @@ public class MainMenuController implements Initializable {
 		int posX;
 		int posY;
 		gc.setLineWidth(5);
-		gc.setStroke(Color.DARKBLUE);
 		List<Trader> traders = traderService.getAllForLocation(selectedLocation);
 		for (Trader t : traders) {
+			if (t instanceof MovingTrader) {
+				gc.setStroke(Color.LIGHTBLUE);
+			} else {
+				gc.setStroke(Color.DARKBLUE);
+			}
 			posX = t.getxPos();
 			posY = t.getyPos();
 			if (posX != 0 && posY != 0) {

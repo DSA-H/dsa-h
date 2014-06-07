@@ -17,8 +17,7 @@
         </Label>
         <Label fx:id="categoryLabel" alignment="CENTER" layoutX="-1.0" layoutY="41.0" prefHeight="17.0"
                prefWidth="800.0" text="Händlerkategorie" textAlignment="CENTER"/>
-        <TableView fx:id="offerTable" layoutX="21.0" layoutY="67.0" onMouseClicked="#checkFocus" prefHeight="355.0"
-                   prefWidth="550.0">
+        <TableView fx:id="offerTable" layoutX="21.0" layoutY="67.0" prefHeight="355.0" prefWidth="550.0">
             <columns>
                 <TableColumn fx:id="amountColumn" prefWidth="75.0" text="Menge"/>
                 <TableColumn fx:id="productColumn" prefWidth="275.0" text="Ware"/>
@@ -29,8 +28,8 @@
         <Button layoutX="714.0" layoutY="800.0" mnemonicParsing="false" onAction="#onBackPressed" text="Zurück"/>
         <Label layoutX="591.0" layoutY="67.0" text="Überreden:" underline="true"/>
         <Label layoutX="591.0" layoutY="91.0" text="Erschwernis:"/>
-        <TextField fx:id="difficultyField" layoutX="665.0" layoutY="86.0" prefHeight="25.0" prefWidth="30.0"/>
-        <Button disable="true" layoutX="703.0" layoutY="88.0" mnemonicParsing="false" onAction="#onRolePressed"
+        <TextField fx:id="difficultyField" layoutX="665.0" layoutY="86.0" prefHeight="25.0" prefWidth="30.0" text="0"/>
+        <Button layoutX="703.0" layoutY="88.0" mnemonicParsing="false" onAction="#onRolePressed"
                 text="Würfeln"/>
         <Label layoutX="607.0" layoutY="121.0" text="Ergebnis:"/>
         <Label fx:id="resultLabel" layoutX="665.0" layoutY="121.0" text="ERGEBNIS" textAlignment="CENTER"/>

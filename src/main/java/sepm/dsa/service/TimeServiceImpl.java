@@ -1,5 +1,6 @@
 package sepm.dsa.service;
 
+import javafx.scene.image.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,12 @@ public class TimeServiceImpl implements TimeService {
 
 	static private final float PRODUCT_TURNOVER_PERCENT_PER_DAY = 1.5f;   // trader changes x% of his products per day
 
-	private TraderService traderService;
-	private OfferDao offerDao;
-	private LocationService locationService;
-	private TavernService tavernService;
+    private TraderService traderService;
+    private OfferDao offerDao;
+    private LocationService locationService;
+    private TavernService tavernService;
+	private SaveCancelService saveCancelService;
+	private MapService mapService;
 
 	private DSADate date;
 	private Properties properties;
@@ -140,59 +143,74 @@ public class TimeServiceImpl implements TimeService {
 			}
 		}
 
-		// move moving traders
-		List<MovingTrader> movingTraders = traderService.getAllMovingTraders();
-		for (MovingTrader movingTrader : movingTraders) {
-			long daysSinceMove = date.getTimestamp() - movingTrader.getLastMoved();
-			// chance to move 5 days around the average move day
-			double moveCance = (float) (daysSinceMove - movingTrader.getAvgStayDays() + 5) / 10f;
-			float random = (float) Math.random();
-			// move
-			if (random < moveCance) {
-				Location actLocation = movingTrader.getLocation();
+        // move moving traders
+        List<MovingTrader> movingTraders = traderService.getAllMovingTraders();
+        for(MovingTrader movingTrader : movingTraders) {
+            long daysSinceMove = date.getTimestamp() - movingTrader.getLastMoved();
+            // chance to move 5 days around the average move day
+            double moveChance = (float)(daysSinceMove - movingTrader.getAvgStayDays() + 5) / 10f;
+            float random = (float)Math.random();
+            // move
+            if(random < moveChance) {
+                Location actLocation = movingTrader.getLocation();
 
-				// possible locations
-				List<Location> possibleLocations = null;
-				// distance filter
-				if (movingTrader.getPreferredDistance() == DistancePreferrence.GLOBAL) {
-					possibleLocations = locationService.getAll();
-				} else if (movingTrader.getPreferredDistance() == DistancePreferrence.REGION) {
-					possibleLocations = locationService.getAllByRegion(actLocation.getRegion().getId());
-				}
-				// TownSize filter
-				if (movingTrader.getPreferredTownSize() != null) {
-					List<Location> removeList = new ArrayList<>();
-					for (Location location : possibleLocations) {
-						// if not preferred town size, than its a 80% chance to remove the town from the possible goals
-						if (location.getSize() != movingTrader.getPreferredTownSize()) {
-							if (Math.random() <= 0.8f) {
-								removeList.add(location);
-							}
-						}
-					}
-					possibleLocations.remove(removeList);
-				}
-				// no possible Locations -> not moving
-				if (possibleLocations.isEmpty()) {
-					break;
-				}
-				// take random one of the possible locations
-				int randomIndex = (int) (Math.random() * possibleLocations.size());
-				Location goalLocation = possibleLocations.get(randomIndex);
-				// move trader
-				movingTrader.setLocation(goalLocation);
-				movingTrader.setLastMoved(date.getTimestamp());
-				// calculate new prices
-				for (Offer offer : movingTrader.getOffers()) {
-					int price = traderService.calculatePriceForProduct(offer.getProduct(), movingTrader);
-					if (offer.getProduct().getQuality()) {
-						offer.setPricePerUnit((int) (price * offer.getQuality().getQualityPriceFactor()));
-						offerDao.update(offer);
-					}
-				}
-				traderService.update(movingTrader);
-			}
-		}
+                // possible locations
+                List<Location> possibleLocations = null;
+                // distance filter
+                if(movingTrader.getPreferredDistance() == DistancePreferrence.GLOBAL) {
+                    possibleLocations = locationService.getAll();
+                }else if(movingTrader.getPreferredDistance() == DistancePreferrence.REGION) {
+                    possibleLocations = locationService.getAllByRegion(actLocation.getRegion().getId());
+                }
+                // TownSize filter
+                if (movingTrader.getPreferredTownSize() != null) {
+                    List<Location> removeList = new ArrayList<>();
+                    for(Location location : possibleLocations) {
+	                    // if not preferred town size, than its a 80% chance to remove the town from the possible goals
+                        if(location.getSize() != movingTrader.getPreferredTownSize()) {
+                            if(Math.random() <= 0.8f) {
+                                removeList.add(location);
+                            }
+                        }
+                    }
+                    possibleLocations.remove(removeList);
+                }
+	            // not allowed to move to same location
+	            possibleLocations.remove(movingTrader.getLocation());
+                // no possible Locations -> not moving
+                if(possibleLocations.isEmpty()) {
+                    break;
+                }
+                // take random one of the possible locations
+                int randomIndex = (int)(Math.random()*possibleLocations.size());
+                Location goalLocation = possibleLocations.get(randomIndex);
+                // move trader
+                movingTrader.setLocation(goalLocation);
+                movingTrader.setLastMoved(date.getTimestamp());
+                // calculate new prices
+                for(Offer offer : movingTrader.getOffers()) {
+                    int price = traderService.calculatePriceForProduct(offer.getProduct(), movingTrader);
+                    if(offer.getProduct().getQuality()) {
+                        offer.setPricePerUnit((int)(price*offer.getQuality().getQualityPriceFactor()));
+                        offerDao.update(offer);
+                    }
+                }
+	            // random position in new location
+	            Image image = new Image("file:" + mapService.getLocationMap(movingTrader.getLocation()));
+	            System.out.println("("+image.getWidth()+"/"+image.getHeight()+")");
+	            if (image != null) {
+		            movingTrader.setxPos((int) (Math.random()*image.getWidth()));
+		            movingTrader.setyPos((int) (Math.random()*image.getHeight()));
+	            } else {
+		            movingTrader.setxPos(0);
+		            movingTrader.setyPos(0);
+	            }
+	            System.out.println("("+movingTrader.getxPos()+"/"+movingTrader.getyPos()+")");
+
+                traderService.update(movingTrader);
+	            saveCancelService.save();
+            }
+        }
 
 		// new tavern useage and price calculation
 		List<Tavern> taverns = tavernService.getAll();
@@ -216,7 +234,15 @@ public class TimeServiceImpl implements TimeService {
 		this.tavernService = tavernService;
 	}
 
-	public void setLocationService(LocationService locationService) {
-		this.locationService = locationService;
+    public void setLocationService(LocationService locationService) {
+        this.locationService = locationService;
+    }
+
+	public void setSaveCancelService(SaveCancelService saveCancelService) {
+		this.saveCancelService = saveCancelService;
+	}
+
+	public void setMapService(MapService mapService) {
+		this.mapService = mapService;
 	}
 }

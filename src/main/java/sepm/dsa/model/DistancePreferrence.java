@@ -33,6 +33,6 @@ public enum DistancePreferrence {
 
     @Override
     public String toString() {
-        return name() + "(" + this.getValue() + ")";
+        return name;
     }
 }
