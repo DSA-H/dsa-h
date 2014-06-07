@@ -88,7 +88,7 @@ public class TradeBuyFromPlayerController implements Initializable {
                     int setQuality = traderService.calculatePricePerUnit(quality, productsTable.getSelectionModel().getSelectedItem(), trader);
                     selectedPrice.setText(Integer.toString(setQuality));
                 } else {
-                    selectedQuality.getSelectionModel().select(3);
+                    selectedQuality.getSelectionModel().select(2);
                     int setQuality = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
                     selectedPrice.setText(Integer.toString(setQuality));
                 }
