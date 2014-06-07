@@ -84,6 +84,13 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
         return locationConnectionDao.get(pk);
     }
 
+	@Override
+	public List<LocationConnection> getAll() {
+		log.debug("calling getAll()");
+		List<LocationConnection> result = locationConnectionDao.getAll();
+		return result;
+	}
+
     @Override
     public List<LocationConnection> getShortestPathBetween(Location location1, Location location2) throws NoPathException{
         log.debug("calling getShortestPathBetween(" + location1 + ", " + location2 + ")");

@@ -72,6 +72,7 @@ public class MainMenuController implements Initializable {
 	private double scaleFactor = 1.0;
 	private Boolean dontUpdateScroll = false;
 	private Boolean setZoomToStandard = true;
+	private List<LocationConnection> connections;
 
 	@FXML
 	private MenuBar menuBar;
@@ -519,6 +520,30 @@ public class MainMenuController implements Initializable {
 					locY = (int) (l.getyCoord() * scaleFactor);
 					if (xPos > locX - 20 && xPos < locX + 20 && yPos > locY - 20 && yPos < locY + 20) {
 						locationTable.getSelectionModel().select(l);
+						return;
+					}
+				}
+				Location loc1;
+				Location loc2;
+				for (LocationConnection lc : connections) {
+					loc1 = lc.getLocation1();
+					loc2 = lc.getLocation2();
+					if ( (xPos < loc1.getxCoord() && xPos > loc2.getxCoord()) || (xPos > loc1.getxCoord() && xPos < loc2.getxCoord()) ) {
+						if ((yPos < loc1.getyCoord() && yPos > loc2.getyCoord()) || (yPos > loc1.getyCoord() && yPos < loc2.getyCoord())) {
+							System.out.println("RECTANGULAR FOUND");
+							if (loc1.getxCoord() > loc2.getxCoord()) {
+								Location temp = loc1;
+								loc1 = loc2;
+								loc2 = temp;
+							}
+							double d = loc1.getyCoord();
+							double k = ((double) (loc2.getyCoord()-loc1.getyCoord())) / ((double) (loc2.getxCoord()-loc1.getxCoord()));
+							double x = xPos - loc1.getxCoord();
+							if (yPos-10 < (int) (k * x + d) && yPos+10 > (int) (k * x + d)) {
+								//TODO connection found
+								return;
+							}
+						}
 					}
 				}
 			} else {
@@ -1031,34 +1056,35 @@ public class MainMenuController implements Initializable {
 				gc.setStroke(Color.BLACK);
 				gc.setLineWidth(1);
 				gc.strokeRoundRect(posX1 - 10, posY1 - 10, 20, 20, 10, 10);
-                saveCancelService.refresh(l);
-				for (LocationConnection lc : l.getAllConnections()) {
-					loc1 = lc.getLocation1();
-					loc2 = lc.getLocation2();
-					posX1 = loc1.getxCoord();
-					posY1 = loc1.getyCoord();
-					posX2 = loc2.getxCoord();
-					posY2 = loc2.getyCoord();
-					posXm = posX1 + (posX2-posX1)/2;
-					posYm = posY1 + (posY2-posY1)/2;
-
-					gc.setLineWidth(3);
-					gc.setStroke(new Color(
-							(double) Integer.valueOf(loc1.getRegion().getColor().substring(0, 2), 16) / 255,
-							(double) Integer.valueOf(loc1.getRegion().getColor().substring(2, 4), 16) / 255,
-							(double) Integer.valueOf(loc1.getRegion().getColor().substring(4, 6), 16) / 255,
-							1.0));
-					gc.strokeLine(posX1, posY1, posXm, posYm);
-					gc.setStroke(new Color(
-							(double) Integer.valueOf(loc2.getRegion().getColor().substring(0, 2), 16) / 255,
-							(double) Integer.valueOf(loc2.getRegion().getColor().substring(2, 4), 16) / 255,
-							(double) Integer.valueOf(loc2.getRegion().getColor().substring(4, 6), 16) / 255,
-							1.0));
-					gc.strokeLine(posX2, posY2, posXm, posYm);
-				}
-
+				saveCancelService.refresh(l);
 			}
 		}
+		connections = locationConnectionService.getAll();
+		for (LocationConnection lc : connections) {
+			loc1 = lc.getLocation1();
+			loc2 = lc.getLocation2();
+			posX1 = loc1.getxCoord();
+			posY1 = loc1.getyCoord();
+			posX2 = loc2.getxCoord();
+			posY2 = loc2.getyCoord();
+			posXm = posX1 + (posX2-posX1)/2;
+			posYm = posY1 + (posY2-posY1)/2;
+
+			gc.setLineWidth(3);
+			gc.setStroke(new Color(
+					(double) Integer.valueOf(loc1.getRegion().getColor().substring(0, 2), 16) / 255,
+					(double) Integer.valueOf(loc1.getRegion().getColor().substring(2, 4), 16) / 255,
+					(double) Integer.valueOf(loc1.getRegion().getColor().substring(4, 6), 16) / 255,
+					1.0));
+			gc.strokeLine(posX1, posY1, posXm, posYm);
+			gc.setStroke(new Color(
+					(double) Integer.valueOf(loc2.getRegion().getColor().substring(0, 2), 16) / 255,
+					(double) Integer.valueOf(loc2.getRegion().getColor().substring(2, 4), 16) / 255,
+					(double) Integer.valueOf(loc2.getRegion().getColor().substring(4, 6), 16) / 255,
+					1.0));
+			gc.strokeLine(posX2, posY2, posXm, posYm);
+		}
+
 		gc.setStroke(Color.BLACK);
 		gc.setLineWidth(0.6);
 		for (Location l : locations) {
