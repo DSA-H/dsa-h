@@ -58,7 +58,7 @@ public enum ProductQuality {
 
     @Override
     public String toString() {
-        return name() + "(" + this.getValue() + ")";
+        return this.getName();
     }
 
     public String getName() {

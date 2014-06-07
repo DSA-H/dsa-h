@@ -46,14 +46,6 @@ public interface TavernService {
      */
     public List<Tavern> getAll();
 
-    /**
-     * Calculates the price for a night's stay in the given tavern.
-     *
-     * @param tavern The chosen tavern; must not be null
-     * @return The costs of a hypothetical stay.
-     */
-    int getPriceForStay(Tavern tavern);
-
 	/**
 	 * Get all taverns for a specified location or empty List if nothing found
 	 *
@@ -61,4 +53,18 @@ public interface TavernService {
 	 * @return the taverns for the location or empty list
 	 */
 	List<Tavern> getAllByLocation(int locationId);
+
+    /**
+     * Returns a random (Gaussian distribution) numbers of beds that are used for this tavern. Minimum 0, Maximum tavern.getBeds().
+     * @param tavern The chosen tavern; must not be null
+     * @return
+     */
+    int calculateBedsUseage(Tavern tavern);
+
+    /**
+     * Calculates the price for a night's stay in the given tavern in dependence of useage, townsize, quality and a random factor.
+     * @param tavern The chosen tavern; must not be null
+     * @return The costs of a hypothetical stay.
+     */
+    int calculatePrice(Tavern tavern);
 }

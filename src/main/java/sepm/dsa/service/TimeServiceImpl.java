@@ -214,8 +214,9 @@ public class TimeServiceImpl implements TimeService {
         // new tavern useage and price calculation
         List<Tavern> taverns = tavernService.getAll();
         for(Tavern tavern : taverns) {
-            // random useage  (todo: more sophisticated usage calculation?)
-            tavern.setUsage((int)Math.random()*100);
+            // update useage and price
+            tavern.setUsage(tavernService.calculateBedsUseage(tavern));
+            tavern.setPrice(tavernService.calculatePrice(tavern));
             tavernService.update(tavern);
         }
     }

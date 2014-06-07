@@ -235,7 +235,6 @@ public class MainMenuController implements Initializable {
 			editButton.setText("Details");
 			Stage stage = (Stage) editButton.getScene().getWindow();
 			stage.setTitle("DSA-Händlertool - "+ selectedLocation.getName());
-			checkTraderFocus();
 		} else {
 			dontUpdateScroll = true;
 			scrollPane.setHvalue(worldScrollH);
@@ -250,10 +249,15 @@ public class MainMenuController implements Initializable {
 			editButton.setText("Bearbeiten");
 			Stage stage = (Stage) editButton.getScene().getWindow();
 			stage.setTitle("DSA-Händlertool");
-			checkLocationFocus();
 		}
 
 		updateTables();
+		if (mode == LOCATIONMODE) {
+			traderList.getSelectionModel().select(0);
+			checkTraderFocus();
+		} else {
+			checkLocationFocus();
+		}
 		updateMap();
 		updateZoom();
 	}
@@ -280,17 +284,17 @@ public class MainMenuController implements Initializable {
 
 				TraderDetailsController controller = loader.getController();
 				controller.setTrader((Trader) selectedObject);
-				stage.setScene(new Scene(scene, 830, 781));
+				stage.setScene(new Scene(scene, 781, 830));
 				stage.setResizable(false);
 				stage.showAndWait();
 			} else {
 				Stage stage = new Stage();
 				Parent scene = (Parent) loader.load("/gui/edittavern.fxml");
-				stage.setTitle("Wirtshaus erstellen");
+				stage.setTitle("Wirtshaus");
 
 				EditTavernController controller = loader.getController();
 				controller.setTavern((Tavern) selectedObject);
-				stage.setScene(new Scene(scene, 600, 400));
+				stage.setScene(new Scene(scene, 383, 400));
 				stage.setResizable(false);
 				stage.showAndWait();
 			}
@@ -1240,8 +1244,6 @@ public class MainMenuController implements Initializable {
 			editButton.setDisable(false);
 			if (selectedObject instanceof Trader) {
 				editButton.setText("Details");
-			} else {
-				editButton.setText("Bearbeiten");
 			}
 
 			if (zoomGroup.getChildren().size() > 2) {

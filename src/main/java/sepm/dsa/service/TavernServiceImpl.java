@@ -13,6 +13,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 @Service("tavernService")
@@ -65,8 +66,8 @@ public class TavernServiceImpl implements TavernService {
 
 
     @Override
-    public int getPriceForStay(Tavern tavern) {
-        // @TODO Really calculate a price
+    public int calculatePrice(Tavern tavern) {
+        // @TODO Really calculate a price (Laurids liefert diese Woche noch konkrete Formel)
         return 4; // chosen by fair dice roll.
         // guaranteed to be random.
         // http://xkcd.com/221/
@@ -80,6 +81,22 @@ public class TavernServiceImpl implements TavernService {
         log.trace("returning " + result);
         return result;
 	}
+
+    @Override
+    public int calculateBedsUseage(Tavern tavern) {
+        log.debug("calling getBedsUseage(" + tavern + ")");
+        Random random = new Random();
+        double gaus = random.nextGaussian() / 4f;
+        gaus += 0.5f;
+        int result = (int) Math.round(tavern.getBeds()*gaus);
+        if(result > tavern.getBeds()) {
+            result = tavern.getBeds();
+        }
+        if(result < 0) {
+            result = 0;
+        }
+        return result;
+    }
 
     /**
      * Validates a Tavern

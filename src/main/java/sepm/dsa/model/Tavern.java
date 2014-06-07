@@ -30,19 +30,22 @@ public class Tavern implements BaseModel {
 
 	@NotNull
 	@Column(nullable = false)
-	private Integer usage;
+	private Integer usage;  // in beds
 
-    //TODO: free beds, comment, ...
     @NotNull
     @Column(nullable = false)
     private Integer beds;
 
+    @NotNull
+    @Column(nullable = false)
+    private Integer price;
+
+    @NotNull
+    @Column(nullable =  false)
+    private Integer quality;
+
     @Column
     private String comment;
-	// @TODO ??
-//    private ??? overnightStayPrice;
-//    private DSADate onDate;
-
 
     public Integer getBeds() {
         return beds;
@@ -112,7 +115,27 @@ public class Tavern implements BaseModel {
 	public void setLocation(Location location) {
 		this.location = location;
 	}
-	
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public ProductQuality getQuality() {
+        return ProductQuality.parse(quality);
+    }
+
+    public void setQuality(ProductQuality quality) {
+        this.quality = quality.getValue();
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
