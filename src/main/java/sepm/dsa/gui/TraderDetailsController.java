@@ -10,8 +10,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
@@ -160,7 +162,49 @@ public class TraderDetailsController implements Initializable {
     @FXML
     private void onRolePressed() {
         log.debug("called onRolePressed");
-        //TODO not part of version 1
+	    int difficulty = 0;
+	    try {
+		    difficulty = Integer.parseInt(difficultyField.getText());
+	    } catch (NumberFormatException e) {
+		    Dialogs.create()
+				    .title("Ungültige Eingabe")
+				    .masthead(null)
+				    .message("Die Erschwernis muss eine Zahl sein!")
+				    .showWarning();
+		    return;
+	    }
+	    int dice1 = (int) (Math.random()*20)+1;
+	    int dice2 = (int) (Math.random()*20)+1;
+	    int dice3 = (int) (Math.random()*20)+1;
+	    int result = trader.getConvince()-difficulty;
+	    if (result < 0) {
+		    difficulty = result;
+		    result = 0;
+	    } else {
+		    difficulty = 0;
+	    }
+	    if (dice1 > (trader.getMut()+difficulty)) {
+		    result -= (dice1-(trader.getMut()+difficulty));
+	    }
+	    if (dice2 > (trader.getIntelligence()+difficulty)) {
+		    result -= (dice2-(trader.getIntelligence()+difficulty));
+	    }
+	    if (dice3 > (trader.getCharisma()+difficulty)) {
+		    result -= (dice3-(trader.getCharisma()+difficulty));
+	    }
+	    if (dice1 == 20 && dice2 == 20 || dice2 == 20 && dice3 == 20 || dice1 == 20 && dice3 == 20) {
+		    resultLabel.setText("PATZER");
+		    resultLabel.setTextFill(Color.RED);
+	    } else if (dice1 == 1 && dice2 == 1 || dice2 == 1 && dice3 == 1 || dice1 == 1 && dice3 == 1) {
+		    resultLabel.setText("MEISTERHAFT");
+		    resultLabel.setTextFill(Color.GREEN);
+	    } else if (result >= 0) {
+		    resultLabel.setText(""+result);
+		    resultLabel.setTextFill(Color.GREEN);
+	    } else if (result < 0) {
+		    resultLabel.setText(""+result);
+		    resultLabel.setTextFill(Color.RED);
+	    }
     }
 
     @FXML

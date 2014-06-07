@@ -111,7 +111,6 @@ public class EditTraderController implements Initializable {
 				    areaBox.setDisable(false);
 				    areaLabel.setDisable(false);
 				    currentType = MOVINGTRADER;
-				    System.out.println("SWITCHED TO MOVINGTRADER");
 			    } else {
 				    stayTimeField.setDisable(true);
 				    stayTimeLabel.setDisable(true);
@@ -121,7 +120,6 @@ public class EditTraderController implements Initializable {
 				    areaBox.setDisable(true);
 				    areaLabel.setDisable(true);
 				    currentType = TRADER;
-				    System.out.println("SWITCHED TO TRADER");
 			    }
 		    }
 	    });
@@ -171,9 +169,9 @@ public class EditTraderController implements Initializable {
         rand *= 5;
         rand2 = Math.random();
         if (rand2 < 0.5) {
-            result = (int) (14 + rand);
+            result = (int) (15 + rand);
         } else {
-            result = (int) (14 - rand);
+            result = (int) (15 - rand);
         }
         muField.setText("" + result);
 
@@ -182,9 +180,9 @@ public class EditTraderController implements Initializable {
         rand *= 5;
         rand2 = Math.random();
         if (rand2 < 0.5) {
-            result = (int) (14 + rand);
+            result = (int) (15 + rand);
         } else {
-            result = (int) (14 - rand);
+            result = (int) (15 - rand);
         }
         inField.setText("" + result);
 
@@ -193,20 +191,20 @@ public class EditTraderController implements Initializable {
         rand *= 5;
         rand2 = Math.random();
         if (rand2 < 0.5) {
-            result = (int) (14 + rand);
+            result = (int) (15 + rand);
         } else {
-            result = (int) (14 - rand);
+            result = (int) (15 - rand);
         }
         chField.setText("" + result);
 
         rand = Math.random();
         rand *= rand;
-        rand *= 4;
+        rand *= 6;
         rand2 = Math.random();
         if (rand2 < 0.5) {
-            result = (int) (4 + rand);
+            result = (int) (6 + rand);
         } else {
-            result = (int) (4 - rand);
+            result = (int) (6 - rand);
         }
         convinceField.setText("" + result);
 
@@ -217,19 +215,16 @@ public class EditTraderController implements Initializable {
         log.debug("called onSavePressed");
 
 	    if (initialType != currentType) {
-		    System.out.println("NOT SAME TYPE");
 		    if (currentType == MOVINGTRADER) {
 			    if (!isNewTrader) {
 				    traderService.remove(selectedTrader);
 			    }
 			    selectedTrader = new MovingTrader();
-			    System.out.println("NEW MOVINGTRADER");
 		    } else {
 			    if (!isNewTrader) {
 				    traderService.remove(selectedTrader);
 			    }
 				selectedTrader = new Trader();
-			    System.out.println("NEW TRADER");
 		    }
 	    }
 
@@ -344,7 +339,6 @@ public class EditTraderController implements Initializable {
 	    selectedTrader.setyPos((int) position.getY());
 
 	    if (selectedTrader instanceof MovingTrader) {
-		    System.out.println("IS MOVING TRADER");
 		    //avg. stayTime
 		    try {
 			    ((MovingTrader) selectedTrader).setAvgStayDays(Integer.parseInt(stayTimeField.getText()));
@@ -473,7 +467,6 @@ public class EditTraderController implements Initializable {
             selectedTrader = new Trader();
 	        initialType = TRADER;
 	        currentType = TRADER;
-	        System.out.println("NEW TRADER");
         } else {
             isNewTrader = false;
 	        if (trader instanceof MovingTrader) {
