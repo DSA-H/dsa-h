@@ -1,6 +1,8 @@
 package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -74,6 +76,13 @@ public class TradeBuyFromPlayerController implements Initializable {
             qualityList.add(q.getName());
         }
         selectedQuality.setItems(FXCollections.observableArrayList(qualityList));
+        selectedQuality.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                int setQuality = traderService.calculatePricePerUnit(ProductQuality.valueOf(newValue), productsTable.getSelectionModel().getSelectedItem(), trader);
+                selectedPrice.setText(Integer.toString(setQuality));
+            }
+        });
     }
 
     @FXML

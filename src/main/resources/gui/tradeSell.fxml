@@ -13,12 +13,12 @@
       <Label layoutX="80.0" layoutY="117.0" text="Menge:" />
       <HBox layoutX="15.0" layoutY="241.0" prefHeight="33.0" prefWidth="301.0" spacing="10.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="26.0" prefWidth="140.0" text="Abbrechen">
+            <Button mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="26.0" prefWidth="116.0" text="Abbrechen">
                <HBox.margin>
                   <Insets bottom="4.0" right="3.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#onSavePressed" text="Kauf durchführen" />
+            <Button mnemonicParsing="false" onAction="#onSavePressed" prefHeight="26.0" prefWidth="150.0" text="Kauf durchführen" />
          </children>
       </HBox>
       <Label alignment="CENTER" layoutY="14.0" prefHeight="27.0" prefWidth="316.0" text="Ware verkaufen an Spieler" textAlignment="CENTER">
