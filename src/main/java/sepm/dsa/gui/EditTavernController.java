@@ -27,133 +27,133 @@ import java.util.List;
 
 public class EditTavernController implements Initializable {
 
-    private static final Logger log = LoggerFactory.getLogger(EditTavernController.class);
-    private SpringFxmlLoader loader;
+	private static final Logger log = LoggerFactory.getLogger(EditTavernController.class);
+	private SpringFxmlLoader loader;
 
-    private Tavern selectedTavern;
-    private TavernService tavernService;
-    private LocationService locationService;
-    private SaveCancelService saveCancelService;
+	private Tavern selectedTavern;
+	private TavernService tavernService;
+	private LocationService locationService;
+	private SaveCancelService saveCancelService;
 
-    private boolean isNewTavern;
+	private boolean isNewTavern;
 
-    @FXML
-    private TextField nameField;
-    @FXML
-    private TextArea commentArea;
-    @FXML
-    private Label useageLabel;
-    @FXML
-    private ChoiceBox<ProductQuality> qualityCoicheBox;
-    @FXML
-    private Label priceLabel;
-    @FXML
-    private TextField bedsField;
-
-
-    @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialise EditTavernController");
-        qualityCoicheBox.setItems(FXCollections.observableArrayList(ProductQuality.values()));
-    }
-
-    @FXML
-    private void onSavePressed() {
-        log.debug("called onSavePressed");
+	@FXML
+	private TextField nameField;
+	@FXML
+	private TextArea commentArea;
+	@FXML
+	private Label useageLabel;
+	@FXML
+	private ChoiceBox<ProductQuality> qualityCoicheBox;
+	@FXML
+	private Label priceLabel;
+	@FXML
+	private TextField bedsField;
 
 
-        String name = nameField.getText();
-        int beds = 0;
-        try{
-            beds = Integer.parseInt(bedsField.getText());
-        }catch (NumberFormatException ex) {
-            throw new DSAValidationException("Anzahl der Betten muss eine ganze Zahl sein!");
-        }
-        ProductQuality quality = qualityCoicheBox.getValue();
+	@Override
+	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
+		log.debug("initialise EditTavernController");
+		qualityCoicheBox.setItems(FXCollections.observableArrayList(ProductQuality.values()));
+	}
 
-        // beds or quality change --> calulate new
-        if(isNewTavern || beds != selectedTavern.getBeds() || quality != selectedTavern.getQuality()) {
-            selectedTavern.setName(name);
-            selectedTavern.setQuality(quality);
-            selectedTavern.setBeds(beds);
-            selectedTavern.setComment(commentArea.getText());
-            int usage = tavernService.calculateBedsUseage(selectedTavern);
-            selectedTavern.setUsage(usage);
-            int price = tavernService.calculatePrice(selectedTavern);
-            selectedTavern.setPrice(price);
-        }else {
-            selectedTavern.setName(name);
-            selectedTavern.setQuality(quality);
-            selectedTavern.setBeds(beds);
-            selectedTavern.setComment(commentArea.getText());
-        }
+	@FXML
+	private void onSavePressed() {
+		log.debug("called onSavePressed");
 
-        if (isNewTavern) {
-            tavernService.add(selectedTavern);
-        } else {
-            tavernService.update(selectedTavern);
-        }
-        saveCancelService.save();
 
-        Stage stage = (Stage) nameField.getScene().getWindow();
-        stage.close();
-    }
+		String name = nameField.getText();
+		int beds = 0;
+		try {
+			beds = Integer.parseInt(bedsField.getText());
+		} catch (NumberFormatException ex) {
+			throw new DSAValidationException("Anzahl der Betten muss eine ganze Zahl sein!");
+		}
+		ProductQuality quality = qualityCoicheBox.getValue();
 
-    @FXML
-    private void onCancelPressed() {
-        log.debug("called onCancelPressed");
-        saveCancelService.cancel();
-        Stage stage = (Stage) nameField.getScene().getWindow();
-        stage.close();
-    }
+		// beds or quality change --> calulate new
+		if (isNewTavern || beds != selectedTavern.getBeds() || quality != selectedTavern.getQuality()) {
+			selectedTavern.setName(name);
+			selectedTavern.setQuality(quality);
+			selectedTavern.setBeds(beds);
+			selectedTavern.setComment(commentArea.getText());
+			int usage = tavernService.calculateBedsUseage(selectedTavern);
+			selectedTavern.setUsage(usage);
+			int price = tavernService.calculatePrice(selectedTavern);
+			selectedTavern.setPrice(price);
+		} else {
+			selectedTavern.setName(name);
+			selectedTavern.setQuality(quality);
+			selectedTavern.setBeds(beds);
+			selectedTavern.setComment(commentArea.getText());
+		}
 
-    public void setTavernService(TavernService tavernService) {
-        log.debug("calling setTavernService(" + tavernService + ")");
-        this.tavernService = tavernService;
-    }
+		if (isNewTavern) {
+			tavernService.add(selectedTavern);
+		} else {
+			tavernService.update(selectedTavern);
+		}
+		saveCancelService.save();
 
-    public void setLocationService(LocationService locationService) {
-        log.debug("calling setLocationService(" + locationService + ")");
-        this.locationService = locationService;
-    }
+		Stage stage = (Stage) nameField.getScene().getWindow();
+		stage.close();
+	}
 
-    public void setTavern(Tavern tavern) {
-	    if (tavern == null) {
-            isNewTavern = true;
-            selectedTavern = new Tavern();
-        } else {
-            isNewTavern = false;
-            this.selectedTavern = tavern;
-            fillGuiWithData(selectedTavern);
-        }
-    }
+	@FXML
+	private void onCancelPressed() {
+		log.debug("called onCancelPressed");
+		saveCancelService.cancel();
+		Stage stage = (Stage) nameField.getScene().getWindow();
+		stage.close();
+	}
 
-    /**
-     * @param tavern must be valid and must not be null
-     */
-    private void fillGuiWithData(Tavern tavern) {
-        nameField.setText(tavern.getName());
-        bedsField.setText("" + tavern.getBeds());
-        qualityCoicheBox.getSelectionModel().select(tavern.getQuality());
-        useageLabel.setText(tavern.getUsage() + "");
-        priceLabel.setText(tavern.getPrice() + "");
-        commentArea.setText(tavern.getComment() == null ? "" : tavern.getComment());
-    }
+	public void setTavernService(TavernService tavernService) {
+		log.debug("calling setTavernService(" + tavernService + ")");
+		this.tavernService = tavernService;
+	}
 
-    public void setLoader(SpringFxmlLoader loader) {
-        this.loader = loader;
-    }
+	public void setLocationService(LocationService locationService) {
+		log.debug("calling setLocationService(" + locationService + ")");
+		this.locationService = locationService;
+	}
 
-    public void setSaveCancelService(SaveCancelService saveCancelService) {
-        this.saveCancelService = saveCancelService;
-    }
+	public void setTavern(Tavern tavern) {
+		if (tavern == null) {
+			isNewTavern = true;
+			selectedTavern = new Tavern();
+		} else {
+			isNewTavern = false;
+			this.selectedTavern = tavern;
+			fillGuiWithData(selectedTavern);
+		}
+	}
 
-    public void setPosition(Point2D pos) {
-        selectedTavern.setxPos((int) pos.getX());
-        selectedTavern.setyPos((int) pos.getY());
-    }
+	/**
+	 * @param tavern must be valid and must not be null
+	 */
+	private void fillGuiWithData(Tavern tavern) {
+		nameField.setText(tavern.getName());
+		bedsField.setText("" + tavern.getBeds());
+		qualityCoicheBox.getSelectionModel().select(tavern.getQuality());
+		useageLabel.setText(tavern.getUsage() + "");
+		priceLabel.setText(tavern.getPrice() + "");
+		commentArea.setText(tavern.getComment() == null ? "" : tavern.getComment());
+	}
 
-    public void setLocation(Location location) {
-        selectedTavern.setLocation(location);
-    }
+	public void setLoader(SpringFxmlLoader loader) {
+		this.loader = loader;
+	}
+
+	public void setSaveCancelService(SaveCancelService saveCancelService) {
+		this.saveCancelService = saveCancelService;
+	}
+
+	public void setPosition(Point2D pos) {
+		selectedTavern.setxPos((int) pos.getX());
+		selectedTavern.setyPos((int) pos.getY());
+	}
+
+	public void setLocation(Location location) {
+		selectedTavern.setLocation(location);
+	}
 }

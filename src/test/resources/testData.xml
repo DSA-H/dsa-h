@@ -7,27 +7,33 @@
     <regions id="5" name="region5" color="1C11ED" temperatureId="0" rainfallChanceId="1"/>
     <regions id="6" name="region6" color="FFFFFF" temperatureId="4" rainfallChanceId="0"/>
     <regions id="7" name="region7" color="FFFFFF" temperatureId="4" rainfallChanceId="0"/>
-    <borders region1="1" region2="2" borderCost="80" />
-    <borders region1="1" region2="3" borderCost="120" />
-    <borders region1="3" region2="4" borderCost="130" />
-    <borders region1="5" region2="6" borderCost="160" />
-    <borders region1="4" region2="5" borderCost="40" />
-    <borders region1="4" region2="6" borderCost="110" />
-    <borders region1="1" region2="6" borderCost="60" />
+    <borders region1="1" region2="2" borderCost="80"/>
+    <borders region1="1" region2="3" borderCost="120"/>
+    <borders region1="3" region2="4" borderCost="130"/>
+    <borders region1="5" region2="6" borderCost="160"/>
+    <borders region1="4" region2="5" borderCost="40"/>
+    <borders region1="4" region2="6" borderCost="110"/>
+    <borders region1="1" region2="6" borderCost="60"/>
     <locations id="1" name="location1" REGION="1" xCoord="50" yCoord="50" sizeId="2" height="10" weatherId="1"/>
     <locations id="2" name="location2" REGION="2" xCoord="100" yCoord="100" sizeId="2" height="10" weatherId="3"/>
     <locations id="3" name="location3" REGION="2" xCoord="70" yCoord="80" sizeId="4" height="30" weatherId="2"/>
     <!-- ======================================================== -->
     <!-- don't change this!! Used for testing LocationConnections -->
-        <locations id="4" name="location4_LoConTest" REGION="2" xCoord="500" yCoord="500" sizeId="4" height="100" weatherId="1"/>
-        <locations id="5" name="location5_LoConTest" REGION="2" xCoord="500" yCoord="550" sizeId="4" height="100" weatherId="1"/>
-        <locations id="6" name="location6_LoConTest" REGION="2" xCoord="550" yCoord="500" sizeId="4" height="100" weatherId="1"/>
-        <locations id="7" name="location7_LoConTest" REGION="2" xCoord="530" yCoord="520" sizeId="0" height="50" weatherId="2"/>
-        <locations id="8" name="location8_LoConTest" REGION="3" xCoord="550" yCoord="550" sizeId="1" height="40" weatherId="4"/>
-        <locations id="9" name="location9_LoConTest" REGION="3" xCoord="700" yCoord="700" sizeId="3" height="140" weatherId="1"/>
-        <connections location1="4" location2="5" travelTime="4" />
-        <connections location1="4" location2="6" travelTime="7" />
-        <connections location1="7" location2="4" travelTime="10" />
+    <locations id="4" name="location4_LoConTest" REGION="2" xCoord="500" yCoord="500" sizeId="4" height="100"
+               weatherId="1"/>
+    <locations id="5" name="location5_LoConTest" REGION="2" xCoord="500" yCoord="550" sizeId="4" height="100"
+               weatherId="1"/>
+    <locations id="6" name="location6_LoConTest" REGION="2" xCoord="550" yCoord="500" sizeId="4" height="100"
+               weatherId="1"/>
+    <locations id="7" name="location7_LoConTest" REGION="2" xCoord="530" yCoord="520" sizeId="0" height="50"
+               weatherId="2"/>
+    <locations id="8" name="location8_LoConTest" REGION="3" xCoord="550" yCoord="550" sizeId="1" height="40"
+               weatherId="4"/>
+    <locations id="9" name="location9_LoConTest" REGION="3" xCoord="700" yCoord="700" sizeId="3" height="140"
+               weatherId="1"/>
+    <connections location1="4" location2="5" travelTime="4"/>
+    <connections location1="4" location2="6" travelTime="7"/>
+    <connections location1="7" location2="4" travelTime="10"/>
     <!-- end of LocationConnections test data                     -->
     <!-- ======================================================== -->
 
@@ -46,66 +52,71 @@
     <units id="8" name="Raumschritt" unittype_id="5" valueToBaseUnit="1" shortname="Raumschr."/>
 
     <taverns id="1" name="Zum Wegstein" location_id="1" xPos="42" yPos="12" usage="12" price="4" quality="2" beds="10"/>
-    <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="60" yPos="9" usage="12" price="13" quality="1" beds="7"/>
+    <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="60" yPos="9" usage="12" price="13" quality="1"
+             beds="7"/>
 
     <players id="1" name="Mr X" comment="no comment"/>
     <players id="2" name="Mr Z" comment="A test comment"/>
-    <traderCategories id="1" name="category1" />
-    <traderCategories id="2" name="category2" />
-    <traderCategories id="3" name="category3" />
-    <traderCategories id="4" name="category4" />
-    <traderCategories id="5" name="noTradersToThisCategorie" />
-    <products id="1" name="product1" unit_id="1" occurence="100" cost="17" attributeId="1" quality="false" />
-    <products id="2" name="product2" unit_id="2" occurence="100" cost="23" attributeId="2" quality="true" />
-    <products id="3" name="product3" unit_id="3" occurence="100" cost="29" attributeId="3" quality="true" />
-    <products id="4" name="product4" unit_id="4" occurence="100" cost="36" attributeId="0" quality="true" />
-    <products id="5" name="product5" unit_id="4" occurence="100" cost="200" attributeId="3" quality="true" />
-    <products id="6" name="product6" unit_id="7" occurence="100" cost="450" attributeId="0" quality="true" />
-    <products id="7" name="product7" unit_id="6" occurence="100" cost="65" attributeId="2" quality="true" />
-    <products id="8" name="product8" unit_id="5" occurence="100" cost="105" attributeId="0" quality="true" />
-    <traders id="1" name="Optimus Prime" category_id="1" size="20" xPos="7" yPos="7" mut="14" intelligence="14" charisma="14" convince="5" location_id="1" />
-    <traders id="2" name="Megatron" category_id="2" size="200" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13" convince="7" location_id="1" />
-    <traders id="3" name="Fluttershy" category_id="3" size="200" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13" convince="7" location_id="1" />
-    <traders id="4" name="trader4" category_id="4" size="400" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13" convince="7" location_id="1" />
-    <movingTraders trader="2" lastMoved="0" avgStayDays="3" preferredDistance="1" />
-    <movingTraders trader="3" lastMoved="0" avgStayDays="11" preferredTownSize="1" preferredDistance="0" />
-    <offers id="1" product_id="1" trader_id="1" amount="2" pricePerUnit="50" qualityId="1" />
-    <offers id="2" product_id="2" trader_id="1" amount="8" pricePerUnit="10" qualityId="0" />
-    <productCategories id="1" name="category1" />
-    <productCategories id="2" name="category2" />
+    <traderCategories id="1" name="category1"/>
+    <traderCategories id="2" name="category2"/>
+    <traderCategories id="3" name="category3"/>
+    <traderCategories id="4" name="category4"/>
+    <traderCategories id="5" name="noTradersToThisCategorie"/>
+    <products id="1" name="product1" unit_id="1" occurence="100" cost="17" attributeId="1" quality="false"/>
+    <products id="2" name="product2" unit_id="2" occurence="100" cost="23" attributeId="2" quality="true"/>
+    <products id="3" name="product3" unit_id="3" occurence="100" cost="29" attributeId="3" quality="true"/>
+    <products id="4" name="product4" unit_id="4" occurence="100" cost="36" attributeId="0" quality="true"/>
+    <products id="5" name="product5" unit_id="4" occurence="100" cost="200" attributeId="3" quality="true"/>
+    <products id="6" name="product6" unit_id="7" occurence="100" cost="450" attributeId="0" quality="true"/>
+    <products id="7" name="product7" unit_id="6" occurence="100" cost="65" attributeId="2" quality="true"/>
+    <products id="8" name="product8" unit_id="5" occurence="100" cost="105" attributeId="0" quality="true"/>
+    <traders id="1" name="Optimus Prime" category_id="1" size="20" xPos="7" yPos="7" mut="14" intelligence="14"
+             charisma="14" convince="5" location_id="1"/>
+    <traders id="2" name="Megatron" category_id="2" size="200" xPos="7" yPos="7" mut="13" intelligence="13"
+             charisma="13" convince="7" location_id="1"/>
+    <traders id="3" name="Fluttershy" category_id="3" size="200" xPos="7" yPos="7" mut="13" intelligence="13"
+             charisma="13" convince="7" location_id="1"/>
+    <traders id="4" name="trader4" category_id="4" size="400" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13"
+             convince="7" location_id="1"/>
+    <movingTraders trader="2" lastMoved="0" avgStayDays="3" preferredDistance="1"/>
+    <movingTraders trader="3" lastMoved="0" avgStayDays="11" preferredTownSize="1" preferredDistance="0"/>
+    <offers id="1" product_id="1" trader_id="1" amount="2" pricePerUnit="50" qualityId="1"/>
+    <offers id="2" product_id="2" trader_id="1" amount="8" pricePerUnit="10" qualityId="0"/>
+    <productCategories id="1" name="category1"/>
+    <productCategories id="2" name="category2"/>
     <productCategories id="3" name="category3" parent_id="2"/>
     <productCategories id="4" name="category4" parent_id="3"/>
     <productCategories id="5" name="category5" parent_id="3"/>
-    <productCategories id="6" name="category6" />
-    <product_categories productId="1" categoryId="1" />
-    <product_categories productId="1" categoryId="2" />
-    <product_categories productId="1" categoryId="3" />
-    <product_categories productId="2" categoryId="5" />
-    <product_categories productId="2" categoryId="1" />
-    <product_categories productId="3" categoryId="1" />
-    <product_categories productId="4" categoryId="2" />
-    <product_categories productId="6" categoryId="1" />
-    <product_categories productId="7" categoryId="3" />
-    <product_categories productId="8" categoryId="6" />
-    <product_regions productId="1" regionId="1" />
-    <product_regions productId="2" regionId="3" />
-    <product_regions productId="2" regionId="2" />
-    <product_regions productId="3" regionId="2" />
-    <product_regions productId="4" regionId="2" />
-    <product_regions productId="5" regionId="4" />
-    <product_regions productId="5" regionId="5" />
-    <product_regions productId="5" regionId="3" />
-    <product_regions productId="6" regionId="5" />
-    <product_regions productId="8" regionId="7" />
-    <assortmentNatures DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="1" traderCategory_id="1" />
-    <assortmentNatures DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="2" traderCategory_id="1" />
-    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="1" traderCategory_id="2" />
-    <assortmentNatures DEFAULTOCCURENCE="50" PRODUCTCATEGORY_ID="4" traderCategory_id="2" />
-    <assortmentNatures DEFAULTOCCURENCE="20" PRODUCTCATEGORY_ID="5" traderCategory_id="2" />
-    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="6" traderCategory_id="4" />
-    <assortmentNatures DEFAULTOCCURENCE="20" PRODUCTCATEGORY_ID="1" traderCategory_id="4" />
-    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="1" traderCategory_id="5" />
-    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="2" traderCategory_id="5" />
+    <productCategories id="6" name="category6"/>
+    <product_categories productId="1" categoryId="1"/>
+    <product_categories productId="1" categoryId="2"/>
+    <product_categories productId="1" categoryId="3"/>
+    <product_categories productId="2" categoryId="5"/>
+    <product_categories productId="2" categoryId="1"/>
+    <product_categories productId="3" categoryId="1"/>
+    <product_categories productId="4" categoryId="2"/>
+    <product_categories productId="6" categoryId="1"/>
+    <product_categories productId="7" categoryId="3"/>
+    <product_categories productId="8" categoryId="6"/>
+    <product_regions productId="1" regionId="1"/>
+    <product_regions productId="2" regionId="3"/>
+    <product_regions productId="2" regionId="2"/>
+    <product_regions productId="3" regionId="2"/>
+    <product_regions productId="4" regionId="2"/>
+    <product_regions productId="5" regionId="4"/>
+    <product_regions productId="5" regionId="5"/>
+    <product_regions productId="5" regionId="3"/>
+    <product_regions productId="6" regionId="5"/>
+    <product_regions productId="8" regionId="7"/>
+    <assortmentNatures DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="1" traderCategory_id="1"/>
+    <assortmentNatures DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="2" traderCategory_id="1"/>
+    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="1" traderCategory_id="2"/>
+    <assortmentNatures DEFAULTOCCURENCE="50" PRODUCTCATEGORY_ID="4" traderCategory_id="2"/>
+    <assortmentNatures DEFAULTOCCURENCE="20" PRODUCTCATEGORY_ID="5" traderCategory_id="2"/>
+    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="6" traderCategory_id="4"/>
+    <assortmentNatures DEFAULTOCCURENCE="20" PRODUCTCATEGORY_ID="1" traderCategory_id="4"/>
+    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="1" traderCategory_id="5"/>
+    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="2" traderCategory_id="5"/>
     <!-- location cascade deleting test data, don't change this -->
 
     <!-- end of location cascade deleting test data -->

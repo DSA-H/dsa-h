@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class PlacementController implements Initializable{
+public class PlacementController implements Initializable {
 	private static final Logger log = LoggerFactory.getLogger(PlacementController.class);
 	private SpringFxmlLoader loader;
 	private LocationService locationService;
@@ -50,7 +50,8 @@ public class PlacementController implements Initializable{
 	private Button commitButton;
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {}
+	public void initialize(URL location, ResourceBundle resources) {
+	}
 
 	@FXML
 	private void onConfirmPressed() {

@@ -50,8 +50,8 @@ import java.util.List;
 public class MainMenuController implements Initializable {
 
 	private static final Logger log = LoggerFactory.getLogger(MainMenuController.class);
-    private static final int WORLDMODE = 0;
-    private static final int LOCATIONMODE = 1;
+	private static final int WORLDMODE = 0;
+	private static final int LOCATIONMODE = 1;
 
 	private SpringFxmlLoader loader;
 	private LocationService locationService;
@@ -206,7 +206,7 @@ public class MainMenuController implements Initializable {
 			}
 		});
 
-		zoomSlider.setMin((536)/mapCanvas.getHeight());
+		zoomSlider.setMin((536) / mapCanvas.getHeight());
 		zoomSlider.setMax(2.69);
 		zoomSlider.adjustValue(1.0);
 	}
@@ -231,10 +231,10 @@ public class MainMenuController implements Initializable {
 			deleteButton.setDisable(true);
 			editButton.setDisable(true);
 			chooseButton.setText("Weltansicht");
-            createButton.setText("Händler / Wirtshaus platzieren");
+			createButton.setText("Händler / Wirtshaus platzieren");
 			editButton.setText("Details");
 			Stage stage = (Stage) editButton.getScene().getWindow();
-			stage.setTitle("DSA-Händlertool - "+ selectedLocation.getName());
+			stage.setTitle("DSA-Händlertool - " + selectedLocation.getName());
 		} else {
 			dontUpdateScroll = true;
 			scrollPane.setHvalue(worldScrollH);
@@ -245,7 +245,7 @@ public class MainMenuController implements Initializable {
 			locationTable.setVisible(true);
 			traderList.setVisible(false);
 			chooseButton.setText("Ortsansicht");
-            createButton.setText("Ort platzieren");
+			createButton.setText("Ort platzieren");
 			editButton.setText("Bearbeiten");
 			Stage stage = (Stage) editButton.getScene().getWindow();
 			stage.setTitle("DSA-Händlertool");
@@ -326,8 +326,8 @@ public class MainMenuController implements Initializable {
 						.title("Löschen?")
 						.masthead(null)
 						.message("Wollen Sie den Ort '" + selectedLocation.getName() + "' wirklich löschen? Folgende verbundenden Einträge würden ebenfalls gelöscht werden:" + connectedEntries)
-                        .actions(Dialog.Actions.NO, Dialog.Actions.YES)
-                        .showConfirm(); // TODO was ist hier sinnvoll?
+						.actions(Dialog.Actions.NO, Dialog.Actions.YES)
+						.showConfirm(); // TODO was ist hier sinnvoll?
 				if (response == Dialog.Actions.YES) {
 					locationService.remove(selectedLocation);
 					saveCancelService.save();
@@ -352,9 +352,9 @@ public class MainMenuController implements Initializable {
 					Action response = Dialogs.create()
 							.title("Löschen?")
 							.masthead(null)
-							.message("Wollen Sie den Händer '" + ((Trader)selectedObject).getName() + "' wirklich löschen")
-                            .actions(Dialog.Actions.NO, Dialog.Actions.YES)
-                            .showConfirm();
+							.message("Wollen Sie den Händer '" + ((Trader) selectedObject).getName() + "' wirklich löschen")
+							.actions(Dialog.Actions.NO, Dialog.Actions.YES)
+							.showConfirm();
 					if (response == Dialog.Actions.YES) {
 						traderService.remove((Trader) selectedObject);
 						saveCancelService.save();
@@ -365,9 +365,9 @@ public class MainMenuController implements Initializable {
 					Action response = Dialogs.create()
 							.title("Löschen?")
 							.masthead(null)
-							.message("Wollen Sie das Wirtshaus '" + ((Tavern)selectedObject).getName() + "' wirklich löschen")
-                            .actions(Dialog.Actions.NO, Dialog.Actions.YES)
-                            .showConfirm();
+							.message("Wollen Sie das Wirtshaus '" + ((Tavern) selectedObject).getName() + "' wirklich löschen")
+							.actions(Dialog.Actions.NO, Dialog.Actions.YES)
+							.showConfirm();
 					if (response == Dialog.Actions.YES) {
 						tavernService.remove((Tavern) selectedObject);
 						saveCancelService.save();
@@ -415,7 +415,7 @@ public class MainMenuController implements Initializable {
 				PlacementController controller = loader.getController();
 
 				stage.setTitle("Händler/Wirtshaus platzieren");
-				controller.setUp(selectedLocation, new Point2D(0,0), null, true);
+				controller.setUp(selectedLocation, new Point2D(0, 0), null, true);
 
 				stage.setScene(new Scene(scene, 350, 190));
 				stage.setResizable(false);
@@ -465,8 +465,8 @@ public class MainMenuController implements Initializable {
 
 		Point mousePosition = MouseInfo.getPointerInfo().getLocation();
 		Canvas mapCanvas = (Canvas) zoomGroup.getChildren().get(0);
-		double scrollableX = mapCanvas.getWidth()*scaleFactor - scrollPane.getWidth();
-		double scrollableY = mapCanvas.getHeight()*scaleFactor - scrollPane.getHeight();
+		double scrollableX = mapCanvas.getWidth() * scaleFactor - scrollPane.getWidth();
+		double scrollableY = mapCanvas.getHeight() * scaleFactor - scrollPane.getHeight();
 		if (mapCanvas.getWidth() > scrollPane.getWidth()) {
 			scrollableX += 12;
 		}
@@ -478,7 +478,7 @@ public class MainMenuController implements Initializable {
 		int yPos = (int) (mousePosition.getY() - SPLocation.getY() + scrollPane.getVvalue() * scrollableY);
 
 		Point2D pos = new Point2D(xPos, yPos);
-		Point2D realPos = new Point2D(xPos/scaleFactor, yPos/scaleFactor);
+		Point2D realPos = new Point2D(xPos / scaleFactor, yPos / scaleFactor);
 
 		if (creationMode) {
 			Stage stage = new Stage();
@@ -582,7 +582,7 @@ public class MainMenuController implements Initializable {
 	}
 
 	@FXML
-	private void onCalculateCurrencyClicked(){
+	private void onCalculateCurrencyClicked() {
 		log.debug("onCalculateCurrencyClicked - open Calculate Currency Window");
 		Stage stage = new Stage();
 
@@ -668,41 +668,41 @@ public class MainMenuController implements Initializable {
 		checkTraderFocus();
 	}
 
-    @FXML
-    private void onEditDateClicked() {
-        log.debug("onEditDateClicked - open EditDate Window");
-        Stage stage = new Stage();
+	@FXML
+	private void onEditDateClicked() {
+		log.debug("onEditDateClicked - open EditDate Window");
+		Stage stage = new Stage();
 
-        Parent scene = (Parent) loader.load("/gui/edittime.fxml");
+		Parent scene = (Parent) loader.load("/gui/edittime.fxml");
 
-        stage.setTitle("Datum umstellen");
-        stage.setScene(new Scene(scene, 419, 150));
-        stage.setResizable(false);
-	    stage.showAndWait();
+		stage.setTitle("Datum umstellen");
+		stage.setScene(new Scene(scene, 419, 150));
+		stage.setResizable(false);
+		stage.showAndWait();
 
-	    updateTables();
-	    updateMap();
-	    checkLocationFocus();
-	    checkTraderFocus();
-    }
+		updateTables();
+		updateMap();
+		checkLocationFocus();
+		checkTraderFocus();
+	}
 
-    @FXML
-    private void onForwardTimeClicked() {
-        log.debug("onForwardTimeClicked - open ForwardTime Window");
-        Stage stage = new Stage();
+	@FXML
+	private void onForwardTimeClicked() {
+		log.debug("onForwardTimeClicked - open ForwardTime Window");
+		Stage stage = new Stage();
 
-        Parent scene = (Parent) loader.load("/gui/forwardtime.fxml");
+		Parent scene = (Parent) loader.load("/gui/forwardtime.fxml");
 
-        stage.setTitle("Zeit vorstellen");
-        stage.setScene(new Scene(scene, 462, 217));
-        stage.setResizable(false);
-	    stage.showAndWait();
+		stage.setTitle("Zeit vorstellen");
+		stage.setScene(new Scene(scene, 462, 217));
+		stage.setResizable(false);
+		stage.showAndWait();
 
-	    updateTables();
-	    updateMap();
-	    checkLocationFocus();
-	    checkTraderFocus();
-    }
+		updateTables();
+		updateMap();
+		checkLocationFocus();
+		checkTraderFocus();
+	}
 
 	@FXML
 	private void onExitClicked() {
@@ -773,8 +773,9 @@ public class MainMenuController implements Initializable {
 
 	@FXML
 	private void onCalcPressed() {
-		if (nothingChanged) {zoomGroup.getChildren().remove(pathCanvas);
-			pathCanvas = new Canvas(1,1);
+		if (nothingChanged) {
+			zoomGroup.getChildren().remove(pathCanvas);
+			pathCanvas = new Canvas(1, 1);
 			zoomGroup.getChildren().add(pathCanvas);
 			nothingChanged = false;
 			calcButton.setText("Berechnen");
@@ -853,14 +854,14 @@ public class MainMenuController implements Initializable {
 	@FXML
 	private void onZoomInPressed() {
 		double oldVal = zoomSlider.getValue();
-		double newVal = oldVal + (zoomSlider.getMax()-zoomSlider.getMin())/10;
+		double newVal = oldVal + (zoomSlider.getMax() - zoomSlider.getMin()) / 10;
 		zoomSlider.adjustValue(newVal);
 	}
 
 	@FXML
 	private void onZoomOutPressed() {
 		double oldVal = zoomSlider.getValue();
-		double newVal = oldVal - (zoomSlider.getMax()-zoomSlider.getMin())/10;
+		double newVal = oldVal - (zoomSlider.getMax() - zoomSlider.getMin()) / 10;
 		zoomSlider.adjustValue(newVal);
 	}
 
@@ -883,8 +884,8 @@ public class MainMenuController implements Initializable {
 	}
 
 	private void updateZoom() {
-		double minScaleX = (scrollPane.getWidth()-2)/mapCanvas.getWidth();
-		double minScaleY = (scrollPane.getHeight()-2)/mapCanvas.getHeight();
+		double minScaleX = (scrollPane.getWidth() - 2) / mapCanvas.getWidth();
+		double minScaleY = (scrollPane.getHeight() - 2) / mapCanvas.getHeight();
 		zoomSlider.setMin(Math.min(minScaleX, minScaleY));
 		zoomSlider.setMax(2.69);
 	}
@@ -976,40 +977,41 @@ public class MainMenuController implements Initializable {
 						public void handle(MouseEvent e) {
 							boolean onStuff = false;
 							for (Trader t : traders) {
-								if (e.getX() > t.getxPos()-10 && e.getX() < t.getxPos()+10 &&
-										e.getY() > t.getyPos()-10 && e.getY() < t.getyPos()+10) {
+								if (e.getX() > t.getxPos() - 10 && e.getX() < t.getxPos() + 10 &&
+										e.getY() > t.getyPos() - 10 && e.getY() < t.getyPos() + 10) {
 									Canvas highlight = new Canvas(20, 20);
 									highlight.getGraphicsContext2D().setLineWidth(6);
 									highlight.getGraphicsContext2D().setStroke(Color.RED);
 									highlight.getGraphicsContext2D().strokeLine(4, 4, 16, 16);
 									highlight.getGraphicsContext2D().strokeLine(4, 16, 16, 4);
-									highlight.setLayoutX(t.getxPos()-10);
-									highlight.setLayoutY(t.getyPos()-10);
+									highlight.setLayoutX(t.getxPos() - 10);
+									highlight.setLayoutY(t.getyPos() - 10);
 									zoomGroup.getChildren().add(highlight);
 									onStuff = true;
 								}
 							}
 							for (Tavern t : taverns) {
-								if (e.getX() > t.getxPos()-10 && e.getX() < t.getxPos()+10 &&
-										e.getY() > t.getyPos()-10 && e.getY() < t.getyPos()+10) {
+								if (e.getX() > t.getxPos() - 10 && e.getX() < t.getxPos() + 10 &&
+										e.getY() > t.getyPos() - 10 && e.getY() < t.getyPos() + 10) {
 									Canvas highlight = new Canvas(20, 20);
 									highlight.getGraphicsContext2D().setLineWidth(6);
 									highlight.getGraphicsContext2D().setStroke(Color.RED);
 									highlight.getGraphicsContext2D().strokeLine(4, 4, 16, 16);
 									highlight.getGraphicsContext2D().strokeLine(4, 16, 16, 4);
-									highlight.setLayoutX(t.getxPos()-10);
-									highlight.setLayoutY(t.getyPos()-10);
+									highlight.setLayoutX(t.getxPos() - 10);
+									highlight.setLayoutY(t.getyPos() - 10);
 									zoomGroup.getChildren().add(highlight);
 									onStuff = true;
 								}
 							}
 							if (!onStuff) {
-								while(zoomGroup.getChildren().size() > 2) {
+								while (zoomGroup.getChildren().size() > 2) {
 									zoomGroup.getChildren().remove(2);
 								}
 							}
 						}
-					});
+					}
+			);
 		}
 	}
 
@@ -1036,7 +1038,7 @@ public class MainMenuController implements Initializable {
 				gc.setStroke(Color.BLACK);
 				gc.setLineWidth(1);
 				gc.strokeRoundRect(posX1 - 10, posY1 - 10, 20, 20, 10, 10);
-                saveCancelService.refresh(l);
+				saveCancelService.refresh(l);
 				for (LocationConnection lc : l.getAllConnections()) {
 					loc1 = lc.getLocation1();
 					loc2 = lc.getLocation2();
@@ -1044,8 +1046,8 @@ public class MainMenuController implements Initializable {
 					posY1 = loc1.getyCoord();
 					posX2 = loc2.getxCoord();
 					posY2 = loc2.getyCoord();
-					posXm = posX1 + (posX2-posX1)/2;
-					posYm = posY1 + (posY2-posY1)/2;
+					posXm = posX1 + (posX2 - posX1) / 2;
+					posYm = posY1 + (posY2 - posY1) / 2;
 
 					gc.setLineWidth(3);
 					gc.setStroke(new Color(
@@ -1131,8 +1133,8 @@ public class MainMenuController implements Initializable {
 				.title("Programm beenden?")
 				.masthead(null)
 				.message("Wollen Sie das Händlertool wirklich beenden? Nicht gespeicherte Änderungen gehen dabei verloren.")
-                .actions(Dialog.Actions.NO, Dialog.Actions.YES)
-                .showConfirm();
+				.actions(Dialog.Actions.NO, Dialog.Actions.YES)
+				.showConfirm();
 
 		if (response == Dialog.Actions.YES) {
 			log.debug("Confirm-Exit-Dialog confirmed");
@@ -1184,7 +1186,7 @@ public class MainMenuController implements Initializable {
 				selectionCanvas.setLayoutX(selectedLocation.getxCoord() - 15);
 				selectionCanvas.setLayoutY(selectedLocation.getyCoord() - 15);
 			} else {
-				selectionCanvas = new Canvas(1,1);
+				selectionCanvas = new Canvas(1, 1);
 			}
 
 			zoomGroup.getChildren().add(selectionCanvas);
@@ -1216,8 +1218,8 @@ public class MainMenuController implements Initializable {
 			}
 			zoomGroup.getChildren().remove(selectionCanvas);
 
-			if ( (selectedObject instanceof Trader && ((Trader)selectedObject).getxPos() > 0 && ((Trader)selectedObject).getyPos() > 0) ||
-					(selectedObject instanceof Tavern && ((Tavern)selectedObject).getxPos() > 0 && ((Tavern)selectedObject).getyPos() > 0)) {
+			if ((selectedObject instanceof Trader && ((Trader) selectedObject).getxPos() > 0 && ((Trader) selectedObject).getyPos() > 0) ||
+					(selectedObject instanceof Tavern && ((Tavern) selectedObject).getxPos() > 0 && ((Tavern) selectedObject).getyPos() > 0)) {
 				selectionCanvas = new Canvas(30, 30);
 				selectionCanvas.getGraphicsContext2D().setLineWidth(6);
 				selectionCanvas.getGraphicsContext2D().setStroke(Color.GREEN);
@@ -1231,7 +1233,7 @@ public class MainMenuController implements Initializable {
 					selectionCanvas.setLayoutY(((Tavern) selectedObject).getyPos() - 10);
 				}
 			} else {
-				selectionCanvas = new Canvas(1,1);
+				selectionCanvas = new Canvas(1, 1);
 			}
 
 			zoomGroup.getChildren().add(selectionCanvas);
@@ -1263,8 +1265,8 @@ public class MainMenuController implements Initializable {
 		this.locationConnectionService = locationConnectionService;
 	}
 
-    public void setLoader(SpringFxmlLoader loader) {
-        this.loader = loader;
-    }
+	public void setLoader(SpringFxmlLoader loader) {
+		this.loader = loader;
+	}
 
 }
