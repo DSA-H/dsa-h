@@ -404,6 +404,10 @@
         <property name="loader" ref="loader"/>
         <property name="timeService" ref="timeService"/>
     </bean>
+    <bean id="movingTraderList" class="sepm.dsa.gui.MovingTraderListController">
+        <property name="loader" ref="loader"/>
+        <property name="traderService" ref="traderService"/>
+    </bean>
     <!-- Transaction -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">

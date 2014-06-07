@@ -528,9 +528,8 @@ public class MainMenuController implements Initializable {
 				for (LocationConnection lc : connections) {
 					loc1 = lc.getLocation1();
 					loc2 = lc.getLocation2();
-					if ( (xPos < loc1.getxCoord() && xPos > loc2.getxCoord()) || (xPos > loc1.getxCoord() && xPos < loc2.getxCoord()) ) {
-						if ((yPos < loc1.getyCoord() && yPos > loc2.getyCoord()) || (yPos > loc1.getyCoord() && yPos < loc2.getyCoord())) {
-							System.out.println("RECTANGULAR FOUND");
+					if ( (xPos < loc1.getxCoord()+10 && xPos > loc2.getxCoord()-10) || (xPos > loc1.getxCoord()-10 && xPos < loc2.getxCoord()+10) ) {
+						if ((yPos < loc1.getyCoord()+10 && yPos > loc2.getyCoord()-10) || (yPos > loc1.getyCoord()-10 && yPos < loc2.getyCoord()+10)) {
 							if (loc1.getxCoord() > loc2.getxCoord()) {
 								Location temp = loc1;
 								loc1 = loc2;
@@ -540,7 +539,14 @@ public class MainMenuController implements Initializable {
 							double k = ((double) (loc2.getyCoord()-loc1.getyCoord())) / ((double) (loc2.getxCoord()-loc1.getxCoord()));
 							double x = xPos - loc1.getxCoord();
 							if (yPos-10 < (int) (k * x + d) && yPos+10 > (int) (k * x + d)) {
-								//TODO connection found
+								Stage stage = new Stage();
+								Parent scene = (Parent) loader.load("/gui/movingtraderlist.fxml");
+								MovingTraderListController controller = loader.getController();
+								controller.setLocationConnection(lc);
+								stage.setTitle("Fahrende Händler");
+								stage.setScene(new Scene(scene, 600, 400));
+								stage.setResizable(false);
+								stage.showAndWait();
 								return;
 							}
 						}
@@ -1102,10 +1108,8 @@ public class MainMenuController implements Initializable {
 		for (Trader t : traders) {
 			if (t instanceof MovingTrader) {
 				gc.setStroke(Color.LIGHTBLUE);
-				System.out.println(t);
 			} else {
 				gc.setStroke(Color.DARKBLUE);
-				System.out.println(t);
 			}
 			posX = t.getxPos();
 			posY = t.getyPos();

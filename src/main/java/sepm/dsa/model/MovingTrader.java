@@ -69,6 +69,6 @@ public class MovingTrader extends Trader implements Serializable {
 
     @Override
     public String toString() {
-        return "fahrender Händler " + getName();
+        return "fahrender Händler " + getName() + " (" + getCategory() + ")";
     }
 }
