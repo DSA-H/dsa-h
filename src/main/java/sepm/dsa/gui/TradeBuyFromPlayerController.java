@@ -4,7 +4,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,9 +56,6 @@ public class TradeBuyFromPlayerController implements Initializable {
     private TableColumn<Product, String> productColumn;
     @FXML
     private TextField searchField;
-    @FXML
-    private CheckBox qualityChoice;
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -79,26 +79,25 @@ public class TradeBuyFromPlayerController implements Initializable {
     @FXML
     private void checkFocus() {
         Product selProduct = productsTable.getSelectionModel().getSelectedItem();
-        ProductQuality quality = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
+        ProductQuality quality;
         if (selProduct != null) {
-            if (quality != null) {
-                int setQuality = traderService.calculatePricePerUnit(quality, productsTable.getSelectionModel().getSelectedItem(), trader);
-                selectedPrice.setText(Integer.toString(setQuality));
+            if (selProduct.getQuality()) {
+                selectedQuality.setDisable(false);
+                quality = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
+                if (quality != null) {
+                    int setQuality = traderService.calculatePricePerUnit(quality, productsTable.getSelectionModel().getSelectedItem(), trader);
+                    selectedPrice.setText(Integer.toString(setQuality));
+                } else {
+                    selectedQuality.getSelectionModel().select(3);
+                    int setQuality = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
+                    selectedPrice.setText(Integer.toString(setQuality));
+                }
             } else {
                 int priceDefault = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
                 selectedPrice.setText(Integer.toString(priceDefault));
+                selectedQuality.setDisable(true);
             }
             selectedUnit.getSelectionModel().select(selProduct.getUnit());
-        }
-    }
-
-    @FXML
-    private void onEnableQualityClicked() {
-        log.debug("calling onEnableQualityClicked");
-        if (qualityChoice.isSelected()) {
-            selectedQuality.setDisable(false);
-        } else {
-            selectedQuality.setDisable(true);
         }
     }
 
@@ -150,7 +149,7 @@ public class TradeBuyFromPlayerController implements Initializable {
         try {
             DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(Locale.GERMAN);
             df.setParseBigDecimal(true);
-            price = (BigDecimal)df.parse(selectedPrice.getText());
+            price = (BigDecimal) df.parse(selectedPrice.getText());
 
         } catch (NumberFormatException ex) {
             throw new DSAValidationException("Preis muss eine Zahl sein!");
