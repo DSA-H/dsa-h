@@ -205,7 +205,7 @@ public class TraderDetailsController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/traderBuy.fxml");
 
         dialog.setTitle("Ware ankaufen von Spieler");
-        dialog.setScene(new Scene(scene, 565, 317));
+        dialog.setScene(new Scene(scene, 565, 355));
         dialog.setResizable(false);
 
         dialog.show();

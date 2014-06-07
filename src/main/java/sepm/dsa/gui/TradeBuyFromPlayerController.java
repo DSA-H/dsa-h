@@ -1,8 +1,6 @@
 package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -64,6 +62,7 @@ public class TradeBuyFromPlayerController implements Initializable {
         log.debug("initialize TradeBuyFromPlayerController");
 
         selectedAmount.setText("1");
+
         //initialize table
         initialzeTableWithColums();
 
@@ -76,17 +75,56 @@ public class TradeBuyFromPlayerController implements Initializable {
             qualityList.add(q.getName());
         }
         selectedQuality.setItems(FXCollections.observableArrayList(qualityList));
-        selectedQuality.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                int setQuality = traderService.calculatePricePerUnit(ProductQuality.valueOf(newValue), productsTable.getSelectionModel().getSelectedItem(), trader);
-                selectedPrice.setText(Integer.toString(setQuality));
+        selectedQuality.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (productsTable.getSelectionModel().getSelectedItem() != null) {
+                //TODO check -- no change (old / new used ...) aber egal ist das OK / gut so? hatte probleme sonst beim parsen
+                //TODO: setQuality variable evtl. zu Field convertierne? performance steigerung?
+                ProductQuality qualitySelChanged = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
+                int setQuality = traderService.calculatePricePerUnit(qualitySelChanged, productsTable.getSelectionModel().getSelectedItem(), trader);
+                int amount;
+
+                //##### get amount
+                if (selectedAmount.getText().isEmpty()) {
+
+                } else {
+                    try {
+                        amount = new Integer(selectedAmount.getText());
+
+                    } catch (NumberFormatException ex) {
+                        throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
+                    }
+
+                    selectedPrice.setText(Integer.toString(setQuality * amount));
+                }
+            }
+        });
+
+        selectedAmount.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (productsTable.getSelectionModel().getSelectedItem() != null) {
+                ProductQuality qualitySelChanged = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
+                int setQuality = traderService.calculatePricePerUnit(qualitySelChanged, productsTable.getSelectionModel().getSelectedItem(), trader);
+                int amount;
+
+                //##### get amount
+                if (selectedAmount.getText().isEmpty()) {
+                } else {
+                    try {
+                        amount = new Integer(selectedAmount.getText());
+
+                    } catch (NumberFormatException ex) {
+                        throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
+                    }
+
+                    selectedPrice.setText(Integer.toString(setQuality * amount));
+                }
             }
         });
     }
 
+
     @FXML
     private void checkFocus() {
+        selectedAmount.setText("1");
         Product selProduct = productsTable.getSelectionModel().getSelectedItem();
         ProductQuality quality;
         if (selProduct != null) {
