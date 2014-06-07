@@ -224,6 +224,12 @@ public class TraderDetailsController implements Initializable {
 		//TODO not part of version 1
 	}
 
+	@FXML
+	private void onTradeBuyPressed() {
+		log.debug("called onTradeBuyPressed");
+		//TODO not part of version 1
+	}
+
 	public void setTrader(Trader trader) {
 		this.trader = trader;
 

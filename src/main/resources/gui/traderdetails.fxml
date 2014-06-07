@@ -28,7 +28,7 @@
         <Button layoutX="714.0" layoutY="800.0" mnemonicParsing="false" onAction="#onBackPressed" text="Zurück"/>
         <Label layoutX="591.0" layoutY="67.0" text="Überreden:" underline="true"/>
         <Label layoutX="591.0" layoutY="91.0" text="Erschwernis:"/>
-        <TextField fx:id="difficultyField" layoutX="665.0" layoutY="86.0" prefHeight="25.0" prefWidth="30.0"/>
+        <TextField fx:id="difficultyField" layoutX="665.0" layoutY="86.0" prefHeight="25.0" prefWidth="30.0" text="0"/>
         <Button layoutX="703.0" layoutY="88.0" mnemonicParsing="false" onAction="#onRolePressed"
                 text="Würfeln"/>
         <Label layoutX="607.0" layoutY="121.0" text="Ergebnis:"/>
