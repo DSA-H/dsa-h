@@ -20,14 +20,14 @@
           <TableColumn fx:id="productColumn" prefWidth="289.0" text="Ware" />
         </columns>
       </TableView>
-      <HBox layoutX="298.0" layoutY="321.0" prefHeight="33.0" prefWidth="253.0" spacing="10.0">
+      <HBox layoutX="304.0" layoutY="321.0" prefHeight="33.0" prefWidth="262.0" spacing="10.0">
          <children>
             <Button mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="26.0" prefWidth="91.0" text="Abbrechen">
                <HBox.margin>
                   <Insets bottom="4.0" right="3.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#onSavePressed" text="Ankauf durchführen" />
+            <Button mnemonicParsing="false" onAction="#onSavePressed" prefHeight="26.0" prefWidth="150.0" text="Ankauf durchführen" />
          </children>
       </HBox>
       <Label layoutX="326.0" layoutY="283.0" text="Währung:" />
@@ -37,13 +37,12 @@
       <TextField fx:id="selectedAmount" layoutX="408.0" layoutY="202.0" />
       <ChoiceBox fx:id="selectedUnit" layoutX="407.0" layoutY="167.0" prefWidth="150.0" />
       <Label layoutX="343.0" layoutY="207.0" text="Menge:" />
-      <Label layoutX="14.0" layoutY="80.0" text="gefundene Waren: (Preis aktualisiert sich bei Klick auf Ware)" />
+      <Label layoutX="14.0" layoutY="80.0" text="gefundene Waren:" />
       <TextField fx:id="searchField" layoutX="107.0" layoutY="40.0" prefHeight="26.0" prefWidth="290.0" />
       <Label layoutX="14.0" layoutY="45.0" text="Ware suchen:" />
       <Button layoutX="409.0" layoutY="40.0" mnemonicParsing="false" onAction="#onSearchPressed" prefHeight="26.0" prefWidth="145.0" text="Waren Suchen" />
       <Label layoutX="339.0" layoutY="101.0" text="Qualität:" />
       <ChoiceBox fx:id="selectedQuality" disable="true" layoutX="408.0" layoutY="96.0" prefWidth="150.0" />
-      <CheckBox fx:id="qualityChoice" layoutX="412.0" layoutY="71.0" mnemonicParsing="false" onAction="#onEnableQualityClicked" text="Qualitätsmerkmale" />
       <Label layoutX="343.0" layoutY="172.0" text="Einheit:" />
    </children>
 </Pane>
