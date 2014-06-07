@@ -79,10 +79,11 @@ public class TraderDetailsController implements Initializable {
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize TraderDetailsController");
 
-        amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        //init deals table
         initialzeTableWithColums();
 
-
+        //init offer table
+        amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         productColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Offer, String> r) {

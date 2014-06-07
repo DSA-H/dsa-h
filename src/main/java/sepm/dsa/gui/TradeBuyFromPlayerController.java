@@ -235,6 +235,8 @@ public class TradeBuyFromPlayerController implements Initializable {
             throw new DSAValidationException("Bitte Produkt auswählen!!");
         }
 
+        //TODO @Michael einkaufen OHNE qualität ermöglichen --> ich übergebe hier NULL, Deal in Players_DEALS tabelle verfügbar machen
+        //TODO warum erscheinen die Deals nicht in der Liste
         traderService.buyFromPlayer(trader, playerToCreateDealFor, productsTable.getSelectionModel().getSelectedItem(), quality, selectedUnit.getSelectionModel().getSelectedItem(), amount, price, selectedCurrency.getSelectionModel().getSelectedItem());
         saveCancelService.save();
 
