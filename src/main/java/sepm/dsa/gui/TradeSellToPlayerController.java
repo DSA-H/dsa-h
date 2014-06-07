@@ -67,6 +67,24 @@ public class TradeSellToPlayerController implements Initializable {
             sb.append(" (" + offer.getQuality().getName() + ")");
         }
         selectedOffer.setText(sb.toString());
+        selectedAmount.setText("1");
+        selectedAmount.textProperty().addListener((observable, oldValue, newValue) -> {
+                int setQuality = traderService.calculatePricePerUnit(offer.getQuality(), offer.getProduct(), trader);
+                int amount;
+
+                //##### get amount
+                if (selectedAmount.getText().isEmpty()) {
+                } else {
+                    try {
+                        amount = new Integer(selectedAmount.getText());
+
+                    } catch (NumberFormatException ex) {
+                        throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
+                    }
+
+                    selectedPrice.setText(Integer.toString(setQuality * amount));
+                }
+        });
     }
 
     @FXML
