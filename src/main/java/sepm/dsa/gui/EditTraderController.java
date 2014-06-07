@@ -37,7 +37,10 @@ public class EditTraderController implements Initializable {
 	private TimeService timeService;
 
     private boolean isNewTrader;
-	private boolean sametype = true;
+	int currentType;
+	int initialType;
+	private static final int MOVINGTRADER = 0;
+	private static final int TRADER = 1;
 
 	private Point2D position;
 	private DSADate lastmoved;
@@ -107,11 +110,8 @@ public class EditTraderController implements Initializable {
 				    daysLabel.setDisable(false);
 				    areaBox.setDisable(false);
 				    areaLabel.setDisable(false);
-				    if (sametype) {
-					    sametype = false;
-				    } else {
-					    sametype = true;
-				    }
+				    currentType = MOVINGTRADER;
+				    System.out.println("SWITCHED TO MOVINGTRADER");
 			    } else {
 				    stayTimeField.setDisable(true);
 				    stayTimeLabel.setDisable(true);
@@ -120,11 +120,8 @@ public class EditTraderController implements Initializable {
 				    daysLabel.setDisable(true);
 				    areaBox.setDisable(true);
 				    areaLabel.setDisable(true);
-				    if (sametype) {
-					    sametype = false;
-				    } else {
-					    sametype = true;
-				    }
+				    currentType = TRADER;
+				    System.out.println("SWITCHED TO TRADER");
 			    }
 		    }
 	    });
@@ -146,8 +143,9 @@ public class EditTraderController implements Initializable {
             chField.setText("" + selectedTrader.getCharisma());
             convinceField.setText("" + selectedTrader.getConvince());
             commentArea.setText(selectedTrader.getComment());
+	        movingCheck.setSelected(false);
 
-	        if (selectedTrader instanceof MovingTrader) {
+	        if (currentType == MOVINGTRADER) {
 		        stayTimeField.setText("" + ((MovingTrader) selectedTrader).getAvgStayDays());
 		        citySizeBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredTownSize());
 				areaBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredDistance());
@@ -218,19 +216,20 @@ public class EditTraderController implements Initializable {
     private void onSavePressed() {
         log.debug("called onSavePressed");
 
-	    if (!sametype) {
-		    if (selectedTrader instanceof MovingTrader) {
+	    if (initialType != currentType) {
+		    System.out.println("NOT SAME TYPE");
+		    if (currentType == MOVINGTRADER) {
 			    if (!isNewTrader) {
 				    traderService.remove(selectedTrader);
 			    }
-			    selectedTrader = new Trader();
-			    System.out.println("NEW TRADER");
+			    selectedTrader = new MovingTrader();
+			    System.out.println("NEW MOVINGTRADER");
 		    } else {
 			    if (!isNewTrader) {
 				    traderService.remove(selectedTrader);
 			    }
-				selectedTrader = new MovingTrader();
-			    System.out.println("NEW MOVINGTRADER");
+				selectedTrader = new Trader();
+			    System.out.println("NEW TRADER");
 		    }
 	    }
 
@@ -345,6 +344,7 @@ public class EditTraderController implements Initializable {
 	    selectedTrader.setyPos((int) position.getY());
 
 	    if (selectedTrader instanceof MovingTrader) {
+		    System.out.println("IS MOVING TRADER");
 		    //avg. stayTime
 		    try {
 			    ((MovingTrader) selectedTrader).setAvgStayDays(Integer.parseInt(stayTimeField.getText()));
@@ -389,14 +389,10 @@ public class EditTraderController implements Initializable {
 
 	    }
 
-
-
-
-
         if (isNewTrader) {
             traderService.add(selectedTrader);
         } else {
-            if (!(selectedTrader instanceof MovingTrader) && !oldLocation.equals(selectedTrader.getLocation())) {
+            if (currentType == TRADER && !oldLocation.equals(selectedTrader.getLocation())) {
                 Action response = Dialogs.create()
                         .title("Sortiment neu berechnen?")
                         .masthead(null)
@@ -432,7 +428,7 @@ public class EditTraderController implements Initializable {
                 }
             }
 
-	        if (sametype) {
+	        if (currentType == initialType) {
 		        traderService.update(selectedTrader);
 	        } else {
 		        traderService.add(selectedTrader);
@@ -475,11 +471,18 @@ public class EditTraderController implements Initializable {
         if (trader == null) {
             isNewTrader = true;
             selectedTrader = new Trader();
+	        initialType = TRADER;
+	        currentType = TRADER;
 	        System.out.println("NEW TRADER");
         } else {
             isNewTrader = false;
 	        if (trader instanceof MovingTrader) {
 		        lastmoved = new DSADate(((MovingTrader) trader).getLastMoved());
+		        initialType = MOVINGTRADER;
+		        currentType = MOVINGTRADER;
+	        } else {
+		        initialType = TRADER;
+		        currentType = TRADER;
 	        }
         }
         setUp();

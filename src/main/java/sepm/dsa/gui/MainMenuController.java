@@ -327,7 +327,6 @@ public class MainMenuController implements Initializable {
 				if (response == Dialog.Actions.YES) {
 					locationService.remove(selectedLocation);
 					saveCancelService.save();
-					//locationTable.getItems().remove(selectedLocation);
 				}
 
 				if (selectedLocation == fromLocation) {
@@ -367,7 +366,6 @@ public class MainMenuController implements Initializable {
 					if (response == Dialog.Actions.YES) {
 						tavernService.remove((Tavern) selectedObject);
 						saveCancelService.save();
-						//traderList.getItems().remove(selectedObject);
 					}
 				}
 			}
@@ -375,6 +373,8 @@ public class MainMenuController implements Initializable {
 
 		updateTables();
 		updateMap();
+		checkLocationFocus();
+		checkTraderFocus();
 	}
 
 	@FXML
