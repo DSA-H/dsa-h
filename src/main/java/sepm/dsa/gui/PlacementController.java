@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class PlacementController implements Initializable{
+public class PlacementController implements Initializable {
 	private static final Logger log = LoggerFactory.getLogger(PlacementController.class);
 	private SpringFxmlLoader loader;
 	private LocationService locationService;
@@ -50,7 +50,8 @@ public class PlacementController implements Initializable{
 	private Button commitButton;
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {}
+	public void initialize(URL location, ResourceBundle resources) {
+	}
 
 	@FXML
 	private void onConfirmPressed() {
@@ -113,7 +114,7 @@ public class PlacementController implements Initializable{
 			controller.setTrader(null);
 			controller.setPosition(pos);
 			controller.setLocation(selectedLocation);
-			stage.setScene(new Scene(scene, 509, 421));
+			stage.setScene(new Scene(scene, 785, 513));
 			stage.setResizable(false);
 			stage.showAndWait();
 		}
@@ -132,7 +133,7 @@ public class PlacementController implements Initializable{
 		controller.setTavern(null);
 		controller.setPosition(pos);
 		controller.setLocation(selectedLocation);
-		stage.setScene(new Scene(scene, 383, 400));
+		stage.setScene(new Scene(scene, 600, 400));
 		stage.setResizable(false);
 		stage.showAndWait();
 
