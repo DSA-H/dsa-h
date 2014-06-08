@@ -14,7 +14,7 @@ public class Player implements Serializable, BaseModel {
 	private static final long serialVersionUID = 3102323283798472344L;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(nullable = false, unique = true)
 	private Integer id;
 

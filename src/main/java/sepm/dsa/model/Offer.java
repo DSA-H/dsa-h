@@ -10,7 +10,7 @@ public class Offer implements BaseModel {
     private static final long serialVersionUID = 2957223850231481777L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 

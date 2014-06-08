@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 public class Unit implements BaseModel {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 

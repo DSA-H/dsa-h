@@ -50,6 +50,8 @@ public class ProductServiceTest extends AbstractDatabaseTest {
 
         int size = productService.getAll().size();
         productService.add(p);
+        saveCancelService.save();
+
         assertTrue (productService.getAll().size()-1 == size);
         Product newP = productService.get(p.getId());
         assertEquals(p,newP);
@@ -70,6 +72,8 @@ public class ProductServiceTest extends AbstractDatabaseTest {
 
         int size = productService.getAll().size();
         productService.add(p);
+        saveCancelService.save();
+
         assertTrue (productService.getAll().size()-1 == size);
         Product newP = productService.get(p.getId());
         assertEquals(p,newP);
@@ -99,6 +103,8 @@ public class ProductServiceTest extends AbstractDatabaseTest {
 
         int size = productService.getAll().size();
         productService.add(p);
+        saveCancelService.save();
+
         assertTrue (productService.getAll().size()-1 == size);
         Product newP = productService.get(p.getId());
         assertEquals(p, newP);
@@ -125,6 +131,8 @@ public class ProductServiceTest extends AbstractDatabaseTest {
         p.setName("testerUpdate");
         p.setComment("testerComment");
         productService.update(p);
+        saveCancelService.save();
+
         assertTrue(size == productService.getAll().size());
         Product updateProduct = productService.get(1);
         assertEquals(p,updateProduct);

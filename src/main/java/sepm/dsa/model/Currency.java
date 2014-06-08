@@ -14,7 +14,7 @@ public class Currency implements BaseModel {
     private static final long serialVersionUID = 5329256729754963420L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 
