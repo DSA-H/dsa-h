@@ -8,7 +8,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="355.0" prefWidth="565.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.TradeBuyFromPlayerController">
    <children>
-      <Label alignment="CENTER" layoutY="14.0" prefHeight="27.0" prefWidth="565.0" text="Ware ankaufen von Spieler" textAlignment="CENTER">
+      <Label alignment="CENTER" layoutY="14.0" prefHeight="27.0" prefWidth="565.0" text="Ware verkaufen an Händler" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>

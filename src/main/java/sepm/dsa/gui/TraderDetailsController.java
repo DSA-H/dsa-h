@@ -191,8 +191,8 @@ public class TraderDetailsController implements Initializable {
             dialog.initOwner(dealsTable.getParent().getScene().getWindow());
             Parent scene = (Parent) loader.load("/gui/tradeSell.fxml");
 
-            dialog.setTitle("Ware verkaufen an Spieler");
-            dialog.setScene(new Scene(scene, 316, 275));
+            dialog.setTitle("Kauf von Waren");
+            dialog.setScene(new Scene(scene, 330, 310));
             dialog.setResizable(false);
             dialog.showAndWait();
             checkFocus();
@@ -213,7 +213,7 @@ public class TraderDetailsController implements Initializable {
         dialog.initOwner(dealsTable.getParent().getScene().getWindow());
         Parent scene = (Parent) loader.load("/gui/traderBuy.fxml");
 
-        dialog.setTitle("Ware ankaufen von Spieler");
+        dialog.setTitle("Verkauf von Waren an Händler");
         dialog.setScene(new Scene(scene, 565, 355));
         dialog.setResizable(false);
 

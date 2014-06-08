@@ -3,6 +3,7 @@ package sepm.dsa.gui;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -37,6 +38,10 @@ public class TradeSellToPlayerController implements Initializable {
     private ChoiceBox<Currency> selectedCurrency;
     @FXML
     private TextField selectedPrice;
+    @FXML
+    private Button calculateDiscount;
+    @FXML
+    private Label selectedDiscount;
 
     private static Trader trader;
     private static Offer offer;
