@@ -40,10 +40,10 @@
       <TableView fx:id="dealsTable" layoutX="21.0" layoutY="432.0" prefHeight="250.0" prefWidth="754.0">
          <columns>
             <TableColumn fx:id="playerColumn" prefWidth="153.0" text="Spieler" />
-            <TableColumn fx:id="productDealColumn" prefWidth="237.0" text="Produkt" />
-            <TableColumn fx:id="priceColumn" prefWidth="79.0" text="Preis" />
-            <TableColumn fx:id="amountDealColumn" prefWidth="82.0" text="Menge" />
-            <TableColumn fx:id="dateColumn" prefWidth="202.0" text="Datum" />
+            <TableColumn fx:id="productDealColumn" prefWidth="131.0" text="Produkt" />
+            <TableColumn fx:id="priceColumn" prefWidth="74.0" text="Preis" />
+            <TableColumn fx:id="amountDealColumn" prefWidth="125.0" text="Menge" />
+            <TableColumn fx:id="dateColumn" minWidth="0.0" prefWidth="270.0" text="Datum" />
          </columns>
       </TableView>
       <Button fx:id="tradeButtonBuy" layoutX="656.0" layoutY="267.0" mnemonicParsing="false" onAction="#onTradeBuyPressed" prefHeight="26.0" prefWidth="118.0" text="Verkauf Buchen" />

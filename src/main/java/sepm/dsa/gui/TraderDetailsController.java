@@ -138,8 +138,15 @@ public class TraderDetailsController implements Initializable {
         amountDealColumn.setCellValueFactory(d -> {
             Unit unit = d.getValue().getUnit();
             Integer amount = d.getValue().getAmount();
+            boolean purchase = d.getValue().isPurchase();
 
             StringBuilder sb = new StringBuilder();
+
+            if (purchase) {
+                sb.append("(+) ");
+            } else {
+                sb.append("(-) ");
+            }
             sb.append(amount).append(" ").append(unit.getShortName());
             return new SimpleStringProperty(sb.toString());
         });
@@ -185,7 +192,7 @@ public class TraderDetailsController implements Initializable {
     private void onDeleteDealClicked() {
         log.debug("called onDeleteDealClicked");
         Deal selectedDeal = dealsTable.getSelectionModel().getSelectedItem();
-        if(selectedDeal == null){
+        if (selectedDeal == null) {
             throw new DSAValidationException("Bitte einen Deal zum Löschen auswählen");
         }
         dealService.remove(selectedDeal);
@@ -214,7 +221,7 @@ public class TraderDetailsController implements Initializable {
             dialog.showAndWait();
             checkFocus();
             refreshView();
-        }else {
+        } else {
             throw new DSAValidationException("Kein Angebot ausgewählt");
         }
     }

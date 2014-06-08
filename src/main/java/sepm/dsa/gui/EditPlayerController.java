@@ -136,7 +136,7 @@ public class EditPlayerController implements Initializable {
                     Deal deal = d.getValue();
                     StringBuilder sb = new StringBuilder();
                     sb.append(deal.getProductName());
-                    if (deal.getQuality()!= null) {
+                    if (deal.getQuality() != null) {
                         sb.append(" (" + d.getValue().getQuality().getName() + ")");
                     }
                     return new SimpleStringProperty(sb.toString());
@@ -149,8 +149,15 @@ public class EditPlayerController implements Initializable {
         amountColumn.setCellValueFactory(d -> {
             Unit unit = d.getValue().getUnit();
             Integer amount = d.getValue().getAmount();
+            boolean purchase = d.getValue().isPurchase();
 
             StringBuilder sb = new StringBuilder();
+            if (purchase) {
+                sb.append("(+) ");
+            } else {
+                sb.append("(-) ");
+            }
+
             sb.append(amount).append(" ").append(unit.getShortName());
             return new SimpleStringProperty(sb.toString());
         });
