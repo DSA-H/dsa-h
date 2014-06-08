@@ -130,6 +130,7 @@ public class TradeSellToPlayerController implements Initializable {
 
     @FXML
     private void onSavePressed() {
+
         log.debug("calling SaveButtonPressed");
         Player playerToCreateDealFor;
 
@@ -181,7 +182,36 @@ public class TradeSellToPlayerController implements Initializable {
             throw new DSAValidationException("Preis muss > 0 sein");
         }
 
-        traderService.sellToPlayer(trader, playerToCreateDealFor, offer.getProduct(), offer.getQuality(), selectedUnit.getSelectionModel().getSelectedItem(), amount, price, selectedCurrency.getSelectionModel().getSelectedItem());
+        //######## Discount stuff --
+        //PRICE STUFF ###########
+        BigDecimal discount = new BigDecimal(0);
+        if (selectedDiscount.getText().isEmpty()) {
+            //without discount
+            traderService.sellToPlayer(trader, playerToCreateDealFor, offer.getProduct(), offer.getQuality(), selectedUnit.getSelectionModel().getSelectedItem(), amount, price, selectedCurrency.getSelectionModel().getSelectedItem());
+        } else {
+            try {
+                DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(Locale.GERMAN);
+                df.setParseBigDecimal(true);
+
+                try {
+                    price = (BigDecimal) df.parse(selectedPrice.getText());
+                } catch (IllegalArgumentException e) {
+                    throw new DSAValidationException("Discount kann so nicht als Zahl eingegeben werden");
+                } catch (ParseException e) {
+                    throw new DSAValidationException("Ungültiger Discount. ");
+                }
+
+            } catch (NumberFormatException ex) {
+                throw new DSAValidationException("Discount muss eine Zahl sein!");
+            }
+            if (price.compareTo(BigDecimal.ZERO) < 0) {
+                throw new DSAValidationException("Discount muss >= 0 sein");
+            }
+
+            // with discount
+            price.subtract(discount);
+            traderService.sellToPlayer(trader, playerToCreateDealFor, offer.getProduct(), offer.getQuality(), selectedUnit.getSelectionModel().getSelectedItem(), amount, price, selectedCurrency.getSelectionModel().getSelectedItem());
+        }
         saveCancelService.save();
 
         saveCancelService.refresh(trader);//, offer, offer.getProduct());
