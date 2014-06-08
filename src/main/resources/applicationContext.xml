@@ -340,6 +340,11 @@
         <property name="traderService" ref="traderService"/>
         <property name="timeService" ref="timeService"/>
     </bean>
+    <bean id="calculatePrice" class="sepm.dsa.gui.CalculatePriceController">
+        <property name="loader" ref="loader"/>
+        <property name="productService" ref="productService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
+    </bean>
     <bean id="editTavern" class="sepm.dsa.gui.EditTavernController">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
