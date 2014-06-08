@@ -226,6 +226,9 @@
         <property name="pathService" ref="pathService"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
+        <property name="timeService" ref="timeService" />
+        <property name="dealService" ref="dealService" />
+        <property name="currencyService" ref="currencyService"/>
     </bean>
 
     <bean id="pathService" class="sepm.dsa.service.path.PathServiceDijkstraJGraphImpl">
@@ -240,6 +243,7 @@
 
     <bean id="dealService" class="sepm.dsa.service.DealServiceImpl">
         <property name="dealDao" ref="dealDao"/>
+        <property name="timeService" ref="timeService"/>
     </bean>
 
     <bean id="timeService" class="sepm.dsa.service.TimeServiceImpl">
@@ -339,6 +343,23 @@
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>
         <property name="timeService" ref="timeService"/>
+        <property name="dealService" ref="dealService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
+    </bean>
+    <bean id="traderSellToPlayer" class="sepm.dsa.gui.TradeSellToPlayerController">
+        <property name="traderService" ref="traderService"/>
+        <property name="unitService" ref="unitService"/>
+        <property name="currencyService" ref="currencyService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
+        <property name="playerService" ref="playerService"/>
+    </bean>
+    <bean id="traderBuyFromPlayer" class="sepm.dsa.gui.TradeBuyFromPlayerController">
+        <property name="traderService" ref="traderService"/>
+        <property name="unitService" ref="unitService"/>
+        <property name="currencyService" ref="currencyService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
+        <property name="playerService" ref="playerService"/>
+        <property name="productService" ref="productService"/>
     </bean>
     <bean id="editTavern" class="sepm.dsa.gui.EditTavernController">
         <property name="loader" ref="loader"/>

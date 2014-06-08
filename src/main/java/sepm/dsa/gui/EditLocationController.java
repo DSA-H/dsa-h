@@ -190,10 +190,11 @@ public class EditLocationController implements Initializable {
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
         saveCancelService.cancel();
-        saveCancelService.refresh(selectedLocation);
-        log.info("before: connections.size=" + selectedLocation.getAllConnections().size());
-        selectedLocation = locationService.get(selectedLocation.getId());
-        log.info("after: connections.size=" + selectedLocation.getAllConnections().size());
+        //TODO @Michael: wozu war das hier gedacht? wirft einen fehler wenn region null? ++ Model Location Region set to NOT NULL
+//        saveCancelService.refresh(selectedLocation);
+//        log.info("before: connections.size=" + selectedLocation.getAllConnections().size());
+//        selectedLocation = locationService.get(selectedLocation.getId());
+//        log.info("after: connections.size=" + selectedLocation.getAllConnections().size());
 
         Stage stage = (Stage) nameField.getScene().getWindow();
 	    stage.close();

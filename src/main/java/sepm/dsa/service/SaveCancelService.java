@@ -1,5 +1,7 @@
 package sepm.dsa.service;
 
+import sepm.dsa.model.BaseModel;
+
 import java.util.Collection;
 
 public interface SaveCancelService {
@@ -14,6 +16,8 @@ public interface SaveCancelService {
 
     void closeSession();
 
-    void refresh(Object... objects);
+    void refresh(BaseModel... objects);
+
+    void refresh(Collection<? extends BaseModel> objects);
 
 }

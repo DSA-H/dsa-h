@@ -48,4 +48,11 @@ public interface ProductService {
      * @return all products from a product-category and all of its child categories -- if nothing found empty list is returned
      */
     Set<Product> getAllFromProductcategory(ProductCategory productCategory);
+
+    /**
+     * Search for all Products containing the searchTerm in Product.name
+     * @param searchTerm must not be null
+     * @return set of products -- or empty set if nothing found (not null)
+     */
+    Set<Product> getBySearchTerm(String searchTerm);
 }

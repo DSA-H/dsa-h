@@ -65,6 +65,14 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
+    public BigDecimal exchangeToBaseRate(Currency from, BigDecimal amount) {
+        log.debug("calling exchangeToBaseRate(" + from + "," + amount + ")");
+        BigDecimal result = amount.divide(from.getValueToBaseRate(),4, RoundingMode.HALF_UP);
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
     public CurrencyAmount exchange(Currency from, Currency to, BigDecimal amount) {
         CurrencyAmount result = new CurrencyAmount();
         result.setAmount(amount.multiply(to.getValueToBaseRate()).divide(from.getValueToBaseRate(),4, RoundingMode.HALF_UP));

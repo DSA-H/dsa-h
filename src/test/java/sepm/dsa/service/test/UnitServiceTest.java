@@ -11,6 +11,7 @@ import sepm.dsa.service.UnitTypeService;
 
 import static org.junit.Assert.*;
 
+
 public class UnitServiceTest extends AbstractDatabaseTest {
 
     @Autowired

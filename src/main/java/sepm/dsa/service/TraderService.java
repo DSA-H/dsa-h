@@ -3,6 +3,7 @@ package sepm.dsa.service;
 
 import sepm.dsa.model.*;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -127,4 +128,54 @@ public interface TraderService {
      * @return the price in default (base-rate) currency
      */
     void reCalculatePriceForOfferIfNewPriceIsHigher(/*Set<Offer> offers, */Trader trader);
+
+    /**
+     * A trader sells a product to a player. The trader's amount for this product decreases. If the amount becomes zero,
+     * then the trader's corresponding offer will be removed.
+     *
+     * @param trader
+     * @param player
+     * @param product
+     * @param unit the unit of the product
+     * @param amount product amount, > 0
+     * @param totalPrice total price for this deal
+     *
+     * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
+     *      or the amount is greater than the trader offers <br />
+     *      or unit type does does not match the product unit type <br />
+     *      or totalPrice is negative
+     */
+    Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency);
+
+    /**
+     * A trader buys a product from a player. The trader's amount for this product increases
+     *
+     * @param trader
+     * @param player
+     * @param product
+     * @param unit the unit of the product
+     * @param amount product amount, > 0
+     * @param totalPrice total price for this deal
+     *
+     * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
+     *      or the amount is greater than the trader offers <br />
+     *      or unit type does does not match the product unit type <br />
+     *      or totalPrice is negative
+     */
+    Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency);
+
+    /**
+     * Suggests a discount for a Players Product purchase in percent (0 ... 0%, 20 ... 20%, etc).
+     *
+     * @param trader the Trader
+     * @param player the Player who buys the product
+     * @param product the Product
+     * @param productQuality the Product Quality
+     * @param unit the Product Unit
+     * @param amount the Amount of Products
+     * @return the suggested discount for the purchase [0..100], meaning 0 ... 0% discount (full price), 100 ... 100% discount (free)
+     */
+    Integer suggesstDiscount(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount);
+
+
 }

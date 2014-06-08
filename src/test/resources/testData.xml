@@ -57,33 +57,29 @@
 
     <players id="1" name="Mr X" comment="no comment"/>
     <players id="2" name="Mr Z" comment="A test comment"/>
-    <traderCategories id="1" name="category1"/>
-    <traderCategories id="2" name="category2"/>
-    <traderCategories id="3" name="category3"/>
-    <traderCategories id="4" name="category4"/>
-    <traderCategories id="5" name="noTradersToThisCategorie"/>
-    <products id="1" name="product1" unit_id="1" occurence="100" cost="17" attributeId="1" quality="false"/>
-    <products id="2" name="product2" unit_id="2" occurence="100" cost="23" attributeId="2" quality="true"/>
-    <products id="3" name="product3" unit_id="3" occurence="100" cost="29" attributeId="3" quality="true"/>
-    <products id="4" name="product4" unit_id="4" occurence="100" cost="36" attributeId="0" quality="true"/>
-    <products id="5" name="product5" unit_id="4" occurence="100" cost="200" attributeId="3" quality="true"/>
-    <products id="6" name="product6" unit_id="7" occurence="100" cost="450" attributeId="0" quality="true"/>
-    <products id="7" name="product7" unit_id="6" occurence="100" cost="65" attributeId="2" quality="true"/>
-    <products id="8" name="product8" unit_id="5" occurence="100" cost="105" attributeId="0" quality="true"/>
-    <traders id="1" name="Optimus Prime" category_id="1" size="20" xPos="7" yPos="7" mut="14" intelligence="14"
-             charisma="14" convince="5" location_id="1"/>
-    <traders id="2" name="Megatron" category_id="2" size="200" xPos="7" yPos="7" mut="13" intelligence="13"
-             charisma="13" convince="7" location_id="1"/>
-    <traders id="3" name="Fluttershy" category_id="3" size="200" xPos="7" yPos="7" mut="13" intelligence="13"
-             charisma="13" convince="7" location_id="1"/>
-    <traders id="4" name="trader4" category_id="4" size="400" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13"
-             convince="7" location_id="1"/>
-    <movingTraders trader="2" lastMoved="0" avgStayDays="3" preferredDistance="1"/>
-    <movingTraders trader="3" lastMoved="0" avgStayDays="11" preferredTownSize="1" preferredDistance="0"/>
-    <offers id="1" product_id="1" trader_id="1" amount="2" pricePerUnit="50" qualityId="1"/>
-    <offers id="2" product_id="2" trader_id="1" amount="8" pricePerUnit="10" qualityId="0"/>
-    <productCategories id="1" name="category1"/>
-    <productCategories id="2" name="category2"/>
+    <traderCategories id="1" name="category1" />
+    <traderCategories id="2" name="category2" />
+    <traderCategories id="3" name="category3" />
+    <traderCategories id="4" name="category4" />
+    <traderCategories id="5" name="noTradersToThisCategorie" />
+    <products id="1" name="product1" unit_id="1" occurence="100" cost="17" attributeId="1" quality="false" />
+    <products id="2" name="product2" unit_id="2" occurence="100" cost="23" attributeId="2" quality="true" />
+    <products id="3" name="product3" unit_id="3" occurence="100" cost="29" attributeId="3" quality="true" />
+    <products id="4" name="product4" unit_id="4" occurence="100" cost="36" attributeId="0" quality="true" />
+    <products id="5" name="product5" unit_id="4" occurence="100" cost="200" attributeId="3" quality="true" />
+    <products id="6" name="product6" unit_id="7" occurence="100" cost="450" attributeId="0" quality="true" />
+    <products id="7" name="product7" unit_id="6" occurence="100" cost="65" attributeId="2" quality="true" />
+    <products id="8" name="product8" unit_id="5" occurence="100" cost="105" attributeId="0" quality="true" />
+    <traders id="1" name="Optimus Prime" category_id="1" size="20" xPos="7" yPos="7" mut="14" intelligence="14" charisma="14" convince="5" location_id="1" />
+    <traders id="2" name="Megatron" category_id="2" size="200" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13" convince="7" location_id="1" />
+    <traders id="3" name="Fluttershy" category_id="3" size="200" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13" convince="7" location_id="1" />
+    <traders id="4" name="trader4" category_id="4" size="400" xPos="7" yPos="7" mut="13" intelligence="13" charisma="13" convince="7" location_id="1" />
+    <movingTraders trader="2" lastMoved="0" avgStayDays="3" preferredDistance="1" />
+    <movingTraders trader="3" lastMoved="0" avgStayDays="11" preferredTownSize="1" preferredDistance="0" />
+    <offers id="1" product_id="1" trader_id="1" amount="20" pricePerUnit="50" qualityId="1" />
+    <offers id="2" product_id="2" trader_id="1" amount="80" pricePerUnit="10" qualityId="0" />
+    <productCategories id="1" name="category1" />
+    <productCategories id="2" name="category2" />
     <productCategories id="3" name="category3" parent_id="2"/>
     <productCategories id="4" name="category4" parent_id="3"/>
     <productCategories id="5" name="category5" parent_id="3"/>
@@ -123,4 +119,5 @@
 
     <currencies id="1" name="firstCurrency" valueToBaseRate="3"/>
     <currencies id="2" name="secondCurrency" valueToBaseRate="2"/>
+    <deals id="1" amount="5" date="1" locationName="location1" price="100.00" productName="product1" purchase="true" qualityid="3" player_id="1" trader_id="2" unit_id="1" discount="0"/>
 </dataset>

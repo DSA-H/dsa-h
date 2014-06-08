@@ -31,14 +31,16 @@ public class TimeServiceTest extends AbstractDatabaseTest {
     private TraderService traderService;
 
     @Before
-    public void befor() {
+    public void before() {
         // init trader 1 with calculated offers
         Trader trader = traderDao.get(1);
 
-        for(Offer offer : trader.getOffers()) {
+        Set<Offer> traderOffers = new HashSet<>(trader.getOffers());
+        for(Offer offer : traderOffers) {
             offerDao.remove(offer);
         }
         trader.getOffers().clear();
+//        saveCancelService.save();
 
         List<Offer> offers = traderService.calculateOffers(trader);
         offerDao.addList(offers);

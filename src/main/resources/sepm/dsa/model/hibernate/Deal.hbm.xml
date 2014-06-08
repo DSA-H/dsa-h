@@ -7,4 +7,12 @@
         <![CDATA[from Deal ORDER BY id ASC]]>
     </query>
 
+    <query name="Deal.findAllBetweenPlayerAndTraderInTimeRange">
+        <![CDATA[   FROM Deal
+                    WHERE trader.id = :traderId
+                        and player.id = :playerId
+                        and :fromDate <= date and date <= :toDate
+                    ORDER BY id asc]]>
+    </query>
+
 </hibernate-mapping>
