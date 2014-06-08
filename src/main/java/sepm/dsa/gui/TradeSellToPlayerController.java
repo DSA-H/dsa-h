@@ -151,7 +151,7 @@ public class TradeSellToPlayerController implements Initializable {
         traderService.sellToPlayer(trader, playerToCreateDealFor, offer.getProduct(), offer.getQuality(), selectedUnit.getSelectionModel().getSelectedItem(), amount, price, selectedCurrency.getSelectionModel().getSelectedItem());
         saveCancelService.save();
 
-        saveCancelService.refresh(trader, offer, offer.getProduct());
+        saveCancelService.refresh(trader);//, offer, offer.getProduct());
         saveCancelService.refresh(trader.getDeals());
 
         Stage stage = (Stage) selectedUnit.getScene().getWindow();

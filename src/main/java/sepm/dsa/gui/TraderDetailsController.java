@@ -237,7 +237,7 @@ public class TraderDetailsController implements Initializable {
         categoryLabel.setText(trader.getCategory().getName());
         commentArea.setText(trader.getComment());
 
-        List<Offer> offers = new ArrayList<>(traderService.getOffers(trader));
+        List<Offer> offers = new ArrayList<>(trader.getOffers());//traderService.getOffers(trader));
         offers = offers.stream().sorted((o1, o2) -> {
             int result = o1.getProduct().getId() - o2.getProduct().getId();
             if (result != 0) {
@@ -247,6 +247,7 @@ public class TraderDetailsController implements Initializable {
             return result;
         }).collect(Collectors.toList());
 
+        offerTable.getItems().clear();
         offerTable.setItems(FXCollections.observableArrayList(offers));
         dealsTable.setItems(FXCollections.observableArrayList(trader.getDeals()));
     }

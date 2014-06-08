@@ -159,7 +159,8 @@ public class TraderServiceImpl implements TraderService {
 
         Double offerAmountDifference = unit.exchange(productAmount.doubleValue(), product.getUnit());
         Double remainingAmount = offer.getAmount() - offerAmountDifference;
-        if (remainingAmount < 0 || Math.abs(remainingAmount) < EPSILON) {
+        log.info("remaing amount would be " + remainingAmount);
+        if (remainingAmount < 0) {
             throw new DSAValidationException("Der Händler hat nicht genug Waren dieser Art in dieser Qualitätsstufe");
         }
 
@@ -186,6 +187,7 @@ public class TraderServiceImpl implements TraderService {
         newDeal.setquality(productQuality);
         newDeal.setTrader(trader);
         newDeal.setUnit(unit);
+        validateDeal(newDeal);
 
         Deal result = dealService.add(newDeal);
 
@@ -244,6 +246,7 @@ public class TraderServiceImpl implements TraderService {
         newDeal.setquality(productQuality);
         newDeal.setTrader(trader);
         newDeal.setUnit(unit);
+        validateDeal(newDeal);
 
         Deal result = dealService.add(newDeal);
 
@@ -502,6 +505,19 @@ public class TraderServiceImpl implements TraderService {
         Set<ConstraintViolation<Trader>> violations = validator.validate(trader);
         if (violations.size() > 0) {
             throw new DSAValidationException("Händler ist nicht valide.", violations);
+        }
+    }
+
+    /**
+     * Validates a Deal
+     *
+     * @param deal must not be null
+     * @throws sepm.dsa.exceptions.DSAValidationException if location is not valid
+     */
+    private void validateDeal(Deal deal) throws DSAValidationException {
+        Set<ConstraintViolation<Deal>> violations = validator.validate(deal);
+        if (violations.size() > 0) {
+            throw new DSAValidationException("Deal ist nicht valide.", violations);
         }
     }
 
