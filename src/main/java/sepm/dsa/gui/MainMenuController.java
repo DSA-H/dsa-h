@@ -57,23 +57,31 @@ public class MainMenuController implements Initializable {
 	private MapService mapService;
 	private SaveCancelService saveCancelService;
 	private LocationConnectionService locationConnectionService;
-	private Canvas mapCanvas, selectionCanvas, pathCanvas;
-	private Location selectedLocation;
-	private Object selectedObject;
-	private Location fromLocation, toLocation;
-	private int mode;   // 0..worldMode(default) 1..locationMode
-	private Boolean creationMode = false;
-	private Boolean nothingChanged = false;
-	private double hVal = 0.0;
-	private double vVal = 0.0;
-	private double worldScrollH;
-	private double worldScrollV;
-	private Group zoomGroup;
-	private double scaleFactor = 1.0;
-	private Boolean dontUpdateScroll = false;
-	private Boolean setZoomToStandard = true;
-	private List<LocationConnection> connections;
 
+	private Canvas mapCanvas, selectionCanvas, pathCanvas; // 3 canvases on top of each other in zoomGroup; bottom: mapCanvas, top: pathCanvas
+
+	private Location selectedLocation; // selection in WORLDMODE, current Location in LOCATIONMODE
+	private Object selectedObject; // selection in LOCATIONMODE (Trader or Tavern)
+
+	private Location fromLocation, toLocation; // for calculating and showing shortest route
+
+	private int mode;   // 0..WORLDMODE, 1..LOCATIONMODE
+
+	private Boolean creationMode = false; // to distinguish between placing something (true), and selecting something (false) on the map
+	private Boolean nothingChanged = false; // to tell if a new path should be calculated, or the existing made invisible
+
+	private double hVal = 0.0; // to set horizontal value of scrollPane
+	private double vVal = 0.0; // to set vertical value of scrollPane
+	private double worldScrollH; // jump back to this when switching to WORLDMODE
+	private double worldScrollV; // jump back to this when switching to WORLDMODE
+	private Boolean dontUpdateScroll = false; // to stop the scrollListener to undo it's own changes
+
+	private Group zoomGroup; // Group of canvases that can be scaled
+	private double scaleFactor = 1.0; // zoom factor
+
+	private List<LocationConnection> connections; // all LocationConnections
+
+	// menu-bar
 	@FXML
 	private MenuBar menuBar;
 	@FXML
@@ -103,12 +111,19 @@ public class MainMenuController implements Initializable {
 	@FXML
 	private MenuItem location;
 
+	// lists, tables, maps
 	@FXML
 	private TableView<Location> locationTable;
 	@FXML
 	private TableColumn locationColumn;
 	@FXML
 	private TableColumn regionColumn;
+	@FXML
+	private ListView traderList;
+	@FXML
+	private ScrollPane scrollPane;
+
+	// controle buttons
 	@FXML
 	private Button createButton;
 	@FXML
@@ -117,13 +132,8 @@ public class MainMenuController implements Initializable {
 	private Button deleteButton;
 	@FXML
 	private Button chooseButton;
-	@FXML
-	private ListView traderList;
 
-	private ImageView mapImageView = new ImageView();
-	@FXML
-	private ScrollPane scrollPane;
-
+	// path calculation
 	@FXML
 	private Button fromButton;
 	@FXML
@@ -139,6 +149,7 @@ public class MainMenuController implements Initializable {
 	@FXML
 	private GridPane pathCalcGrid;
 
+	// zoom
 	@FXML
 	private Slider zoomSlider;
 
@@ -146,13 +157,9 @@ public class MainMenuController implements Initializable {
 	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
 		updateMap();
 
-		// init table
+		// init location-table
 		locationColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 		regionColumn.setCellValueFactory(new PropertyValueFactory<>("region"));
-
-
-		updateTables();
-
 		locationTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Location>() {
 			@Override
 			public void changed(ObservableValue<? extends Location> observable, Location oldValue, Location newValue) {
@@ -160,6 +167,7 @@ public class MainMenuController implements Initializable {
 			}
 		});
 
+		// init trader-list
 		traderList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
 			@Override
 			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
@@ -167,10 +175,13 @@ public class MainMenuController implements Initializable {
 			}
 		});
 
+		updateTables();
+
 		mode = WORLDMODE;
 
 		chooseButton.setStyle("-fx-font-weight: bold;");
 
+		// scroll-position listener: on sudden changes the scroll position is set to (hVal/vVal)
 		scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -188,6 +199,11 @@ public class MainMenuController implements Initializable {
 			}
 		});
 
+		// init zoom
+		zoomSlider.setMin((536) / mapCanvas.getHeight());
+		zoomSlider.setMax(2.69);
+		zoomSlider.adjustValue(1.0);
+		// zoom-value listener: zooms the map acording to slider
 		zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -206,62 +222,12 @@ public class MainMenuController implements Initializable {
 			}
 		});
 
-		zoomSlider.setMin((536) / mapCanvas.getHeight());
-		zoomSlider.setMax(2.69);
-		zoomSlider.adjustValue(1.0);
 	}
 
-	private void changeMode() {
-		if (selectedLocation == null) {
-			Dialogs.create()
-					.title("Fehler")
-					.masthead(null)
-					.message("Es muss ein Ort ausgewählt sein!")
-					.showWarning();
-			return;
-		}
-		if (mode == 0) {
-			worldScrollH = scrollPane.getHvalue();
-			worldScrollV = scrollPane.getVvalue();
-			mode = LOCATIONMODE;
-			pathCalcGrid.setVisible(false);
-			locationTable.setVisible(false);
-			traderList.setVisible(true);
-			selectedObject = null;
-			deleteButton.setDisable(true);
-			editButton.setDisable(true);
-			chooseButton.setText("Weltansicht");
-			createButton.setText("Händler / Wirtshaus platzieren");
-			editButton.setText("Details");
-			Stage stage = (Stage) editButton.getScene().getWindow();
-			stage.setTitle("DSA-Händlertool - " + selectedLocation.getName());
-		} else {
-			dontUpdateScroll = true;
-			scrollPane.setHvalue(worldScrollH);
-			scrollPane.setVvalue(worldScrollV);
-			dontUpdateScroll = false;
-			mode = WORLDMODE;
-			pathCalcGrid.setVisible(true);
-			locationTable.setVisible(true);
-			traderList.setVisible(false);
-			chooseButton.setText("Ortsansicht");
-			createButton.setText("Ort platzieren");
-			editButton.setText("Bearbeiten");
-			Stage stage = (Stage) editButton.getScene().getWindow();
-			stage.setTitle("DSA-Händlertool");
-		}
-
-		updateTables();
-		if (mode == LOCATIONMODE) {
-			traderList.getSelectionModel().select(0);
-			checkTraderFocus();
-		} else {
-			checkLocationFocus();
-		}
-		updateMap();
-		updateZoom();
-	}
-
+	/**
+	 * WORLDMODE: Edit-Button
+	 * LOCATIONMODE: Details-Button
+	 */
 	@FXML
 	private void onEditButtonPressed() {
 		log.debug("onEditButtonPressed - open Details Window");
@@ -306,6 +272,9 @@ public class MainMenuController implements Initializable {
 
 	}
 
+	/**
+	 * delete selected Object (Location in WORLDMODE, Trader/Tavern in LOCATIONMODE)
+	 */
 	@FXML
 	private void onDeleteButtonPressed() {
 		log.debug("onDeleteButtonPressed - deleting selected Data");
@@ -381,6 +350,11 @@ public class MainMenuController implements Initializable {
 		checkTraderFocus();
 	}
 
+	/**
+	 * create a new object
+	 * if there is a map you have to select a position on this map, which opens the placement-window
+	 * if there is no map, in WORLDMODE you are sent to create-location-window, in LOCATIONMODE you get a placement-window to choose between Trader and Tavern
+	 */
 	@FXML
 	private void onCreateButtonPressed() {
 		log.debug("onCreateButtonPressed - open Details Window");
@@ -405,7 +379,7 @@ public class MainMenuController implements Initializable {
 				deleteButton.setDisable(true);
 				chooseButton.setText("Weltansicht");
 				chooseButton.setDisable(false);
-				creationMode = true;
+				creationMode = true;                    // -> waiting for scrollPane Click
 			}
 		} else {
 			if (mapService.getLocationMap(selectedLocation) == null) {
@@ -429,12 +403,15 @@ public class MainMenuController implements Initializable {
 				deleteButton.setDisable(true);
 				chooseButton.setText("Weltansicht");
 				chooseButton.setDisable(false);
-				creationMode = true;
+				creationMode = true;                    // -> wait for scrollPane Click
 			}
 		}
 
 	}
 
+	/**
+	 * switches between modes / exits creation mode
+	 */
 	@FXML
 	private void onChooseButtonPressed() {
 		if (creationMode) {
@@ -450,13 +427,65 @@ public class MainMenuController implements Initializable {
 				traderList.setDisable(false);
 			}
 		} else {
-			changeMode();
+			if (selectedLocation == null) {     // should not be possible (checkFocus)
+				Dialogs.create()
+						.title("Fehler")
+						.masthead(null)
+						.message("Es muss ein Ort ausgewählt sein!")
+						.showWarning();
+				return;
+			}
+			if (mode == 0) {                    //switch to LOCATIONMODE
+				worldScrollH = scrollPane.getHvalue();
+				worldScrollV = scrollPane.getVvalue();
+				mode = LOCATIONMODE;
+				pathCalcGrid.setVisible(false);
+				locationTable.setVisible(false);
+				traderList.setVisible(true);
+				selectedObject = null;
+				deleteButton.setDisable(true);
+				editButton.setDisable(true);
+				chooseButton.setText("Weltansicht");
+				createButton.setText("Händler / Wirtshaus platzieren");
+				editButton.setText("Details");
+				Stage stage = (Stage) editButton.getScene().getWindow();
+				stage.setTitle("DSA-Händlertool - " + selectedLocation.getName());
+			} else {                            // switch to WORLDMODE
+				dontUpdateScroll = true;
+				scrollPane.setHvalue(worldScrollH);
+				scrollPane.setVvalue(worldScrollV);
+				dontUpdateScroll = false;
+				mode = WORLDMODE;
+				pathCalcGrid.setVisible(true);
+				locationTable.setVisible(true);
+				traderList.setVisible(false);
+				chooseButton.setText("Ortsansicht");
+				createButton.setText("Ort platzieren");
+				editButton.setText("Bearbeiten");
+				Stage stage = (Stage) editButton.getScene().getWindow();
+				stage.setTitle("DSA-Händlertool");
+			}
+
+			updateTables();
+			if (mode == LOCATIONMODE) {
+				traderList.getSelectionModel().select(0);
+				checkTraderFocus();
+			} else {
+				checkLocationFocus();
+			}
+			updateMap();
+			updateZoom();
 		}
 	}
 
+	/**
+	 * creation mode: opens placement-window and forwards the clicked position
+	 * else: select location/location-connection/trader/tavern on map
+	 */
 	@FXML
 	private void onScrollPaneClicked() {
 
+		// calculate mouse position
 		Scene SPscene = scrollPane.getScene();
 		Point2D windowCoord = new Point2D(SPscene.getWindow().getX(), SPscene.getWindow().getY());
 		Point2D sceneCoord = new Point2D(SPscene.getX(), SPscene.getY());
@@ -480,16 +509,17 @@ public class MainMenuController implements Initializable {
 		Point2D pos = new Point2D(xPos, yPos);
 		Point2D realPos = new Point2D(xPos / scaleFactor, yPos / scaleFactor);
 
-		if (creationMode) {
+
+		if (creationMode) {                 // in creation mode: chose position to place location/trader/tavern
 			Stage stage = new Stage();
 			Parent scene = (Parent) loader.load("/gui/placement.fxml");
 			PlacementController controller = loader.getController();
 			if (mode == WORLDMODE) {
 				stage.setTitle("Ort platzieren");
-				controller.setUp(null, realPos, selectedLocation, false);
+				controller.setUp(null, realPos, selectedLocation, false);           // (locaiton, position, selectedObject, noMap)
 			} else {
 				stage.setTitle("Händler/Wirtshaus platzieren");
-				controller.setUp(selectedLocation, realPos, selectedObject, false);
+				controller.setUp(selectedLocation, realPos, selectedObject, false); // (locaiton, position, selectedObject, noMap)
 			}
 			stage.setScene(new Scene(scene, 350, 190));
 			stage.setResizable(false);
@@ -514,12 +544,12 @@ public class MainMenuController implements Initializable {
 			}
 			updateMap();
 			updateTables();
-		} else {
+		} else {                            // selection mode
 			if (mode == WORLDMODE) {
 				int locX;
 				int locY;
 				List<Location> locations = locationService.getAll();
-				for (Location l : locations) {
+				for (Location l : locations) {                  // search all locations for hit
 					locX = (int) (l.getxCoord() * scaleFactor);
 					locY = (int) (l.getyCoord() * scaleFactor);
 					if (xPos > locX - 20 && xPos < locX + 20 && yPos > locY - 20 && yPos < locY + 20) {
@@ -529,7 +559,7 @@ public class MainMenuController implements Initializable {
 				}
 				Location loc1;
 				Location loc2;
-				for (LocationConnection lc : connections) {
+				for (LocationConnection lc : connections) {     // seach all location-connections for hit
 					loc1 = lc.getLocation1();
 					loc2 = lc.getLocation2();
 					if ( (xPos < loc1.getxCoord()+10 && xPos > loc2.getxCoord()-10) || (xPos > loc1.getxCoord()-10 && xPos < loc2.getxCoord()+10) ) {
@@ -560,7 +590,7 @@ public class MainMenuController implements Initializable {
 				int locX;
 				int locY;
 				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-				for (Trader t : traders) {
+				for (Trader t : traders) {                      // search all traders for hit
 					locX = (int) (t.getxPos() * scaleFactor);
 					locY = (int) (t.getyPos() * scaleFactor);
 					if (xPos > locX - 20 && xPos < locX + 20 && yPos > locY - 20 && yPos < locY + 20) {
@@ -568,7 +598,7 @@ public class MainMenuController implements Initializable {
 					}
 				}
 				List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
-				for (Tavern t : taverns) {
+				for (Tavern t : taverns) {                      // search all taverns for hit
 					locX = (int) (t.getxPos() * scaleFactor);
 					locY = (int) (t.getyPos() * scaleFactor);
 					if (xPos > locX - 20 && xPos < locX + 20 && yPos > locY - 20 && yPos < locY + 20) {
@@ -773,6 +803,9 @@ public class MainMenuController implements Initializable {
 		}
 	}
 
+	/**
+	 * sets currently selected location as from-location
+	 */
 	@FXML
 	private void onFromPressed() {
 		if (selectedLocation != null) {
@@ -787,6 +820,9 @@ public class MainMenuController implements Initializable {
 		}
 	}
 
+	/**
+	 * sets currently selected location as to-location
+	 */
 	@FXML
 	private void onToPressed() {
 		if (selectedLocation != null) {
@@ -801,9 +837,13 @@ public class MainMenuController implements Initializable {
 		}
 	}
 
+	/**
+	 * calculates shortest route between from and to, an shows the route on the map
+	 * if a route is already displayed it is instead not displayed
+	 */
 	@FXML
 	private void onCalcPressed() {
-		if (nothingChanged) {
+		if (nothingChanged) {       // still old route displayed
 			zoomGroup.getChildren().remove(pathCanvas);
 			pathCanvas = new Canvas(1, 1);
 			zoomGroup.getChildren().add(pathCanvas);
@@ -811,6 +851,8 @@ public class MainMenuController implements Initializable {
 			calcButton.setText("Berechnen");
 			return;
 		}
+
+		// calculate cost
 		List<LocationConnection> path;
 		try {
 			path = locationConnectionService.getShortestPathBetween(fromLocation, toLocation);
@@ -827,6 +869,7 @@ public class MainMenuController implements Initializable {
 			resultLabel.setText(cost + " Stunde");
 		}
 
+		// mark start and end location on map
 		zoomGroup.getChildren().remove(pathCanvas);
 		pathCanvas = new Canvas(mapCanvas.getWidth(), mapCanvas.getHeight());
 		GraphicsContext gc = pathCanvas.getGraphicsContext2D();
@@ -835,6 +878,7 @@ public class MainMenuController implements Initializable {
 		gc.fillRoundRect(fromLocation.getxCoord() - 13, fromLocation.getyCoord() - 13, 26, 26, 15, 15);
 		gc.fillRoundRect(toLocation.getxCoord() - 13, toLocation.getyCoord() - 13, 26, 26, 15, 15);
 
+		// mark path on map
 		Location loc1, loc2;
 		int posX1, posY1, posX2, posY2;
 		for (LocationConnection lc : path) {
@@ -848,6 +892,7 @@ public class MainMenuController implements Initializable {
 			gc.strokeLine(posX1, posY1, posX2, posY2);
 		}
 
+		// add same listener to pathCanvas as is on mapCanvas, to enable highlighting stuff "through" the pathCanvas
 		List<Location> locations = locationService.getAll();
 		pathCanvas.addEventHandler(MouseEvent.MOUSE_MOVED,
 				new EventHandler<MouseEvent>() {
@@ -881,6 +926,9 @@ public class MainMenuController implements Initializable {
 		zoomGroup.getChildren().add(pathCanvas);
 	}
 
+	/**
+	 * zooms in 1/10 of zoom-range
+	 */
 	@FXML
 	private void onZoomInPressed() {
 		double oldVal = zoomSlider.getValue();
@@ -888,6 +936,9 @@ public class MainMenuController implements Initializable {
 		zoomSlider.adjustValue(newVal);
 	}
 
+	/**
+	 * zooms out 1/10 of zoom-range
+	 */
 	@FXML
 	private void onZoomOutPressed() {
 		double oldVal = zoomSlider.getValue();
@@ -895,6 +946,9 @@ public class MainMenuController implements Initializable {
 		zoomSlider.adjustValue(newVal);
 	}
 
+	/**
+	 * updates the locationTable
+	 */
 	private void updateTables() {
 		ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
 		locationTable.setItems(data);
@@ -913,6 +967,9 @@ public class MainMenuController implements Initializable {
 		}
 	}
 
+	/**
+	 * updates the minimum zoom value to fit the map into the scrollPane
+	 */
 	private void updateZoom() {
 		double minScaleX = (scrollPane.getWidth() - 2) / mapCanvas.getWidth();
 		double minScaleY = (scrollPane.getHeight() - 2) / mapCanvas.getHeight();
@@ -920,26 +977,30 @@ public class MainMenuController implements Initializable {
 		zoomSlider.setMax(2.69);
 	}
 
+	/**
+	 * updates the map to be displayed and redraws all locations/traders/taverns
+	 */
 	private void updateMap() {
 		log.debug("updateMap called");
 
+		// save current scroll position for restoring
 		hVal = scrollPane.getHvalue();
 		vVal = scrollPane.getVvalue();
 
 		if (mode == WORLDMODE) {
+			// load map
 			File worldMap = mapService.getWorldMap();
 			if (worldMap == null) {
 				worldMap = mapService.getNoMapImage();
 			}
 			Image image = new Image("file:" + worldMap.getAbsolutePath());
+
+			// create the 3 canvases + group structure
 			mapCanvas = new Canvas(image.getWidth(), image.getHeight());
 			if (selectionCanvas == null) {
 				selectionCanvas = new Canvas(1, 1);
 			}
 			pathCanvas = new Canvas(1, 1);
-			nothingChanged = false;
-			calcButton.setText("Berechnen");
-			resultLabel.setText("kein Ergebnis");
 			GraphicsContext gc = mapCanvas.getGraphicsContext2D();
 			gc.drawImage(image, 0, 0);
 			drawLocations(gc);
@@ -947,11 +1008,17 @@ public class MainMenuController implements Initializable {
 			Group contentGroup = new Group(zoomGroup);
 			scrollPane.setContent(contentGroup);
 
+			// zoom to current value
 			zoomGroup.setScaleX(scaleFactor);
 			zoomGroup.setScaleY(scaleFactor);
 
-			List<Location> locations = locationService.getAll();
+			// reset path calculation
+			nothingChanged = false;
+			calcButton.setText("Berechnen");
+			resultLabel.setText("kein Ergebnis");
 
+			// add mouse-listener for highlighting
+			List<Location> locations = locationService.getAll();
 			mapCanvas.addEventHandler(MouseEvent.MOUSE_MOVED,
 					new EventHandler<MouseEvent>() {
 						@Override
@@ -979,11 +1046,14 @@ public class MainMenuController implements Initializable {
 			);
 
 		} else {
+			// load map
 			File map = mapService.getLocationMap(selectedLocation);
 			if (map == null) {
 				map = mapService.getNoMapImage();
 			}
 			Image image = new Image("file:" + map.getAbsolutePath());
+
+			// create the 3 canvases + group structure
 			mapCanvas = new Canvas(image.getWidth(), image.getHeight());
 			if (selectionCanvas == null) {
 				Canvas selectionCanvas = new Canvas(1, 1);
@@ -995,12 +1065,13 @@ public class MainMenuController implements Initializable {
 			Group contentGroup = new Group(zoomGroup);
 			scrollPane.setContent(contentGroup);
 
+			// zoom in to current value
 			zoomGroup.setScaleX(scaleFactor);
 			zoomGroup.setScaleY(scaleFactor);
 
+			// add mouse listener for highlighting
 			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
 			List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
-
 			mapCanvas.addEventHandler(MouseEvent.MOUSE_MOVED,
 					new EventHandler<MouseEvent>() {
 						@Override
@@ -1045,18 +1116,17 @@ public class MainMenuController implements Initializable {
 		}
 	}
 
+	/**
+	 * draws the locations and connections onto the world map
+	 * @param gc the GraphicsContext of the mapCanvas
+	 */
 	private void drawLocations(GraphicsContext gc) {
 		int posX1, posY1, posX2, posY2, posXm, posYm;
 		Location loc1, loc2;
 		List<Location> locations = locationService.getAll();
 		gc.setLineWidth(3);
-		for (Location l : locations) {
+		for (Location l : locations) {                  // draw locations
 			gc.setFill(new Color(
-					(double) Integer.valueOf(l.getRegion().getColor().substring(0, 2), 16) / 255,
-					(double) Integer.valueOf(l.getRegion().getColor().substring(2, 4), 16) / 255,
-					(double) Integer.valueOf(l.getRegion().getColor().substring(4, 6), 16) / 255,
-					1.0));
-			gc.setStroke(new Color(
 					(double) Integer.valueOf(l.getRegion().getColor().substring(0, 2), 16) / 255,
 					(double) Integer.valueOf(l.getRegion().getColor().substring(2, 4), 16) / 255,
 					(double) Integer.valueOf(l.getRegion().getColor().substring(4, 6), 16) / 255,
@@ -1072,7 +1142,7 @@ public class MainMenuController implements Initializable {
 			}
 		}
 		connections = locationConnectionService.getAll();
-		for (LocationConnection lc : connections) {
+		for (LocationConnection lc : connections) {     // draw conections
 			loc1 = lc.getLocation1();
 			loc2 = lc.getLocation2();
 			posX1 = loc1.getxCoord();
@@ -1099,19 +1169,23 @@ public class MainMenuController implements Initializable {
 
 		gc.setStroke(Color.BLACK);
 		gc.setLineWidth(0.6);
-		for (Location l : locations) {
+		for (Location l : locations) {              // write names next to locations
 			posX1 = l.getxCoord();
 			posY1 = l.getyCoord();
 			gc.strokeText(l.getName(), posX1 + 10, posY1 - 10);
 		}
 	}
 
+	/**
+	 * draws the traders and taverns onto the location map
+	 * @param gc the GraphicsContext of the mapCanvas
+	 */
 	private void drawTraders(GraphicsContext gc) {
 		int posX;
 		int posY;
 		gc.setLineWidth(5);
 		List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-		for (Trader t : traders) {
+		for (Trader t : traders) {              // draw traders
 			if (t instanceof MovingTrader) {
 				gc.setStroke(Color.LIGHTBLUE);
 			} else {
@@ -1126,7 +1200,7 @@ public class MainMenuController implements Initializable {
 		}
 		gc.setStroke(Color.YELLOW);
 		List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
-		for (Tavern t : taverns) {
+		for (Tavern t : taverns) {              // draw taverns
 			posX = t.getxPos();
 			posY = t.getyPos();
 			if (posX != 0 && posY != 0) {
@@ -1136,12 +1210,12 @@ public class MainMenuController implements Initializable {
 		}
 		gc.setStroke(Color.BLACK);
 		gc.setLineWidth(0.6);
-		for (Trader t : traders) {
+		for (Trader t : traders) {              // write names next to traders
 			posX = t.getxPos();
 			posY = t.getyPos();
 			gc.strokeText(t.getName(), posX + 10, posY - 10);
 		}
-		for (Tavern t : taverns) {
+		for (Tavern t : taverns) {              // write names next to locations
 			posX = t.getxPos();
 			posY = t.getyPos();
 			gc.strokeText(t.getName(), posX + 10, posY - 10);
@@ -1186,8 +1260,12 @@ public class MainMenuController implements Initializable {
 		}
 	}
 
+	/**
+	 * checks the focus of the location-table and sets disables accordingly
+	 * marks selected location on map
+	 */
 	private void checkLocationFocus() {
-		selectedLocation = locationTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
+		selectedLocation = locationTable.getSelectionModel().getSelectedItem();
 		if (selectedLocation == null) {
 			selectedLocation = locationTable.getFocusModel().getFocusedItem();
 		}
@@ -1213,7 +1291,7 @@ public class MainMenuController implements Initializable {
 			}
 			zoomGroup.getChildren().remove(selectionCanvas);
 
-			if (selectedLocation.getxCoord() > 0 && selectedLocation.getyCoord() > 0) {
+			if (selectedLocation.getxCoord() > 0 && selectedLocation.getyCoord() > 0) {     // mark on map
 				selectionCanvas = new Canvas(30, 30);
 				selectionCanvas.getGraphicsContext2D().setLineWidth(4);
 				selectionCanvas.getGraphicsContext2D().setStroke(Color.GREEN);
@@ -1230,6 +1308,10 @@ public class MainMenuController implements Initializable {
 		}
 	}
 
+	/**
+	 * checks the focus of the trader-list and sets disables accordingly
+	 * marks selected traders/taverns on map
+	 */
 	private void checkTraderFocus() {
 		selectedObject = traderList.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
 		if (selectedObject == null) {
@@ -1254,7 +1336,7 @@ public class MainMenuController implements Initializable {
 			zoomGroup.getChildren().remove(selectionCanvas);
 
 			if ((selectedObject instanceof Trader && ((Trader) selectedObject).getxPos() > 0 && ((Trader) selectedObject).getyPos() > 0) ||
-					(selectedObject instanceof Tavern && ((Tavern) selectedObject).getxPos() > 0 && ((Tavern) selectedObject).getyPos() > 0)) {
+					(selectedObject instanceof Tavern && ((Tavern) selectedObject).getxPos() > 0 && ((Tavern) selectedObject).getyPos() > 0)) {     // mark on map
 				selectionCanvas = new Canvas(30, 30);
 				selectionCanvas.getGraphicsContext2D().setLineWidth(6);
 				selectionCanvas.getGraphicsContext2D().setStroke(Color.GREEN);
