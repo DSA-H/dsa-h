@@ -94,7 +94,14 @@ public class CalculatePriceController implements Initializable {
         log.debug("called onCalculatePressed");
         Trader t = new Trader();
         t.setLocation(choiceLocation.getSelectionModel().getSelectedItem());
-        int price = traderService.calculatePricePerUnit(choiceQuality.getSelectionModel().getSelectedItem(),productTable.getSelectionModel().getSelectedItem(),t);
+
+        int price = 0;
+        if (choiceQuality.isDisabled()){
+            price = traderService.calculatePriceForProduct(productTable.getSelectionModel().getSelectedItem(),t);
+        }else{
+            price = traderService.calculatePricePerUnit(choiceQuality.getSelectionModel().getSelectedItem(),productTable.getSelectionModel().getSelectedItem(),t);
+        }
+
         labelPrice.setText(price+"");
         //TraderService ts = new TraderService();
         //ts.calculatePriceForProduct()
