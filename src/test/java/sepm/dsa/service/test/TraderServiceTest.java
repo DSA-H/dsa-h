@@ -251,7 +251,7 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         assertEquals(amount, deal.getAmount());
         assertEquals(currencyService.exchangeToBaseRate(currency, totalPrice), deal.getPrice());
         assertEquals(unit, deal.getUnit());
-        assertEquals(false, deal.isPurchase());
+        assertEquals(true, deal.isPurchase());
         assertEquals(dealSizeBefore + 1, dealService.getAll().size());
         assertEquals(offerSizeBefore, traderAfter.getOffers().size());
         assertTrue("Amount afterwards was expected to be " + (offerAmountBefore - amount) + ", but was " + offerAfter.getAmount(),
@@ -296,7 +296,7 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         assertEquals(amount, deal.getAmount());
         assertEquals(currencyService.exchangeToBaseRate(currency, totalPrice), deal.getPrice());
         assertEquals(unit, deal.getUnit());
-        assertEquals(true, deal.isPurchase());
+        assertEquals(false, deal.isPurchase());
         assertEquals(dealSizeBefore + 1, dealService.getAll().size());
         assertEquals(offerSizeBefore + 1, traderAfter.getOffers().size());
         assertNotNull(offerAfter);
