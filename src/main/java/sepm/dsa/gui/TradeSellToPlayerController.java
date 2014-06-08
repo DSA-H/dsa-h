@@ -194,7 +194,7 @@ public class TradeSellToPlayerController implements Initializable {
                 df.setParseBigDecimal(true);
 
                 try {
-                    price = (BigDecimal) df.parse(selectedPrice.getText());
+                    discount = (BigDecimal) df.parse(selectedDiscount.getText());
                 } catch (IllegalArgumentException e) {
                     throw new DSAValidationException("Discount kann so nicht als Zahl eingegeben werden");
                 } catch (ParseException e) {
@@ -204,7 +204,7 @@ public class TradeSellToPlayerController implements Initializable {
             } catch (NumberFormatException ex) {
                 throw new DSAValidationException("Discount muss eine Zahl sein!");
             }
-            if (price.compareTo(BigDecimal.ZERO) < 0) {
+            if (discount.compareTo(BigDecimal.ZERO) < 0) {
                 throw new DSAValidationException("Discount muss >= 0 sein");
             }
 
