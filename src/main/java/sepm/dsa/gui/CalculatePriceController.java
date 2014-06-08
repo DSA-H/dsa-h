@@ -24,6 +24,7 @@ public class CalculatePriceController implements Initializable {
     private SpringFxmlLoader loader;
     private SaveCancelService saveCancelService;
     private TraderService traderService;
+    private LocationService locationService;
     private ProductService productService;
     private List<Product> allProducts;
     private Trader selectedTrader;
@@ -55,22 +56,20 @@ public class CalculatePriceController implements Initializable {
         allProducts = productService.getAll();
         showProducts(allProducts);
 
+        choiceLocation.setItems(FXCollections.observableArrayList(locationService.getAll()));
+        choiceLocation.getSelectionModel().select(0);
+
         //init choiceBoxes
         ProductQuality[] productQualities = ProductQuality.values();
         choiceQuality.setItems(FXCollections.observableArrayList(productQualities));
         choiceQuality.getSelectionModel().select(ProductQuality.NORMAL);
+        labelPrice.setText("0");
         checkFocus();
     }
 
     private void showProducts(List<Product> products){
         ObservableList<Product> data = FXCollections.observableArrayList(products);
         productTable.setItems(data);
-    }
-
-    private void setUp() {
-        log.debug("calling setUp");
-
-
     }
 
     @FXML
@@ -93,11 +92,12 @@ public class CalculatePriceController implements Initializable {
     @FXML
     private void onCalculatePressed() {
         log.debug("called onCalculatePressed");
-
-
-
-        Stage stage = (Stage) textName.getScene().getWindow();
-        stage.close();
+        Trader t = new Trader();
+        t.setLocation(choiceLocation.getSelectionModel().getSelectedItem());
+        int price = traderService.calculatePricePerUnit(choiceQuality.getSelectionModel().getSelectedItem(),productTable.getSelectionModel().getSelectedItem(),t);
+        labelPrice.setText(price+"");
+        //TraderService ts = new TraderService();
+        //ts.calculatePriceForProduct()
     }
 
     @FXML
@@ -109,7 +109,10 @@ public class CalculatePriceController implements Initializable {
         choiceQuality.setDisable(true);
 
         if (p!=null){
-            calcButton.setDisable(false);
+            if (choiceLocation.getSelectionModel().getSelectedItem()!=null) {
+                calcButton.setDisable(false);
+            }
+
             if (p.getQuality()){
                 choiceQuality.setDisable(false);
             }
@@ -119,7 +122,6 @@ public class CalculatePriceController implements Initializable {
     @FXML
     private void onCancelPressed() {
         log.debug("called onCancelPressed");
-        saveCancelService.cancel();
         Stage stage = (Stage) textName.getScene().getWindow();
         stage.close();
     }
@@ -127,10 +129,13 @@ public class CalculatePriceController implements Initializable {
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
     }
-    public void setSaveCancelService(SaveCancelService saveCancelService) {
-        this.saveCancelService = saveCancelService;
-    }
     public void setProductService(ProductService productService) {
         this.productService = productService;
+    }
+    public void setLocationService(LocationService locationService) {
+        this.locationService = locationService;
+    }
+    public void setTraderService(TraderService traderService) {
+        this.traderService = traderService;
     }
 }
