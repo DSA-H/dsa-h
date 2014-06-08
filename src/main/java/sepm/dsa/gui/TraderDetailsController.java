@@ -16,6 +16,7 @@ import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.TimeService;
 import sepm.dsa.service.TraderService;
@@ -31,7 +32,6 @@ public class TraderDetailsController implements Initializable {
     private TraderService traderService;
 
     private Trader trader;
-    private Offer selectedOffer;
     private TimeService timeService;
 
 
@@ -116,6 +116,7 @@ public class TraderDetailsController implements Initializable {
             sb.append("vor ").append(current - timestamp).append(" Tagen").append(" (").append(date).append(")");
             return new SimpleStringProperty(sb.toString());
         });
+//        dateColumn.setSortType(TableColumn.SortType.DESCENDING);
 
         priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
 
@@ -182,18 +183,23 @@ public class TraderDetailsController implements Initializable {
         //trader wants to sell stuff to the player
         //TODO as popover
         TradeSellToPlayerController.setTrader(trader);
-        TradeSellToPlayerController.setOffer(offerTable.getSelectionModel().getSelectedItem());
-        Stage dialog = new Stage(StageStyle.DECORATED);
-        dialog.initModality(Modality.WINDOW_MODAL);
-        dialog.initOwner(dealsTable.getParent().getScene().getWindow());
-        Parent scene = (Parent) loader.load("/gui/tradeSell.fxml");
+        Offer selectedItem = offerTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            TradeSellToPlayerController.setOffer(selectedItem);
+            Stage dialog = new Stage(StageStyle.DECORATED);
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.initOwner(dealsTable.getParent().getScene().getWindow());
+            Parent scene = (Parent) loader.load("/gui/tradeSell.fxml");
 
-        dialog.setTitle("Ware verkaufen an Spieler");
-        dialog.setScene(new Scene(scene, 316, 275));
-        dialog.setResizable(false);
-        dialog.showAndWait();
-        checkFocus();
-        refreshView();
+            dialog.setTitle("Ware verkaufen an Spieler");
+            dialog.setScene(new Scene(scene, 316, 275));
+            dialog.setResizable(false);
+            dialog.showAndWait();
+            checkFocus();
+            refreshView();
+        }else {
+            throw new DSAValidationException("Kein Angebot ausgewählt");
+        }
     }
 
     @FXML
