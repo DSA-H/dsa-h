@@ -19,6 +19,7 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.DealService;
+import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TimeService;
 import sepm.dsa.service.TraderService;
 
@@ -35,6 +36,7 @@ public class TraderDetailsController implements Initializable {
     private Trader trader;
     private TimeService timeService;
     private DealService dealService;
+    private SaveCancelService saveCancelService;
 
 
     @FXML
@@ -187,6 +189,8 @@ public class TraderDetailsController implements Initializable {
             throw new DSAValidationException("Bitte einen Deal zum Löschen auswählen");
         }
         dealService.remove(selectedDeal);
+        saveCancelService.save();
+        refreshView();
     }
 
 
@@ -284,5 +288,9 @@ public class TraderDetailsController implements Initializable {
 
     public void setTimeService(TimeService timeService) {
         this.timeService = timeService;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

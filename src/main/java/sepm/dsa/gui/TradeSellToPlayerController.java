@@ -116,8 +116,15 @@ public class TradeSellToPlayerController implements Initializable {
         if (selPlayer == null) {
             throw new DSAValidationException("Ein Spieler muss gewählt werden!");
         }
-        Integer discountAmount = traderService.suggesstDiscount(trader, selPlayer, offer.getProduct(), offer.getQuality(), selectedUnit.getSelectionModel().getSelectedItem(), amount);
-        selectedDiscount.setText(Integer.toString(discountAmount));
+        Integer discount = traderService.suggesstDiscount(trader, selPlayer, offer.getProduct(), offer.getQuality(), selectedUnit.getSelectionModel().getSelectedItem(), amount);
+
+        Integer discountAmount = null;
+        try {
+            discountAmount = (Integer.parseInt(selectedPrice.getText()) * discount) / 100;
+        } catch (NumberFormatException ex) {
+            throw new DSAValidationException("Der Preis muss angegeben sein.");
+        }
+        selectedDiscount.setText("" + (discountAmount == null ? 0 : discountAmount));
     }
 
     @FXML
