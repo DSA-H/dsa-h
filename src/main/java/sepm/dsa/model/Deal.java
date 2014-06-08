@@ -1,7 +1,5 @@
 package sepm.dsa.model;
 
-import sepm.dsa.dao.CurrencyAmount;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -42,7 +40,8 @@ public class Deal implements BaseModel {
 
     @Transient
     @ManyToOne
-    @JoinColumn     // => nullable = true; product can be deleted, therefore store productName to keep history for player
+    @JoinColumn
+    // => nullable = true; product can be deleted, therefore store productName to keep history for player
     private transient Product product;
 
     @ManyToOne
@@ -132,8 +131,9 @@ public class Deal implements BaseModel {
     public void setquality(ProductQuality quality) {
         if (quality == null) {
             this.qualityId = null;
+        } else {
+            this.qualityId = quality.getValue();
         }
-        this.qualityId = quality.getValue();
     }
 
     public DSADate getDate() {
