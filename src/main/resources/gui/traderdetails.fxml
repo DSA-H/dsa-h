@@ -36,17 +36,18 @@
         <Separator layoutX="580.0" layoutY="145.0" prefWidth="200.0" />
         <Separator layoutX="580.0" layoutY="216.0" prefWidth="200.0" />
         <Label layoutX="591.0" layoutY="229.0" text="Handel:" underline="true" />
-        <TextArea fx:id="commentArea" editable="false" layoutX="22.0" layoutY="695.0" prefHeight="94.0" prefWidth="754.0" wrapText="true" />
-      <TableView fx:id="dealsTable" layoutX="21.0" layoutY="432.0" prefHeight="250.0" prefWidth="754.0">
+        <TextArea fx:id="commentArea" editable="false" layoutX="22.0" layoutY="702.0" prefHeight="94.0" prefWidth="754.0" wrapText="true" />
+      <TableView fx:id="dealsTable" layoutX="21.0" layoutY="448.0" prefHeight="250.0" prefWidth="754.0">
          <columns>
             <TableColumn fx:id="playerColumn" prefWidth="153.0" text="Spieler" />
-            <TableColumn fx:id="productDealColumn" prefWidth="237.0" text="Produkt" />
-            <TableColumn fx:id="priceColumn" prefWidth="79.0" text="Preis" />
-            <TableColumn fx:id="amountDealColumn" prefWidth="82.0" text="Menge" />
-            <TableColumn fx:id="dateColumn" prefWidth="202.0" text="Datum" />
+            <TableColumn fx:id="productDealColumn" prefWidth="131.0" text="Produkt" />
+            <TableColumn fx:id="priceColumn" prefWidth="74.0" text="Preis" />
+            <TableColumn fx:id="amountDealColumn" prefWidth="125.0" text="Menge" />
+            <TableColumn fx:id="dateColumn" minWidth="0.0" prefWidth="270.0" text="Datum" />
          </columns>
       </TableView>
       <Button fx:id="tradeButtonBuy" layoutX="656.0" layoutY="267.0" mnemonicParsing="false" onAction="#onTradeBuyPressed" prefHeight="26.0" prefWidth="118.0" text="Verkauf Buchen" />
       <Button layoutX="585.0" layoutY="396.0" mnemonicParsing="false" onMouseClicked="#onDeleteDealClicked" prefHeight="26.0" prefWidth="187.0" text="Bestehenden Deal löschen" />
+      <Label layoutX="22.0" layoutY="428.0" prefHeight="16.0" prefWidth="754.0" text="(+) bei Menge: Kauf von Spieler, (-) Ankauf durch Händler" />
     </children>
 </Pane>
