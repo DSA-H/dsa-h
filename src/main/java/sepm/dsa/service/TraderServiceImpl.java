@@ -183,7 +183,7 @@ public class TraderServiceImpl implements TraderService {
         newDeal.setPrice(priceInBaseRate);   // Integer
         newDeal.setProduct(product);
         newDeal.setProductName(product.getName());
-        newDeal.setPurchase(false);
+        newDeal.setPurchase(true);
         newDeal.setquality(productQuality);
         newDeal.setTrader(trader);
         newDeal.setUnit(unit);
@@ -252,7 +252,7 @@ public class TraderServiceImpl implements TraderService {
         newDeal.setPrice(priceInBaseRate);   // Integer
         newDeal.setProduct(product);
         newDeal.setProductName(product.getName());
-        newDeal.setPurchase(true);
+        newDeal.setPurchase(false);
         newDeal.setquality(productQuality);
         newDeal.setTrader(trader);
         newDeal.setUnit(unit);

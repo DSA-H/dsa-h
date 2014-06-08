@@ -16,7 +16,7 @@ public class Deal implements BaseModel {
 
     @NotNull
     @Column(nullable = false)
-    private boolean purchase;
+    private boolean purchase;       // true if the player purchases the product, false if the player sells the product
 
     @NotNull
     @Column(nullable = false)
@@ -105,10 +105,16 @@ public class Deal implements BaseModel {
         return purchase;
     }
 
+    /**
+     * @param purchase true if the player purchases the product, false if the player sells the product
+     */
     public void setPurchase(boolean purchase) {
         this.purchase = purchase;
     }
 
+    /**
+     * @return true if the player purchases the product, false if the player sells the product
+     */
     public BigDecimal getPrice() {
         return price;
     }
