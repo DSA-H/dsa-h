@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
+import sepm.dsa.service.DealService;
 import sepm.dsa.service.TimeService;
 import sepm.dsa.service.TraderService;
 
@@ -33,6 +34,7 @@ public class TraderDetailsController implements Initializable {
 
     private Trader trader;
     private TimeService timeService;
+    private DealService dealService;
 
 
     @FXML
@@ -178,6 +180,17 @@ public class TraderDetailsController implements Initializable {
     }
 
     @FXML
+    private void onDeleteDealClicked() {
+        log.debug("called onDeleteDealClicked");
+        Deal selectedDeal = dealsTable.getSelectionModel().getSelectedItem();
+        if(selectedDeal == null){
+            throw new DSAValidationException("Bitte einen Deal zum Löschen auswählen");
+        }
+        dealService.remove(selectedDeal);
+    }
+
+
+    @FXML
     private void onTradePressed() {
         log.debug("called onTradePressed");
         //trader wants to sell stuff to the player
@@ -250,6 +263,10 @@ public class TraderDetailsController implements Initializable {
         offerTable.getItems().clear();
         offerTable.setItems(FXCollections.observableArrayList(offers));
         dealsTable.setItems(FXCollections.observableArrayList(trader.getDeals()));
+    }
+
+    public void setDealService(DealService dealService) {
+        this.dealService = dealService;
     }
 
     public void setTrader(Trader trader) {

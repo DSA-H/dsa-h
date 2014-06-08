@@ -144,6 +144,7 @@ public class TradeBuyFromPlayerController implements Initializable {
                 selectedPrice.setText(Integer.toString(priceDefault));
                 selectedQuality.setDisable(true);
             }
+            selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAllByType(selProduct.getUnit().getUnitType())));
             selectedUnit.getSelectionModel().select(selProduct.getUnit());
         }
     }
@@ -153,8 +154,12 @@ public class TradeBuyFromPlayerController implements Initializable {
         log.debug("calling onSearchPressed");
         if (searchField.getText().isEmpty()) {
             productsTable.setItems(FXCollections.observableArrayList(productService.getAll()));
+            productsTable.getSelectionModel().selectFirst();
+            checkFocus();
         } else {
             productsTable.setItems(FXCollections.observableArrayList(productService.getBySearchTerm(searchField.getText())));
+            productsTable.getSelectionModel().selectFirst();
+            checkFocus();
         }
     }
 

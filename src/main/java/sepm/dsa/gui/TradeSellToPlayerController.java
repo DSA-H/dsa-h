@@ -3,7 +3,6 @@ package sepm.dsa.gui;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -39,9 +38,7 @@ public class TradeSellToPlayerController implements Initializable {
     @FXML
     private TextField selectedPrice;
     @FXML
-    private Button calculateDiscount;
-    @FXML
-    private Label selectedDiscount;
+    private TextField selectedDiscount;
 
     private static Trader trader;
     private static Offer offer;
@@ -54,8 +51,10 @@ public class TradeSellToPlayerController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        selectedDiscount.setText("0");
+
         selectedCurrency.setItems(FXCollections.observableArrayList(currencyService.getAll()));
-        selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAll()));
+        selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAllByType(offer.getProduct().getUnit().getUnitType())));
         selectedPrice.setText(offer.getPricePerUnit().toString());
         selectedPlayer.setItems(FXCollections.observableArrayList(playerService.getAll()));
 
@@ -74,22 +73,51 @@ public class TradeSellToPlayerController implements Initializable {
         selectedOffer.setText(sb.toString());
         selectedAmount.setText("1");
         selectedAmount.textProperty().addListener((observable, oldValue, newValue) -> {
-                int setQuality = traderService.calculatePricePerUnit(offer.getQuality(), offer.getProduct(), trader);
-                int amount;
+            int setQuality = traderService.calculatePricePerUnit(offer.getQuality(), offer.getProduct(), trader);
+            int amount;
 
-                //##### get amount
-                if (selectedAmount.getText().isEmpty()) {
-                } else {
-                    try {
-                        amount = new Integer(selectedAmount.getText());
+            //##### get amount
+            if (selectedAmount.getText().isEmpty()) {
+            } else {
+                try {
+                    amount = new Integer(selectedAmount.getText());
 
-                    } catch (NumberFormatException ex) {
-                        throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
-                    }
-
-                    selectedPrice.setText(Integer.toString(setQuality * amount));
+                } catch (NumberFormatException ex) {
+                    throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
                 }
+
+                selectedPrice.setText(Integer.toString(setQuality * amount));
+            }
         });
+    }
+
+    @FXML
+    private void calculateDiscount() {
+
+        Player selPlayer = this.selectedPlayer.getSelectionModel().getSelectedItem();
+        int amount = 1;
+
+        if (selectedAmount.getText().isEmpty()) {
+            throw new DSAValidationException("Bitte Menge eingeben");
+        }
+        try {
+            amount = new Integer(selectedAmount.getText());
+
+        } catch (NumberFormatException ex) {
+            throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
+        }
+        if (amount <= 0) {
+            throw new DSAValidationException("Menge muss > 0 sein");
+        }
+        if (selectedUnit.getSelectionModel().getSelectedItem() == null) {
+            throw new DSAValidationException("Die Einheit wurde nicht gewählt!");
+        }
+
+        if (selPlayer != null) {
+            traderService.suggesstDiscount(trader, selPlayer, offer.getProduct(), offer.getQuality(), selectedUnit.getSelectionModel().getSelectedItem(), amount);
+        } else {
+            throw new DSAValidationException("Ein Spieler muss gewählt werden!");
+        }
     }
 
     @FXML
@@ -139,8 +167,8 @@ public class TradeSellToPlayerController implements Initializable {
             df.setParseBigDecimal(true);
 
             try {
-                price = (BigDecimal)df.parse(selectedPrice.getText());
-            }catch(IllegalArgumentException e){
+                price = (BigDecimal) df.parse(selectedPrice.getText());
+            } catch (IllegalArgumentException e) {
                 throw new DSAValidationException("Preis kann so nicht als Zahl eingegeben werden");
             } catch (ParseException e) {
                 throw new DSAValidationException("Ungültiger Preis. ");

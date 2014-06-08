@@ -334,6 +334,7 @@
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>
         <property name="timeService" ref="timeService"/>
+        <property name="dealService" ref="dealService"/>
     </bean>
     <bean id="traderSellToPlayer" class="sepm.dsa.gui.TradeSellToPlayerController">
         <property name="traderService" ref="traderService"/>

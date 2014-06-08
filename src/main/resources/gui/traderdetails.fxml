@@ -47,5 +47,6 @@
          </columns>
       </TableView>
       <Button fx:id="tradeButtonBuy" layoutX="656.0" layoutY="267.0" mnemonicParsing="false" onAction="#onTradeBuyPressed" prefHeight="26.0" prefWidth="118.0" text="Verkauf Buchen" />
+      <Button layoutX="585.0" layoutY="396.0" mnemonicParsing="false" onMouseClicked="#onDeleteDealClicked" prefHeight="26.0" prefWidth="187.0" text="Bestehenden Deal löschen" />
     </children>
 </Pane>
