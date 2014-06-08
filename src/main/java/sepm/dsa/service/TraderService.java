@@ -164,4 +164,18 @@ public interface TraderService {
      */
     Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency);
 
+    /**
+     * Suggests a discount for a Players Product purchase in percent (0 ... 0%, 20 ... 20%, etc).
+     *
+     * @param trader the Trader
+     * @param player the Player who buys the product
+     * @param product the Product
+     * @param productQuality the Product Quality
+     * @param unit the Product Unit
+     * @param amount the Amount of Products
+     * @return the suggested discount for the purchase [0..100], meaning 0 ... 0% discount (full price), 100 ... 100% discount (free)
+     */
+    Integer suggesstDiscount(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount);
+
+
 }

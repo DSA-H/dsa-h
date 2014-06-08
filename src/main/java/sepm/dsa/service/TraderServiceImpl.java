@@ -202,6 +202,16 @@ public class TraderServiceImpl implements TraderService {
     }
 
     @Override
+    public Integer suggesstDiscount(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount) {
+
+        long lookDaysBackwards = 365L;    // consider all deals between player and trader in the last year
+        List<Deal> deals = dealService.getAllBetweenPlayerAndTraderLastXDays(player, trader, lookDaysBackwards);
+
+        // TODO some logic that decides about the discount value
+        return deals.size();
+    }
+
+    @Override
     public Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, BigDecimal totalPrice, Currency currency) {
 
         // TODO discuss Currency question with jotschi

@@ -24,6 +24,10 @@ public class Deal implements BaseModel {
 
     @NotNull
     @Column(nullable = false)
+    private Integer discount = 0;
+
+    @NotNull
+    @Column(nullable = false)
     private Integer amount;
 
     @NotNull
@@ -202,4 +206,17 @@ public class Deal implements BaseModel {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
+    public Integer getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
+    }
+
+    public Integer priceWithDiscount() {
+        return price.intValue() - discount;
+    }
+
 }

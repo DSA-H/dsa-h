@@ -112,4 +112,5 @@
 
     <currencies id="1" name="firstCurrency" valueToBaseRate="3"/>
     <currencies id="2" name="secondCurrency" valueToBaseRate="2"/>
+    <deals id="1" amount="5" date="1" locationName="location1" price="100.00" productName="product1" purchase="true" qualityid="3" player_id="1" trader_id="2" unit_id="1" discount="0"/>
 </dataset>

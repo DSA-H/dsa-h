@@ -8,6 +8,7 @@ import sepm.dsa.dao.UnitAmount;
 import sepm.dsa.dao.UnitDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Unit;
+import sepm.dsa.model.UnitType;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -68,7 +69,15 @@ public class UnitServiceImpl implements UnitService {
         return result;
     }
 
-     /**
+    @Override
+    public List<Unit> getAllByType(UnitType unitType) {
+        log.debug("calling getAll()");
+        List<Unit> result = unitDao.getAllByType(unitType);
+        log.trace("returning " + result);
+        return result;
+    }
+
+    /**
      * Validates a product
      *
      * @param product

@@ -237,6 +237,7 @@
 
     <bean id="dealService" class="sepm.dsa.service.DealServiceImpl">
         <property name="dealDao" ref="dealDao"/>
+        <property name="timeService" ref="timeService"/>
     </bean>
 
     <bean id="timeService" class="sepm.dsa.service.TimeServiceImpl">

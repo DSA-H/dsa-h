@@ -6,7 +6,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.DealDao;
 import sepm.dsa.exceptions.DSAValidationException;
+import sepm.dsa.model.DSADate;
 import sepm.dsa.model.Deal;
+import sepm.dsa.model.Player;
+import sepm.dsa.model.Trader;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -19,6 +22,8 @@ public class DealServiceImpl implements DealService {
 
     private static final Logger log = LoggerFactory.getLogger(DealServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
+
+    private TimeService timeService;
 
     private DealDao dealDao;
 
@@ -60,6 +65,15 @@ public class DealServiceImpl implements DealService {
         return result;
     }
 
+    @Override
+    public List<Deal> getAllBetweenPlayerAndTraderLastXDays(Player player, Trader trader, long days) {
+        log.debug("calling getAllBetweenPlayerAndTraderLastXDays(" + player + ", " + trader + ", " + days + ")");
+        long currentDateValue = timeService.getCurrentDate().getTimestamp();
+        List<Deal> result = dealDao.playerDealsWithTraderInTimeRange(player, trader, currentDateValue - days, currentDateValue);
+        log.trace("returning " + result);
+        return result;
+    }
+
     /**
      * Validates a deal
      *
@@ -75,5 +89,9 @@ public class DealServiceImpl implements DealService {
 
     public void setDealDao(DealDao dealDao) {
         this.dealDao = dealDao;
+    }
+
+    public void setTimeService(TimeService timeService) {
+        this.timeService = timeService;
     }
 }

@@ -308,4 +308,21 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         saveCancelService.save();
 
     }
+
+    @Test
+    public void suggestDiscount_zeroIfNoDealsWithTraderBefore() {
+        Trader trader = traderService.get(1);
+        Player player = playerService.get(1);
+        Product product = productService.get(1);
+        ProductQuality productQuality = ProductQuality.NORMAL;
+        Unit unit = product.getUnit();
+        Integer amount = 5;
+
+        int discount = traderService.suggesstDiscount(trader, player, product, productQuality, unit, amount);
+
+        assertEquals("The discount must be zero if there were no deals between this trader and player before", 0, discount);
+    }
+
+
+
 }
