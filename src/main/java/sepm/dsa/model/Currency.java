@@ -25,6 +25,11 @@ public class Currency implements BaseModel {
     @Column(nullable = false, length = 60)
     private String name;
 
+    @NotBlank
+    @Size(max = 5)
+    @Column(nullable = false, length = 5)
+    private String shortName;
+
     @NotNull
     @Column(nullable = false)
     private Integer valueToBaseRate;  // relative value to base rate TODO change to Integer
@@ -104,5 +109,13 @@ public class Currency implements BaseModel {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 }

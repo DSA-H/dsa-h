@@ -359,6 +359,7 @@
         <property name="traderService" ref="traderService"/>
         <property name="timeService" ref="timeService"/>
         <property name="dealService" ref="dealService"/>
+        <property name="currencySetService" ref="currencySetService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
     <bean id="traderSellToPlayer" class="sepm.dsa.gui.TradeSellToPlayerController">

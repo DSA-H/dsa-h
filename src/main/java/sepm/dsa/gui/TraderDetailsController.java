@@ -19,12 +19,11 @@ import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
-import sepm.dsa.service.DealService;
-import sepm.dsa.service.SaveCancelService;
-import sepm.dsa.service.TimeService;
-import sepm.dsa.service.TraderService;
+import sepm.dsa.service.*;
+import sepm.dsa.util.CurrencyFormatUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +38,7 @@ public class TraderDetailsController implements Initializable {
     private Trader trader;
     private TimeService timeService;
     private DealService dealService;
+    private CurrencySetService currencySetService;
     private SaveCancelService saveCancelService;
 
 
@@ -82,10 +82,13 @@ public class TraderDetailsController implements Initializable {
 	@FXML
 	private TableColumn<Deal, String> dateColumn;
 
+    private CurrencySet defaultCurrencySet;
 
 	@Override
 	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
 		log.debug("initialize TraderDetailsController");
+
+        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
 
 		amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
 		initialzeTableWithColums();
@@ -107,8 +110,38 @@ public class TraderDetailsController implements Initializable {
                 }
             }
         });
-        localPriceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
-        standardPriceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
+//        localPriceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
+//        standardPriceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
+        localPriceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Offer, String> r) {
+                if (r.getValue() != null) {
+                    Offer offer = r.getValue();
+                    CurrencySet traderCurrencySet = trader.getLocation().getRegion().getPreferredCurrencySet();
+                    if (traderCurrencySet == null) {
+                        traderCurrencySet = defaultCurrencySet;
+                    }
+                    List<CurrencyAmount> ca = currencySetService.toCurrencySet(traderCurrencySet, offer.getPricePerUnit());
+                    String str = CurrencyFormatUtil.currencySetShortString(ca, ", ");
+                    return new SimpleStringProperty(str);
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
+        standardPriceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Offer, String> r) {
+                if (r.getValue() != null) {
+                    Offer offer = r.getValue();
+                    List<CurrencyAmount> ca = currencySetService.toCurrencySet(defaultCurrencySet, offer.getPricePerUnit());
+                    String str = CurrencyFormatUtil.currencySetShortString(ca, ", ");
+                    return new SimpleStringProperty(str);
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
 
 	}
 
@@ -346,5 +379,9 @@ public class TraderDetailsController implements Initializable {
 
     public void setSaveCancelService(SaveCancelService saveCancelService) {
         this.saveCancelService = saveCancelService;
+    }
+
+    public void setCurrencySetService(CurrencySetService currencySetService) {
+        this.currencySetService = currencySetService;
     }
 }

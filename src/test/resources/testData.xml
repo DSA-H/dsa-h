@@ -117,12 +117,12 @@
 
     <!-- end of location cascade deleting test data -->
 
-    <currencies id="1" name="currency1" valueToBaseRate="3"/>
-    <currencies id="2" name="currency2" valueToBaseRate="2"/>
-    <currencies id="3" name="currency3" valueToBaseRate="1"/>
-    <currencies id="4" name="currency4" valueToBaseRate="10"/>
-    <currencies id="5" name="currency5" valueToBaseRate="100"/>
-    <currencies id="6" name="currency6" valueToBaseRate="1000"/>
+    <currencies id="1" name="currency1" shortName="c1" valueToBaseRate="3"/>
+    <currencies id="2" name="currency2" shortName="c1" valueToBaseRate="2"/>
+    <currencies id="3" name="currency3" shortName="c1" valueToBaseRate="1"/>
+    <currencies id="4" name="currency4" shortName="c1" valueToBaseRate="10"/>
+    <currencies id="5" name="currency5" shortName="c1" valueToBaseRate="100"/>
+    <currencies id="6" name="currency6" shortName="c1" valueToBaseRate="1000"/>
     <currencySets id="1" name="currencySet1"/>
     <currencySets id="2" name="currencySet2"/>
     <currencySet_currencies currencySet_id="1" currency_id="3"/>

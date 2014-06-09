@@ -64,7 +64,7 @@ public class CurrencyListController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/editcurrency.fxml");
 
         stage.setTitle("Währungen");
-        stage.setScene(new Scene(scene, 600, 414));
+        stage.setScene(new Scene(scene, 464, 279));
         stage.show();
     }
 
@@ -78,7 +78,7 @@ public class CurrencyListController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/editcurrency.fxml");
 
         stage.setTitle("Währungen");
-        stage.setScene(new Scene(scene, 600, 414));
+        stage.setScene(new Scene(scene, 464, 279));
         stage.show();
     }
 

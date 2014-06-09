@@ -32,6 +32,7 @@ public class CurrencyDaoTest extends AbstractDatabaseTest {
     public void testAdd() throws Exception {
         Currency c1 = new Currency();
         c1.setName("fofods");
+        c1.setShortName("i31");
         c1.setValueToBaseRate(1);
 
         currencyDao.add(c1);

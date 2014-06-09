@@ -9,7 +9,6 @@ public class CurrencyFormatUtil {
 
     public static String currencySetString(List<CurrencyAmount> cas) {
         return currencySetString(cas, ", ");
-
     }
 
     /**
@@ -39,6 +38,24 @@ public class CurrencyFormatUtil {
         for (int i=1; i<cas.size(); i++) {
             CurrencyAmount ca = cas.get(i);
             result +=  delimiter + ca.getAmount() + " " + ca.getCurrency().getName();
+        }
+        return result;
+    }
+
+    public static String currencySetShortString(List<CurrencyAmount> cas) {
+        return currencySetShortString(cas, ", ");
+    }
+
+    public static String currencySetShortString(List<CurrencyAmount> cas, final String delimiter) {
+
+        if (cas.size() == 0) {
+            throw new IllegalArgumentException("currencyAmounts size is zero");
+        }
+
+        String result = cas.get(0).getAmount() + " " + cas.get(0).getCurrency().getShortName();
+        for (int i=1; i<cas.size(); i++) {
+            CurrencyAmount ca = cas.get(i);
+            result +=  delimiter + ca.getAmount() + " " + ca.getCurrency().getShortName();
         }
         return result;
     }
