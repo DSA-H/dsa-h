@@ -116,6 +116,11 @@
               <MenuItem mnemonicParsing="false" onAction="#onCalculateProductPrice" text="Preise berechnen" fx:id="berechnePreis" />
           </items>
         </Menu>
+        <Menu mnemonicParsing="false" text="Export">
+          <items>
+            <MenuItem mnemonicParsing="false" onAction="#onPrintTraderClicked" text="Händler drucken" />
+          </items>
+        </Menu>
       </menus>
     </MenuBar>
   </top>

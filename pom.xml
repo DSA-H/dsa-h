@@ -293,6 +293,13 @@
 	    <version>3.2.1</version>
 	</dependency>
 
+        <!-- PDF rendering -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.3.0</version>
+        </dependency>
+
         <!-- File copy -->
         <dependency>
             <groupId>org.apache.commons</groupId>
