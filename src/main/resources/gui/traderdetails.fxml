@@ -5,24 +5,20 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="830.0"
-      prefWidth="781.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="sepm.dsa.gui.TraderDetailsController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="830.0" prefWidth="781.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.TraderDetailsController">
     <children>
-        <Label fx:id="nameLabel" alignment="CENTER" layoutY="14.0" prefHeight="27.0" prefWidth="800.0"
-               text="Vorname Nachname" textAlignment="CENTER">
+        <Label fx:id="nameLabel" alignment="CENTER" layoutY="14.0" prefHeight="27.0" prefWidth="800.0" text="Vorname Nachname" textAlignment="CENTER">
             <font>
-                <Font name="System Bold" size="18.0"/>
+                <Font name="System Bold" size="18.0" />
             </font>
         </Label>
-        <Label fx:id="categoryLabel" alignment="CENTER" layoutX="-1.0" layoutY="41.0" prefHeight="17.0"
-               prefWidth="800.0" text="Händlerkategorie" textAlignment="CENTER"/>
+        <Label fx:id="categoryLabel" alignment="CENTER" layoutX="-1.0" layoutY="41.0" prefHeight="17.0" prefWidth="800.0" text="Händlerkategorie" textAlignment="CENTER" />
         <TableView fx:id="offerTable" layoutX="21.0" layoutY="67.0" onMouseClicked="#checkFocus" prefHeight="355.0" prefWidth="550.0">
             <columns>
-                <TableColumn fx:id="amountColumn" prefWidth="75.0" text="Menge"/>
-                <TableColumn fx:id="productColumn" prefWidth="275.0" text="Ware"/>
-                <TableColumn fx:id="localPriceColumn" prefWidth="100.0" text="Preis (lokal)"/>
-                <TableColumn fx:id="standardPriceColumn" prefWidth="100.0" text="Preis (standard)"/>
+                <TableColumn fx:id="amountColumn" prefWidth="75.0" text="Menge" />
+                <TableColumn fx:id="productColumn" prefWidth="275.0" text="Ware" />
+                <TableColumn fx:id="localPriceColumn" prefWidth="100.0" text="Preis (lokal)" />
+                <TableColumn fx:id="standardPriceColumn" prefWidth="100.0" text="Preis (standard)" />
             </columns>
         </TableView>
         <Button layoutX="714.0" layoutY="800.0" mnemonicParsing="false" onAction="#onBackPressed" text="Zurück" />
@@ -51,7 +47,7 @@
          </columns>
       </TableView>
       <Button fx:id="tradeButtonBuy" layoutX="656.0" layoutY="267.0" mnemonicParsing="false" onAction="#onTradeBuyPressed" prefHeight="26.0" prefWidth="118.0" text="Verkauf Buchen" />
-      <Button layoutX="585.0" layoutY="396.0" mnemonicParsing="false" onMouseClicked="#onDeleteDealClicked" prefHeight="26.0" prefWidth="187.0" text="Bestehenden Deal löschen" />
+      <Button layoutX="585.0" layoutY="396.0" mnemonicParsing="false" onMouseClicked="#onDeleteDealClicked" prefHeight="26.0" prefWidth="187.0" text="Bestehenden Handel löschen" />
       <Label layoutX="22.0" layoutY="428.0" prefHeight="16.0" prefWidth="754.0" text="(+) bei Menge: Kauf von Spieler, (-) Ankauf durch Händler" />
     </children>
 </Pane>
