@@ -122,8 +122,13 @@ public class AddOfferController implements Initializable {
         }
 
         traderService.addManualOffer(selectedTrader, o);
+
         Stage stage = (Stage) textName.getScene().getWindow();
-        stage.close();
+
+        Parent scene = (Parent) loader.load("/gui/traderdetails.fxml");
+        TraderDetailsController controller = loader.getController();
+        controller.setTrader(selectedTrader);
+        stage.setScene(new Scene(scene, 800, 552));
     }
 
     @FXML

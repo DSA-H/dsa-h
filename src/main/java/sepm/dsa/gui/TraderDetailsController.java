@@ -26,6 +26,7 @@ import sepm.dsa.service.TraderServiceImpl;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -139,9 +140,54 @@ public class TraderDetailsController implements Initializable {
         log.debug("called onDeletePressed");
         Offer o = offerTable.getSelectionModel().getSelectedItem();
 
+        Optional<String> response = Dialogs.create()
+                .title("Löschen?")
+                .masthead(null)
+                .message("Wie viel wollen sie entfernen?")
+                .showTextInput();
 
-        traderService.removeManualOffer(trader, o);
-        offerTable.getItems().remove(o);
+        int amount = 0;
+        if (response.isPresent()){
+            try{
+                amount = Integer.parseInt(response.get());
+                if (amount < 0){
+                    Dialogs.create()
+                            .title("Ungültige Eingabe")
+                            .masthead(null)
+                            .message("Ungültige Eingabe")
+                            .showError();
+                    return;
+                }
+            }catch (NumberFormatException nfe){
+                Dialogs.create()
+                        .title("Ungültige Eingabe")
+                        .masthead(null)
+                        .message("Ungültige Eingabe")
+                        .showError();
+                return;
+            }
+        }else {
+            Dialogs.create()
+                    .title("Ungültige Eingabe")
+                    .masthead(null)
+                    .message("Ungültige Eingabe")
+                    .showError();
+            return;
+        }
+
+        boolean remove = false;
+        if (amount>=o.getAmount()){
+            remove = true;
+        }
+
+        traderService.removeManualOffer(trader, o, amount);
+
+        if (remove){
+            offerTable.getItems().remove(o);
+        }else{
+            offerTable.getItems().set(offerTable.getItems().indexOf(o),o);
+        }
+
         checkFocus();
     }
 
