@@ -76,7 +76,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     public List<Currency> getAllByCurrencySet(CurrencySet currencySet) {
         log.debug("calling getAllByCurrencySet(" + currencySet + ")");
-        List<Currency> result = currencyDao.getAll();
+        List<Currency> result = currencyDao.getAllByCurrencySet(currencySet);
         log.trace("returning " + result);
         return result;
     }

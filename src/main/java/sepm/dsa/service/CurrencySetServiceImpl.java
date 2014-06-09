@@ -84,7 +84,8 @@ public class CurrencySetServiceImpl implements CurrencySetService {
         Integer remaingAmount = baseRateAmount;
         List<Currency> currencies = currencyService.getAllByCurrencySet(currencySet);
         List<CurrencyAmount> result = new ArrayList<>(currencies.size());
-        for (Currency c : currencies) {
+        for (int i=0; i<currencies.size(); i++) {
+            Currency c = currencies.get(i);
             CurrencyAmount a = new CurrencyAmount();
             a.setCurrency(c);
             a.setAmount(remaingAmount / c.getValueToBaseRate());

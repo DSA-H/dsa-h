@@ -59,13 +59,33 @@ public class CurrencyDaoTest extends AbstractDatabaseTest {
         Currency last = currencies.get(0);
         for (int i=1; i<currencies.size(); i++) {
             assertTrue("The order is not descending the valueToBaseRate",
-                    last.getValueToBaseRate().compareTo(currencies.get(i).getValueToBaseRate()) == 1);  //this greater than that
+                    last.getValueToBaseRate().compareTo(currencies.get(i).getValueToBaseRate()) > 0);  //this greater than that
         }
 
     }
 
     @Test
-    public void getAllByCurrencySet_containsEntries() {
+    public void getAllByCurrencySet_containsEntries1() {
+
+        Currency c1 = currencyDao.get(3);
+        Currency c2 = currencyDao.get(4);
+        Currency c3 = currencyDao.get(5);
+        Currency c4 = currencyDao.get(6);
+        Set<Currency> expectedCurrencies = new HashSet<>(4);
+        expectedCurrencies.add(c1);
+        expectedCurrencies.add(c2);
+        expectedCurrencies.add(c3);
+        expectedCurrencies.add(c4);
+
+        CurrencySet currencySet = currencySetService.get(1);
+        Set<Currency> currencies = new HashSet<>(currencyDao.getAllByCurrencySet(currencySet));
+
+        Assert.assertEquals(expectedCurrencies, currencies);
+
+    }
+
+    @Test
+    public void getAllByCurrencySet_containsEntries2() {
 
         Currency c1 = currencyDao.get(2);
         Currency c2 = currencyDao.get(3);

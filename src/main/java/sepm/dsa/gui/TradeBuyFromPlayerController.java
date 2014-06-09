@@ -122,10 +122,19 @@ public class TradeBuyFromPlayerController implements Initializable {
         refreshPriceView();
     }
 
+    private ProductQuality selectedQuality() {
+        return selectedQuality.getSelectionModel().getSelectedItem();
+    }
+
+    private Product selectedProduct() {
+        return productsTable.getSelectionModel().getSelectedItem();
+    }
+
     private void updatePrice() {
+        log.info("calling updatePrice()");
         if (productsTable.getSelectionModel().getSelectedItem() != null) {
-            ProductQuality qualitySelChanged = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
-            int setQuality = traderService.calculatePricePerUnit(qualitySelChanged, productsTable.getSelectionModel().getSelectedItem(), trader);
+            log.info(selectedQuality() + ", " + selectedProduct() + " " + trader);
+            int setQuality = traderService.calculatePricePerUnit(selectedQuality(), selectedProduct(), trader);
             int amount = 0;
 
             //##### get amount
@@ -152,6 +161,7 @@ public class TradeBuyFromPlayerController implements Initializable {
     }
 
     private void refreshPriceView() {
+        log.info("calling refreshPriceView()");
         CurrencySet selected = selectedCurrencySet();
         if (selected == null) {
             selected = currencySetService.getDefaultCurrencySet();
@@ -172,29 +182,32 @@ public class TradeBuyFromPlayerController implements Initializable {
     @FXML
     private void checkFocus() {
         log.info("calling checkFocus (uncommented code)");
-//        selectedAmount.setText("1");
-//        Product selProduct = productsTable.getSelectionModel().getSelectedItem();
-//        ProductQuality quality;
-//        if (selProduct != null) {
-//            if (selProduct.getQuality()) {
-//                selectedQuality.setDisable(false);
-//                quality = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
-//                int setQuality = 0;
-//                if (quality != null) {
+        selectedAmount.setText("1");
+        Product selProduct = productsTable.getSelectionModel().getSelectedItem();
+        ProductQuality quality;
+        if (selProduct != null) {
+            if (selProduct.getQuality()) {
+                selectedQuality.setDisable(false);
+                quality = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
+                int setQuality = 0;
+                if (quality != null) {
 //                    setQuality = traderService.calculatePricePerUnit(quality, productsTable.getSelectionModel().getSelectedItem(), trader);
-//                } else {
-//                    selectedQuality.getSelectionModel().select(2);
+                } else {
+                    selectedQuality.getSelectionModel().select(2);
 //                    setQuality = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
-//                }
+                }
 //                selectedPrice.setText(Integer.toString(setQuality));
-//            } else {
+                updatePrice();
+            } else {
+                selectedQuality.getSelectionModel().select(ProductQuality.NORMAL);
 //                int priceDefault = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
 //                selectedPrice.setText(Integer.toString(priceDefault));
-//                selectedQuality.setDisable(true);
-//            }
-//            selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAllByType(selProduct.getUnit().getUnitType())));
-//            selectedUnit.getSelectionModel().select(selProduct.getUnit());
-//        }
+                selectedQuality.setDisable(true);
+            }
+            updatePrice();
+            selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAllByType(selProduct.getUnit().getUnitType())));
+            selectedUnit.getSelectionModel().select(selProduct.getUnit());
+        }
     }
 
     private CurrencySet selectedCurrencySet() {
