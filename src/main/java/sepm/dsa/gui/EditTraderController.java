@@ -483,7 +483,7 @@ public class EditTraderController implements Initializable {
 
     public void setLocation(Location location) {
         locationBox.getSelectionModel().select(location);
-        locationBox.setDisable(true);
+        locationBox.setDisable(false);
     }
 
     public void setPosition(Point2D pos) {
