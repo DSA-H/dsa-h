@@ -1,7 +1,5 @@
 package sepm.dsa.model;
 
-import sepm.dsa.dao.CurrencyAmount;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -12,17 +10,21 @@ public class Deal implements BaseModel {
     private static final long serialVersionUID = 2957293850231481770L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 
     @NotNull
     @Column(nullable = false)
-    private boolean purchase;
+    private boolean purchase;       // true if the player purchases the product, false if the player sells the product
 
     @NotNull
     @Column(nullable = false)
-    private BigDecimal price;
+    private Integer price;
+
+    @NotNull
+    @Column(nullable = false)
+    private Integer discount = 0;
 
     @NotNull
     @Column(nullable = false)
@@ -40,8 +42,10 @@ public class Deal implements BaseModel {
     @JoinColumn     // => nullable = true !!
     private Trader trader;
 
+    @Transient
     @ManyToOne
-    @JoinColumn     // => nullable = true; product can be deleted, therefore store productName to keep history for player
+    @JoinColumn
+    // => nullable = true; product can be deleted, therefore store productName to keep history for player
     private transient Product product;
 
     @ManyToOne
@@ -49,6 +53,7 @@ public class Deal implements BaseModel {
     private Unit unit;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Player player;
 
     @NotNull
@@ -100,15 +105,21 @@ public class Deal implements BaseModel {
         return purchase;
     }
 
+    /**
+     * @param purchase true if the player purchases the product, false if the player sells the product
+     */
     public void setPurchase(boolean purchase) {
         this.purchase = purchase;
     }
 
-    public BigDecimal getPrice() {
+    /**
+     * @return true if the player purchases the product, false if the player sells the product
+     */
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
@@ -130,8 +141,9 @@ public class Deal implements BaseModel {
     public void setquality(ProductQuality quality) {
         if (quality == null) {
             this.qualityId = null;
+        } else {
+            this.qualityId = quality.getValue();
         }
-        this.qualityId = quality.getValue();
     }
 
     public DSADate getDate() {
@@ -200,4 +212,17 @@ public class Deal implements BaseModel {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
+    public Integer getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
+    }
+
+    public Integer priceWithDiscount() {
+        return price.intValue() - discount;
+    }
+
 }

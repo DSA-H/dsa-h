@@ -8,6 +8,7 @@ import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.dao.CurrencyDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Currency;
+import sepm.dsa.model.CurrencySet;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -65,9 +66,34 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public CurrencyAmount exchange(Currency from, Currency to, BigDecimal amount) {
+    public Integer exchangeToBaseRate(Currency from, Integer amount) {
+        log.debug("calling exchangeToBaseRate(" + from + "," + amount + ")");
+        Integer result = (int) (((double) amount) * from.getValueToBaseRate() + 0.5); //,4, RoundingMode.HALF_UP);
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Currency> getAllByCurrencySet(CurrencySet currencySet) {
+        log.debug("calling getAllByCurrencySet(" + currencySet + ")");
+        List<Currency> result = currencyDao.getAllByCurrencySet(currencySet);
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public Integer exchangeToBaseRate(List<CurrencyAmount> currencyAmounts) {
+        int result = 0;
+        for (CurrencyAmount a : currencyAmounts) {
+            result += exchangeToBaseRate(a.getCurrency(), a.getAmount());
+        }
+        return result;
+    }
+
+    @Override
+    public CurrencyAmount exchange(Currency from, Currency to, Integer amount) {
         CurrencyAmount result = new CurrencyAmount();
-        result.setAmount(amount.multiply(to.getValueToBaseRate()).divide(from.getValueToBaseRate(),4, RoundingMode.HALF_UP));
+        result.setAmount((int) ((((double) amount) * from.getValueToBaseRate()) / (to.getValueToBaseRate()) + 0.5)); //,4, RoundingMode.HALF_UP));
         result.setCurrency(to);
         return result;
     }

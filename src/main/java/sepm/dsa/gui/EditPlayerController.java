@@ -1,6 +1,7 @@
 package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
@@ -115,28 +117,47 @@ public class EditPlayerController implements Initializable {
 
     private void initialzeTableWithColums() {
 
-        //Todo relative DATE & abs date
         dateColumn.setCellValueFactory(d -> {
             DSADate date = d.getValue().getDate();
             long timestamp = d.getValue().getDate().getTimestamp();
 
             long current = timeService.getCurrentDate().getTimestamp();
 
-            //TODO date before days
             StringBuilder sb = new StringBuilder();
             sb.append("vor ").append(current - timestamp).append(" Tagen").append(" (").append(date).append(")");
             return new SimpleStringProperty(sb.toString());
         });
 
         priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
-        productColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("productName"));
+        productColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> d) {
+                if (d.getValue() != null) {
+                    Deal deal = d.getValue();
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(deal.getProductName());
+                    if (deal.getQuality() != null) {
+                        sb.append(" (" + d.getValue().getQuality().getName() + ")");
+                    }
+                    return new SimpleStringProperty(sb.toString());
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
 
-        //TODO check unit and amount
         amountColumn.setCellValueFactory(d -> {
             Unit unit = d.getValue().getUnit();
             Integer amount = d.getValue().getAmount();
+            boolean purchase = d.getValue().isPurchase();
 
             StringBuilder sb = new StringBuilder();
+            if (purchase) {
+                sb.append("(+) ");
+            } else {
+                sb.append("(-) ");
+            }
+
             sb.append(amount).append(" ").append(unit.getShortName());
             return new SimpleStringProperty(sb.toString());
         });

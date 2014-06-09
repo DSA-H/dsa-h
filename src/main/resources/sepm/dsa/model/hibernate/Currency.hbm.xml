@@ -7,4 +7,21 @@
         <![CDATA[from Currency ORDER BY name ASC]]>
     </query>
 
+    <!--
+    <query name="Currency.findAllByCurrencySet2">
+        <![CDATA[   FROM Currency c
+                    WHERE c in (SELECT s.currencies
+                                FROM CurrencySet s
+                                WHERE s.id = :currencySetId)
+                    ORDER BY c.valueToBaseRate desc, c.name asc]]>
+    </query>
+    -->
+
+    <query name="Currency.findAllByCurrencySet">
+        <![CDATA[   FROM Currency c
+                    WHERE :currencySetId in (SELECT s.id
+                                FROM c.currencySets s)
+                    ORDER BY c.valueToBaseRate desc, c.name asc]]>
+    </query>
+
 </hibernate-mapping>

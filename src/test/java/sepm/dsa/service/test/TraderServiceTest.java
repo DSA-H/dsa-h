@@ -1,5 +1,6 @@
 package sepm.dsa.service.test;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,16 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.*;
-import sepm.dsa.service.LocationService;
-import sepm.dsa.service.ProductService;
-import sepm.dsa.service.TraderCategoryService;
-import sepm.dsa.service.TraderService;
+import sepm.dsa.service.*;
+import sepm.dsa.util.MathUtil;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
@@ -39,6 +40,15 @@ public class TraderServiceTest extends AbstractDatabaseTest {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private CurrencyService currencyService;
+
+    @Autowired
+    private PlayerService playerService;
+
+    @Autowired
+    private DealService dealService;
 
 
     @Test
@@ -78,6 +88,7 @@ public class TraderServiceTest extends AbstractDatabaseTest {
     public void testRemove() throws Exception {
         Trader trader = traderService.get(2);
         traderService.remove(trader);
+        saveCancelService.save();
 
         assertNull(traderService.get(2));
     }
@@ -198,4 +209,123 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         assertTrue("TraderService didn't find a offer to suggest, update test data", offers.size() > 0);
         assertTrue(offersAmount == traderSize);
     }
+
+    @Test
+    public void sellToPlayer_shouldCreateDealAndReduceOfferAmountInsertDeal() {
+
+        Trader trader = traderService.get(1);
+        Player player = playerService.get(1);
+        Product product = productService.get(1);
+        ProductQuality productQuality = ProductQuality.SCHLECHT;
+        Unit unit = product.getUnit();
+        Integer amount = 5;
+        Integer totalPrice = 40000;
+        Currency currency = currencyService.get(1);
+        Integer discount = 0;
+
+        Offer offerBefore = null;
+        for (Offer o : trader.getOffers()) {
+            if (o.getProduct().equals(product) && o.getQuality().equals(productQuality)) {
+                offerBefore = o;
+                break;
+            }
+        }
+        double offerAmountBefore = offerBefore.getAmount();
+
+        int dealSizeBefore = dealService.getAll().size();
+        int offerSizeBefore = trader.getOffers().size();
+
+        Deal deal = traderService.sellToPlayer(trader, player, product, productQuality, unit, amount, totalPrice, discount);
+        saveCancelService.save();
+
+        Trader traderAfter = traderService.get(1);
+
+
+        Offer offerAfter = null;
+        for (Offer o : traderAfter.getOffers()) {
+            if (o.getProduct().equals(product) && o.getQuality().equals(productQuality)) {
+                offerAfter = o;
+                break;
+            }
+        }
+
+        assertEquals(amount, deal.getAmount());
+//        assertEquals(currencyService.exchangeToBaseRate(currency, totalPrice), deal.getPrice());
+        assertEquals(totalPrice, deal.getPrice());
+        assertEquals(unit, deal.getUnit());
+        assertEquals(true, deal.isPurchase());
+        assertEquals(dealSizeBefore + 1, dealService.getAll().size());
+        assertEquals(offerSizeBefore, traderAfter.getOffers().size());
+        assertTrue("Amount afterwards was expected to be " + (offerAmountBefore - amount) + ", but was " + offerAfter.getAmount(),
+                Math.abs((offerAmountBefore - amount) - offerAfter.getAmount()) < MathUtil.EPSILON);
+
+        // TODO we need to remove this, otherwise all tests coming later would fail, but WHY ??
+        dealService.remove(deal);
+        saveCancelService.save();
+
+    }
+
+
+    @Test
+    public void buyFromPlayer_shouldCreateDealAndReduceOfferAmountInsertDeal() {
+
+        Trader trader = traderService.get(1);
+        Player player = playerService.get(1);
+        Product product = productService.get(1);
+        ProductQuality productQuality = ProductQuality.NORMAL;
+        Unit unit = product.getUnit();
+        Integer amount = 5;
+        Integer totalPrice = 40000;
+//        Currency currency = currencyService.get(3);
+
+        int dealSizeBefore = dealService.getAll().size();
+        int offerSizeBefore = trader.getOffers().size();
+
+        Deal deal = traderService.buyFromPlayer(trader, player, product, productQuality, unit, amount, totalPrice);
+        saveCancelService.save();
+
+        Trader traderAfter = traderService.get(1);
+
+
+        Offer offerAfter = null;
+        for (Offer o : traderAfter.getOffers()) {
+            if (o.getProduct().equals(product) && o.getQuality().equals(productQuality)) {
+                offerAfter = o;
+                break;
+            }
+        }
+
+        assertEquals(amount, deal.getAmount());
+//        assertEquals(currencyService.exchangeToBaseRate(currency, totalPrice), deal.getPrice());
+        assertEquals(totalPrice, deal.getPrice());
+        assertEquals(unit, deal.getUnit());
+        assertEquals(false, deal.isPurchase());
+        assertEquals(dealSizeBefore + 1, dealService.getAll().size());
+        assertEquals(offerSizeBefore + 1, traderAfter.getOffers().size());
+        assertNotNull(offerAfter);
+        assertTrue("Amount afterwards was expected to be " + amount + ", but was " + offerAfter.getAmount(),
+                Math.abs(amount - offerAfter.getAmount()) < MathUtil.EPSILON);
+
+        // TODO we need to remove this, otherwise all tests coming later would fail, but WHY ??
+        dealService.remove(deal);
+        saveCancelService.save();
+
+    }
+
+    @Test
+    public void suggestDiscount_zeroIfNoDealsWithTraderBefore() {
+        Trader trader = traderService.get(1);
+        Player player = playerService.get(1);
+        Product product = productService.get(1);
+        ProductQuality productQuality = ProductQuality.NORMAL;
+        Unit unit = product.getUnit();
+        Integer amount = 5;
+
+        int discount = traderService.suggesstDiscount(trader, player, product, productQuality, unit, amount);
+
+        assertEquals("The discount must be zero if there were no deals between this trader and player before", 0, discount);
+    }
+
+
+
 }

@@ -21,4 +21,5 @@ public interface TraderDao extends BaseDao<Trader> {
      * @return the list of traders matching this category or empty list if nothing found
      */
     public List<Trader> getAllByCategory(TraderCategory category);
+
 }

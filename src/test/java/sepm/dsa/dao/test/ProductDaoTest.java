@@ -1,5 +1,6 @@
 package sepm.dsa.dao.test;
 
+import junit.framework.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import sepm.dsa.dao.ProductDao;
@@ -7,6 +8,10 @@ import sepm.dsa.dao.UnitDao;
 import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductAttribute;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
@@ -57,4 +62,32 @@ public class ProductDaoTest extends AbstractDatabaseTest {
 	    saveCancelService.save();
         assertEquals(size - 1, productDao.getAll().size());
     }
+
+    @Test
+    public void getAllByName_nullParamReturnsAll() {
+
+        Set<Product> allByName = new HashSet<>(productDao.getAllByName(null));
+        Set<Product> all = new HashSet<>(productDao.getAll());
+
+        Assert.assertEquals(all, allByName);
+    }
+
+    @Test
+    public void getAllByName_shouldFilterOthers() {
+
+        Set<Product> allByName = new HashSet<>(productDao.getAllByName("%1%"));
+
+        Assert.assertEquals(1, allByName.size());
+    }
+
+    @Test
+    public void getAllByName_shouldIgnoreCase() {
+
+        Set<Product> allByName = new HashSet<>(productDao.getAllByName("%PRODUCT%"));
+        Set<Product> all = new HashSet<>(productDao.getAll());
+
+        Assert.assertEquals(all, allByName);
+    }
+
+
 }

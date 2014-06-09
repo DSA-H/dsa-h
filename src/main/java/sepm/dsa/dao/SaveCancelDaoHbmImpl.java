@@ -3,6 +3,9 @@ package sepm.dsa.dao;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sepm.dsa.model.BaseModel;
+
+import java.util.Collection;
 
 public class SaveCancelDaoHbmImpl implements SaveCancelDao {
 
@@ -25,20 +28,20 @@ public class SaveCancelDaoHbmImpl implements SaveCancelDao {
     }
 
     @Override
-    public void refresh(Object... objects) {
+    public void refresh(BaseModel... objects) {
         log.info("calling refresh(" + objects + ")");
         for (Object o : objects) {
             sessionFactory.getCurrentSession().refresh(o);
         }
     }
 
-//    @Override
-//    public void refresh(Collection<?> objects) {
-//        log.info("calling refresh(" + objects + ")");
-//        for (Object o : objects) {
-//            sessionFactory.getCurrentSession().refresh(o);
-//        }
-//    }
+    @Override
+    public void refresh(Collection<? extends BaseModel> objects) {
+        log.info("calling refresh(" + objects + ")");
+        for (Object o : objects) {
+            sessionFactory.getCurrentSession().refresh(o);
+        }
+    }
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;

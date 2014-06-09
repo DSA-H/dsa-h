@@ -2,6 +2,7 @@ package sepm.dsa.service;
 
 import sepm.dsa.dao.UnitAmount;
 import sepm.dsa.model.Unit;
+import sepm.dsa.model.UnitType;
 
 import java.util.List;
 
@@ -49,4 +50,11 @@ public interface UnitService {
      * @return the value / amount of the original Unit expressed by / in the foreign Unit
      */
     UnitAmount exchange(Unit from, Unit to, Double amount);
+
+    /**
+     * @param unitType the id of the unit type
+     * @return all units of a specific unit type
+     */
+    List<Unit> getAllByType(UnitType unitType);
+
 }
