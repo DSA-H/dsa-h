@@ -118,11 +118,17 @@ public class TraderServiceImpl implements TraderService {
     public Trader recalculateOffers(Trader t) {
         log.debug("calling addConnection(" + t + ")");
         Set<Offer> oldOffers = t.getOffers();
+        Offer[] newOfferList = new Offer[oldOffers.size()];
 
         //TODO: Remove is missing (error: ConcurrentModifitcationException)
-        /*for(Offer o : oldOffers){
+        int i = 0;
+        for(Offer o : oldOffers){
+            newOfferList[i] = o;
+            i++;
+        }
+        for(Offer o: newOfferList){
             offerDao.remove(o);
-        }*/
+        }
 
         List<Offer> offers = calculateOffers(t);
         offerDao.addList(offers);
