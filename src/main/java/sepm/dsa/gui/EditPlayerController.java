@@ -14,15 +14,13 @@ import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
-import sepm.dsa.model.DSADate;
-import sepm.dsa.model.Deal;
-import sepm.dsa.model.Player;
-import sepm.dsa.model.Unit;
-import sepm.dsa.service.DealService;
-import sepm.dsa.service.PlayerService;
-import sepm.dsa.service.SaveCancelService;
-import sepm.dsa.service.TimeService;
+import sepm.dsa.model.*;
+import sepm.dsa.service.*;
+import sepm.dsa.util.CurrencyFormatUtil;
+
+import java.util.List;
 
 public class EditPlayerController implements Initializable {
 
@@ -32,11 +30,13 @@ public class EditPlayerController implements Initializable {
     private PlayerService playerService;
     private DealService dealService;
     private TimeService timeService;
+    private CurrencySetService currencySetService;
 
     private SaveCancelService saveCancelService;
 
     private static Player selectedPlayer;
     private boolean isNewPlaper;
+    private CurrencySet defaultCurrencySet;
 
     @FXML
     private TextField nameField;
@@ -62,6 +62,9 @@ public class EditPlayerController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize EditPlayerController");
+
+        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+        
         //initialize table
         initialzeTableWithColums();
 
@@ -128,7 +131,21 @@ public class EditPlayerController implements Initializable {
             return new SimpleStringProperty(sb.toString());
         });
 
-        priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
+//        priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
+        priceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> r) {
+                if (r.getValue() != null) {
+                    Deal deal = r.getValue();
+                    List<CurrencyAmount> ca = currencySetService.toCurrencySet(defaultCurrencySet, deal.priceWithDiscount());
+                    String str = CurrencyFormatUtil.currencySetShortString(ca, ", ");
+                    return new SimpleStringProperty(str);
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
+
         productColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> d) {
@@ -186,5 +203,9 @@ public class EditPlayerController implements Initializable {
 
     public void setTimeService(TimeService timeService) {
         this.timeService = timeService;
+    }
+
+    public void setCurrencySetService(CurrencySetService currencySetService) {
+        this.currencySetService = currencySetService;
     }
 }

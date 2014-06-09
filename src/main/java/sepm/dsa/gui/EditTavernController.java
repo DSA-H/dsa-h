@@ -15,13 +15,17 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
+import sepm.dsa.model.CurrencySet;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.ProductQuality;
 import sepm.dsa.model.Tavern;
+import sepm.dsa.service.CurrencySetService;
 import sepm.dsa.service.LocationService;
 import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TavernService;
+import sepm.dsa.util.CurrencyFormatUtil;
 
 import java.util.List;
 
@@ -33,9 +37,11 @@ public class EditTavernController implements Initializable {
 	private Tavern selectedTavern;
 	private TavernService tavernService;
 	private LocationService locationService;
+    private CurrencySetService currencySetService;
 	private SaveCancelService saveCancelService;
 
 	private boolean isNewTavern;
+    private CurrencySet defaultCurrencySet;
 
 	@FXML
 	private TextField nameField;
@@ -55,12 +61,12 @@ public class EditTavernController implements Initializable {
 	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
 		log.debug("initialise EditTavernController");
 		qualityCoicheBox.setItems(FXCollections.observableArrayList(ProductQuality.values()));
+        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
 	}
 
 	@FXML
 	private void onSavePressed() {
 		log.debug("called onSavePressed");
-
 
 		String name = nameField.getText();
 		int beds = 0;
@@ -136,7 +142,8 @@ public class EditTavernController implements Initializable {
 		bedsField.setText("" + tavern.getBeds());
 		qualityCoicheBox.getSelectionModel().select(tavern.getQuality());
 		useageLabel.setText(tavern.getUsage() + "");
-		priceLabel.setText(tavern.getPrice() + "");
+        List<CurrencyAmount> currencyAmounts = currencySetService.toCurrencySet(defaultCurrencySet, tavern.getPrice());
+		priceLabel.setText(CurrencyFormatUtil.currencySetShortString(currencyAmounts, ", "));
 		commentArea.setText(tavern.getComment() == null ? "" : tavern.getComment());
 	}
 
@@ -156,4 +163,8 @@ public class EditTavernController implements Initializable {
 	public void setLocation(Location location) {
 		selectedTavern.setLocation(location);
 	}
+
+    public void setCurrencySetService(CurrencySetService currencySetService) {
+        this.currencySetService = currencySetService;
+    }
 }
