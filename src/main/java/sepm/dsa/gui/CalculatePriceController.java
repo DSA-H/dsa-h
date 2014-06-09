@@ -76,11 +76,11 @@ public class CalculatePriceController implements Initializable {
     private void onFilterPressed() {
         log.debug("called onFilterPressed");
         List<Product> filteredProducts;
-        String filter = textName.getText();
+        String filter = textName.getText().toLowerCase();
 
         filteredProducts = new ArrayList<Product>();
         for (int i = 0; i<allProducts.size();i++){
-            if (allProducts.get(i).getName().contains(filter)){
+            if (allProducts.get(i).getName().toLowerCase().contains(filter)){
                 filteredProducts.add(allProducts.get(i));
             }
         }

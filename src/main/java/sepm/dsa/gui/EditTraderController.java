@@ -411,7 +411,6 @@ public class EditTraderController implements Initializable {
                     if (response2 == links.get(0)) {
                         //Recalculate pricing
                         traderService.reCalculatePriceForOffer(/*selectedTrader.getOffers(), */selectedTrader);
-
                     } else {
                         //Recalculate pricing if new price is higher
                         traderService.reCalculatePriceForOfferIfNewPriceIsHigher(/*selectedTrader.getOffers(), */selectedTrader);
