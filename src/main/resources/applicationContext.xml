@@ -364,7 +364,6 @@
     <bean id="traderDetails" class="sepm.dsa.gui.TraderDetailsController">
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>
-        <property name="saveCancelService" ref="saveCancelService" />
         <property name="timeService" ref="timeService"/>
         <property name="dealService" ref="dealService"/>
         <property name="saveCancelService" ref="saveCancelService"/>

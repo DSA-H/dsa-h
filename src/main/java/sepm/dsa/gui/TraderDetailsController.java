@@ -403,11 +403,6 @@ public class TraderDetailsController implements Initializable {
         this.dealService = dealService;
     }
 
-    public void setTrader(Trader trader) {
-        this.trader = trader;
-        refreshView(); // in setter not very beautiful, do we need this here?
-    }
-
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
     }

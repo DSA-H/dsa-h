@@ -102,7 +102,7 @@ public class AddOfferController implements Initializable {
         o.setProduct(p);
 
         try {
-            o.setAmount(Integer.parseInt(textAmount.getText()));
+            o.setAmount(Double.parseDouble(textAmount.getText()));
         } catch (NumberFormatException e) {
             Dialogs.create()
                     .title("Ungültige Eingabe")
