@@ -41,9 +41,12 @@ import sepm.dsa.model.Tavern;
 import sepm.dsa.model.Trader;
 import sepm.dsa.service.*;
 import sepm.dsa.service.path.NoPathException;
+import sepm.dsa.service.pdf.TraderPdfService;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +63,7 @@ public class MainMenuController implements Initializable {
 	private MapService mapService;
 	private SaveCancelService saveCancelService;
 	private LocationConnectionService locationConnectionService;
+	private TraderPdfService traderPdfService;
 	private Canvas mapCanvas, selectionCanvas, pathCanvas;
 	private Location selectedLocation;
 	private Object selectedObject;
@@ -710,6 +714,25 @@ public class MainMenuController implements Initializable {
 	}
 
 	@FXML
+	private void onPrintTraderClicked() {
+		log.debug("onPrintTraderClicked - ...");
+		File file = null;
+		try {
+			file = File.createTempFile("dsa-trader-export", ".pdf");
+			file.deleteOnExit();
+			FileOutputStream fos = new FileOutputStream(file);
+			traderPdfService.generatePdf(fos);
+			Desktop.getDesktop().open(file);
+		} catch (IOException e) {
+			Dialogs.create()
+				.title("Fehler")
+				.masthead(null)
+				.message("Export fehlgeschlagen.")
+				.showWarning();
+		}
+	}
+
+	@FXML
 	private void onWeltkarteImportierenPressed() {
 		log.debug("onWeltkarteImportierenPressed called");
 
@@ -1251,6 +1274,10 @@ public class MainMenuController implements Initializable {
 
 	public void setLocationService(LocationService locationService) {
 		this.locationService = locationService;
+	}
+
+	public void setTraderPdfService(TraderPdfService traderPdfService) {
+		this.traderPdfService = traderPdfService;
 	}
 
 	public void setSaveCancelService(SaveCancelService saveCancelService) {

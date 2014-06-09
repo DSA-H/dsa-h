@@ -115,6 +115,11 @@
             <MenuItem mnemonicParsing="false" onAction="#onCalculateCurrencyClicked" text="Währungen umrechnen" fx:id="berechneWährung" />
           </items>
         </Menu>
+        <Menu mnemonicParsing="false" text="Export">
+          <items>
+            <MenuItem mnemonicParsing="false" onAction="#onPrintTraderClicked" text="Händler drucken" />
+          </items>
+        </Menu>
       </menus>
     </MenuBar>
   </top>
