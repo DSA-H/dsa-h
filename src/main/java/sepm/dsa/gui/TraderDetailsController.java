@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -136,6 +138,8 @@ public class TraderDetailsController implements Initializable {
     private void onDeletePressed() {
         log.debug("called onDeletePressed");
         Offer o = offerTable.getSelectionModel().getSelectedItem();
+
+
         traderService.removeManualOffer(trader, o);
         offerTable.getItems().remove(o);
         checkFocus();

@@ -5,9 +5,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
@@ -34,8 +37,8 @@ public class AddOfferController implements Initializable {
     private TextField textName;
     @FXML
     private TextField textAmount;
-    @FXML
-    private TextField textPrice;
+    //@FXML
+    //private TextField textPrice;
     @FXML
     private ChoiceBox<ProductQuality> choiceQuality;
     @FXML
@@ -97,17 +100,25 @@ public class AddOfferController implements Initializable {
         Offer o = new Offer();
         Product p = productTable.getSelectionModel().getSelectedItem();
         o.setProduct(p);
+
         try {
             o.setAmount(Integer.parseInt(textAmount.getText()));
-        }catch (NumberFormatException nfe){
-            //throw new DSAValidationException()
+        } catch (NumberFormatException e) {
+            Dialogs.create()
+                    .title("Ungültige Eingabe")
+                    .masthead(null)
+                    .message("Anzahl ist keine gültige Nummer")
+                    .showWarning();
+            return;
         }
-        o.setPricePerUnit(Integer.parseInt(textPrice.getText()));
+
         o.setTrader(selectedTrader);
         if (!choiceQuality.isDisabled()){
             o.setQuality(choiceQuality.getSelectionModel().getSelectedItem());
+            o.setPricePerUnit(traderService.calculatePricePerUnit(o.getQuality(), p, selectedTrader));
         }else{
             o.setQuality(ProductQuality.NORMAL);
+            o.setPricePerUnit(traderService.calculatePriceForProduct(p,selectedTrader));
         }
 
         traderService.addManualOffer(selectedTrader, o);
@@ -133,10 +144,14 @@ public class AddOfferController implements Initializable {
 
     @FXML
     private void onCancelPressed() {
-        log.debug("called onCancelPressed");
+        log.debug("called onCancelPressed - return to TraderDetailsController");
         saveCancelService.cancel();
         Stage stage = (Stage) textName.getScene().getWindow();
-	    stage.close();
+
+        Parent scene = (Parent) loader.load("/gui/traderdetails.fxml");
+        TraderDetailsController controller = loader.getController();
+        controller.setTrader(selectedTrader);
+        stage.setScene(new Scene(scene, 800, 552));
     }
 
     public void setLoader(SpringFxmlLoader loader) {
