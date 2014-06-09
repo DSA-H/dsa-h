@@ -20,6 +20,7 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.dao.OfferDao;
 import sepm.dsa.model.Offer;
 import sepm.dsa.model.Trader;
+import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TraderService;
 import sepm.dsa.service.TraderServiceImpl;
 
@@ -38,6 +39,7 @@ public class TraderDetailsController implements Initializable {
 
     private Trader trader;
     private Offer selectedOffer;
+    private SaveCancelService saveCancelService;
 
     @FXML
     private TableView<Offer> offerTable;
@@ -189,6 +191,7 @@ public class TraderDetailsController implements Initializable {
         }
 
         checkFocus();
+        saveCancelService.save();
     }
 
     @FXML
@@ -233,4 +236,8 @@ public class TraderDetailsController implements Initializable {
 	public void setTraderService(TraderService traderService) {
 		this.traderService = traderService;
 	}
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
+    }
 }
