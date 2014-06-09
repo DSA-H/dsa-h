@@ -32,6 +32,8 @@ public class TradeBuyFromPlayerController implements Initializable {
 
     private static Trader trader;
 
+    private List<Currency> currencies;
+
     @FXML
     private ChoiceBox<Unit> selectedUnit;
     @FXML
@@ -119,6 +121,10 @@ public class TradeBuyFromPlayerController implements Initializable {
             updatePrice();
         });
 
+        selectedCurrency.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            updatePrice();
+        });
+
         refreshPriceView();
     }
 
@@ -166,6 +172,7 @@ public class TradeBuyFromPlayerController implements Initializable {
         if (selected == null) {
             selected = currencySetService.getDefaultCurrencySet();
         }
+        currencies = currencyService.getAllByCurrencySet(selectedCurrencySet());
         int i=0;
         for (Currency c : currencyService.getAllByCurrencySet(selected)) {
             log.info(lbl_CurrencyAmounts + ": " + lbl_CurrencyAmounts[i] + " " + c.getName());
@@ -285,7 +292,7 @@ public class TradeBuyFromPlayerController implements Initializable {
 //        }
 
         CurrencySet currencySet = selectedCurrency.getSelectionModel().getSelectedItem();
-        List<Currency> currencies = currencyService.getAllByCurrencySet(currencySet);
+//        List<Currency> currencies = currencyService.getAllByCurrencySet(currencySet);
         List<CurrencyAmount> currencyAmounts = new ArrayList<>(5);
         try {
             for (int i = 0; i < currencies.size(); i++) {
@@ -320,11 +327,11 @@ public class TradeBuyFromPlayerController implements Initializable {
         Product product = productsTable.getSelectionModel().getSelectedItem();
         if (product != null) {
             if (quality != null) { //so quality was SET
-                int setQuality = traderService.calculatePricePerUnit(quality, productsTable.getSelectionModel().getSelectedItem(), trader);
+//                int setQuality = traderService.calculatePricePerUnit(quality, productsTable.getSelectionModel().getSelectedItem(), trader);
 //                selectedPrice.setText(Integer.toString(setQuality));
             } else {
                 //no quality enabled -- NORMAL price
-                int priceDefault = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
+//                int priceDefault = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
 //                selectedPrice.setText(Integer.toString(priceDefault));
             }
             selectedUnit.getSelectionModel().select(product.getUnit());

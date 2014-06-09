@@ -68,7 +68,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     public Integer exchangeToBaseRate(Currency from, Integer amount) {
         log.debug("calling exchangeToBaseRate(" + from + "," + amount + ")");
-        Integer result = (int) (((double) amount) / from.getValueToBaseRate() + 0.5); //,4, RoundingMode.HALF_UP);
+        Integer result = (int) (((double) amount) * from.getValueToBaseRate() + 0.5); //,4, RoundingMode.HALF_UP);
         log.trace("returning " + result);
         return result;
     }
@@ -93,7 +93,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     public CurrencyAmount exchange(Currency from, Currency to, Integer amount) {
         CurrencyAmount result = new CurrencyAmount();
-        result.setAmount((int) ((((double) amount) * to.getValueToBaseRate()) / (from.getValueToBaseRate()) + 0.5)); //,4, RoundingMode.HALF_UP));
+        result.setAmount((int) ((((double) amount) * from.getValueToBaseRate()) / (to.getValueToBaseRate()) + 0.5)); //,4, RoundingMode.HALF_UP));
         result.setCurrency(to);
         return result;
     }
