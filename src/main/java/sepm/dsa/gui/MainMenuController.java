@@ -657,6 +657,22 @@ public class MainMenuController implements Initializable {
 		updateMap();
 	}
 
+    @FXML
+    private void onCalculateProductPrice() {
+        log.debug("onCalculateProductPriceClicked - open Calculate Product Price Window");
+        Stage stage = new Stage();
+
+        Parent scene = (Parent) loader.load("/gui/calculatePrice.fxml");
+
+        stage.setTitle("Preis berechnen");
+        stage.setScene(new Scene(scene, 600, 400));
+        stage.setResizable(false);
+        stage.showAndWait();
+
+        updateTables();
+        updateMap();
+    }
+
 	@FXML
 	private void onGrenzenGebieteClicked() {
 		log.debug("onGrenzenGebieteClicked - open Grenzen und Gebiete Window");

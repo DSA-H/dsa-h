@@ -361,6 +361,12 @@
         <property name="playerService" ref="playerService"/>
         <property name="productService" ref="productService"/>
     </bean>
+    <bean id="calculatePrice" class="sepm.dsa.gui.CalculatePriceController">
+        <property name="loader" ref="loader"/>
+        <property name="locationService" ref="locationService"/>
+        <property name="productService" ref="productService"/>
+        <property name="traderService" ref="traderService"/>
+    </bean>
     <bean id="editTavern" class="sepm.dsa.gui.EditTavernController">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
