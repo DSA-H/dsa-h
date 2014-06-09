@@ -264,7 +264,7 @@ public class TraderDetailsController implements Initializable {
             Parent scene = (Parent) loader.load("/gui/tradeSell.fxml");
 
             dialog.setTitle("Kauf von Waren");
-            dialog.setScene(new Scene(scene, 330, 310));
+            dialog.setScene(new Scene(scene, 334, 458));
             dialog.setResizable(false);
             dialog.showAndWait();
             checkFocus();

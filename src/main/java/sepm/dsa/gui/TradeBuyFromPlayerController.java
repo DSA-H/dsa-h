@@ -204,7 +204,7 @@ public class TradeBuyFromPlayerController implements Initializable {
 //                    setQuality = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
                 }
 //                selectedPrice.setText(Integer.toString(setQuality));
-                updatePrice();
+//                updatePrice(); TODO just commented it out, now broken?
             } else {
                 selectedQuality.getSelectionModel().select(ProductQuality.NORMAL);
 //                int priceDefault = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
@@ -291,7 +291,7 @@ public class TradeBuyFromPlayerController implements Initializable {
 //            throw new DSAValidationException("Preis muss > 0 sein");
 //        }
 
-        CurrencySet currencySet = selectedCurrency.getSelectionModel().getSelectedItem();
+//        CurrencySet currencySet = selectedCurrency.getSelectionModel().getSelectedItem();
 //        List<Currency> currencies = currencyService.getAllByCurrencySet(currencySet);
         List<CurrencyAmount> currencyAmounts = new ArrayList<>(5);
         try {
