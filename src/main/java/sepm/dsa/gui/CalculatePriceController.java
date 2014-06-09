@@ -11,8 +11,10 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.model.*;
 import sepm.dsa.service.*;
+import sepm.dsa.util.CurrencyFormatUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +28,11 @@ public class CalculatePriceController implements Initializable {
     private TraderService traderService;
     private LocationService locationService;
     private ProductService productService;
+    private CurrencySetService currencySetService;
     private List<Product> allProducts;
     private Trader calculationTrader = new Trader();
 
+    private CurrencySet defaultCurrencySet;
 
     @FXML
     private TextField textName;
@@ -52,6 +56,8 @@ public class CalculatePriceController implements Initializable {
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize EditTraderController");
 
+        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+
         columnProduct.setCellValueFactory(new PropertyValueFactory<>("name"));
         allProducts = productService.getAll();
         showProducts(allProducts);
@@ -63,7 +69,8 @@ public class CalculatePriceController implements Initializable {
         ProductQuality[] productQualities = ProductQuality.values();
         choiceQuality.setItems(FXCollections.observableArrayList(productQualities));
         choiceQuality.getSelectionModel().select(ProductQuality.NORMAL);
-        labelPrice.setText("0");
+        List<CurrencyAmount> currencyAmounts = currencySetService.toCurrencySet(defaultCurrencySet, 0);
+        labelPrice.setText(CurrencyFormatUtil.currencySetShortString(currencyAmounts, ", "));
         checkFocus();
     }
 
@@ -101,7 +108,10 @@ public class CalculatePriceController implements Initializable {
             price = traderService.calculatePricePerUnit(choiceQuality.getSelectionModel().getSelectedItem(),productTable.getSelectionModel().getSelectedItem(),calculationTrader);
         }
 
-        labelPrice.setText(price+"");
+//        labelPrice.setText(price+"");
+        List<CurrencyAmount> currencyAmounts = currencySetService.toCurrencySet(defaultCurrencySet, price);
+        labelPrice.setText(CurrencyFormatUtil.currencySetShortString(currencyAmounts, ", "));
+
     }
 
     @FXML
@@ -141,5 +151,9 @@ public class CalculatePriceController implements Initializable {
     }
     public void setTraderService(TraderService traderService) {
         this.traderService = traderService;
+    }
+
+    public void setCurrencySetService(CurrencySetService currencySetService) {
+        this.currencySetService = currencySetService;
     }
 }

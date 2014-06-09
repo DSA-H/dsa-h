@@ -384,6 +384,7 @@
         <property name="locationService" ref="locationService"/>
         <property name="productService" ref="productService"/>
         <property name="traderService" ref="traderService"/>
+        <property name="currencySetService" ref="currencySetService"/>
     </bean>
     <bean id="editTavern" class="sepm.dsa.gui.EditTavernController">
         <property name="loader" ref="loader"/>
