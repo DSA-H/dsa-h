@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 
@@ -96,15 +97,16 @@ public class AddOfferController implements Initializable {
         Offer o = new Offer();
         Product p = productTable.getSelectionModel().getSelectedItem();
         o.setProduct(p);
-        o.setAmount(Integer.parseInt(textAmount.getText()));
+        try {
+            o.setAmount(Integer.parseInt(textAmount.getText()));
+        }catch (NumberFormatException nfe){
+            //throw new DSAValidationException()
+        }
         o.setPricePerUnit(Integer.parseInt(textPrice.getText()));
         o.setTrader(selectedTrader);
         if (!choiceQuality.isDisabled()){
-            //o.setQualityId(0);
-            //o.setQuality(ProductQuality.NORMAL); //TODO: to be implemented
             o.setQuality(choiceQuality.getSelectionModel().getSelectedItem());
         }else{
-            //o.setQualityId(0);
             o.setQuality(ProductQuality.NORMAL);
         }
 
