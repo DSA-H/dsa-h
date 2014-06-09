@@ -121,7 +121,6 @@ public class TraderServiceImpl implements TraderService {
         Set<Offer> oldOffers = t.getOffers();
         Offer[] newOfferList = new Offer[oldOffers.size()];
 
-        //TODO: Remove is missing (error: ConcurrentModifitcationException)
         int i = 0;
         for(Offer o : oldOffers){
             newOfferList[i] = o;
