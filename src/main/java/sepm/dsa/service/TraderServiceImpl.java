@@ -7,6 +7,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.dao.MovingTraderDao;
 import sepm.dsa.dao.OfferDao;
 import sepm.dsa.dao.TraderDao;
@@ -169,12 +170,24 @@ public class TraderServiceImpl implements TraderService {
 	    return result;
     }
 
-//     * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
+    @Override
+    public Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, List<CurrencyAmount> totalPrice, Integer discount) {
+        Integer baseValuePrice = currencyService.exchangeToBaseRate(totalPrice);
+        return sellToPlayer(trader, player, product, productQuality, unit, amount, baseValuePrice, discount);
+    }
+
+    @Override
+    public Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, List<CurrencyAmount> totalPrice) {
+        Integer baseValuePrice = currencyService.exchangeToBaseRate(totalPrice);
+        return buyFromPlayer(trader, player, product, productQuality, unit, amount, baseValuePrice);
+    }
+
+    //     * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
 //     *      or the amount is greater than the trader offers <br />
 //     *      or unit does does not match the product unit <br />
 //     *      or totalPrice is negative
     @Override
-    public Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, BigDecimal totalPrice, Currency currency) {
+    public Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, Integer totalPrice, Integer discount) {
         // TODO discuss Currency question with jotschi
 
         Offer offer = null;
@@ -205,7 +218,8 @@ public class TraderServiceImpl implements TraderService {
                 "angegebener Einheit " + unit.getUnitType().getName() + " zusammen.");
         }
 
-        BigDecimal priceInBaseRate = currencyService.exchangeToBaseRate(currency, totalPrice);
+//        Integer priceInBaseRate = currencyService.exchangeToBaseRate(currency, totalPrice);
+        Integer priceInBaseRate = totalPrice;
 
         Deal newDeal = new Deal();
         newDeal.setAmount(productAmount);
@@ -213,6 +227,7 @@ public class TraderServiceImpl implements TraderService {
         newDeal.setLocationName(trader.getLocation().getName());
         newDeal.setPlayer(player);
         newDeal.setPrice(priceInBaseRate);   // Integer
+        newDeal.setDiscount(discount);
         newDeal.setProduct(product);
         newDeal.setProductName(product.getName());
         newDeal.setPurchase(true);
@@ -244,7 +259,7 @@ public class TraderServiceImpl implements TraderService {
     }
 
     @Override
-    public Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, BigDecimal totalPrice, Currency currency) {
+    public Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, Integer totalPrice) {
 
         // TODO discuss Currency question with jotschi
 
@@ -274,7 +289,8 @@ public class TraderServiceImpl implements TraderService {
                     "angegebener Einheit " + unit.getUnitType().getName() + " zusammen.");
         }
 
-        BigDecimal priceInBaseRate = currencyService.exchangeToBaseRate(currency, totalPrice);
+//        Integer priceInBaseRate = currencyService.exchangeToBaseRate(currency, totalPrice);
+        Integer priceInBaseRate = totalPrice;
 
         Deal newDeal = new Deal();
         newDeal.setAmount(productAmount);
@@ -296,7 +312,7 @@ public class TraderServiceImpl implements TraderService {
             offer = new Offer();
             offer.setTrader(trader);
             offer.setAmount(offerAmountDifference);
-            offer.setPricePerUnit(priceInBaseRate.divide(new BigDecimal(productAmount)).intValue());
+            offer.setPricePerUnit(priceInBaseRate / productAmount);
             offer.setProduct(product);
             offer.setQuality(productQuality);
             log.info("add " + offer);

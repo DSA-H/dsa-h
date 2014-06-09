@@ -1,5 +1,6 @@
 package sepm.dsa.service;
 
+import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.model.CurrencySet;
 
 import java.util.List;
@@ -41,5 +42,14 @@ public interface CurrencySetService {
      * @return all entries, might be an empty list (not null)
      */
     List<CurrencySet> getAll();
+
+    /**
+     *
+     * @param currencySet
+     * @param baseRateAmount
+     * @return returns an ordered list with currency-value pairs, representing the amount of money in baseRate
+     *          (order by currency valueToBaseRate)
+     */
+    List<CurrencyAmount> toCurrencySet(CurrencySet currencySet, Integer baseRateAmount);
 
 }

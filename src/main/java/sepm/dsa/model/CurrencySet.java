@@ -71,4 +71,27 @@ public class CurrencySet implements BaseModel {
         this.currencies.clear();
     }
 
+    public Set<Currency> getCurrencies() {
+        return currencies;
+    }
+
+    public void setCurrencies(Set<Currency> currencies) {
+        this.currencies = currencies;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

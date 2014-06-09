@@ -39,6 +39,7 @@
                 <value>sepm.dsa.model.Unit</value>
                 <value>sepm.dsa.model.UnitType</value>
                 <value>sepm.dsa.model.Currency</value>
+                <value>sepm.dsa.model.CurrencySet</value>
                 <value>sepm.dsa.model.MovingTrader</value>
             </list>
         </property>
@@ -252,6 +253,7 @@
 
     <bean id="currencySetService" class="sepm.dsa.service.CurrencySetServiceImpl">
         <property name="currencySetDao" ref="currencySetDao"/>
+        <property name="currencyService" ref="currencyService"/>
     </bean>
 
     <bean id="timeService" class="sepm.dsa.service.TimeServiceImpl">
@@ -358,6 +360,7 @@
         <property name="traderService" ref="traderService"/>
         <property name="unitService" ref="unitService"/>
         <property name="currencyService" ref="currencyService"/>
+        <property name="currencySetService" ref="currencySetService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
         <property name="playerService" ref="playerService"/>
     </bean>
@@ -365,6 +368,7 @@
         <property name="traderService" ref="traderService"/>
         <property name="unitService" ref="unitService"/>
         <property name="currencyService" ref="currencyService"/>
+        <property name="currencySetService" ref="currencySetService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
         <property name="playerService" ref="playerService"/>
         <property name="productService" ref="productService"/>

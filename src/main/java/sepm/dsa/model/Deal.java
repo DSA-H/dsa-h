@@ -20,7 +20,7 @@ public class Deal implements BaseModel {
 
     @NotNull
     @Column(nullable = false)
-    private BigDecimal price;
+    private Integer price;
 
     @NotNull
     @Column(nullable = false)
@@ -115,11 +115,11 @@ public class Deal implements BaseModel {
     /**
      * @return true if the player purchases the product, false if the player sells the product
      */
-    public BigDecimal getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 

@@ -4,13 +4,16 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.dao.CurrencySetDao;
 import sepm.dsa.exceptions.DSAValidationException;
+import sepm.dsa.model.Currency;
 import sepm.dsa.model.CurrencySet;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +24,7 @@ public class CurrencySetServiceImpl implements CurrencySetService {
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private CurrencySetDao currencySetDao;
+    private CurrencyService currencyService;
 
     @Override
     public CurrencySet get(int id) {
@@ -60,6 +64,24 @@ public class CurrencySetServiceImpl implements CurrencySetService {
         return result;
     }
 
+    @Override
+    public List<CurrencyAmount> toCurrencySet(CurrencySet currencySet, final Integer baseRateAmount) {
+
+        Integer remaingAmount = baseRateAmount;
+        List<Currency> currencies = currencyService.getAllByCurrencySet(currencySet);
+        List<CurrencyAmount> result = new ArrayList<>(currencies.size());
+        for (Currency c : currencies) {
+            CurrencyAmount a = new CurrencyAmount();
+            a.setCurrency(c);
+            a.setAmount(remaingAmount / c.getValueToBaseRate());
+            if (a.getAmount() > 0) {
+                remaingAmount = remaingAmount % c.getValueToBaseRate();
+            }
+            result.add(a);
+        }
+        return result;
+    }
+
     public void setCurrencySetDao(CurrencySetDao currencySetDao) {
         this.currencySetDao = currencySetDao;
     }
@@ -76,5 +98,8 @@ public class CurrencySetServiceImpl implements CurrencySetService {
             throw new DSAValidationException("CurrencySet ist nicht valide.", violations);
         }
     }
-    
+
+    public void setCurrencyService(CurrencyService currencyService) {
+        this.currencyService = currencyService;
+    }
 }
