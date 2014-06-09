@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.dao.CurrencySetDao;
+import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Currency;
 import sepm.dsa.model.CurrencySet;
@@ -61,6 +62,19 @@ public class CurrencySetServiceImpl implements CurrencySetService {
         log.debug("calling getAll()");
         List<CurrencySet> result = currencySetDao.getAll();
         log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public CurrencySet getDefaultCurrencySet() {
+        CurrencySet result = currencySetDao.get(1);
+        if (result == null) {
+            throw new DSARuntimeException("Keine Standardwährung gespeichert, importieren Sie bitte einen geeigneten Datensatz!");
+//            result = new CurrencySet();
+//            result.setName("<generated-currency-set>");     // TODO use the correct name
+//            result.setId(1);
+//            //...
+        }
         return result;
     }
 

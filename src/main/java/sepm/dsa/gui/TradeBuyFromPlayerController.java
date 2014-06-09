@@ -4,10 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,14 +13,9 @@ import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 
-import java.math.BigDecimal;
 import java.net.URL;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class TradeBuyFromPlayerController implements Initializable {
@@ -45,13 +37,13 @@ public class TradeBuyFromPlayerController implements Initializable {
     @FXML
     private ChoiceBox<Player> selectedPlayer;
     @FXML
-    private ChoiceBox selectedQuality;
+    private ChoiceBox<ProductQuality> selectedQuality;
     @FXML
     private TextField selectedAmount;
     @FXML
     private ChoiceBox<CurrencySet> selectedCurrency;
-    @FXML
-    private TextField selectedPrice;
+//    @FXML
+//    private TextField selectedPrice;
     @FXML
     private TableView<Product> productsTable;
     @FXML
@@ -60,27 +52,50 @@ public class TradeBuyFromPlayerController implements Initializable {
     private TextField searchField;
 
     @FXML
-    private TextField tf_currency1Amount;
+    private TextField tf_CurrencyAmount1;
     @FXML
-    private TextField tf_currency2Amount;
+    private TextField tf_CurrencyAmount2;
     @FXML
-    private TextField tf_currency3Amount;
+    private TextField tf_CurrencyAmount3;
     @FXML
-    private TextField tf_currency4Amount;
+    private TextField tf_CurrencyAmount4;
     @FXML
-    private TextField tf_currency5Amount;
+    private TextField tf_CurrencyAmount5;
 
-    private TextField[] tf_currencyAmounts =
-            new TextField[] {
-                    tf_currency1Amount,
-                    tf_currency2Amount,
-                    tf_currency3Amount,
-                    tf_currency4Amount,
-                    tf_currency5Amount };
+    private TextField[] tf_CurrencyAmounts;
+
+    @FXML
+    private Label lbl_CurrencyAmount1;
+    @FXML
+    private Label lbl_CurrencyAmount2;
+    @FXML
+    private Label lbl_CurrencyAmount3;
+    @FXML
+    private Label lbl_CurrencyAmount4;
+    @FXML
+    private Label lbl_CurrencyAmount5;
+
+    private Label[] lbl_CurrencyAmounts;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         log.debug("initialize TradeBuyFromPlayerController");
+
+        lbl_CurrencyAmounts =
+                new Label[] {
+                        lbl_CurrencyAmount1,
+                        lbl_CurrencyAmount2,
+                        lbl_CurrencyAmount3,
+                        lbl_CurrencyAmount4,
+                        lbl_CurrencyAmount5};
+
+        tf_CurrencyAmounts =
+                new TextField[] {
+                        tf_CurrencyAmount1,
+                        tf_CurrencyAmount2,
+                        tf_CurrencyAmount3,
+                        tf_CurrencyAmount4,
+                        tf_CurrencyAmount5};
 
         selectedAmount.setText("1");
 
@@ -91,83 +106,99 @@ public class TradeBuyFromPlayerController implements Initializable {
         selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAll()));
         selectedPlayer.setItems(FXCollections.observableArrayList(playerService.getAll()));
 
-        List<String> qualityList = new ArrayList<>();
+        List<ProductQuality> qualityList = new ArrayList<>();
         for (ProductQuality q : ProductQuality.values()) {
-            qualityList.add(q.getName());
+            qualityList.add(q);
         }
         selectedQuality.setItems(FXCollections.observableArrayList(qualityList));
         selectedQuality.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (productsTable.getSelectionModel().getSelectedItem() != null) {
-                //TODO check -- no change (old / new used ...) aber egal ist das OK / gut so? hatte probleme sonst beim parsen
-                //TODO: setQuality variable evtl. zu Field convertierne? performance steigerung?
-                ProductQuality qualitySelChanged = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
-                int setQuality = traderService.calculatePricePerUnit(qualitySelChanged, productsTable.getSelectionModel().getSelectedItem(), trader);
-                int amount;
-
-                //##### get amount
-                if (selectedAmount.getText().isEmpty()) {
-
-                } else {
-                    try {
-                        amount = new Integer(selectedAmount.getText());
-
-                    } catch (NumberFormatException ex) {
-                        throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
-                    }
-
-                    selectedPrice.setText(Integer.toString(setQuality * amount));
-                }
-            }
+            updatePrice();
         });
 
         selectedAmount.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (productsTable.getSelectionModel().getSelectedItem() != null) {
-                ProductQuality qualitySelChanged = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
-                int setQuality = traderService.calculatePricePerUnit(qualitySelChanged, productsTable.getSelectionModel().getSelectedItem(), trader);
-                int amount;
-
-                //##### get amount
-                if (selectedAmount.getText().isEmpty()) {
-                } else {
-                    try {
-                        amount = new Integer(selectedAmount.getText());
-
-                    } catch (NumberFormatException ex) {
-                        throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
-                    }
-
-                    selectedPrice.setText(Integer.toString(setQuality * amount));
-                }
-            }
+            updatePrice();
         });
+
+        refreshPriceView();
     }
 
+    private void updatePrice() {
+        if (productsTable.getSelectionModel().getSelectedItem() != null) {
+            ProductQuality qualitySelChanged = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
+            int setQuality = traderService.calculatePricePerUnit(qualitySelChanged, productsTable.getSelectionModel().getSelectedItem(), trader);
+            int amount = 0;
+
+            //##### get amount
+            if (!selectedAmount.getText().isEmpty()) {
+                try {
+                    amount = new Integer(selectedAmount.getText());
+
+                } catch (NumberFormatException ex) {
+                    throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
+                }
+            }
+            int baseRatePrice = setQuality * amount;    // TODO is this really the baseRate price?
+//            selectedPrice.setText(Integer.toString());
+
+            List<CurrencyAmount> currencyAmounts = currencySetService.toCurrencySet(selectedCurrencySet(), baseRatePrice);
+            int i=0;
+            for (CurrencyAmount c : currencyAmounts) {
+//                lbl_CurrencyAmounts[i].setText(c.getCurrency().getName());
+                tf_CurrencyAmounts[i].setText(c.getAmount().toString());
+                i++;
+            }
+            refreshPriceView();
+        }
+    }
+
+    private void refreshPriceView() {
+        CurrencySet selected = selectedCurrencySet();
+        if (selected == null) {
+            selected = currencySetService.getDefaultCurrencySet();
+        }
+        int i=0;
+        for (Currency c : currencyService.getAllByCurrencySet(selected)) {
+            log.info(lbl_CurrencyAmounts + ": " + lbl_CurrencyAmounts[i] + " " + c.getName());
+            lbl_CurrencyAmounts[i].setText(c.getName());
+            i++;
+        }
+        for (; i<5; i++) {
+            lbl_CurrencyAmounts[i].setText("");
+            tf_CurrencyAmounts[i].setDisable(true);
+        }
+
+    }
 
     @FXML
     private void checkFocus() {
-        selectedAmount.setText("1");
-        Product selProduct = productsTable.getSelectionModel().getSelectedItem();
-        ProductQuality quality;
-        if (selProduct != null) {
-            if (selProduct.getQuality()) {
-                selectedQuality.setDisable(false);
-                quality = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
-                if (quality != null) {
-                    int setQuality = traderService.calculatePricePerUnit(quality, productsTable.getSelectionModel().getSelectedItem(), trader);
-                    selectedPrice.setText(Integer.toString(setQuality));
-                } else {
-                    selectedQuality.getSelectionModel().select(2);
-                    int setQuality = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
-                    selectedPrice.setText(Integer.toString(setQuality));
-                }
-            } else {
-                int priceDefault = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
-                selectedPrice.setText(Integer.toString(priceDefault));
-                selectedQuality.setDisable(true);
-            }
-            selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAllByType(selProduct.getUnit().getUnitType())));
-            selectedUnit.getSelectionModel().select(selProduct.getUnit());
-        }
+        log.info("calling checkFocus (uncommented code)");
+//        selectedAmount.setText("1");
+//        Product selProduct = productsTable.getSelectionModel().getSelectedItem();
+//        ProductQuality quality;
+//        if (selProduct != null) {
+//            if (selProduct.getQuality()) {
+//                selectedQuality.setDisable(false);
+//                quality = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
+//                int setQuality = 0;
+//                if (quality != null) {
+//                    setQuality = traderService.calculatePricePerUnit(quality, productsTable.getSelectionModel().getSelectedItem(), trader);
+//                } else {
+//                    selectedQuality.getSelectionModel().select(2);
+//                    setQuality = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
+//                }
+//                selectedPrice.setText(Integer.toString(setQuality));
+//            } else {
+//                int priceDefault = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
+//                selectedPrice.setText(Integer.toString(priceDefault));
+//                selectedQuality.setDisable(true);
+//            }
+//            selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAllByType(selProduct.getUnit().getUnitType())));
+//            selectedUnit.getSelectionModel().select(selProduct.getUnit());
+//        }
+    }
+
+    private CurrencySet selectedCurrencySet() {
+        return selectedCurrency.getSelectionModel().getSelectedItem();
     }
 
     @FXML
@@ -247,7 +278,7 @@ public class TradeBuyFromPlayerController implements Initializable {
             for (int i = 0; i < currencies.size(); i++) {
                 CurrencyAmount a = new CurrencyAmount();
                 a.setCurrency(currencies.get(i));
-                Integer currencyAmount = Integer.parseInt(tf_currencyAmounts[i].getText());
+                Integer currencyAmount = Integer.parseInt(tf_CurrencyAmounts[i].getText());
                 if (currencyAmount < 0) {
                     throw new DSAValidationException("Preis muss > 0 sein");
                 }
@@ -268,23 +299,28 @@ public class TradeBuyFromPlayerController implements Initializable {
             throw new DSAValidationException("Die Einheit wurde nicht gewählt!");
         }
         //######## Quality Stuff ########
-        Product selProduct = productsTable.getSelectionModel().getSelectedItem();
-        ProductQuality quality = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
-        if (selProduct != null) {
+
+        ProductQuality quality = selectedQuality.getSelectionModel().getSelectedItem();
+
+        Unit unit = selectedUnit.getSelectionModel().getSelectedItem();
+
+        Product product = productsTable.getSelectionModel().getSelectedItem();
+        if (product != null) {
             if (quality != null) { //so quality was SET
                 int setQuality = traderService.calculatePricePerUnit(quality, productsTable.getSelectionModel().getSelectedItem(), trader);
-                selectedPrice.setText(Integer.toString(setQuality));
+//                selectedPrice.setText(Integer.toString(setQuality));
             } else {
                 //no quality enabled -- NORMAL price
                 int priceDefault = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
-                selectedPrice.setText(Integer.toString(priceDefault));
+//                selectedPrice.setText(Integer.toString(priceDefault));
             }
-            selectedUnit.getSelectionModel().select(selProduct.getUnit());
+            selectedUnit.getSelectionModel().select(product.getUnit());
+            unit = selectedUnit.getSelectionModel().getSelectedItem();
         } else {
             throw new DSAValidationException("Bitte Produkt auswählen!!");
         }
 
-        traderService.buyFromPlayer(trader, playerToCreateDealFor, productsTable.getSelectionModel().getSelectedItem(), quality, selectedUnit.getSelectionModel().getSelectedItem(), amount, currencyAmounts);
+        traderService.buyFromPlayer(trader, playerToCreateDealFor, product, quality, unit, amount, currencyAmounts);
         saveCancelService.save();
 
         saveCancelService.refresh(trader);

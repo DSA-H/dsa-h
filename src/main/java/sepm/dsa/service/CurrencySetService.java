@@ -52,4 +52,9 @@ public interface CurrencySetService {
      */
     List<CurrencyAmount> toCurrencySet(CurrencySet currencySet, Integer baseRateAmount);
 
+    /**
+     * @return the default currency set (ID=1)
+     */
+    CurrencySet getDefaultCurrencySet();
+
 }
