@@ -7,12 +7,14 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.*;
+import sepm.dsa.util.CurrencyFormatUtil;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -118,24 +120,9 @@ public class TradeSellToPlayerController implements Initializable {
         }
         selectedOffer.setText(sb.toString());
         selectedAmount.setText("1");
-        selectedAmount.textProperty().addListener((observable, oldValue, newValue) -> {
-//            int setQuality = traderService.calculatePricePerUnit(offer.getQuality(), offer.getProduct(), trader);
-//            int amount;
-//
-//            //##### get amount
-//            if (selectedAmount.getText().isEmpty()) {
-//            } else {
-//                try {
-//                    amount = new Integer(selectedAmount.getText());
-//
-//                } catch (NumberFormatException ex) {
-//                    throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
-//                }
-//
-//                selectedPrice.setText(Integer.toString(setQuality * amount));
-//            }
-            updatePrice();
-        });
+        selectedAmount.textProperty().addListener((observable, oldValue, newValue) -> updatePrice());
+        selectedCurrency.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updatePrice());
+
         refreshPriceView();
     }
 
@@ -153,6 +140,7 @@ public class TradeSellToPlayerController implements Initializable {
 
     private void updatePrice() {
         log.info("calling updatePrice()");
+        refreshPriceView();
         if (offer.getProduct() != null) {
             log.info(selectedQuality() + ", " + selectedProduct() + " " + trader);
             int setQuality = traderService.calculatePricePerUnit(selectedQuality(), selectedProduct(), trader);
@@ -177,7 +165,6 @@ public class TradeSellToPlayerController implements Initializable {
                 tf_CurrencyAmounts[i].setText(c.getAmount().toString());
                 i++;
             }
-            refreshPriceView();
         }
     }
 
@@ -192,10 +179,12 @@ public class TradeSellToPlayerController implements Initializable {
         for (Currency c : currencyService.getAllByCurrencySet(selected)) {
             log.info(lbl_CurrencyAmounts + ": " + lbl_CurrencyAmounts[i] + " " + c.getName());
             lbl_CurrencyAmounts[i].setText(c.getName());
+            tf_CurrencyAmounts[i].setDisable(false);
             i++;
         }
         for (; i<5; i++) {
             lbl_CurrencyAmounts[i].setText("");
+            tf_CurrencyAmounts[i].setText("");
             tf_CurrencyAmounts[i].setDisable(true);
         }
 
@@ -281,19 +270,7 @@ public class TradeSellToPlayerController implements Initializable {
 
         //######## Discount stuff --
         //PRICE STUFF ###########
-        Integer discount = 0;
-        if (!selectedDiscount.getText().isEmpty()) {
-            try {
-                discount = Integer.parseInt(selectedDiscount.getText());
-            } catch (NumberFormatException ex) {
-                throw new DSAValidationException("Discount muss eine Zahl sein!");
-            }
-
-            if (discount < 0 || discount > 100) {
-                throw new DSAValidationException("Discount muss darf nur ein Wert von 0 bis 100 sein");
-            }
-
-        }
+        Integer discount = retrieveDiscount();
 
         traderService.sellToPlayer(trader, playerToCreateDealFor, offer.getProduct(), offer.getQuality(), selectedUnit.getSelectionModel().getSelectedItem(), amount, currencyAmounts, discount);
         saveCancelService.save();
@@ -323,6 +300,39 @@ public class TradeSellToPlayerController implements Initializable {
         }
         return result;
     }
+
+    private int retrieveDiscount() {
+        int result = 0;
+        if (!selectedDiscount.getText().isEmpty()) {
+            try {
+                result = Integer.parseInt(selectedDiscount.getText());
+            } catch (NumberFormatException ex) {
+                throw new DSAValidationException("Discount muss eine Zahl sein!");
+            }
+
+            if (result < 0 || result > 100) {
+                throw new DSAValidationException("Discount muss darf nur ein Wert von 0 bis 100 sein");
+            }
+        }
+        return result;
+    }
+
+    @FXML
+    public void onShowReducedPriceClicked() {
+        log.debug("calling onShowReducedPriceClicked");
+
+        int discount = retrieveDiscount();
+        int baseRatePrice = currencyService.exchangeToBaseRate(retrieveCurrencyAmounts());
+        int reducedPrice = (baseRatePrice * (100 - discount)) / 100;
+        String reducePriceString = CurrencyFormatUtil.currencySetString(currencySetService.toCurrencySet(selectedCurrencySet(), reducedPrice), "\n");
+
+        Dialogs.create()
+                .title("neuer Preis nach Rabatt")
+                .masthead(null)
+                .message(reducePriceString)
+                .showWarning();
+    }
+
 
     public static void setTrader(Trader trader) {
         TradeSellToPlayerController.trader = trader;

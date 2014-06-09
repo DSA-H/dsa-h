@@ -138,6 +138,7 @@ public class TradeBuyFromPlayerController implements Initializable {
 
     private void updatePrice() {
         log.info("calling updatePrice()");
+        refreshPriceView();
         if (productsTable.getSelectionModel().getSelectedItem() != null) {
             log.info(selectedQuality() + ", " + selectedProduct() + " " + trader);
             int setQuality = traderService.calculatePricePerUnit(selectedQuality(), selectedProduct(), trader);
@@ -162,7 +163,6 @@ public class TradeBuyFromPlayerController implements Initializable {
                 tf_CurrencyAmounts[i].setText(c.getAmount().toString());
                 i++;
             }
-            refreshPriceView();
         }
     }
 
@@ -177,10 +177,12 @@ public class TradeBuyFromPlayerController implements Initializable {
         for (Currency c : currencyService.getAllByCurrencySet(selected)) {
             log.info(lbl_CurrencyAmounts + ": " + lbl_CurrencyAmounts[i] + " " + c.getName());
             lbl_CurrencyAmounts[i].setText(c.getName());
+            tf_CurrencyAmounts[i].setDisable(false);
             i++;
         }
         for (; i<5; i++) {
             lbl_CurrencyAmounts[i].setText("");
+            tf_CurrencyAmounts[i].setText("");
             tf_CurrencyAmounts[i].setDisable(true);
         }
 
