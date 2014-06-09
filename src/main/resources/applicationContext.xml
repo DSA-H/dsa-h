@@ -39,6 +39,7 @@
                 <value>sepm.dsa.model.Unit</value>
                 <value>sepm.dsa.model.UnitType</value>
                 <value>sepm.dsa.model.Currency</value>
+                <value>sepm.dsa.model.CurrencySet</value>
                 <value>sepm.dsa.model.MovingTrader</value>
             </list>
         </property>
@@ -162,6 +163,10 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="currencySetDao" class="sepm.dsa.dao.CurrencySetDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
@@ -246,6 +251,11 @@
         <property name="timeService" ref="timeService"/>
     </bean>
 
+    <bean id="currencySetService" class="sepm.dsa.service.CurrencySetServiceImpl">
+        <property name="currencySetDao" ref="currencySetDao"/>
+        <property name="currencyService" ref="currencyService"/>
+    </bean>
+
     <bean id="timeService" class="sepm.dsa.service.TimeServiceImpl">
         <property name="traderService" ref="traderService"/>
         <property name="offerDao" ref="offerDao" />
@@ -253,6 +263,10 @@
         <property name="tavernService" ref="tavernService" />
         <property name="saveCancelService" ref="saveCancelService"/>
         <property name="mapService" ref="mapService"/>
+    </bean>
+
+    <bean id="traderPdfService" class="sepm.dsa.service.pdf.TraderPdfServiceImpl">
+        <property name="traderService" ref="traderService"/>
     </bean>
 
     <!-- GUI DI -->
@@ -264,6 +278,7 @@
         <property name="tavernService" ref="tavernService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
         <property name="locationConnectionService" ref="locationConnectionService"/>
+        <property name="traderPdfService" ref="traderPdfService"/>
     </bean>
 
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
@@ -350,6 +365,7 @@
         <property name="traderService" ref="traderService"/>
         <property name="unitService" ref="unitService"/>
         <property name="currencyService" ref="currencyService"/>
+        <property name="currencySetService" ref="currencySetService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
         <property name="playerService" ref="playerService"/>
     </bean>
@@ -357,6 +373,7 @@
         <property name="traderService" ref="traderService"/>
         <property name="unitService" ref="unitService"/>
         <property name="currencyService" ref="currencyService"/>
+        <property name="currencySetService" ref="currencySetService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
         <property name="playerService" ref="playerService"/>
         <property name="productService" ref="productService"/>

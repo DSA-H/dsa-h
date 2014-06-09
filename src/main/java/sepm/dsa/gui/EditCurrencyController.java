@@ -70,14 +70,14 @@ public class EditCurrencyController implements Initializable {
             throw new DSAValidationException("Bitte Namen eingeben");
         }
         String name = nameField.getText();
-        BigDecimal exchangeToBase;
+        Integer exchangeToBase = null;
         try {
-            exchangeToBase = new BigDecimal(valueToBaseRateField.getText());
+            exchangeToBase = Integer.parseInt(valueToBaseRateField.getText());
 
         } catch (NumberFormatException ex) {
             throw new DSAValidationException("Wechselkurs muss eine Zahl sein!");
         }
-        if (exchangeToBase.compareTo(BigDecimal.ZERO)<=0){
+        if (exchangeToBase <= 0){
             throw new DSAValidationException("Wechselkurs muss Zahl > 0 sein");
         }
 
