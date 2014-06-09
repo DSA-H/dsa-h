@@ -158,7 +158,21 @@ public class TraderDetailsController implements Initializable {
         });
 //        dateColumn.setSortType(TableColumn.SortType.DESCENDING);
 
-		priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
+//		priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
+		priceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> r) {
+                if (r.getValue() != null) {
+                    Deal deal = r.getValue();
+                    List<CurrencyAmount> ca = currencySetService.toCurrencySet(defaultCurrencySet, deal.priceWithDiscount());
+                    String str = CurrencyFormatUtil.currencySetShortString(ca, ", ");
+                    return new SimpleStringProperty(str);
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
+
 
 		playerColumn.setCellValueFactory(d -> {
 			Player player = d.getValue().getPlayer();
