@@ -162,6 +162,10 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="currencySetDao" class="sepm.dsa.dao.CurrencySetDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
@@ -244,6 +248,10 @@
     <bean id="dealService" class="sepm.dsa.service.DealServiceImpl">
         <property name="dealDao" ref="dealDao"/>
         <property name="timeService" ref="timeService"/>
+    </bean>
+
+    <bean id="currencySetService" class="sepm.dsa.service.CurrencySetServiceImpl">
+        <property name="currencySetDao" ref="currencySetDao"/>
     </bean>
 
     <bean id="timeService" class="sepm.dsa.service.TimeServiceImpl">

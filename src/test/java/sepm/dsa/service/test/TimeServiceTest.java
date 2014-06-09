@@ -3,6 +3,7 @@ package sepm.dsa.service.test;
 
 import junit.framework.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import sepm.dsa.dao.OfferDao;
@@ -57,6 +58,7 @@ public class TimeServiceTest extends AbstractDatabaseTest {
         Assert.assertEquals(dsaDate.getTimestamp(), 17);
     }
 
+    @Ignore
     @Test
     public void forwardTimeTestmovingTrader() {
         Trader trader = traderDao.get(2);
@@ -70,6 +72,7 @@ public class TimeServiceTest extends AbstractDatabaseTest {
         Assert.assertTrue(!oldLocation.equals(newLocation));
     }
 
+    @Ignore
     @Test
     public void forwardTimeTestChangeSortiment1() {
         Trader trader = traderDao.get(1);
@@ -85,6 +88,7 @@ public class TimeServiceTest extends AbstractDatabaseTest {
         Assert.assertTrue(actAmount == trader.getSize());
     }
 
+    @Ignore
     @Test
     public void forwardTimeTestChangeSortiment2() {
         Trader trader = traderDao.get(1);
@@ -110,6 +114,7 @@ public class TimeServiceTest extends AbstractDatabaseTest {
         Assert.assertTrue(actAmount == trader.getSize());
     }
 
+    @Ignore
     @Test
     public void forwardTimeTestChangeSortiment3() {
         Trader trader = traderDao.get(1);
