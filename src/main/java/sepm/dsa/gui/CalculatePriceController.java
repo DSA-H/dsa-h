@@ -27,7 +27,7 @@ public class CalculatePriceController implements Initializable {
     private LocationService locationService;
     private ProductService productService;
     private List<Product> allProducts;
-    private Trader selectedTrader;
+    private Trader calculationTrader = new Trader();
 
 
     @FXML
@@ -92,19 +92,16 @@ public class CalculatePriceController implements Initializable {
     @FXML
     private void onCalculatePressed() {
         log.debug("called onCalculatePressed");
-        Trader t = new Trader();
-        t.setLocation(choiceLocation.getSelectionModel().getSelectedItem());
+        calculationTrader.setLocation(choiceLocation.getSelectionModel().getSelectedItem());
 
         int price = 0;
         if (choiceQuality.isDisabled()){
-            price = traderService.calculatePriceForProduct(productTable.getSelectionModel().getSelectedItem(),t);
+            price = traderService.calculatePriceForProduct(productTable.getSelectionModel().getSelectedItem(),calculationTrader);
         }else{
-            price = traderService.calculatePricePerUnit(choiceQuality.getSelectionModel().getSelectedItem(),productTable.getSelectionModel().getSelectedItem(),t);
+            price = traderService.calculatePricePerUnit(choiceQuality.getSelectionModel().getSelectedItem(),productTable.getSelectionModel().getSelectedItem(),calculationTrader);
         }
 
         labelPrice.setText(price+"");
-        //TraderService ts = new TraderService();
-        //ts.calculatePriceForProduct()
     }
 
     @FXML
