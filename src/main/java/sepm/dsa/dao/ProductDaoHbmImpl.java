@@ -44,4 +44,21 @@ public class ProductDaoHbmImpl
         log.trace("returning " + result);
         return result;
     }
+
+    @Override
+    public List<Product> getAllByName(String name) {
+        log.debug("calling getAllByName(" + name + ")");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("Product.findAllByName");
+        query.setParameter("name", name);
+        List<?> list = query.list();
+
+        List<Product> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((Product) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
+
 }

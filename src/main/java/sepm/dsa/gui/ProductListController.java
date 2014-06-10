@@ -101,7 +101,7 @@ public class ProductListController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/editproduct.fxml");
 
         stage.setTitle("Waren");
-        stage.setScene(new Scene(scene, 600, 414));
+        stage.setScene(new Scene(scene, 600, 479));
         stage.show();
     }
 
@@ -115,7 +115,7 @@ public class ProductListController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/editproduct.fxml");
 
         stage.setTitle("Waren");
-        stage.setScene(new Scene(scene, 600, 414));
+        stage.setScene(new Scene(scene, 600, 479));
         stage.show();
     }
 

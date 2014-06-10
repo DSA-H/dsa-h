@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 public class Unit implements BaseModel {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 
@@ -21,7 +21,7 @@ public class Unit implements BaseModel {
     private String name;
 
     @NotBlank
-    @Size(max = 10, min = 1)
+    @Size(max = 12, min = 1)
     @Column(nullable = false, length = 10)
     private String shortName;
 
@@ -75,6 +75,11 @@ public class Unit implements BaseModel {
         this.valueToBaseUnit = valueToBaseUnit;
     }
 
+    public Double exchange(Double amount, Unit to) {
+        Double result = (amount * to.getValueToBaseUnit() / this.getValueToBaseUnit());
+        return result;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,12 +109,6 @@ public class Unit implements BaseModel {
 
     @Override
     public String toString() {
-        return "Unit{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", shortName='" + shortName + '\'' +
-                ", unitType=" + unitType +
-                ", valueToBaseUnit=" + valueToBaseUnit +
-                '}';
+        return name;
     }
 }

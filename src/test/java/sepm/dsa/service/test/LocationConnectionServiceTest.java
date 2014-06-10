@@ -130,7 +130,7 @@ public class LocationConnectionServiceTest extends AbstractDatabaseTest {
     public void suggestConnectionsAround_locationsAround() throws Exception {
         Location location = locationService.get(4);
         List<LocationConnection> suggestions = locationConnectionService.suggestLocationConnectionsAround(location, 100);
-        assertEquals(1, suggestions.size());
+        assertEquals(4, suggestions.size());
     }
 
 //	@Ignore("Composite identifier must be fixed")

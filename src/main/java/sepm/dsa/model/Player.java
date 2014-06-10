@@ -14,7 +14,7 @@ public class Player implements Serializable, BaseModel {
 	private static final long serialVersionUID = 3102323283798472344L;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(nullable = false, unique = true)
 	private Integer id;
 
@@ -25,7 +25,7 @@ public class Player implements Serializable, BaseModel {
 	@Column
 	private String comment;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "player", cascade = CascadeType.REMOVE)
     private Set<Deal> deals = new HashSet<>();
 
 	public Integer getId() {
@@ -76,4 +76,9 @@ public class Player implements Serializable, BaseModel {
 	public int hashCode() {
 		return id != null ? id.hashCode() : 0;
 	}
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

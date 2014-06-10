@@ -45,7 +45,9 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
         log.debug("calling addConnection(" + locationConnection + ")");
         validate(locationConnection);
         if (get(locationConnection.getLocation1(), locationConnection.getLocation2()) != null) {
-            throw new DSAAlreadyExistsException();
+            throw new DSAAlreadyExistsException("Die Verbindung zwischen "
+                    + locationConnection.getLocation1().getName() + " und "
+                    + locationConnection.getLocation2().getName() + " exisitiert bereits.");
         }
         LocationConnection lc = locationConnectionDao.add(locationConnection);
         log.info("added " + lc);
@@ -82,6 +84,13 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
         return locationConnectionDao.get(pk);
     }
 
+	@Override
+	public List<LocationConnection> getAll() {
+		log.debug("calling getAll()");
+		List<LocationConnection> result = locationConnectionDao.getAll();
+		return result;
+	}
+
     @Override
     public List<LocationConnection> getShortestPathBetween(Location location1, Location location2) throws NoPathException{
         log.debug("calling getShortestPathBetween(" + location1 + ", " + location2 + ")");
@@ -94,11 +103,19 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
     }
 
     @Override
+    public List<LocationConnection> getAllByLocation(int locationId) {
+        log.debug("calling getAllByLocation(" + locationId + ")");
+        List<LocationConnection> result = locationConnectionDao.getAllByLocation(locationId);
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
     public List<LocationConnection> suggestLocationConnectionsByFilter(Location location, String filter) {
         log.debug("calling suggestLocationConnectionsByFilter(" + location + "," + filter + ")");
         //extract filter info (currently just location name)
         String locationName = filter == null ? "%" : "%" + filter + "%";
-        List<Location> locations = locationDao.getAllByNameNotConnectedTo(location, locationName);
+        List<Location> locations = locationDao.getAllByNameWithoutLocation(location, locationName);
         List<LocationConnection> result = makeconnectionSuggestions(location, locations);
         log.trace("returning " + result);
         return result;
@@ -132,7 +149,7 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
     @Override
     public List<LocationConnection> suggestLocationConnectionsAround(Location location, double withinDistance) {
         log.debug("calling suggestLocationConnectionsAround(" + location + "," + withinDistance + ")");
-        List<Location> nearLocations = locationDao.getAllAroundNotConnected(location, withinDistance);
+        List<Location> nearLocations = locationDao.getAllAround(location, withinDistance);
         List<LocationConnection> result = makeconnectionSuggestions(location, nearLocations);
         log.trace("returning " + result);
         return result;

@@ -3,6 +3,8 @@ package sepm.dsa.model;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
@@ -14,7 +16,7 @@ public class Product implements BaseModel {
     private static final long serialVersionUID = 5890354733231481712L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 
@@ -27,10 +29,16 @@ public class Product implements BaseModel {
     @Column(nullable = false)
     private Integer cost;
 
-    /*
     @NotNull
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Unit unit;
+
+    @NotNull
+    @Min(value = 1)
+    @Max(value = 100)
     @Column(nullable = false)
-    private Integer unitId;*/
+    private Integer occurence = 100;
 
     @NotNull
     @Column(nullable = false)
@@ -111,22 +119,6 @@ public class Product implements BaseModel {
             this.attributeId = attribute.getValue();
         }
     }
-
-    /*public Integer getUnit() {
-        if (attributeId == null){
-            return null;
-        }else {
-            return unitId;
-        }
-    }
-    public void setUnit(ProductUnit unit) {
-        if (unit==null){
-            this.unitId = null;
-        }else{
-            this.unitId = unit.getId();
-        }
-    }*/
-
     public String getComment() {
         return comment;
     }
@@ -157,6 +149,22 @@ public class Product implements BaseModel {
 
     public void setQuality(Boolean quality) {
         this.quality = quality;
+    }
+
+    public Integer getOccurence() {
+        return occurence;
+    }
+
+    public void setOccurence(Integer occurence) {
+        this.occurence = occurence;
+    }
+
+    public Unit getUnit() {
+        return unit;
+    }
+
+    public void setUnit(Unit unit) {
+        this.unit = unit;
     }
 
     @Override

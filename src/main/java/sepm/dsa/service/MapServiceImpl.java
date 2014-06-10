@@ -121,7 +121,7 @@ public class MapServiceImpl implements MapService {
         //check if old File exists
         File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return name.startsWith("" + location.getName() + location.getId() + "map");
+                return name.startsWith(location.getId() + "map");
             }
         });
 
@@ -141,7 +141,7 @@ public class MapServiceImpl implements MapService {
 
         //copy new File to dir
         String extNew = FilenameUtils.getExtension(newMap.getAbsolutePath());
-        File locMap = new File(activeDir + "/" + location.getName() + location.getId() + "map." + extNew);
+        File locMap = new File(activeDir + "/" + location.getId() + "map." + extNew);
         try {
             FileUtils.copyFile(newMap, locMap);
             log.debug("copied new map");
@@ -158,10 +158,10 @@ public class MapServiceImpl implements MapService {
         if (matchingFiles != null && matchingFiles.length >= 1) {
             File oldMap = matchingFiles[0];
             String extOld = FilenameUtils.getExtension(oldMap.getAbsolutePath());
-            File dest = new File(alternativeDir + "/" + location.getName() + location.getId() + "map." + extOld);
+            File dest = new File(alternativeDir + "/" + location.getName() + "Karte." + extOld);
             int k = 1;
             while (dest.exists() && !dest.isDirectory()) {
-                dest = new File(alternativeDir + "/" + location.getName() + location.getId() + "map(" + k + ")." + extOld);
+                dest = new File(alternativeDir + "/" + location.getName() + "Karte(" + k + ")." + extOld);
                 k++;
             }
             try {
@@ -247,7 +247,7 @@ public class MapServiceImpl implements MapService {
     public File getLocationMap(Location location) {
         File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return name.startsWith("" + location.getName() + location.getId() + "map");
+                return name.startsWith("" + location.getId() + "map");
             }
         });
         if (matchingFiles != null && matchingFiles.length >= 1) {

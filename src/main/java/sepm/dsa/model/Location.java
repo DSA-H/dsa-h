@@ -28,6 +28,7 @@ public class Location implements BaseModel, PathNode {
 
     @ManyToOne
     @JoinColumn(name = "region", nullable = false)
+    @NotNull
     private Region region;
 
     @NotNull
@@ -81,6 +82,14 @@ public class Location implements BaseModel, PathNode {
 
     public void setTaverns(Set<Tavern> taverns) {
         this.taverns = taverns;
+    }
+
+    public Set<Trader> getTraders() {
+        return traders;
+    }
+
+    public void setTraders(Set<Trader> traders) {
+        this.traders = traders;
     }
 
     public Integer getId() {
@@ -205,6 +214,17 @@ public class Location implements BaseModel, PathNode {
     public void removeConnection(LocationConnection locationConnection) {
         connections1.remove(locationConnection);
         connections2.remove(locationConnection);
+    }
+
+    public void addAllConnections(Collection<LocationConnection> locationConnections) {
+        for (LocationConnection l : locationConnections) {
+            addConnection(l);
+        }
+    }
+
+    public void clearConnections() {
+        connections1.clear();
+        connections2.clear();
     }
 
     public boolean equalsByPk(Location location) {

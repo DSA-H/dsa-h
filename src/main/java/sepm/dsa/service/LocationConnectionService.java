@@ -40,11 +40,11 @@ public interface LocationConnectionService {
      */
     LocationConnection get(Location location1, Location location2);
 
-//    /**
-//     * Gets all {@code LocationConnection}s
-//     * @return
-//     */
-//    LocationConnection getAll();
+    /**
+     * Gets all {@code LocationConnection}s
+     * @return
+     */
+    List<LocationConnection> getAll();
 
     /**
      * Gets an ordered list being the shortest path of {@code LocationConnection}s between two locations
@@ -103,5 +103,12 @@ public interface LocationConnectionService {
      */
     int suggestedTravelTimeForDistance(double distance);
 
+
+    /**
+     *
+     * @param locationId
+     * @return all connections of a location
+     */
+    public List<LocationConnection> getAllByLocation(int locationId);
 
 }

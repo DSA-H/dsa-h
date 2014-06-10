@@ -22,6 +22,13 @@
                     ORDER BY l.name asc]]>
     </query>
 
+    <query name="Location.findAllByNameWithoutLocation">
+        <![CDATA[   FROM Location l
+                    WHERE (:locationId is null or l.id != :locationId)
+                            and (l.name like :locationName)
+                    ORDER BY l.name asc]]>
+    </query>
+
     <query name="Location.findAllByNameNotConnected">
         <![CDATA[   FROM Location l
                     WHERE (:ownLocationId is null or l.id != :ownLocationId)

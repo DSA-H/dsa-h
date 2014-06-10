@@ -18,4 +18,10 @@
                     WHERE ((pk.location1.id = :locationId and pk.location2.name like :locationName)
                             or (pk.location2.id = :locationId and pk.location1.name like :locationName)) ]]>
     </query>
+
+    <query name="LocationConnection.findAllByLocation">
+        <![CDATA[   FROM LocationConnection
+                    WHERE pk.location1.id = :locationId or pk.location2.id = :locationId]]>
+    </query>
+
 </hibernate-mapping>

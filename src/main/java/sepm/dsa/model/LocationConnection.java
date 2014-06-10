@@ -36,6 +36,7 @@ public class LocationConnection implements BaseModel, PathEdge {
     }
 
     public void setLocation1(Location location1) {
+        System.out.println("setLocation1(" + location1 + ")");
         this.pk.location1 = location1;
     }
 
@@ -44,6 +45,7 @@ public class LocationConnection implements BaseModel, PathEdge {
     }
 
     public void setLocation2(Location location2) {
+        System.out.println("setLocation2(" + location2 + ")");
         this.pk.location2 = location2;
     }
 
@@ -72,6 +74,42 @@ public class LocationConnection implements BaseModel, PathEdge {
         return null;
     }
 
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//
+//        LocationConnection that = (LocationConnection) o;
+//
+//        if (comment != null ? !comment.equals(that.comment) : that.comment != null) return false;
+//        if (pk != null ? !pk.equals(that.pk) : that.pk != null) return false;
+//        if (travelTime != null ? !travelTime.equals(that.travelTime) : that.travelTime != null) return false;
+//
+//        return true;
+//    }
+
+    public boolean equalsById(LocationConnection that) {
+        if (this == that) return true;
+
+        Pk pkReverse = null;
+        if (pk != null) {
+            pkReverse = new Pk(pk.getLocation2(), pk.getLocation1());
+        }
+        if (pk != null && pk.equals(that.pk)) return true;
+        if (pkReverse != null && pkReverse.equals(that.pk)) return true;
+
+        return false;
+    }
+
+//    @Override
+//    public int hashCode() {
+//        int result = pk != null ? pk.hashCode() : 0;
+//        result = 31 * result + (travelTime != null ? travelTime.hashCode() : 0);
+//        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+//        return result;
+//    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,19 +117,14 @@ public class LocationConnection implements BaseModel, PathEdge {
 
         LocationConnection that = (LocationConnection) o;
 
-        if (comment != null ? !comment.equals(that.comment) : that.comment != null) return false;
         if (pk != null ? !pk.equals(that.pk) : that.pk != null) return false;
-        if (travelTime != null ? !travelTime.equals(that.travelTime) : that.travelTime != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = pk != null ? pk.hashCode() : 0;
-        result = 31 * result + (travelTime != null ? travelTime.hashCode() : 0);
-        result = 31 * result + (comment != null ? comment.hashCode() : 0);
-        return result;
+        return pk != null ? pk.hashCode() : 0;
     }
 
     @Override

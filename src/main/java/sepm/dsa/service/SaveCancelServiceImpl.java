@@ -3,6 +3,9 @@ package sepm.dsa.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.dao.SaveCancelDao;
+import sepm.dsa.model.BaseModel;
+
+import java.util.Collection;
 
 public class SaveCancelServiceImpl implements SaveCancelService {
 
@@ -29,8 +32,13 @@ public class SaveCancelServiceImpl implements SaveCancelService {
     }
 
     @Override
-    public void refresh(Object... objects) {
+    public void refresh(BaseModel... objects) {
         log.debug("calling save(" + objects + ")");
+        saveCancelDao.refresh(objects);
+    }
+
+    @Override
+    public void refresh(Collection<? extends BaseModel> objects) {
         saveCancelDao.refresh(objects);
     }
 

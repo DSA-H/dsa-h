@@ -5,7 +5,8 @@ public enum ProductAttribute {
     NORMAL(0, "normal"),
     VERDERBLICH(1, "verderblich"),
     LAGERBAR(2, "lagerbar"),
-    ZERBRECHLICH(3, "zerbrechlich");
+    ZERBRECHLICH(3, "zerbrechlich"),
+    GEFAEHRLICH(4, "gefährlich");
 
     private int value;
     private String name;
@@ -39,6 +40,7 @@ public enum ProductAttribute {
             case 1: return 1.5f;
             case 2: return 0.875f;
             case 3: return 1.5f;
+            case 4: return 1.5f;
             default: return 0f;
         }
     }
@@ -52,6 +54,7 @@ public enum ProductAttribute {
             case 1: return 320;
             case 2: return 200;
             case 3: return 0;
+            case 4: return 0; //todo: Wert von Laurids
             default: return 0;
         }
     }

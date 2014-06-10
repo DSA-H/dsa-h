@@ -114,12 +114,12 @@ public class TraderDaoTest extends AbstractDatabaseTest {
         trader.setCategory(tc);
 
         Offer o1 = new Offer();
-        o1.setAmount(10);
+        o1.setAmount(10.0);
         o1.setPricePerUnit(170);
         Product p1 = productDao.get(1);
         o1.setProduct(p1);
         o1.setTrader(trader);
-        o1.setQuality(ProductQuality.SCHLECHT);
+        o1.setQuality(ProductQuality.MANGELHAFT);
         trader.getOffers().add(o1);
 
         traderDao.add(trader);

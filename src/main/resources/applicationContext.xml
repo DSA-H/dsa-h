@@ -39,6 +39,7 @@
                 <value>sepm.dsa.model.Unit</value>
                 <value>sepm.dsa.model.UnitType</value>
                 <value>sepm.dsa.model.Currency</value>
+                <value>sepm.dsa.model.CurrencySet</value>
                 <value>sepm.dsa.model.MovingTrader</value>
             </list>
         </property>
@@ -48,6 +49,7 @@
                 <value>sepm/dsa/model/hibernate/Region.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/RegionBorder.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Trader.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/MovingTrader.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/TraderCategory.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Location.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Product.hbm.xml</value>
@@ -106,6 +108,10 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="movingTraderDao" class="sepm.dsa.dao.MovingTraderDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <bean id="productDao" class="sepm.dsa.dao.ProductDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
@@ -157,6 +163,10 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="currencySetDao" class="sepm.dsa.dao.CurrencySetDaoHbmImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <!-- Services DI -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
@@ -174,6 +184,7 @@
 
     <bean id="locationService" class="sepm.dsa.service.LocationServiceImpl">
         <property name="locationDao" ref="locationDao"/>
+        <property name="traderService" ref="traderService"/>
     </bean>
 
     <bean id="currencyService" class="sepm.dsa.service.CurrencyServiceImpl">
@@ -214,11 +225,15 @@
 
     <bean id="traderService" class="sepm.dsa.service.TraderServiceImpl">
         <property name="traderDao" ref="traderDao"/>
+        <property name="movingTraderDao" ref="movingTraderDao"/>
         <property name="offerDao" ref="offerDao" />
         <property name="productService" ref="productService"/>
         <property name="pathService" ref="pathService"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
+        <property name="timeService" ref="timeService" />
+        <property name="dealService" ref="dealService" />
+        <property name="currencyService" ref="currencyService"/>
     </bean>
 
     <bean id="pathService" class="sepm.dsa.service.path.PathServiceDijkstraJGraphImpl">
@@ -233,6 +248,12 @@
 
     <bean id="dealService" class="sepm.dsa.service.DealServiceImpl">
         <property name="dealDao" ref="dealDao"/>
+        <property name="timeService" ref="timeService"/>
+    </bean>
+
+    <bean id="currencySetService" class="sepm.dsa.service.CurrencySetServiceImpl">
+        <property name="currencySetDao" ref="currencySetDao"/>
+        <property name="currencyService" ref="currencyService"/>
     </bean>
 
     <bean id="timeService" class="sepm.dsa.service.TimeServiceImpl">
@@ -240,6 +261,12 @@
         <property name="offerDao" ref="offerDao" />
         <property name="locationService" ref="locationService" />
         <property name="tavernService" ref="tavernService" />
+        <property name="saveCancelService" ref="saveCancelService"/>
+        <property name="mapService" ref="mapService"/>
+    </bean>
+
+    <bean id="traderPdfService" class="sepm.dsa.service.pdf.TraderPdfServiceImpl">
+        <property name="traderService" ref="traderService"/>
     </bean>
 
     <!-- GUI DI -->
@@ -251,6 +278,7 @@
         <property name="tavernService" ref="tavernService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
         <property name="locationConnectionService" ref="locationConnectionService"/>
+        <property name="traderPdfService" ref="traderPdfService"/>
     </bean>
 
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
@@ -273,6 +301,7 @@
         <property name="locationService" ref="locationService"/>
         <property name="regionService" ref="regionService"/>
         <property name="mapService" ref="mapService"/>
+        <property name="locationConnectionService" ref="locationConnectionService"/>
         <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
@@ -288,6 +317,7 @@
         <property name="productCategoryService" ref="productCategoryService"/>
         <property name="regionService" ref="regionService"/>
         <property name="saveCancelService" ref="saveCancelService" />
+        <property name="unitService" ref="unitService" />
     </bean>
 
     <bean id="ProductCategoryListController" class="sepm.dsa.gui.ProductCategoryListController">
@@ -322,15 +352,45 @@
         <property name="traderCategoryService" ref="traderCategoryService"/>
         <property name="locationService" ref="locationService"/>
         <property name="saveCancelService" ref="saveCancelService" />
+        <property name="timeService" ref="timeService"/>
     </bean>
     <bean id="traderDetails" class="sepm.dsa.gui.TraderDetailsController">
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>
+        <property name="timeService" ref="timeService"/>
+        <property name="dealService" ref="dealService"/>
+        <property name="currencySetService" ref="currencySetService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
+    </bean>
+    <bean id="traderSellToPlayer" class="sepm.dsa.gui.TradeSellToPlayerController">
+        <property name="traderService" ref="traderService"/>
+        <property name="unitService" ref="unitService"/>
+        <property name="currencyService" ref="currencyService"/>
+        <property name="currencySetService" ref="currencySetService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
+        <property name="playerService" ref="playerService"/>
+    </bean>
+    <bean id="traderBuyFromPlayer" class="sepm.dsa.gui.TradeBuyFromPlayerController">
+        <property name="traderService" ref="traderService"/>
+        <property name="unitService" ref="unitService"/>
+        <property name="currencyService" ref="currencyService"/>
+        <property name="currencySetService" ref="currencySetService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
+        <property name="playerService" ref="playerService"/>
+        <property name="productService" ref="productService"/>
+    </bean>
+    <bean id="calculatePrice" class="sepm.dsa.gui.CalculatePriceController">
+        <property name="loader" ref="loader"/>
+        <property name="locationService" ref="locationService"/>
+        <property name="productService" ref="productService"/>
+        <property name="traderService" ref="traderService"/>
+        <property name="currencySetService" ref="currencySetService"/>
     </bean>
     <bean id="editTavern" class="sepm.dsa.gui.EditTavernController">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
         <property name="tavernService" ref="tavernService"/>
+        <property name="currencySetService" ref="currencySetService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
     <bean id="tavernList" class="sepm.dsa.gui.TavernListController">
@@ -367,6 +427,7 @@
         <property name="playerService" ref="playerService"/>
         <property name="dealService" ref="dealService"/>
         <property name="timeService" ref="timeService"/>
+        <property name="currencySetService" ref="currencySetService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
     <bean id="currencyList" class="sepm.dsa.gui.CurrencyListController">
@@ -390,6 +451,10 @@
     <bean id="forwardDate" class="sepm.dsa.gui.ForwardDateController">
         <property name="loader" ref="loader"/>
         <property name="timeService" ref="timeService"/>
+    </bean>
+    <bean id="movingTraderList" class="sepm.dsa.gui.MovingTraderListController">
+        <property name="loader" ref="loader"/>
+        <property name="traderService" ref="traderService"/>
     </bean>
     <!-- Transaction -->
     <tx:annotation-driven transaction-manager="transactionManager"/>

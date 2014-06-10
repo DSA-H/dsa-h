@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="458.0" prefWidth="334.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.TradeSellToPlayerController">
+   <children>
+      <Label layoutX="116.0" layoutY="85.0" text="Ware:" />
+      <Label layoutX="108.0" layoutY="148.0" text="Einheit:" />
+      <Label layoutX="106.0" layoutY="115.0" text="Menge:" />
+      <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="411.0" prefHeight="33.0" prefWidth="315.0" spacing="10.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="26.0" prefWidth="80.0" text="Abbrechen">
+               <HBox.margin>
+                  <Insets bottom="4.0" right="3.0" />
+               </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#onSavePressed" prefHeight="26.0" prefWidth="135.0" text="Kauf durchführen">
+               <HBox.margin>
+                  <Insets bottom="4.0" right="3.0" />
+               </HBox.margin></Button>
+         </children>
+      </HBox>
+      <Label alignment="CENTER" layoutX="7.0" layoutY="14.0" prefHeight="27.0" prefWidth="330.0" text="Kauf von Waren" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="selectedUnit" layoutX="172.0" layoutY="143.0" prefWidth="150.0" />
+      <Label fx:id="selectedOffer" layoutX="172.0" layoutY="80.0" prefHeight="26.0" prefWidth="150.0" text="gewählte Ware" />
+      <TextField fx:id="selectedAmount" layoutX="172.0" layoutY="110.0" />
+      <Label layoutX="119.0" layoutY="212.0" text="Preis:" />
+      <ChoiceBox fx:id="selectedCurrency" layoutX="172.0" layoutY="175.0" prefWidth="150.0" />
+      <Label layoutX="95.0" layoutY="180.0" text="Währung:" />
+      <Label layoutX="108.0" layoutY="57.0" text="Spieler:" />
+      <ChoiceBox fx:id="selectedPlayer" layoutX="172.0" layoutY="52.0" prefWidth="150.0" />
+      <TextField fx:id="selectedDiscount" layoutX="173.0" layoutY="360.0" prefHeight="25.0" prefWidth="40.0" />
+      <Button layoutX="24.0" layoutY="360.0" mnemonicParsing="false" onAction="#calculateDiscount" prefHeight="26.0" prefWidth="122.0" text="Rabatt vorschlagen" />
+      <TextField fx:id="tf_CurrencyAmount5" layoutX="173.0" layoutY="328.0" prefHeight="25.0" prefWidth="59.0" />
+      <Label fx:id="lbl_CurrencyAmount5" layoutX="234.0" layoutY="332.0" text="Currency5" />
+      <TextField fx:id="tf_CurrencyAmount3" layoutX="173.0" layoutY="270.0" prefHeight="25.0" prefWidth="59.0" />
+      <Label fx:id="lbl_CurrencyAmount3" layoutX="234.0" layoutY="274.0" text="Currency3" />
+      <Label fx:id="lbl_CurrencyAmount4" layoutX="234.0" layoutY="303.0" text="Currency4" />
+      <TextField fx:id="tf_CurrencyAmount4" layoutX="173.0" layoutY="299.0" prefHeight="25.0" prefWidth="59.0" />
+      <TextField fx:id="tf_CurrencyAmount2" layoutX="173.0" layoutY="241.0" prefHeight="25.0" prefWidth="59.0" />
+      <Label fx:id="lbl_CurrencyAmount2" layoutX="234.0" layoutY="245.0" text="Currency2" />
+      <Label fx:id="lbl_CurrencyAmount1" layoutX="234.0" layoutY="216.0" text="Currency1" />
+      <TextField fx:id="tf_CurrencyAmount1" layoutX="173.0" layoutY="212.0" prefHeight="25.0" prefWidth="59.0" />
+      <Label layoutX="218.0" layoutY="365.0" text="\%" />
+      <Button layoutX="243.0" layoutY="360.0" mnemonicParsing="false" onAction="#onShowReducedPriceClicked" text="zeige Preis" />
+   </children>
+</Pane>

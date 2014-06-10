@@ -7,4 +7,11 @@
         <![CDATA[from Unit ORDER BY id ASC]]>
     </query>
 
+    <query name="Unit.findAllByType">
+        <![CDATA[   FROM Unit
+                    WHERE unitType.id = :unitTypeId
+                    ORDER BY id asc]]>
+    </query>
+
+
 </hibernate-mapping>

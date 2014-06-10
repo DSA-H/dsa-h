@@ -7,16 +7,21 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.dao.MovingTraderDao;
 import sepm.dsa.dao.OfferDao;
 import sepm.dsa.dao.TraderDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
+import sepm.dsa.model.Currency;
 import sepm.dsa.service.path.NoPathException;
 import sepm.dsa.service.path.PathService;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 public class TraderServiceImpl implements TraderService {
@@ -24,11 +29,17 @@ public class TraderServiceImpl implements TraderService {
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private TraderDao traderDao;
+	private MovingTraderDao movingTraderDao;
     private ProductService productService;
     private PathService<RegionBorder> pathService;
     private RegionService regionService;
     private RegionBorderService regionBorderService;
+    private TimeService timeService;
+    private DealService dealService;
+    private CurrencyService currencyService;
     private OfferDao offerDao;
+
+    private static final Double EPSILON = 1E-5;
 
 	private SessionFactory sessionFactory;
 
@@ -36,6 +47,9 @@ public class TraderServiceImpl implements TraderService {
     public Trader get(int id) {
         log.debug("calling get(" + id + ")");
         Trader result = traderDao.get(id);
+		if (result instanceof MovingTrader) {
+			result = movingTraderDao.get(id);
+		}
         log.trace("returning " + result);
         return result;
     }
@@ -48,10 +62,15 @@ public class TraderServiceImpl implements TraderService {
     @Override
     @Transactional(readOnly = false)
     public Trader add(Trader t) {
-        log.debug("calling addConnection(" + t + ")");
+        log.debug("calling addTrader(" + t + ")");
         validate(t);
-        Trader trader = traderDao.add(t);
-        List<Offer> offers = calculateOffers(t);
+	    Trader trader;
+	    if (t instanceof MovingTrader) {
+		    trader = movingTraderDao.add((MovingTrader) t);
+	    } else {
+		    trader = traderDao.add(t);
+	    }
+		List<Offer> offers = calculateOffers(t);
         offerDao.addList(offers);
         trader.setOffers(new HashSet<>(offers));
 
@@ -63,6 +82,9 @@ public class TraderServiceImpl implements TraderService {
     public Trader update(Trader t) {
         log.debug("calling update(" + t + ")");
         validate(t);
+	    if (t instanceof MovingTrader) {
+		    return movingTraderDao.update((MovingTrader) t);
+	    }
         return traderDao.update(t);
     }
 
@@ -70,45 +92,243 @@ public class TraderServiceImpl implements TraderService {
     @Transactional(readOnly = false)
     public void remove(Trader t) {
         log.debug("calling removeConnection(" + t + ")");
+	    if (t instanceof MovingTrader) {
+		    movingTraderDao.remove((MovingTrader) t);
+	    }
         traderDao.remove(t);
     }
 
     @Override
     public List<Trader> getAll() {
         log.debug("calling getAll()");
-        List<Trader> result = traderDao.getAll();
-        log.trace("returning " + result);
-        return result;
+	    List<Trader> traders = traderDao.getAll();
+	    List<MovingTrader> movingTraders = movingTraderDao.getAll();
+	    List<Trader> result = new ArrayList<>();
+	    for (Trader t : traders) {
+		    if (!(t instanceof MovingTrader)) {
+			    result.add(t);
+		    }
+	    }
+	    result.addAll(movingTraders);
+	    log.trace("returning " + result);
+	    return result;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public Trader recalculateOffers(Trader t) {
+        log.debug("calling addConnection(" + t + ")");
+        Set<Offer> oldOffers = t.getOffers();
+        Offer[] newOfferList = new Offer[oldOffers.size()];
+
+        int i = 0;
+        for(Offer o : oldOffers){
+            newOfferList[i] = o;
+            i++;
+        }
+        for(Offer o: newOfferList){
+            offerDao.remove(o);
+        }
+
+        List<Offer> offers = calculateOffers(t);
+        offerDao.addList(offers);
+        t.setOffers(new HashSet<>(offers));
+
+        return t;
     }
 
     @Override
     public List<MovingTrader> getAllMovingTraders() {
         log.debug("calling getAllMovingTraders()");
-        List<Trader> traders = traderDao.getAll();
-        List<MovingTrader> result = new ArrayList<>();
-        for(Trader trader : traders) {
-            if(trader instanceof MovingTrader) {
-                result.add((MovingTrader)trader);
-            }
-        }
-        log.trace("returning " + result);
-        return result;
+	    return movingTraderDao.getAll();
     }
 
     @Override
     public List<Trader> getAllForLocation(Location location) {
         log.debug("calling getAllForLocation()");
-        List<Trader> result = traderDao.getAllByLocation(location);
-        log.trace("returning " + result);
-        return result;
+        List<Trader> traders = traderDao.getAllByLocation(location);
+	    List<MovingTrader> movingTraders = movingTraderDao.getAllByLocation(location);
+	    List<Trader> result = new ArrayList<>();
+	    for (Trader t : traders) {
+		    if (!(t instanceof MovingTrader)) {
+			    result.add(t);
+		    }
+	    }
+	    result.addAll(movingTraders);
+	    log.trace("returning " + result);
+	    return result;
     }
 
     @Override
     public List<Trader> getAllByCategory(TraderCategory traderCategory) {
         log.debug("calling getAllByCategory()");
-        List<Trader> result = traderDao.getAllByCategory(traderCategory);
-        log.trace("returning " + result);
+	    List<Trader> traders = traderDao.getAllByCategory(traderCategory);
+	    List<MovingTrader> movingTraders = movingTraderDao.getAllByCategory(traderCategory);
+	    List<Trader> result = new ArrayList<>();
+	    for (Trader t : traders) {
+		    if (!(t instanceof MovingTrader)) {
+			    result.add(t);
+		    }
+	    }
+	    result.addAll(movingTraders);
+	    log.trace("returning " + result);
+	    return result;
+    }
+
+    @Override
+    public Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, List<CurrencyAmount> totalPrice, Integer discount) {
+        Integer baseValuePrice = currencyService.exchangeToBaseRate(totalPrice);
+        return sellToPlayer(trader, player, product, productQuality, unit, amount, baseValuePrice, discount);
+    }
+
+    @Override
+    public Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, List<CurrencyAmount> totalPrice) {
+        Integer baseValuePrice = currencyService.exchangeToBaseRate(totalPrice);
+        return buyFromPlayer(trader, player, product, productQuality, unit, amount, baseValuePrice);
+    }
+
+    //     * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
+//     *      or the amount is greater than the trader offers <br />
+//     *      or unit does does not match the product unit <br />
+//     *      or totalPrice is negative
+    @Override
+    public Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, Integer totalPrice, Integer discount) {
+        // TODO discuss Currency question with jotschi
+
+        Offer offer = null;
+        Set<Offer> traderOffers = trader.getOffers(); // get from dao
+        for (Offer o : traderOffers) {
+            if (o.getProduct().equals(product) && o.getQuality().equals(productQuality)) {
+                offer = o;
+                break;
+            }
+        }
+        if (offer == null) {
+            throw new DSAValidationException("Der Händler hat die Ware in der gewünschten Qualität nicht.");
+        }
+
+        Double offerAmountDifference = unit.exchange(productAmount.doubleValue(), product.getUnit());
+        Double remainingAmount = offer.getAmount() - offerAmountDifference;
+        log.info("remaing amount would be " + remainingAmount);
+        if (remainingAmount < 0) {
+            throw new DSAValidationException("Der Händler hat nicht genug Waren dieser Art in dieser Qualitätsstufe");
+        }
+
+        if (totalPrice.doubleValue() < 0) {
+            throw new DSAValidationException("Der Preis darf nicht negativ sein");
+        }
+
+        if (!unit.getUnitType().equals(offer.getProduct().getUnit().getUnitType())) {     // offer needs unit?
+            throw new DSAValidationException("Einheit der Ware " + product.getUnit().getUnitType().getName() + " passt nicht mit " +
+                "angegebener Einheit " + unit.getUnitType().getName() + " zusammen.");
+        }
+
+//        Integer priceInBaseRate = currencyService.exchangeToBaseRate(currency, totalPrice);
+        Integer priceInBaseRate = totalPrice;
+
+        Deal newDeal = new Deal();
+        newDeal.setAmount(productAmount);
+        newDeal.setDate(timeService.getCurrentDate());
+        newDeal.setLocationName(trader.getLocation().getName());
+        newDeal.setPlayer(player);
+        newDeal.setPrice(priceInBaseRate);   // Integer
+        newDeal.setDiscount(discount);
+        newDeal.setProduct(product);
+        newDeal.setProductName(product.getName());
+        newDeal.setPurchase(true);
+        newDeal.setquality(productQuality);
+        newDeal.setTrader(trader);
+        newDeal.setUnit(unit);
+        validateDeal(newDeal);
+
+        Deal result = dealService.add(newDeal);
+
+        offer.addAmount(-offerAmountDifference);
+        if (offer.isEmpty()) {
+            offerDao.remove(offer);
+        } else {
+            offerDao.update(offer);
+        }
+
         return result;
+    }
+
+    @Override
+    public Integer suggesstDiscount(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount) {
+
+        long lookDaysBackwards = 365L;    // consider all deals between player and trader in the last year
+        List<Deal> deals = dealService.getAllBetweenPlayerAndTraderLastXDays(player, trader, lookDaysBackwards);
+
+        // TODO some logic that decides about the discount value
+        return deals.size();
+    }
+
+    @Override
+    public Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, Integer totalPrice) {
+
+        // TODO discuss Currency question with jotschi
+
+        Offer offer = null;
+        Set<Offer> traderOffers = trader.getOffers(); // get from dao
+        for (Offer o : traderOffers) {
+            if (o.getProduct().equals(product) && o.getQuality().equals(productQuality)) {
+                offer = o;
+                break;
+            }
+        }
+
+//        TODO Jotschi: Der Haendler hat bekommt ja normalerweise immer ein volles Sortiment wenn Zeit vorwaerts gestellt wird
+//        TODO          wenn jetzt ein Spieler etwas verkaufen will, muss er zuerst was vom Haendler kaufen, sonst hat dieser keinen Platz. Bitte klaeren mit Michael
+        Double offerAmountDifference = unit.exchange(productAmount.doubleValue(), product.getUnit());
+//        double newUsedspace = trader.usedSpace() + offerAmountDifference;
+//        if (newUsedspace > trader.getSize()) {
+//            throw new DSAValidationException("Der Händler kann so viele Waren nicht besitzen");
+//        }
+
+        if (totalPrice.doubleValue() < 0) {
+            throw new DSAValidationException("Der Preis darf nicht negativ sein");
+        }
+
+        if (!unit.getUnitType().equals(product.getUnit().getUnitType())) {     // offer needs unit?
+            throw new DSAValidationException("Einheit der Ware " + product.getUnit().getUnitType().getName() + " passt nicht mit " +
+                    "angegebener Einheit " + unit.getUnitType().getName() + " zusammen.");
+        }
+
+//        Integer priceInBaseRate = currencyService.exchangeToBaseRate(currency, totalPrice);
+        Integer priceInBaseRate = totalPrice;
+
+        Deal newDeal = new Deal();
+        newDeal.setAmount(productAmount);
+        newDeal.setDate(timeService.getCurrentDate());
+        newDeal.setLocationName(trader.getLocation().getName());
+        newDeal.setPlayer(player);
+        newDeal.setPrice(priceInBaseRate);   // Integer
+        newDeal.setProduct(product);
+        newDeal.setProductName(product.getName());
+        newDeal.setPurchase(false);
+        newDeal.setquality(productQuality);
+        newDeal.setTrader(trader);
+        newDeal.setUnit(unit);
+        validateDeal(newDeal);
+
+        Deal result = dealService.add(newDeal);
+
+        if (offer == null) {
+            offer = new Offer();
+            offer.setTrader(trader);
+            offer.setAmount(offerAmountDifference);
+            offer.setPricePerUnit(priceInBaseRate / productAmount);
+            offer.setProduct(product);
+            offer.setQuality(productQuality);
+            log.info("add " + offer);
+            offerDao.add(offer);
+        } else {
+            offer.addAmount(offerAmountDifference);
+            offerDao.update(offer);
+        }
+
+        return result;
+
     }
 
     /**
@@ -120,6 +340,9 @@ public class TraderServiceImpl implements TraderService {
     @Transactional(readOnly = true)
     public List<Offer> calculateOffers(Trader trader, int number) {
         log.debug("calling calculateOffers()");
+
+        // TODO Jotschi: Offer.amount changed from Integer to Double, might cause problems!
+
         List<Product> weightProducts = new ArrayList<>();
         List<Float> weights = new ArrayList<>();
         float topWeight = 0;
@@ -148,6 +371,7 @@ public class TraderServiceImpl implements TraderService {
                     weight -= x;
                 }
                 weight *= (defaultOccurence / 100f);
+                weight *= (product.getOccurence() / 100f);
 
                 topWeight += weight;
 
@@ -183,7 +407,7 @@ public class TraderServiceImpl implements TraderService {
             int amount = productAmmountMap.get(product);
 
             // random quality distribution
-            int amountQualities[] = new int[ProductQuality.values().length];
+            double amountQualities[] = new double[ProductQuality.values().length];
             if (product.getQuality()) {
                 for (int i = 0; i < amount; i++) {
                     int j = 0;
@@ -197,7 +421,8 @@ public class TraderServiceImpl implements TraderService {
                     }
                 }
             } else {
-                amountQualities[0] = amount;
+                // if no quality => all to normal
+                amountQualities[ProductQuality.NORMAL.getValue()] = amount;
             }
             // create offers
             int i = 0;
@@ -206,7 +431,7 @@ public class TraderServiceImpl implements TraderService {
                     Offer offer = new Offer();
                     offer.setTrader(trader);
                     offer.setQuality(productQuality);
-                    int price = (int) (calculatePriceForProduct(product, trader) * productQuality.getQualityPriceFactor());
+                    int price = calculatePricePerUnit(productQuality, product, trader);
                     offer.setPricePerUnit(price);
                     offer.setProduct(product);
                     offer.setAmount(amountQualities[i]);
@@ -226,6 +451,18 @@ public class TraderServiceImpl implements TraderService {
     @Override
     public List<Offer> calculateOffers(Trader trader) {
         return calculateOffers(trader, trader.getSize());
+    }
+    
+
+    /**
+     *
+     * @param productQuality
+     * @param product
+     * @param trader
+     * @return
+     */
+    public int calculatePricePerUnit(ProductQuality productQuality, Product product, Trader trader){
+        return (int) (calculatePriceForProduct(product, trader) * productQuality.getQualityPriceFactor());
     }
 
     /**
@@ -254,6 +491,39 @@ public class TraderServiceImpl implements TraderService {
         return price;
     }
 
+
+    @Override
+    public void reCalculatePriceForOffer(/*Set<Offer> offers, */Trader trader) {
+        Set<Offer> offers = trader.getOffers();
+        if (offers==null){
+            return;
+        }
+        Iterator i = offers.iterator();
+        while(i.hasNext()){
+            Offer offer = (Offer)i.next();
+            int pricePerUnit = calculatePricePerUnit(offer.getQuality(), offer.getProduct(), trader);
+            offer.setPricePerUnit(pricePerUnit);
+        }
+        trader.setOffers(offers);
+    }
+
+    @Override
+    public void reCalculatePriceForOfferIfNewPriceIsHigher(/*Set<Offer> offers, */Trader trader) {
+        Set<Offer> offers = trader.getOffers();
+        if (offers==null){
+            return;
+        }
+        Iterator i = offers.iterator();
+        while(i.hasNext()){
+            Offer offer = (Offer)i.next();
+            int pricePerUnit = calculatePricePerUnit(offer.getQuality(), offer.getProduct(), trader);
+            if (pricePerUnit > offer.getPricePerUnit()){
+                offer.setPricePerUnit(pricePerUnit);
+            }
+        }
+        trader.setOffers(offers);
+    }
+
     private List<RegionBorder> getCheapestWayBordersBetween(Set<Region> productionRegions, Region tradeRegion) throws NoPathException {
         List<RegionBorder> allBorders = regionBorderService.getAll();
         List<Region> allRegions = regionService.getAll();
@@ -267,6 +537,10 @@ public class TraderServiceImpl implements TraderService {
     public void setTraderDao(TraderDao traderDao) {
         this.traderDao = traderDao;
     }
+
+	public void setMovingTraderDao(MovingTraderDao movingTraderDao) {
+		this.movingTraderDao = movingTraderDao;
+	}
 
     public void setProductService(ProductService productService) {
         this.productService = productService;
@@ -301,6 +575,19 @@ public class TraderServiceImpl implements TraderService {
         }
     }
 
+    /**
+     * Validates a Deal
+     *
+     * @param deal must not be null
+     * @throws sepm.dsa.exceptions.DSAValidationException if location is not valid
+     */
+    private void validateDeal(Deal deal) throws DSAValidationException {
+        Set<ConstraintViolation<Deal>> violations = validator.validate(deal);
+        if (violations.size() > 0) {
+            throw new DSAValidationException("Deal ist nicht valide.", violations);
+        }
+    }
+
 	/**
 	 * Returns a list of Offers of the specified trader.
 	 *
@@ -319,4 +606,16 @@ public class TraderServiceImpl implements TraderService {
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
+
+    public void setTimeService(TimeService timeService) {
+        this.timeService = timeService;
+    }
+
+    public void setDealService(DealService dealService) {
+        this.dealService = dealService;
+    }
+
+    public void setCurrencyService(CurrencyService currencyService) {
+        this.currencyService = currencyService;
+    }
 }

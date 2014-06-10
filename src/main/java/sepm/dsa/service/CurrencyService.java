@@ -2,6 +2,7 @@ package sepm.dsa.service;
 
 import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.model.Currency;
+import sepm.dsa.model.CurrencySet;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -52,5 +53,29 @@ public interface CurrencyService {
      * @param amount amount of from {@code Currency} to be exchanged
      * @return the value / amount of the original currency expressed by / in the foreign currency
      */
-    CurrencyAmount exchange(Currency from, Currency to, BigDecimal amount);
+    CurrencyAmount exchange(Currency from, Currency to, Integer amount);
+
+    /**
+     * Exchanges / converts from one to the base rate
+     *
+     * @param from      the original Currency must not be null
+     * @param amount    amount of from {@code Currency} to be exchanged
+     * @return the value / amount of the original currency expressed by / in the base rate
+     */
+    Integer exchangeToBaseRate(Currency from, Integer amount);
+
+    /**
+     * Exchanges / converts from multiple currencies to the base rate
+     *
+     * @param currencyAmounts
+     * @return the base rate value
+     */
+    Integer exchangeToBaseRate(List<CurrencyAmount> currencyAmounts);
+
+    /**
+     * @param currencySet the currency set, must not be null
+     * @return all currencies in a specific CurrencySet
+     */
+    List<Currency> getAllByCurrencySet(CurrencySet currencySet);
+
 }

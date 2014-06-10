@@ -1,6 +1,7 @@
 package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,18 +10,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
-import sepm.dsa.model.DSADate;
-import sepm.dsa.model.Deal;
-import sepm.dsa.model.Player;
-import sepm.dsa.model.Unit;
-import sepm.dsa.service.DealService;
-import sepm.dsa.service.PlayerService;
-import sepm.dsa.service.SaveCancelService;
-import sepm.dsa.service.TimeService;
+import sepm.dsa.model.*;
+import sepm.dsa.service.*;
+import sepm.dsa.util.CurrencyFormatUtil;
+
+import java.util.List;
 
 public class EditPlayerController implements Initializable {
 
@@ -30,11 +30,13 @@ public class EditPlayerController implements Initializable {
     private PlayerService playerService;
     private DealService dealService;
     private TimeService timeService;
+    private CurrencySetService currencySetService;
 
     private SaveCancelService saveCancelService;
 
     private static Player selectedPlayer;
     private boolean isNewPlaper;
+    private CurrencySet defaultCurrencySet;
 
     @FXML
     private TextField nameField;
@@ -60,6 +62,9 @@ public class EditPlayerController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize EditPlayerController");
+
+        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+        
         //initialize table
         initialzeTableWithColums();
 
@@ -115,28 +120,61 @@ public class EditPlayerController implements Initializable {
 
     private void initialzeTableWithColums() {
 
-        //Todo relative DATE & abs date
         dateColumn.setCellValueFactory(d -> {
             DSADate date = d.getValue().getDate();
             long timestamp = d.getValue().getDate().getTimestamp();
 
             long current = timeService.getCurrentDate().getTimestamp();
 
-            //TODO date before days
             StringBuilder sb = new StringBuilder();
             sb.append("vor ").append(current - timestamp).append(" Tagen").append(" (").append(date).append(")");
             return new SimpleStringProperty(sb.toString());
         });
 
-        priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
-        productColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("productName"));
+//        priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
+        priceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> r) {
+                if (r.getValue() != null) {
+                    Deal deal = r.getValue();
+                    List<CurrencyAmount> ca = currencySetService.toCurrencySet(defaultCurrencySet, deal.priceWithDiscount());
+                    String str = CurrencyFormatUtil.currencySetShortString(ca, ", ");
+                    return new SimpleStringProperty(str);
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
 
-        //TODO check unit and amount
+        productColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> d) {
+                if (d.getValue() != null) {
+                    Deal deal = d.getValue();
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(deal.getProductName());
+                    if (deal.getQuality() != null) {
+                        sb.append(" (" + d.getValue().getQuality().getName() + ")");
+                    }
+                    return new SimpleStringProperty(sb.toString());
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
+
         amountColumn.setCellValueFactory(d -> {
             Unit unit = d.getValue().getUnit();
             Integer amount = d.getValue().getAmount();
+            boolean purchase = d.getValue().isPurchase();
 
             StringBuilder sb = new StringBuilder();
+            if (purchase) {
+                sb.append("(+) ");
+            } else {
+                sb.append("(-) ");
+            }
+
             sb.append(amount).append(" ").append(unit.getShortName());
             return new SimpleStringProperty(sb.toString());
         });
@@ -165,5 +203,9 @@ public class EditPlayerController implements Initializable {
 
     public void setTimeService(TimeService timeService) {
         this.timeService = timeService;
+    }
+
+    public void setCurrencySetService(CurrencySetService currencySetService) {
+        this.currencySetService = currencySetService;
     }
 }

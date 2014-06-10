@@ -65,7 +65,7 @@ public class Trader implements BaseModel {
 
 //    @OneToMany(cascade = CascadeType.ALL)// LAZY, otherwise offer will not be delted cascading!
 //    @JoinColumn(nullable = false)
-    @OneToMany(mappedBy = "trader", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "trader", cascade = { CascadeType.REMOVE, CascadeType.REFRESH })
     private Set<Offer> offers = new HashSet<>();
 
     @OneToMany(mappedBy = "trader")
@@ -181,6 +181,14 @@ public class Trader implements BaseModel {
 
     public void setDeals(Set<Deal> deals) {
         this.deals = deals;
+    }
+
+    public double usedSpace() {
+        double result = 0;
+        for (Offer o : offers) {
+            result += o.getAmount();
+        }
+        return result;
     }
 
     @Override

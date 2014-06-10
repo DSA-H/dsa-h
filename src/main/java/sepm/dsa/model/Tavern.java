@@ -8,62 +8,65 @@ import javax.validation.constraints.Size;
 @Table(name = "taverns")
 public class Tavern implements BaseModel {
 
-    private static final long serialVersionUID = -2259554288598225744L;
+	private static final long serialVersionUID = -2259554288598225744L;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(nullable = false, unique = true)
-    private Integer id;
+	private Integer id;
 
-    @NotNull
+	@NotNull
 	@Size(min = 1, max = 100)
 	@Column(nullable = false, length = 100)
-    private String name;
+	private String name;
 
 	@NotNull
 	@Column(nullable = false)
-    private Integer xPos;
+	private Integer xPos;
 
 	@NotNull
 	@Column(nullable = false)
-    private Integer yPos;
+	private Integer yPos;
 
 	@NotNull
 	@Column(nullable = false)
-	private Integer usage;
+	private Integer usage;  // in beds
 
-    //TODO: free beds, comment, ...
-    @NotNull
-    @Column(nullable = false)
-    private Integer beds;
+	@NotNull
+	@Column(nullable = false)
+	private Integer beds;
 
-    @Column
-    private String comment;
-	// @TODO ??
-//    private ??? overnightStayPrice;
-//    private DSADate onDate;
+	@NotNull
+	@Column(nullable = false)
+	private Integer price;
 
+	@NotNull
+	@Column(nullable = false)
+	private Integer quality;
 
-    public Integer getBeds() {
-        return beds;
-    }
+	@Column
+	private String comment;
 
-    public void setBeds(Integer beds) {
-        this.beds = beds;
-    }
+	public Integer getBeds() {
+		return beds;
+	}
 
-    public String getComment() {
-        return comment;
-    }
+	public void setBeds(Integer beds) {
+		this.beds = beds;
+	}
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
+	public String getComment() {
+		return comment;
+	}
 
-    @NotNull
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	@NotNull
 	@ManyToOne
 	@JoinColumn(nullable = false)
-    private Location location;
+	private Location location;
 
 	public Integer getId() {
 		return id;
@@ -112,26 +115,46 @@ public class Tavern implements BaseModel {
 	public void setLocation(Location location) {
 		this.location = location;
 	}
-	
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        Tavern tavern = (Tavern) o;
+	public Integer getPrice() {
+		return price;
+	}
 
-        if (id != null ? !id.equals(tavern.id) : tavern.id != null) return false;
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
 
-        return true;
-    }
+	public ProductQuality getQuality() {
+		return ProductQuality.parse(quality);
+	}
 
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
+	public void setQuality(ProductQuality quality) {
+		this.quality = quality.getValue();
+	}
 
-    @Override
-    public String toString() {
-        return "Wirtshaus " + name;
-    }
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Tavern tavern = (Tavern) o;
+
+		if (id != null ? !id.equals(tavern.id) : tavern.id != null) return false;
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		return id != null ? id.hashCode() : 0;
+	}
+
+	@Override
+	public String toString() {
+		return "Wirtshaus " + name;
+	}
 }
