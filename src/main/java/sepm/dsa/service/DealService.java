@@ -1,6 +1,8 @@
 package sepm.dsa.service;
 
 import sepm.dsa.model.Deal;
+import sepm.dsa.model.Player;
+import sepm.dsa.model.Trader;
 
 import java.util.List;
 
@@ -41,4 +43,14 @@ public interface DealService {
      * @return all entries, might be an empty list (not null)
      */
     List<Deal> getAll();
+
+    /**
+     * @param player
+     * @param trader
+     * @param days
+     * @return all deals between the player and the trader in the last :days days
+     */
+    List<Deal> getAllBetweenPlayerAndTraderLastXDays(Player player, Trader trader, long days);
+
+
 }

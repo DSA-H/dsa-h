@@ -9,12 +9,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
+import sepm.dsa.service.DealService;
+import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TimeService;
 import sepm.dsa.service.TraderService;
 
@@ -29,8 +34,9 @@ public class TraderDetailsController implements Initializable {
     private TraderService traderService;
 
     private Trader trader;
-    private Offer selectedOffer;
     private TimeService timeService;
+    private DealService dealService;
+    private SaveCancelService saveCancelService;
 
 
     @FXML
@@ -77,11 +83,11 @@ public class TraderDetailsController implements Initializable {
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize TraderDetailsController");
 
-        amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        //init deals table
         initialzeTableWithColums();
 
-
-
+        //init offer table
+        amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         productColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Offer, String> r) {
@@ -114,6 +120,7 @@ public class TraderDetailsController implements Initializable {
             sb.append("vor ").append(current - timestamp).append(" Tagen").append(" (").append(date).append(")");
             return new SimpleStringProperty(sb.toString());
         });
+//        dateColumn.setSortType(TableColumn.SortType.DESCENDING);
 
         priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
 
@@ -131,8 +138,15 @@ public class TraderDetailsController implements Initializable {
         amountDealColumn.setCellValueFactory(d -> {
             Unit unit = d.getValue().getUnit();
             Integer amount = d.getValue().getAmount();
+            boolean purchase = d.getValue().isPurchase();
 
             StringBuilder sb = new StringBuilder();
+
+            if (purchase) {
+                sb.append("(+) ");
+            } else {
+                sb.append("(-) ");
+            }
             sb.append(amount).append(" ").append(unit.getShortName());
             return new SimpleStringProperty(sb.toString());
         });
@@ -175,15 +189,61 @@ public class TraderDetailsController implements Initializable {
     }
 
     @FXML
+    private void onDeleteDealClicked() {
+        log.debug("called onDeleteDealClicked");
+        Deal selectedDeal = dealsTable.getSelectionModel().getSelectedItem();
+        if (selectedDeal == null) {
+            throw new DSAValidationException("Bitte einen Deal zum Löschen auswählen");
+        }
+        dealService.remove(selectedDeal);
+        saveCancelService.save();
+        refreshView();
+    }
+
+
+    @FXML
     private void onTradePressed() {
         log.debug("called onTradePressed");
         //trader wants to sell stuff to the player
+        //TODO as popover
+        TradeSellToPlayerController.setTrader(trader);
+        Offer selectedItem = offerTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            TradeSellToPlayerController.setOffer(selectedItem);
+            Stage dialog = new Stage(StageStyle.DECORATED);
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.initOwner(dealsTable.getParent().getScene().getWindow());
+            Parent scene = (Parent) loader.load("/gui/tradeSell.fxml");
+
+            dialog.setTitle("Kauf von Waren");
+            dialog.setScene(new Scene(scene, 330, 310));
+            dialog.setResizable(false);
+            dialog.showAndWait();
+            checkFocus();
+            refreshView();
+        } else {
+            throw new DSAValidationException("Kein Angebot ausgewählt");
+        }
     }
 
     @FXML
     private void onTradeBuyPressed() {
         log.debug("called onTradeBuyPressed");
         //Player wants to sell stuff to the trader
+        //TODO as popover
+        TradeBuyFromPlayerController.setTrader(trader);
+        Stage dialog = new Stage(StageStyle.DECORATED);
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initOwner(dealsTable.getParent().getScene().getWindow());
+        Parent scene = (Parent) loader.load("/gui/traderBuy.fxml");
+
+        dialog.setTitle("Verkauf von Waren an Händler");
+        dialog.setScene(new Scene(scene, 565, 355));
+        dialog.setResizable(false);
+
+        dialog.showAndWait();
+        checkFocus();
+        refreshView();
     }
 
     @FXML
@@ -196,14 +256,12 @@ public class TraderDetailsController implements Initializable {
         }
     }
 
-    public void setTrader(Trader trader) {
-        this.trader = trader;
-
+    private void refreshView() {
         nameLabel.setText(trader.getName());
         categoryLabel.setText(trader.getCategory().getName());
         commentArea.setText(trader.getComment());
 
-        List<Offer> offers = new ArrayList<>(traderService.getOffers(trader));
+        List<Offer> offers = new ArrayList<>(trader.getOffers());//traderService.getOffers(trader));
         offers = offers.stream().sorted((o1, o2) -> {
             int result = o1.getProduct().getId() - o2.getProduct().getId();
             if (result != 0) {
@@ -213,8 +271,18 @@ public class TraderDetailsController implements Initializable {
             return result;
         }).collect(Collectors.toList());
 
+        offerTable.getItems().clear();
         offerTable.setItems(FXCollections.observableArrayList(offers));
-	    dealsTable.setItems(FXCollections.observableArrayList(trader.getDeals()));
+        dealsTable.setItems(FXCollections.observableArrayList(trader.getDeals()));
+    }
+
+    public void setDealService(DealService dealService) {
+        this.dealService = dealService;
+    }
+
+    public void setTrader(Trader trader) {
+        this.trader = trader;
+        refreshView(); // in setter not very beautiful, do we need this here?
     }
 
     public void setLoader(SpringFxmlLoader loader) {
@@ -227,5 +295,9 @@ public class TraderDetailsController implements Initializable {
 
     public void setTimeService(TimeService timeService) {
         this.timeService = timeService;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

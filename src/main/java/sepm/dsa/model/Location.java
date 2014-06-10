@@ -28,6 +28,7 @@ public class Location implements BaseModel, PathNode {
 
     @ManyToOne
     @JoinColumn(name = "region", nullable = false)
+    @NotNull
     private Region region;
 
     @NotNull

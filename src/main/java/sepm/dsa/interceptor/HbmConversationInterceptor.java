@@ -23,16 +23,16 @@ public class HbmConversationInterceptor implements MethodInterceptor {
             args += (arg == null ? "null" : arg.toString()) + "; ";
         }
         args += "]";
-        log.info("invoke method '" + invocation.getMethod().toGenericString() + "' " + args);
+        log.debug("invoke method '" + invocation.getMethod().toGenericString() + "' " + args);
 
         Session currentSession = null;
 
         if (disconnectedSession == null) {
-            log.info("OPEN new session");
+            log.debug("OPEN new session");
             currentSession = sessionFactory.openSession();
             currentSession.setFlushMode(FlushMode.MANUAL);
         } else {
-            log.info("REUSING session");
+            log.debug("REUSING session");
             currentSession = disconnectedSession;
         }
 
@@ -51,7 +51,7 @@ public class HbmConversationInterceptor implements MethodInterceptor {
             currentSession.getTransaction().commit();
             disconnectedSession = currentSession;
         } else if (invocation.getMethod().getName().equals("cancel")) {
-            log.info("cancel => rollback");
+            log.debug("cancel => rollback");
             currentSession.getTransaction().rollback();
             disconnectedSession = currentSession;
         } else if (invocation.getMethod().getName().equals("closeSession")) {
@@ -59,7 +59,7 @@ public class HbmConversationInterceptor implements MethodInterceptor {
             currentSession.close();
             disconnectedSession = null;
         } else {
-            log.info("just continue");
+            log.debug("just continue");
             currentSession.getTransaction().commit();
             disconnectedSession = currentSession;
         }
