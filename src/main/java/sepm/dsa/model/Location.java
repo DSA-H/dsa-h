@@ -43,9 +43,6 @@ public class Location implements BaseModel, PathNode {
     @Column(nullable = false)
     private Integer sizeId;
 
-    @Column(nullable = true)
-    private String planFileName;    //TODO not needed
-
     @NotNull
     @Column(nullable = false)
     private Integer height;
@@ -63,6 +60,9 @@ public class Location implements BaseModel, PathNode {
     @Size(max = 1000)
     @Column(nullable = true, length = 1000)
     private String comment;
+
+	@Column(nullable = true)
+	private Double iconSize;
 
     @OneToMany(mappedBy = "pk.location1", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<LocationConnection> connections1 = new HashSet<>();
@@ -139,15 +139,15 @@ public class Location implements BaseModel, PathNode {
         }
     }
 
-    public String getPlanFileName() {
-        return planFileName;
-    }
+	public Double getIconSize() {
+		return iconSize;
+	}
 
-    public void setPlanFileName(String planFileName) {
-        this.planFileName = planFileName;
-    }
+	public void setIconSize(Double iconSize) {
+		this.iconSize = iconSize;
+	}
 
-    public Integer getHeight() {
+	public Integer getHeight() {
         return height;
     }
 
