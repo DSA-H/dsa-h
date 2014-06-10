@@ -75,18 +75,18 @@ public class CurrencyCalculateController implements Initializable {
     @FXML
     private void onCalculatePressed() {
         log.debug("onCalculateClicked - calculate Currency");
-        BigDecimal amountToExchange;
+        Integer amountToExchange;
         try {
-            amountToExchange = new BigDecimal(textFirst.getText());
+            amountToExchange = Integer.parseInt(textFirst.getText());
 
         } catch (NumberFormatException ex) {
             throw new DSAValidationException("Menge von zu Wechselndem Geld muss eine Zahl sein!");
         }
 
         CurrencyAmount exchangeResult = currencyService.exchange(choiceFirst.getSelectionModel().getSelectedItem(), choiceSecond.getSelectionModel().getSelectedItem(), amountToExchange);
-        BigDecimal exchangeAmount = exchangeResult.getAmount();
+        Integer exchangeAmount = exchangeResult.getAmount();
 
-        exchangeAmount.setScale(2, BigDecimal.ROUND_DOWN);
+//        exchangeAmount.setScale(2, BigDecimal.ROUND_DOWN);
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
         df.setMinimumFractionDigits(0);

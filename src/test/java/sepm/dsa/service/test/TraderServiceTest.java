@@ -216,11 +216,12 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         Trader trader = traderService.get(1);
         Player player = playerService.get(1);
         Product product = productService.get(1);
-        ProductQuality productQuality = ProductQuality.SCHLECHT;
+        ProductQuality productQuality = ProductQuality.MANGELHAFT;
         Unit unit = product.getUnit();
         Integer amount = 5;
-        BigDecimal totalPrice = new BigDecimal(40000);
+        Integer totalPrice = 40000;
         Currency currency = currencyService.get(1);
+        Integer discount = 0;
 
         Offer offerBefore = null;
         for (Offer o : trader.getOffers()) {
@@ -234,7 +235,7 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         int dealSizeBefore = dealService.getAll().size();
         int offerSizeBefore = trader.getOffers().size();
 
-        Deal deal = traderService.sellToPlayer(trader, player, product, productQuality, unit, amount, totalPrice, currency);
+        Deal deal = traderService.sellToPlayer(trader, player, product, productQuality, unit, amount, totalPrice, discount);
         saveCancelService.save();
 
         Trader traderAfter = traderService.get(1);
@@ -249,7 +250,8 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         }
 
         assertEquals(amount, deal.getAmount());
-        assertEquals(currencyService.exchangeToBaseRate(currency, totalPrice), deal.getPrice());
+//        assertEquals(currencyService.exchangeToBaseRate(currency, totalPrice), deal.getPrice());
+        assertEquals(totalPrice, deal.getPrice());
         assertEquals(unit, deal.getUnit());
         assertEquals(true, deal.isPurchase());
         assertEquals(dealSizeBefore + 1, dealService.getAll().size());
@@ -273,13 +275,13 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         ProductQuality productQuality = ProductQuality.NORMAL;
         Unit unit = product.getUnit();
         Integer amount = 5;
-        BigDecimal totalPrice = new BigDecimal(40000);
-        Currency currency = currencyService.get(1);
+        Integer totalPrice = 40000;
+//        Currency currency = currencyService.get(3);
 
         int dealSizeBefore = dealService.getAll().size();
         int offerSizeBefore = trader.getOffers().size();
 
-        Deal deal = traderService.buyFromPlayer(trader, player, product, productQuality, unit, amount, totalPrice, currency);
+        Deal deal = traderService.buyFromPlayer(trader, player, product, productQuality, unit, amount, totalPrice);
         saveCancelService.save();
 
         Trader traderAfter = traderService.get(1);
@@ -294,7 +296,8 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         }
 
         assertEquals(amount, deal.getAmount());
-        assertEquals(currencyService.exchangeToBaseRate(currency, totalPrice), deal.getPrice());
+//        assertEquals(currencyService.exchangeToBaseRate(currency, totalPrice), deal.getPrice());
+        assertEquals(totalPrice, deal.getPrice());
         assertEquals(unit, deal.getUnit());
         assertEquals(false, deal.isPurchase());
         assertEquals(dealSizeBefore + 1, dealService.getAll().size());

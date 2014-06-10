@@ -51,6 +51,10 @@ public class MovingTrader extends Trader implements Serializable {
         this.lastMoved = lastMoved;
     }
 
+	public void setLastMoved(DSADate lastMoved) {
+		this.lastMoved = lastMoved.getTimestamp();
+	}
+
     public void setAvgStayDays(Integer avgStayDays) {
         this.avgStayDays = avgStayDays;
     }
@@ -65,6 +69,6 @@ public class MovingTrader extends Trader implements Serializable {
 
     @Override
     public String toString() {
-        return "fahrender Händler " + getName();
+        return "fahrender Händler " + getName() + " (" + getCategory() + ")";
     }
 }

@@ -36,7 +36,7 @@ public enum TownSize {
 
     @Override
     public String toString() {
-        return name() + "(" + this.getValue() + ")";
+        return name;
     }
 
     public String getName() {

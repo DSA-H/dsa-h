@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 public class CurrencyAmount {
 
     private Currency currency;
-    private BigDecimal amount;
+    private Integer amount;
 
-    public CurrencyAmount(Currency currency, BigDecimal amount) {
+    public CurrencyAmount(Currency currency, Integer amount) {
         this.currency = currency;
         this.amount = amount;
     }
@@ -17,11 +17,11 @@ public class CurrencyAmount {
     public CurrencyAmount() {
     }
 
-    public BigDecimal getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 

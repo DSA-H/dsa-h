@@ -1,6 +1,7 @@
 package sepm.dsa.service;
 
 
+import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.model.*;
 
 import java.math.BigDecimal;
@@ -138,14 +139,35 @@ public interface TraderService {
      * @param product
      * @param unit the unit of the product
      * @param amount product amount, > 0
-     * @param totalPrice total price for this deal
+     * @param totalPrice total price for this deal in base rate
+     * @param discount discount int percent [0..100]
+     * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
+     *      or the amount is greater than the trader offers <br />
+     *      or unit type does does not match the product unit type <br />
+     *      or totalPrice is negative
+     */
+    Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, Integer totalPrice, Integer discount);
+
+    /**
+     * A trader sells a product to a player. The trader's amount for this product decreases. If the amount becomes zero,
+     * then the trader's corresponding offer will be removed.
+     *
+     * @param trader
+     * @param player
+     * @param product
+     * @param unit the unit of the product
+     * @param amount product amount, > 0
+     * @param totalPrice total price for this deal in multiple currencies (e.g. deriving from a currency set)
+     * @param discount discount int percent [0..100]
+     *
+     * @return converts the total price to base rate and calls 'Deal sellToPlayer(Trader, Player, Product, ProductQuality, Unit, Integer, Integer)'
      *
      * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
      *      or the amount is greater than the trader offers <br />
      *      or unit type does does not match the product unit type <br />
      *      or totalPrice is negative
      */
-    Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency);
+    Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, List<CurrencyAmount> totalPrice, Integer discount);
 
     /**
      * A trader buys a product from a player. The trader's amount for this product increases
@@ -162,7 +184,19 @@ public interface TraderService {
      *      or unit type does does not match the product unit type <br />
      *      or totalPrice is negative
      */
-    Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, BigDecimal totalPrice, Currency currency);
+    Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, Integer totalPrice);
+
+    /**
+     * @param trader
+     * @param player
+     * @param product
+     * @param productQuality
+     * @param unit the unit of the product
+     * @param amount product amount, > 0
+     * @param totalPrice total price for this deal in multiple currencies (e.g. deriving from a currency set)
+     * @return converts the total price to base rate and calls Deal buyFromPlayer(Trader, Player, Product, ProductQuality, Unit, Integer, Integer);
+     */
+    Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, List<CurrencyAmount> totalPrice);
 
     /**
      * Suggests a discount for a Players Product purchase in percent (0 ... 0%, 20 ... 20%, etc).

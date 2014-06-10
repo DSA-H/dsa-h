@@ -210,7 +210,6 @@ public class EditLocationController implements Initializable {
         if (seletcedRegionForLocation == null) {
             throw new DSAValidationException("Wählen sie ein Gebiet aus");
         }
-        selectedLocation.setPlanFileName(backgroundMapName);
         selectedLocation.setName(name);
         selectedLocation.setComment(comment);
         selectedLocation.setWeather(weather);

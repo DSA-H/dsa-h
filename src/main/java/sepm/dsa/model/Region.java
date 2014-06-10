@@ -43,7 +43,7 @@ public class Region implements BaseModel, PathNode {
 
     @ManyToOne
     @JoinColumn(nullable = true)
-    private Currency preferredCurrency;
+    private CurrencySet preferredCurrencySet;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.region1", cascade = CascadeType.REMOVE)
     private Set<RegionBorder> borders1 = new HashSet<>();
@@ -174,12 +174,12 @@ public class Region implements BaseModel, PathNode {
         borders2.remove(regionBorder);
     }
 
-    public Currency getPreferredCurrency() {
-        return preferredCurrency;
+    public CurrencySet getPreferredCurrencySet() {
+        return preferredCurrencySet;
     }
 
-    public void setPreferredCurrency(Currency preferredCurrency) {
-        this.preferredCurrency = preferredCurrency;
+    public void setPreferredCurrencySet(CurrencySet preferredCurrencySet) {
+        this.preferredCurrencySet = preferredCurrencySet;
     }
 
     @Override

@@ -1,13 +1,13 @@
 package sepm.dsa.gui;
 
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.controlsfx.control.action.Action;
 import org.controlsfx.dialog.Dialog;
@@ -16,13 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.model.Location;
-import sepm.dsa.model.Trader;
-import sepm.dsa.model.TraderCategory;
-import sepm.dsa.service.LocationService;
-import sepm.dsa.service.SaveCancelService;
-import sepm.dsa.service.TraderCategoryService;
-import sepm.dsa.service.TraderService;
+import sepm.dsa.model.*;
+import sepm.dsa.service.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,8 +34,16 @@ public class EditTraderController implements Initializable {
     private TraderCategoryService categoryService;
     private LocationService locationService;
     private SaveCancelService saveCancelService;
+	private TimeService timeService;
 
     private boolean isNewTrader;
+	int currentType;
+	int initialType;
+	private static final int MOVINGTRADER = 0;
+	private static final int TRADER = 1;
+
+	private Point2D position;
+	private DSADate lastmoved;
 
     //TODO fill with better names
     ArrayList<String> firstNames = new ArrayList<String>(
@@ -67,6 +70,23 @@ public class EditTraderController implements Initializable {
     @FXML
     private TextArea commentArea;
 
+	@FXML
+	private Label stayTimeLabel;
+	@FXML
+	private Label citySizeLabel;
+	@FXML
+	private Label areaLabel;
+	@FXML
+	private Label daysLabel;
+	@FXML
+	private TextField stayTimeField;
+	@FXML
+	private ChoiceBox<DistancePreferrence> areaBox;
+	@FXML
+	private ChoiceBox<TownSize> citySizeBox;
+	@FXML
+	private CheckBox movingCheck;
+
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise EditTraderController");
@@ -74,8 +94,35 @@ public class EditTraderController implements Initializable {
         //init choiceBoxes
         List<TraderCategory> categories = categoryService.getAll();
         List<Location> locations = locationService.getAll();
-        categoryBox.setItems(FXCollections.observableArrayList(categories));
+	    categoryBox.setItems(FXCollections.observableArrayList(categories));
         locationBox.setItems(FXCollections.observableArrayList(locations));
+	    areaBox.setItems(FXCollections.observableArrayList(DistancePreferrence.values()));
+	    citySizeBox.setItems(FXCollections.observableArrayList(TownSize.values()));
+
+	    movingCheck.selectedProperty().addListener(new ChangeListener<Boolean>() {
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+			    if (newValue) {
+				    stayTimeField.setDisable(false);
+				    stayTimeLabel.setDisable(false);
+				    citySizeBox.setDisable(false);
+				    citySizeLabel.setDisable(false);
+				    daysLabel.setDisable(false);
+				    areaBox.setDisable(false);
+				    areaLabel.setDisable(false);
+				    currentType = MOVINGTRADER;
+			    } else {
+				    stayTimeField.setDisable(true);
+				    stayTimeLabel.setDisable(true);
+				    citySizeBox.setDisable(true);
+				    citySizeLabel.setDisable(true);
+				    daysLabel.setDisable(true);
+				    areaBox.setDisable(true);
+				    areaLabel.setDisable(true);
+				    currentType = TRADER;
+			    }
+		    }
+	    });
     }
 
     private void setUp() {
@@ -94,6 +141,14 @@ public class EditTraderController implements Initializable {
             chField.setText("" + selectedTrader.getCharisma());
             convinceField.setText("" + selectedTrader.getConvince());
             commentArea.setText(selectedTrader.getComment());
+	        movingCheck.setSelected(false);
+
+	        if (currentType == MOVINGTRADER) {
+		        stayTimeField.setText("" + ((MovingTrader) selectedTrader).getAvgStayDays());
+		        citySizeBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredTownSize());
+				areaBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredDistance());
+		        movingCheck.setSelected(true);
+	        }
         }
     }
 
@@ -114,9 +169,9 @@ public class EditTraderController implements Initializable {
         rand *= 5;
         rand2 = Math.random();
         if (rand2 < 0.5) {
-            result = (int) (14 + rand);
+            result = (int) (15 + rand);
         } else {
-            result = (int) (14 - rand);
+            result = (int) (15 - rand);
         }
         muField.setText("" + result);
 
@@ -125,9 +180,9 @@ public class EditTraderController implements Initializable {
         rand *= 5;
         rand2 = Math.random();
         if (rand2 < 0.5) {
-            result = (int) (14 + rand);
+            result = (int) (15 + rand);
         } else {
-            result = (int) (14 - rand);
+            result = (int) (15 - rand);
         }
         inField.setText("" + result);
 
@@ -136,20 +191,20 @@ public class EditTraderController implements Initializable {
         rand *= 5;
         rand2 = Math.random();
         if (rand2 < 0.5) {
-            result = (int) (14 + rand);
+            result = (int) (15 + rand);
         } else {
-            result = (int) (14 - rand);
+            result = (int) (15 - rand);
         }
         chField.setText("" + result);
 
         rand = Math.random();
         rand *= rand;
-        rand *= 4;
+        rand *= 6;
         rand2 = Math.random();
         if (rand2 < 0.5) {
-            result = (int) (4 + rand);
+            result = (int) (6 + rand);
         } else {
-            result = (int) (4 - rand);
+            result = (int) (6 - rand);
         }
         convinceField.setText("" + result);
 
@@ -159,6 +214,19 @@ public class EditTraderController implements Initializable {
     private void onSavePressed() {
         log.debug("called onSavePressed");
 
+	    if (initialType != currentType) {
+		    if (currentType == MOVINGTRADER) {
+			    if (!isNewTrader) {
+				    traderService.remove(selectedTrader);
+			    }
+			    selectedTrader = new MovingTrader();
+		    } else {
+			    if (!isNewTrader) {
+				    traderService.remove(selectedTrader);
+			    }
+				selectedTrader = new Trader();
+		    }
+	    }
 
         //name
         int count = StringUtils.countOccurrencesOf(nameField.getText(), " ");
@@ -266,10 +334,59 @@ public class EditTraderController implements Initializable {
         //comment
         selectedTrader.setComment(commentArea.getText());
 
+	    //position
+	    selectedTrader.setxPos((int) position.getX());
+	    selectedTrader.setyPos((int) position.getY());
+
+	    if (selectedTrader instanceof MovingTrader) {
+		    //avg. stayTime
+		    try {
+			    ((MovingTrader) selectedTrader).setAvgStayDays(Integer.parseInt(stayTimeField.getText()));
+		    } catch (NumberFormatException e) {
+			    Dialogs.create()
+					    .title("Ungültige Eingabe")
+					    .masthead(null)
+					    .message("Die Durchschnittliche Verweilzeit des Händler muss eine Zahl sein!")
+					    .showWarning();
+			    return;
+		    }
+
+		    //pref. townSize
+		    TownSize size = citySizeBox.getValue();
+		    if (size != null) {
+			    ((MovingTrader) selectedTrader).setPreferredTownSize(size);
+		    } else {
+			    Dialogs.create()
+					    .title("Ungültige Eingabe")
+					    .masthead(null)
+					    .message("Eine bevorzugte Stadtgröße muss ausgewählt werden!")
+					    .showWarning();
+			    return;
+		    }
+
+		    //travel area
+		    DistancePreferrence area = areaBox.getValue();
+		    if (area != null) {
+			    ((MovingTrader) selectedTrader).setPreferredDistance(area);
+		    } else {
+			    Dialogs.create()
+					    .title("Ungültige Eingabe")
+					    .masthead(null)
+					    .message("Ein Reisegebiet muss ausgewählt werden!")
+					    .showWarning();
+			    return;
+		    }
+
+		    //lastmoved
+		    DSADate date = timeService.getCurrentDate();
+		    ((MovingTrader) selectedTrader).setLastMoved(date);
+
+	    }
+
         if (isNewTrader) {
             traderService.add(selectedTrader);
         } else {
-            if (!oldLocation.equals(selectedTrader.getLocation())) {
+            if (currentType == TRADER && !oldLocation.equals(selectedTrader.getLocation())) {
                 Action response = Dialogs.create()
                         .title("Sortiment neu berechnen?")
                         .masthead(null)
@@ -294,7 +411,6 @@ public class EditTraderController implements Initializable {
                     if (response2 == links.get(0)) {
                         //Recalculate pricing
                         traderService.reCalculatePriceForOffer(/*selectedTrader.getOffers(), */selectedTrader);
-
                     } else {
                         //Recalculate pricing if new price is higher
                         traderService.reCalculatePriceForOfferIfNewPriceIsHigher(/*selectedTrader.getOffers(), */selectedTrader);
@@ -305,7 +421,11 @@ public class EditTraderController implements Initializable {
                 }
             }
 
-            traderService.update(selectedTrader);
+	        if (currentType == initialType) {
+		        traderService.update(selectedTrader);
+	        } else {
+		        traderService.add(selectedTrader);
+	        }
         }
         saveCancelService.save();
 
@@ -344,20 +464,29 @@ public class EditTraderController implements Initializable {
         if (trader == null) {
             isNewTrader = true;
             selectedTrader = new Trader();
+	        initialType = TRADER;
+	        currentType = TRADER;
         } else {
             isNewTrader = false;
+	        if (trader instanceof MovingTrader) {
+		        lastmoved = new DSADate(((MovingTrader) trader).getLastMoved());
+		        initialType = MOVINGTRADER;
+		        currentType = MOVINGTRADER;
+	        } else {
+		        initialType = TRADER;
+		        currentType = TRADER;
+	        }
         }
         setUp();
     }
 
     public void setLocation(Location location) {
         locationBox.getSelectionModel().select(location);
-        locationBox.setDisable(true);
+        locationBox.setDisable(false);
     }
 
     public void setPosition(Point2D pos) {
-        selectedTrader.setyPos((int) pos.getY());
-        selectedTrader.setxPos((int) pos.getX());
+        position = pos;
     }
 
     public void setLoader(SpringFxmlLoader loader) {
@@ -367,4 +496,8 @@ public class EditTraderController implements Initializable {
     public void setSaveCancelService(SaveCancelService saveCancelService) {
         this.saveCancelService = saveCancelService;
     }
+
+	public void setTimeService(TimeService timeService) {
+		this.timeService = timeService;
+	}
 }

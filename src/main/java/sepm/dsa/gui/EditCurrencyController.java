@@ -31,6 +31,8 @@ public class EditCurrencyController implements Initializable {
     @FXML
     private TextField nameField;
     @FXML
+    private TextField shortNameField;
+    @FXML
     private TextField valueToBaseRateField;
     @FXML
     private Button cancelButton;
@@ -44,6 +46,7 @@ public class EditCurrencyController implements Initializable {
         if (selectedCurrency != null) {
             isNewCurrency = false;
             nameField.setText(selectedCurrency.getName());
+            shortNameField.setText(selectedCurrency.getShortName());
             valueToBaseRateField.setText(selectedCurrency.getValueToBaseRate().toString());
         } else {
             isNewCurrency = true;
@@ -70,19 +73,21 @@ public class EditCurrencyController implements Initializable {
             throw new DSAValidationException("Bitte Namen eingeben");
         }
         String name = nameField.getText();
-        BigDecimal exchangeToBase;
+        String shortName = shortNameField.getText();
+        Integer exchangeToBase = null;
         try {
-            exchangeToBase = new BigDecimal(valueToBaseRateField.getText());
+            exchangeToBase = Integer.parseInt(valueToBaseRateField.getText());
 
         } catch (NumberFormatException ex) {
             throw new DSAValidationException("Wechselkurs muss eine Zahl sein!");
         }
-        if (exchangeToBase.compareTo(BigDecimal.ZERO)<=0){
+        if (exchangeToBase <= 0){
             throw new DSAValidationException("Wechselkurs muss Zahl > 0 sein");
         }
 
         selectedCurrency.setName(name);
         selectedCurrency.setValueToBaseRate(exchangeToBase);
+        selectedCurrency.setShortName(shortName);
 
         if (isNewCurrency) {
             currencyService.add(selectedCurrency);

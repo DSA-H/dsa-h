@@ -7,27 +7,33 @@
     <regions id="5" name="region5" color="1C11ED" temperatureId="0" rainfallChanceId="1"/>
     <regions id="6" name="region6" color="FFFFFF" temperatureId="4" rainfallChanceId="0"/>
     <regions id="7" name="region7" color="FFFFFF" temperatureId="4" rainfallChanceId="0"/>
-    <borders region1="1" region2="2" borderCost="80" />
-    <borders region1="1" region2="3" borderCost="120" />
-    <borders region1="3" region2="4" borderCost="130" />
-    <borders region1="5" region2="6" borderCost="160" />
-    <borders region1="4" region2="5" borderCost="40" />
-    <borders region1="4" region2="6" borderCost="110" />
-    <borders region1="1" region2="6" borderCost="60" />
+    <borders region1="1" region2="2" borderCost="80"/>
+    <borders region1="1" region2="3" borderCost="120"/>
+    <borders region1="3" region2="4" borderCost="130"/>
+    <borders region1="5" region2="6" borderCost="160"/>
+    <borders region1="4" region2="5" borderCost="40"/>
+    <borders region1="4" region2="6" borderCost="110"/>
+    <borders region1="1" region2="6" borderCost="60"/>
     <locations id="1" name="location1" REGION="1" xCoord="50" yCoord="50" sizeId="2" height="10" weatherId="1"/>
     <locations id="2" name="location2" REGION="2" xCoord="100" yCoord="100" sizeId="2" height="10" weatherId="3"/>
     <locations id="3" name="location3" REGION="2" xCoord="70" yCoord="80" sizeId="4" height="30" weatherId="2"/>
     <!-- ======================================================== -->
     <!-- don't change this!! Used for testing LocationConnections -->
-        <locations id="4" name="location4_LoConTest" REGION="2" xCoord="500" yCoord="500" sizeId="4" height="100" weatherId="1"/>
-        <locations id="5" name="location5_LoConTest" REGION="2" xCoord="500" yCoord="550" sizeId="4" height="100" weatherId="1"/>
-        <locations id="6" name="location6_LoConTest" REGION="2" xCoord="550" yCoord="500" sizeId="4" height="100" weatherId="1"/>
-        <locations id="7" name="location7_LoConTest" REGION="2" xCoord="530" yCoord="520" sizeId="0" height="50" weatherId="2"/>
-        <locations id="8" name="location8_LoConTest" REGION="3" xCoord="550" yCoord="550" sizeId="1" height="40" weatherId="4"/>
-        <locations id="9" name="location9_LoConTest" REGION="3" xCoord="700" yCoord="700" sizeId="3" height="140" weatherId="1"/>
-        <connections location1="4" location2="5" travelTime="4" />
-        <connections location1="4" location2="6" travelTime="7" />
-        <connections location1="7" location2="4" travelTime="10" />
+    <locations id="4" name="location4_LoConTest" REGION="2" xCoord="500" yCoord="500" sizeId="4" height="100"
+               weatherId="1"/>
+    <locations id="5" name="location5_LoConTest" REGION="2" xCoord="500" yCoord="550" sizeId="4" height="100"
+               weatherId="1"/>
+    <locations id="6" name="location6_LoConTest" REGION="2" xCoord="550" yCoord="500" sizeId="4" height="100"
+               weatherId="1"/>
+    <locations id="7" name="location7_LoConTest" REGION="2" xCoord="530" yCoord="520" sizeId="0" height="50"
+               weatherId="2"/>
+    <locations id="8" name="location8_LoConTest" REGION="3" xCoord="550" yCoord="550" sizeId="1" height="40"
+               weatherId="4"/>
+    <locations id="9" name="location9_LoConTest" REGION="3" xCoord="700" yCoord="700" sizeId="3" height="140"
+               weatherId="1"/>
+    <connections location1="4" location2="5" travelTime="4"/>
+    <connections location1="4" location2="6" travelTime="7"/>
+    <connections location1="7" location2="4" travelTime="10"/>
     <!-- end of LocationConnections test data                     -->
     <!-- ======================================================== -->
 
@@ -46,7 +52,8 @@
     <units id="8" name="Raumschritt" unittype_id="5" valueToBaseUnit="1" shortname="Raumschr."/>
 
     <taverns id="1" name="Zum Wegstein" location_id="1" xPos="42" yPos="12" usage="12" price="4" quality="2" beds="10"/>
-    <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="60" yPos="9" usage="12" price="13" quality="1" beds="7"/>
+    <taverns id="2" name="Zum tänzelnden Pony" location_id="2" xPos="60" yPos="9" usage="12" price="13" quality="1"
+             beds="7"/>
 
     <players id="1" name="Mr X" comment="no comment"/>
     <players id="2" name="Mr Z" comment="A test comment"/>
@@ -76,41 +83,53 @@
     <productCategories id="3" name="category3" parent_id="2"/>
     <productCategories id="4" name="category4" parent_id="3"/>
     <productCategories id="5" name="category5" parent_id="3"/>
-    <productCategories id="6" name="category6" />
-    <product_categories productId="1" categoryId="1" />
-    <product_categories productId="1" categoryId="2" />
-    <product_categories productId="1" categoryId="3" />
-    <product_categories productId="2" categoryId="5" />
-    <product_categories productId="2" categoryId="1" />
-    <product_categories productId="3" categoryId="1" />
-    <product_categories productId="4" categoryId="2" />
-    <product_categories productId="6" categoryId="1" />
-    <product_categories productId="7" categoryId="3" />
-    <product_categories productId="8" categoryId="6" />
-    <product_regions productId="1" regionId="1" />
-    <product_regions productId="2" regionId="3" />
-    <product_regions productId="2" regionId="2" />
-    <product_regions productId="3" regionId="2" />
-    <product_regions productId="4" regionId="2" />
-    <product_regions productId="5" regionId="4" />
-    <product_regions productId="5" regionId="5" />
-    <product_regions productId="5" regionId="3" />
-    <product_regions productId="6" regionId="5" />
-    <product_regions productId="8" regionId="7" />
-    <assortmentNatures DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="1" traderCategory_id="1" />
-    <assortmentNatures DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="2" traderCategory_id="1" />
-    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="1" traderCategory_id="2" />
-    <assortmentNatures DEFAULTOCCURENCE="50" PRODUCTCATEGORY_ID="4" traderCategory_id="2" />
-    <assortmentNatures DEFAULTOCCURENCE="20" PRODUCTCATEGORY_ID="5" traderCategory_id="2" />
-    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="6" traderCategory_id="4" />
-    <assortmentNatures DEFAULTOCCURENCE="20" PRODUCTCATEGORY_ID="1" traderCategory_id="4" />
-    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="1" traderCategory_id="5" />
-    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="2" traderCategory_id="5" />
+    <productCategories id="6" name="category6"/>
+    <product_categories productId="1" categoryId="1"/>
+    <product_categories productId="1" categoryId="2"/>
+    <product_categories productId="1" categoryId="3"/>
+    <product_categories productId="2" categoryId="5"/>
+    <product_categories productId="2" categoryId="1"/>
+    <product_categories productId="3" categoryId="1"/>
+    <product_categories productId="4" categoryId="2"/>
+    <product_categories productId="6" categoryId="1"/>
+    <product_categories productId="7" categoryId="3"/>
+    <product_categories productId="8" categoryId="6"/>
+    <product_regions productId="1" regionId="1"/>
+    <product_regions productId="2" regionId="3"/>
+    <product_regions productId="2" regionId="2"/>
+    <product_regions productId="3" regionId="2"/>
+    <product_regions productId="4" regionId="2"/>
+    <product_regions productId="5" regionId="4"/>
+    <product_regions productId="5" regionId="5"/>
+    <product_regions productId="5" regionId="3"/>
+    <product_regions productId="6" regionId="5"/>
+    <product_regions productId="8" regionId="7"/>
+    <assortmentNatures DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="1" traderCategory_id="1"/>
+    <assortmentNatures DEFAULTOCCURENCE="40" PRODUCTCATEGORY_ID="2" traderCategory_id="1"/>
+    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="1" traderCategory_id="2"/>
+    <assortmentNatures DEFAULTOCCURENCE="50" PRODUCTCATEGORY_ID="4" traderCategory_id="2"/>
+    <assortmentNatures DEFAULTOCCURENCE="20" PRODUCTCATEGORY_ID="5" traderCategory_id="2"/>
+    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="6" traderCategory_id="4"/>
+    <assortmentNatures DEFAULTOCCURENCE="20" PRODUCTCATEGORY_ID="1" traderCategory_id="4"/>
+    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="1" traderCategory_id="5"/>
+    <assortmentNatures DEFAULTOCCURENCE="100" PRODUCTCATEGORY_ID="2" traderCategory_id="5"/>
     <!-- location cascade deleting test data, don't change this -->
 
     <!-- end of location cascade deleting test data -->
 
-    <currencies id="1" name="firstCurrency" valueToBaseRate="3"/>
-    <currencies id="2" name="secondCurrency" valueToBaseRate="2"/>
+    <currencies id="1" name="currency1" shortName="c1" valueToBaseRate="3"/>
+    <currencies id="2" name="currency2" shortName="c1" valueToBaseRate="2"/>
+    <currencies id="3" name="currency3" shortName="c1" valueToBaseRate="1"/>
+    <currencies id="4" name="currency4" shortName="c1" valueToBaseRate="10"/>
+    <currencies id="5" name="currency5" shortName="c1" valueToBaseRate="100"/>
+    <currencies id="6" name="currency6" shortName="c1" valueToBaseRate="1000"/>
+    <currencySets id="1" name="currencySet1"/>
+    <currencySets id="2" name="currencySet2"/>
+    <currencySet_currencies currencySet_id="1" currency_id="3"/>
+    <currencySet_currencies currencySet_id="1" currency_id="4"/>
+    <currencySet_currencies currencySet_id="1" currency_id="5"/>
+    <currencySet_currencies currencySet_id="1" currency_id="6"/>
+    <currencySet_currencies currencySet_id="2" currency_id="3"/>
+    <currencySet_currencies currencySet_id="2" currency_id="2"/>
     <deals id="1" amount="5" date="1" locationName="location1" price="100.00" productName="product1" purchase="true" qualityid="3" player_id="1" trader_id="2" unit_id="1" discount="0"/>
 </dataset>

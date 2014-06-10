@@ -5,23 +5,25 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
-import sepm.dsa.service.DealService;
-import sepm.dsa.service.SaveCancelService;
-import sepm.dsa.service.TimeService;
-import sepm.dsa.service.TraderService;
+import sepm.dsa.service.*;
+import sepm.dsa.util.CurrencyFormatUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,65 +31,69 @@ import java.util.stream.Collectors;
 
 public class TraderDetailsController implements Initializable {
 
-    private static final Logger log = LoggerFactory.getLogger(TraderDetailsController.class);
-    private SpringFxmlLoader loader;
-    private TraderService traderService;
+	private static final Logger log = LoggerFactory.getLogger(TraderDetailsController.class);
+	private SpringFxmlLoader loader;
+	private TraderService traderService;
 
     private Trader trader;
     private TimeService timeService;
     private DealService dealService;
+    private CurrencySetService currencySetService;
     private SaveCancelService saveCancelService;
 
 
-    @FXML
-    private TableView<Offer> offerTable;
-    @FXML
-    private TableColumn amountColumn;
-    @FXML
-    private TableColumn productColumn;
-    @FXML
-    private TableColumn localPriceColumn;
-    @FXML
-    private TableColumn standardPriceColumn;
+	@FXML
+	private TableView<Offer> offerTable;
+	@FXML
+	private TableColumn amountColumn;
+	@FXML
+	private TableColumn productColumn;
+	@FXML
+	private TableColumn localPriceColumn;
+	@FXML
+	private TableColumn standardPriceColumn;
 
-    @FXML
-    private Label nameLabel;
-    @FXML
-    private Label categoryLabel;
+	@FXML
+	private Label nameLabel;
+	@FXML
+	private Label categoryLabel;
 
-    @FXML
-    private TextField difficultyField;
-    @FXML
-    private Label resultLabel;
-    @FXML
-    private TextArea commentArea;
-    @FXML
+	@FXML
+	private TextField difficultyField;
+	@FXML
+	private Label resultLabel;
+	@FXML
+	private TextArea commentArea;
+
+	@FXML
     private Button tradeButtonSell;
     @FXML
     private Button tradeButtonBuy;
     @FXML
-    private TableView<Deal> dealsTable;
-    @FXML
-    private TableColumn<Deal, String> playerColumn;
-    @FXML
-    private TableColumn<Deal, String> productDealColumn;
-    @FXML
-    private TableColumn<Deal, String> priceColumn;
-    @FXML
-    private TableColumn<Deal, String> amountDealColumn;
-    @FXML
-    private TableColumn<Deal, String> dateColumn;
+	private TableView<Deal> dealsTable;
+	@FXML
+	private TableColumn<Deal, String> playerColumn;
+	@FXML
+	private TableColumn<Deal, String> productDealColumn;
+	@FXML
+	private TableColumn<Deal, String> priceColumn;
+	@FXML
+	private TableColumn<Deal, String> amountDealColumn;
+	@FXML
+	private TableColumn<Deal, String> dateColumn;
+
+    private CurrencySet defaultCurrencySet;
+
+	@Override
+	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
+		log.debug("initialize TraderDetailsController");
+
+        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+
+		amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
+		initialzeTableWithColums();
 
 
-    @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize TraderDetailsController");
-
-        //init deals table
-        initialzeTableWithColums();
-
-        //init offer table
-        amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         productColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Offer, String> r) {
@@ -104,14 +110,44 @@ public class TraderDetailsController implements Initializable {
                 }
             }
         });
-        localPriceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
-        standardPriceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
+//        localPriceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
+//        standardPriceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
+        localPriceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Offer, String> r) {
+                if (r.getValue() != null) {
+                    Offer offer = r.getValue();
+                    CurrencySet traderCurrencySet = trader.getLocation().getRegion().getPreferredCurrencySet();
+                    if (traderCurrencySet == null) {
+                        traderCurrencySet = defaultCurrencySet;
+                    }
+                    List<CurrencyAmount> ca = currencySetService.toCurrencySet(traderCurrencySet, offer.getPricePerUnit());
+                    String str = CurrencyFormatUtil.currencySetShortString(ca, ", ");
+                    return new SimpleStringProperty(str);
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
+        standardPriceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Offer, String> r) {
+                if (r.getValue() != null) {
+                    Offer offer = r.getValue();
+                    List<CurrencyAmount> ca = currencySetService.toCurrencySet(defaultCurrencySet, offer.getPricePerUnit());
+                    String str = CurrencyFormatUtil.currencySetShortString(ca, ", ");
+                    return new SimpleStringProperty(str);
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
 
-    }
+	}
 
-    private void initialzeTableWithColums() {
+	private void initialzeTableWithColums() {
 
-        dateColumn.setCellValueFactory(d -> {
+		dateColumn.setCellValueFactory(d -> {
             DSADate date = d.getValue().getDate();
             long timestamp = d.getValue().getDate().getTimestamp();
             long current = timeService.getCurrentDate().getTimestamp();
@@ -122,18 +158,32 @@ public class TraderDetailsController implements Initializable {
         });
 //        dateColumn.setSortType(TableColumn.SortType.DESCENDING);
 
-        priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
-
-        playerColumn.setCellValueFactory(d -> {
-            Player player = d.getValue().getPlayer();
-            String pName = player.getName();
-
-            StringBuilder sb = new StringBuilder();
-            sb.append(pName);
-            return new SimpleStringProperty(sb.toString());
+//		priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
+		priceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> r) {
+                if (r.getValue() != null) {
+                    Deal deal = r.getValue();
+                    List<CurrencyAmount> ca = currencySetService.toCurrencySet(defaultCurrencySet, deal.priceWithDiscount());
+                    String str = CurrencyFormatUtil.currencySetShortString(ca, ", ");
+                    return new SimpleStringProperty(str);
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
         });
 
-        productDealColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("productName"));
+
+		playerColumn.setCellValueFactory(d -> {
+			Player player = d.getValue().getPlayer();
+			String pName = player.getName();
+
+			StringBuilder sb = new StringBuilder();
+			sb.append(pName);
+			return new SimpleStringProperty(sb.toString());
+		});
+
+		productDealColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("productName"));
 
         amountDealColumn.setCellValueFactory(d -> {
             Unit unit = d.getValue().getUnit();
@@ -152,41 +202,85 @@ public class TraderDetailsController implements Initializable {
         });
     }
 
-    @FXML
-    private void onBackPressed() {
-        log.debug("called onBackPressed");
+	@FXML
+	private void onBackPressed() {
+		log.debug("called onBackPressed");
 
-        Stage stage = (Stage) offerTable.getScene().getWindow();
-        stage.close();
-    }
+		Stage stage = (Stage) offerTable.getScene().getWindow();
+		stage.close();
+	}
 
-    @FXML
-    private void onEditPressed() {
-        log.debug("called onEditPressed");
-        Stage stage = (Stage) offerTable.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
-        EditTraderController controller = loader.getController();
-        controller.setTrader(trader);
-        stage.setScene(new Scene(scene, 509, 421));
-    }
+	@FXML
+	private void onEditPressed() {
+		log.debug("called onEditPressed");
+		Stage stage = (Stage) offerTable.getScene().getWindow();
+		Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
+		EditTraderController controller = loader.getController();
+		controller.setTrader(trader);
+		controller.setLocation(trader.getLocation());
+		controller.setPosition(new Point2D(trader.getxPos(), trader.getyPos()));
+		stage.setScene(new Scene(scene, 785, 513));
+	}
 
-    @FXML
-    private void onRolePressed() {
-        log.debug("called onRolePressed");
-        //TODO not part of version 1
-    }
+	@FXML
+	private void onRolePressed() {
+		log.debug("called onRolePressed");
+		int difficulty = 0;
+		try {
+			difficulty = Integer.parseInt(difficultyField.getText());
+		} catch (NumberFormatException e) {
+			Dialogs.create()
+					.title("Ungültige Eingabe")
+					.masthead(null)
+					.message("Die Erschwernis muss eine Zahl sein!")
+					.showWarning();
+			return;
+		}
+		int dice1 = (int) (Math.random() * 20) + 1;
+		int dice2 = (int) (Math.random() * 20) + 1;
+		int dice3 = (int) (Math.random() * 20) + 1;
+		int result = trader.getConvince() - difficulty;
+		if (result < 0) {
+			difficulty = result;
+			result = 0;
+		} else {
+			difficulty = 0;
+		}
+		if (dice1 > (trader.getMut() + difficulty)) {
+			result -= (dice1 - (trader.getMut() + difficulty));
+		}
+		if (dice2 > (trader.getIntelligence() + difficulty)) {
+			result -= (dice2 - (trader.getIntelligence() + difficulty));
+		}
+		if (dice3 > (trader.getCharisma() + difficulty)) {
+			result -= (dice3 - (trader.getCharisma() + difficulty));
+		}
+		if (dice1 == 20 && dice2 == 20 || dice2 == 20 && dice3 == 20 || dice1 == 20 && dice3 == 20) {
+			resultLabel.setText("PATZER");
+			resultLabel.setTextFill(Color.RED);
+		} else if (dice1 == 1 && dice2 == 1 || dice2 == 1 && dice3 == 1 || dice1 == 1 && dice3 == 1) {
+			resultLabel.setText("MEISTERHAFT");
+			resultLabel.setTextFill(Color.GREEN);
+		} else if (result >= 0) {
+			resultLabel.setText("" + result);
+			resultLabel.setTextFill(Color.GREEN);
+		} else if (result < 0) {
+			resultLabel.setText("" + result);
+			resultLabel.setTextFill(Color.RED);
+		}
+	}
 
-    @FXML
-    private void onAddPressed() {
-        log.debug("called onAddPressed");
-        //TODO not part of version 1
-    }
+	@FXML
+	private void onAddPressed() {
+		log.debug("called onAddPressed");
+		//TODO not part of version 1
+	}
 
-    @FXML
-    private void onDeletePressed() {
-        log.debug("called onDeletePressed");
-        //TODO not part of version 1
-    }
+	@FXML
+	private void onDeletePressed() {
+		log.debug("called onDeletePressed");
+		//TODO not part of version 1
+	}
 
     @FXML
     private void onDeleteDealClicked() {
@@ -216,7 +310,7 @@ public class TraderDetailsController implements Initializable {
             Parent scene = (Parent) loader.load("/gui/tradeSell.fxml");
 
             dialog.setTitle("Kauf von Waren");
-            dialog.setScene(new Scene(scene, 330, 310));
+            dialog.setScene(new Scene(scene, 334, 458));
             dialog.setResizable(false);
             dialog.showAndWait();
             checkFocus();
@@ -238,7 +332,7 @@ public class TraderDetailsController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/traderBuy.fxml");
 
         dialog.setTitle("Verkauf von Waren an Händler");
-        dialog.setScene(new Scene(scene, 565, 355));
+        dialog.setScene(new Scene(scene, 565, 476));
         dialog.setResizable(false);
 
         dialog.showAndWait();
@@ -299,5 +393,9 @@ public class TraderDetailsController implements Initializable {
 
     public void setSaveCancelService(SaveCancelService saveCancelService) {
         this.saveCancelService = saveCancelService;
+    }
+
+    public void setCurrencySetService(CurrencySetService currencySetService) {
+        this.currencySetService = currencySetService;
     }
 }
