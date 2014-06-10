@@ -17,7 +17,7 @@
     <HBox alignment="CENTER_LEFT" layoutX="366.0" layoutY="310.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="90.0" prefWidth="222.0" spacing="10.0">
 <children>
 <Button fx:id="calcButton" mnemonicParsing="false" onAction="#onCalculatePressed" text="Berechnen" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
-<Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="25.0" prefWidth="94.0" text="Abbrechen" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
+<Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="25.0" prefWidth="94.0" text="Schließen" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
 </children>
 <opaqueInsets>
 <Insets />
