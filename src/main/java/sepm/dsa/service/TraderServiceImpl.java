@@ -46,9 +46,22 @@ public class TraderServiceImpl implements TraderService {
     @Override
     public void addManualOffer(Trader trader, Offer offer)
     {
-        offerDao.add(offer);
         Set<Offer> offers = trader.getOffers();
-        offers.add(offer);
+        Offer raiseOffer = null;
+        for (Offer o : offers){
+            if (offer.getProduct().equals(o.getProduct())){
+                if (offer.getQuality().equals(o.getQuality())){
+                    raiseOffer=o;
+                    break;
+                }
+            }
+        }
+        if (raiseOffer!=null){
+            raiseOffer.setAmount(raiseOffer.getAmount()+offer.getAmount());
+        }else {
+            offerDao.add(offer);
+            offers.add(offer);
+        }
         trader.setOffers(offers);
     }
 
@@ -426,7 +439,7 @@ public class TraderServiceImpl implements TraderService {
         }
 
         // create Offers
-        List<Offer> offers = new ArrayList<>();
+        List<Offer> offers = new ArrayList<Offer>();
         for (Product product : productAmmountMap.keySet()) {
             int amount = productAmmountMap.get(product);
 

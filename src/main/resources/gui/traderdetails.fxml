@@ -13,7 +13,7 @@
             </font>
         </Label>
         <Label fx:id="categoryLabel" alignment="CENTER" layoutX="-1.0" layoutY="41.0" prefHeight="17.0" prefWidth="800.0" text="Händlerkategorie" textAlignment="CENTER" />
-        <TableView onMouseClicked="#checkFocus" fx:id="offerTable" layoutX="21.0" layoutY="67.0" prefHeight="355.0" prefWidth="550.0">
+        <TableView fx:id="offerTable" layoutX="21.0" layoutY="67.0" onMouseClicked="#checkFocus" prefHeight="355.0" prefWidth="550.0">
             <columns>
                 <TableColumn fx:id="amountColumn" prefWidth="75.0" text="Menge" />
                 <TableColumn fx:id="productColumn" prefWidth="275.0" text="Ware" />
@@ -30,12 +30,12 @@
         <Label fx:id="resultLabel" layoutX="665.0" layoutY="121.0" text="ERGEBNIS" textAlignment="CENTER" />
         <Label layoutX="591.0" layoutY="159.0" text="Waren:" underline="true" />
         <Button layoutX="683.0" layoutY="156.0" mnemonicParsing="false" onAction="#onAddPressed" text="Hinzufügen" />
-        <Button fx:id="removeButton" layoutX="683.0" layoutY="184.0" mnemonicParsing="false" onAction="#onDeletePressed" prefWidth="82.0" text="Entfernen" />
+        <Button fx:id="removeButton" layoutX="683.0" layoutY="188.0" mnemonicParsing="false" onAction="#onDeletePressed" prefWidth="82.0" text="Entfernen" />
         <Button layoutX="21.0" layoutY="23.0" mnemonicParsing="false" onAction="#onEditPressed" text="Bearbeiten" />
-        <Button fx:id="tradeButtonSell" disable="true" layoutX="656.0" layoutY="227.0" mnemonicParsing="false" onAction="#onTradePressed" prefHeight="26.0" prefWidth="118.0" text="Kauf Buchen" />
+        <Button fx:id="tradeButtonSell" disable="true" layoutX="656.0" layoutY="265.0" mnemonicParsing="false" onAction="#onTradePressed" prefHeight="26.0" prefWidth="118.0" text="Kauf Buchen" />
         <Separator layoutX="580.0" layoutY="145.0" prefWidth="200.0" />
-        <Separator layoutX="580.0" layoutY="216.0" prefWidth="200.0" />
-        <Label layoutX="591.0" layoutY="229.0" text="Handel:" underline="true" />
+        <Separator layoutX="580.0" layoutY="254.0" prefWidth="200.0" />
+        <Label layoutX="591.0" layoutY="267.0" text="Handel:" underline="true" />
         <TextArea fx:id="commentArea" editable="false" layoutX="22.0" layoutY="702.0" prefHeight="94.0" prefWidth="754.0" wrapText="true" />
       <TableView fx:id="dealsTable" layoutX="21.0" layoutY="448.0" prefHeight="250.0" prefWidth="754.0">
          <columns>
@@ -46,8 +46,8 @@
             <TableColumn fx:id="dateColumn" minWidth="0.0" prefWidth="270.0" text="Datum" />
          </columns>
       </TableView>
-      <Button fx:id="tradeButtonBuy" layoutX="656.0" layoutY="267.0" mnemonicParsing="false" onAction="#onTradeBuyPressed" prefHeight="26.0" prefWidth="118.0" text="Verkauf Buchen" />
-      <Button layoutX="585.0" layoutY="396.0" mnemonicParsing="false" onMouseClicked="#onDeleteDealClicked" prefHeight="26.0" prefWidth="187.0" text="Bestehenden Handel löschen" />
-      <Label layoutX="22.0" layoutY="428.0" prefHeight="16.0" prefWidth="754.0" text="(+) bei Menge: Kauf von Spieler, (-) Ankauf durch Händler" />
+      <Button fx:id="tradeButtonBuy" layoutX="656.0" layoutY="305.0" mnemonicParsing="false" onAction="#onTradeBuyPressed" prefHeight="26.0" prefWidth="118.0" text="Verkauf Buchen" />
+      <Button layoutX="585.0" layoutY="396.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="187.0" text="Bestehenden Handel löschen" />
+      <Label layoutX="22.0" layoutY="428.0" prefHeight="16.0" prefWidth="754.0" text="(+) bei Menge: Kauf von Spieler, (-) Ankauf durch Händler" /><Separator layoutX="580.0" layoutY="145.0" prefWidth="200.0" /><Button layoutX="632.0" layoutY="220.0" mnemonicParsing="false" onAction="#onChangePricePressed" prefHeight="25.0" prefWidth="133.0" text="Standardpreis ändern" />
     </children>
 </Pane>

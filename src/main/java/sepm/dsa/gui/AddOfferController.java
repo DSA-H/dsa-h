@@ -122,6 +122,7 @@ public class AddOfferController implements Initializable {
         }
 
         traderService.addManualOffer(selectedTrader, o);
+        saveCancelService.save();
 
         Stage stage = (Stage) textName.getScene().getWindow();
 

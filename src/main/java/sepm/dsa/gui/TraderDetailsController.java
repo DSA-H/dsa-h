@@ -284,11 +284,11 @@ public class TraderDetailsController implements Initializable {
                 return;
             }
         }else {
-            Dialogs.create()
+            /*Dialogs.create()
                     .title("Ungültige Eingabe")
                     .masthead(null)
                     .message("Ungültige Eingabe")
-                    .showError();
+                    .showError();*/
             return;
         }
 
@@ -304,6 +304,53 @@ public class TraderDetailsController implements Initializable {
         }else{
             offerTable.getItems().set(offerTable.getItems().indexOf(o),o);
         }
+
+        checkFocus();
+        saveCancelService.save();
+    }
+
+    @FXML
+    private void onChangePricePressed() {
+        log.debug("called onChangePricePressed");
+        Offer o = offerTable.getSelectionModel().getSelectedItem();
+
+        Optional<String> response = Dialogs.create()
+                .title("Preis ändern")
+                .masthead(null)
+                .message("Wie hoch soll der neue Standardpreis sein?")
+                .showTextInput();
+
+        int price = 0;
+        if (response.isPresent()){
+            try{
+                price = Integer.parseInt(response.get());
+                if (price < 0){
+                    Dialogs.create()
+                            .title("Ungültige Eingabe")
+                            .masthead(null)
+                            .message("Ungültige Eingabe")
+                            .showError();
+                    return;
+                }
+            }catch (NumberFormatException nfe){
+                Dialogs.create()
+                        .title("Ungültige Eingabe")
+                        .masthead(null)
+                        .message("Ungültige Eingabe")
+                        .showError();
+                return;
+            }
+        }else {
+            /*Dialogs.create()
+                    .title("Ungültige Eingabe")
+                    .masthead(null)
+                    .message("Ungültige Eingabe")
+                    .showError();*/
+            return;
+        }
+
+        o.setPricePerUnit(price);
+        offerTable.getItems().set(offerTable.getItems().indexOf(o),o);
 
         checkFocus();
         saveCancelService.save();
