@@ -21,7 +21,7 @@ public class Unit implements BaseModel {
     private String name;
 
     @NotBlank
-    @Size(max = 10, min = 1)
+    @Size(max = 12, min = 1)
     @Column(nullable = false, length = 10)
     private String shortName;
 

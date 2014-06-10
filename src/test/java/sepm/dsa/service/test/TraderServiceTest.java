@@ -216,7 +216,7 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         Trader trader = traderService.get(1);
         Player player = playerService.get(1);
         Product product = productService.get(1);
-        ProductQuality productQuality = ProductQuality.SCHLECHT;
+        ProductQuality productQuality = ProductQuality.MANGELHAFT;
         Unit unit = product.getUnit();
         Integer amount = 5;
         Integer totalPrice = 40000;

@@ -2,12 +2,11 @@ package sepm.dsa.model;
 
 public enum ProductQuality {
 
-	KATASTROPHAL(0, "katastrophal"),
-	SCHLECHT(1, "schlecht"),
+	MIES(0, "mies"),
+	MANGELHAFT(1, "mangelhaft"),
 	NORMAL(2, "normal"),
-	BESSER(3, "besser"),
-	AUSSERGEWOEHNLICH(4, "ausergewöhnlich"),
-	UEBERRAGEND(5, "überragend");
+	HERAUSRAGEND(3, "herausragend"),
+	AUSSERGEWOEHNLICH(4, "ausergewöhnlich");
 
 	private int value;
 	private String name;
@@ -37,14 +36,12 @@ public enum ProductQuality {
 			case 0:
 				return 0.05f;
 			case 1:
-				return 0.15f;
+				return 0.3f;
 			case 2:
-				return 0.7f;
+				return 0.95f;
 			case 3:
-				return 0.9f;
+				return 0.995f;
 			case 4:
-				return 0.98f;
-			case 5:
 				return 1f;
 			default:
 				return 0;
@@ -56,14 +53,12 @@ public enum ProductQuality {
 			case 0:
 				return 0.5f;
 			case 1:
-				return 0.8f;
+				return 0.75f;
 			case 2:
 				return 1f;
 			case 3:
-				return 2f;
+				return 3f;
 			case 4:
-				return 5f;
-			case 5:
 				return 10f;
 			default:
 				return 0;
