@@ -34,12 +34,13 @@ public class CurrencyFormatUtil {
 //            return 0;
 //        });
 
-        String result = cas.get(0).getAmount() + " " + cas.get(0).getCurrency().getName();
+        StringBuilder sb = new StringBuilder();
+        sb.append(cas.get(0).getAmount()).append(" ").append(cas.get(0).getCurrency().getName());
         for (int i=1; i<cas.size(); i++) {
             CurrencyAmount ca = cas.get(i);
-            result +=  delimiter + ca.getAmount() + " " + ca.getCurrency().getName();
+            sb.append(delimiter).append(ca.getAmount()).append(" ").append(ca.getCurrency().getName());
         }
-        return result;
+        return sb.toString();
     }
 
     public static String currencySetShortString(List<CurrencyAmount> cas) {
@@ -55,11 +56,11 @@ public class CurrencyFormatUtil {
         for (int i=0; i<cas.size(); i++) {
             CurrencyAmount ca = cas.get(i);
             if(ca.getAmount() > 0) {
-                sb.append(delimiter + ca.getAmount() + "" + ca.getCurrency().getShortName());
+                sb.append(ca.getAmount()).append(ca.getCurrency().getShortName()).append(delimiter);
             }
         }
         if(sb.length() == 0) {
-            sb.append("0" + cas.get(0).getCurrency().getShortName());
+            sb.append("0").append(cas.get(0).getCurrency().getShortName());
         }
         return sb.toString();
     }
