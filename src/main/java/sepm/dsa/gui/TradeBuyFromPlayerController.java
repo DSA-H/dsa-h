@@ -157,7 +157,7 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
                     throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
                 }
             }
-            int baseRatePrice = setQuality * amount;    // TODO is this really the baseRate price?
+            int baseRatePrice = setQuality * amount;
 //            selectedPrice.setText(Integer.toString());
 
             List<CurrencyAmount> currencyAmounts = currencySetService.toCurrencySet(selectedCurrencySet(), baseRatePrice);
@@ -312,7 +312,7 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
                 currencyAmounts.add(a);
             }
         } catch (NumberFormatException ex) {
-            throw new DSAValidationException("Der Preis muss aus lauter Zahlen bestehen!");
+            throw new DSAValidationException("Der Preis muss aus lauter ganzen Zahlen bestehen!");
         }
 
 

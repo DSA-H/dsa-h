@@ -318,6 +318,8 @@
         <property name="regionService" ref="regionService"/>
         <property name="saveCancelService" ref="saveCancelService" />
         <property name="unitService" ref="unitService" />
+        <property name="currencyService" ref="currencyService" />
+        <property name="currencySetService" ref="currencySetService" />
     </bean>
 
     <bean id="ProductCategoryListController" class="sepm.dsa.gui.ProductCategoryListController">

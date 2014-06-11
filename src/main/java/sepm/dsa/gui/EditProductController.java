@@ -14,6 +14,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.*;
@@ -32,14 +33,14 @@ public class EditProductController extends BaseControllerImpl {
     private UnitService unitService;
     private RegionService regionService;
     private SaveCancelService saveCancelService;
+    private CurrencySetService currencySetService;
+    private CurrencyService currencyService;
 
     private Product selectedProduct;
     private boolean isNewProduct;
 
     @FXML
     private TextField nameField;
-    @FXML
-    private TextField costField;
     @FXML
     private TableView<ProductCategory> categorieTable;
     @FXML
@@ -75,26 +76,61 @@ public class EditProductController extends BaseControllerImpl {
     @FXML
     private ChoiceBox<Unit> unitBox;
 
+    @FXML
+    private TextField tf_CurrencyAmount1;
+    @FXML
+    private TextField tf_CurrencyAmount2;
+    @FXML
+    private TextField tf_CurrencyAmount3;
+    @FXML
+    private TextField tf_CurrencyAmount4;
+
+    private TextField[] tf_CurrencyAmounts;
+
+    @FXML
+    private Label lbl_CurrencyAmount1;
+    @FXML
+    private Label lbl_CurrencyAmount2;
+    @FXML
+    private Label lbl_CurrencyAmount3;
+    @FXML
+    private Label lbl_CurrencyAmount4;
+
+    private Label[] lbl_CurrencyAmounts;
+
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize EditProductController");
+        lbl_CurrencyAmounts =
+                new Label[] {
+                        lbl_CurrencyAmount1,
+                        lbl_CurrencyAmount2,
+                        lbl_CurrencyAmount3,
+                        lbl_CurrencyAmount4};
+
+        tf_CurrencyAmounts =
+                new TextField[] {
+                        tf_CurrencyAmount1,
+                        tf_CurrencyAmount2,
+                        tf_CurrencyAmount3,
+                        tf_CurrencyAmount4};
+        List<String> attributeList = new ArrayList<>();
+        for(ProductAttribute t : ProductAttribute.values()) {
+            attributeList.add(t.getName());
+        }
+        categorieColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
     }
 
     @Override
     public void reload() {
         log.debug("reload EditProductController");
 
-        List<String> attributeList = new ArrayList<>();
-        for(ProductAttribute t : ProductAttribute.values()) {
-            attributeList.add(t.getName());
-        }
         List<ProductCategory> categoryList = productCategoryService.getAll();
         List<Region> regionList = regionService.getAll();
 
         List<Unit> unitList = unitService.getAll();
         unitBox.setItems(FXCollections.observableArrayList(unitList));
-        categorieColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         attributeBox.setItems(FXCollections.observableArrayList(ProductAttribute.values()));
         categorieChoiceBox.setItems(FXCollections.observableArrayList(categoryList));
@@ -103,7 +139,7 @@ public class EditProductController extends BaseControllerImpl {
         if (selectedProduct != null){
             isNewProduct = false;
             nameField.setText(selectedProduct.getName());
-            costField.setText(selectedProduct.getCost().toString());
+            refreshPriceView(selectedProduct.getCost());
             attributeBox.getSelectionModel().select(selectedProduct.getAttribute());
             //choice_unit.getSelectionModel().select(productUnitService.get(selectedProduct.getUnit()));
             ObservableList<Region> regionData = FXCollections.observableArrayList(selectedProduct.getRegions());
@@ -120,6 +156,8 @@ public class EditProductController extends BaseControllerImpl {
             isNewProduct = true;
             selectedProduct = new Product();
             attributeBox.getSelectionModel().select(0);
+            refreshPriceView(0);
+            unitBox.getSelectionModel().selectFirst();
         }
     }
 
@@ -202,6 +240,8 @@ public class EditProductController extends BaseControllerImpl {
         Stage stage = (Stage) nameField.getScene().getWindow();
 
         Parent scene = (Parent) loader.load("/gui/productslist.fxml");
+        ProductListController ctrl = loader.getController();
+        ctrl.reload();
 
         stage.setScene(new Scene(scene, 600, 438));
     }
@@ -214,7 +254,19 @@ public class EditProductController extends BaseControllerImpl {
         String name = nameField.getText();
         int cost = 0;
         try {
-            cost = Integer.parseInt(costField.getText());
+            List<CurrencyAmount> currencyAmounts = new ArrayList<>(4);
+            List<Currency> currencies = currencyService.getAllByCurrencySet(currencySetService.getDefaultCurrencySet());
+            for (int i = 0; i < currencies.size() ; i++) {
+                    CurrencyAmount a = new CurrencyAmount();
+                    a.setCurrency(currencies.get(i));
+                    Integer currencyAmount = Integer.parseInt(tf_CurrencyAmounts[i].getText());
+                    if (currencyAmount < 0) {
+                        throw new DSAValidationException("Preis muss > 0 sein");
+                    }
+                    a.setAmount(currencyAmount);
+                    currencyAmounts.add(a);
+            }
+            cost = currencyService.exchangeToBaseRate(currencyAmounts);
         }catch (NumberFormatException ex) {
             throw new DSAValidationException("Kosten müssen eine ganze Zahl sein!");
         }
@@ -234,7 +286,7 @@ public class EditProductController extends BaseControllerImpl {
         selectedProduct.setOccurence(occurcene);
         selectedProduct.setAttribute(attribute);
         selectedProduct.setQuality(qualityBox.isSelected());
-        selectedProduct.setComment(costField.getText());
+        selectedProduct.setComment(commentField.getText());
         selectedProduct.setCategories(localCategoryList);
         selectedProduct.setRegions(localRegionList);
 
@@ -248,9 +300,29 @@ public class EditProductController extends BaseControllerImpl {
         // return to productslist
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/productslist.fxml");
+        ProductListController ctrl = loader.getController();
+        ctrl.reload();
         stage.setScene(new Scene(scene, 600, 438));
     }
 
+    private void refreshPriceView(int baseRatePrice) {
+        log.info("calling refreshPriceView()");
+        CurrencySet selected = currencySetService.getDefaultCurrencySet();
+        List<Currency> currencies = currencyService.getAllByCurrencySet(selected);
+        List<CurrencyAmount> currencyAmounts = currencySetService.toCurrencySet(selected, baseRatePrice);
+        int i=0;
+        for (Currency c : currencies) {
+            log.info(lbl_CurrencyAmounts + ": " + lbl_CurrencyAmounts[i] + " " + c.getName());
+            lbl_CurrencyAmounts[i].setText(c.getShortName());
+            tf_CurrencyAmounts[i].setText(currencyAmounts.get(i).getAmount()+"");
+            i++;
+        }
+        for (; i<4; i++) {
+            lbl_CurrencyAmounts[i].setText("");
+            tf_CurrencyAmounts[i].setText("");
+        }
+
+    }
 
     public void setProduct(Product product) {
         selectedProduct = product;
@@ -278,5 +350,13 @@ public class EditProductController extends BaseControllerImpl {
 
     public void setUnitService(UnitService unitService) {
         this.unitService = unitService;
+    }
+
+    public void setCurrencySetService(CurrencySetService currencySetService) {
+        this.currencySetService = currencySetService;
+    }
+
+    public void setCurrencyService(CurrencyService currencyService) {
+        this.currencyService = currencyService;
     }
 }

@@ -43,7 +43,7 @@ public class CurrencyFormatUtil {
     }
 
     public static String currencySetShortString(List<CurrencyAmount> cas) {
-        return currencySetShortString(cas, ", ");
+        return currencySetShortString(cas, " ");
     }
 
     public static String currencySetShortString(List<CurrencyAmount> cas, final String delimiter) {
@@ -52,10 +52,10 @@ public class CurrencyFormatUtil {
             throw new IllegalArgumentException("currencyAmounts size is zero");
         }
 
-        String result = cas.get(0).getAmount() + " " + cas.get(0).getCurrency().getShortName();
+        String result = cas.get(0).getAmount() + "" + cas.get(0).getCurrency().getShortName();
         for (int i=1; i<cas.size(); i++) {
             CurrencyAmount ca = cas.get(i);
-            result +=  delimiter + ca.getAmount() + " " + ca.getCurrency().getShortName();
+            result +=  delimiter + ca.getAmount() + "" + ca.getCurrency().getShortName();
         }
         return result;
     }
