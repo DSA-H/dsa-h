@@ -32,7 +32,7 @@ public enum Weather {
 
     @Override
     public String toString() {
-        return name() + "(" + this.getValue() + ")";
+        return name;
     }
 
     public String getName() {
