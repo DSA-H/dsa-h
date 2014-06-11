@@ -184,6 +184,8 @@ public class MainMenuController extends BaseControllerImpl {
 
 		chooseButton.setStyle("-fx-font-weight: bold;");
 
+        // init zoom
+        zoomSlider.setMin((536) / mapCanvas.getHeight());
         zoomSlider.setMax(2.69);
         zoomSlider.adjustValue(1.0);
         // zoom-value listener: zooms the map acording to slider
@@ -230,9 +232,7 @@ public class MainMenuController extends BaseControllerImpl {
         updateMap();
         checkLocationFocus();
         checkTraderFocus();
-
-        // init zoom
-        zoomSlider.setMin((536) / mapCanvas.getHeight());
+        updateZoom();
     }
 
     /**
