@@ -46,7 +46,7 @@ public class CurrencyListController extends BaseControllerImpl {
         currencyColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         valueToBaseRateColumn.setCellValueFactory(new PropertyValueFactory<>("valueToBaseRate"));
 
-	currencyTable.setItems(currencyService.getAll());
+		currencyTable.getItems().setAll(currencyService.getAll());
 
         checkFocus();
     }

@@ -158,7 +158,7 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
                 newConns.add(c);
             }
         }
-	suggestLocationConnectionsTable.setItems(newConns);
+		suggestLocationConnectionsTable.getItems().setAll(newConns);
 
     }
 

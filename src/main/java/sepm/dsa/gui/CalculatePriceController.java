@@ -70,7 +70,7 @@ public class CalculatePriceController extends BaseControllerImpl {
     }
 
     private void showProducts(List<Product> products){
-	productTable.setItems(products);
+		productTable.getItems().setAll(products);
     }
 
     @FXML
