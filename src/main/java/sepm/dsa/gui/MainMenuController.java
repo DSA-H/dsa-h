@@ -441,7 +441,7 @@ public class MainMenuController extends BaseControllerImpl {
 						.showWarning();
 				return;
 			}
-			if (mode == 0) {                    //switch to LOCATIONMODE
+			if (mode == WORLDMODE) {        //switch to LOCATIONMODE
 				worldScrollH = scrollPane.getHvalue();
 				worldScrollV = scrollPane.getVvalue();
 				mode = LOCATIONMODE;
@@ -472,6 +472,16 @@ public class MainMenuController extends BaseControllerImpl {
 				stage.setTitle("DSA-Händlertool");
 			}
 		}
+
+        updateTables();
+        if (mode == LOCATIONMODE) {
+            traderList.getSelectionModel().select(0);
+            checkTraderFocus();
+        } else {
+            checkLocationFocus();
+        }
+        updateMap();
+        updateZoom();
 	}
 
 	/**
@@ -826,6 +836,7 @@ public class MainMenuController extends BaseControllerImpl {
 			nothingChanged = false;
 			calcButton.setText("Berechnen");
 		}
+        reload();
 	}
 
 	/**
@@ -843,6 +854,7 @@ public class MainMenuController extends BaseControllerImpl {
 			nothingChanged = false;
 			calcButton.setText("Berechnen");
 		}
+        reload();
 	}
 
 	/**
