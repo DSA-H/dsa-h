@@ -159,6 +159,7 @@ public class EditProductController extends BaseControllerImpl {
         if (pc != null){
             categorieTable.getItems().add(pc);
             categorieChoiceBox.getItems().remove(pc);
+            categorieChoiceBox.getSelectionModel().selectFirst();
         }else {
             throw new DSAValidationException("Keine Warenkategorie gewählt!");
         }
@@ -184,6 +185,7 @@ public class EditProductController extends BaseControllerImpl {
         if (r != null){
             regionTable.getItems().add(r);
             regionChoiceBox.getItems().remove(r);
+            regionChoiceBox.getSelectionModel().selectFirst();
         }else {
             throw new DSAValidationException("Keine Region gewählt!");
         }
