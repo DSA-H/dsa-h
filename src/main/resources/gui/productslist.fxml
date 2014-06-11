@@ -9,9 +9,9 @@
 <children><TableView fx:id="productTable" layoutX="11.0" layoutY="86.0" onMouseClicked="#checkFocus" prefHeight="338.0" prefWidth="577.0">
 <columns>
 <TableColumn fx:id="productColumn" prefWidth="151.0" text="Ware" />
-<TableColumn fx:id="costColumn" minWidth="0.0" prefWidth="78.0" text="Basispreis" />
-<TableColumn fx:id="attributeColumn" prefWidth="106.0" text="Attribut" />
-<TableColumn fx:id="productionRegionColumn" prefWidth="241.0" text="Produktionsgebiete" />
+<TableColumn fx:id="costColumn" minWidth="0.0" prefWidth="94.0" text="Basispreis" />
+<TableColumn fx:id="categorieColumn" prefWidth="166.0" text="Kategorien" />
+<TableColumn fx:id="productionRegionColumn" prefWidth="165.0" text="Produktionsgebiete" />
 </columns>
 </TableView><Label alignment="CENTER" contentDisplay="CENTER" layoutX="264.0" layoutY="6.0" prefHeight="47.0" prefWidth="77.0" text="Waren" textAlignment="CENTER">
 <font>

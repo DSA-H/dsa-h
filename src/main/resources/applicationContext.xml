@@ -309,6 +309,7 @@
         <property name="loader" ref="loader"/>
         <property name="productService" ref="productService"/>
         <property name="saveCancelService" ref="saveCancelService" />
+        <property name="currencySetService" ref="currencySetService" />
     </bean>
 
     <bean id="EditProductController" class="sepm.dsa.gui.EditProductController">

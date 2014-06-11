@@ -19,11 +19,14 @@ import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.model.Product;
-import sepm.dsa.model.Region;
+import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.*;
+import sepm.dsa.service.CurrencySetService;
 import sepm.dsa.service.ProductService;
 import sepm.dsa.service.SaveCancelService;
+import sepm.dsa.util.CurrencyFormatUtil;
 
+import java.util.List;
 import java.util.Set;
 
 public class ProductListController extends BaseControllerImpl {
@@ -33,6 +36,7 @@ public class ProductListController extends BaseControllerImpl {
 
     private ProductService productService;
     private SaveCancelService saveCancelService;
+    private CurrencySetService currencySetService;
 
     @FXML
     private TableView<Product> productTable;
@@ -41,7 +45,7 @@ public class ProductListController extends BaseControllerImpl {
     @FXML
     private TableColumn costColumn;
     @FXML
-    private TableColumn attributeColumn;
+    private TableColumn categorieColumn;
     @FXML
     private TableColumn productionRegionColumn;
     @FXML
@@ -54,15 +58,36 @@ public class ProductListController extends BaseControllerImpl {
         log.debug("initialize ProductListController");
         // init table
         productColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        costColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
-        attributeColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
+        costColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Product, String> r) {
+                if (r.getValue() != null) {
+                    Product product = r.getValue();
+                    CurrencySet currencySet = currencySetService.getDefaultCurrencySet();
+                    List<CurrencyAmount> ca = currencySetService.toCurrencySet(currencySet, product.getCost());
+                    String str = CurrencyFormatUtil.currencySetShortString(ca);
+                    return new SimpleStringProperty(str);
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
+        categorieColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Product, String> r) {
                 if (r.getValue() == null) {
                     return new SimpleStringProperty("");
                 }
                 Product product = r.getValue();
-                return new SimpleStringProperty(product.getAttribute().getName());
+                StringBuilder sb = new StringBuilder();
+                Set<ProductCategory> categories = product.getCategories();
+                for (ProductCategory categorie : categories) {
+                    sb.append(categorie.getName()).append(", ");
+                }
+                if (sb.length() >= 2) {
+                    sb.delete(sb.length() - 2, sb.length());
+                }
+                return new SimpleStringProperty(sb.toString());
             }
         });
         productionRegionColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
@@ -170,5 +195,9 @@ public class ProductListController extends BaseControllerImpl {
 
     public void setSaveCancelService(SaveCancelService saveCancelService) {
         this.saveCancelService = saveCancelService;
+    }
+
+    public void setCurrencySetService(CurrencySetService currencySetService) {
+        this.currencySetService = currencySetService;
     }
 }
