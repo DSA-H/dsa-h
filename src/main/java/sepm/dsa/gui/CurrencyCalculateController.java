@@ -2,7 +2,6 @@ package sepm.dsa.gui;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -46,14 +45,14 @@ public class CurrencyCalculateController extends BaseControllerImpl {
         log.debug("reload CurrencyCalculateController");
         // init table
         List<Currency> currencies = currencyService.getAll();
-        choiceFirst.setItems(FXCollections.observableArrayList(currencies));
+	choiceFirst.getItems().setAll(currencies);
         choiceFirst.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Currency>() {
             @Override
             public void changed(ObservableValue<? extends Currency> observable, Currency oldValue, Currency newValue) {
                 labelvon.setText(newValue.getName());
             }
         });
-        choiceSecond.setItems(FXCollections.observableArrayList(currencies));
+	choiceSecond.getItems().setAll(currencies);
         choiceSecond.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Currency>() {
             @Override
             public void changed(ObservableValue<? extends Currency> observable, Currency oldValue, Currency newValue) {

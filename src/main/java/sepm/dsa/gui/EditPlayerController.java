@@ -2,7 +2,6 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -73,7 +72,7 @@ public class EditPlayerController extends BaseControllerImpl {
             nameField.setText(selectedPlayer.getName());
             commentField.setText(selectedPlayer.getComment());
             if (selectedPlayer.getDeals().size() > 0) {
-                dealsTable.setItems(FXCollections.observableArrayList(selectedPlayer.getDeals()));
+		dealsTable.getItems().setAll(selectedPlayer.getDeals());
             }
         } else {
             isNewPlaper = true;

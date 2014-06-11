@@ -3,8 +3,6 @@ package sepm.dsa.gui;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -94,16 +92,14 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
             for (LocationConnection con : allConnections) {
                 locationConnectionsToStore.add(new LocationConnectionWrapper(con));
             }
-            ObservableList<LocationConnection> connections = FXCollections.observableArrayList(allConnections);
-            locationConnectionsTable.setItems(connections);
+	    locationConnectionsTable.getItems().setAll(allConnections);
         } else {
             Set<LocationConnection> allConnections = new HashSet<>(locationConnectionsToStore.size());
             for (LocationConnectionWrapper conWrapper : locationConnectionsToStore) {
 //                locationConnectionsToStore.add(new LocationConnectionWrapper(con));
                 allConnections.add(conWrapper.getLocationConnection());
             }
-            ObservableList<LocationConnection> connections = FXCollections.observableArrayList(allConnections);
-            locationConnectionsTable.setItems(connections);
+		locationConnectionsTable.getItems().setAll(allConnections);
         }
 
         scTravelTimeColumn.setCellValueFactory(new PropertyValueFactory<>("travelTime"));
@@ -162,8 +158,7 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
                 newConns.add(c);
             }
         }
-        ObservableList<LocationConnection> connections2 = FXCollections.observableArrayList(newConns);
-        suggestLocationConnectionsTable.setItems(connections2);
+	suggestLocationConnectionsTable.setItems(newConns);
 
     }
 

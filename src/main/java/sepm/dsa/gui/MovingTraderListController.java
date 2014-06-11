@@ -2,7 +2,6 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -78,7 +77,7 @@ public class MovingTraderListController extends BaseControllerImpl {
                 movingTraders.add((MovingTrader) t);
             }
         }
-        traderTable.setItems(FXCollections.observableArrayList(movingTraders));
+	traderTable.getItems().setAll(movingTraders);
 
         checkFocus();
     }

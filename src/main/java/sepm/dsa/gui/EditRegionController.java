@@ -2,8 +2,6 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -72,8 +70,8 @@ public class EditRegionController extends BaseControllerImpl {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-        temperatureChoiceBox.setItems(FXCollections.observableArrayList(Temperature.values()));
-        rainfallChoiceBox.setItems(FXCollections.observableArrayList(RainfallChance.values()));
+	temperatureChoiceBox.getItems().setAll(Temperature.values());
+	rainfallChoiceBox.getItems().setAll(RainfallChance.values());
 
         // init border table
         borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<RegionBorder, String>, ObservableValue<String>>() {
@@ -108,8 +106,7 @@ public class EditRegionController extends BaseControllerImpl {
             temperatureChoiceBox.getSelectionModel().select(Temperature.MEDIUM.getValue());
             rainfallChoiceBox.getSelectionModel().select(RainfallChance.MEDIUM.getValue());
 
-            ObservableList<RegionBorder> data = FXCollections.observableArrayList();
-            borderTable.setItems(data);
+	    borderTable.getItems().retainAll();
         }
 
 
@@ -125,7 +122,7 @@ public class EditRegionController extends BaseControllerImpl {
             otherRegions.remove(regionBorder.getRegion2());
         }
 
-        borderChoiceBox.setItems(FXCollections.observableArrayList(otherRegions));
+	borderChoiceBox.getItems().setAll(otherRegions);
     }
 
     public void setRegionService(RegionService regionService) {
@@ -298,8 +295,7 @@ public class EditRegionController extends BaseControllerImpl {
             rainfallChoiceBox.getSelectionModel().select(selectedRegion.getRainfallChance().getValue());
             commentArea.setText(selectedRegion.getComment());
 
-            ObservableList<RegionBorder> data = FXCollections.observableArrayList(regionBorderService.getAllByRegion(selectedRegion.getId()));
-            borderTable.setItems(data);
+	    borderTable.getItems().setAll(regionBorderService.getAllByRegion(selectedRegion.getId()));
         }
     }
 

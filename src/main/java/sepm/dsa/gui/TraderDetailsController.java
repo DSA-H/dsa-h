@@ -2,7 +2,6 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -374,9 +373,8 @@ public class TraderDetailsController extends BaseControllerImpl {
             return result;
         }).collect(Collectors.toList());
 
-        offerTable.getItems().clear();
-        offerTable.setItems(FXCollections.observableArrayList(offers));
-        dealsTable.setItems(FXCollections.observableArrayList(trader.getDeals()));
+	offerTable.getItems().setAll(offers);
+	dealsTable.getItems().setAll(trader.getDeals());
     }
 
     public void setDealService(DealService dealService) {

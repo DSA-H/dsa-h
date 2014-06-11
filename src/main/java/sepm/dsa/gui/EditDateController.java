@@ -1,6 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -38,7 +37,7 @@ public class EditDateController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("reload EditDateController");
-        month.setItems(FXCollections.observableArrayList(DSADate.getMonthNames()));
+	month.getItems().setAll(DSADate.getMonthNames());
 
         DSADate date = timeService.getCurrentDate();
 

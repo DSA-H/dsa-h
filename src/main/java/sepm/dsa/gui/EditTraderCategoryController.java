@@ -1,6 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -78,13 +77,13 @@ public class EditTraderCategoryController extends BaseControllerImpl {
                 productCategories.remove(as.getProductCategory());
             }
 
-            productCategoryChoiceBox.setItems(FXCollections.observableArrayList(productCategories));
-            assortmentTable.setItems(FXCollections.observableArrayList(traderCategory.getAssortments().values()));
+	    productCategoryChoiceBox.getItems().setAll(productCategories);
+	    assortmentTable.getItems().setAll(traderCategory.getAssortments().values());
 
         } else {
             isNewTraderCategory = true;
             traderCategory = new TraderCategory();
-            productCategoryChoiceBox.setItems(FXCollections.observableArrayList(productCategories));
+	    productCategoryChoiceBox.getItems().setAll(productCategories);
         }
 
         checkFocus();

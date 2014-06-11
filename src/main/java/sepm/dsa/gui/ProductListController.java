@@ -2,8 +2,6 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -115,8 +113,7 @@ public class ProductListController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("reload ProductListController");
-        ObservableList<Product> data = FXCollections.observableArrayList(productService.getAll());
-        productTable.setItems(data);
+	    productTable.getItems().setAll(productService.getAll());
 
         checkFocus();
     }

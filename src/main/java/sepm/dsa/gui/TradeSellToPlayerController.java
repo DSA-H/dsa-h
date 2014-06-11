@@ -1,6 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -101,10 +100,10 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
 
         selectedDiscount.setText("0");
 
-        selectedCurrency.setItems(FXCollections.observableArrayList(currencySetService.getAll()));
-        selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAllByType(offer.getProduct().getUnit().getUnitType())));
+	selectedCurrency.getItems().setAll(currencySetService.getAll());
+	selectedUnit.getItems().setAll(unitService.getAllByType(offer.getProduct().getUnit().getUnitType()));
 //        selectedPrice.setText(offer.getPricePerUnit().toString());
-        selectedPlayer.setItems(FXCollections.observableArrayList(playerService.getAll()));
+	selectedPlayer.getItems().setAll(playerService.getAll());
 
         //select default unit & currency
         CurrencySet preferredCurrency = trader.getLocation().getRegion().getPreferredCurrencySet();

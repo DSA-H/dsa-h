@@ -3,8 +3,6 @@ package sepm.dsa.gui;
 import com.sun.javafx.stage.StageHelper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -1020,8 +1018,7 @@ public class MainMenuController extends BaseControllerImpl {
 	 * updates the locationTable
 	 */
 	private void updateTables() {
-		ObservableList<Location> data = FXCollections.observableArrayList(locationService.getAll());
-		locationTable.setItems(data);
+		locationTable.getItems().setAll(locationService.getAll());
 
 		if (selectedLocation != null) {
 			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
@@ -1033,7 +1030,7 @@ public class MainMenuController extends BaseControllerImpl {
 			for (Tavern t : taverns) {
 				all.add(t);
 			}
-			traderList.setItems(FXCollections.observableArrayList(all));
+			traderList.getItems().setAll(all);
 		}
 	}
 

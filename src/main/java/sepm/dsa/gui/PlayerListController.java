@@ -1,7 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -43,8 +41,7 @@ public class PlayerListController extends BaseControllerImpl {
         // init table
         currencyColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        ObservableList<Player> data = FXCollections.observableArrayList(playerService.getAll());
-        playerTable.setItems(data);
+	playerTable.getItems().setAll(playerService.getAll());
 
         checkFocus();
     }

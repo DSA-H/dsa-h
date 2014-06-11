@@ -2,8 +2,6 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -86,9 +84,8 @@ public class EditLocationController extends BaseControllerImpl {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-        weatherChoiceBox.setItems(FXCollections.observableArrayList(Weather.values()));
-        sizeChoiceBox.setItems(FXCollections.observableArrayList(TownSize.values()));
-
+        weatherChoiceBox.getItems().setAll(Weather.values());
+        sizeChoiceBox.getItems().setAll(TownSize.values());
 
         travelTimeColumn.setCellValueFactory(new PropertyValueFactory<>("travelTime"));
 
@@ -120,16 +117,13 @@ public class EditLocationController extends BaseControllerImpl {
         }
 
         // init region choice box
-        List<Region> regions = regionService.getAll();
-        Region selectedRegion = regionChoiceBox.getSelectionModel().getSelectedItem();
-        regionChoiceBox.setItems(FXCollections.observableArrayList(regions));
+	    Region selectedRegion = regionChoiceBox.getSelectionModel().getSelectedItem();
+        regionChoiceBox.getItems().setAll(regionService.getAll());
         if(selectedRegion != null) {
             regionChoiceBox.getSelectionModel().select(selectedRegion);
         }
 
-        Set<LocationConnection> allConnections = this.connections;
-        ObservableList<LocationConnection> connections = FXCollections.observableArrayList(allConnections);
-        locationConnectionsTable.setItems(connections);
+	    locationConnectionsTable.getItems().setAll(this.connections);
     }
 
     public void setLocationService(LocationService locationService) {

@@ -1,6 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -163,8 +162,7 @@ public class PlacementController extends BaseControllerImpl {
 				headline.setText("Ort platzieren");
 				newButton.setText("Neuer Ort");
 				newTavernButton.setVisible(false);
-				List<Location> locations = locationService.getAll();
-				choiceBox.setItems(FXCollections.observableArrayList(locations));
+				choiceBox.getItems().setAll(locationService.getAll());
 			} else {
 				headline.setText("Händler/Wirtshaus platzieren");
 				newButton.setText("Neuer Händler");
@@ -178,7 +176,7 @@ public class PlacementController extends BaseControllerImpl {
 				for (Tavern t : taverns) {
 					all.add(t);
 				}
-				choiceBox.setItems(FXCollections.observableArrayList(all));
+				choiceBox.getItems().setAll(all);
 			}
 			if (selectedObj != null) {
 				choiceBox.getSelectionModel().select(selectedObj);
