@@ -123,6 +123,10 @@ public class EditProductController extends BaseControllerImpl {
         }
         categorieColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        List<Unit> unitList = unitService.getAll();
+        unitBox.setItems(FXCollections.observableArrayList(unitList));
+        attributeBox.setItems(FXCollections.observableArrayList(ProductAttribute.values()));
     }
 
     @Override
@@ -131,11 +135,6 @@ public class EditProductController extends BaseControllerImpl {
 
         List<ProductCategory> categoryList = productCategoryService.getAll();
         List<Region> regionList = regionService.getAll();
-
-        List<Unit> unitList = unitService.getAll();
-        unitBox.setItems(FXCollections.observableArrayList(unitList));
-
-        attributeBox.setItems(FXCollections.observableArrayList(ProductAttribute.values()));
 
         categoryList.removeAll(categorieTable.getItems());
         regionList.removeAll(regionTable.getItems());
