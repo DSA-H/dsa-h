@@ -41,8 +41,6 @@ public class TraderServiceImpl implements TraderService {
 
     private static final Double EPSILON = 1E-5;
 
-	private SessionFactory sessionFactory;
-
 	@Override
     public Trader get(int id) {
         log.debug("calling get(" + id + ")");
@@ -601,10 +599,6 @@ public class TraderServiceImpl implements TraderService {
 		trader.getOffers().size();
 
 		return trader.getOffers();
-	}
-
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
 	}
 
     public void setTimeService(TimeService timeService) {
