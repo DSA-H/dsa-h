@@ -71,9 +71,8 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
     private Button editButton;
 
     @Override
-    public void reload() {
-        log.debug("initialize");
-        log.info("--- going to edit location connections for location '" + selectedLocation + "'");
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
         travelTimeColumn.setCellValueFactory(new PropertyValueFactory<>("travelTime"));
         connectionToColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LocationConnection, String>, ObservableValue<String>>() {
             @Override
@@ -86,22 +85,6 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
                 }
             }
         });
-        if (loadSelectedLocation_Connections_OnReload) {
-            Set<LocationConnection> allConnections = selectedLocation.getAllConnections();
-            locationConnectionsToStore.clear();
-            for (LocationConnection con : allConnections) {
-                locationConnectionsToStore.add(new LocationConnectionWrapper(con));
-            }
-	    locationConnectionsTable.getItems().setAll(allConnections);
-        } else {
-            Set<LocationConnection> allConnections = new HashSet<>(locationConnectionsToStore.size());
-            for (LocationConnectionWrapper conWrapper : locationConnectionsToStore) {
-//                locationConnectionsToStore.add(new LocationConnectionWrapper(con));
-                allConnections.add(conWrapper.getLocationConnection());
-            }
-		locationConnectionsTable.getItems().setAll(allConnections);
-        }
-
         scTravelTimeColumn.setCellValueFactory(new PropertyValueFactory<>("travelTime"));
         scConnectedToColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LocationConnection, String>, ObservableValue<String>>() {
             @Override
@@ -114,13 +97,35 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
                 }
             }
         });
-
         locationConnectionsTable.getFocusModel().focusedItemProperty().addListener(new ChangeListener<LocationConnection>() {
             @Override
             public void changed(ObservableValue<? extends LocationConnection> observable, LocationConnection oldValue, LocationConnection newValue) {
                 checkFocus();
             }
         });
+    }
+
+    @Override
+    public void reload() {
+        log.debug("initialize");
+        log.info("--- going to edit location connections for location '" + selectedLocation + "'");
+
+        if (loadSelectedLocation_Connections_OnReload) {
+            Set<LocationConnection> allConnections = selectedLocation.getAllConnections();
+            locationConnectionsToStore.clear();
+            for (LocationConnection con : allConnections) {
+                locationConnectionsToStore.add(new LocationConnectionWrapper(con));
+            }
+	        locationConnectionsTable.getItems().setAll(allConnections);
+        } else {
+            Set<LocationConnection> allConnections = new HashSet<>(locationConnectionsToStore.size());
+            for (LocationConnectionWrapper conWrapper : locationConnectionsToStore) {
+//                locationConnectionsToStore.add(new LocationConnectionWrapper(con));
+                allConnections.add(conWrapper.getLocationConnection());
+            }
+		    locationConnectionsTable.getItems().setAll(allConnections);
+        }
+
         checkFocus();
         // TODO suggest connections click
     }
