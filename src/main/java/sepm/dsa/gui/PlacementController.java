@@ -104,7 +104,7 @@ public class PlacementController extends BaseControllerImpl {
 			stage.setTitle("Ort erstellen");
 			stage.setScene(new Scene(scene, 900, 438));
 			stage.setResizable(false);
-			stage.showAndWait();
+			stage.show();
 		} else {
 			Stage stage = new Stage();
 			Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
@@ -117,7 +117,7 @@ public class PlacementController extends BaseControllerImpl {
             controller.reload();
 			stage.setScene(new Scene(scene, 785, 513));
 			stage.setResizable(false);
-			stage.showAndWait();
+			stage.show();
 		}
 
 		Stage stage = (Stage) choiceBox.getScene().getWindow();
@@ -136,7 +136,7 @@ public class PlacementController extends BaseControllerImpl {
 		controller.setLocation(selectedLocation);
 		stage.setScene(new Scene(scene, 600, 400));
 		stage.setResizable(false);
-		stage.showAndWait();
+		stage.show();
 
 		stage = (Stage) choiceBox.getScene().getWindow();
 		stage.close();
