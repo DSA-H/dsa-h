@@ -136,8 +136,9 @@ public class EditProductController extends BaseControllerImpl {
         unitBox.setItems(FXCollections.observableArrayList(unitList));
 
         attributeBox.setItems(FXCollections.observableArrayList(ProductAttribute.values()));
-        categorieChoiceBox.setItems(FXCollections.observableArrayList(categoryList));
-        regionChoiceBox.setItems(FXCollections.observableArrayList(regionList));
+
+        categoryList.removeAll(categorieTable.getItems());
+        regionList.removeAll(regionTable.getItems());
 
         if (selectedProduct != null){
             isNewProduct = false;
@@ -150,6 +151,9 @@ public class EditProductController extends BaseControllerImpl {
             refreshPriceView(0);
             unitBox.getSelectionModel().selectFirst();
         }
+
+        categorieChoiceBox.setItems(FXCollections.observableArrayList(categoryList));
+        regionChoiceBox.setItems(FXCollections.observableArrayList(regionList));
     }
 
     @FXML
