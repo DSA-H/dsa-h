@@ -6,7 +6,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,7 +22,6 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
 import sepm.dsa.model.LocationConnectionWrapper;
-import sepm.dsa.model.RegionBorder;
 import sepm.dsa.service.LocationConnectionService;
 import sepm.dsa.service.LocationService;
 
@@ -31,16 +29,16 @@ import java.net.URL;
 import java.util.*;
 
 @Service("EditLocationConnectionsController")
-public class EditLocationConnectionsController implements Initializable {
+public class EditLocationConnectionsController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(EditLocationConnectionsController.class);
 
     private SpringFxmlLoader loader;
 
-    private static Location selectedLocation;
+    private Location selectedLocation;
     private static List<LocationConnection> locationConnections;
 
-    private static boolean loadSelectedLocation_Connections_OnInitialize = true;
+    private boolean loadSelectedLocation_Connections_OnReload = true;
 
     private LocationConnectionService locationConnectionService;
     private LocationService locationService;
@@ -76,11 +74,12 @@ public class EditLocationConnectionsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+    }
+
+    @Override
+    public void reload() {
         log.debug("initialize");
         log.info("--- going to edit location connections for location '" + selectedLocation + "'");
-
-//        reloadLocation();
-
         travelTimeColumn.setCellValueFactory(new PropertyValueFactory<>("travelTime"));
         connectionToColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LocationConnection, String>, ObservableValue<String>>() {
             @Override
@@ -93,7 +92,7 @@ public class EditLocationConnectionsController implements Initializable {
                 }
             }
         });
-        if (loadSelectedLocation_Connections_OnInitialize) {
+        if (loadSelectedLocation_Connections_OnReload) {
             Set<LocationConnection> allConnections = selectedLocation.getAllConnections();
             locationConnectionsToStore.clear();
             for (LocationConnection con : allConnections) {
@@ -134,13 +133,12 @@ public class EditLocationConnectionsController implements Initializable {
         // TODO suggest connections click
     }
 
-
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
     }
 
-    public static void setSelectedLocation(Location selectedLocation) {
-        EditLocationConnectionsController.selectedLocation = selectedLocation;
+    public void setSelectedLocation(Location selectedLocation) {
+        this.selectedLocation = selectedLocation;
     }
 
     public void setLocationConnectionService(LocationConnectionService locationConnectionService) {
@@ -177,13 +175,14 @@ public class EditLocationConnectionsController implements Initializable {
     public void onEditConnectionClicked() {
         log.debug("calling onEditConnectionClicked()");
         LocationConnection selected = locationConnectionsTable.getSelectionModel().getSelectedItem();
-//        selected = locationConnectionService.get(selected.getLocation1(), selected.getLocation2());
-        EditLocationConnectionController.setLocationConnection(selected);
 
-        EditLocationConnectionsController.setLoadSelectedLocation_Connections_OnInitialize(false);
+        this.setLoadSelectedLocation_Connections_OnInitialize(false);
 
         Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
         Parent root = (Parent) loader.load("/gui/editlocationconnection.fxml");
+        EditLocationConnectionController ctrl = loader.getController();
+        ctrl.setLocationConnection(selected);
+        ctrl.reload();
 
         stage.setTitle("Reiseverbindung bearbeiten");
         stage.setScene(new Scene(root, 500, 380));
@@ -226,15 +225,17 @@ public class EditLocationConnectionsController implements Initializable {
 
 //        selectedLocation.clearConnections();
 //        selectedLocation.addAllConnections(locationConnectionsToStore);
-        EditLocationController.setLocation(selectedLocation);
         Set<LocationConnection> selectedLocationConnections = new HashSet<>(locationConnectionsToStore.size());
         for (LocationConnectionWrapper conWrapper : locationConnectionsToStore) {
             selectedLocationConnections.add(conWrapper.getLocationConnection());
         }
-        EditLocationController.setConnections(selectedLocationConnections);
 
         Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
         Parent root = (Parent) loader.load("/gui/editlocation.fxml");
+        EditLocationController ctrl = loader.getController();
+        ctrl.setLocation(selectedLocation);
+        ctrl.setConnections(selectedLocationConnections);
+        ctrl.reload();
 
         stage.setTitle("Ort erstellen");
         stage.setScene(new Scene(root, 900, 438));
@@ -299,7 +300,7 @@ public class EditLocationConnectionsController implements Initializable {
 //    }
 
 
-    public static void setLoadSelectedLocation_Connections_OnInitialize(boolean loadSelectedLocation_Connections_OnInitialize) {
-        EditLocationConnectionsController.loadSelectedLocation_Connections_OnInitialize = loadSelectedLocation_Connections_OnInitialize;
+    public void setLoadSelectedLocation_Connections_OnInitialize(boolean loadSelectedLocation_Connections_OnInitialize) {
+        this.loadSelectedLocation_Connections_OnReload = loadSelectedLocation_Connections_OnInitialize;
     }
 }

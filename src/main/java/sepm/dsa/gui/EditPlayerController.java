@@ -22,7 +22,7 @@ import sepm.dsa.util.CurrencyFormatUtil;
 
 import java.util.List;
 
-public class EditPlayerController implements Initializable {
+public class EditPlayerController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(EditPlayerController.class);
     private SpringFxmlLoader loader;
@@ -34,7 +34,7 @@ public class EditPlayerController implements Initializable {
 
     private SaveCancelService saveCancelService;
 
-    private static Player selectedPlayer;
+    private Player selectedPlayer;
     private boolean isNewPlaper;
     private CurrencySet defaultCurrencySet;
 
@@ -62,9 +62,14 @@ public class EditPlayerController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize EditPlayerController");
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload EditPlayerController");
 
         defaultCurrencySet = currencySetService.getDefaultCurrencySet();
-        
+
         //initialize table
         initialzeTableWithColums();
 
@@ -189,7 +194,7 @@ public class EditPlayerController implements Initializable {
         this.loader = loader;
     }
 
-    public static void setPlayer(Player player) {
+    public void setPlayer(Player player) {
         selectedPlayer = player;
     }
 

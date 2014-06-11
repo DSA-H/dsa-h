@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class CalculatePriceController implements Initializable {
+public class CalculatePriceController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(CalculatePriceController.class);
     private SpringFxmlLoader loader;
@@ -54,8 +54,12 @@ public class CalculatePriceController implements Initializable {
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize EditTraderController");
+        log.debug("initialize CalculatePriceController");
+    }
 
+    @Override
+    public void reload() {
+        log.debug("reload CalculatePriceController");
         defaultCurrencySet = currencySetService.getDefaultCurrencySet();
 
         columnProduct.setCellValueFactory(new PropertyValueFactory<>("name"));

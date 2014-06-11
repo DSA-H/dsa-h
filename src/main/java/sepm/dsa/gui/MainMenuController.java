@@ -34,6 +34,7 @@ import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.*;
 import sepm.dsa.service.*;
@@ -47,7 +48,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainMenuController implements Initializable {
+public class MainMenuController extends BaseControllerImpl {
 
 	private static final Logger log = LoggerFactory.getLogger(MainMenuController.class);
 	private static final int WORLDMODE = 0;
@@ -159,17 +160,15 @@ public class MainMenuController implements Initializable {
 
 	@Override
 	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-		updateMap();
-
 		// init location-table
 		locationColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 		regionColumn.setCellValueFactory(new PropertyValueFactory<>("region"));
 		locationTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Location>() {
-			@Override
-			public void changed(ObservableValue<? extends Location> observable, Location oldValue, Location newValue) {
-				if (mode == WORLDMODE) checkLocationFocus();
-			}
-		});
+            @Override
+            public void changed(ObservableValue<? extends Location> observable, Location oldValue, Location newValue) {
+                if (mode == WORLDMODE) checkLocationFocus();
+            }
+        });
 
 		// init trader-list
 		traderList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -179,29 +178,27 @@ public class MainMenuController implements Initializable {
 			}
 		});
 
-		updateTables();
-
 		mode = WORLDMODE;
 
 		chooseButton.setStyle("-fx-font-weight: bold;");
 
 		// scroll-position listener: on sudden changes the scroll position is set to (hVal/vVal)
 		scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				if (!dontUpdateScroll) {
-					if (Math.abs(oldValue.doubleValue() - newValue.doubleValue()) > 0.1) {
-						dontUpdateScroll = true;
-						scrollPane.setVvalue(vVal);
-						scrollPane.setHvalue(hVal);
-						vVal = 0;
-						hVal = 0;
-					}
-				} else {
-					dontUpdateScroll = false;
-				}
-			}
-		});
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if (!dontUpdateScroll) {
+                    if (Math.abs(oldValue.doubleValue() - newValue.doubleValue()) > 0.1) {
+                        dontUpdateScroll = true;
+                        scrollPane.setVvalue(vVal);
+                        scrollPane.setHvalue(hVal);
+                        vVal = 0;
+                        hVal = 0;
+                    }
+                } else {
+                    dontUpdateScroll = false;
+                }
+            }
+        });
 
 		// init zoom
 		zoomSlider.setMin((536) / mapCanvas.getHeight());
@@ -225,10 +222,17 @@ public class MainMenuController implements Initializable {
 				updateZoom();
 			}
 		});
-
 	}
 
-	/**
+    @Override
+    public void reload() {
+        updateTables();
+        updateMap();
+        checkLocationFocus();
+        checkTraderFocus();
+    }
+
+    /**
 	 * WORLDMODE: Edit-Button
 	 * LOCATIONMODE: Details-Button
 	 */
@@ -237,10 +241,11 @@ public class MainMenuController implements Initializable {
 		log.debug("onEditButtonPressed - open Details Window");
 
 		if (mode == WORLDMODE) {
-			EditLocationController.setLocation(selectedLocation);
-
 			Stage stage = new Stage();
 			Parent scene = (Parent) loader.load("/gui/editlocation.fxml");
+            EditLocationController ctrl = loader.getController();
+            ctrl.setLocation(selectedLocation);
+            ctrl.reload();
 
 			stage.setTitle("Ort bearbeiten");
 			stage.setScene(new Scene(scene, 900, 438));
@@ -254,6 +259,7 @@ public class MainMenuController implements Initializable {
 
 				TraderDetailsController controller = loader.getController();
 				controller.setTrader((Trader) selectedObject);
+                controller.reload();
 				stage.setScene(new Scene(scene, 781, 830));
 				stage.setResizable(false);
 				stage.showAndWait();
@@ -264,6 +270,7 @@ public class MainMenuController implements Initializable {
 
 				EditTavernController controller = loader.getController();
 				controller.setTavern((Tavern) selectedObject);
+                controller.reload();
 				stage.setScene(new Scene(scene, 383, 400));
 				stage.setResizable(false);
 				stage.showAndWait();
@@ -271,9 +278,7 @@ public class MainMenuController implements Initializable {
 
 		}
 
-		updateTables();
-		updateMap();
-
+		reload();
 	}
 
 	/**
@@ -348,10 +353,7 @@ public class MainMenuController implements Initializable {
 			}
 		}
 
-		updateTables();
-		updateMap();
-		checkLocationFocus();
-		checkTraderFocus();
+		reload();
 	}
 
 	/**
@@ -365,10 +367,12 @@ public class MainMenuController implements Initializable {
 
 		if (mode == WORLDMODE) {
 			if (mapService.getWorldMap() == null) {
-				EditLocationController.setLocation(null);
 
 				Stage stage = new Stage();
 				Parent scene = (Parent) loader.load("/gui/editlocation.fxml");
+                EditLocationController ctrl = loader.getController();
+                ctrl.setLocation(null);
+                ctrl.reload();
 
 				stage.setTitle("Ort erstellen");
 				stage.setScene(new Scene(scene, 900, 438));
@@ -394,6 +398,7 @@ public class MainMenuController implements Initializable {
 
 				stage.setTitle("Händler/Wirtshaus platzieren");
 				controller.setUp(selectedLocation, new Point2D(0, 0), null, true);
+                controller.reload();
 
 				stage.setScene(new Scene(scene, 350, 190));
 				stage.setResizable(false);
@@ -525,6 +530,8 @@ public class MainMenuController implements Initializable {
 				stage.setTitle("Händler/Wirtshaus platzieren");
 				controller.setUp(selectedLocation, realPos, selectedObject, false); // (locaiton, position, selectedObject, noMap)
 			}
+            controller.reload();
+
 			stage.setScene(new Scene(scene, 350, 190));
 			stage.setResizable(false);
 			stage.showAndWait();
@@ -581,6 +588,7 @@ public class MainMenuController implements Initializable {
 								Parent scene = (Parent) loader.load("/gui/movingtraderlist.fxml");
 								MovingTraderListController controller = loader.getController();
 								controller.setLocationConnection(lc);
+                                controller.reload();
 								stage.setTitle("Fahrende Händler");
 								stage.setScene(new Scene(scene, 600, 400));
 								stage.setResizable(false);
@@ -619,6 +627,8 @@ public class MainMenuController implements Initializable {
 		log.debug("onPlayerClicked - open Player Window");
 		Stage stage = new Stage();
 		Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
+        BaseController ctrl = loader.getController();
+        ctrl.reload();
 
 		stage.setTitle("Spieler verwalten");
 		stage.setScene(new Scene(scene, 600, 438));
@@ -635,6 +645,8 @@ public class MainMenuController implements Initializable {
 		Stage stage = new Stage();
 
 		Parent scene = (Parent) loader.load("/gui/currencyList.fxml");
+        BaseController ctrl = loader.getController();
+        ctrl.reload();
 
 		stage.setTitle("Währungen");
 		stage.setScene(new Scene(scene, 600, 438));
@@ -651,6 +663,8 @@ public class MainMenuController implements Initializable {
 		Stage stage = new Stage();
 
 		Parent scene = (Parent) loader.load("/gui/calculatecurrency.fxml");
+        BaseController ctrl = loader.getController();
+        ctrl.reload();
 
 		stage.setTitle("Währung umrechnen");
 		stage.setScene(new Scene(scene, 600, 215));
@@ -667,6 +681,8 @@ public class MainMenuController implements Initializable {
         Stage stage = new Stage();
 
         Parent scene = (Parent) loader.load("/gui/calculatePrice.fxml");
+        BaseController ctrl = loader.getController();
+        ctrl.reload();
 
         stage.setTitle("Preis berechnen");
         stage.setScene(new Scene(scene, 600, 400));
@@ -683,6 +699,8 @@ public class MainMenuController implements Initializable {
 
 		Stage stage = new Stage();
 		Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
+        BaseController ctrl = loader.getController();
+        ctrl.reload();
 
 		stage.setTitle("Grenzen und Gebiete");
 		stage.setScene(new Scene(scene, 600, 438));
@@ -700,6 +718,8 @@ public class MainMenuController implements Initializable {
 		log.debug("onTraderCategoriesClicked - open Trader Categories Window");
 		Stage stage = new Stage();
 		Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml");
+        BaseController ctrl = loader.getController();
+        ctrl.reload();
 
 		stage.setTitle("Händlerkategorien");
 		stage.setScene(new Scene(scene, 600, 438));
@@ -718,6 +738,8 @@ public class MainMenuController implements Initializable {
 		Stage stage = new Stage();
 
 		Parent scene = (Parent) loader.load("/gui/productslist.fxml");
+        BaseController ctrl = loader.getController();
+        ctrl.reload();
 
 		stage.setTitle("Waren");
 		stage.setScene(new Scene(scene, 600, 438));
@@ -736,6 +758,8 @@ public class MainMenuController implements Initializable {
 		Stage stage = new Stage();
 
 		Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml");
+        BaseController ctrl = loader.getController();
+        ctrl.reload();
 
 		stage.setTitle("Warenkategorie");
 		stage.setScene(new Scene(scene, 600, 438));
@@ -754,6 +778,8 @@ public class MainMenuController implements Initializable {
 		Stage stage = new Stage();
 
 		Parent scene = (Parent) loader.load("/gui/edittime.fxml");
+        BaseController ctrl = loader.getController();
+        ctrl.reload();
 
 		stage.setTitle("Datum umstellen");
 		stage.setScene(new Scene(scene, 419, 150));
@@ -772,6 +798,8 @@ public class MainMenuController implements Initializable {
 		Stage stage = new Stage();
 
 		Parent scene = (Parent) loader.load("/gui/forwardtime.fxml");
+        BaseController ctrl = loader.getController();
+        ctrl.reload();
 
 		stage.setTitle("Zeit vorstellen");
 		stage.setScene(new Scene(scene, 462, 217));

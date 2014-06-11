@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class TradeSellToPlayerController implements Initializable {
+public class TradeSellToPlayerController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(TradeSellToPlayerController.class);
 
@@ -71,8 +71,8 @@ public class TradeSellToPlayerController implements Initializable {
 
     private List<Currency> currencies;
 
-    private static Trader trader;
-    private static Offer offer;
+    private Trader trader;
+    private Offer offer;
     private TraderService traderService;
     private SaveCancelService saveCancelService;
     private UnitService unitService;
@@ -82,7 +82,12 @@ public class TradeSellToPlayerController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        log.debug("initialize TradeSellToPlayerController");
+    }
 
+    @Override
+    public void reload() {
+        log.debug("reload TradeSellToPlayerController");
         lbl_CurrencyAmounts =
                 new Label[] {
                         lbl_CurrencyAmount1,
@@ -334,12 +339,12 @@ public class TradeSellToPlayerController implements Initializable {
     }
 
 
-    public static void setTrader(Trader trader) {
-        TradeSellToPlayerController.trader = trader;
+    public void setTrader(Trader trader) {
+        this.trader = trader;
     }
 
-    public static void setOffer(Offer offer) {
-        TradeSellToPlayerController.offer = offer;
+    public void setOffer(Offer offer) {
+        this.offer = offer;
     }
 
     public void setTraderService(TraderService traderService) {

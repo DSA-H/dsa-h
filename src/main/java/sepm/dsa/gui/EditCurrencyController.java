@@ -17,7 +17,7 @@ import sepm.dsa.service.SaveCancelService;
 
 import java.math.BigDecimal;
 
-public class EditCurrencyController implements Initializable {
+public class EditCurrencyController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(EditCurrencyController.class);
     private SpringFxmlLoader loader;
@@ -25,7 +25,7 @@ public class EditCurrencyController implements Initializable {
     private CurrencyService currencyService;
     private SaveCancelService saveCancelService;
 
-    private static Currency selectedCurrency;
+    private Currency selectedCurrency;
     private boolean isNewCurrency;
 
     @FXML
@@ -42,7 +42,11 @@ public class EditCurrencyController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize EditCurrencyController");
+    }
 
+    @Override
+    public void reload() {
+        log.debug("reload EditCurrencyController");
         if (selectedCurrency != null) {
             isNewCurrency = false;
             nameField.setText(selectedCurrency.getName());
@@ -52,6 +56,10 @@ public class EditCurrencyController implements Initializable {
             isNewCurrency = true;
             selectedCurrency = new Currency();
         }
+    }
+
+    public void setCurrency(Currency selectedCurrency) {
+        this.selectedCurrency = selectedCurrency;
     }
 
     @FXML
@@ -100,10 +108,6 @@ public class EditCurrencyController implements Initializable {
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/currencyList.fxml");
         stage.setScene(new Scene(scene, 600, 438));
-    }
-
-    public static void setCurrency(Currency currency) {
-        selectedCurrency = currency;
     }
 
     public void setCurrencyService(CurrencyService currencyService) {

@@ -25,7 +25,7 @@ import sepm.dsa.service.TavernService;
 
 import java.util.List;
 
-public class TavernListController implements Initializable {
+public class TavernListController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(TavernListController.class);
     private SpringFxmlLoader loader;
@@ -48,9 +48,6 @@ public class TavernListController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize TavernListController");
-
-        List<Location> locations = locationService.getAll();
-        locationBox.setItems(FXCollections.observableArrayList(locations));
         locationBox.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Location>() {
                     @Override
@@ -80,6 +77,13 @@ public class TavernListController implements Initializable {
         );
     }
 
+    @Override
+    public void reload() {
+        log.debug("reload TavernListController");
+        List<Location> locations = locationService.getAll();
+        locationBox.setItems(FXCollections.observableArrayList(locations));
+    }
+
     @FXML
     private void onCreatePressed() {
         log.debug("called onCreateButtonPressed");
@@ -88,6 +92,7 @@ public class TavernListController implements Initializable {
         Parent scene = (Parent) loader.load("/gui/edittavern.fxml");
         EditTavernController controller = loader.getController();
         controller.setTavern(null);
+        controller.reload();
         stage.setScene(new Scene(scene, 600, 400));
     }
 
@@ -133,6 +138,7 @@ public class TavernListController implements Initializable {
         checkFocus();
         selectedTavern = (Tavern) tavernList.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         controller.setTavern(selectedTavern);
+        controller.reload();
         stage.setScene(new Scene(scene, 600, 400));
     }
 

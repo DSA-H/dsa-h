@@ -28,12 +28,12 @@ import sepm.dsa.service.SaveCancelService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditRegionController implements Initializable {
+public class EditRegionController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(EditRegionController.class);
     private SpringFxmlLoader loader;
 
-    private static Region selectedRegion;
+    private Region selectedRegion;
 
     private RegionService regionService;
     private RegionBorderService regionBorderService;
@@ -70,6 +70,11 @@ public class EditRegionController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise EditRegionController");
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload EditRegionController");
 
         // init ChoiceBoxes
         List<String> temperatureList = new ArrayList<>();
@@ -295,7 +300,7 @@ public class EditRegionController implements Initializable {
         }
     }
 
-    public static void setRegion(Region region) {
+    public void setRegion(Region region) {
         log.debug("calling setRegion(" + region + ")");
         selectedRegion = region;
     }

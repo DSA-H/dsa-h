@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Location;
@@ -24,7 +25,7 @@ import java.util.ResourceBundle;
 
 
 @Service("EditLocationConnectionController")
-public class EditLocationConnectionController implements Initializable {
+public class EditLocationConnectionController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(EditLocationConnectionController.class);
     private SpringFxmlLoader loader;
@@ -32,7 +33,7 @@ public class EditLocationConnectionController implements Initializable {
     private LocationConnectionService locationConnectionService;
     private LocationService locationService;
 
-    private static LocationConnection locationConnection;
+    private LocationConnection locationConnection;
 
     @FXML
     private Label lbl_Location1;
@@ -49,7 +50,12 @@ public class EditLocationConnectionController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        log.debug("initialise");
+        log.debug("initialise EditLocationConnectionController");
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload EditLocationConnectionController");
         lbl_Location1.setText(locationConnection.getLocation1().getName());
         lbl_Location2.setText(locationConnection.getLocation2().getName());
         tf_TravelTime.setText(locationConnection.getTravelTime() + "");
@@ -92,15 +98,16 @@ public class EditLocationConnectionController implements Initializable {
 
         Stage stage = (Stage) lbl_Location1.getScene().getWindow();
         Parent root = (Parent) loader.load("/gui/editlocationconnections.fxml");
+        EditLocationConnectionsController ctrl = loader.getController();
 
         stage.setScene(new Scene(root, 900, 500));
         stage.show();
 
-        EditLocationConnectionsController.setLoadSelectedLocation_Connections_OnInitialize(true);
+        ctrl.setLoadSelectedLocation_Connections_OnInitialize(true);
     }
 
-    public static void setLocationConnection(LocationConnection locationConnection) {
-        EditLocationConnectionController.locationConnection = locationConnection;
+    public void setLocationConnection(LocationConnection locationConnection) {
+        this.locationConnection = locationConnection;
     }
 
     public void setLocationService(LocationService locationService) {

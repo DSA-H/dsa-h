@@ -20,7 +20,7 @@ import sepm.dsa.service.TimeService;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class EditDateController implements Initializable {
+public class EditDateController extends BaseControllerImpl {
     private static final Logger log = LoggerFactory.getLogger(EditDateController.class);
     private SpringFxmlLoader loader;
 
@@ -37,6 +37,12 @@ public class EditDateController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        log.debug("initialize EditDateController");
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload EditDateController");
         month.setItems(FXCollections.observableArrayList(DSADate.getMonthNames()));
 
         DSADate date = timeService.getCurrentDate();

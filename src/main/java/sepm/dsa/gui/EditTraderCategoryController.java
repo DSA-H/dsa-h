@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditTraderCategoryController implements Initializable {
+public class EditTraderCategoryController extends BaseControllerImpl {
 
     private TraderCategoryService traderCategoryService;
     private ProductCategoryService productCategoryService;
@@ -33,7 +33,7 @@ public class EditTraderCategoryController implements Initializable {
     private SaveCancelService saveCancelService;
 
 
-    private static TraderCategory traderCategory;
+    private TraderCategory traderCategory;
 
     private static final Logger log = LoggerFactory.getLogger(EditTraderCategoryController.class);
     private SpringFxmlLoader loader;
@@ -61,8 +61,12 @@ public class EditTraderCategoryController implements Initializable {
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize EditRegionController");
+        log.debug("initialize EditTraderCategoryController");
+    }
 
+    @Override
+    public void reload() {
+        log.debug("reload EditTraderCategoryController");
         // init ChoiceBoxes
         List<ProductCategory> productCategories = productCategoryService.getAll();
         assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("productCategory"));
@@ -221,8 +225,8 @@ public class EditTraderCategoryController implements Initializable {
         this.loader = loader;
     }
 
-    public static void setTraderCategory(TraderCategory traderCategory) {
-        EditTraderCategoryController.traderCategory = traderCategory;
+    public void setTraderCategory(TraderCategory traderCategory) {
+        this.traderCategory = traderCategory;
     }
 
     public void setTraderCategoryService(TraderCategoryService traderCategoryService) {

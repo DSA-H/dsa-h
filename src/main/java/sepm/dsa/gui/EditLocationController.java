@@ -25,13 +25,13 @@ import java.io.File;
 import java.util.*;
 
 @Service("EditLocationController")
-public class EditLocationController implements Initializable {
+public class EditLocationController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(EditLocationController.class);
     private SpringFxmlLoader loader;
 
-    private static Location selectedLocation;
-    private static Set<LocationConnection> connections = new HashSet<>();
+    private Location selectedLocation;
+    private Set<LocationConnection> connections = new HashSet<>();
 
     private LocationService locationService;
     private LocationConnectionService locationConnectionService;
@@ -71,28 +71,26 @@ public class EditLocationController implements Initializable {
 
     @FXML
     private TableColumn<LocationConnection, String> connectionToColumn;
-//    @FXML
-//    private TableColumn<LocationConnection, Location> location2Column;
+
     @FXML
     private TableColumn<LocationConnection, Integer> travelTimeColumn;
 
     @FXML
     private Button editConnectionsBtn;
 
-    public static void setConnections(Set<LocationConnection> connections) {
-        EditLocationController.connections = connections;
+    public void setConnections(Set<LocationConnection> connections) {
+        this.connections = connections;
     }
-//    @FXML
-//    private Button suggestConnectionsBtn;
-//    @FXML
-//    private Button addConnectionBtn;
-//    @FXML
-//    private Button removeConnectionBtn;
+
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialise EditRegionController");
+        log.debug("initialise EditLocationController");
+    }
 
+    @Override
+    public void reload() {
+        log.debug("reload EditLocationController");
         // init ChoiceBoxes
         List<String> sizeList = new ArrayList<>();
         for (TownSize t : TownSize.values()) {
@@ -112,8 +110,8 @@ public class EditLocationController implements Initializable {
             weatherChoiceBox.getSelectionModel().select(selectedLocation.getWeather().getValue());
             sizeChoiceBox.getSelectionModel().select(selectedLocation.getSize().getValue());
             commentArea.setText(selectedLocation.getComment());
-	        xCoord = selectedLocation.getxCoord();
-	        yCoord = selectedLocation.getyCoord();
+            xCoord = selectedLocation.getxCoord();
+            yCoord = selectedLocation.getyCoord();
             height.setText(selectedLocation.getHeight().toString());
             regionChoiceBox.getSelectionModel().select(selectedLocation.getRegion());
         } else {
@@ -125,38 +123,10 @@ public class EditLocationController implements Initializable {
 
         // init region choice box
         List<Region> otherRegions = regionService.getAll();
-//        otherRegions.removeConnection(selectedLocation.getRegion());
         regionChoiceBox.setItems(FXCollections.observableArrayList(otherRegions));
 
         travelTimeColumn.setCellValueFactory(new PropertyValueFactory<>("travelTime"));
-//        location1Column.setCellValueFactory(new PropertyValueFactory<>("location1"));
-//        location2Column.setCellValueFactory(new PropertyValueFactory<>("location2"));
-//        location1Column.setCellFactory(new Callback<TableColumn<LocationConnection, Location>, TableCell<LocationConnection, Location>>() {
-//            @Override
-//            public TableCell<LocationConnection, Location> call(TableColumn<LocationConnection, Location> locationConnectionLocationTableColumn) {
-//                return new TableCell<LocationConnection, Location>() {
-//
-//                    @Override
-//                    protected void updateItem(Location item, boolean empty) {
-//                        super.updateItem(item, empty);
-//
-//                        if (!empty) {
-//                            if (item != null) {
-//                                setText(item.getName());
-//                                if (selectedLocation.equals(item)) {
-//                                    //
-//                                }
-//                            } else {
-//                                setText("<null>");
-//                            }
-//                        } else {
-//                            setText(null);
-//                        }
-//                    }
-//
-//                };
-//            }
-//        });
+
         connectionToColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<LocationConnection, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<LocationConnection, String> r) {
@@ -172,8 +142,6 @@ public class EditLocationController implements Initializable {
         Set<LocationConnection> allConnections = this.connections;//selectedLocation.getAllConnections();
         ObservableList<LocationConnection> connections = FXCollections.observableArrayList(allConnections);
         locationConnectionsTable.setItems(connections);
-//        this.connections = new HashSet<>(connections);
-
     }
 
     public void setLocationService(LocationService locationService) {
@@ -286,7 +254,7 @@ public class EditLocationController implements Initializable {
     }
 
 
-    public static void setLocation(Location location) {
+    public void setLocation(Location location) {
         log.debug("calling setLocation(" + location + ")");
         selectedLocation = location;
         if (selectedLocation != null) {
@@ -304,10 +272,11 @@ public class EditLocationController implements Initializable {
 
         applyLocationChanges();
 
-        EditLocationConnectionsController.setSelectedLocation(selectedLocation);
-
         Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
         Parent root = (Parent) loader.load("/gui/editlocationconnections.fxml");
+        EditLocationConnectionsController ctrl = (EditLocationConnectionsController)loader.getController();
+        ctrl.setSelectedLocation(selectedLocation);
+        ctrl.reload();
 
         stage.setTitle("Reiseverbindungen für Ort '" + selectedLocation.getName() + "' bearbeiten");
         stage.setScene(new Scene(root, 900, 500));

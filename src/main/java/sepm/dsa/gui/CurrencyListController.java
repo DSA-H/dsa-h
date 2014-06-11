@@ -21,7 +21,7 @@ import sepm.dsa.model.Currency;
 import sepm.dsa.service.CurrencyService;
 import sepm.dsa.service.SaveCancelService;
 
-public class CurrencyListController implements Initializable {
+public class CurrencyListController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(CurrencyListController.class);
     SpringFxmlLoader loader;
@@ -44,6 +44,11 @@ public class CurrencyListController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize CurrencyListController");
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload CurrencyListController");
         // init table
         currencyColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         valueToBaseRateColumn.setCellValueFactory(new PropertyValueFactory<>("valueToBaseRate"));
@@ -58,10 +63,11 @@ public class CurrencyListController implements Initializable {
     private void onCreateButtonPressed() {
         log.debug("onCreateClicked - open Currency Window");
 
-	    EditCurrencyController.setCurrency(null);
-
         Stage stage = (Stage) currencyTable.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/editcurrency.fxml");
+        EditCurrencyController ctrl = loader.getController();
+        ctrl.setCurrency(null);
+        ctrl.reload();
 
         stage.setTitle("Währungen");
         stage.setScene(new Scene(scene, 464, 279));
@@ -72,10 +78,11 @@ public class CurrencyListController implements Initializable {
     private void onEditButtonPressed() {
         log.debug("onEditButtonPressed - open Currency Window");
 
-        EditCurrencyController.setCurrency(currencyTable.getSelectionModel().getSelectedItem());//.getFocusModel().getFocusedItem());
-
         Stage stage = (Stage) currencyTable.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/editcurrency.fxml");
+        EditCurrencyController ctrl = loader.getController();
+        ctrl.setCurrency(currencyTable.getSelectionModel().getSelectedItem());
+        ctrl.reload();
 
         stage.setTitle("Währungen");
         stage.setScene(new Scene(scene, 464, 279));

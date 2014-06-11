@@ -20,7 +20,7 @@ import sepm.dsa.service.TimeService;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ForwardDateController implements Initializable {
+public class ForwardDateController extends BaseControllerImpl {
     private static final Logger log = LoggerFactory.getLogger(ForwardDateController.class);
     private SpringFxmlLoader loader;
 
@@ -33,10 +33,14 @@ public class ForwardDateController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        day.setText("3");  // default value
+    }
+
+    @Override
+    public void reload() {
         DSADate date = timeService.getCurrentDate();
 
         actDate.setText(date.toString());
-        day.setText("3");
     }
 
     @FXML

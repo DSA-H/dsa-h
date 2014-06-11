@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class EditTraderController implements Initializable {
+public class EditTraderController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(EditTraderController.class);
     private SpringFxmlLoader loader;
@@ -91,38 +91,62 @@ public class EditTraderController implements Initializable {
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialise EditTraderController");
 
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload EditTraderController");
+
         //init choiceBoxes
         List<TraderCategory> categories = categoryService.getAll();
         List<Location> locations = locationService.getAll();
-	    categoryBox.setItems(FXCollections.observableArrayList(categories));
+        categoryBox.setItems(FXCollections.observableArrayList(categories));
         locationBox.setItems(FXCollections.observableArrayList(locations));
-	    areaBox.setItems(FXCollections.observableArrayList(DistancePreferrence.values()));
-	    citySizeBox.setItems(FXCollections.observableArrayList(TownSize.values()));
+        areaBox.setItems(FXCollections.observableArrayList(DistancePreferrence.values()));
+        citySizeBox.setItems(FXCollections.observableArrayList(TownSize.values()));
 
-	    movingCheck.selectedProperty().addListener(new ChangeListener<Boolean>() {
-		    @Override
-		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-			    if (newValue) {
-				    stayTimeField.setDisable(false);
-				    stayTimeLabel.setDisable(false);
-				    citySizeBox.setDisable(false);
-				    citySizeLabel.setDisable(false);
-				    daysLabel.setDisable(false);
-				    areaBox.setDisable(false);
-				    areaLabel.setDisable(false);
-				    currentType = MOVINGTRADER;
-			    } else {
-				    stayTimeField.setDisable(true);
-				    stayTimeLabel.setDisable(true);
-				    citySizeBox.setDisable(true);
-				    citySizeLabel.setDisable(true);
-				    daysLabel.setDisable(true);
-				    areaBox.setDisable(true);
-				    areaLabel.setDisable(true);
-				    currentType = TRADER;
-			    }
-		    }
-	    });
+        movingCheck.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    stayTimeField.setDisable(false);
+                    stayTimeLabel.setDisable(false);
+                    citySizeBox.setDisable(false);
+                    citySizeLabel.setDisable(false);
+                    daysLabel.setDisable(false);
+                    areaBox.setDisable(false);
+                    areaLabel.setDisable(false);
+                    currentType = MOVINGTRADER;
+                } else {
+                    stayTimeField.setDisable(true);
+                    stayTimeLabel.setDisable(true);
+                    citySizeBox.setDisable(true);
+                    citySizeLabel.setDisable(true);
+                    daysLabel.setDisable(true);
+                    areaBox.setDisable(true);
+                    areaLabel.setDisable(true);
+                    currentType = TRADER;
+                }
+            }
+        });
+
+        if (selectedTrader == null) {
+            isNewTrader = true;
+            selectedTrader = new Trader();
+            initialType = TRADER;
+            currentType = TRADER;
+        } else {
+            isNewTrader = false;
+            if (selectedTrader instanceof MovingTrader) {
+                lastmoved = new DSADate(((MovingTrader) selectedTrader).getLastMoved());
+                initialType = MOVINGTRADER;
+                currentType = MOVINGTRADER;
+            } else {
+                initialType = TRADER;
+                currentType = TRADER;
+            }
+        }
+        setUp();
     }
 
     private void setUp() {
@@ -152,6 +176,7 @@ public class EditTraderController implements Initializable {
         }
     }
 
+    //TODO: move to service laer. This calculations should not be in GUI layer!
     private void generateRandoms() {
         double rand;
         double rand2;
@@ -207,7 +232,6 @@ public class EditTraderController implements Initializable {
             result = (int) (6 - rand);
         }
         convinceField.setText("" + result);
-
     }
 
     @FXML
@@ -461,23 +485,6 @@ public class EditTraderController implements Initializable {
     public void setTrader(Trader trader) {
         log.debug("calling setTrader(" + trader + ")");
         selectedTrader = trader;
-        if (trader == null) {
-            isNewTrader = true;
-            selectedTrader = new Trader();
-	        initialType = TRADER;
-	        currentType = TRADER;
-        } else {
-            isNewTrader = false;
-	        if (trader instanceof MovingTrader) {
-		        lastmoved = new DSADate(((MovingTrader) trader).getLastMoved());
-		        initialType = MOVINGTRADER;
-		        currentType = MOVINGTRADER;
-	        } else {
-		        initialType = TRADER;
-		        currentType = TRADER;
-	        }
-        }
-        setUp();
     }
 
     public void setLocation(Location location) {

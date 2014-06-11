@@ -26,7 +26,7 @@ import sepm.dsa.service.SaveCancelService;
 
 import java.util.Set;
 
-public class ProductListController implements Initializable {
+public class ProductListController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(ProductListController.class);
     SpringFxmlLoader loader;
@@ -83,8 +83,11 @@ public class ProductListController implements Initializable {
                 return new SimpleStringProperty(sb.toString());
             }
         });
+    }
 
-
+    @Override
+    public void reload() {
+        log.debug("reload ProductListController");
         ObservableList<Product> data = FXCollections.observableArrayList(productService.getAll());
         productTable.setItems(data);
 
@@ -95,10 +98,11 @@ public class ProductListController implements Initializable {
     private void onCreateButtonPressed() {
         log.debug("onCreateClicked - open Waren Window");
 
-        EditProductController.setProduct(null);
-
         Stage stage = (Stage) productTable.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/editproduct.fxml");
+        EditProductController ctrl = loader.getController();
+        ctrl.setProduct(null);
+        ctrl.reload();
 
         stage.setTitle("Waren");
         stage.setScene(new Scene(scene, 600, 479));
@@ -109,10 +113,11 @@ public class ProductListController implements Initializable {
     private void onEditButtonPressed() {
         log.debug("onWarenClicked - open Waren Window");
 
-        EditProductController.setProduct(productTable.getSelectionModel().getSelectedItem());//.getFocusModel().getFocusedItem());
-
         Stage stage = (Stage) productTable.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/editproduct.fxml");
+        EditProductController ctrl = loader.getController();
+        ctrl.setProduct(productTable.getSelectionModel().getSelectedItem());
+        ctrl.reload();
 
         stage.setTitle("Waren");
         stage.setScene(new Scene(scene, 600, 479));

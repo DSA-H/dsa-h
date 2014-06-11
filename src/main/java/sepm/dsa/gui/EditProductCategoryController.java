@@ -30,14 +30,14 @@ import java.util.List;
 import java.util.Set;
 
 @Service("EditProductController")
-public class EditProductCategoryController implements Initializable {
+public class EditProductCategoryController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(EditProductCategoryController.class);
     private SpringFxmlLoader loader;
     private ProductCategoryService productCategoryService;
     private SaveCancelService saveCancelService;
 
-    private static ProductCategory selectedProductCategory;
+    private ProductCategory selectedProductCategory;
     private boolean isNewProductCategory;
 
     @FXML
@@ -49,6 +49,11 @@ public class EditProductCategoryController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize EditProductCategoryController");
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload EditProductCategoryController");
         List<ProductCategory> categoryList = productCategoryService.getAll();
 
         if (selectedProductCategory != null){
@@ -68,7 +73,6 @@ public class EditProductCategoryController implements Initializable {
 
         choiceParent.setItems(FXCollections.observableArrayList(categoryList));
     }
-
 
     @FXML
     private void onCancelPressed() {
@@ -112,7 +116,7 @@ public class EditProductCategoryController implements Initializable {
     }
 
 
-    public static void setProductCategory(ProductCategory productCategory) {
+    public void setProductCategory(ProductCategory productCategory) {
         selectedProductCategory = productCategory;
     }
 

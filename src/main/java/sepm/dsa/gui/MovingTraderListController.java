@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MovingTraderListController implements Initializable {
+public class MovingTraderListController extends BaseControllerImpl {
 
 	private static final Logger log = LoggerFactory.getLogger(MovingTraderListController.class);
 	private SpringFxmlLoader loader;
@@ -32,6 +32,7 @@ public class MovingTraderListController implements Initializable {
 	private TraderService traderService;
 
 	private MovingTrader selectedTrader;
+    private LocationConnection connection;
 
 	@FXML
 	private TableView traderTable;
@@ -62,7 +63,25 @@ public class MovingTraderListController implements Initializable {
 		locationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
 	}
 
-	@FXML
+    @Override
+    public void reload() {
+        log.debug("reload MovingTraderListController");
+        locationsLabel.setText("in den Orten " + connection.getLocation1() + " und " + connection.getLocation2());
+
+        List<Trader> traders = traderService.getAllForLocation(connection.getLocation1());
+        traders.addAll(traderService.getAllForLocation(connection.getLocation2()));
+        List<MovingTrader> movingTraders = new ArrayList<MovingTrader>();
+        for (Trader t : traders) {
+            if (t instanceof MovingTrader) {
+                movingTraders.add((MovingTrader) t);
+            }
+        }
+        traderTable.setItems(FXCollections.observableArrayList(movingTraders));
+
+        checkFocus();
+    }
+
+    @FXML
 	private void onDetailsButtonPressed() {
 		log.debug("calling onDetailsPressed");
 		Stage stage = new Stage();
@@ -90,19 +109,7 @@ public class MovingTraderListController implements Initializable {
 	}
 
 	public void setLocationConnection(LocationConnection connection) {
-		locationsLabel.setText("in den Orten " + connection.getLocation1() + " und " + connection.getLocation2());
-
-		List<Trader> traders = traderService.getAllForLocation(connection.getLocation1());
-		traders.addAll(traderService.getAllForLocation(connection.getLocation2()));
-		List<MovingTrader> movingTraders = new ArrayList<MovingTrader>();
-		for (Trader t : traders) {
-			if (t instanceof MovingTrader) {
-				movingTraders.add((MovingTrader) t);
-			}
-		}
-		traderTable.setItems(FXCollections.observableArrayList(movingTraders));
-
-		checkFocus();
+        this.connection = connection;
 	}
 
 	public void setTraderService(TraderService traderService) {

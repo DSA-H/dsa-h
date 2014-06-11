@@ -30,7 +30,7 @@ import sepm.dsa.service.SaveCancelService;
 
 import java.util.List;
 
-public class RegionListController implements Initializable {
+public class RegionListController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(RegionListController.class);
     private SpringFxmlLoader loader;
@@ -107,6 +107,11 @@ public class RegionListController implements Initializable {
             }
         });
 
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload RegionListController");
         ObservableList<Region> data = FXCollections.observableArrayList(regionService.getAll());
         regionTable.setItems(data);
     }
@@ -115,10 +120,11 @@ public class RegionListController implements Initializable {
     private void onCreateButtonPressed() {
         log.debug("onCreateButtonPressed - open Gebiet-Details Window");
 
-        EditRegionController.setRegion(null);
-
         Stage stage = (Stage) regionTable.getScene().getWindow();
         Parent root = (Parent) loader.load("/gui/editregion.fxml");
+        EditRegionController ctrl = loader.getController();
+        ctrl.setRegion(null);
+        ctrl.reload();
 
         stage.setTitle("Gebiet-Details");
         stage.setScene(new Scene(root, 600, 438));
@@ -130,10 +136,12 @@ public class RegionListController implements Initializable {
         log.debug("onEditButtonPressed - open Gebiet-Details Window");
 
         Region selectedRegion = regionTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
-        EditRegionController.setRegion(selectedRegion);
 
         Stage stage = (Stage) regionTable.getScene().getWindow();
         Parent root = (Parent) loader.load("/gui/editregion.fxml");
+        EditRegionController ctrl = loader.getController();
+        ctrl.setRegion(selectedRegion);
+        ctrl.reload();
 
         stage.setTitle("Gebiet-Details");
         stage.setScene(new Scene(root, 600, 438));

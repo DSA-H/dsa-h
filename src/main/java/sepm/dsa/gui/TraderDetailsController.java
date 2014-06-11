@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TraderDetailsController implements Initializable {
+public class TraderDetailsController extends BaseControllerImpl {
 
 	private static final Logger log = LoggerFactory.getLogger(TraderDetailsController.class);
 	private SpringFxmlLoader loader;
@@ -88,11 +88,7 @@ public class TraderDetailsController implements Initializable {
 	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
 		log.debug("initialize TraderDetailsController");
 
-        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
-
 		amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
-		initialzeTableWithColums();
-
 
         productColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
             @Override
@@ -145,7 +141,15 @@ public class TraderDetailsController implements Initializable {
 
 	}
 
-	private void initialzeTableWithColums() {
+    @Override
+    public void reload() {
+        log.debug("reload TraderDetailsController");
+        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+        initialzeTableWithColums();
+        refreshView();
+    }
+
+    private void initialzeTableWithColums() {
 
 		dateColumn.setCellValueFactory(d -> {
             DSADate date = d.getValue().getDate();
@@ -299,15 +303,16 @@ public class TraderDetailsController implements Initializable {
     private void onTradePressed() {
         log.debug("called onTradePressed");
         //trader wants to sell stuff to the player
-        //TODO as popover
-        TradeSellToPlayerController.setTrader(trader);
         Offer selectedItem = offerTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-            TradeSellToPlayerController.setOffer(selectedItem);
             Stage dialog = new Stage(StageStyle.DECORATED);
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.initOwner(dealsTable.getParent().getScene().getWindow());
             Parent scene = (Parent) loader.load("/gui/tradeSell.fxml");
+            TradeSellToPlayerController ctrl = loader.getController();
+            ctrl.setTrader(trader);
+            ctrl.setOffer(selectedItem);
+            ctrl.reload();
 
             dialog.setTitle("Kauf von Waren");
             dialog.setScene(new Scene(scene, 334, 458));
@@ -325,11 +330,13 @@ public class TraderDetailsController implements Initializable {
         log.debug("called onTradeBuyPressed");
         //Player wants to sell stuff to the trader
         //TODO as popover
-        TradeBuyFromPlayerController.setTrader(trader);
         Stage dialog = new Stage(StageStyle.DECORATED);
         dialog.initModality(Modality.WINDOW_MODAL);
         dialog.initOwner(dealsTable.getParent().getScene().getWindow());
         Parent scene = (Parent) loader.load("/gui/traderBuy.fxml");
+        TradeBuyFromPlayerController ctrl = loader.getController();
+        ctrl.setTrader(trader);
+        ctrl.reload();
 
         dialog.setTitle("Verkauf von Waren an Händler");
         dialog.setScene(new Scene(scene, 565, 476));
@@ -376,7 +383,6 @@ public class TraderDetailsController implements Initializable {
 
     public void setTrader(Trader trader) {
         this.trader = trader;
-        refreshView(); // in setter not very beautiful, do we need this here?
     }
 
     public void setLoader(SpringFxmlLoader loader) {

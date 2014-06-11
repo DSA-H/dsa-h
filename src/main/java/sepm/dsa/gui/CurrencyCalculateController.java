@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class CurrencyCalculateController implements Initializable {
+public class CurrencyCalculateController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(CurrencyCalculateController.class);
     SpringFxmlLoader loader;
@@ -43,7 +43,12 @@ public class CurrencyCalculateController implements Initializable {
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize CurrencyListController");
+        log.debug("initialize CurrencyCalculateController");
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload CurrencyCalculateController");
         // init table
         List<Currency> currencies = currencyService.getAll();
         choiceFirst.setItems(FXCollections.observableArrayList(currencies));
@@ -61,9 +66,7 @@ public class CurrencyCalculateController implements Initializable {
             }
         });
 
-        if (currencies.isEmpty()) {
-            //TODO what to do?
-        } else {
+        if (!currencies.isEmpty()) {
             choiceFirst.getSelectionModel().select(0);
             choiceSecond.getSelectionModel().select(0);
 

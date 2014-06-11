@@ -22,7 +22,7 @@ import sepm.dsa.service.SaveCancelService;
 import java.util.List;
 import java.util.Set;
 
-public class ProductCategoryListController implements Initializable {
+public class ProductCategoryListController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(ProductCategoryListController.class);
     SpringFxmlLoader loader;
@@ -47,9 +47,12 @@ public class ProductCategoryListController implements Initializable {
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize ProductListController");
         // init table
-
         productColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+    }
 
+    @Override
+    public void reload() {
+        log.debug("reload ProductListController");
         reloadAndRefreshGui();
     }
 
@@ -107,10 +110,11 @@ public class ProductCategoryListController implements Initializable {
     private void onCreateButtonPressed() {
         log.debug("onCreateClicked - open Waren Window");
 
-        EditProductCategoryController.setProductCategory(null);
-
         Stage stage = (Stage) tableview.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/editproductcategory.fxml");
+        EditProductCategoryController ctrl = loader.getController();
+        ctrl.setProductCategory(null);
+        ctrl.reload();
 
         stage.setTitle("Warenkategorie");
         stage.setScene(new Scene(scene, 490, 219));
@@ -121,10 +125,12 @@ public class ProductCategoryListController implements Initializable {
     private void onEditButtonPressed() {
         log.debug("onWarenClicked - open Waren Window");
 
-        EditProductCategoryController.setProductCategory(treeview.getSelectionModel().getSelectedItem().getValue());
 
         Stage stage = (Stage) tableview.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/editproductcategory.fxml");
+        EditProductCategoryController ctrl = loader.getController();
+        ctrl.setProductCategory(treeview.getSelectionModel().getSelectedItem().getValue());
+        ctrl.reload();
 
         stage.setTitle("Warenkategorie");
         stage.setScene(new Scene(scene, 490, 219));

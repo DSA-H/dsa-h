@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class PlacementController implements Initializable {
+public class PlacementController extends BaseControllerImpl {
 	private static final Logger log = LoggerFactory.getLogger(PlacementController.class);
 	private SpringFxmlLoader loader;
 	private LocationService locationService;
@@ -53,7 +53,11 @@ public class PlacementController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 	}
 
-	@FXML
+    @Override
+    public void reload() {
+    }
+
+    @FXML
 	private void onConfirmPressed() {
 		if (choiceBox.getSelectionModel().getSelectedItem() == null) {
 			Dialogs.create()
@@ -93,13 +97,13 @@ public class PlacementController implements Initializable {
 	@FXML
 	private void onNewPressed() {
 		if (selectedLocation == null) {
-			EditLocationController.setLocation(null);
-
 			Stage stage = new Stage();
 			Parent scene = (Parent) loader.load("/gui/editlocation.fxml");
 
 			EditLocationController controller = loader.getController();
+            controller.setLocation(null);
 			controller.setPosition(pos);
+            controller.reload();
 
 			stage.setTitle("Ort erstellen");
 			stage.setScene(new Scene(scene, 900, 438));
@@ -114,6 +118,7 @@ public class PlacementController implements Initializable {
 			controller.setTrader(null);
 			controller.setPosition(pos);
 			controller.setLocation(selectedLocation);
+            controller.reload();
 			stage.setScene(new Scene(scene, 785, 513));
 			stage.setResizable(false);
 			stage.showAndWait();

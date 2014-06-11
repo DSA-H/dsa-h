@@ -29,7 +29,7 @@ import sepm.dsa.util.CurrencyFormatUtil;
 
 import java.util.List;
 
-public class EditTavernController implements Initializable {
+public class EditTavernController extends BaseControllerImpl {
 
 	private static final Logger log = LoggerFactory.getLogger(EditTavernController.class);
 	private SpringFxmlLoader loader;
@@ -60,11 +60,23 @@ public class EditTavernController implements Initializable {
 	@Override
 	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
 		log.debug("initialise EditTavernController");
-		qualityCoicheBox.setItems(FXCollections.observableArrayList(ProductQuality.values()));
-        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
 	}
 
-	@FXML
+    @Override
+    public void reload() {
+        log.debug("reload EditTavernController");
+        qualityCoicheBox.setItems(FXCollections.observableArrayList(ProductQuality.values()));
+        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+        if (selectedTavern == null) {
+            isNewTavern = true;
+            selectedTavern = new Tavern();
+        } else {
+            isNewTavern = false;
+            fillGuiWithData(selectedTavern);
+        }
+    }
+
+    @FXML
 	private void onSavePressed() {
 		log.debug("called onSavePressed");
 
@@ -124,14 +136,7 @@ public class EditTavernController implements Initializable {
 	}
 
 	public void setTavern(Tavern tavern) {
-		if (tavern == null) {
-			isNewTavern = true;
-			selectedTavern = new Tavern();
-		} else {
-			isNewTavern = false;
-			this.selectedTavern = tavern;
-			fillGuiWithData(selectedTavern);
-		}
+        selectedTavern = tavern;
 	}
 
 	/**

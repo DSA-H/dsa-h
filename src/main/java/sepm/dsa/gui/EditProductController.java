@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class EditProductController implements Initializable {
+public class EditProductController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(EditProductController.class);
     private SpringFxmlLoader loader;
@@ -33,7 +33,7 @@ public class EditProductController implements Initializable {
     private RegionService regionService;
     private SaveCancelService saveCancelService;
 
-    private static Product selectedProduct;
+    private Product selectedProduct;
     private boolean isNewProduct;
 
     @FXML
@@ -78,6 +78,11 @@ public class EditProductController implements Initializable {
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
         log.debug("initialize EditProductController");
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload EditProductController");
 
         List<String> attributeList = new ArrayList<>();
         for(ProductAttribute t : ProductAttribute.values()) {
@@ -247,7 +252,7 @@ public class EditProductController implements Initializable {
     }
 
 
-    public static void setProduct(Product product) {
+    public void setProduct(Product product) {
         selectedProduct = product;
     }
 
