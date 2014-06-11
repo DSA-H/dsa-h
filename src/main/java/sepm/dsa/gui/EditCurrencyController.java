@@ -40,11 +40,6 @@ public class EditCurrencyController extends BaseControllerImpl {
     private Button saveButton;
 
     @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize EditCurrencyController");
-    }
-
-    @Override
     public void reload() {
         log.debug("reload EditCurrencyController");
         if (selectedCurrency != null) {

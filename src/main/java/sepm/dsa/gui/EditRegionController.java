@@ -67,12 +67,6 @@ public class EditRegionController extends BaseControllerImpl {
     @FXML
     private Button removeBorderButton;
 
-
-    @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialise EditRegionController");
-    }
-
     @Override
     public void reload() {
         log.debug("reload EditRegionController");

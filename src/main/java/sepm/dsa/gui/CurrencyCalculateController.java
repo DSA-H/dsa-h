@@ -42,11 +42,6 @@ public class CurrencyCalculateController extends BaseControllerImpl {
     private Label labelin;
 
     @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize CurrencyCalculateController");
-    }
-
-    @Override
     public void reload() {
         log.debug("reload CurrencyCalculateController");
         // init table

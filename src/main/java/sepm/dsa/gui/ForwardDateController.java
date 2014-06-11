@@ -33,7 +33,9 @@ public class ForwardDateController extends BaseControllerImpl {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        day.setText("3");  // default value
+	    super.initialize(location, resources);
+
+	    day.setText("3");  // default value
     }
 
     @Override

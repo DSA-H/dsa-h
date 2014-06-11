@@ -42,11 +42,6 @@ public class CurrencyListController extends BaseControllerImpl {
     private Button editButton;
 
     @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize CurrencyListController");
-    }
-
-    @Override
     public void reload() {
         log.debug("reload CurrencyListController");
         // init table

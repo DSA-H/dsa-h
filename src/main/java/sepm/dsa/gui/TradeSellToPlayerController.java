@@ -81,11 +81,6 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
     private PlayerService playerService;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        log.debug("initialize TradeSellToPlayerController");
-    }
-
-    @Override
     public void reload() {
         log.debug("reload TradeSellToPlayerController");
         lbl_CurrencyAmounts =

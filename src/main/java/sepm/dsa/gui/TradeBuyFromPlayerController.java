@@ -80,11 +80,6 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
     private Label[] lbl_CurrencyAmounts;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        log.debug("initialize TradeBuyFromPlayerController");
-    }
-
-    @Override
     public void reload() {
         log.debug("reload TradeBuyFromPlayerController");
         lbl_CurrencyAmounts =

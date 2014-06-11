@@ -48,6 +48,8 @@ public class MovingTraderListController extends BaseControllerImpl {
 
 	@Override
 	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
+		super.initialize(location, resources);
+
 		log.debug("initialise MovingTraderListController");
 
 		traderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<MovingTrader, String>, ObservableValue<String>>() {

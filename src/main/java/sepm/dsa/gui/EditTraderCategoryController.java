@@ -60,11 +60,6 @@ public class EditTraderCategoryController extends BaseControllerImpl {
     private Button cancelButton;
 
     @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize EditTraderCategoryController");
-    }
-
-    @Override
     public void reload() {
         log.debug("reload EditTraderCategoryController");
         // init ChoiceBoxes

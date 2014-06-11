@@ -38,11 +38,6 @@ public class PlayerListController extends BaseControllerImpl {
     private Button editButton;
 
     @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize PlayerListController");
-    }
-
-    @Override
     public void reload() {
         log.debug("reload PlayerListController");
         // init table

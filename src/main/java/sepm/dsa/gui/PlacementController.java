@@ -49,10 +49,6 @@ public class PlacementController extends BaseControllerImpl {
 	@FXML
 	private Button commitButton;
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-	}
-
     @Override
     public void reload() {
     }

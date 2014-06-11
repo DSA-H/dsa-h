@@ -56,12 +56,6 @@ public class EditTavernController extends BaseControllerImpl {
 	@FXML
 	private TextField bedsField;
 
-
-	@Override
-	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-		log.debug("initialise EditTavernController");
-	}
-
     @Override
     public void reload() {
         log.debug("reload EditTavernController");

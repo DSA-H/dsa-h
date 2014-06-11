@@ -47,7 +47,9 @@ public class TavernListController extends BaseControllerImpl {
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize TavernListController");
+	    super.initialize(location, resources);
+
+	    log.debug("initialize TavernListController");
         locationBox.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Location>() {
                     @Override

@@ -59,6 +59,8 @@ public class RegionListController extends BaseControllerImpl {
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
+	    super.initialize(location, resources);
+
         log.debug("initialise RegionListController");
 
         // init table

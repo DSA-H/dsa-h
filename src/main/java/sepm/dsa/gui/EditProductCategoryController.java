@@ -45,12 +45,6 @@ public class EditProductCategoryController extends BaseControllerImpl {
     @FXML
     private ChoiceBox<ProductCategory> choiceParent;
 
-
-    @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize EditProductCategoryController");
-    }
-
     @Override
     public void reload() {
         log.debug("reload EditProductCategoryController");

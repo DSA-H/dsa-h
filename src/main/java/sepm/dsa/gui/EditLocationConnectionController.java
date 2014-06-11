@@ -47,12 +47,6 @@ public class EditLocationConnectionController extends BaseControllerImpl {
     @FXML
     private TextArea ta_Comment;
 
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        log.debug("initialise EditLocationConnectionController");
-    }
-
     @Override
     public void reload() {
         log.debug("reload EditLocationConnectionController");

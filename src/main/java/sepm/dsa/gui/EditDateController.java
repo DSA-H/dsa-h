@@ -36,11 +36,6 @@ public class EditDateController extends BaseControllerImpl {
     private Label actDate;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        log.debug("initialize EditDateController");
-    }
-
-    @Override
     public void reload() {
         log.debug("reload EditDateController");
         month.setItems(FXCollections.observableArrayList(DSADate.getMonthNames()));

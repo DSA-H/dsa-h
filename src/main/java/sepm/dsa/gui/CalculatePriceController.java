@@ -51,12 +51,6 @@ public class CalculatePriceController extends BaseControllerImpl {
     @FXML
     private Button calcButton;
 
-
-    @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize CalculatePriceController");
-    }
-
     @Override
     public void reload() {
         log.debug("reload CalculatePriceController");

@@ -82,12 +82,6 @@ public class EditLocationController extends BaseControllerImpl {
         this.connections = connections;
     }
 
-
-    @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialise EditLocationController");
-    }
-
     @Override
     public void reload() {
         log.debug("reload EditLocationController");

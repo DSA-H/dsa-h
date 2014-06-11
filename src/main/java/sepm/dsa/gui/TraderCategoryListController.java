@@ -48,7 +48,9 @@ public class TraderCategoryListController extends BaseControllerImpl {
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialise TraderCategoryListController");
+	    super.initialize(location, resources);
+
+	    log.debug("initialise TraderCategoryListController");
         // init table
         traderCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         prodcutCategoryColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TraderCategory, String>, ObservableValue<String>>() {

@@ -88,12 +88,6 @@ public class EditTraderController extends BaseControllerImpl {
 	private CheckBox movingCheck;
 
     @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialise EditTraderController");
-
-    }
-
-    @Override
     public void reload() {
         log.debug("reload EditTraderController");
 

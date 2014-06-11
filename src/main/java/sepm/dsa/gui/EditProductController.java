@@ -101,6 +101,8 @@ public class EditProductController extends BaseControllerImpl {
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
+	    super.initialize(location, resources);
+
         log.debug("initialize EditProductController");
         lbl_CurrencyAmounts =
                 new Label[] {

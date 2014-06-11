@@ -160,6 +160,8 @@ public class MainMenuController extends BaseControllerImpl {
 
 	@Override
 	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
+		super.initialize(location, resources);
+
 		// init location-table
 		locationColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 		regionColumn.setCellValueFactory(new PropertyValueFactory<>("region"));

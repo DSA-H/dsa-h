@@ -47,9 +47,11 @@ public class ProductCategoryListController extends BaseControllerImpl {
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize ProductListController");
+	    log.debug("initialize ProductListController");
         // init table
         productColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+	    super.initialize(location, resources);
     }
 
     @Override

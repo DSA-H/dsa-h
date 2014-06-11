@@ -73,10 +73,6 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
     private Button editButton;
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-    }
-
-    @Override
     public void reload() {
         log.debug("initialize");
         log.info("--- going to edit location connections for location '" + selectedLocation + "'");
