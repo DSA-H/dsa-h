@@ -22,6 +22,7 @@ import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 
 import java.io.File;
+import java.net.URL;
 import java.util.*;
 
 @Service("EditLocationController")
@@ -48,13 +49,13 @@ public class EditLocationController extends BaseControllerImpl {
     @FXML
     private TextField nameField;
     @FXML
-    private ChoiceBox weatherChoiceBox;
+    private ChoiceBox<Weather> weatherChoiceBox;
     @FXML
     private Button mapCoordSelection;
     @FXML
-    private ChoiceBox sizeChoiceBox;
+    private ChoiceBox<TownSize> sizeChoiceBox;
     @FXML
-    private ChoiceBox regionChoiceBox;
+    private ChoiceBox<Region> regionChoiceBox;
     @FXML
     private TextField height;
     @FXML
@@ -83,41 +84,11 @@ public class EditLocationController extends BaseControllerImpl {
     }
 
     @Override
-    public void reload() {
-        log.debug("reload EditLocationController");
-        // init ChoiceBoxes
-        List<String> sizeList = new ArrayList<>();
-        for (TownSize t : TownSize.values()) {
-            sizeList.add(t.getName());
-        }
-        List<String> weatherList = new ArrayList<>();
-        for (Weather w : Weather.values()) {
-            weatherList.add(w.getName());
-        }
-        weatherChoiceBox.setItems(FXCollections.observableArrayList(weatherList));
-        sizeChoiceBox.setItems(FXCollections.observableArrayList(sizeList));
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
+        weatherChoiceBox.setItems(FXCollections.observableArrayList(Weather.values()));
+        sizeChoiceBox.setItems(FXCollections.observableArrayList(TownSize.values()));
 
-        // set values if editing
-        if (selectedLocation != null) {
-            isNewLocation = false;
-            nameField.setText(selectedLocation.getName());
-            weatherChoiceBox.getSelectionModel().select(selectedLocation.getWeather().getValue());
-            sizeChoiceBox.getSelectionModel().select(selectedLocation.getSize().getValue());
-            commentArea.setText(selectedLocation.getComment());
-            xCoord = selectedLocation.getxCoord();
-            yCoord = selectedLocation.getyCoord();
-            height.setText(selectedLocation.getHeight().toString());
-            regionChoiceBox.getSelectionModel().select(selectedLocation.getRegion());
-        } else {
-            isNewLocation = true;
-            selectedLocation = new Location();
-            weatherChoiceBox.getSelectionModel().select(Temperature.MEDIUM.getValue());
-            sizeChoiceBox.getSelectionModel().select(RainfallChance.MEDIUM.getValue());
-        }
-
-        // init region choice box
-        List<Region> otherRegions = regionService.getAll();
-        regionChoiceBox.setItems(FXCollections.observableArrayList(otherRegions));
 
         travelTimeColumn.setCellValueFactory(new PropertyValueFactory<>("travelTime"));
 
@@ -132,8 +103,27 @@ public class EditLocationController extends BaseControllerImpl {
                 }
             }
         });
+    }
 
-        Set<LocationConnection> allConnections = this.connections;//selectedLocation.getAllConnections();
+    @Override
+    public void reload() {
+        log.debug("reload EditLocationController");
+
+        // set values if editing
+        if (selectedLocation != null) {
+            isNewLocation = false;
+        } else {
+            isNewLocation = true;
+            selectedLocation = new Location();
+            weatherChoiceBox.getSelectionModel().select(Temperature.MEDIUM.getValue());
+            sizeChoiceBox.getSelectionModel().select(RainfallChance.MEDIUM.getValue());
+        }
+
+        // init region choice box
+        List<Region> regions = regionService.getAll();
+        regionChoiceBox.setItems(FXCollections.observableArrayList(regions));
+
+        Set<LocationConnection> allConnections = this.connections;
         ObservableList<LocationConnection> connections = FXCollections.observableArrayList(allConnections);
         locationConnectionsTable.setItems(connections);
     }
@@ -252,6 +242,14 @@ public class EditLocationController extends BaseControllerImpl {
         log.debug("calling setLocation(" + location + ")");
         selectedLocation = location;
         if (selectedLocation != null) {
+            nameField.setText(selectedLocation.getName());
+            weatherChoiceBox.getSelectionModel().select(selectedLocation.getWeather().getValue());
+            sizeChoiceBox.getSelectionModel().select(selectedLocation.getSize().getValue());
+            commentArea.setText(selectedLocation.getComment());
+            xCoord = selectedLocation.getxCoord();
+            yCoord = selectedLocation.getyCoord();
+            height.setText(selectedLocation.getHeight().toString());
+            regionChoiceBox.getSelectionModel().select(selectedLocation.getRegion());
             connections = new HashSet<>(selectedLocation.getAllConnections());
         }
     }
