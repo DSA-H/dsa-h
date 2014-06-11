@@ -26,8 +26,10 @@ import sepm.dsa.service.RegionBorderService;
 import sepm.dsa.service.RegionService;
 import sepm.dsa.service.SaveCancelService;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class EditRegionController extends BaseControllerImpl {
 
@@ -45,11 +47,11 @@ public class EditRegionController extends BaseControllerImpl {
     @FXML
     private TextField nameField;
     @FXML
-    private ChoiceBox temperatureChoiceBox;
+    private ChoiceBox<Temperature> temperatureChoiceBox;
     @FXML
     private ColorPicker colorPicker;
     @FXML
-    private ChoiceBox rainfallChoiceBox;
+    private ChoiceBox<RainfallChance> rainfallChoiceBox;
     @FXML
     private ChoiceBox borderChoiceBox;
     @FXML
@@ -68,46 +70,10 @@ public class EditRegionController extends BaseControllerImpl {
     private Button removeBorderButton;
 
     @Override
-    public void reload() {
-        log.debug("reload EditRegionController");
-
-        // init ChoiceBoxes
-        List<String> temperatureList = new ArrayList<>();
-        for (Temperature t : Temperature.values()) {
-            temperatureList.add(t.getName());
-        }
-        List<String> rainList = new ArrayList<>();
-        for (RainfallChance t : RainfallChance.values()) {
-            rainList.add(t.getName());
-        }
-        temperatureChoiceBox.setItems(FXCollections.observableArrayList(temperatureList));
-        rainfallChoiceBox.setItems(FXCollections.observableArrayList(rainList));
-
-        // set values if editing
-        if (selectedRegion != null) {
-            isNewRegion = false;
-            nameField.setText(selectedRegion.getName());
-            colorPicker.setValue(new Color(
-                            (double) Integer.valueOf(selectedRegion.getColor().substring(0, 2), 16) / 255,
-                            (double) Integer.valueOf(selectedRegion.getColor().substring(2, 4), 16) / 255,
-                            (double) Integer.valueOf(selectedRegion.getColor().substring(4, 6), 16) / 255,
-                            1.0)
-            );
-            temperatureChoiceBox.getSelectionModel().select(selectedRegion.getTemperature().getValue());
-            rainfallChoiceBox.getSelectionModel().select(selectedRegion.getRainfallChance().getValue());
-            commentArea.setText(selectedRegion.getComment());
-
-            ObservableList<RegionBorder> data = FXCollections.observableArrayList(regionBorderService.getAllByRegion(selectedRegion.getId()));
-            borderTable.setItems(data);
-        } else {
-            isNewRegion = true;
-            selectedRegion = new Region();
-            temperatureChoiceBox.getSelectionModel().select(Temperature.MEDIUM.getValue());
-            rainfallChoiceBox.getSelectionModel().select(RainfallChance.MEDIUM.getValue());
-
-            ObservableList<RegionBorder> data = FXCollections.observableArrayList();
-            borderTable.setItems(data);
-        }
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
+        temperatureChoiceBox.setItems(FXCollections.observableArrayList(Temperature.values()));
+        rainfallChoiceBox.setItems(FXCollections.observableArrayList(RainfallChance.values()));
 
         // init border table
         borderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<RegionBorder, String>, ObservableValue<String>>() {
@@ -127,20 +93,38 @@ public class EditRegionController extends BaseControllerImpl {
             }
         });
         borderCostColumn.setCellValueFactory(new PropertyValueFactory<>("borderCost"));
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload EditRegionController");
+
+        // set values if editing
+        if (selectedRegion != null) {
+            isNewRegion = false;
+        } else {
+            isNewRegion = true;
+            selectedRegion = new Region();
+            temperatureChoiceBox.getSelectionModel().select(Temperature.MEDIUM.getValue());
+            rainfallChoiceBox.getSelectionModel().select(RainfallChance.MEDIUM.getValue());
+
+            ObservableList<RegionBorder> data = FXCollections.observableArrayList();
+            borderTable.setItems(data);
+        }
+
 
         // init border choice box
         List<Region> otherRegions = regionService.getAll();
         otherRegions.remove(selectedRegion);
-        if (!isNewRegion) {
-            List<RegionBorder> borders = regionBorderService.getAllByRegion(selectedRegion.getId());
-            for (RegionBorder border : borders) {
-                if (border.getRegion1().equals(selectedRegion)) {
-                    otherRegions.remove(border.getRegion2());
-                } else {
-                    otherRegions.remove(border.getRegion1());
-                }
-            }
+        for(RegionBorder regionBorder : borderTable.getItems()) {
+            otherRegions.remove(regionBorder.getRegion1());
+            otherRegions.remove(regionBorder.getRegion2());
         }
+        for(RegionBorder regionBorder : selectedRegion.getAllBorders()) {
+            otherRegions.remove(regionBorder.getRegion1());
+            otherRegions.remove(regionBorder.getRegion2());
+        }
+
         borderChoiceBox.setItems(FXCollections.observableArrayList(otherRegions));
     }
 
@@ -180,8 +164,8 @@ public class EditRegionController extends BaseControllerImpl {
 
         // save region
         String name = nameField.getText();
-        Temperature temperature = Temperature.parse(temperatureChoiceBox.getSelectionModel().getSelectedIndex());
-        RainfallChance rainfallChance = RainfallChance.parse(rainfallChoiceBox.getSelectionModel().getSelectedIndex());
+        Temperature temperature = temperatureChoiceBox.getSelectionModel().getSelectedItem();
+        RainfallChance rainfallChance = rainfallChoiceBox.getSelectionModel().getSelectedItem();
         String comment = commentArea.getText();
         Color selectedColor = colorPicker.getValue();
         String colorString = "";
@@ -302,6 +286,21 @@ public class EditRegionController extends BaseControllerImpl {
     public void setRegion(Region region) {
         log.debug("calling setRegion(" + region + ")");
         selectedRegion = region;
+        if(selectedRegion != null) {
+            nameField.setText(selectedRegion.getName());
+            colorPicker.setValue(new Color(
+                            (double) Integer.valueOf(selectedRegion.getColor().substring(0, 2), 16) / 255,
+                            (double) Integer.valueOf(selectedRegion.getColor().substring(2, 4), 16) / 255,
+                            (double) Integer.valueOf(selectedRegion.getColor().substring(4, 6), 16) / 255,
+                            1.0)
+            );
+            temperatureChoiceBox.getSelectionModel().select(selectedRegion.getTemperature().getValue());
+            rainfallChoiceBox.getSelectionModel().select(selectedRegion.getRainfallChance().getValue());
+            commentArea.setText(selectedRegion.getComment());
+
+            ObservableList<RegionBorder> data = FXCollections.observableArrayList(regionBorderService.getAllByRegion(selectedRegion.getId()));
+            borderTable.setItems(data);
+        }
     }
 
     public void setLoader(SpringFxmlLoader loader) {
