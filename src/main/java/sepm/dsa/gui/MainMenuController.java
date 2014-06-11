@@ -199,29 +199,6 @@ public class MainMenuController extends BaseControllerImpl {
                 }
             }
         });
-
-		// init zoom
-		zoomSlider.setMin((536) / mapCanvas.getHeight());
-		zoomSlider.setMax(2.69);
-		zoomSlider.adjustValue(1.0);
-		// zoom-value listener: zooms the map acording to slider
-		zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				//double currentX = ( (scrollPane.getWidth()/2) + scrollPane.getHvalue()*(mapCanvas.getWidth()*scaleFactor-scrollPane.getWidth()) ) / (mapCanvas.getWidth()*scaleFactor);
-				//double currentY = ( (scrollPane.getHeight()/2) + scrollPane.getVvalue()*(mapCanvas.getHeight()*scaleFactor-scrollPane.getHeight()) ) / (mapCanvas.getHeight()*scaleFactor);
-				scaleFactor = newValue.doubleValue();
-				double v = scrollPane.getVvalue();
-				double h = scrollPane.getHvalue();
-				dontUpdateScroll = true;
-				zoomGroup.setScaleX(scaleFactor);
-				zoomGroup.setScaleY(scaleFactor);
-				dontUpdateScroll = true;
-				scrollPane.setVvalue(v);
-				scrollPane.setHvalue(h);
-				updateZoom();
-			}
-		});
 	}
 
     @Override
@@ -230,6 +207,29 @@ public class MainMenuController extends BaseControllerImpl {
         updateMap();
         checkLocationFocus();
         checkTraderFocus();
+
+        // init zoom
+        zoomSlider.setMin((536) / mapCanvas.getHeight());
+        zoomSlider.setMax(2.69);
+        zoomSlider.adjustValue(1.0);
+        // zoom-value listener: zooms the map acording to slider
+        zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                //double currentX = ( (scrollPane.getWidth()/2) + scrollPane.getHvalue()*(mapCanvas.getWidth()*scaleFactor-scrollPane.getWidth()) ) / (mapCanvas.getWidth()*scaleFactor);
+                //double currentY = ( (scrollPane.getHeight()/2) + scrollPane.getVvalue()*(mapCanvas.getHeight()*scaleFactor-scrollPane.getHeight()) ) / (mapCanvas.getHeight()*scaleFactor);
+                scaleFactor = newValue.doubleValue();
+                double v = scrollPane.getVvalue();
+                double h = scrollPane.getHvalue();
+                dontUpdateScroll = true;
+                zoomGroup.setScaleX(scaleFactor);
+                zoomGroup.setScaleY(scaleFactor);
+                dontUpdateScroll = true;
+                scrollPane.setVvalue(v);
+                scrollPane.setHvalue(h);
+                updateZoom();
+            }
+        });
     }
 
     /**

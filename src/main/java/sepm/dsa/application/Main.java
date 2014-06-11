@@ -89,6 +89,7 @@ public class Main extends Application {
 //	    Parent root = (Parent) loader.load("/gui/mainmenu.fxml");
         Parent root = (Parent) loader.load("/gui/mainmenuResizable.fxml");
         final MainMenuController ctrl = loader.getController();
+        ctrl.reload();
         primaryStage.setTitle("DSA-Händlertool");
         primaryStage.setScene(new Scene(root, 1045, 600));
         primaryStage.setMinWidth(600);
