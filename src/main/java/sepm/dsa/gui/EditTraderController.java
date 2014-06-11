@@ -3,7 +3,6 @@ package sepm.dsa.gui;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -92,12 +91,10 @@ public class EditTraderController extends BaseControllerImpl {
         log.debug("reload EditTraderController");
 
         //init choiceBoxes
-        List<TraderCategory> categories = categoryService.getAll();
-        List<Location> locations = locationService.getAll();
-        categoryBox.setItems(FXCollections.observableArrayList(categories));
-        locationBox.setItems(FXCollections.observableArrayList(locations));
-        areaBox.setItems(FXCollections.observableArrayList(DistancePreferrence.values()));
-        citySizeBox.setItems(FXCollections.observableArrayList(TownSize.values()));
+	    categoryBox.getItems().setAll(categoryService.getAll());
+	locationBox.getItems().setAll(locationService.getAll());
+	areaBox.getItems().setAll(DistancePreferrence.values());
+	citySizeBox.getItems().setAll(TownSize.values());
 
         movingCheck.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override

@@ -1,7 +1,6 @@
 package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -103,15 +102,15 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
         //initialize table
         initialzeTableWithColums();
 
-        selectedCurrency.setItems(FXCollections.observableArrayList(currencySetService.getAll()));
-        selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAll()));
-        selectedPlayer.setItems(FXCollections.observableArrayList(playerService.getAll()));
+	selectedCurrency.getItems().setAll(currencySetService.getAll());
+	selectedUnit.getItems().setAll(unitService.getAll());
+	selectedPlayer.getItems().setAll(playerService.getAll());
 
         List<ProductQuality> qualityList = new ArrayList<>();
         for (ProductQuality q : ProductQuality.values()) {
             qualityList.add(q);
         }
-        selectedQuality.setItems(FXCollections.observableArrayList(qualityList));
+	selectedQuality.getItems().setAll(qualityList);
         selectedQuality.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updatePrice();
         });
@@ -213,7 +212,7 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
                 selectedQuality.setDisable(true);
             }
             updatePrice();
-            selectedUnit.setItems(FXCollections.observableArrayList(unitService.getAllByType(selProduct.getUnit().getUnitType())));
+	    selectedUnit.getItems().setAll(unitService.getAllByType(selProduct.getUnit().getUnitType()));
             selectedUnit.getSelectionModel().select(selProduct.getUnit());
         }
     }
@@ -226,11 +225,11 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
     private void onSearchPressed() {
         log.debug("calling onSearchPressed");
         if (searchField.getText().isEmpty()) {
-            productsTable.setItems(FXCollections.observableArrayList(productService.getAll()));
+	    productsTable.getItems().setAll(productService.getAll());
             productsTable.getSelectionModel().selectFirst();
             checkFocus();
         } else {
-            productsTable.setItems(FXCollections.observableArrayList(productService.getBySearchTerm(searchField.getText())));
+	    productsTable.getItems().setAll(productService.getBySearchTerm(searchField.getText()));
             productsTable.getSelectionModel().selectFirst();
             checkFocus();
         }

@@ -1,7 +1,5 @@
 package sepm.dsa.gui;
 
-
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -59,7 +57,7 @@ public class EditTavernController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("reload EditTavernController");
-        qualityCoicheBox.setItems(FXCollections.observableArrayList(ProductQuality.values()));
+	qualityCoicheBox.getItems().setAll(ProductQuality.values());
         defaultCurrencySet = currencySetService.getDefaultCurrencySet();
         if (selectedTavern == null) {
             isNewTavern = true;

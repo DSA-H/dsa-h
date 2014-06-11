@@ -1,8 +1,5 @@
 package sepm.dsa.gui;
 
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -60,12 +57,12 @@ public class CalculatePriceController extends BaseControllerImpl {
         allProducts = productService.getAll();
         showProducts(allProducts);
 
-        choiceLocation.setItems(FXCollections.observableArrayList(locationService.getAll()));
+	choiceLocation.getItems().setAll(locationService.getAll());
         choiceLocation.getSelectionModel().select(0);
 
         //init choiceBoxes
         ProductQuality[] productQualities = ProductQuality.values();
-        choiceQuality.setItems(FXCollections.observableArrayList(productQualities));
+	choiceQuality.getItems().setAll(productQualities);
         choiceQuality.getSelectionModel().select(ProductQuality.NORMAL);
         List<CurrencyAmount> currencyAmounts = currencySetService.toCurrencySet(defaultCurrencySet, 0);
         labelPrice.setText(CurrencyFormatUtil.currencySetShortString(currencyAmounts, ", "));
@@ -73,8 +70,7 @@ public class CalculatePriceController extends BaseControllerImpl {
     }
 
     private void showProducts(List<Product> products){
-        ObservableList<Product> data = FXCollections.observableArrayList(products);
-        productTable.setItems(data);
+	productTable.setItems(products);
     }
 
     @FXML

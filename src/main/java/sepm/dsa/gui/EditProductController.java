@@ -1,7 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -124,9 +122,8 @@ public class EditProductController extends BaseControllerImpl {
         categorieColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        List<Unit> unitList = unitService.getAll();
-        unitBox.setItems(FXCollections.observableArrayList(unitList));
-        attributeBox.setItems(FXCollections.observableArrayList(ProductAttribute.values()));
+	    unitBox.getItems().setAll(unitService.getAll());
+	attributeBox.getItems().setAll(ProductAttribute.values());
     }
 
     @Override
@@ -151,8 +148,8 @@ public class EditProductController extends BaseControllerImpl {
             unitBox.getSelectionModel().selectFirst();
         }
 
-        categorieChoiceBox.setItems(FXCollections.observableArrayList(categoryList));
-        regionChoiceBox.setItems(FXCollections.observableArrayList(regionList));
+	categorieChoiceBox.getItems().setAll(categoryList);
+	regionChoiceBox.getItems().setAll(regionList);
     }
 
     @FXML
@@ -345,10 +342,8 @@ public class EditProductController extends BaseControllerImpl {
             nameField.setText(selectedProduct.getName());
             refreshPriceView(selectedProduct.getCost());
             attributeBox.getSelectionModel().select(selectedProduct.getAttribute());
-            ObservableList<Region> regionData = FXCollections.observableArrayList(selectedProduct.getRegions());
-            regionTable.setItems(regionData);
-            ObservableList<ProductCategory> categoryData = FXCollections.observableArrayList(selectedProduct.getCategories());
-            categorieTable.setItems(categoryData);
+	    regionTable.getItems().setAll(selectedProduct.getRegions());
+	    categorieTable.getItems().setAll(selectedProduct.getCategories());
             commentField.setText(selectedProduct.getComment());
             qualityBox.setSelected(selectedProduct.getQuality());
             unitBox.getSelectionModel().select(selectedProduct.getUnit());

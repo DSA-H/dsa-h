@@ -2,7 +2,6 @@ package sepm.dsa.gui;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -57,8 +56,7 @@ public class TavernListController extends BaseControllerImpl {
                         //List<Tavern> taverns = tavernService.getAllByLocation((Location) locationBox.getSelectionModel().getSelectedItem());
                         //tavernList.setItems(FXCollections.observableArrayList(taverns));
                         checkFocus();
-                        List<Tavern> taverns = tavernService.getAllByLocation(selected.getValue().getId());
-                        tavernList.setItems(FXCollections.observableArrayList(taverns));
+			    tavernList.getItems().setAll(tavernService.getAllByLocation(selected.getValue().getId()));
                     }
                 }
         );
@@ -82,8 +80,7 @@ public class TavernListController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("reload TavernListController");
-        List<Location> locations = locationService.getAll();
-        locationBox.setItems(FXCollections.observableArrayList(locations));
+	    locationBox.getItems().setAll(locationService.getAll());
     }
 
     @FXML

@@ -2,8 +2,6 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -77,8 +75,7 @@ public class TraderCategoryListController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("reload TraderCategoryListController");
-        ObservableList<TraderCategory> data = FXCollections.observableArrayList(traderCategoryService.getAll());
-        traderCategoryTable.setItems(data);
+	traderCategoryTable.getItems().setAll(traderCategoryService.getAll());
 
         checkFocus();
     }

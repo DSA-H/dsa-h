@@ -1,7 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -65,7 +63,7 @@ public class EditProductCategoryController extends BaseControllerImpl {
             selectedProductCategory = new ProductCategory();
         }
 
-        choiceParent.setItems(FXCollections.observableArrayList(categoryList));
+	choiceParent.getItems().setAll(categoryList);
     }
 
     @FXML

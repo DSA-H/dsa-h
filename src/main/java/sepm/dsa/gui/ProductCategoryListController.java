@@ -1,6 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,6 +18,8 @@ import sepm.dsa.model.ProductCategory;
 import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.SaveCancelService;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -75,14 +76,14 @@ public class ProductCategoryListController extends BaseControllerImpl {
 
     private void refreshGui() {
         log.debug("refreshGui");
-        ObservableList<Product> data = null;
+	Set<Product> data;
         if (selectedProcutCategory == null) {
-            data = FXCollections.observableArrayList();
+	    data = new HashSet<>(0);
         } else {
-            data = FXCollections.observableArrayList(selectedProcutCategory.getProducts());
+	    data = selectedProcutCategory.getProducts();
             productView.getSelectionModel().selectFirst();
         }
-        productView.setItems(data);
+	productView.getItems().setAll(data);
     }
 
     private void addTreeChildren(List<ProductCategory> productCategoryList, TreeItem root){

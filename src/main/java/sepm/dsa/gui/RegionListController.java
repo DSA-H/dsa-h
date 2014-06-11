@@ -2,8 +2,6 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -114,8 +112,7 @@ public class RegionListController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("reload RegionListController");
-        ObservableList<Region> data = FXCollections.observableArrayList(regionService.getAll());
-        regionTable.setItems(data);
+	    regionTable.getItems().setAll(regionService.getAll());
     }
 
     @FXML

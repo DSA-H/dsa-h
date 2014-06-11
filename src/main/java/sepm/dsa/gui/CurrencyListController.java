@@ -1,7 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -48,8 +46,7 @@ public class CurrencyListController extends BaseControllerImpl {
         currencyColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         valueToBaseRateColumn.setCellValueFactory(new PropertyValueFactory<>("valueToBaseRate"));
 
-        ObservableList<Currency> data = FXCollections.observableArrayList(currencyService.getAll());
-        currencyTable.setItems(data);
+	currencyTable.setItems(currencyService.getAll());
 
         checkFocus();
     }
