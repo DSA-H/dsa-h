@@ -51,13 +51,17 @@ public class CurrencyFormatUtil {
         if (cas.size() == 0) {
             throw new IllegalArgumentException("currencyAmounts size is zero");
         }
-
-        String result = cas.get(0).getAmount() + "" + cas.get(0).getCurrency().getShortName();
-        for (int i=1; i<cas.size(); i++) {
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<cas.size(); i++) {
             CurrencyAmount ca = cas.get(i);
-            result +=  delimiter + ca.getAmount() + "" + ca.getCurrency().getShortName();
+            if(ca.getAmount() > 0) {
+                sb.append(delimiter + ca.getAmount() + "" + ca.getCurrency().getShortName());
+            }
         }
-        return result;
+        if(sb.length() == 0) {
+            sb.append("0" + cas.get(0).getCurrency().getShortName());
+        }
+        return sb.toString();
     }
 
 }
