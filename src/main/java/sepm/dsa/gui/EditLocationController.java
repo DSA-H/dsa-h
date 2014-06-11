@@ -121,7 +121,11 @@ public class EditLocationController extends BaseControllerImpl {
 
         // init region choice box
         List<Region> regions = regionService.getAll();
+        Region selectedRegion = regionChoiceBox.getSelectionModel().getSelectedItem();
         regionChoiceBox.setItems(FXCollections.observableArrayList(regions));
+        if(selectedRegion != null) {
+            regionChoiceBox.getSelectionModel().select(selectedRegion);
+        }
 
         Set<LocationConnection> allConnections = this.connections;
         ObservableList<LocationConnection> connections = FXCollections.observableArrayList(allConnections);
