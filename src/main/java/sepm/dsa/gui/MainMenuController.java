@@ -113,8 +113,6 @@ public class MainMenuController extends BaseControllerImpl {
 	private MenuItem weltkarteImportieren;
 	@FXML
 	private MenuItem weltkarteExportieren;
-	@FXML
-	private MenuItem location;
 
 	// lists, tables, maps
 	@FXML
@@ -153,7 +151,6 @@ public class MainMenuController extends BaseControllerImpl {
 	private Label resultLabel;
 	@FXML
 	private GridPane pathCalcGrid;
-
 	// zoom
 	@FXML
 	private Slider zoomSlider;
@@ -184,10 +181,13 @@ public class MainMenuController extends BaseControllerImpl {
 
 		chooseButton.setStyle("-fx-font-weight: bold;");
 
+        updateTables();
+        updateMap();
         // init zoom
         zoomSlider.setMin((536) / mapCanvas.getHeight());
         zoomSlider.setMax(2.69);
         zoomSlider.adjustValue(1.0);
+
         // zoom-value listener: zooms the map acording to slider
         zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
