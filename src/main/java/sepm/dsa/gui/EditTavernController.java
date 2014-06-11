@@ -25,7 +25,9 @@ import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TavernService;
 import sepm.dsa.util.CurrencyFormatUtil;
 
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class EditTavernController extends BaseControllerImpl {
 
@@ -54,18 +56,16 @@ public class EditTavernController extends BaseControllerImpl {
 	@FXML
 	private TextField bedsField;
 
-    @Override
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		super.initialize(location, resources);
+		qualityCoicheBox.getItems().setAll(ProductQuality.values());
+		defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+	}
+
+	@Override
     public void reload() {
         log.debug("reload EditTavernController");
-	qualityCoicheBox.getItems().setAll(ProductQuality.values());
-        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
-        if (selectedTavern == null) {
-            isNewTavern = true;
-            selectedTavern = new Tavern();
-        } else {
-            isNewTavern = false;
-            fillGuiWithData(selectedTavern);
-        }
     }
 
     @FXML
@@ -128,7 +128,14 @@ public class EditTavernController extends BaseControllerImpl {
 	}
 
 	public void setTavern(Tavern tavern) {
-        selectedTavern = tavern;
+		if (tavern == null) {
+			isNewTavern = true;
+			selectedTavern = new Tavern();
+		} else {
+			isNewTavern = false;
+			selectedTavern = tavern;
+			fillGuiWithData(selectedTavern);
+		}
 	}
 
 	/**

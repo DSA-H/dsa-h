@@ -133,6 +133,7 @@ public class PlacementController extends BaseControllerImpl {
 		controller.setTavern(null);
 		controller.setPosition(pos);
 		controller.setLocation(selectedLocation);
+		controller.reload();
 		stage.setScene(new Scene(scene, 600, 400));
 		stage.setResizable(false);
 		stage.show();
