@@ -111,6 +111,7 @@ public class ProductCategoryListController extends BaseControllerImpl {
 
     @FXML
     private void onTreeviewClicked() {
+        checkFocus();
         refreshGui();
         checkFocus();
     }
