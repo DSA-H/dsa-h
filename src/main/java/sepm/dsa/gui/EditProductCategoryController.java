@@ -81,6 +81,8 @@ public class EditProductCategoryController extends BaseControllerImpl {
         Stage stage = (Stage) nameField.getScene().getWindow();
 
         Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml");
+        EditProductCategoryController ctrl = loader.getController();
+        ctrl.reload();
 
         stage.setScene(new Scene(scene, 600, 438));
     }
@@ -106,12 +108,12 @@ public class EditProductCategoryController extends BaseControllerImpl {
             productCategoryService.update(selectedProductCategory);
         }
         saveCancelService.save();
-        // TODO remove this, need to implement this references change on update -> parent changed in DAO.update
-//        saveCancelService.refresh(selectedProductCategory.getParent());
 
         // return to productcategorylist
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml");
+        EditProductCategoryController ctrl = loader.getController();
+        ctrl.reload();
         stage.setScene(new Scene(scene, 600, 438));
     }
 

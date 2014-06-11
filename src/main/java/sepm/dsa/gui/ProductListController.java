@@ -127,6 +127,7 @@ public class ProductListController extends BaseControllerImpl {
         Parent scene = (Parent) loader.load("/gui/editproduct.fxml");
         EditProductController ctrl = loader.getController();
         ctrl.setProduct(null);
+        ctrl.setCalledFromCategorie(false);
         ctrl.reload();
 
         stage.setTitle("Waren");
@@ -142,6 +143,7 @@ public class ProductListController extends BaseControllerImpl {
         Parent scene = (Parent) loader.load("/gui/editproduct.fxml");
         EditProductController ctrl = loader.getController();
         ctrl.setProduct(productTable.getSelectionModel().getSelectedItem());
+        ctrl.setCalledFromCategorie(false);
         ctrl.reload();
 
         stage.setTitle("Waren");
@@ -182,6 +184,12 @@ public class ProductListController extends BaseControllerImpl {
             deleteButton.setDisable(false);
             editButton.setDisable(false);
         }
+    }
+
+    @FXML
+    public void closeClicked() {
+        Stage stage = (Stage) productTable.getScene().getWindow();
+        stage.close();
     }
 
 

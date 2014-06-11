@@ -38,6 +38,7 @@ public class EditProductController extends BaseControllerImpl {
 
     private Product selectedProduct;
     private boolean isNewProduct;
+    private boolean calledFromCategorie = false;
 
     @FXML
     private TextField nameField;
@@ -239,11 +240,21 @@ public class EditProductController extends BaseControllerImpl {
 
         Stage stage = (Stage) nameField.getScene().getWindow();
 
-        Parent scene = (Parent) loader.load("/gui/productslist.fxml");
-        ProductListController ctrl = loader.getController();
-        ctrl.reload();
+        if(calledFromCategorie) {
+            Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml");
+            BaseController ctrl = loader.getController();
+            ctrl.reload();
 
-        stage.setScene(new Scene(scene, 600, 438));
+            stage.setTitle("Warenkategorie");
+            stage.setScene(new Scene(scene, 600, 438));
+            stage.setResizable(false);
+        }else {
+            Parent scene = (Parent) loader.load("/gui/productslist.fxml");
+            ProductListController ctrl = loader.getController();
+            ctrl.reload();
+
+            stage.setScene(new Scene(scene, 600, 438));
+        }
     }
 
     @FXML
@@ -297,12 +308,23 @@ public class EditProductController extends BaseControllerImpl {
         }
         saveCancelService.save();
 
-        // return to productslist
+        // return to productslist / productcategorie
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/productslist.fxml");
-        ProductListController ctrl = loader.getController();
-        ctrl.reload();
-        stage.setScene(new Scene(scene, 600, 438));
+        if(calledFromCategorie) {
+            Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml");
+            BaseController ctrl = loader.getController();
+            ctrl.reload();
+
+            stage.setTitle("Warenkategorie");
+            stage.setScene(new Scene(scene, 600, 438));
+            stage.setResizable(false);
+        }else {
+            Parent scene = (Parent) loader.load("/gui/productslist.fxml");
+            ProductListController ctrl = loader.getController();
+            ctrl.reload();
+
+            stage.setScene(new Scene(scene, 600, 438));
+        }
     }
 
     private void refreshPriceView(int baseRatePrice) {
@@ -358,5 +380,9 @@ public class EditProductController extends BaseControllerImpl {
 
     public void setCurrencyService(CurrencyService currencyService) {
         this.currencyService = currencyService;
+    }
+
+    public void setCalledFromCategorie(boolean calledFromCategorie) {
+        this.calledFromCategorie = calledFromCategorie;
     }
 }

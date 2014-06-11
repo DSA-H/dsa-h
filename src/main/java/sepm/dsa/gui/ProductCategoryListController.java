@@ -35,13 +35,15 @@ public class ProductCategoryListController extends BaseControllerImpl {
     @FXML
     private TreeView<ProductCategory> treeview;
     @FXML
-    private TableView<Product> tableview;
+    private TableView<Product> productView;
     @FXML
     private TableColumn<Product, String> productColumn;
     @FXML
     private Button deleteButton;
     @FXML
     private Button editButton;
+    @FXML
+    private Button editProductButton;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
@@ -76,8 +78,9 @@ public class ProductCategoryListController extends BaseControllerImpl {
             data = FXCollections.observableArrayList();
         } else {
             data = FXCollections.observableArrayList(selectedProcutCategory.getProducts());
+            productView.getSelectionModel().selectFirst();
         }
-        tableview.setItems(data);
+        productView.setItems(data);
     }
 
     private void addTreeChildren(List<ProductCategory> productCategoryList, TreeItem root){
@@ -98,26 +101,32 @@ public class ProductCategoryListController extends BaseControllerImpl {
             deleteButton.setDisable(false);
             editButton.setDisable(false);
         }
+        Product selectedProduct = productView.getSelectionModel().getSelectedItem() != null ? productView.getSelectionModel().getSelectedItem() : null;
+        if (selectedProduct == null) {
+            editProductButton.setDisable(true);
+        } else {
+            editProductButton.setDisable(false);
+        }
     }
 
     @FXML
     private void onTreeviewClicked() {
-        checkFocus();
         refreshGui();
+        checkFocus();
     }
 
     @FXML
     private void onCreateButtonPressed() {
         log.debug("onCreateClicked - open Waren Window");
 
-        Stage stage = (Stage) tableview.getScene().getWindow();
+        Stage stage = (Stage) productView.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/editproductcategory.fxml");
         EditProductCategoryController ctrl = loader.getController();
         ctrl.setProductCategory(null);
         ctrl.reload();
 
         stage.setTitle("Warenkategorie");
-        stage.setScene(new Scene(scene, 490, 219));
+        stage.setScene(new Scene(scene, 440, 178));
         stage.show();
     }
 
@@ -126,14 +135,14 @@ public class ProductCategoryListController extends BaseControllerImpl {
         log.debug("onWarenClicked - open Waren Window");
 
 
-        Stage stage = (Stage) tableview.getScene().getWindow();
+        Stage stage = (Stage) productView.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/editproductcategory.fxml");
         EditProductCategoryController ctrl = loader.getController();
         ctrl.setProductCategory(treeview.getSelectionModel().getSelectedItem().getValue());
         ctrl.reload();
 
         stage.setTitle("Warenkategorie");
-        stage.setScene(new Scene(scene, 490, 219));
+        stage.setScene(new Scene(scene, 440, 178));
         stage.show();
     }
 
@@ -159,6 +168,26 @@ public class ProductCategoryListController extends BaseControllerImpl {
         }
 
         checkFocus();
+    }
+
+    @FXML
+    public void onEditProduct() {
+        Stage stage = (Stage) treeview.getScene().getWindow();
+        Parent scene = (Parent) loader.load("/gui/editproduct.fxml");
+        EditProductController ctrl = loader.getController();
+        ctrl.setProduct(productView.getSelectionModel().getSelectedItem());
+        ctrl.setCalledFromCategorie(true);
+        ctrl.reload();
+
+        stage.setTitle("Waren");
+        stage.setScene(new Scene(scene, 600, 479));
+        stage.show();
+    }
+
+    @FXML
+    public void closeClicked() {
+        Stage stage = (Stage) productView.getScene().getWindow();
+        stage.close();
     }
 
     public void setProductCategoryService(ProductCategoryService productCategoryService) {
