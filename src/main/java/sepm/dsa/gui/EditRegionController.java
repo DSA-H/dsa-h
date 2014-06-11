@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.RainfallChance;
@@ -173,6 +174,8 @@ public class EditRegionController extends BaseControllerImpl {
 
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
+        RegionListController ctrl = loader.getController();
+        ctrl.reload();
 
         stage.setScene(new Scene(scene, 600, 438));
     }
@@ -240,6 +243,8 @@ public class EditRegionController extends BaseControllerImpl {
         // return to regionlist
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
+        RegionListController ctrl = loader.getController();
+        ctrl.reload();
 
         stage.setScene(new Scene(scene, 600, 438));
     }

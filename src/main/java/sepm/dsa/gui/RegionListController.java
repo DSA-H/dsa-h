@@ -195,6 +195,12 @@ public class RegionListController extends BaseControllerImpl {
 
     }
 
+    @FXML
+    private void closeClicked() {
+        Stage stage = (Stage)regionTable.getScene().getWindow();
+        stage.close();
+    }
+
     public void setRegionService(RegionService regionService) {
         this.regionService = regionService;
     }
