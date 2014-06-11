@@ -253,7 +253,7 @@ public class MainMenuController extends BaseControllerImpl {
 			stage.setTitle("Ort bearbeiten");
 			stage.setScene(new Scene(scene, 900, 438));
 			stage.setResizable(false);
-			stage.showAndWait();
+			stage.show();
 		} else {
 			if (selectedObject instanceof Trader) {
 				Stage stage = new Stage();
@@ -265,7 +265,7 @@ public class MainMenuController extends BaseControllerImpl {
                 controller.reload();
 				stage.setScene(new Scene(scene, 781, 830));
 				stage.setResizable(false);
-				stage.showAndWait();
+				stage.show();
 			} else {
 				Stage stage = new Stage();
 				Parent scene = (Parent) loader.load("/gui/edittavern.fxml");
@@ -276,12 +276,10 @@ public class MainMenuController extends BaseControllerImpl {
                 controller.reload();
 				stage.setScene(new Scene(scene, 383, 400));
 				stage.setResizable(false);
-				stage.showAndWait();
+				stage.show();
 			}
 
 		}
-
-		reload();
 	}
 
 	/**
@@ -355,8 +353,6 @@ public class MainMenuController extends BaseControllerImpl {
 				}
 			}
 		}
-
-		reload();
 	}
 
 	/**
@@ -380,7 +376,7 @@ public class MainMenuController extends BaseControllerImpl {
 				stage.setTitle("Ort erstellen");
 				stage.setScene(new Scene(scene, 900, 438));
 				stage.setResizable(false);
-				stage.showAndWait();
+				stage.show();
 
 				updateTables();
 			} else {
@@ -405,7 +401,7 @@ public class MainMenuController extends BaseControllerImpl {
 
 				stage.setScene(new Scene(scene, 350, 190));
 				stage.setResizable(false);
-				stage.showAndWait();
+				stage.show();
 
 				updateTables();
 			} else {
@@ -477,16 +473,6 @@ public class MainMenuController extends BaseControllerImpl {
 				Stage stage = (Stage) editButton.getScene().getWindow();
 				stage.setTitle("DSA-Händlertool");
 			}
-
-			updateTables();
-			if (mode == LOCATIONMODE) {
-				traderList.getSelectionModel().select(0);
-				checkTraderFocus();
-			} else {
-				checkLocationFocus();
-			}
-			updateMap();
-			updateZoom();
 		}
 	}
 
@@ -537,7 +523,7 @@ public class MainMenuController extends BaseControllerImpl {
 
 			stage.setScene(new Scene(scene, 350, 190));
 			stage.setResizable(false);
-			stage.showAndWait();
+			stage.show();
 
 			if (mode == WORLDMODE) {
 				checkLocationFocus();
@@ -595,7 +581,7 @@ public class MainMenuController extends BaseControllerImpl {
 								stage.setTitle("Fahrende Händler");
 								stage.setScene(new Scene(scene, 600, 400));
 								stage.setResizable(false);
-								stage.showAndWait();
+								stage.show();
 								return;
 							}
 						}
@@ -636,10 +622,7 @@ public class MainMenuController extends BaseControllerImpl {
 		stage.setTitle("Spieler verwalten");
 		stage.setScene(new Scene(scene, 600, 438));
 		stage.setResizable(false);
-		stage.showAndWait();
-
-		updateTables();
-		updateMap();
+		stage.show();
 	}
 
 	@FXML
@@ -654,10 +637,7 @@ public class MainMenuController extends BaseControllerImpl {
 		stage.setTitle("Währungen");
 		stage.setScene(new Scene(scene, 600, 438));
 		stage.setResizable(false);
-		stage.showAndWait();
-
-		updateTables();
-		updateMap();
+		stage.show();
 	}
 
 	@FXML
@@ -672,10 +652,7 @@ public class MainMenuController extends BaseControllerImpl {
 		stage.setTitle("Währung umrechnen");
 		stage.setScene(new Scene(scene, 600, 215));
 		stage.setResizable(false);
-		stage.showAndWait();
-
-		updateTables();
-		updateMap();
+		stage.show();
 	}
 
     @FXML
@@ -690,10 +667,7 @@ public class MainMenuController extends BaseControllerImpl {
         stage.setTitle("Preis berechnen");
         stage.setScene(new Scene(scene, 600, 400));
         stage.setResizable(false);
-        stage.showAndWait();
-
-        updateTables();
-        updateMap();
+        stage.show();
     }
 
 	@FXML
@@ -708,12 +682,7 @@ public class MainMenuController extends BaseControllerImpl {
 		stage.setTitle("Grenzen und Gebiete");
 		stage.setScene(new Scene(scene, 600, 438));
 		stage.setResizable(false);
-		stage.showAndWait();
-
-		updateTables();
-		updateMap();
-		checkLocationFocus();
-		checkTraderFocus();
+		stage.show();
 	}
 
 	@FXML
@@ -727,12 +696,7 @@ public class MainMenuController extends BaseControllerImpl {
 		stage.setTitle("Händlerkategorien");
 		stage.setScene(new Scene(scene, 600, 438));
 		stage.setResizable(false);
-		stage.showAndWait();
-
-		updateTables();
-		updateMap();
-		checkLocationFocus();
-		checkTraderFocus();
+		stage.show();
 	}
 
 	@FXML
@@ -747,12 +711,7 @@ public class MainMenuController extends BaseControllerImpl {
 		stage.setTitle("Waren");
 		stage.setScene(new Scene(scene, 600, 438));
 		stage.setResizable(false);
-		stage.showAndWait();
-
-		updateTables();
-		updateMap();
-		checkLocationFocus();
-		checkTraderFocus();
+		stage.show();
 	}
 
 	@FXML
@@ -767,12 +726,7 @@ public class MainMenuController extends BaseControllerImpl {
 		stage.setTitle("Warenkategorie");
 		stage.setScene(new Scene(scene, 600, 438));
 		stage.setResizable(false);
-		stage.showAndWait();
-
-		updateTables();
-		updateMap();
-		checkLocationFocus();
-		checkTraderFocus();
+		stage.show();
 	}
 
 	@FXML
@@ -787,12 +741,7 @@ public class MainMenuController extends BaseControllerImpl {
 		stage.setTitle("Datum umstellen");
 		stage.setScene(new Scene(scene, 419, 150));
 		stage.setResizable(false);
-		stage.showAndWait();
-
-		updateTables();
-		updateMap();
-		checkLocationFocus();
-		checkTraderFocus();
+		stage.show();
 	}
 
 	@FXML
@@ -807,12 +756,7 @@ public class MainMenuController extends BaseControllerImpl {
 		stage.setTitle("Zeit vorstellen");
 		stage.setScene(new Scene(scene, 462, 217));
 		stage.setResizable(false);
-		stage.showAndWait();
-
-		updateTables();
-		updateMap();
-		checkLocationFocus();
-		checkTraderFocus();
+		stage.show();
 	}
 
 	@FXML
@@ -852,10 +796,6 @@ public class MainMenuController extends BaseControllerImpl {
 			return;
 		}
 		mapService.setWorldMap(newmap);
-
-		updateMap();
-		checkLocationFocus();
-		checkTraderFocus();
 	}
 
 	@FXML
