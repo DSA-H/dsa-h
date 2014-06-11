@@ -141,20 +141,8 @@ public class EditProductController extends BaseControllerImpl {
 
         if (selectedProduct != null){
             isNewProduct = false;
-            nameField.setText(selectedProduct.getName());
-            refreshPriceView(selectedProduct.getCost());
-            attributeBox.getSelectionModel().select(selectedProduct.getAttribute());
-            //choice_unit.getSelectionModel().select(productUnitService.get(selectedProduct.getUnit()));
-            ObservableList<Region> regionData = FXCollections.observableArrayList(selectedProduct.getRegions());
-            regionList.removeAll(selectedProduct.getRegions());
-            regionTable.setItems(regionData);
-            ObservableList<ProductCategory> categoryData = FXCollections.observableArrayList(selectedProduct.getCategories());
             categoryList.removeAll(selectedProduct.getCategories());
-            categorieTable.setItems(categoryData);
-            commentField.setText(selectedProduct.getComment());
-            qualityBox.setSelected(selectedProduct.getQuality());
-            unitBox.getSelectionModel().select(selectedProduct.getUnit());
-            occurenceField.setText(selectedProduct.getOccurence()+"");
+            regionList.removeAll(selectedProduct.getRegions());
         }else {
             isNewProduct = true;
             selectedProduct = new Product();
@@ -350,6 +338,19 @@ public class EditProductController extends BaseControllerImpl {
 
     public void setProduct(Product product) {
         selectedProduct = product;
+        if(selectedProduct != null) {
+            nameField.setText(selectedProduct.getName());
+            refreshPriceView(selectedProduct.getCost());
+            attributeBox.getSelectionModel().select(selectedProduct.getAttribute());
+            ObservableList<Region> regionData = FXCollections.observableArrayList(selectedProduct.getRegions());
+            regionTable.setItems(regionData);
+            ObservableList<ProductCategory> categoryData = FXCollections.observableArrayList(selectedProduct.getCategories());
+            categorieTable.setItems(categoryData);
+            commentField.setText(selectedProduct.getComment());
+            qualityBox.setSelected(selectedProduct.getQuality());
+            unitBox.getSelectionModel().select(selectedProduct.getUnit());
+            occurenceField.setText(selectedProduct.getOccurence() + "");
+        }
     }
 
     public void setProductService(ProductService productService) {
