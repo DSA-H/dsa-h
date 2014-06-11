@@ -9,13 +9,17 @@ import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
+import sepm.dsa.application.ReloadEvent;
 
-public class HbmConversationInterceptor implements MethodInterceptor {
+public class HbmConversationInterceptor implements MethodInterceptor, ApplicationEventPublisherAware {
 
     private final static Logger log = LoggerFactory.getLogger(HbmConversationInterceptor.class);
 
     private SessionFactory sessionFactory;
     private Session disconnectedSession = null;
+	private ApplicationEventPublisher applicationEventPublisher;
 
     public Object invoke(MethodInvocation invocation) throws Throwable {
         String args = "[args:";
@@ -49,6 +53,7 @@ public class HbmConversationInterceptor implements MethodInterceptor {
             log.info("save => flush, commit");
             currentSession.flush();
             currentSession.getTransaction().commit();
+		applicationEventPublisher.publishEvent(new ReloadEvent(this));
             disconnectedSession = currentSession;
         } else if (invocation.getMethod().getName().equals("cancel")) {
             log.debug("cancel => rollback");
@@ -70,4 +75,8 @@ public class HbmConversationInterceptor implements MethodInterceptor {
         this.sessionFactory = sessionFactory;
     }
 
+	@Override
+	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+		this.applicationEventPublisher = applicationEventPublisher;
+	}
 }
