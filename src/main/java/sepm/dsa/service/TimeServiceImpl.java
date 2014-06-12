@@ -196,7 +196,10 @@ public class TimeServiceImpl implements TimeService {
                     }
                 }
 	            // random position in new location
-	            Image image = new Image("file:" + mapService.getLocationMap(movingTrader.getLocation()));
+	            Image image = null;
+	            if (mapService.getLocationMap(movingTrader.getLocation()) != null) {
+		            image = new Image("file:" + mapService.getLocationMap(movingTrader.getLocation()));
+	            }
 	            if (image != null) {
 		            movingTrader.setxPos((int) (Math.random()*image.getWidth()));
 		            movingTrader.setyPos((int) (Math.random()*image.getHeight()));
