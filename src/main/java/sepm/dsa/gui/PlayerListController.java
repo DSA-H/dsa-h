@@ -18,6 +18,9 @@ import sepm.dsa.model.Player;
 import sepm.dsa.service.PlayerService;
 import sepm.dsa.service.SaveCancelService;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 public class PlayerListController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(PlayerListController.class);
@@ -36,12 +39,17 @@ public class PlayerListController extends BaseControllerImpl {
     private Button editButton;
 
     @Override
-    public void reload() {
-        log.debug("reload PlayerListController");
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
         // init table
         currencyColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+    }
 
-	playerTable.getItems().setAll(playerService.getAll());
+    @Override
+    public void reload() {
+        log.debug("reload PlayerListController");
+
+	    playerTable.getItems().setAll(playerService.getAll());
 
         checkFocus();
     }

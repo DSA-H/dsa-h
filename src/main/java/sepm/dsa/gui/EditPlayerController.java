@@ -19,7 +19,9 @@ import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 import sepm.dsa.util.CurrencyFormatUtil;
 
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class EditPlayerController extends BaseControllerImpl {
 
@@ -59,25 +61,16 @@ public class EditPlayerController extends BaseControllerImpl {
     private TableColumn<Deal, String> amountColumn;
 
     @Override
-    public void reload() {
-        log.debug("reload EditPlayerController");
-
-        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
-
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
         //initialize table
         initialzeTableWithColums();
+        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+    }
 
-        if (selectedPlayer != null) {
-            isNewPlaper = false;
-            nameField.setText(selectedPlayer.getName());
-            commentField.setText(selectedPlayer.getComment());
-            if (selectedPlayer.getDeals().size() > 0) {
-		dealsTable.getItems().setAll(selectedPlayer.getDeals());
-            }
-        } else {
-            isNewPlaper = true;
-            selectedPlayer = new Player();
-        }
+    @Override
+    public void reload() {
+        log.debug("reload EditPlayerController");
     }
 
     @FXML
@@ -88,6 +81,8 @@ public class EditPlayerController extends BaseControllerImpl {
         Stage stage = (Stage) nameField.getScene().getWindow();
 
         Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
+        PlayerListController ctrl = loader.getController();
+        ctrl.reload();
 
         stage.setScene(new Scene(scene, 850, 438));
     }
@@ -114,6 +109,8 @@ public class EditPlayerController extends BaseControllerImpl {
         // return to players-list
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
+        PlayerListController ctrl = loader.getController();
+        ctrl.reload();
         stage.setScene(new Scene(scene, 850, 438));
     }
 
@@ -190,6 +187,17 @@ public class EditPlayerController extends BaseControllerImpl {
 
     public void setPlayer(Player player) {
         selectedPlayer = player;
+        if(selectedPlayer != null) {
+            isNewPlaper = false;
+            nameField.setText(selectedPlayer.getName());
+            commentField.setText(selectedPlayer.getComment());
+            if (selectedPlayer.getDeals().size() > 0) {
+                dealsTable.getItems().setAll(selectedPlayer.getDeals());
+            }
+        }else {
+            isNewPlaper = true;
+            selectedPlayer = new Player();
+        }
     }
 
     public void setSaveCancelService(SaveCancelService saveCancelService) {
