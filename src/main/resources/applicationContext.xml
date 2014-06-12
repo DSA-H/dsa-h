@@ -203,6 +203,7 @@
 
     <bean id="productService" class="sepm.dsa.service.ProductServiceImpl">
         <property name="productDao" ref="productDao"/>
+        <property name="productCategoryService" ref="productCategoryService"/>
     </bean>
 
     <bean id="productCategoryService" class="sepm.dsa.service.ProductCategoryServiceImpl">

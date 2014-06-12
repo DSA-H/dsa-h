@@ -76,17 +76,17 @@ public class CalculatePriceController extends BaseControllerImpl {
     @FXML
     private void onFilterPressed() {
         log.debug("called onFilterPressed");
-        List<Product> filteredProducts;
-        String filter = textName.getText().toLowerCase();
+//        List<Product> filteredProducts;
+        String filter = textName.getText();//.toLowerCase();
+        Set<Product> filteredProducts = productService.getBySearchTerm(filter);
+//        filteredProducts = new ArrayList<Product>();
+//        for (int i = 0; i<allProducts.size();i++){
+//            if (allProducts.get(i).getName().toLowerCase().contains(filter)){
+//                filteredProducts.add(allProducts.get(i));
+//            }
+//        }
 
-        filteredProducts = new ArrayList<Product>();
-        for (int i = 0; i<allProducts.size();i++){
-            if (allProducts.get(i).getName().toLowerCase().contains(filter)){
-                filteredProducts.add(allProducts.get(i));
-            }
-        }
-
-        showProducts(filteredProducts);
+        showProducts(new ArrayList<>(filteredProducts));
         checkFocus();
     }
 

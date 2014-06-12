@@ -50,7 +50,8 @@ public interface ProductService {
     Set<Product> getAllFromProductcategory(ProductCategory productCategory);
 
     /**
-     * Search for all Products containing the searchTerm in Product.name
+     * Search for all Products containing the searchTerm in Product.name and all
+     * Products with Product(super)Category containing the name
      * @param searchTerm must not be null
      * @return set of products -- or empty set if nothing found (not null)
      */

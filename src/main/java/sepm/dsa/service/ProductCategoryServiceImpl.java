@@ -97,6 +97,14 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         return result;
     }
 
+    @Override
+    public List<ProductCategory> getAllByName(String name) {
+        log.debug("calling getAllByName(" + name + ")");
+        List<ProductCategory> result = productCategoryDao.getAllByName(name == null ? null : "%" + name + "%");
+        log.trace("returning " + result);
+        return result;
+    }
+
 
     private List<ProductCategory> addAllProductCategoryChildren(ProductCategory productCategory, List<ProductCategory> target) {
         target.add(productCategory);
