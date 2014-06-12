@@ -35,16 +35,23 @@ public class EditDateController extends BaseControllerImpl {
     private Label actDate;
 
     @Override
-    public void reload() {
-        log.debug("reload EditDateController");
-	month.getItems().setAll(DSADate.getMonthNames());
-
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
+        month.getItems().setAll(DSADate.getMonthNames());
         DSADate date = timeService.getCurrentDate();
 
         actDate.setText(date.toString());
         day.setText(date.getDay()+"");
         month.getSelectionModel().select(date.getMonth()-1);
         year.setText(date.getYear()+"");
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload EditDateController");
+        DSADate date = timeService.getCurrentDate();
+
+        actDate.setText(date.toString());
     }
 
     @FXML
