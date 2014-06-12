@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
 import sepm.dsa.service.LocationConnectionService;
@@ -69,7 +70,9 @@ public class EditLocationConnectionController extends BaseControllerImpl {
         Integer travelTime = null;
         try {
             travelTime = Integer.parseInt(tf_TravelTime.getText());
-        } catch (NumberFormatException ex) {}
+        } catch (NumberFormatException ex) {
+            throw new DSAValidationException("Reisezeit muss eine ganze Zahl sein!");
+        }
 
         locationConnection.setTravelTime(travelTime);
         locationConnection.setComment(ta_Comment.getText());
