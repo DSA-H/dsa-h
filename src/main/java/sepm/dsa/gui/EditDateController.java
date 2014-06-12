@@ -79,8 +79,8 @@ public class EditDateController extends BaseControllerImpl {
         Action response = Dialogs.create()
                 .title("Datum wirklich ändern?")
                 .masthead(null)
-                .message("Wollen Sie das Datum wirklich auf " + newDate + " ändern? Das Ändern des Datums kann bei " +
-                        "bestehenden Händlern und abgeschlossenen Käufen zu Problemen führen und sollte nur einmal zu" +
+                .message("Wollen Sie das Datum wirklich auf " + newDate + " ändern? Das Ändern des Datums führt bei " +
+                        "bestehenden Händlern und abgeschlossenen Käufen eventuell zu nicht sinnvollen relativen Zeitangaben und sollte daher nur einmal zu" +
                         " Beginn einer Spielwelt gemacht werden. \nBeachten Sie, dass es zum Vorstellen des Datums, wegen im Spiel " +
                         "vergangener Zeit, einen eigenen Button im Hauptmenü gibt!")
                 .showConfirm();
