@@ -97,6 +97,7 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
                 }
             }
         });
+
         locationConnectionsTable.getFocusModel().focusedItemProperty().addListener(new ChangeListener<LocationConnection>() {
             @Override
             public void changed(ObservableValue<? extends LocationConnection> observable, LocationConnection oldValue, LocationConnection newValue) {
@@ -135,6 +136,9 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
     }
 
     public void setSelectedLocation(Location selectedLocation) {
+        if (selectedLocation == null) {
+            selectedLocation = new Location();
+        }
         this.selectedLocation = selectedLocation;
     }
 
@@ -174,10 +178,16 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
 
         this.setLoadSelectedLocation_Connections_OnInitialize(false);
 
+        selectedLocation.clearConnections();
+        for (LocationConnectionWrapper w : locationConnectionsToStore) {
+            selectedLocation.addConnection(w.getLocationConnection());
+        }
+
         Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
         Parent root = (Parent) loader.load("/gui/editlocationconnection.fxml", stage);
         EditLocationConnectionController ctrl = loader.getController();
         ctrl.setLocationConnection(selected);
+        ctrl.setSelectedLocation(selectedLocation);
         ctrl.reload();
 
         stage.setTitle("Reiseverbindung bearbeiten");

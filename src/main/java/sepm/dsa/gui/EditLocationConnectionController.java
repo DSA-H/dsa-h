@@ -34,6 +34,7 @@ public class EditLocationConnectionController extends BaseControllerImpl {
     private LocationService locationService;
 
     private LocationConnection locationConnection;
+    private Location selectedLocation;
 
     @FXML
     private Label lbl_Location1;
@@ -46,7 +47,6 @@ public class EditLocationConnectionController extends BaseControllerImpl {
 
     @FXML
     private TextArea ta_Comment;
-
 
     @Override
     public void reload() {
@@ -90,10 +90,13 @@ public class EditLocationConnectionController extends BaseControllerImpl {
         Parent root = (Parent) loader.load("/gui/editlocationconnections.fxml", stage);
         EditLocationConnectionsController ctrl = loader.getController();
         ctrl.setLoadSelectedLocation_Connections_OnInitialize(true);
+        ctrl.setSelectedLocation(selectedLocation);
         ctrl.reload();
 
         stage.setScene(new Scene(root, 900, 500));
         stage.show();
+
+        ctrl.setLoadSelectedLocation_Connections_OnInitialize(true);
     }
 
     public void setLocationConnection(LocationConnection locationConnection) {
@@ -103,6 +106,10 @@ public class EditLocationConnectionController extends BaseControllerImpl {
         tf_TravelTime.setText(locationConnection.getTravelTime() + "");
         String comment = locationConnection.getComment();
         ta_Comment.setText(comment == null ? "" : comment);
+    }
+
+    public void setSelectedLocation(Location selectedLocation) {
+        this.selectedLocation = selectedLocation;
     }
 
     public void setLocationService(LocationService locationService) {
