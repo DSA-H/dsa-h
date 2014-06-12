@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +18,10 @@ import sepm.dsa.model.Currency;
 import sepm.dsa.service.CurrencyService;
 
 import java.math.BigDecimal;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class CurrencyCalculateController extends BaseControllerImpl {
 
@@ -41,32 +44,49 @@ public class CurrencyCalculateController extends BaseControllerImpl {
     private Label labelin;
 
     @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
+
+        choiceFirst.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Currency>() {
+            @Override
+            public void changed(ObservableValue<? extends Currency> observable, Currency oldValue, Currency newValue) {
+                if(newValue == null) {
+                    return;
+                }
+                labelvon.setText(newValue.getName());
+            }
+        });
+        choiceSecond.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Currency>() {
+            @Override
+            public void changed(ObservableValue<? extends Currency> observable, Currency oldValue, Currency newValue) {
+                if(newValue == null) {
+                    return;
+                }
+                labelin.setText(newValue.getName());
+            }
+        });
+    }
+
+    @Override
     public void reload() {
         log.debug("reload CurrencyCalculateController");
         // init table
         List<Currency> currencies = currencyService.getAll();
-	choiceFirst.getItems().setAll(currencies);
-        choiceFirst.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Currency>() {
-            @Override
-            public void changed(ObservableValue<? extends Currency> observable, Currency oldValue, Currency newValue) {
-                labelvon.setText(newValue.getName());
-            }
-        });
-	choiceSecond.getItems().setAll(currencies);
-        choiceSecond.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Currency>() {
-            @Override
-            public void changed(ObservableValue<? extends Currency> observable, Currency oldValue, Currency newValue) {
-                labelin.setText(newValue.getName());
-            }
-        });
-
-        if (!currencies.isEmpty()) {
-            choiceFirst.getSelectionModel().select(0);
-            choiceSecond.getSelectionModel().select(0);
-
-            labelvon.setText(choiceFirst.getSelectionModel().getSelectedItem().getName());
-            labelin.setText(choiceSecond.getSelectionModel().getSelectedItem().getName());
+        Currency selectedFirst = choiceFirst.getSelectionModel().getSelectedItem();
+	    choiceFirst.getItems().setAll(currencies);
+        choiceFirst.getSelectionModel().select(selectedFirst);
+        if(selectedFirst == null) {
+            choiceFirst.getSelectionModel().selectFirst();
         }
+        Currency secondSelected = choiceSecond.getSelectionModel().getSelectedItem();
+	    choiceSecond.getItems().setAll(currencies);
+        choiceSecond.getSelectionModel().select(secondSelected);
+        if(secondSelected == null) {
+            choiceSecond.getSelectionModel().selectFirst();
+        }
+
+        labelvon.setText(choiceFirst.getSelectionModel().getSelectedItem().getName());
+        labelin.setText(choiceSecond.getSelectionModel().getSelectedItem().getName());
     }
 
     @FXML
@@ -75,20 +95,27 @@ public class CurrencyCalculateController extends BaseControllerImpl {
         Integer amountToExchange;
         try {
             amountToExchange = Integer.parseInt(textFirst.getText());
-
         } catch (NumberFormatException ex) {
-            throw new DSAValidationException("Menge von zu Wechselndem Geld muss eine Zahl sein!");
+            throw new DSAValidationException("Menge von zu Wechselndem Geld muss eine ganze Zahl sein!");
         }
 
-        CurrencyAmount exchangeResult = currencyService.exchange(choiceFirst.getSelectionModel().getSelectedItem(), choiceSecond.getSelectionModel().getSelectedItem(), amountToExchange);
-        Integer exchangeAmount = exchangeResult.getAmount();
+        Currency currencyFrom = choiceFirst.getSelectionModel().getSelectedItem();
+        Currency currencyTo = choiceSecond.getSelectionModel().getSelectedItem();
 
-//        exchangeAmount.setScale(2, BigDecimal.ROUND_DOWN);
+        float exchangeAmount = currencyFrom.getValueToBaseRate()*amountToExchange;
+        exchangeAmount = exchangeAmount / currencyTo.getValueToBaseRate();
+
         DecimalFormat df = new DecimalFormat();
-        df.setMaximumFractionDigits(2);
+        df.setMaximumFractionDigits(3);
         df.setMinimumFractionDigits(0);
         df.setGroupingUsed(false);
         labelresult.setText(String.format(df.format(exchangeAmount)));
+    }
+
+    @FXML
+    private void onCloseClicked() {
+        Stage stage = (Stage)choiceFirst.getScene().getWindow();
+        stage.close();
     }
 
     public void setCurrencyService(CurrencyService currencyService) {
