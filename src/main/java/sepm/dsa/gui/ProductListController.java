@@ -123,7 +123,7 @@ public class ProductListController extends BaseControllerImpl {
         log.debug("onCreateClicked - open Waren Window");
 
         Stage stage = (Stage) productTable.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/editproduct.fxml");
+        Parent scene = (Parent) loader.load("/gui/editproduct.fxml", stage);
         EditProductController ctrl = loader.getController();
         ctrl.setProduct(null);
         ctrl.setCalledFromCategorie(false);
@@ -139,7 +139,7 @@ public class ProductListController extends BaseControllerImpl {
         log.debug("onWarenClicked - open Waren Window");
 
         Stage stage = (Stage) productTable.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/editproduct.fxml");
+        Parent scene = (Parent) loader.load("/gui/editproduct.fxml", stage);
         EditProductController ctrl = loader.getController();
         ctrl.setProduct(productTable.getSelectionModel().getSelectedItem());
         ctrl.setCalledFromCategorie(false);

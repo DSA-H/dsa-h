@@ -85,7 +85,7 @@ public class TraderCategoryListController extends BaseControllerImpl {
         log.debug("onCreateButtonPressed - open Trader-Category-Details Window");
 
         Stage stage = (Stage) traderCategoryTable.getScene().getWindow();
-        Parent root = (Parent) loader.load("/gui/edittradercategory.fxml");
+        Parent root = (Parent) loader.load("/gui/edittradercategory.fxml", stage);
         EditTraderCategoryController ctrl = loader.getController();
         ctrl.setTraderCategory(null);
         ctrl.reload();
@@ -102,7 +102,7 @@ public class TraderCategoryListController extends BaseControllerImpl {
         TraderCategory selectedTraderCategory = traderCategoryTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
 
         Stage stage = (Stage) traderCategoryTable.getScene().getWindow();
-        Parent root = (Parent) loader.load("/gui/edittradercategory.fxml");
+        Parent root = (Parent) loader.load("/gui/edittradercategory.fxml", stage);
         EditTraderCategoryController ctrl = loader.getController();
         ctrl.setTraderCategory(selectedTraderCategory);
         ctrl.reload();

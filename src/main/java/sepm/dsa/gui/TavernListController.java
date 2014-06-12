@@ -88,7 +88,7 @@ public class TavernListController extends BaseControllerImpl {
         log.debug("called onCreateButtonPressed");
 
         Stage stage = (Stage) locationBox.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/edittavern.fxml");
+        Parent scene = (Parent) loader.load("/gui/edittavern.fxml", stage);
         EditTavernController controller = loader.getController();
         controller.setTavern(null);
         controller.reload();
@@ -131,7 +131,7 @@ public class TavernListController extends BaseControllerImpl {
         log.debug("called onEditPressed");
 
         Stage stage = (Stage) locationBox.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/edittavern.fxml");
+        Parent scene = (Parent) loader.load("/gui/edittavern.fxml", stage);
         EditTavernController controller = loader.getController();
 //        selectedTavern = (Tavern) tavernList.getFocusModel().getFocusedItem();
         checkFocus();

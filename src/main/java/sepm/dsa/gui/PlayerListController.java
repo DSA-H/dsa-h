@@ -59,7 +59,7 @@ public class PlayerListController extends BaseControllerImpl {
         log.debug("onCreateClicked - open Player Window");
 
         Stage stage = (Stage) playerTable.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/editplayer.fxml");
+        Parent scene = (Parent) loader.load("/gui/editplayer.fxml", stage);
         EditPlayerController ctrl = loader.getController();
         ctrl.setPlayer(null);
         ctrl.reload();
@@ -74,7 +74,7 @@ public class PlayerListController extends BaseControllerImpl {
         log.debug("onWarenClicked - open Player Window");
 
         Stage stage = (Stage) playerTable.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/editplayer.fxml");
+        Parent scene = (Parent) loader.load("/gui/editplayer.fxml", stage);
         EditPlayerController ctrl = loader.getController();
         ctrl.setPlayer(playerTable.getSelectionModel().getSelectedItem());
         ctrl.reload();

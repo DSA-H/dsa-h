@@ -233,7 +233,7 @@ public class EditProductController extends BaseControllerImpl {
         Stage stage = (Stage) nameField.getScene().getWindow();
 
         if(calledFromCategorie) {
-            Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml");
+            Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml", stage);
             BaseController ctrl = loader.getController();
             ctrl.reload();
 
@@ -241,7 +241,7 @@ public class EditProductController extends BaseControllerImpl {
             stage.setScene(new Scene(scene, 600, 438));
             stage.setResizable(false);
         }else {
-            Parent scene = (Parent) loader.load("/gui/productslist.fxml");
+            Parent scene = (Parent) loader.load("/gui/productslist.fxml", stage);
             ProductListController ctrl = loader.getController();
             ctrl.reload();
 
@@ -303,7 +303,7 @@ public class EditProductController extends BaseControllerImpl {
         // return to productslist / productcategorie
         Stage stage = (Stage) nameField.getScene().getWindow();
         if(calledFromCategorie) {
-            Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml");
+            Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml", stage);
             BaseController ctrl = loader.getController();
             ctrl.reload();
 
@@ -311,7 +311,7 @@ public class EditProductController extends BaseControllerImpl {
             stage.setScene(new Scene(scene, 600, 438));
             stage.setResizable(false);
         }else {
-            Parent scene = (Parent) loader.load("/gui/productslist.fxml");
+            Parent scene = (Parent) loader.load("/gui/productslist.fxml", stage);
             ProductListController ctrl = loader.getController();
             ctrl.reload();
 

@@ -56,7 +56,7 @@ public class CurrencyListController extends BaseControllerImpl {
         log.debug("onCreateClicked - open Currency Window");
 
         Stage stage = (Stage) currencyTable.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/editcurrency.fxml");
+        Parent scene = (Parent) loader.load("/gui/editcurrency.fxml", stage);
         EditCurrencyController ctrl = loader.getController();
         ctrl.setCurrency(null);
         ctrl.reload();
@@ -71,7 +71,7 @@ public class CurrencyListController extends BaseControllerImpl {
         log.debug("onEditButtonPressed - open Currency Window");
 
         Stage stage = (Stage) currencyTable.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/editcurrency.fxml");
+        Parent scene = (Parent) loader.load("/gui/editcurrency.fxml", stage);
         EditCurrencyController ctrl = loader.getController();
         ctrl.setCurrency(currencyTable.getSelectionModel().getSelectedItem());
         ctrl.reload();

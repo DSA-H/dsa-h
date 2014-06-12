@@ -175,7 +175,7 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
         this.setLoadSelectedLocation_Connections_OnInitialize(false);
 
         Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
-        Parent root = (Parent) loader.load("/gui/editlocationconnection.fxml");
+        Parent root = (Parent) loader.load("/gui/editlocationconnection.fxml", stage);
         EditLocationConnectionController ctrl = loader.getController();
         ctrl.setLocationConnection(selected);
         ctrl.reload();
@@ -227,7 +227,7 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
         }
 
         Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
-        Parent root = (Parent) loader.load("/gui/editlocation.fxml");
+        Parent root = (Parent) loader.load("/gui/editlocation.fxml", stage);
         EditLocationController ctrl = loader.getController();
         ctrl.setLocation(selectedLocation);
         ctrl.setConnections(selectedLocationConnections);

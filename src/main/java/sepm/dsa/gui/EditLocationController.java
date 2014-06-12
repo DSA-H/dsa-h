@@ -263,7 +263,7 @@ public class EditLocationController extends BaseControllerImpl {
         applyLocationChanges();
 
         Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
-        Parent root = (Parent) loader.load("/gui/editlocationconnections.fxml");
+        Parent root = (Parent) loader.load("/gui/editlocationconnections.fxml", stage);
         EditLocationConnectionsController ctrl = (EditLocationConnectionsController)loader.getController();
         ctrl.setSelectedLocation(selectedLocation);
         ctrl.reload();

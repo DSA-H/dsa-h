@@ -25,4 +25,9 @@ public abstract class BaseControllerImpl implements BaseController, ApplicationL
 			this.reload();
 		}
 	}
+
+    @Override
+    public void unload() {
+        initialized = false;
+    }
 }

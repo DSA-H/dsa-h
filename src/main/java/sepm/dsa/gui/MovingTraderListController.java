@@ -86,7 +86,7 @@ public class MovingTraderListController extends BaseControllerImpl {
 	private void onDetailsButtonPressed() {
 		log.debug("calling onDetailsPressed");
 		Stage stage = new Stage();
-		Parent scene = (Parent) loader.load("/gui/traderdetails.fxml");
+		Parent scene = (Parent) loader.load("/gui/traderdetails.fxml", stage);
 		stage.setTitle("Händler-Details");
 
 		TraderDetailsController controller = loader.getController();

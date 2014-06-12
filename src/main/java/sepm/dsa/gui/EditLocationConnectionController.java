@@ -87,7 +87,7 @@ public class EditLocationConnectionController extends BaseControllerImpl {
     private void goBack() {
 
         Stage stage = (Stage) lbl_Location1.getScene().getWindow();
-        Parent root = (Parent) loader.load("/gui/editlocationconnections.fxml");
+        Parent root = (Parent) loader.load("/gui/editlocationconnections.fxml", stage);
         EditLocationConnectionsController ctrl = loader.getController();
         ctrl.setLoadSelectedLocation_Connections_OnInitialize(true);
         ctrl.reload();
