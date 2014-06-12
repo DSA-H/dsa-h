@@ -110,6 +110,11 @@ public class EditProductCategoryController extends BaseControllerImpl {
     }
 
 
+    @FXML
+    public void noParentClicked() {
+        choiceParent.getSelectionModel().clearSelection();
+    }
+
     public void setProductCategory(ProductCategory productCategory) {
         selectedProductCategory = productCategory;
     }

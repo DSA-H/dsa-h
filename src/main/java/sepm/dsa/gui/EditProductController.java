@@ -148,8 +148,8 @@ public class EditProductController extends BaseControllerImpl {
             unitBox.getSelectionModel().selectFirst();
         }
 
-	categorieChoiceBox.getItems().setAll(categoryList);
-	regionChoiceBox.getItems().setAll(regionList);
+    	categorieChoiceBox.getItems().setAll(categoryList);
+	    regionChoiceBox.getItems().setAll(regionList);
     }
 
     @FXML

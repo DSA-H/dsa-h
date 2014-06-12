@@ -20,6 +20,7 @@ import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TraderCategoryService;
 
+import java.net.URL;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class EditTraderCategoryController extends BaseControllerImpl {
     private static final Logger log = LoggerFactory.getLogger(EditTraderCategoryController.class);
     private SpringFxmlLoader loader;
     // true if the traderCategory is not editing
-    private boolean isNewTraderCategory;
+    private boolean isNewTraderCategory = false;
 
     @FXML
     private TextField nameField;
@@ -59,31 +60,30 @@ public class EditTraderCategoryController extends BaseControllerImpl {
     private Button cancelButton;
 
     @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
+        assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("productCategory"));
+        defaultOccurenceColumn.setCellValueFactory(new PropertyValueFactory<>("defaultOccurence"));
+    }
+
+    @Override
     public void reload() {
         log.debug("reload EditTraderCategoryController");
         // init ChoiceBoxes
         List<ProductCategory> productCategories = productCategoryService.getAll();
-        assortmentColumn.setCellValueFactory(new PropertyValueFactory<>("productCategory"));
-        defaultOccurenceColumn.setCellValueFactory(new PropertyValueFactory<>("defaultOccurence"));
 
         // set values if editing
         if (traderCategory != null) {
-            isNewTraderCategory = false;
             removeAssortButton.setDisable(false);
-            nameField.setText(traderCategory.getName());
-            commentField.setText(traderCategory.getComment());
-            ArrayList<AssortmentNature> assortmentNaturesAlreadySelected = new ArrayList<>(traderCategory.getAssortments().values());
-            for (AssortmentNature as : assortmentNaturesAlreadySelected) {
+
+            Collection<AssortmentNature> assortmentNaturesAlreadySelected = traderCategory.getAssortments().values();
+            for(AssortmentNature as : assortmentTable.getItems()) {
                 productCategories.remove(as.getProductCategory());
             }
-
-	    productCategoryChoiceBox.getItems().setAll(productCategories);
-	    assortmentTable.getItems().setAll(traderCategory.getAssortments().values());
-
+            productCategoryChoiceBox.getItems().setAll(productCategories);
         } else {
-            isNewTraderCategory = true;
             traderCategory = new TraderCategory();
-	    productCategoryChoiceBox.getItems().setAll(productCategories);
+	        productCategoryChoiceBox.getItems().setAll(productCategories);
         }
 
         checkFocus();
@@ -129,7 +129,7 @@ public class EditTraderCategoryController extends BaseControllerImpl {
         productCategoryChoiceBox.getItems().remove(selectedProductCategory);
         productCategoryChoiceBox.getSelectionModel().selectFirst();
         //TODO besser / schöner gestalten -> evtl. inkrementelle Suche oder sonstwas
-        //TODO multiple select ermöglichen ???? Wie soll das gehen ??
+        //TODO multiple select ermöglichen
     }
 
     @FXML
@@ -146,6 +146,8 @@ public class EditTraderCategoryController extends BaseControllerImpl {
 
         Stage stage = (Stage) nameField.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml");
+        TraderCategoryListController ctrl = loader.getController();
+        ctrl.reload();
 
         stage.setScene(new Scene(scene, 600, 438));
     }
@@ -200,6 +202,8 @@ public class EditTraderCategoryController extends BaseControllerImpl {
         // return to traderCategoryList
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml");
+        TraderCategoryListController ctrl = loader.getController();
+        ctrl.reload();
 
         stage.setScene(new Scene(scene, 600, 438));
     }
@@ -221,6 +225,14 @@ public class EditTraderCategoryController extends BaseControllerImpl {
 
     public void setTraderCategory(TraderCategory traderCategory) {
         this.traderCategory = traderCategory;
+        if(traderCategory != null) {
+            isNewTraderCategory = false;
+            nameField.setText(traderCategory.getName());
+            commentField.setText(traderCategory.getComment());
+            assortmentTable.getItems().setAll(traderCategory.getAssortments().values());
+        }else {
+            isNewTraderCategory = true;
+        }
     }
 
     public void setTraderCategoryService(TraderCategoryService traderCategoryService) {

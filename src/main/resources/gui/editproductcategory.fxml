@@ -18,5 +18,5 @@
 <opaqueInsets>
 <Insets />
 </opaqueInsets>
-</HBox>
+</HBox><Button layoutX="302.6875" layoutY="103.0" mnemonicParsing="false" onAction="#noParentClicked" text="Keine Oberkategorie" />
 </children></Pane>

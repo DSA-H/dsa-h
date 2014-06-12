@@ -75,7 +75,7 @@ public class TraderCategoryListController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("reload TraderCategoryListController");
-	traderCategoryTable.getItems().setAll(traderCategoryService.getAll());
+	    traderCategoryTable.getItems().setAll(traderCategoryService.getAll());
 
         checkFocus();
     }
