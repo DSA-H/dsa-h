@@ -171,4 +171,26 @@ public class ProductServiceTest extends AbstractDatabaseTest {
         assertEquals(expected, products);
     }
 
+    @Test
+    public void getBySearchTerm_returnsAllWithProductName() {
+        Product product1 = productService.get(6);
+        HashSet<Product> expectedProducts = new HashSet<>();
+        expectedProducts.add(product1);
+        HashSet<Product> products = new HashSet<>(productService.getBySearchTerm("product6"));
+        assertEquals(expectedProducts, products);
+    }
+
+    @Test
+    public void getBySearchTerm_returnsAllProductsInProductCategoryWithName() {
+        Product product1 = productService.get(1);
+        Product product2 = productService.get(2);
+        Product product3 = productService.get(7);
+        Set<Product> expected = new HashSet<>(3);
+        expected.add(product1);
+        expected.add(product2);
+        expected.add(product3);
+        HashSet<Product> products = new HashSet<>(productService.getBySearchTerm("category3"));
+        assertEquals(expected, products);
+    }
+
 }

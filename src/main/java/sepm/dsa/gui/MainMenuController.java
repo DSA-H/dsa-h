@@ -246,7 +246,7 @@ public class MainMenuController extends BaseControllerImpl {
 
 		if (mode == WORLDMODE) {
 			Stage stage = new Stage();
-			Parent scene = (Parent) loader.load("/gui/editlocation.fxml");
+			Parent scene = (Parent) loader.load("/gui/editlocation.fxml", stage);
             EditLocationController ctrl = loader.getController();
             ctrl.setLocation(selectedLocation);
             ctrl.reload();
@@ -258,7 +258,7 @@ public class MainMenuController extends BaseControllerImpl {
 		} else {
 			if (selectedObject instanceof Trader) {
 				Stage stage = new Stage();
-				Parent scene = (Parent) loader.load("/gui/traderdetails.fxml");
+				Parent scene = (Parent) loader.load("/gui/traderdetails.fxml", stage);
 				stage.setTitle("Händler-Details");
 
 				TraderDetailsController controller = loader.getController();
@@ -269,7 +269,7 @@ public class MainMenuController extends BaseControllerImpl {
 				stage.show();
 			} else {
 				Stage stage = new Stage();
-				Parent scene = (Parent) loader.load("/gui/edittavern.fxml");
+				Parent scene = (Parent) loader.load("/gui/edittavern.fxml", stage);
 				stage.setTitle("Wirtshaus");
 
 				EditTavernController controller = loader.getController();
@@ -369,7 +369,7 @@ public class MainMenuController extends BaseControllerImpl {
 			if (mapService.getWorldMap() == null) {
 
 				Stage stage = new Stage();
-				Parent scene = (Parent) loader.load("/gui/editlocation.fxml");
+				Parent scene = (Parent) loader.load("/gui/editlocation.fxml", stage);
                 EditLocationController ctrl = loader.getController();
                 ctrl.setLocation(null);
                 ctrl.reload();
@@ -393,7 +393,7 @@ public class MainMenuController extends BaseControllerImpl {
 			if (mapService.getLocationMap(selectedLocation) == null) {
 
 				Stage stage = new Stage();
-				Parent scene = (Parent) loader.load("/gui/placement.fxml");
+				Parent scene = (Parent) loader.load("/gui/placement.fxml", stage);
 				PlacementController controller = loader.getController();
 
 				stage.setTitle("Händler/Wirtshaus platzieren");
@@ -521,7 +521,7 @@ public class MainMenuController extends BaseControllerImpl {
 
 		if (creationMode) {                 // in creation mode: chose position to place location/trader/tavern
 			Stage stage = new Stage();
-			Parent scene = (Parent) loader.load("/gui/placement.fxml");
+			Parent scene = (Parent) loader.load("/gui/placement.fxml", stage);
 			PlacementController controller = loader.getController();
 			if (mode == WORLDMODE) {
 				stage.setTitle("Ort platzieren");
@@ -585,7 +585,7 @@ public class MainMenuController extends BaseControllerImpl {
 							double x = xPos - loc1.getxCoord();
 							if (yPos-10 < (int) (k * x + d) && yPos+10 > (int) (k * x + d)) {
 								Stage stage = new Stage();
-								Parent scene = (Parent) loader.load("/gui/movingtraderlist.fxml");
+								Parent scene = (Parent) loader.load("/gui/movingtraderlist.fxml", stage);
 								MovingTraderListController controller = loader.getController();
 								controller.setLocationConnection(lc);
                                 controller.reload();
@@ -626,7 +626,7 @@ public class MainMenuController extends BaseControllerImpl {
 	public void onPlayerClicked(ActionEvent event) {
 		log.debug("onPlayerClicked - open Player Window");
 		Stage stage = new Stage();
-		Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
+		Parent scene = (Parent) loader.load("/gui/playerlist.fxml", stage);
         BaseController ctrl = loader.getController();
         ctrl.reload();
 
@@ -641,7 +641,7 @@ public class MainMenuController extends BaseControllerImpl {
 		log.debug("onWarenClicked - open Currency Window");
 		Stage stage = new Stage();
 
-		Parent scene = (Parent) loader.load("/gui/currencyList.fxml");
+		Parent scene = (Parent) loader.load("/gui/currencyList.fxml", stage);
         BaseController ctrl = loader.getController();
         ctrl.reload();
 
@@ -656,7 +656,7 @@ public class MainMenuController extends BaseControllerImpl {
 		log.debug("onCalculateCurrencyClicked - open Calculate Currency Window");
 		Stage stage = new Stage();
 
-		Parent scene = (Parent) loader.load("/gui/calculatecurrency.fxml");
+		Parent scene = (Parent) loader.load("/gui/calculatecurrency.fxml", stage);
         BaseController ctrl = loader.getController();
         ctrl.reload();
 
@@ -671,7 +671,7 @@ public class MainMenuController extends BaseControllerImpl {
         log.debug("onCalculateProductPriceClicked - open Calculate Product Price Window");
         Stage stage = new Stage();
 
-        Parent scene = (Parent) loader.load("/gui/calculatePrice.fxml");
+        Parent scene = (Parent) loader.load("/gui/calculatePrice.fxml", stage);
         BaseController ctrl = loader.getController();
         ctrl.reload();
 
@@ -686,7 +686,7 @@ public class MainMenuController extends BaseControllerImpl {
 		log.debug("onGrenzenGebieteClicked - open Grenzen und Gebiete Window");
 
 		Stage stage = new Stage();
-		Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
+		Parent scene = (Parent) loader.load("/gui/regionlist.fxml", stage);
         BaseController ctrl = loader.getController();
         ctrl.reload();
 
@@ -700,7 +700,7 @@ public class MainMenuController extends BaseControllerImpl {
 	private void onTraderCategoriesClicked() {
 		log.debug("onTraderCategoriesClicked - open Trader Categories Window");
 		Stage stage = new Stage();
-		Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml");
+		Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml", stage);
         BaseController ctrl = loader.getController();
         ctrl.reload();
 
@@ -715,7 +715,7 @@ public class MainMenuController extends BaseControllerImpl {
 		log.debug("onWarenClicked - open Waren Window");
 		Stage stage = new Stage();
 
-		Parent scene = (Parent) loader.load("/gui/productslist.fxml");
+		Parent scene = (Parent) loader.load("/gui/productslist.fxml", stage);
         BaseController ctrl = loader.getController();
         ctrl.reload();
 
@@ -730,7 +730,7 @@ public class MainMenuController extends BaseControllerImpl {
 		log.debug("onWarenKategorieClicked - open Warenkategorie Window");
 		Stage stage = new Stage();
 
-		Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml");
+		Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml", stage);
         BaseController ctrl = loader.getController();
         ctrl.reload();
 
@@ -745,7 +745,7 @@ public class MainMenuController extends BaseControllerImpl {
 		log.debug("onEditDateClicked - open EditDate Window");
 		Stage stage = new Stage();
 
-		Parent scene = (Parent) loader.load("/gui/edittime.fxml");
+		Parent scene = (Parent) loader.load("/gui/edittime.fxml", stage);
         BaseController ctrl = loader.getController();
         ctrl.reload();
 
@@ -760,7 +760,7 @@ public class MainMenuController extends BaseControllerImpl {
 		log.debug("onForwardTimeClicked - open ForwardTime Window");
 		Stage stage = new Stage();
 
-		Parent scene = (Parent) loader.load("/gui/forwardtime.fxml");
+		Parent scene = (Parent) loader.load("/gui/forwardtime.fxml", stage);
         BaseController ctrl = loader.getController();
         ctrl.reload();
 

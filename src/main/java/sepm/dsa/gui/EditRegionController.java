@@ -148,7 +148,7 @@ public class EditRegionController extends BaseControllerImpl {
         saveCancelService.cancel();
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
+        Parent scene = (Parent) loader.load("/gui/regionlist.fxml", stage);
         RegionListController ctrl = loader.getController();
         ctrl.reload();
 
@@ -217,7 +217,7 @@ public class EditRegionController extends BaseControllerImpl {
 
         // return to regionlist
         Stage stage = (Stage) cancelButton.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/regionlist.fxml");
+        Parent scene = (Parent) loader.load("/gui/regionlist.fxml", stage);
         RegionListController ctrl = loader.getController();
         ctrl.reload();
 

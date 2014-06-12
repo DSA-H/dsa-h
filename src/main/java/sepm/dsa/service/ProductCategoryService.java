@@ -51,4 +51,10 @@ public interface ProductCategoryService {
      */
     List<ProductCategory> getAllChilds(ProductCategory productCategory);
 
+    /**
+     * @param name
+     * @return all ProductCategory by name, may be an empty list (not null)
+     */
+    List<ProductCategory> getAllByName(String name);
+
 }

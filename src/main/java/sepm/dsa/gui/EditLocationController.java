@@ -38,7 +38,7 @@ public class EditLocationController extends BaseControllerImpl {
 	private MapService mapService;
     private SaveCancelService saveCancelService;
     // true if the location is not editing
-    private boolean isNewLocation;
+//    private boolean isNewLocation;
 
 	private int xCoord = 0;
 	private int yCoord = 0;
@@ -108,9 +108,9 @@ public class EditLocationController extends BaseControllerImpl {
 
         // set values if editing
         if (selectedLocation != null) {
-            isNewLocation = false;
+//            isNewLocation = false;
         } else {
-            isNewLocation = true;
+//            isNewLocation = true;
             selectedLocation = new Location();
             weatherChoiceBox.getSelectionModel().select(Temperature.MEDIUM.getValue());
             sizeChoiceBox.getSelectionModel().select(RainfallChance.MEDIUM.getValue());
@@ -178,7 +178,25 @@ public class EditLocationController extends BaseControllerImpl {
             log.info("location: " + con);
         }
 
-        if (isNewLocation) {
+        log.info("selectedLocation.id = " + selectedLocation.getId());
+//        selectedLocation = locationService.get(selectedLocation.getId());
+
+    }
+
+    private boolean isNew() {
+        return selectedLocation.getId() == null;
+    }
+
+    @FXML
+    private void onSavePressed() {
+        log.debug("calling SaveButtonPressed");
+
+	    if (newMap != null) {
+		    mapService.setLocationMap(selectedLocation, newMap);
+	    }
+        applyLocationChanges();
+
+        if (isNew()) {
             log.info("addConnection location");
             locationService.add(selectedLocation);
         } else {
@@ -205,21 +223,6 @@ public class EditLocationController extends BaseControllerImpl {
             locationConnectionService.add(connection);
         }
 
-
-        log.info("selectedLocation.id = " + selectedLocation.getId());
-//        selectedLocation = locationService.get(selectedLocation.getId());
-
-    }
-
-    @FXML
-    private void onSavePressed() {
-        log.debug("calling SaveButtonPressed");
-
-	    if (newMap != null) {
-		    mapService.setLocationMap(selectedLocation, newMap);
-	    }
-        applyLocationChanges();
-
         saveCancelService.save();
 //        locationService.update(selectedLocation);
         saveCancelService.refresh(selectedLocation);
@@ -239,17 +242,20 @@ public class EditLocationController extends BaseControllerImpl {
     public void setLocation(Location location) {
         log.debug("calling setLocation(" + location + ")");
         selectedLocation = location;
-        if (selectedLocation != null) {
-            nameField.setText(selectedLocation.getName());
-            weatherChoiceBox.getSelectionModel().select(selectedLocation.getWeather().getValue());
-            sizeChoiceBox.getSelectionModel().select(selectedLocation.getSize().getValue());
-            commentArea.setText(selectedLocation.getComment());
+        if (selectedLocation == null) {
+            selectedLocation = new Location();
+        } else {
             xCoord = selectedLocation.getxCoord();
             yCoord = selectedLocation.getyCoord();
-            height.setText(selectedLocation.getHeight().toString());
+            nameField.setText(selectedLocation.getName() == null ? "" : selectedLocation.getName());
+            weatherChoiceBox.getSelectionModel().select(selectedLocation.getWeather());
+            sizeChoiceBox.getSelectionModel().select(selectedLocation.getSize());
+            commentArea.setText(selectedLocation.getComment() == null ? "" : selectedLocation.getComment());
+            height.setText(selectedLocation.getHeight() == null ? "" : "" + selectedLocation.getHeight());
             regionChoiceBox.getSelectionModel().select(selectedLocation.getRegion());
             connections = new HashSet<>(selectedLocation.getAllConnections());
         }
+
     }
 
     public void setLoader(SpringFxmlLoader loader) {
@@ -263,7 +269,7 @@ public class EditLocationController extends BaseControllerImpl {
         applyLocationChanges();
 
         Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
-        Parent root = (Parent) loader.load("/gui/editlocationconnections.fxml");
+        Parent root = (Parent) loader.load("/gui/editlocationconnections.fxml", stage);
         EditLocationConnectionsController ctrl = (EditLocationConnectionsController)loader.getController();
         ctrl.setSelectedLocation(selectedLocation);
         ctrl.reload();

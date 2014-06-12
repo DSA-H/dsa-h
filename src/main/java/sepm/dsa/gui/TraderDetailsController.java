@@ -219,7 +219,7 @@ public class TraderDetailsController extends BaseControllerImpl {
 	private void onEditPressed() {
 		log.debug("called onEditPressed");
 		Stage stage = (Stage) offerTable.getScene().getWindow();
-		Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
+		Parent scene = (Parent) loader.load("/gui/edittrader.fxml", stage);
 		EditTraderController controller = loader.getController();
 		controller.setTrader(trader);
 		controller.setLocation(trader.getLocation());
@@ -309,7 +309,7 @@ public class TraderDetailsController extends BaseControllerImpl {
             Stage dialog = new Stage(StageStyle.DECORATED);
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.initOwner(dealsTable.getParent().getScene().getWindow());
-            Parent scene = (Parent) loader.load("/gui/tradeSell.fxml");
+            Parent scene = (Parent) loader.load("/gui/tradeSell.fxml", dialog);
             TradeSellToPlayerController ctrl = loader.getController();
             ctrl.setTrader(trader);
             ctrl.setOffer(selectedItem);
@@ -334,7 +334,7 @@ public class TraderDetailsController extends BaseControllerImpl {
         Stage dialog = new Stage(StageStyle.DECORATED);
         dialog.initModality(Modality.WINDOW_MODAL);
         dialog.initOwner(dealsTable.getParent().getScene().getWindow());
-        Parent scene = (Parent) loader.load("/gui/traderBuy.fxml");
+        Parent scene = (Parent) loader.load("/gui/traderBuy.fxml", dialog);
         TradeBuyFromPlayerController ctrl = loader.getController();
         ctrl.setTrader(trader);
         ctrl.reload();

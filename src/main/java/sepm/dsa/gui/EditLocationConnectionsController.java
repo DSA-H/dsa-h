@@ -34,7 +34,6 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
     private SpringFxmlLoader loader;
 
     private Location selectedLocation;
-    private static List<LocationConnection> locationConnections;
 
     private boolean loadSelectedLocation_Connections_OnReload = true;
 
@@ -97,6 +96,7 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
                 }
             }
         });
+
         locationConnectionsTable.getFocusModel().focusedItemProperty().addListener(new ChangeListener<LocationConnection>() {
             @Override
             public void changed(ObservableValue<? extends LocationConnection> observable, LocationConnection oldValue, LocationConnection newValue) {
@@ -120,7 +120,6 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
         } else {
             Set<LocationConnection> allConnections = new HashSet<>(locationConnectionsToStore.size());
             for (LocationConnectionWrapper conWrapper : locationConnectionsToStore) {
-//                locationConnectionsToStore.add(new LocationConnectionWrapper(con));
                 allConnections.add(conWrapper.getLocationConnection());
             }
 		    locationConnectionsTable.getItems().setAll(allConnections);
@@ -135,6 +134,9 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
     }
 
     public void setSelectedLocation(Location selectedLocation) {
+        if (selectedLocation == null) {
+            selectedLocation = new Location();
+        }
         this.selectedLocation = selectedLocation;
     }
 
@@ -174,10 +176,16 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
 
         this.setLoadSelectedLocation_Connections_OnInitialize(false);
 
+        selectedLocation.clearConnections();
+        for (LocationConnectionWrapper w : locationConnectionsToStore) {
+            selectedLocation.addConnection(w.getLocationConnection());
+        }
+
         Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
-        Parent root = (Parent) loader.load("/gui/editlocationconnection.fxml");
+        Parent root = (Parent) loader.load("/gui/editlocationconnection.fxml", stage);
         EditLocationConnectionController ctrl = loader.getController();
         ctrl.setLocationConnection(selected);
+        ctrl.setSelectedLocation(selectedLocation);
         ctrl.reload();
 
         stage.setTitle("Reiseverbindung bearbeiten");
@@ -189,11 +197,9 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
     public void onRemoveConnectionClicked() {
         log.debug("calling onRemoveConnectionClicked()");
         LocationConnection selected = locationConnectionsTable.getSelectionModel().getSelectedItem();
-//        locationConnectionService.remove(selected);
         if (locationConnectionsToStore.remove(new LocationConnectionWrapper(selected))) {
             locationConnectionsTable.getItems().remove(selected);
             suggestLocationConnectionsTable.getItems().add(selected);
-//            selectedLocation.removeConnection(selected);
         }
     }
 
@@ -203,14 +209,12 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
 
         List<LocationConnection> applied = new ArrayList<>(suggestLocationConnectionsTable.getItems().size());
         for (LocationConnection c : suggestLocationConnectionsTable.getItems()) {
-//            locationConnectionService.add(c);
             applied.add(c);
         }
         for (LocationConnection c : applied) {
             if (locationConnectionsToStore.add(new LocationConnectionWrapper(c))) {
                 locationConnectionsTable.getItems().add(c);
                 suggestLocationConnectionsTable.getItems().remove(c);
-//                selectedLocation.addConnection(c);
             }
         }
     }
@@ -219,15 +223,13 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
     public void onFinishedClicked() {
         log.debug("calling onFinishedClicked()");
 
-//        selectedLocation.clearConnections();
-//        selectedLocation.addAllConnections(locationConnectionsToStore);
         Set<LocationConnection> selectedLocationConnections = new HashSet<>(locationConnectionsToStore.size());
         for (LocationConnectionWrapper conWrapper : locationConnectionsToStore) {
             selectedLocationConnections.add(conWrapper.getLocationConnection());
         }
 
         Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
-        Parent root = (Parent) loader.load("/gui/editlocation.fxml");
+        Parent root = (Parent) loader.load("/gui/editlocation.fxml", stage);
         EditLocationController ctrl = loader.getController();
         ctrl.setLocation(selectedLocation);
         ctrl.setConnections(selectedLocationConnections);
@@ -255,19 +257,16 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
         lastClickedSuggestTable = newClick;
 
         LocationConnection selected = suggestLocationConnectionsTable.getSelectionModel().getSelectedItem();
-//        locationConnectionService.add(selected);
         if (locationConnectionsToStore.add(new LocationConnectionWrapper(selected))) {
             suggestLocationConnectionsTable.getItems().remove(selected);
             locationConnectionsTable.getItems().add(selected);
-//            selectedLocation.addConnection(selected);
         }
-//        reloadLocation();
     }
 
     @FXML
     private void checkFocus() {
         log.debug("calling checkFocus()");
-        LocationConnection selected = locationConnectionsTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
+        LocationConnection selected = locationConnectionsTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
             removeButton.setDisable(true);
             editButton.setDisable(true);
@@ -282,19 +281,9 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
         this.locationService = locationService;
     }
 
-    public static void setLocationConnections(List<LocationConnection> locationConnections) {
-        log.debug("calling setLocationConnections()");
-        EditLocationConnectionsController.locationConnections = locationConnections;
-    }
-
     private void reloadLocation() {
         selectedLocation = locationService.get(selectedLocation.getId());
     }
-
-//    private void refreshLocationConnectionsToStoreList() {
-//        locationConnectionsTable.setItems(FXCollections.observableList(new ArrayList<>(locationConnectionsToStore)));
-//    }
-
 
     public void setLoadSelectedLocation_Connections_OnInitialize(boolean loadSelectedLocation_Connections_OnInitialize) {
         this.loadSelectedLocation_Connections_OnReload = loadSelectedLocation_Connections_OnInitialize;

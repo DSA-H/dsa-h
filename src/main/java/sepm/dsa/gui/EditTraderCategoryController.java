@@ -145,7 +145,7 @@ public class EditTraderCategoryController extends BaseControllerImpl {
 //        saveCancelService.refresh(assortmentTable.getItems());
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml");
+        Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml", stage);
         TraderCategoryListController ctrl = loader.getController();
         ctrl.reload();
 
@@ -201,7 +201,7 @@ public class EditTraderCategoryController extends BaseControllerImpl {
 
         // return to traderCategoryList
         Stage stage = (Stage) cancelButton.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml");
+        Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml", stage);
         TraderCategoryListController ctrl = loader.getController();
         ctrl.reload();
 

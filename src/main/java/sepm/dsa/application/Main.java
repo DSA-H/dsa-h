@@ -87,7 +87,7 @@ public class Main extends Application {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
         final SpringFxmlLoader loader = (SpringFxmlLoader) context.getBean("loader");
 //	    Parent root = (Parent) loader.load("/gui/mainmenu.fxml");
-        Parent root = (Parent) loader.load("/gui/mainmenuResizable.fxml");
+        Parent root = (Parent) loader.load("/gui/mainmenuResizable.fxml", primaryStage);
         final MainMenuController ctrl = loader.getController();
         ctrl.reload();
         primaryStage.setTitle("DSA-Händlertool");

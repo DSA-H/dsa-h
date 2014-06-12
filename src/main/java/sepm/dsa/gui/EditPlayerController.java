@@ -80,7 +80,7 @@ public class EditPlayerController extends BaseControllerImpl {
         saveCancelService.save();
         Stage stage = (Stage) nameField.getScene().getWindow();
 
-        Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
+        Parent scene = (Parent) loader.load("/gui/playerlist.fxml", stage);
         PlayerListController ctrl = loader.getController();
         ctrl.reload();
 
@@ -108,7 +108,7 @@ public class EditPlayerController extends BaseControllerImpl {
 
         // return to players-list
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
+        Parent scene = (Parent) loader.load("/gui/playerlist.fxml", stage);
         PlayerListController ctrl = loader.getController();
         ctrl.reload();
         stage.setScene(new Scene(scene, 850, 438));

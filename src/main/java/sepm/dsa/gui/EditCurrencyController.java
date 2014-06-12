@@ -63,7 +63,7 @@ public class EditCurrencyController extends BaseControllerImpl {
         saveCancelService.cancel();
         Stage stage = (Stage) nameField.getScene().getWindow();
 
-        Parent scene = (Parent) loader.load("/gui/currencyList.fxml");
+        Parent scene = (Parent) loader.load("/gui/currencyList.fxml", stage);
 
         stage.setScene(new Scene(scene, 600, 438));
     }
@@ -101,7 +101,7 @@ public class EditCurrencyController extends BaseControllerImpl {
 
         // return to currencies-list
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/currencyList.fxml");
+        Parent scene = (Parent) loader.load("/gui/currencyList.fxml", stage);
         stage.setScene(new Scene(scene, 600, 438));
     }
 
