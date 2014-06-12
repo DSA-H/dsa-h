@@ -228,8 +228,11 @@ public class MainMenuController extends BaseControllerImpl {
     public void reload() {
         updateTables();
         updateMap();
-        checkLocationFocus();
-        checkTraderFocus();
+	    if (mode == WORLDMODE) {
+		    checkLocationFocus();
+	    } else {
+		    checkTraderFocus();
+	    }
         updateZoom();
     }
 

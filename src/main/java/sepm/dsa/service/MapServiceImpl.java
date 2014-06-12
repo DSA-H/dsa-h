@@ -247,7 +247,7 @@ public class MapServiceImpl implements MapService {
     public File getLocationMap(Location location) {
         File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return name.startsWith("" + location.getId() + "map");
+                return name.startsWith(location.getId() + "map");
             }
         });
         if (matchingFiles != null && matchingFiles.length >= 1) {
