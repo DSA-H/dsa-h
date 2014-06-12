@@ -13,5 +13,12 @@
                     ORDER BY name asc]]>
     </query>
 
+    <query name="ProductCategory.findAllByName">
+        <![CDATA[   FROM ProductCategory
+                    WHERE lower(name) like lower(:name)
+                    ORDER BY name asc]]>
+    </query>
+
+
 
 </hibernate-mapping>

@@ -25,6 +25,7 @@ public class ProductServiceImpl implements ProductService {
     private static final Logger log = LoggerFactory.getLogger(RegionServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
     private ProductDao productDao;
+    private ProductCategoryService productCategoryService;
 
     @Override
     public Product get(int id) {
@@ -87,6 +88,12 @@ public class ProductServiceImpl implements ProductService {
     public Set<Product> getBySearchTerm(String searchTerm) {
         log.debug("calling getBySearchTerm(" + searchTerm + ")");
         Set<Product> result = new HashSet<>(productDao.getAllByName(searchTerm == null ? null : "%" + searchTerm + "%"));
+        List<ProductCategory> matchingCategories = productCategoryService.getAllByName(searchTerm);
+        for (ProductCategory c : matchingCategories) {
+            for (Product p : getAllFromProductcategory(c)) {
+                result.add(p);
+            }
+        }
         log.trace("returning " + result);
         return result;
     }
@@ -122,4 +129,7 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    public void setProductCategoryService(ProductCategoryService productCategoryService) {
+        this.productCategoryService = productCategoryService;
+    }
 }
