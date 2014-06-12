@@ -385,7 +385,7 @@ public class MainMenuController extends BaseControllerImpl {
 				createButton.setDisable(true);
 				editButton.setDisable(true);
 				deleteButton.setDisable(true);
-				chooseButton.setText("Weltansicht");
+				chooseButton.setText("Abbrechen");
 				chooseButton.setDisable(false);
 				creationMode = true;                    // -> waiting for scrollPane Click
 			}
@@ -410,7 +410,7 @@ public class MainMenuController extends BaseControllerImpl {
 				createButton.setDisable(true);
 				editButton.setDisable(true);
 				deleteButton.setDisable(true);
-				chooseButton.setText("Weltansicht");
+				chooseButton.setText("Abbrechen");
 				chooseButton.setDisable(false);
 				creationMode = true;                    // -> wait for scrollPane Click
 			}
