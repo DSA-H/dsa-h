@@ -6,10 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -43,13 +40,17 @@ public class MovingTraderListController extends BaseControllerImpl {
 	private Button detailsButton;
 	@FXML
 	private Label locationsLabel;
-
+    @FXML
+    private Label commentLabel;
+    @FXML
+    private Accordion accordion;
 
 	@Override
 	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
 		super.initialize(location, resources);
-
 		log.debug("initialise MovingTraderListController");
+
+        accordion.setExpandedPane(accordion.getPanes().get(0));
 
 		traderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<MovingTrader, String>, ObservableValue<String>>() {
 			@Override
@@ -77,7 +78,7 @@ public class MovingTraderListController extends BaseControllerImpl {
                 movingTraders.add((MovingTrader) t);
             }
         }
-	traderTable.getItems().setAll(movingTraders);
+	    traderTable.getItems().setAll(movingTraders);
 
         checkFocus();
     }
@@ -111,6 +112,7 @@ public class MovingTraderListController extends BaseControllerImpl {
 
 	public void setLocationConnection(LocationConnection connection) {
         this.connection = connection;
+        commentLabel.setText(connection.getComment());
 	}
 
 	public void setTraderService(TraderService traderService) {
