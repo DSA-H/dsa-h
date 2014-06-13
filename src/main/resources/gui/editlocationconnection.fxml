@@ -76,7 +76,7 @@
       <FlowPane alignment="CENTER_RIGHT" hgap="10.0" prefHeight="50.0" BorderPane.alignment="CENTER_RIGHT">
          <children>
             <Button mnemonicParsing="false" onAction="#onAbortClicked" text="Abbrechen" />
-            <Button mnemonicParsing="false" onAction="#onSaveClicked" text="Speichern" />
+            <Button mnemonicParsing="false" onAction="#onSaveClicked" text="Übernehmen" />
          </children>
 <BorderPane.margin>
 <Insets />
