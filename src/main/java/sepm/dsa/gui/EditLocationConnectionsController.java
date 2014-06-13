@@ -194,6 +194,7 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
 
         stage.setTitle("Reiseverbindung bearbeiten");
         stage.setScene(new Scene(root, 500, 380));
+        stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }

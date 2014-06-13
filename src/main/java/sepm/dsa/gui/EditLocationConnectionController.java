@@ -102,6 +102,7 @@ public class EditLocationConnectionController extends BaseControllerImpl {
         ctrl.reload();
 
         stage.setScene(new Scene(root, 900, 500));
+        stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
 

@@ -285,6 +285,7 @@ public class EditLocationController extends BaseControllerImpl {
 
         stage.setTitle("Reiseverbindungen für Ort '" + selectedLocation.getName() + "' bearbeiten");
         stage.setScene(new Scene(root, 900, 500));
+        stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }
