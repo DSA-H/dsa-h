@@ -91,6 +91,9 @@ public class PlacementController extends BaseControllerImpl {
 
 	@FXML
 	private void onNewPressed() {
+        Stage placementStage = (Stage) choiceBox.getScene().getWindow();
+        placementStage.close();
+
 		if (selectedLocation == null) {
 			Stage stage = new Stage();
 			Parent scene = (Parent) loader.load("/gui/editlocation.fxml", stage);
@@ -116,9 +119,6 @@ public class PlacementController extends BaseControllerImpl {
 			stage.setResizable(false);
 			stage.show();
 		}
-
-		Stage stage = (Stage) choiceBox.getScene().getWindow();
-		stage.close();
 	}
 
 	@FXML
