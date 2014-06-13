@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +72,10 @@ public class EditLocationConnectionController extends BaseControllerImpl {
         try {
             travelTime = Integer.parseInt(tf_TravelTime.getText());
         } catch (NumberFormatException ex) {
-            throw new DSAValidationException("Reisezeit muss eine ganze Zahl sein!");
+            throw new DSAValidationException("Reisezeit muss eine positive ganze Zahl sein!");
+        }
+        if(travelTime < 0) {
+            throw new DSAValidationException("Reisezeit muss eine positive ganze Zahl sein!");
         }
 
         locationConnection.setTravelTime(travelTime);
@@ -84,12 +88,13 @@ public class EditLocationConnectionController extends BaseControllerImpl {
     public void onAbortClicked() {
         log.debug("onAbortClicked");
         goBack();
-
     }
 
     private void goBack() {
+        Stage myStage = (Stage)lbl_Location1.getScene().getWindow();
+        myStage.close();
 
-        Stage stage = (Stage) lbl_Location1.getScene().getWindow();
+        Stage stage = new Stage();
         Parent root = (Parent) loader.load("/gui/editlocationconnections.fxml", stage);
         EditLocationConnectionsController ctrl = loader.getController();
         ctrl.setLoadSelectedLocation_Connections_OnInitialize(true);
@@ -97,6 +102,7 @@ public class EditLocationConnectionController extends BaseControllerImpl {
         ctrl.reload();
 
         stage.setScene(new Scene(root, 900, 500));
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
 
         ctrl.setLoadSelectedLocation_Connections_OnInitialize(true);

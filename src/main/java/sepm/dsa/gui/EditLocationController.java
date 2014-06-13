@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
@@ -270,10 +271,12 @@ public class EditLocationController extends BaseControllerImpl {
     @FXML
     public void onEditConnectionsClicked() {
         log.debug("calling onEditConnectionsClicked");
-
         applyLocationChanges();
 
-        Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
+        Stage myStage = (Stage)locationConnectionsTable.getScene().getWindow();
+        myStage.close();
+
+        Stage stage = new Stage();
         Parent root = (Parent) loader.load("/gui/editlocationconnections.fxml", stage);
         EditLocationConnectionsController ctrl = (EditLocationConnectionsController)loader.getController();
         ctrl.setSelectedLocation(selectedLocation);
@@ -281,6 +284,7 @@ public class EditLocationController extends BaseControllerImpl {
 
         stage.setTitle("Reiseverbindungen für Ort '" + selectedLocation.getName() + "' bearbeiten");
         stage.setScene(new Scene(root, 900, 500));
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }
 

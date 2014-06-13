@@ -11,6 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
@@ -172,6 +173,9 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
     @FXML
     public void onEditConnectionClicked() {
         log.debug("calling onEditConnectionClicked()");
+        Stage myStage = (Stage)locationConnectionsTable.getScene().getWindow();
+        myStage.close();
+
         LocationConnection selected = locationConnectionsTable.getSelectionModel().getSelectedItem();
 
         this.setLoadSelectedLocation_Connections_OnInitialize(false);
@@ -181,7 +185,7 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
             selectedLocation.addConnection(w.getLocationConnection());
         }
 
-        Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
+        Stage stage = new Stage();
         Parent root = (Parent) loader.load("/gui/editlocationconnection.fxml", stage);
         EditLocationConnectionController ctrl = loader.getController();
         ctrl.setLocationConnection(selected);
@@ -190,6 +194,7 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
 
         stage.setTitle("Reiseverbindung bearbeiten");
         stage.setScene(new Scene(root, 500, 380));
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }
 
@@ -222,13 +227,15 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
     @FXML
     public void onFinishedClicked() {
         log.debug("calling onFinishedClicked()");
+        Stage myStage = (Stage)locationConnectionsTable.getScene().getWindow();
+        myStage.close();
 
         Set<LocationConnection> selectedLocationConnections = new HashSet<>(locationConnectionsToStore.size());
         for (LocationConnectionWrapper conWrapper : locationConnectionsToStore) {
             selectedLocationConnections.add(conWrapper.getLocationConnection());
         }
 
-        Stage stage = (Stage) locationConnectionsTable.getScene().getWindow();
+        Stage stage = new Stage();
         Parent root = (Parent) loader.load("/gui/editlocation.fxml", stage);
         EditLocationController ctrl = loader.getController();
         ctrl.setLocation(selectedLocation);
