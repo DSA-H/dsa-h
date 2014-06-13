@@ -37,8 +37,6 @@ public class EditLocationController extends BaseControllerImpl {
     private RegionService regionService;
 	private MapService mapService;
     private SaveCancelService saveCancelService;
-    // true if the location is not editing
-//    private boolean isNewLocation;
 
 	private int xCoord = 0;
 	private int yCoord = 0;
@@ -106,20 +104,16 @@ public class EditLocationController extends BaseControllerImpl {
     public void reload() {
         log.debug("reload EditLocationController");
 
-        // set values if editing
-        if (selectedLocation != null) {
-//            isNewLocation = false;
-        } else {
-//            isNewLocation = true;
+        if(isNew() && selectedLocation.getId() != null) {
             selectedLocation = new Location();
-            weatherChoiceBox.getSelectionModel().select(Temperature.MEDIUM.getValue());
-            sizeChoiceBox.getSelectionModel().select(RainfallChance.MEDIUM.getValue());
         }
 
         // init region choice box
 	    Region selectedRegion = regionChoiceBox.getSelectionModel().getSelectedItem();
         regionChoiceBox.getItems().setAll(regionService.getAll());
-        if(selectedRegion != null) {
+        if(!regionChoiceBox.getItems().contains(selectedRegion)) {
+            regionChoiceBox.getSelectionModel().select(selectedLocation.getRegion());
+        }else if(selectedRegion != null) {
             regionChoiceBox.getSelectionModel().select(selectedRegion);
         }
 
@@ -184,7 +178,16 @@ public class EditLocationController extends BaseControllerImpl {
     }
 
     private boolean isNew() {
-        return selectedLocation.getId() == null;
+        if(selectedLocation.getId() != null) {
+            if(locationService.get(selectedLocation.getId()) == null) {
+                return true;
+            }else {
+                return false;
+            }
+        }else {
+            return true;
+        }
+
     }
 
     @FXML
@@ -244,6 +247,8 @@ public class EditLocationController extends BaseControllerImpl {
         selectedLocation = location;
         if (selectedLocation == null) {
             selectedLocation = new Location();
+            weatherChoiceBox.getSelectionModel().select(Temperature.MEDIUM.getValue());
+            sizeChoiceBox.getSelectionModel().select(RainfallChance.MEDIUM.getValue());
         } else {
             xCoord = selectedLocation.getxCoord();
             yCoord = selectedLocation.getyCoord();

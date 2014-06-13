@@ -94,7 +94,6 @@ public class PlacementController extends BaseControllerImpl {
 		if (selectedLocation == null) {
 			Stage stage = new Stage();
 			Parent scene = (Parent) loader.load("/gui/editlocation.fxml", stage);
-
 			EditLocationController controller = loader.getController();
             controller.setLocation(null);
 			controller.setPosition(pos);
@@ -106,9 +105,8 @@ public class PlacementController extends BaseControllerImpl {
 			stage.show();
 		} else {
 			Stage stage = new Stage();
+            stage.setTitle("Händler erstellen");
 			Parent scene = (Parent) loader.load("/gui/edittrader.fxml", stage);
-			stage.setTitle("Händler erstellen");
-
 			EditTraderController controller = loader.getController();
 			controller.setTrader(null);
 			controller.setPosition(pos);
@@ -128,7 +126,6 @@ public class PlacementController extends BaseControllerImpl {
 		Stage stage = new Stage();
 		Parent scene = (Parent) loader.load("/gui/edittavern.fxml", stage);
 		stage.setTitle("Wirtshaus erstellen");
-
 		EditTavernController controller = loader.getController();
 		controller.setTavern(null);
 		controller.setPosition(pos);
