@@ -107,6 +107,7 @@ public class EditLocationController extends BaseControllerImpl {
 
         if(isNew() && selectedLocation.getId() != null) {
             selectedLocation = new Location();
+            connections.clear();
         }
 
         // init region choice box
