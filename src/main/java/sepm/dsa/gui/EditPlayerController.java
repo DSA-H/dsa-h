@@ -84,7 +84,7 @@ public class EditPlayerController extends BaseControllerImpl {
         PlayerListController ctrl = loader.getController();
         ctrl.reload();
 
-        stage.setScene(new Scene(scene, 850, 438));
+        stage.setScene(new Scene(scene, 600, 438));
     }
 
     @FXML
@@ -111,7 +111,7 @@ public class EditPlayerController extends BaseControllerImpl {
         Parent scene = (Parent) loader.load("/gui/playerlist.fxml", stage);
         PlayerListController ctrl = loader.getController();
         ctrl.reload();
-        stage.setScene(new Scene(scene, 850, 438));
+        stage.setScene(new Scene(scene, 600, 438));
     }
 
     private void initialzeTableWithColums() {

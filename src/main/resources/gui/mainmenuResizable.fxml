@@ -105,6 +105,7 @@
             <MenuItem mnemonicParsing="false" onAction="#onTraderCategoriesClicked" text="Händlerkategorie" fx:id="verwaltenHaendlerKategorie" />
             <MenuItem mnemonicParsing="false" onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen" fx:id="verwaltenGebieteGrenzen" />
             <MenuItem mnemonicParsing="false" onAction="#onCurrencyClicked" text="Währungen" fx:id="verwaltenWaehrungen" />
+            <MenuItem mnemonicParsing="false" onAction="#onCurrencySetClicked" text="Währungssysteme" fx:id="verwaltenWaehrungssysteme" />
             <MenuItem mnemonicParsing="false" onAction="#onWarenClicked" text="Waren" fx:id="verwaltenWaren" />
             <MenuItem mnemonicParsing="false" onAction="#onWarenKategorieClicked" text="Warenkategorie" fx:id="verwaltenWarenKategorie" />
             <MenuItem onAction="#onEditDateClicked" text="Datum einstellen" />

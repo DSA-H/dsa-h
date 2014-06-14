@@ -148,6 +148,7 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
     @FXML
     public void onSuggestConnectionsClicked() {
         log.debug("calling onSuggestConnectionsClicked()");
+
         List<LocationConnection> suggestedConnections = locationConnectionService.suggestLocationConnectionsAround(selectedLocation, 100.0);
         addToSuggestion(suggestedConnections);
     }

@@ -19,6 +19,9 @@ import sepm.dsa.model.Currency;
 import sepm.dsa.service.CurrencyService;
 import sepm.dsa.service.SaveCancelService;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 public class CurrencyListController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(CurrencyListController.class);
@@ -40,14 +43,17 @@ public class CurrencyListController extends BaseControllerImpl {
     private Button editButton;
 
     @Override
-    public void reload() {
-        log.debug("reload CurrencyListController");
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
         // init table
         currencyColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         valueToBaseRateColumn.setCellValueFactory(new PropertyValueFactory<>("valueToBaseRate"));
+    }
 
+    @Override
+    public void reload() {
+        log.debug("reload CurrencyListController");
 		currencyTable.getItems().setAll(currencyService.getAll());
-
         checkFocus();
     }
 
