@@ -24,6 +24,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     private static final Logger log = LoggerFactory.getLogger(RegionServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
     private ProductCategoryDao productCategoryDao;
+    private ProductService productService;
     private AssortmentNatureService assortmentNatureService;
 
     @Override
@@ -69,10 +70,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         List<ProductCategory> childs = this.getAllChilds(p);
          for (ProductCategory productCategoryChild: childs) {
              productCategoryChild = get(productCategoryChild.getId());
-             for (AssortmentNature a : assortmentNatureService.getAllByProductCategory(productCategoryChild.getId())) {
-                 assortmentNatureService.remove(a);
-             }
+             assortmentNatureService.getAllByProductCategory(productCategoryChild.getId()).forEach(assortmentNatureService::remove);
         }
+//        p.getProducts().forEach(productService::remove); SHOULD NOT BE REMOVED :)
         Set<ProductCategory> children = new HashSet<>(p.getChilds());
         children.forEach(this::remove);
         productCategoryDao.remove(p);
@@ -143,5 +143,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     public void setAssortmentNatureService(AssortmentNatureService assortmentNatureService) {
         this.assortmentNatureService = assortmentNatureService;
+    }
+
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
     }
 }
