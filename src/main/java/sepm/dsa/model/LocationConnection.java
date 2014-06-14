@@ -6,6 +6,7 @@ import sepm.dsa.service.path.PathNode;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -26,7 +27,8 @@ public class LocationConnection implements BaseModel, PathEdge {
     @Column(nullable = false)
     private Integer travelTime;
 
-    @Column(nullable = true)
+    @Size(max = 1000)
+    @Column(nullable = true, length = 1000)
     private String comment;
 
     public Pk getPk() {

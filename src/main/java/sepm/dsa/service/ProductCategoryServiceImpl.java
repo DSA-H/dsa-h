@@ -14,6 +14,7 @@ import sepm.dsa.model.ProductCategory;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -72,6 +73,8 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
                  assortmentNatureService.remove(a);
              }
         }
+        Set<ProductCategory> children = new HashSet<>(p.getChilds());
+        children.forEach(this::remove);
         productCategoryDao.remove(p);
         for (Product product : p.getProducts()) {
             product.getCategories().remove(p);
