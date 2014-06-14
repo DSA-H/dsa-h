@@ -65,9 +65,10 @@ public class EditCurrencySetController extends BaseControllerImpl {
         };
 
         List<Currency> availableCurrencies = currencyService.getAll();
+        availableCurrencies.add(0, null);
 
         for (ChoiceBox<Currency> choiceBox : choiceBoxes) {
-            choiceBox.setItems(FXCollections.observableList(availableCurrencies));
+            choiceBox.getItems().setAll(availableCurrencies);
         }
 
         if (isNew()) {

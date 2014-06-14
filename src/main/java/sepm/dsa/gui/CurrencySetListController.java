@@ -94,7 +94,6 @@ public class CurrencySetListController extends BaseControllerImpl {
 
         EditCurrencySetController ctrl = loader.getController();
         ctrl.setCurrencySet(null);
-//        ctrl.setCalledFromCategorie(false);
         ctrl.reload();
 
         stage.setTitle("Währungssystem");
@@ -110,7 +109,6 @@ public class CurrencySetListController extends BaseControllerImpl {
         Parent scene = (Parent) loader.load("/gui/editcurrencyset.fxml", stage);
         EditCurrencySetController ctrl = loader.getController();
         ctrl.setCurrencySet(currencySetTable.getSelectionModel().getSelectedItem());
-//        ctrl.setCalledFromCategorie(false);
         ctrl.reload();
 
         stage.setTitle("Währungssystem");
