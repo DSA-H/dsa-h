@@ -56,7 +56,11 @@ public class TraderCategoryServiceImpl implements TraderCategoryService {
 	    if (traders.isEmpty()) {
 		    traderCategoryDao.remove(t);
 	    } else {
-		    throw new DSAValidationException("Löschen nicht möglich. Zu dieser Kategorie sind noch Händler vorhanden.");
+            String msg = "Löschen nicht möglich. Zu dieser Kategorie sind noch folgende Händler vorhanden:";
+            for (Trader tr : traders) {
+                msg += "\n" + tr + " (in " + tr.getLocation().getName() + ")";
+            }
+		    throw new DSAValidationException(msg);
 	    }
     }
 

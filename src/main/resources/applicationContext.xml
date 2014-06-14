@@ -178,6 +178,7 @@
 
     <bean id="playerService" class="sepm.dsa.service.PlayerServiceImpl">
         <property name="playerDao" ref="playerDao"/>
+        <property name="dealDao" ref="dealDao"/>
     </bean>
 
     <bean id="regionBorderService" class="sepm.dsa.service.RegionBorderServiceImpl">

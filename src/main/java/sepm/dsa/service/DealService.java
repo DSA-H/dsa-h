@@ -60,4 +60,11 @@ public interface DealService {
     List<Deal> getAllByProduct(Product product);
 
 
+    /**
+     * @param player the Player, not null
+     * @return all deals with this player involved, might be an empty list (not null)
+     */
+    List<Deal> getAllByPlayer(Player player);
+
+
 }

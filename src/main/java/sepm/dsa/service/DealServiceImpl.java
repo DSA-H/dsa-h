@@ -72,6 +72,14 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
+    public List<Deal> getAllByPlayer(Player player) {
+        log.debug("calling getAllByPlayer(" + player + ")");
+        List<Deal> result = dealDao.getAllByPlayer(player);
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
     public List<Deal> getAllByProduct(Product product) {
         log.debug("calling getAllByProduct(" + product + ")");
         List<Deal> result = dealDao.getAllByProduct(product);

@@ -4,6 +4,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.dao.DealDao;
 import sepm.dsa.dao.PlayerDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Player;
@@ -20,6 +21,7 @@ public class PlayerServiceImpl implements PlayerService {
     private static final Logger log = LoggerFactory.getLogger(PlayerServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
+    private DealDao dealDao;
     private PlayerDao playerDao;
 
     @Override
@@ -43,6 +45,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Transactional(readOnly = false)
     public void remove(Player player) {
         log.debug("calling remove(" + player + ")");
+        dealDao.getAllByPlayer(player).forEach(dealDao::remove);    // Cascade.REMOVE all deals
         playerDao.remove(player);
     }
 
@@ -79,4 +82,7 @@ public class PlayerServiceImpl implements PlayerService {
         this.playerDao = playerDao;
     }
 
+    public void setDealDao(DealDao dealDao) {
+        this.dealDao = dealDao;
+    }
 }

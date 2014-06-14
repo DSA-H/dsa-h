@@ -58,4 +58,20 @@ public class DealDaoHbmImpl extends BaseDaoHbmImpl<Deal>
         log.trace("returning " + result);
         return result;
     }
+
+    @Override
+    public List<Deal> getAllByPlayer(Player player) {
+        log.debug("calling getAllByPlayer(" + player + ")");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("Deal.findAllByPlayer");
+        query.setParameter("playerId", player == null ? null : player.getId());
+        List<?> list = query.list();
+
+        List<Deal> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((Deal) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
 }

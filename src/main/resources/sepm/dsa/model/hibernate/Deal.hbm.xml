@@ -20,4 +20,9 @@
                     WHERE product.id = :productId]]>
     </query>
 
+    <query name="Deal.findAllByPlayer">
+        <![CDATA[   FROM Deal
+                    WHERE player.id = :playerId]]>
+    </query>
+
 </hibernate-mapping>
