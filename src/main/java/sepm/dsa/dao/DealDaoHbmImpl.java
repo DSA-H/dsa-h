@@ -1,10 +1,7 @@
 package sepm.dsa.dao;
 
 import org.hibernate.Query;
-import sepm.dsa.model.Deal;
-import sepm.dsa.model.Player;
-import sepm.dsa.model.Trader;
-import sepm.dsa.model.Unit;
+import sepm.dsa.model.*;
 
 import java.util.List;
 import java.util.Vector;
@@ -35,6 +32,22 @@ public class DealDaoHbmImpl extends BaseDaoHbmImpl<Deal>
         query.setParameter("traderId", trader == null ? null : trader.getId());
         query.setParameter("fromDate", fromDate);
         query.setParameter("toDate", toDate);
+        List<?> list = query.list();
+
+        List<Deal> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((Deal) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Deal> getAllByProduct(Product product) {
+        log.debug("calling getAllByProduct(" + product + ")");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("Deal.findAllByProduct");
+        query.setParameter("productId", product == null ? null : product.getId());
         List<?> list = query.list();
 
         List<Deal> result = new Vector<>(list.size());

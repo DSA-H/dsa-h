@@ -15,4 +15,9 @@
                     ORDER BY id asc]]>
     </query>
 
+    <query name="Deal.findAllByProduct">
+        <![CDATA[   FROM Deal
+                    WHERE product.id = :productId]]>
+    </query>
+
 </hibernate-mapping>

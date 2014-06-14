@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.DealDao;
 import sepm.dsa.exceptions.DSAValidationException;
-import sepm.dsa.model.DSADate;
-import sepm.dsa.model.Deal;
-import sepm.dsa.model.Player;
-import sepm.dsa.model.Trader;
+import sepm.dsa.model.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -70,6 +67,14 @@ public class DealServiceImpl implements DealService {
         log.debug("calling getAllBetweenPlayerAndTraderLastXDays(" + player + ", " + trader + ", " + days + ")");
         long currentDateValue = timeService.getCurrentDate().getTimestamp();
         List<Deal> result = dealDao.playerDealsWithTraderInTimeRange(player, trader, currentDateValue - days, currentDateValue);
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Deal> getAllByProduct(Product product) {
+        log.debug("calling getAllByProduct(" + product + ")");
+        List<Deal> result = dealDao.getAllByProduct(product);
         log.trace("returning " + result);
         return result;
     }

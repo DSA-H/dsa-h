@@ -207,6 +207,7 @@
         <property name="productDao" ref="productDao"/>
         <property name="productCategoryService" ref="productCategoryService"/>
         <property name="offerDao" ref="offerDao"/>
+        <property name="dealDao" ref="dealDao"/>
     </bean>
 
     <bean id="productCategoryService" class="sepm.dsa.service.ProductCategoryServiceImpl">

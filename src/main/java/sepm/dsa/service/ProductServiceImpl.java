@@ -5,13 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.dao.DealDao;
 import sepm.dsa.dao.OfferDao;
 import sepm.dsa.dao.ProductDao;
 import sepm.dsa.exceptions.DSAValidationException;
-import sepm.dsa.model.Offer;
-import sepm.dsa.model.Product;
-import sepm.dsa.model.ProductCategory;
-import sepm.dsa.model.Region;
+import sepm.dsa.model.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -30,6 +28,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao;
     private ProductCategoryService productCategoryService;
     private OfferDao offerDao;
+    private DealDao dealDao;
 
     @Override
     public Product get(int id) {
@@ -63,6 +62,11 @@ public class ProductServiceImpl implements ProductService {
 
         List<Offer> offers = offerDao.getAllByProduct(p);
         offers.forEach(offerDao::remove);
+
+        List<Deal> deals = dealDao.getAllByProduct(p);
+        for (Deal d : deals) {
+            d.setProduct(null);
+        }
 
         productDao.remove(p);
     }
@@ -151,5 +155,9 @@ public class ProductServiceImpl implements ProductService {
 
     public void setOfferDao(OfferDao offerDao) {
         this.offerDao = offerDao;
+    }
+
+    public void setDealDao(DealDao dealDao) {
+        this.dealDao = dealDao;
     }
 }
