@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.RegionBorderDao;
 import sepm.dsa.dao.RegionDao;
 import sepm.dsa.exceptions.DSAValidationException;
+import sepm.dsa.model.Product;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
 
@@ -24,6 +25,7 @@ public class RegionServiceImpl implements RegionService {
 
     private RegionDao regionDao;
     private RegionBorderDao regionBorderDao;
+    private ProductService productService;
     private LocationService locationService;
 
     @Override
@@ -59,9 +61,14 @@ public class RegionServiceImpl implements RegionService {
 
 //        borders.forEach(regionBorderDao::removeConnection);
 //        locations.forEach(locationService::removeConnection);
+        List<Product> associatedProducts = productService.getAllByProductionRegion(r);
         locationService.getAllByRegion(r.getId()).forEach(locationService::remove);
 
         regionDao.remove(r);
+
+        for (Product p : associatedProducts) {
+            p.getRegions().remove(r);
+        }
     }
 
     @Override
@@ -99,5 +106,9 @@ public class RegionServiceImpl implements RegionService {
 
     public void setLocationService(LocationService locationService) {
         this.locationService = locationService;
+    }
+
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
     }
 }

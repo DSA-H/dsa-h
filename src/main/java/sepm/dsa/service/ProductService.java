@@ -2,6 +2,7 @@ package sepm.dsa.service;
 
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
+import sepm.dsa.model.Region;
 
 import java.util.List;
 import java.util.Set;
@@ -56,4 +57,11 @@ public interface ProductService {
      * @return set of products -- or empty set if nothing found (not null)
      */
     Set<Product> getBySearchTerm(String searchTerm);
+
+    /**
+     * @param region the region, not null
+     * @return all products produced in this region, might be an empty list (not null)
+     */
+    List<Product> getAllByProductionRegion(Region region);
+
 }

@@ -9,6 +9,7 @@ import sepm.dsa.dao.ProductDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
+import sepm.dsa.model.Region;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -94,6 +95,14 @@ public class ProductServiceImpl implements ProductService {
                 result.add(p);
             }
         }
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Product> getAllByProductionRegion(Region region) {
+        log.debug("calling getAllByProductionRegion(" + region + ")");
+        List<Product> result = productDao.getAllByRegion(region);
         log.trace("returning " + result);
         return result;
     }

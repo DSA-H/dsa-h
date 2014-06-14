@@ -17,5 +17,6 @@ public class RegionDaoHbmImpl
 			r.getBorders1().remove(rb);
 			r.getBorders2().remove(rb);
 		});
+
 	}
 }

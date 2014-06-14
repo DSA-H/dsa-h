@@ -2,6 +2,7 @@ package sepm.dsa.dao;
 
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
+import sepm.dsa.model.Region;
 
 import java.util.List;
 import java.util.Set;
@@ -22,5 +23,11 @@ public interface ProductDao extends BaseDao<Product> {
      * @return all products containing 'name'-parameter value in its name, might be empty (not null)
      */
     List<Product> getAllByName(String name);
+
+    /**
+     * @param region the region, not null
+     * @return all products produced in this region, might be an empty list (not null)
+     */
+    List<Product> getAllByRegion(Region region);
 
 }

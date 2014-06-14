@@ -172,6 +172,7 @@
         <property name="regionDao" ref="regionDao"/>
         <property name="regionBorderDao" ref="regionBorderDao"/>
         <property name="locationService" ref="locationService"/>
+        <property name="productService" ref="productService"/>
     </bean>
 
     <bean id="playerService" class="sepm.dsa.service.PlayerServiceImpl">

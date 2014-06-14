@@ -18,6 +18,11 @@
         <![CDATA[from Product WHERE :name is null or lower(name) like lower(:name) ORDER BY name ASC]]>
     </query>
 
+    <query name="Product.findAllByRegion">
+        <![CDATA[   FROM Product p
+                    WHERE :regionId in (SELECT id FROM p.productionRegions)]]>
+    </query>
+
     <!--<query name="Product.findAllByDeals">-->
         <!--<![CDATA[   FROM Product p-->
                     <!--WHERE :categoryId in (SELECT  FROM Deal d)-->
