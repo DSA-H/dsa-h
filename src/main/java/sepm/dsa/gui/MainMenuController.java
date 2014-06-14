@@ -651,6 +651,21 @@ public class MainMenuController extends BaseControllerImpl {
 		stage.show();
 	}
 
+    @FXML
+    private void onCurrencySetClicked() {
+        log.debug("onWarenClicked - open Currency Window");
+        Stage stage = new Stage();
+
+        Parent scene = (Parent) loader.load("/gui/currencysetlist.fxml", stage);
+        BaseController ctrl = loader.getController();
+        ctrl.reload();
+
+        stage.setTitle("Währungssysteme");
+        stage.setScene(new Scene(scene, 600, 440));
+        stage.setResizable(false);
+        stage.show();
+    }
+
 	@FXML
 	private void onCalculateCurrencyClicked() {
 		log.debug("onCalculateCurrencyClicked - open Calculate Currency Window");

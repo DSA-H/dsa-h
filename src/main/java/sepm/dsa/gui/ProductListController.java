@@ -30,7 +30,7 @@ import java.util.Set;
 public class ProductListController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(ProductListController.class);
-    SpringFxmlLoader loader;
+    private SpringFxmlLoader loader;
 
     private ProductService productService;
     private SaveCancelService saveCancelService;

@@ -444,6 +444,17 @@
         <property name="currencyService" ref="currencyService"/>
         <property name="saveCancelService" ref="saveCancelService" />
     </bean>
+    <bean id="currencySetListController" class="sepm.dsa.gui.CurrencySetListController" scope="prototype">
+        <property name="loader" ref="loader"/>
+        <property name="currencySetService" ref="currencySetService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
+    </bean>
+    <bean id="editCurrencySetController" class="sepm.dsa.gui.EditCurrencySetController" scope="prototype">
+        <property name="loader" ref="loader"/>
+        <property name="currencyService" ref="currencyService"/>
+        <property name="currencySetService" ref="currencySetService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
+    </bean>
     <bean id="calculateCurrency" class="sepm.dsa.gui.CurrencyCalculateController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="currencyService" ref="currencyService"/>
@@ -467,4 +478,5 @@
     </bean>
 
     <bean class="sepm.dsa.application.ApplicationListenerBeanPostProcessor"/>
+
 </beans>
