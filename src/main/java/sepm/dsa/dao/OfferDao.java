@@ -1,6 +1,7 @@
 package sepm.dsa.dao;
 
 import sepm.dsa.model.Offer;
+import sepm.dsa.model.Product;
 import sepm.dsa.model.Trader;
 
 import java.util.Collection;
@@ -13,5 +14,11 @@ public interface OfferDao extends BaseDao<Offer> {
      * @param offers
      */
     public void addList(Collection<Offer> offers);
+
+    /**
+     * @param product the Product, not null
+     * @return get all offers regarding this product, might be an empty list (not null)
+     */
+    List<Offer> getAllByProduct(Product product);
 
 }

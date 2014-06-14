@@ -62,6 +62,7 @@
                 <value>sepm/dsa/model/hibernate/UnitType.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Unit.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Deal.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Offer.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -205,6 +206,7 @@
     <bean id="productService" class="sepm.dsa.service.ProductServiceImpl">
         <property name="productDao" ref="productDao"/>
         <property name="productCategoryService" ref="productCategoryService"/>
+        <property name="offerDao" ref="offerDao"/>
     </bean>
 
     <bean id="productCategoryService" class="sepm.dsa.service.ProductCategoryServiceImpl">
