@@ -79,8 +79,12 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
     private Label[] lbl_CurrencyAmounts;
 
     @Override
-    public void reload() {
-        log.debug("reload TradeBuyFromPlayerController");
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
+
+        //initialize table
+        initialzeTableWithColums();
+
         lbl_CurrencyAmounts =
                 new Label[] {
                         lbl_CurrencyAmount1,
@@ -97,20 +101,6 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
                         tf_CurrencyAmount4,
                         tf_CurrencyAmount5};
 
-        selectedAmount.setText("1");
-
-        //initialize table
-        initialzeTableWithColums();
-
-	selectedCurrency.getItems().setAll(currencySetService.getAll());
-	selectedUnit.getItems().setAll(unitService.getAll());
-	selectedPlayer.getItems().setAll(playerService.getAll());
-
-        List<ProductQuality> qualityList = new ArrayList<>();
-        for (ProductQuality q : ProductQuality.values()) {
-            qualityList.add(q);
-        }
-	selectedQuality.getItems().setAll(qualityList);
         selectedQuality.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updatePrice();
         });
@@ -122,6 +112,23 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
         selectedCurrency.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updatePrice();
         });
+
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload TradeBuyFromPlayerController");
+
+        selectedAmount.setText("1");
+        selectedCurrency.getItems().setAll(currencySetService.getAll());
+        selectedUnit.getItems().setAll(unitService.getAll());
+        selectedPlayer.getItems().setAll(playerService.getAll());
+
+        List<ProductQuality> qualityList = new ArrayList<>();
+        for (ProductQuality q : ProductQuality.values()) {
+            qualityList.add(q);
+        }
+	    selectedQuality.getItems().setAll(qualityList);
 
         refreshPriceView();
     }
@@ -364,6 +371,13 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
 
     public void setTrader(Trader trader) {
         this.trader = trader;
+        if (trader != null) {
+            CurrencySet defaultCurrencySet = trader.getLocation().getRegion().getPreferredCurrencySet();
+            if (defaultCurrencySet == null) {
+                defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+            }
+            selectedCurrency.getSelectionModel().select(defaultCurrencySet);
+        }
     }
 
     public void setTraderService(TraderService traderService) {

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.RegionBorderDao;
 import sepm.dsa.dao.RegionDao;
 import sepm.dsa.exceptions.DSAValidationException;
+import sepm.dsa.model.CurrencySet;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.Region;
 import sepm.dsa.model.RegionBorder;
@@ -50,6 +51,14 @@ public class RegionServiceImpl implements RegionService {
         log.info("calling update(" + r + ")");
         validate(r);
         return regionDao.update(r);
+    }
+
+    @Override
+    public List<Region> getAllByPreferredCurrencySet(CurrencySet currencySet) {
+        log.debug("calling getAllByPreferredCurrencySet(" + currencySet + ")");
+        List<Region> result = regionDao.getAllByPreferredCurrencySet(currencySet);
+        log.trace("returning " + result);
+        return result;
     }
 
     @Override

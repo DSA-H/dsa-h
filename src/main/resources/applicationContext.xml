@@ -261,6 +261,7 @@
     <bean id="currencySetService" class="sepm.dsa.service.CurrencySetServiceImpl">
         <property name="currencySetDao" ref="currencySetDao"/>
         <property name="currencyService" ref="currencyService"/>
+        <property name="regionService" ref="regionService"/>
     </bean>
 
     <bean id="timeService" class="sepm.dsa.service.TimeServiceImpl">

@@ -80,8 +80,9 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
     private PlayerService playerService;
 
     @Override
-    public void reload() {
-        log.debug("reload TradeSellToPlayerController");
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
+
         lbl_CurrencyAmounts =
                 new Label[] {
                         lbl_CurrencyAmount1,
@@ -98,18 +99,27 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
                         tf_CurrencyAmount4,
                         tf_CurrencyAmount5};
 
+        selectedAmount.textProperty().addListener((observable, oldValue, newValue) -> updatePrice());
+        selectedCurrency.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updatePrice());
+
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload TradeSellToPlayerController");
+
         selectedDiscount.setText("0");
 
-	selectedCurrency.getItems().setAll(currencySetService.getAll());
-	selectedUnit.getItems().setAll(unitService.getAllByType(offer.getProduct().getUnit().getUnitType()));
-//        selectedPrice.setText(offer.getPricePerUnit().toString());
-	selectedPlayer.getItems().setAll(playerService.getAll());
+        selectedCurrency.getItems().setAll(currencySetService.getAll());
+        selectedUnit.getItems().setAll(unitService.getAllByType(offer.getProduct().getUnit().getUnitType()));
+    //        selectedPrice.setText(offer.getPricePerUnit().toString());
+        selectedPlayer.getItems().setAll(playerService.getAll());
 
         //select default unit & currency
-        CurrencySet preferredCurrency = trader.getLocation().getRegion().getPreferredCurrencySet();
-        if (preferredCurrency != null) {
-            selectedCurrency.getSelectionModel().select(preferredCurrency);
-        }
+//        CurrencySet preferredCurrency = trader.getLocation().getRegion().getPreferredCurrencySet();
+//        if (preferredCurrency != null) {
+//            selectedCurrency.getSelectionModel().select(preferredCurrency);
+//        }
         selectedUnit.getSelectionModel().select(offer.getProduct().getUnit());
 
         StringBuilder sb = new StringBuilder();
@@ -119,8 +129,6 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
         }
         selectedOffer.setText(sb.toString());
         selectedAmount.setText("1");
-        selectedAmount.textProperty().addListener((observable, oldValue, newValue) -> updatePrice());
-        selectedCurrency.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updatePrice());
 
         refreshPriceView();
     }
@@ -335,6 +343,13 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
 
     public void setTrader(Trader trader) {
         this.trader = trader;
+        if (trader != null) {
+            CurrencySet defaultCurrencySet = trader.getLocation().getRegion().getPreferredCurrencySet();
+            if (defaultCurrencySet == null) {
+                defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+            }
+            selectedCurrency.getSelectionModel().select(defaultCurrencySet);
+        }
     }
 
     public void setOffer(Offer offer) {

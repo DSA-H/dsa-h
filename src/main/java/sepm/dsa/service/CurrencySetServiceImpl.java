@@ -10,6 +10,7 @@ import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Currency;
 import sepm.dsa.model.CurrencySet;
+import sepm.dsa.model.Region;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -26,6 +27,7 @@ public class CurrencySetServiceImpl implements CurrencySetService {
 
     private CurrencySetDao currencySetDao;
     private CurrencyService currencyService;
+    private RegionService regionService;
 
     @Override
     public CurrencySet get(int id) {
@@ -54,7 +56,11 @@ public class CurrencySetServiceImpl implements CurrencySetService {
     @Transactional(readOnly = false)
     public void remove(CurrencySet r) {
         log.debug("calling removeConnection(" + r + ")");
+        List<Region> regions = regionService.getAllByPreferredCurrencySet(r);
         currencySetDao.remove(r);
+        for (Region region : regions) {
+            region.setPreferredCurrencySet(null);
+        }
     }
 
     @Override
@@ -116,5 +122,9 @@ public class CurrencySetServiceImpl implements CurrencySetService {
 
     public void setCurrencyService(CurrencyService currencyService) {
         this.currencyService = currencyService;
+    }
+
+    public void setRegionService(RegionService regionService) {
+        this.regionService = regionService;
     }
 }

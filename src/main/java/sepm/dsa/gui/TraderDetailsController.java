@@ -311,8 +311,8 @@ public class TraderDetailsController extends BaseControllerImpl {
             dialog.initOwner(dealsTable.getParent().getScene().getWindow());
             Parent scene = (Parent) loader.load("/gui/tradeSell.fxml", dialog);
             TradeSellToPlayerController ctrl = loader.getController();
-            ctrl.setTrader(trader);
             ctrl.setOffer(selectedItem);
+            ctrl.setTrader(trader);
             ctrl.reload();
 
             dialog.setTitle("Kauf von Waren");
