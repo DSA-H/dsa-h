@@ -805,19 +805,97 @@ public class MainMenuController extends BaseControllerImpl {
 					@Override
 					public void handle(MouseEvent e) {
 						boolean onLocation = false;
+						double xPos = e.getX();
+						double yPos = e.getY();
+
 						for (Location l : locations) {
-							if (e.getX() > l.getxCoord() - 10 && e.getX() < l.getxCoord() + 10 &&
-									e.getY() > l.getyCoord() - 10 && e.getY() < l.getyCoord() + 10) {
+							if (xPos > l.getxCoord() - 10 && xPos < l.getxCoord() + 10 &&
+									yPos > l.getyCoord() - 10 && yPos < l.getyCoord() + 10) {
 								zoomGroup.getChildren().remove(highlight);
 								highlight = new Canvas(30, 30);
 								highlight.getGraphicsContext2D().setLineWidth(4);
 								highlight.getGraphicsContext2D().strokeRoundRect(4, 4, 22, 22, 13, 13);
 								highlight.setLayoutX(l.getxCoord() - 15);
 								highlight.setLayoutY(l.getyCoord() - 15);
+
+								highlight.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+									@Override
+									public void handle(MouseEvent event) {
+										locationTable.getSelectionModel().select(l);
+									}
+								});
+
 								zoomGroup.getChildren().add(highlight);
 								onLocation = true;
 							}
 						}
+
+						if (!onLocation) {
+							for (LocationConnection lc : connections) {     // seach all location-connections for hit
+								Location loc1 = lc.getLocation1();
+								Location loc2 = lc.getLocation2();
+								double loc1x = loc1.getxCoord();
+								double loc1y = loc1.getyCoord();
+								double loc2x = loc2.getxCoord();
+								double loc2y = loc2.getyCoord();
+								if ((xPos < loc1x + 10 && xPos > loc2x - 10) || (xPos > loc1x - 10 && xPos < loc2x + 10)) {
+									if ((yPos < loc1y + 10 && yPos > loc2y - 10) || (yPos > loc1y - 10 && yPos < loc2y + 10)) {
+										if (loc1x > loc2x) {
+											Location temp = loc1;
+											loc1 = loc2;
+											loc2 = temp;
+											loc1x = loc1.getxCoord();
+											loc1y = loc1.getyCoord();
+											loc2x = loc2.getxCoord();
+											loc2y = loc2.getyCoord();
+										}
+										double d = loc1y;
+										double k = ((double) (loc2y - loc1y)) / ((double) (loc2x - loc1x));
+										double x = xPos - loc1x;
+										if (yPos - 10 < (int) (k * x + d) && yPos + 10 > (int) (k * x + d)) {
+											zoomGroup.getChildren().remove(highlight);
+
+											double length = Math.sqrt(Math.pow(Math.abs(loc1x-loc2x),2) + Math.pow(Math.abs(loc1y-loc2y),2));
+											double degrees = Math.toDegrees( Math.atan( (loc2y-loc1y)/Math.abs(loc2x-loc1x) ) );
+											if (loc1x > loc2x) {
+												degrees *= -1;
+											}
+											highlight = new Canvas(length, 12);
+											highlight.getGraphicsContext2D().setLineWidth(4);
+											highlight.getGraphicsContext2D().strokeLine(0, 6, length, 6);
+											highlight.setLayoutX(loc1x + (loc2x-loc1x)/2 - length/2);
+											if (loc2y > loc1y) {
+												highlight.setLayoutY(loc1y + (loc2y-loc1y)/2 - 6);
+
+											} else {
+												highlight.setLayoutY(loc2y + (loc1y-loc2y)/2 - 6);
+											}
+
+											highlight.setRotate(degrees);
+
+											highlight.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+												@Override
+												public void handle(MouseEvent event) {
+													Stage stage = new Stage();
+													Parent scene = (Parent) loader.load("/gui/movingtraderlist.fxml", stage);
+													MovingTraderListController controller = loader.getController();
+													controller.setLocationConnection(lc);
+													controller.reload();
+													stage.setTitle("Fahrende Händler");
+													stage.setScene(new Scene(scene, 600, 400));
+													stage.setResizable(false);
+													stage.show();
+												}
+											});
+
+											zoomGroup.getChildren().add(highlight);
+											onLocation = true;
+										}
+									}
+								}
+							}
+						}
+
 						if (!onLocation) {
 							while (zoomGroup.getChildren().size() > 3) {
 								zoomGroup.getChildren().remove(highlight);
@@ -826,6 +904,57 @@ public class MainMenuController extends BaseControllerImpl {
 					}
 				}
 		);
+
+		// add mouse-listener for placement
+		pathCanvas.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				double xPos = e.getX();
+				double yPos = e.getY();
+
+				Point2D pos = new Point2D(xPos, yPos);
+
+				if (!creationMode) {
+					return;
+				}                                   // in creation mode: chose position to place location/trader/tavern
+				Stage stage = new Stage();
+				Parent scene = (Parent) loader.load("/gui/placement.fxml", stage);
+				PlacementController controller = loader.getController();
+				if (mode == WORLDMODE) {
+					stage.setTitle("Ort platzieren");
+					controller.setUp(null, pos, selectedLocation, false);           // (locaiton, position, selectedObject, noMap)
+				} else {
+					stage.setTitle("Händler/Wirtshaus platzieren");
+					controller.setUp(selectedLocation, pos, selectedObject, false); // (locaiton, position, selectedObject, noMap)
+				}
+				controller.reload();
+
+				stage.setScene(new Scene(scene, 350, 190));
+				stage.setResizable(false);
+				stage.show();
+
+				if (mode == WORLDMODE) {
+					checkLocationFocus();
+				} else {
+					checkTraderFocus();
+				}
+
+				creationMode = false;
+				createButton.setDisable(false);
+				if (mode == WORLDMODE) {
+					chooseButton.setText("Ortsansicht");
+					checkLocationFocus();
+					locationTable.setDisable(false);
+				} else {
+					chooseButton.setText("Weltansicht");
+					checkTraderFocus();
+					traderList.setDisable(false);
+				}
+				updateMap();
+				updateTables();
+
+			}
+		});
 
 		calcButton.setText("Ausblenden");
 		nothingChanged = true;
