@@ -60,6 +60,7 @@ public class EditTavernController extends BaseControllerImpl {
 	public void initialize(URL location, ResourceBundle resources) {
 		super.initialize(location, resources);
 		qualityCoicheBox.getItems().setAll(ProductQuality.values());
+        qualityCoicheBox.setValue(ProductQuality.NORMAL);
 		defaultCurrencySet = currencySetService.getDefaultCurrencySet();
 	}
 
@@ -77,7 +78,7 @@ public class EditTavernController extends BaseControllerImpl {
 		try {
 			beds = Integer.parseInt(bedsField.getText());
 		} catch (NumberFormatException ex) {
-			throw new DSAValidationException("Anzahl der Betten muss eine ganze Zahl sein!");
+			throw new DSAValidationException("Anzahl der Betten muss eine ganze positive Zahl sein!");
 		}
 		ProductQuality quality = qualityCoicheBox.getValue();
 
@@ -147,7 +148,7 @@ public class EditTavernController extends BaseControllerImpl {
 		qualityCoicheBox.getSelectionModel().select(tavern.getQuality());
 		useageLabel.setText(tavern.getUsage() + "");
         List<CurrencyAmount> currencyAmounts = currencySetService.toCurrencySet(defaultCurrencySet, tavern.getPrice());
-		priceLabel.setText(CurrencyFormatUtil.currencySetShortString(currencyAmounts, ", "));
+		priceLabel.setText(CurrencyFormatUtil.currencySetString(currencyAmounts));
 		commentArea.setText(tavern.getComment() == null ? "" : tavern.getComment());
 	}
 

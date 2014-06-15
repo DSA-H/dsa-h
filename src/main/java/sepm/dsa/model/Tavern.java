@@ -1,6 +1,7 @@
 package sepm.dsa.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -33,6 +34,7 @@ public class Tavern implements BaseModel {
 	private Integer usage;  // in beds
 
 	@NotNull
+    @Min(value = 1)
 	@Column(nullable = false)
 	private Integer beds;
 

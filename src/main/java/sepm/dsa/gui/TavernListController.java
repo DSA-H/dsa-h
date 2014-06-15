@@ -24,6 +24,7 @@ import sepm.dsa.service.TavernService;
 
 import java.util.List;
 
+// todo: Ist diese Klasse möglicherweise völlig überflüssig?
 public class TavernListController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(TavernListController.class);
