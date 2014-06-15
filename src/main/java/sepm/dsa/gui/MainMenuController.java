@@ -61,7 +61,7 @@ public class MainMenuController extends BaseControllerImpl {
 	private LocationConnectionService locationConnectionService;
 	private TraderPdfService traderPdfService;
 
-	private Canvas mapCanvas, selectionCanvas, pathCanvas; // 3 canvases on top of each other in zoomGroup; bottom: mapCanvas, top: pathCanvas
+	private Canvas mapCanvas, selectionCanvas, pathCanvas, highlight; // 3 canvases on top of each other in zoomGroup; bottom: mapCanvas, top: pathCanvas, addictionally: highlight
 
 	private Location selectedLocation; // selection in WORLDMODE, current Location in LOCATIONMODE
 	private Object selectedObject; // selection in LOCATIONMODE (Trader or Tavern)
@@ -459,6 +459,7 @@ public class MainMenuController extends BaseControllerImpl {
 				editButton.setText("Details");
 				Stage stage = (Stage) editButton.getScene().getWindow();
 				stage.setTitle("DSA-Händlertool - " + selectedLocation.getName());
+				zoomSlider.adjustValue(1.0);
 			} else {                            // switch to WORLDMODE
 				dontUpdateScroll = true;
 				scrollPane.setHvalue(worldScrollH);
@@ -520,6 +521,7 @@ public class MainMenuController extends BaseControllerImpl {
 
 
 		if (creationMode) {                 // in creation mode: chose position to place location/trader/tavern
+
 			Stage stage = new Stage();
 			Parent scene = (Parent) loader.load("/gui/placement.fxml", stage);
 			PlacementController controller = loader.getController();
@@ -563,7 +565,7 @@ public class MainMenuController extends BaseControllerImpl {
 				for (Location l : locations) {                  // search all locations for hit
 					locX = (int) (l.getxCoord() * scaleFactor);
 					locY = (int) (l.getyCoord() * scaleFactor);
-					if (xPos > locX - 20 && xPos < locX + 20 && yPos > locY - 20 && yPos < locY + 20) {
+					if (xPos > locX - 14 && xPos < locX + 14 && yPos > locY - 14 && yPos < locY + 14) {
 						locationTable.getSelectionModel().select(l);
 						return;
 					}
@@ -573,16 +575,24 @@ public class MainMenuController extends BaseControllerImpl {
 				for (LocationConnection lc : connections) {     // seach all location-connections for hit
 					loc1 = lc.getLocation1();
 					loc2 = lc.getLocation2();
-					if ( (xPos < loc1.getxCoord()+10 && xPos > loc2.getxCoord()-10) || (xPos > loc1.getxCoord()-10 && xPos < loc2.getxCoord()+10) ) {
-						if ((yPos < loc1.getyCoord()+10 && yPos > loc2.getyCoord()-10) || (yPos > loc1.getyCoord()-10 && yPos < loc2.getyCoord()+10)) {
-							if (loc1.getxCoord() > loc2.getxCoord()) {
+					double loc1x = loc1.getxCoord()*scaleFactor;
+					double loc1y = loc1.getyCoord()*scaleFactor;
+					double loc2x = loc2.getxCoord()*scaleFactor;
+					double loc2y = loc2.getyCoord()*scaleFactor;
+					if ( (xPos < loc1x+10 && xPos > loc2x-10) || (xPos > loc1x -10 && xPos < loc2x +10) ) {
+						if ((yPos < loc1y +10 && yPos > loc2y -10) || (yPos > loc1y -10 && yPos < loc2y +10)) {
+							if (loc1x > loc2x) {
 								Location temp = loc1;
 								loc1 = loc2;
 								loc2 = temp;
+								loc1x = loc1.getxCoord()*scaleFactor;
+								loc1y = loc1.getyCoord()*scaleFactor;
+								loc2x = loc2.getxCoord()*scaleFactor;
+								loc2y = loc2.getyCoord()*scaleFactor;
 							}
-							double d = loc1.getyCoord();
-							double k = ((double) (loc2.getyCoord()-loc1.getyCoord())) / ((double) (loc2.getxCoord()-loc1.getxCoord()));
-							double x = xPos - loc1.getxCoord();
+							double d = loc1y;
+							double k = ((double) (loc2y-loc1y)) / ((double) (loc2x-loc1x));
+							double x = xPos - loc1x;
 							if (yPos-10 < (int) (k * x + d) && yPos+10 > (int) (k * x + d)) {
 								Stage stage = new Stage();
 								Parent scene = (Parent) loader.load("/gui/movingtraderlist.fxml", stage);
@@ -822,6 +832,7 @@ public class MainMenuController extends BaseControllerImpl {
 			return;
 		}
 		mapService.setWorldMap(newmap);
+		reload();
 	}
 
 	@FXML
@@ -940,7 +951,8 @@ public class MainMenuController extends BaseControllerImpl {
 						for (Location l : locations) {
 							if (e.getX() > l.getxCoord() - 10 && e.getX() < l.getxCoord() + 10 &&
 									e.getY() > l.getyCoord() - 10 && e.getY() < l.getyCoord() + 10) {
-								Canvas highlight = new Canvas(30, 30);
+								zoomGroup.getChildren().remove(highlight);
+								highlight = new Canvas(30, 30);
 								highlight.getGraphicsContext2D().setLineWidth(4);
 								highlight.getGraphicsContext2D().strokeRoundRect(4, 4, 22, 22, 13, 13);
 								highlight.setLayoutX(l.getxCoord() - 15);
@@ -951,7 +963,7 @@ public class MainMenuController extends BaseControllerImpl {
 						}
 						if (!onLocation) {
 							while (zoomGroup.getChildren().size() > 3) {
-								zoomGroup.getChildren().remove(3);
+								zoomGroup.getChildren().remove(highlight);
 							}
 						}
 					}
@@ -1064,7 +1076,8 @@ public class MainMenuController extends BaseControllerImpl {
 							for (Location l : locations) {
 								if (e.getX() > l.getxCoord() - 10 && e.getX() < l.getxCoord() + 10 &&
 										e.getY() > l.getyCoord() - 10 && e.getY() < l.getyCoord() + 10) {
-									Canvas highlight = new Canvas(30, 30);
+									zoomGroup.getChildren().remove(highlight);
+									highlight = new Canvas(30, 30);
 									highlight.getGraphicsContext2D().setLineWidth(4);
 									highlight.getGraphicsContext2D().strokeRoundRect(4, 4, 22, 22, 13, 13);
 									highlight.setLayoutX(l.getxCoord() - 15);
@@ -1075,7 +1088,7 @@ public class MainMenuController extends BaseControllerImpl {
 							}
 							if (!onLocation) {
 								while (zoomGroup.getChildren().size() > 3) {
-									zoomGroup.getChildren().remove(3);
+									zoomGroup.getChildren().remove(highlight);
 								}
 							}
 						}
@@ -1117,7 +1130,8 @@ public class MainMenuController extends BaseControllerImpl {
 							for (Trader t : traders) {
 								if (e.getX() > t.getxPos() - 10 && e.getX() < t.getxPos() + 10 &&
 										e.getY() > t.getyPos() - 10 && e.getY() < t.getyPos() + 10) {
-									Canvas highlight = new Canvas(20, 20);
+									zoomGroup.getChildren().remove(highlight);
+									highlight = new Canvas(20, 20);
 									highlight.getGraphicsContext2D().setLineWidth(6);
 									highlight.getGraphicsContext2D().setStroke(Color.RED);
 									highlight.getGraphicsContext2D().strokeLine(4, 4, 16, 16);
@@ -1131,7 +1145,8 @@ public class MainMenuController extends BaseControllerImpl {
 							for (Tavern t : taverns) {
 								if (e.getX() > t.getxPos() - 10 && e.getX() < t.getxPos() + 10 &&
 										e.getY() > t.getyPos() - 10 && e.getY() < t.getyPos() + 10) {
-									Canvas highlight = new Canvas(20, 20);
+									zoomGroup.getChildren().remove(highlight);
+									highlight = new Canvas(20, 20);
 									highlight.getGraphicsContext2D().setLineWidth(6);
 									highlight.getGraphicsContext2D().setStroke(Color.RED);
 									highlight.getGraphicsContext2D().strokeLine(4, 4, 16, 16);
@@ -1144,7 +1159,7 @@ public class MainMenuController extends BaseControllerImpl {
 							}
 							if (!onStuff) {
 								while (zoomGroup.getChildren().size() > 2) {
-									zoomGroup.getChildren().remove(2);
+									zoomGroup.getChildren().remove(highlight);
 								}
 							}
 						}
