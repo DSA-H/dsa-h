@@ -35,7 +35,6 @@ public class PlacementController extends BaseControllerImpl {
 	private SaveCancelService saveCancelService;
 	private Location selectedLocation;
 	private Point2D pos;
-	private Object selectedObj;
 
 	@FXML
 	private Label headline;
@@ -50,6 +49,28 @@ public class PlacementController extends BaseControllerImpl {
 
     @Override
     public void reload() {
+        // reload dropdown list
+        Object selectedObject = choiceBox.getSelectionModel().getSelectedItem();
+        if(selectedLocation == null) {
+            choiceBox.getItems().setAll(locationService.getAll());
+        }else {
+            List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+            List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
+            List<Object> all = new ArrayList<Object>();
+            for (Trader t : traders) {
+                all.add(t);
+            }
+            for (Tavern t : taverns) {
+                all.add(t);
+            }
+            choiceBox.getItems().setAll(all);
+        }
+        if(choiceBox.getItems().contains(selectedObject)) {
+            choiceBox.getSelectionModel().select(selectedObject);
+        }else {
+            choiceBox.getSelectionModel().clearSelection();
+            choiceBox.setValue(null);
+        }
     }
 
     @FXML
@@ -147,7 +168,6 @@ public class PlacementController extends BaseControllerImpl {
 
 	public void setUp(Location location, Point2D pos, Object selectedObj, boolean noMap) {
 		this.selectedLocation = location;
-		this.selectedObj = selectedObj;
 		this.pos = pos;
 		if (noMap) {
 			choiceBox.setVisible(false);
@@ -160,21 +180,10 @@ public class PlacementController extends BaseControllerImpl {
 				headline.setText("Ort platzieren");
 				newButton.setText("Neuer Ort");
 				newTavernButton.setVisible(false);
-				choiceBox.getItems().setAll(locationService.getAll());
 			} else {
 				headline.setText("Händler/Wirtshaus platzieren");
 				newButton.setText("Neuer Händler");
 				newTavernButton.setVisible(true);
-				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-				List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
-				List<Object> all = new ArrayList<Object>();
-				for (Trader t : traders) {
-					all.add(t);
-				}
-				for (Tavern t : taverns) {
-					all.add(t);
-				}
-				choiceBox.getItems().setAll(all);
 			}
 			if (selectedObj != null) {
 				choiceBox.getSelectionModel().select(selectedObj);
