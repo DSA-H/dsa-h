@@ -90,7 +90,8 @@
           <items>
             <MenuItem disable="true" mnemonicParsing="false" text="Import" fx:id="dateiImport" />
             <MenuItem disable="true" mnemonicParsing="false" text="Export" fx:id="dateiExport" />
-              <MenuItem mnemonicParsing="false" onAction="#onPrintTraderClicked" text="Händler drucken" />
+            <MenuItem mnemonicParsing="false" onAction="#onPrintTraderClicked" text="Händler drucken" />
+            <MenuItem mnemonicParsing="false" onAction="#onMapOptionsClicked" text="Kartenoptionen" />
             <MenuItem mnemonicParsing="false" onAction="#onExitClicked" text="Beenden" fx:id="dateiExit" />
           </items>
         </Menu>

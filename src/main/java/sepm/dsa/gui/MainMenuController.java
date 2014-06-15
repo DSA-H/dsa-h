@@ -24,7 +24,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.controlsfx.control.action.Action;
@@ -704,6 +703,20 @@ public class MainMenuController extends BaseControllerImpl {
 					.message("Es wurde keine Ortskarte gefunden!")
 					.showWarning();
 		}
+	}
+
+	@FXML
+	private void onMapOptionsClicked() {
+		log.debug("onMapOptionsClicked called");
+		Stage stage = new Stage();
+
+		Parent scene = (Parent) loader.load("/gui/mapoptions.fxml", stage);
+		BaseController ctrl = loader.getController();
+
+		stage.setTitle("Kartenoptionen");
+		stage.setScene(new Scene(scene, 600, 400));
+		stage.setResizable(false);
+		stage.show();
 	}
 
 	/**

@@ -480,6 +480,9 @@
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>
     </bean>
+    <bean id="mapOptions" class="sepm.dsa.gui.MapOptionsController" scope="prototype">
+        <property name="mapService" ref="mapService" />
+    </bean>
     <!-- Transaction -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
