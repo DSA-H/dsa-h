@@ -99,12 +99,23 @@ public interface MapService {
 	public int getWorldIconSize();
 
 	/**
-	 * @return Trader/Tavern Icon Size in @param location
+	 * @return Size of Trader/Tavern-Icons
 	 */
-	public int getLocationIconSize(Location location);
+	public double getLocationIconSize(Location location);
 
 	/**
 	 * @return the Size of Names on the Map relative to icons
 	 */
 	public double getTextSize();
+
+	public void setTraderColor(Color c);
+	public void setMovingTraderColor(Color c);
+	public void setTavernColor(Color c);
+	public void setHighlightColor(Color c);
+	public void setSelectionColor(Color c);
+	public void setBorderColor(Color c);
+	public void setNameColor(Color c);
+	public void setWorldIconSize(int size);
+	public void setLocationIconSize(Location location, double size);
+	public void setTextSize(double size);
 }

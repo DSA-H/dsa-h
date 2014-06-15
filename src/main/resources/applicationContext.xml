@@ -251,6 +251,8 @@
     </bean>
 
     <bean id="mapService" class="sepm.dsa.service.MapServiceImpl">
+        <property name="locationService" ref="locationService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 
     <bean id="dealService" class="sepm.dsa.service.DealServiceImpl">

@@ -10,21 +10,69 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.exceptions.DSARuntimeException;
+import sepm.dsa.model.DSADate;
 import sepm.dsa.model.Location;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 @Service("mapService")
 @Transactional(readOnly = true)
 public class MapServiceImpl implements MapService {
     private static final Logger log = LoggerFactory.getLogger(MapServiceImpl.class);
+	private LocationService locationService;
+	private SaveCancelService saveCancelService;
     private File alternativeDir = new File("maps/alternative");
     private File activeDir = new File("maps/active");
     private File ressourceDir = new File("maps/ressource");
+	private Properties properties;
+
+	public MapServiceImpl(){
+		try {
+			properties = new Properties();
+			Path path = Paths.get("properties");
+			if (!Files.exists(path)) {
+				Files.createFile(path);
+			}
+			InputStream is = Files.newInputStream(path);
+			properties.load(is);
+			is.close();
+		} catch (IOException e) {
+			throw new DSARuntimeException("Probleme beim Laden der Properties Datei! \n" + e.getMessage());
+		}
+	}
+
+	private String colorToString(Color color) {
+		String colorString = "";
+		String red = Integer.toHexString((int) (color.getRed() * 255));
+		if (red.length() == 1) {
+			red = "0" + red;
+		}
+		String green = Integer.toHexString((int) (color.getGreen() * 255));
+		if (green.length() == 1) {
+			green = "0" + green;
+		}
+		String blue = Integer.toHexString((int) (color.getBlue() * 255));
+		if (blue.length() == 1) {
+			blue = "0" + blue;
+		}
+		colorString = red + green + blue;
+		return colorString;
+	}
+
+	private Color stringToColor(String colorString) {
+		return new Color(
+				(double) Integer.valueOf(colorString.substring(0, 2), 16) / 255,
+				(double) Integer.valueOf(colorString.substring(2, 4), 16) / 255,
+				(double) Integer.valueOf(colorString.substring(4, 6), 16) / 255,
+				1.0);
+	}
 
     @Override
     public File chooseMap() {
@@ -272,51 +320,178 @@ public class MapServiceImpl implements MapService {
 
 	@Override
 	public Color getTraderColor() {
-		return Color.PINK;
+		return stringToColor(properties.getProperty("traderColor", "0000FF"));
 	}
 
 	@Override
 	public Color getMovingTraderColor() {
-		return Color.PINK;
+		return stringToColor(properties.getProperty("movingTraderColor", "ADD8E6"));
 	}
 
 	@Override
 	public Color getTavernColor() {
-		return Color.PINK;
+		return stringToColor(properties.getProperty("tavernColor", "FFFF00"));
 	}
 
 	@Override
 	public Color getHighlightColor() {
-		return Color.PINK;
+		return stringToColor(properties.getProperty("highlightColor", "000000"));
 	}
 
 	@Override
 	public Color getSelectionColor() {
-		return Color.PINK;
+		return stringToColor(properties.getProperty("selectionColor", "008000"));
 	}
 
 	@Override
 	public Color getBorderColor() {
-		return Color.PINK;
+		return stringToColor(properties.getProperty("borderColor", "000000"));
 	}
 
 	@Override
 	public Color getNameColor() {
-		return Color.PINK;
+		return stringToColor(properties.getProperty("nameColor", "000000"));
 	}
 
 	@Override
 	public int getWorldIconSize() {
-		return 50;
+		return Integer.parseInt(properties.getProperty("worldIconSize", "20"));
 	}
 
 	@Override
-	public int getLocationIconSize(Location location) {
-		return 50;
+	public double getLocationIconSize(Location location) {
+		if (location.getIconSize() == null) {
+			return 10;
+		}
+		return location.getIconSize();
 	}
 
 	@Override
 	public double getTextSize() {
-		return 0.4;
+		return Double.parseDouble(properties.getProperty("textSize", "1.0"));
+	}
+
+
+	@Override
+	public void setTraderColor(Color c) {
+		try {
+			properties.put("traderColor", colorToString(c));
+			OutputStream os = Files.newOutputStream(Paths.get("properties"));
+			properties.store(os, "");
+			os.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void setMovingTraderColor(Color c) {
+		try {
+			properties.put("movingTraderColor", colorToString(c));
+			OutputStream os = Files.newOutputStream(Paths.get("properties"));
+			properties.store(os, "");
+			os.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void setTavernColor(Color c) {
+		try {
+			properties.put("tavernColor", colorToString(c));
+			OutputStream os = Files.newOutputStream(Paths.get("properties"));
+			properties.store(os, "");
+			os.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void setHighlightColor(Color c) {
+		try {
+			properties.put("highlightColor", colorToString(c));
+			OutputStream os = Files.newOutputStream(Paths.get("properties"));
+			properties.store(os, "");
+			os.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void setSelectionColor(Color c) {
+		try {
+			properties.put("selectionColor", colorToString(c));
+			OutputStream os = Files.newOutputStream(Paths.get("properties"));
+			properties.store(os, "");
+			os.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void setBorderColor(Color c) {
+		try {
+			properties.put("borderColor", colorToString(c));
+			OutputStream os = Files.newOutputStream(Paths.get("properties"));
+			properties.store(os, "");
+			os.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void setNameColor(Color c) {
+		try {
+			properties.put("nameColor", colorToString(c));
+			OutputStream os = Files.newOutputStream(Paths.get("properties"));
+			properties.store(os, "");
+			os.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void setWorldIconSize(int size) {
+		try {
+			properties.put("worldIconSize", size);
+			OutputStream os = Files.newOutputStream(Paths.get("properties"));
+			properties.store(os, "");
+			os.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void setLocationIconSize(Location location, double size) {
+		location.setIconSize(size);
+		locationService.update(location);
+		saveCancelService.save();
+	}
+
+	@Override
+	public void setTextSize(double size) {
+		try {
+			properties.put("textSize", size);
+			OutputStream os = Files.newOutputStream(Paths.get("properties"));
+			properties.store(os, "");
+			os.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setLocationService(LocationService locationService) {
+		this.locationService = locationService;
+	}
+
+	public void setSaveCancelService(SaveCancelService saveConcelService) {
+		this.saveCancelService = saveConcelService;
 	}
 }

@@ -1350,13 +1350,13 @@ public class MainMenuController extends BaseControllerImpl {
 			gc.strokeLine(posX2, posY2, posXm, posYm);
 		}
 
-		gc.setStroke(mapService.getNameColor());
+		gc.setFill(mapService.getNameColor());
 		gc.setLineWidth(iconSize*mapService.getTextSize()*0.075);
 		gc.setFont(new Font(iconSize*mapService.getTextSize()));
 		for (Location l : locations) {              // write names next to locations
 			posX1 = l.getxCoord();
 			posY1 = l.getyCoord();
-			gc.strokeText(l.getName(), posX1 + (iconSize*0.5), posY1 - (iconSize*0.5));
+			gc.fillText(l.getName(), posX1 + (iconSize*0.5), posY1 - (iconSize*0.5));
 		}
 	}
 
@@ -1393,18 +1393,18 @@ public class MainMenuController extends BaseControllerImpl {
 				gc.strokeLine(posX - (iconSize*0.5), posY + (iconSize*0.5), posX + (iconSize*0.5), posY - (iconSize*0.5));
 			}
 		}
-		gc.setStroke(mapService.getNameColor());
+		gc.setFill(mapService.getNameColor());
 		gc.setLineWidth(iconSize * mapService.getTextSize() * 0.15);
 		gc.setFont(new Font(iconSize*mapService.getTextSize()*2));
 		for (Trader t : traders) {              // write names next to traders
 			posX = t.getxPos();
 			posY = t.getyPos();
-			gc.strokeText(t.getName(), posX + iconSize, posY - iconSize);
+			gc.fillText(t.getName(), posX + iconSize, posY - iconSize);
 		}
 		for (Tavern t : taverns) {              // write names next to locations
 			posX = t.getxPos();
 			posY = t.getyPos();
-			gc.strokeText(t.getName(), posX + iconSize, posY - iconSize);
+			gc.fillText(t.getName(), posX + iconSize, posY - iconSize);
 		}
 	}
 
