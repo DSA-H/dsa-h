@@ -1,5 +1,6 @@
 package sepm.dsa.service;
 
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
@@ -268,4 +269,54 @@ public class MapServiceImpl implements MapService {
         }
         return null;
     }
+
+	@Override
+	public Color getTraderColor() {
+		return Color.PINK;
+	}
+
+	@Override
+	public Color getMovingTraderColor() {
+		return Color.PINK;
+	}
+
+	@Override
+	public Color getTavernColor() {
+		return Color.PINK;
+	}
+
+	@Override
+	public Color getHighlightColor() {
+		return Color.PINK;
+	}
+
+	@Override
+	public Color getSelectionColor() {
+		return Color.PINK;
+	}
+
+	@Override
+	public Color getBorderColor() {
+		return Color.PINK;
+	}
+
+	@Override
+	public Color getNameColor() {
+		return Color.PINK;
+	}
+
+	@Override
+	public int getWorldIconSize() {
+		return 50;
+	}
+
+	@Override
+	public int getLocationIconSize(Location location) {
+		return 50;
+	}
+
+	@Override
+	public double getTextSize() {
+		return 0.4;
+	}
 }
