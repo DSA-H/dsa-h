@@ -21,24 +21,20 @@ public class CurrencyFormatUtil {
             throw new IllegalArgumentException("currencyAmounts size is zero");
         }
 
-//        List<CurrencyAmount> cas = new ArrayList<>(currencyAmounts);
-//        Collections.sort(cas, (o1, o2) -> {
-//            int valueToBaseRateResult = o1.getCurrency().getValueToBaseRate().compareTo(o2.getCurrency().getValueToBaseRate()));
-//            if (valueToBaseRateResult != 0) {
-//                return valueToBaseRateResult;
-//            }
-//            int nameResult = o1.getCurrency().getName().compareTo(o2.getCurrency().getName());
-//            if (nameResult != 0) {
-//                return nameResult;
-//            }
-//            return 0;
-//        });
-
         StringBuilder sb = new StringBuilder();
-        sb.append(cas.get(0).getAmount()).append(" ").append(cas.get(0).getCurrency().getName());
-        for (int i=1; i<cas.size(); i++) {
+        int j = 0;
+        for (int i=0; i<cas.size(); i++) {
             CurrencyAmount ca = cas.get(i);
-            sb.append(delimiter).append(ca.getAmount()).append(" ").append(ca.getCurrency().getName());
+            if(ca.getAmount() != 0) {
+                if(j > 0) {
+                    sb.append(delimiter);
+                }
+                j++;
+                sb.append(ca.getAmount()).append(" ").append(ca.getCurrency().getName());
+            }
+        }
+        if(sb.length() == 0) {
+            sb.append("0 ").append(cas.get(0).getCurrency().getName());
         }
         return sb.toString();
     }
@@ -53,10 +49,15 @@ public class CurrencyFormatUtil {
             throw new IllegalArgumentException("currencyAmounts size is zero");
         }
         StringBuilder sb = new StringBuilder();
+        int j = 0;
         for (int i=0; i<cas.size(); i++) {
             CurrencyAmount ca = cas.get(i);
-            if(ca.getAmount() > 0) {
-                sb.append(ca.getAmount()).append(ca.getCurrency().getShortName()).append(delimiter);
+            if(ca.getAmount() != 0) {
+                if(j > 0) {
+                    sb.append(delimiter);
+                }
+                j++;
+                sb.append(ca.getAmount()).append(ca.getCurrency().getShortName());
             }
         }
         if(sb.length() == 0) {
