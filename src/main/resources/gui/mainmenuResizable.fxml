@@ -37,7 +37,7 @@
   <center>
     <GridPane BorderPane.alignment="CENTER">
       <children>
-        <ScrollPane fx:id="scrollPane" onMouseClicked="#onScrollPaneClicked" GridPane.rowSpan="2" />
+        <ScrollPane fx:id="scrollPane" GridPane.rowSpan="2" />
         <ListView fx:id="traderList" visible="false" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowSpan="2" />
         <TableView fx:id="locationTable" GridPane.columnIndex="1" GridPane.hgrow="NEVER">
           <columns>
