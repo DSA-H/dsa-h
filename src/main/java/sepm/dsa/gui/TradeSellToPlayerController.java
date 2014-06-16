@@ -99,28 +99,23 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
                         tf_CurrencyAmount4,
                         tf_CurrencyAmount5};
 
-        selectedAmount.textProperty().addListener((observable, oldValue, newValue) -> updatePrice());
-        selectedCurrency.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updatePrice());
-
+        selectedDiscount.setText("0");
+        selectedAmount.setText("1");
     }
 
     @Override
     public void reload() {
         log.debug("reload TradeSellToPlayerController");
 
-        selectedDiscount.setText("0");
-
+        CurrencySet currencySet = selectedCurrency.getValue();
         selectedCurrency.getItems().setAll(currencySetService.getAll());
+        selectedCurrency.setValue(currencySet);
+        Unit unit = selectedUnit.getValue();
         selectedUnit.getItems().setAll(unitService.getAllByType(offer.getProduct().getUnit().getUnitType()));
-    //        selectedPrice.setText(offer.getPricePerUnit().toString());
+        selectedUnit.setValue(unit);
+        Player player = selectedPlayer.getValue();
         selectedPlayer.getItems().setAll(playerService.getAll());
-
-        //select default unit & currency
-//        CurrencySet preferredCurrency = trader.getLocation().getRegion().getPreferredCurrencySet();
-//        if (preferredCurrency != null) {
-//            selectedCurrency.getSelectionModel().select(preferredCurrency);
-//        }
-        selectedUnit.getSelectionModel().select(offer.getProduct().getUnit());
+        selectedPlayer.setValue(player);
 
         StringBuilder sb = new StringBuilder();
         sb.append(offer.getProduct().getName());
@@ -128,7 +123,6 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
             sb.append(" (" + offer.getQuality().getName() + ")");
         }
         selectedOffer.setText(sb.toString());
-        selectedAmount.setText("1");
 
         refreshPriceView();
     }
@@ -145,14 +139,16 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
         return offer.getProduct();
     }
 
-    private void updatePrice() {
+    private void updatePrice(Unit selectedUnit, CurrencySet selectedCurrencySet) {
         log.info("calling updatePrice()");
+        if(selectedUnit == null || selectedCurrencySet == null) {
+            return;
+        }
         refreshPriceView();
         if (offer.getProduct() != null) {
             log.info(selectedQuality() + ", " + selectedProduct() + " " + trader);
-            int setQuality = traderService.calculatePricePerUnit(selectedQuality(), selectedProduct(), trader);
+            int pricePerUnit = traderService.calculatePricePerUnit(selectedQuality(), selectedProduct(), trader);
             int amount = 0;
-
             //##### get amount
             if (!selectedAmount.getText().isEmpty()) {
                 try {
@@ -161,13 +157,16 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
                     throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
                 }
             }
-            int baseRatePrice = setQuality * amount;
-//            selectedPrice.setText(Integer.toString());
+            Unit unit = selectedUnit;
+            Unit defaultUnit = selectedProduct().getUnit();
 
-            List<CurrencyAmount> currencyAmounts = currencySetService.toCurrencySet(selectedCurrencySet(), baseRatePrice);
+            double unitfactor = unit.getValueToBaseUnit() / defaultUnit.getValueToBaseUnit();
+
+            int baseRatePrice = (int)Math.round(pricePerUnit * amount * unitfactor);
+
+            List<CurrencyAmount> currencyAmounts = currencySetService.toCurrencySet(selectedCurrencySet, baseRatePrice);
             int i=0;
             for (CurrencyAmount c : currencyAmounts) {
-//                lbl_CurrencyAmounts[i].setText(c.getCurrency().getName());
                 tf_CurrencyAmounts[i].setText(c.getAmount().toString());
                 i++;
             }
@@ -193,12 +192,10 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
             tf_CurrencyAmounts[i].setText("");
             tf_CurrencyAmounts[i].setDisable(true);
         }
-
     }
 
     @FXML
     private void calculateDiscount() {
-
         Player selPlayer = this.selectedPlayer.getSelectionModel().getSelectedItem();
         int amount = 1;
 
@@ -223,13 +220,6 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
         }
         Integer discount = traderService.suggesstDiscount(trader, selPlayer, offer.getProduct(), offer.getQuality(), selectedUnit.getSelectionModel().getSelectedItem(), amount);
 
-//        Integer discountAmount = null;
-//        try {
-//            discountAmount = (Integer.parseInt(selectedPrice.getText()) * discount) / 100;
-//        } catch (NumberFormatException ex) {
-//            throw new DSAValidationException("Der Preis muss angegeben sein.");
-//        }
-//        selectedDiscount.setText("" + (discountAmount == null ? 0 : discountAmount));
         selectedDiscount.setText("" + discount);
     }
 
@@ -237,7 +227,7 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
 
-        Stage stage = (Stage) selectedUnit.getScene().getWindow();
+        Stage stage = (Stage) selectedOffer.getScene().getWindow();
         stage.close();
     }
 
@@ -281,10 +271,10 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
         traderService.sellToPlayer(trader, playerToCreateDealFor, offer.getProduct(), offer.getQuality(), selectedUnit.getSelectionModel().getSelectedItem(), amount, currencyAmounts, discount);
         saveCancelService.save();
 
-        saveCancelService.refresh(trader);//, offer, offer.getProduct());
+        saveCancelService.refresh(trader);
         saveCancelService.refresh(trader.getDeals());
 
-        Stage stage = (Stage) selectedUnit.getScene().getWindow();
+        Stage stage = (Stage) selectedOffer.getScene().getWindow();
         stage.close();
     }
 
@@ -352,7 +342,15 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
     }
 
     public void setOffer(Offer offer) {
+        if(offer == null) {
+            throw new IllegalArgumentException("Offer cannot be null");
+        }
         this.offer = offer;
+        selectedUnit.getSelectionModel().select(offer.getProduct().getUnit());
+
+        selectedAmount.textProperty().addListener((observable, oldValue, newValue) -> updatePrice(selectedUnit.getValue(), selectedCurrencySet()));
+        selectedCurrency.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updatePrice(selectedUnit.getValue(), newValue));
+        selectedUnit.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updatePrice(newValue, selectedCurrencySet()));
     }
 
     public void setTraderService(TraderService traderService) {

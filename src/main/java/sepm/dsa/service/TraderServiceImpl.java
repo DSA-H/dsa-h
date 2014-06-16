@@ -191,8 +191,6 @@ public class TraderServiceImpl implements TraderService {
 //     *      or totalPrice is negative
     @Override
     public Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, Integer totalPrice, Integer discount) {
-        // TODO discuss Currency question with jotschi
-
         Offer offer = null;
         Set<Offer> traderOffers = trader.getOffers(); // get from dao
         for (Offer o : traderOffers) {

@@ -132,7 +132,7 @@ public class TraderDetailsController extends BaseControllerImpl {
                 if (r.getValue() != null) {
                     Offer offer = r.getValue();
                     List<CurrencyAmount> ca = currencySetService.toCurrencySet(defaultCurrencySet, offer.getPricePerUnit());
-                    String str = CurrencyFormatUtil.currencySetShortString(ca, ", ");
+                    String str = CurrencyFormatUtil.currencySetShortString(ca);
                     return new SimpleStringProperty(str);
                 } else {
                     return new SimpleStringProperty("");
@@ -146,6 +146,7 @@ public class TraderDetailsController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("reload TraderDetailsController");
+        checkFocus();
         refreshView();
     }
 
@@ -167,7 +168,7 @@ public class TraderDetailsController extends BaseControllerImpl {
                 if (r.getValue() != null) {
                     Deal deal = r.getValue();
                     List<CurrencyAmount> ca = currencySetService.toCurrencySet(defaultCurrencySet, deal.priceWithDiscount());
-                    String str = CurrencyFormatUtil.currencySetShortString(ca, ", ");
+                    String str = CurrencyFormatUtil.currencySetShortString(ca);
                     return new SimpleStringProperty(str);
                 } else {
                     return new SimpleStringProperty("");
@@ -293,7 +294,6 @@ public class TraderDetailsController extends BaseControllerImpl {
         }
         dealService.remove(selectedDeal);
         saveCancelService.save();
-        refreshView();
     }
 
 
@@ -304,8 +304,8 @@ public class TraderDetailsController extends BaseControllerImpl {
         Offer selectedItem = offerTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             Stage dialog = new Stage(StageStyle.DECORATED);
-            dialog.initModality(Modality.WINDOW_MODAL);
-            dialog.initOwner(dealsTable.getParent().getScene().getWindow());
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
             Parent scene = (Parent) loader.load("/gui/tradeSell.fxml", dialog);
             TradeSellToPlayerController ctrl = loader.getController();
             ctrl.setOffer(selectedItem);
@@ -315,9 +315,7 @@ public class TraderDetailsController extends BaseControllerImpl {
             dialog.setTitle("Kauf von Waren");
             dialog.setScene(new Scene(scene, 334, 458));
             dialog.setResizable(false);
-            dialog.showAndWait();
-            checkFocus();
-            refreshView();
+            dialog.show();
         } else {
             throw new DSAValidationException("Kein Angebot ausgewählt");
         }
@@ -327,7 +325,6 @@ public class TraderDetailsController extends BaseControllerImpl {
     private void onTradeBuyPressed() {
         log.debug("called onTradeBuyPressed");
         //Player wants to sell stuff to the trader
-        //TODO as popover
         Stage dialog = new Stage(StageStyle.DECORATED);
         dialog.initModality(Modality.WINDOW_MODAL);
         dialog.initOwner(dealsTable.getParent().getScene().getWindow());
@@ -340,9 +337,7 @@ public class TraderDetailsController extends BaseControllerImpl {
         dialog.setScene(new Scene(scene, 565, 476));
         dialog.setResizable(false);
 
-        dialog.showAndWait();
-        checkFocus();
-        refreshView();
+        dialog.show();
     }
 
     @FXML
@@ -356,7 +351,7 @@ public class TraderDetailsController extends BaseControllerImpl {
     }
 
     private void refreshView() {
-        //saveCancelService.refresh(trader);
+        saveCancelService.refresh(trader);
 
         nameLabel.setText(trader.getName());
         categoryLabel.setText(trader.getCategory().getName());
