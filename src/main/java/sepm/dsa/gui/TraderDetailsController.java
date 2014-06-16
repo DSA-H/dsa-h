@@ -140,13 +140,12 @@ public class TraderDetailsController extends BaseControllerImpl {
             }
         });
         defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+        initialzeTableWithColums();
 	}
 
     @Override
     public void reload() {
         log.debug("reload TraderDetailsController");
-
-        initialzeTableWithColums();
         refreshView();
     }
 
@@ -161,9 +160,7 @@ public class TraderDetailsController extends BaseControllerImpl {
             sb.append("vor ").append(current - timestamp).append(" Tagen").append(" (").append(date).append(")");
             return new SimpleStringProperty(sb.toString());
         });
-//        dateColumn.setSortType(TableColumn.SortType.DESCENDING);
 
-//		priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
 		priceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> r) {
@@ -359,11 +356,13 @@ public class TraderDetailsController extends BaseControllerImpl {
     }
 
     private void refreshView() {
+        //saveCancelService.refresh(trader);
+
         nameLabel.setText(trader.getName());
         categoryLabel.setText(trader.getCategory().getName());
         commentArea.setText(trader.getComment());
 
-        List<Offer> offers = new ArrayList<>(trader.getOffers());//traderService.getOffers(trader));
+        List<Offer> offers = new ArrayList<>(trader.getOffers());
         offers = offers.stream().sorted((o1, o2) -> {
             int result = o1.getProduct().getId() - o2.getProduct().getId();
             if (result != 0) {
@@ -373,8 +372,8 @@ public class TraderDetailsController extends BaseControllerImpl {
             return result;
         }).collect(Collectors.toList());
 
-	offerTable.getItems().setAll(offers);
-	dealsTable.getItems().setAll(trader.getDeals());
+	    offerTable.getItems().setAll(offers);
+	    dealsTable.getItems().setAll(trader.getDeals());
     }
 
     public void setDealService(DealService dealService) {

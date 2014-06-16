@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.DSADate;
+import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TimeService;
 
 import java.net.URL;
@@ -24,6 +25,7 @@ public class ForwardDateController extends BaseControllerImpl {
     private SpringFxmlLoader loader;
 
     private TimeService timeService;
+    private SaveCancelService saveCancelService;
 
     @FXML
     private TextField day;
@@ -48,7 +50,6 @@ public class ForwardDateController extends BaseControllerImpl {
     public void cancelClicked() {
         log.debug("CancelButtonPressed");
         Stage stage = (Stage) day.getScene().getWindow();
-
         stage.close();
     }
 
@@ -60,6 +61,9 @@ public class ForwardDateController extends BaseControllerImpl {
         try {
             d = Integer.parseInt(day.getText());
             timeService.forwardTime(d);
+
+            saveCancelService.save();
+
             Stage stage = (Stage) day.getScene().getWindow();
             stage.close();
         }catch(NumberFormatException ex) {
@@ -73,5 +77,9 @@ public class ForwardDateController extends BaseControllerImpl {
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

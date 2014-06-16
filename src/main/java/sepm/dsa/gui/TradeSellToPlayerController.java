@@ -157,7 +157,6 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
             if (!selectedAmount.getText().isEmpty()) {
                 try {
                     amount = new Integer(selectedAmount.getText());
-
                 } catch (NumberFormatException ex) {
                     throw new DSAValidationException("Menge muss eine ganze Zahl sein!");
                 }
