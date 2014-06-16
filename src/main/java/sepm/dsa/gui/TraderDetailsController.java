@@ -139,13 +139,13 @@ public class TraderDetailsController extends BaseControllerImpl {
                 }
             }
         });
-
+        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
 	}
 
     @Override
     public void reload() {
         log.debug("reload TraderDetailsController");
-        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+
         initialzeTableWithColums();
         refreshView();
     }

@@ -404,12 +404,6 @@
         <property name="currencySetService" ref="currencySetService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
-    <bean id="tavernList" class="sepm.dsa.gui.TavernListController" scope="prototype">
-        <property name="loader" ref="loader"/>
-        <property name="locationService" ref="locationService"/>
-        <property name="saveCancelService" ref="saveCancelService"/>
-        <property name="tavernService" ref="tavernService"/>
-    </bean>
     <bean id="EditLocationConnectionsController" class="sepm.dsa.gui.EditLocationConnectionsController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="locationConnectionService" ref="locationConnectionService"/>
