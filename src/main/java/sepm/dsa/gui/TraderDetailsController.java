@@ -2,7 +2,6 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -25,11 +24,12 @@ import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 import sepm.dsa.util.CurrencyFormatUtil;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TraderDetailsController implements Initializable {
+public class TraderDetailsController extends BaseControllerImpl {
 
 	private static final Logger log = LoggerFactory.getLogger(TraderDetailsController.class);
 	private SpringFxmlLoader loader;
@@ -86,13 +86,28 @@ public class TraderDetailsController implements Initializable {
 
 	@Override
 	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
+		super.initialize(location, resources);
+
 		log.debug("initialize TraderDetailsController");
 
-        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+		amountColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Offer, String> r) {
+                if (r.getValue() != null) {
+                    Offer offer = r.getValue();
+                    Unit unit = offer.getProduct().getUnit();
+                    Double amount = offer.getAmount();
 
-		amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
-		initialzeTableWithColums();
+                    DecimalFormat format = new DecimalFormat("#0.##");
 
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(format.format(amount)).append(" ").append(unit.getShortName());
+                    return new SimpleStringProperty(sb.toString());
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
 
         productColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
             @Override
@@ -102,7 +117,7 @@ public class TraderDetailsController implements Initializable {
                     StringBuilder sb = new StringBuilder();
                     sb.append(offer.getProduct().getName());
                     if (offer.getProduct().getQuality()) {
-                        sb.append("(" + r.getValue().getQuality().getName() + ")");
+                        sb.append(" (" + r.getValue().getQuality().getName() + ")");
                     }
                     return new SimpleStringProperty(sb.toString());
                 } else {
@@ -135,17 +150,25 @@ public class TraderDetailsController implements Initializable {
                 if (r.getValue() != null) {
                     Offer offer = r.getValue();
                     List<CurrencyAmount> ca = currencySetService.toCurrencySet(defaultCurrencySet, offer.getPricePerUnit());
-                    String str = CurrencyFormatUtil.currencySetShortString(ca, ", ");
+                    String str = CurrencyFormatUtil.currencySetShortString(ca);
                     return new SimpleStringProperty(str);
                 } else {
                     return new SimpleStringProperty("");
                 }
             }
         });
-
+        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+        initialzeTableWithColums();
 	}
 
-	private void initialzeTableWithColums() {
+    @Override
+    public void reload() {
+        log.debug("reload TraderDetailsController");
+        checkFocus();
+        refreshView();
+    }
+
+    private void initialzeTableWithColums() {
 
 		dateColumn.setCellValueFactory(d -> {
             DSADate date = d.getValue().getDate();
@@ -156,16 +179,14 @@ public class TraderDetailsController implements Initializable {
             sb.append("vor ").append(current - timestamp).append(" Tagen").append(" (").append(date).append(")");
             return new SimpleStringProperty(sb.toString());
         });
-//        dateColumn.setSortType(TableColumn.SortType.DESCENDING);
 
-//		priceColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("price"));
 		priceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> r) {
                 if (r.getValue() != null) {
                     Deal deal = r.getValue();
                     List<CurrencyAmount> ca = currencySetService.toCurrencySet(defaultCurrencySet, deal.priceWithDiscount());
-                    String str = CurrencyFormatUtil.currencySetShortString(ca, ", ");
+                    String str = CurrencyFormatUtil.currencySetShortString(ca);
                     return new SimpleStringProperty(str);
                 } else {
                     return new SimpleStringProperty("");
@@ -183,7 +204,22 @@ public class TraderDetailsController implements Initializable {
 			return new SimpleStringProperty(sb.toString());
 		});
 
-		productDealColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("productName"));
+		productDealColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> r) {
+                if (r.getValue() != null) {
+                    Deal deal = r.getValue();
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(deal.getProduct().getName());
+                    if (deal.getProduct().getQuality()) {
+                        sb.append(" (" + deal.getQuality().getName() + ")");
+                    }
+                    return new SimpleStringProperty(sb.toString());
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
 
         amountDealColumn.setCellValueFactory(d -> {
             Unit unit = d.getValue().getUnit();
@@ -207,21 +243,25 @@ public class TraderDetailsController implements Initializable {
 		log.debug("called onBackPressed");
 
 		Stage stage = (Stage) offerTable.getScene().getWindow();
-		stage.close();
+        if(stage != null) {
+            stage.close();
+        }
 	}
 
 	@FXML
 	private void onEditPressed() {
 		log.debug("called onEditPressed");
 		Stage stage = (Stage) offerTable.getScene().getWindow();
-		Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
+		Parent scene = (Parent) loader.load("/gui/edittrader.fxml", stage);
 		EditTraderController controller = loader.getController();
 		controller.setTrader(trader);
 		controller.setLocation(trader.getLocation());
 		controller.setPosition(new Point2D(trader.getxPos(), trader.getyPos()));
+        controller.reload();
 		stage.setScene(new Scene(scene, 785, 513));
 	}
 
+    // todo: Move to service layer
 	@FXML
 	private void onRolePressed() {
 		log.debug("called onRolePressed");
@@ -287,11 +327,10 @@ public class TraderDetailsController implements Initializable {
         log.debug("called onDeleteDealClicked");
         Deal selectedDeal = dealsTable.getSelectionModel().getSelectedItem();
         if (selectedDeal == null) {
-            throw new DSAValidationException("Bitte einen Deal zum Löschen auswählen");
+            throw new DSAValidationException("Bitte einen Handel zum Löschen auswählen");
         }
         dealService.remove(selectedDeal);
         saveCancelService.save();
-        refreshView();
     }
 
 
@@ -299,22 +338,21 @@ public class TraderDetailsController implements Initializable {
     private void onTradePressed() {
         log.debug("called onTradePressed");
         //trader wants to sell stuff to the player
-        //TODO as popover
-        TradeSellToPlayerController.setTrader(trader);
         Offer selectedItem = offerTable.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-            TradeSellToPlayerController.setOffer(selectedItem);
             Stage dialog = new Stage(StageStyle.DECORATED);
-            dialog.initModality(Modality.WINDOW_MODAL);
-            dialog.initOwner(dealsTable.getParent().getScene().getWindow());
-            Parent scene = (Parent) loader.load("/gui/tradeSell.fxml");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            Parent scene = (Parent) loader.load("/gui/tradeSell.fxml", dialog);
+            TradeSellToPlayerController ctrl = loader.getController();
+            ctrl.setOffer(selectedItem);
+            ctrl.setTrader(trader);
+            ctrl.reload();
 
             dialog.setTitle("Kauf von Waren");
             dialog.setScene(new Scene(scene, 334, 458));
             dialog.setResizable(false);
-            dialog.showAndWait();
-            checkFocus();
-            refreshView();
+            dialog.show();
         } else {
             throw new DSAValidationException("Kein Angebot ausgewählt");
         }
@@ -324,20 +362,19 @@ public class TraderDetailsController implements Initializable {
     private void onTradeBuyPressed() {
         log.debug("called onTradeBuyPressed");
         //Player wants to sell stuff to the trader
-        //TODO as popover
-        TradeBuyFromPlayerController.setTrader(trader);
         Stage dialog = new Stage(StageStyle.DECORATED);
-        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(dealsTable.getParent().getScene().getWindow());
-        Parent scene = (Parent) loader.load("/gui/traderBuy.fxml");
+        Parent scene = (Parent) loader.load("/gui/traderBuy.fxml", dialog);
+        TradeBuyFromPlayerController ctrl = loader.getController();
+        ctrl.setTrader(trader);
+        ctrl.reload();
 
         dialog.setTitle("Verkauf von Waren an Händler");
         dialog.setScene(new Scene(scene, 565, 476));
         dialog.setResizable(false);
 
-        dialog.showAndWait();
-        checkFocus();
-        refreshView();
+        dialog.show();
     }
 
     @FXML
@@ -351,11 +388,18 @@ public class TraderDetailsController implements Initializable {
     }
 
     private void refreshView() {
+        if(traderService.get(trader.getId()) != null) {
+            saveCancelService.refresh(trader);
+        }else {
+            onBackPressed();
+            return;
+        }
+
         nameLabel.setText(trader.getName());
         categoryLabel.setText(trader.getCategory().getName());
         commentArea.setText(trader.getComment());
 
-        List<Offer> offers = new ArrayList<>(trader.getOffers());//traderService.getOffers(trader));
+        List<Offer> offers = new ArrayList<>(trader.getOffers());
         offers = offers.stream().sorted((o1, o2) -> {
             int result = o1.getProduct().getId() - o2.getProduct().getId();
             if (result != 0) {
@@ -365,9 +409,8 @@ public class TraderDetailsController implements Initializable {
             return result;
         }).collect(Collectors.toList());
 
-        offerTable.getItems().clear();
-        offerTable.setItems(FXCollections.observableArrayList(offers));
-        dealsTable.setItems(FXCollections.observableArrayList(trader.getDeals()));
+	    offerTable.getItems().setAll(offers);
+	    dealsTable.getItems().setAll(trader.getDeals());
     }
 
     public void setDealService(DealService dealService) {
@@ -376,7 +419,6 @@ public class TraderDetailsController implements Initializable {
 
     public void setTrader(Trader trader) {
         this.trader = trader;
-        refreshView(); // in setter not very beautiful, do we need this here?
     }
 
     public void setLoader(SpringFxmlLoader loader) {

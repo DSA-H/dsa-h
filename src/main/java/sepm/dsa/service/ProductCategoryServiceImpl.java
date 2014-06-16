@@ -14,6 +14,7 @@ import sepm.dsa.model.ProductCategory;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +24,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     private static final Logger log = LoggerFactory.getLogger(RegionServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
     private ProductCategoryDao productCategoryDao;
+    private ProductService productService;
     private AssortmentNatureService assortmentNatureService;
 
     @Override
@@ -68,10 +70,11 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         List<ProductCategory> childs = this.getAllChilds(p);
          for (ProductCategory productCategoryChild: childs) {
              productCategoryChild = get(productCategoryChild.getId());
-             for (AssortmentNature a : assortmentNatureService.getAllByProductCategory(productCategoryChild.getId())) {
-                 assortmentNatureService.remove(a);
-             }
+             assortmentNatureService.getAllByProductCategory(productCategoryChild.getId()).forEach(assortmentNatureService::remove);
         }
+//        p.getProducts().forEach(productService::remove); SHOULD NOT BE REMOVED :)
+        Set<ProductCategory> children = new HashSet<>(p.getChilds());
+        children.forEach(this::remove);
         productCategoryDao.remove(p);
         for (Product product : p.getProducts()) {
             product.getCategories().remove(p);
@@ -93,6 +96,14 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
         addAllProductCategoryChildren(productCategory, result);
 
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<ProductCategory> getAllByName(String name) {
+        log.debug("calling getAllByName(" + name + ")");
+        List<ProductCategory> result = productCategoryDao.getAllByName(name == null ? null : "%" + name + "%");
         log.trace("returning " + result);
         return result;
     }
@@ -132,5 +143,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     public void setAssortmentNatureService(AssortmentNatureService assortmentNatureService) {
         this.assortmentNatureService = assortmentNatureService;
+    }
+
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
     }
 }

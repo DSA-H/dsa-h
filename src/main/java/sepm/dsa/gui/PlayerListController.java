@@ -1,7 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -20,7 +18,10 @@ import sepm.dsa.model.Player;
 import sepm.dsa.service.PlayerService;
 import sepm.dsa.service.SaveCancelService;
 
-public class PlayerListController implements Initializable {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class PlayerListController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(PlayerListController.class);
     SpringFxmlLoader loader;
@@ -38,13 +39,17 @@ public class PlayerListController implements Initializable {
     private Button editButton;
 
     @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize PlayerListController");
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
         // init table
         currencyColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+    }
 
-        ObservableList<Player> data = FXCollections.observableArrayList(playerService.getAll());
-        playerTable.setItems(data);
+    @Override
+    public void reload() {
+        log.debug("reload PlayerListController");
+
+	    playerTable.getItems().setAll(playerService.getAll());
 
         checkFocus();
     }
@@ -53,10 +58,11 @@ public class PlayerListController implements Initializable {
     private void onCreateButtonPressed() {
         log.debug("onCreateClicked - open Player Window");
 
-        EditPlayerController.setPlayer(null);
-
         Stage stage = (Stage) playerTable.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/editplayer.fxml");
+        Parent scene = (Parent) loader.load("/gui/editplayer.fxml", stage);
+        EditPlayerController ctrl = loader.getController();
+        ctrl.setPlayer(null);
+        ctrl.reload();
 
         stage.setTitle("Spieler Erstellen");
         stage.setScene(new Scene(scene, 850, 414));
@@ -67,10 +73,11 @@ public class PlayerListController implements Initializable {
     private void onEditButtonPressed() {
         log.debug("onWarenClicked - open Player Window");
 
-        EditPlayerController.setPlayer(playerTable.getSelectionModel().getSelectedItem());//.getFocusModel().getFocusedItem());
-
         Stage stage = (Stage) playerTable.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/editplayer.fxml");
+        Parent scene = (Parent) loader.load("/gui/editplayer.fxml", stage);
+        EditPlayerController ctrl = loader.getController();
+        ctrl.setPlayer(playerTable.getSelectionModel().getSelectedItem());
+        ctrl.reload();
 
         stage.setTitle("Spieler bearbeiten");
         stage.setScene(new Scene(scene, 850, 414));

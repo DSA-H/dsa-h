@@ -19,5 +19,7 @@ public class DealDaoTest extends AbstractDatabaseTest {
     }
     // TODO test things...
 
+//    public void playerDealsWithTraderInTimeRange
+
 
 }

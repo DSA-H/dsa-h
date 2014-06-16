@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.DealDao;
 import sepm.dsa.exceptions.DSAValidationException;
-import sepm.dsa.model.DSADate;
-import sepm.dsa.model.Deal;
-import sepm.dsa.model.Player;
-import sepm.dsa.model.Trader;
+import sepm.dsa.model.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -47,6 +44,7 @@ public class DealServiceImpl implements DealService {
     @Transactional(readOnly = false)
     public Deal update(Deal r) {
         log.debug("calling update(" + r + ")");
+        validate(r);
         return dealDao.update(r);
     }
 
@@ -74,13 +72,29 @@ public class DealServiceImpl implements DealService {
         return result;
     }
 
+    @Override
+    public List<Deal> getAllByPlayer(Player player) {
+        log.debug("calling getAllByPlayer(" + player + ")");
+        List<Deal> result = dealDao.getAllByPlayer(player);
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Deal> getAllByProduct(Product product) {
+        log.debug("calling getAllByProduct(" + product + ")");
+        List<Deal> result = dealDao.getAllByProduct(product);
+        log.trace("returning " + result);
+        return result;
+    }
+
     /**
      * Validates a deal
      *
      * @param deal the deal to be validated
      * @throws sepm.dsa.exceptions.DSAValidationException if deal is not valid
      */
-    private void validate(Deal deal) throws DSAValidationException {
+    public void validate(Deal deal) throws DSAValidationException {
         Set<ConstraintViolation<Deal>> violations = validator.validate(deal);
         if (violations.size() > 0) {
             throw new DSAValidationException("Deal ist nicht valide.", violations);

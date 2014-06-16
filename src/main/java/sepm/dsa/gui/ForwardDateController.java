@@ -1,6 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -15,16 +14,18 @@ import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.DSADate;
+import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TimeService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ForwardDateController implements Initializable {
+public class ForwardDateController extends BaseControllerImpl {
     private static final Logger log = LoggerFactory.getLogger(ForwardDateController.class);
     private SpringFxmlLoader loader;
 
     private TimeService timeService;
+    private SaveCancelService saveCancelService;
 
     @FXML
     private TextField day;
@@ -33,17 +34,22 @@ public class ForwardDateController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+	    super.initialize(location, resources);
+
+	    day.setText("3");  // default value
+    }
+
+    @Override
+    public void reload() {
         DSADate date = timeService.getCurrentDate();
 
         actDate.setText(date.toString());
-        day.setText("3");
     }
 
     @FXML
     public void cancelClicked() {
         log.debug("CancelButtonPressed");
         Stage stage = (Stage) day.getScene().getWindow();
-
         stage.close();
     }
 
@@ -55,6 +61,9 @@ public class ForwardDateController implements Initializable {
         try {
             d = Integer.parseInt(day.getText());
             timeService.forwardTime(d);
+
+            saveCancelService.save();
+
             Stage stage = (Stage) day.getScene().getWindow();
             stage.close();
         }catch(NumberFormatException ex) {
@@ -68,5 +77,9 @@ public class ForwardDateController implements Initializable {
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }

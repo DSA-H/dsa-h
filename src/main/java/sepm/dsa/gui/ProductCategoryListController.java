@@ -19,10 +19,12 @@ import sepm.dsa.model.ProductCategory;
 import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.SaveCancelService;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ProductCategoryListController implements Initializable {
+public class ProductCategoryListController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(ProductCategoryListController.class);
     SpringFxmlLoader loader;
@@ -35,21 +37,28 @@ public class ProductCategoryListController implements Initializable {
     @FXML
     private TreeView<ProductCategory> treeview;
     @FXML
-    private TableView<Product> tableview;
+    private TableView<Product> productView;
     @FXML
     private TableColumn<Product, String> productColumn;
     @FXML
     private Button deleteButton;
     @FXML
     private Button editButton;
+    @FXML
+    private Button editProductButton;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize ProductListController");
+	    log.debug("initialize ProductListController");
         // init table
-
         productColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
+	    super.initialize(location, resources);
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload ProductListController");
         reloadAndRefreshGui();
     }
 
@@ -68,13 +77,14 @@ public class ProductCategoryListController implements Initializable {
 
     private void refreshGui() {
         log.debug("refreshGui");
-        ObservableList<Product> data = null;
+	Set<Product> data;
         if (selectedProcutCategory == null) {
-            data = FXCollections.observableArrayList();
+	    data = new HashSet<>(0);
         } else {
-            data = FXCollections.observableArrayList(selectedProcutCategory.getProducts());
+	    data = selectedProcutCategory.getProducts();
+            productView.getSelectionModel().selectFirst();
         }
-        tableview.setItems(data);
+	productView.getItems().setAll(data);
     }
 
     private void addTreeChildren(List<ProductCategory> productCategoryList, TreeItem root){
@@ -95,25 +105,33 @@ public class ProductCategoryListController implements Initializable {
             deleteButton.setDisable(false);
             editButton.setDisable(false);
         }
+        Product selectedProduct = productView.getSelectionModel().getSelectedItem() != null ? productView.getSelectionModel().getSelectedItem() : null;
+        if (selectedProduct == null) {
+            editProductButton.setDisable(true);
+        } else {
+            editProductButton.setDisable(false);
+        }
     }
 
     @FXML
     private void onTreeviewClicked() {
         checkFocus();
         refreshGui();
+        checkFocus();
     }
 
     @FXML
     private void onCreateButtonPressed() {
         log.debug("onCreateClicked - open Waren Window");
 
-        EditProductCategoryController.setProductCategory(null);
-
-        Stage stage = (Stage) tableview.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/editproductcategory.fxml");
+        Stage stage = (Stage) productView.getScene().getWindow();
+        Parent scene = (Parent) loader.load("/gui/editproductcategory.fxml", stage);
+        EditProductCategoryController ctrl = loader.getController();
+        ctrl.setProductCategory(null);
+        ctrl.reload();
 
         stage.setTitle("Warenkategorie");
-        stage.setScene(new Scene(scene, 490, 219));
+        stage.setScene(new Scene(scene, 440, 178));
         stage.show();
     }
 
@@ -121,13 +139,15 @@ public class ProductCategoryListController implements Initializable {
     private void onEditButtonPressed() {
         log.debug("onWarenClicked - open Waren Window");
 
-        EditProductCategoryController.setProductCategory(treeview.getSelectionModel().getSelectedItem().getValue());
 
-        Stage stage = (Stage) tableview.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/editproductcategory.fxml");
+        Stage stage = (Stage) productView.getScene().getWindow();
+        Parent scene = (Parent) loader.load("/gui/editproductcategory.fxml", stage);
+        EditProductCategoryController ctrl = loader.getController();
+        ctrl.setProductCategory(treeview.getSelectionModel().getSelectedItem().getValue());
+        ctrl.reload();
 
         stage.setTitle("Warenkategorie");
-        stage.setScene(new Scene(scene, 490, 219));
+        stage.setScene(new Scene(scene, 440, 178));
         stage.show();
     }
 
@@ -153,6 +173,26 @@ public class ProductCategoryListController implements Initializable {
         }
 
         checkFocus();
+    }
+
+    @FXML
+    public void onEditProduct() {
+        Stage stage = (Stage) treeview.getScene().getWindow();
+        Parent scene = (Parent) loader.load("/gui/editproduct.fxml", stage);
+        EditProductController ctrl = loader.getController();
+        ctrl.setProduct(productView.getSelectionModel().getSelectedItem());
+        ctrl.setCalledFromCategorie(true);
+        ctrl.reload();
+
+        stage.setTitle("Waren");
+        stage.setScene(new Scene(scene, 600, 479));
+        stage.show();
+    }
+
+    @FXML
+    public void closeClicked() {
+        Stage stage = (Stage) productView.getScene().getWindow();
+        stage.close();
     }
 
     public void setProductCategoryService(ProductCategoryService productCategoryService) {

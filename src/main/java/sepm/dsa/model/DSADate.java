@@ -65,7 +65,7 @@ public final class DSADate {
             if (this.getMonth() > date.getMonth()) {
                 return true;
             } else if (this.getMonth() == date.getMonth()) {
-                if (this.getDay() > this.getDay()) {
+                if (this.getDay() > date.getDay()) {
                     return true;
                 } else {
                     return false;

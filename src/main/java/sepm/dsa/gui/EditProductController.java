@@ -1,7 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -14,6 +12,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.*;
@@ -23,7 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class EditProductController implements Initializable {
+public class EditProductController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(EditProductController.class);
     private SpringFxmlLoader loader;
@@ -32,14 +31,15 @@ public class EditProductController implements Initializable {
     private UnitService unitService;
     private RegionService regionService;
     private SaveCancelService saveCancelService;
+    private CurrencySetService currencySetService;
+    private CurrencyService currencyService;
 
-    private static Product selectedProduct;
+    private Product selectedProduct;
     private boolean isNewProduct;
+    private boolean calledFromCategorie = false;
 
     @FXML
     private TextField nameField;
-    @FXML
-    private TextField costField;
     @FXML
     private TableView<ProductCategory> categorieTable;
     @FXML
@@ -75,47 +75,81 @@ public class EditProductController implements Initializable {
     @FXML
     private ChoiceBox<Unit> unitBox;
 
+    @FXML
+    private TextField tf_CurrencyAmount1;
+    @FXML
+    private TextField tf_CurrencyAmount2;
+    @FXML
+    private TextField tf_CurrencyAmount3;
+    @FXML
+    private TextField tf_CurrencyAmount4;
+
+    private TextField[] tf_CurrencyAmounts;
+
+    @FXML
+    private Label lbl_CurrencyAmount1;
+    @FXML
+    private Label lbl_CurrencyAmount2;
+    @FXML
+    private Label lbl_CurrencyAmount3;
+    @FXML
+    private Label lbl_CurrencyAmount4;
+
+    private Label[] lbl_CurrencyAmounts;
+
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize EditProductController");
+	    super.initialize(location, resources);
 
+        log.debug("initialize EditProductController");
+        lbl_CurrencyAmounts =
+                new Label[] {
+                        lbl_CurrencyAmount1,
+                        lbl_CurrencyAmount2,
+                        lbl_CurrencyAmount3,
+                        lbl_CurrencyAmount4};
+
+        tf_CurrencyAmounts =
+                new TextField[] {
+                        tf_CurrencyAmount1,
+                        tf_CurrencyAmount2,
+                        tf_CurrencyAmount3,
+                        tf_CurrencyAmount4};
         List<String> attributeList = new ArrayList<>();
         for(ProductAttribute t : ProductAttribute.values()) {
             attributeList.add(t.getName());
         }
-        List<ProductCategory> categoryList = productCategoryService.getAll();
-        List<Region> regionList = regionService.getAll();
-
-        List<Unit> unitList = unitService.getAll();
-        unitBox.setItems(FXCollections.observableArrayList(unitList));
         categorieColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        attributeBox.setItems(FXCollections.observableArrayList(ProductAttribute.values()));
-        categorieChoiceBox.setItems(FXCollections.observableArrayList(categoryList));
-        regionChoiceBox.setItems(FXCollections.observableArrayList(regionList));
+	    unitBox.getItems().setAll(unitService.getAll());
+	attributeBox.getItems().setAll(ProductAttribute.values());
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload EditProductController");
+
+        List<ProductCategory> categoryList = productCategoryService.getAll();
+        List<Region> regionList = regionService.getAll();
+
+        categoryList.removeAll(categorieTable.getItems());
+        regionList.removeAll(regionTable.getItems());
 
         if (selectedProduct != null){
             isNewProduct = false;
-            nameField.setText(selectedProduct.getName());
-            costField.setText(selectedProduct.getCost().toString());
-            attributeBox.getSelectionModel().select(selectedProduct.getAttribute());
-            //choice_unit.getSelectionModel().select(productUnitService.get(selectedProduct.getUnit()));
-            ObservableList<Region> regionData = FXCollections.observableArrayList(selectedProduct.getRegions());
-            regionList.removeAll(selectedProduct.getRegions());
-            regionTable.setItems(regionData);
-            ObservableList<ProductCategory> categoryData = FXCollections.observableArrayList(selectedProduct.getCategories());
             categoryList.removeAll(selectedProduct.getCategories());
-            categorieTable.setItems(categoryData);
-            commentField.setText(selectedProduct.getComment());
-            qualityBox.setSelected(selectedProduct.getQuality());
-            unitBox.getSelectionModel().select(selectedProduct.getUnit());
-            occurenceField.setText(selectedProduct.getOccurence()+"");
+            regionList.removeAll(selectedProduct.getRegions());
         }else {
             isNewProduct = true;
             selectedProduct = new Product();
             attributeBox.getSelectionModel().select(0);
+            refreshPriceView(0);
+            unitBox.getSelectionModel().selectFirst();
         }
+
+    	categorieChoiceBox.getItems().setAll(categoryList);
+	    regionChoiceBox.getItems().setAll(regionList);
     }
 
     @FXML
@@ -125,6 +159,7 @@ public class EditProductController implements Initializable {
         if (pc != null){
             categorieTable.getItems().add(pc);
             categorieChoiceBox.getItems().remove(pc);
+            categorieChoiceBox.getSelectionModel().selectFirst();
         }else {
             throw new DSAValidationException("Keine Warenkategorie gewählt!");
         }
@@ -150,6 +185,7 @@ public class EditProductController implements Initializable {
         if (r != null){
             regionTable.getItems().add(r);
             regionChoiceBox.getItems().remove(r);
+            regionChoiceBox.getSelectionModel().selectFirst();
         }else {
             throw new DSAValidationException("Keine Region gewählt!");
         }
@@ -196,9 +232,21 @@ public class EditProductController implements Initializable {
 
         Stage stage = (Stage) nameField.getScene().getWindow();
 
-        Parent scene = (Parent) loader.load("/gui/productslist.fxml");
+        if(calledFromCategorie) {
+            Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml", stage);
+            BaseController ctrl = loader.getController();
+            ctrl.reload();
 
-        stage.setScene(new Scene(scene, 600, 438));
+            stage.setTitle("Warenkategorie");
+            stage.setScene(new Scene(scene, 600, 438));
+            stage.setResizable(false);
+        }else {
+            Parent scene = (Parent) loader.load("/gui/productslist.fxml", stage);
+            ProductListController ctrl = loader.getController();
+            ctrl.reload();
+
+            stage.setScene(new Scene(scene, 600, 438));
+        }
     }
 
     @FXML
@@ -209,7 +257,19 @@ public class EditProductController implements Initializable {
         String name = nameField.getText();
         int cost = 0;
         try {
-            cost = Integer.parseInt(costField.getText());
+            List<CurrencyAmount> currencyAmounts = new ArrayList<>(4);
+            List<Currency> currencies = currencyService.getAllByCurrencySet(currencySetService.getDefaultCurrencySet());
+            for (int i = 0; i < currencies.size() ; i++) {
+                    CurrencyAmount a = new CurrencyAmount();
+                    a.setCurrency(currencies.get(i));
+                    Integer currencyAmount = Integer.parseInt(tf_CurrencyAmounts[i].getText());
+                    if (currencyAmount < 0) {
+                        throw new DSAValidationException("Preis muss > 0 sein");
+                    }
+                    a.setAmount(currencyAmount);
+                    currencyAmounts.add(a);
+            }
+            cost = currencyService.exchangeToBaseRate(currencyAmounts);
         }catch (NumberFormatException ex) {
             throw new DSAValidationException("Kosten müssen eine ganze Zahl sein!");
         }
@@ -229,7 +289,7 @@ public class EditProductController implements Initializable {
         selectedProduct.setOccurence(occurcene);
         selectedProduct.setAttribute(attribute);
         selectedProduct.setQuality(qualityBox.isSelected());
-        selectedProduct.setComment(costField.getText());
+        selectedProduct.setComment(commentField.getText());
         selectedProduct.setCategories(localCategoryList);
         selectedProduct.setRegions(localRegionList);
 
@@ -240,15 +300,57 @@ public class EditProductController implements Initializable {
         }
         saveCancelService.save();
 
-        // return to productslist
+        // return to productslist / productcategorie
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/productslist.fxml");
-        stage.setScene(new Scene(scene, 600, 438));
+        if(calledFromCategorie) {
+            Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml", stage);
+            BaseController ctrl = loader.getController();
+            ctrl.reload();
+
+            stage.setTitle("Warenkategorie");
+            stage.setScene(new Scene(scene, 600, 438));
+            stage.setResizable(false);
+        }else {
+            Parent scene = (Parent) loader.load("/gui/productslist.fxml", stage);
+            ProductListController ctrl = loader.getController();
+            ctrl.reload();
+
+            stage.setScene(new Scene(scene, 600, 438));
+        }
     }
 
+    private void refreshPriceView(int baseRatePrice) {
+        log.info("calling refreshPriceView()");
+        CurrencySet selected = currencySetService.getDefaultCurrencySet();
+        List<Currency> currencies = currencyService.getAllByCurrencySet(selected);
+        List<CurrencyAmount> currencyAmounts = currencySetService.toCurrencySet(selected, baseRatePrice);
+        int i=0;
+        for (Currency c : currencies) {
+            log.info(lbl_CurrencyAmounts + ": " + lbl_CurrencyAmounts[i] + " " + c.getName());
+            lbl_CurrencyAmounts[i].setText(c.getShortName());
+            tf_CurrencyAmounts[i].setText(currencyAmounts.get(i).getAmount()+"");
+            i++;
+        }
+        for (; i<4; i++) {
+            lbl_CurrencyAmounts[i].setText("");
+            tf_CurrencyAmounts[i].setText("");
+        }
 
-    public static void setProduct(Product product) {
+    }
+
+    public void setProduct(Product product) {
         selectedProduct = product;
+        if(selectedProduct != null) {
+            nameField.setText(selectedProduct.getName());
+            refreshPriceView(selectedProduct.getCost());
+            attributeBox.getSelectionModel().select(selectedProduct.getAttribute());
+	    regionTable.getItems().setAll(selectedProduct.getRegions());
+	    categorieTable.getItems().setAll(selectedProduct.getCategories());
+            commentField.setText(selectedProduct.getComment());
+            qualityBox.setSelected(selectedProduct.getQuality());
+            unitBox.getSelectionModel().select(selectedProduct.getUnit());
+            occurenceField.setText(selectedProduct.getOccurence() + "");
+        }
     }
 
     public void setProductService(ProductService productService) {
@@ -273,5 +375,17 @@ public class EditProductController implements Initializable {
 
     public void setUnitService(UnitService unitService) {
         this.unitService = unitService;
+    }
+
+    public void setCurrencySetService(CurrencySetService currencySetService) {
+        this.currencySetService = currencySetService;
+    }
+
+    public void setCurrencyService(CurrencyService currencyService) {
+        this.currencyService = currencyService;
+    }
+
+    public void setCalledFromCategorie(boolean calledFromCategorie) {
+        this.calledFromCategorie = calledFromCategorie;
     }
 }

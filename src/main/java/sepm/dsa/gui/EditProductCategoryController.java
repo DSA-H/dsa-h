@@ -1,7 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -30,14 +28,14 @@ import java.util.List;
 import java.util.Set;
 
 @Service("EditProductController")
-public class EditProductCategoryController implements Initializable {
+public class EditProductCategoryController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(EditProductCategoryController.class);
     private SpringFxmlLoader loader;
     private ProductCategoryService productCategoryService;
     private SaveCancelService saveCancelService;
 
-    private static ProductCategory selectedProductCategory;
+    private ProductCategory selectedProductCategory;
     private boolean isNewProductCategory;
 
     @FXML
@@ -45,10 +43,9 @@ public class EditProductCategoryController implements Initializable {
     @FXML
     private ChoiceBox<ProductCategory> choiceParent;
 
-
     @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize EditProductCategoryController");
+    public void reload() {
+        log.debug("reload EditProductCategoryController");
         List<ProductCategory> categoryList = productCategoryService.getAll();
 
         if (selectedProductCategory != null){
@@ -66,9 +63,8 @@ public class EditProductCategoryController implements Initializable {
             selectedProductCategory = new ProductCategory();
         }
 
-        choiceParent.setItems(FXCollections.observableArrayList(categoryList));
+	choiceParent.getItems().setAll(categoryList);
     }
-
 
     @FXML
     private void onCancelPressed() {
@@ -76,7 +72,9 @@ public class EditProductCategoryController implements Initializable {
         saveCancelService.cancel();
         Stage stage = (Stage) nameField.getScene().getWindow();
 
-        Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml");
+        Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml", stage);
+        ProductCategoryListController ctrl = loader.getController();
+        ctrl.reload();
 
         stage.setScene(new Scene(scene, 600, 438));
     }
@@ -102,17 +100,22 @@ public class EditProductCategoryController implements Initializable {
             productCategoryService.update(selectedProductCategory);
         }
         saveCancelService.save();
-        // TODO remove this, need to implement this references change on update -> parent changed in DAO.update
-//        saveCancelService.refresh(selectedProductCategory.getParent());
 
         // return to productcategorylist
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml");
+        Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml", stage);
+        ProductCategoryListController ctrl = loader.getController();
+        ctrl.reload();
         stage.setScene(new Scene(scene, 600, 438));
     }
 
 
-    public static void setProductCategory(ProductCategory productCategory) {
+    @FXML
+    public void noParentClicked() {
+        choiceParent.getSelectionModel().clearSelection();
+    }
+
+    public void setProductCategory(ProductCategory productCategory) {
         selectedProductCategory = productCategory;
     }
 

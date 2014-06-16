@@ -1,6 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -20,7 +19,7 @@ import sepm.dsa.service.TimeService;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class EditDateController implements Initializable {
+public class EditDateController extends BaseControllerImpl {
     private static final Logger log = LoggerFactory.getLogger(EditDateController.class);
     private SpringFxmlLoader loader;
 
@@ -37,14 +36,22 @@ public class EditDateController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        month.setItems(FXCollections.observableArrayList(DSADate.getMonthNames()));
-
+        super.initialize(location, resources);
+        month.getItems().setAll(DSADate.getMonthNames());
         DSADate date = timeService.getCurrentDate();
 
         actDate.setText(date.toString());
         day.setText(date.getDay()+"");
         month.getSelectionModel().select(date.getMonth()-1);
         year.setText(date.getYear()+"");
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload EditDateController");
+        DSADate date = timeService.getCurrentDate();
+
+        actDate.setText(date.toString());
     }
 
     @FXML
@@ -72,8 +79,8 @@ public class EditDateController implements Initializable {
         Action response = Dialogs.create()
                 .title("Datum wirklich ändern?")
                 .masthead(null)
-                .message("Wollen Sie das Datum wirklich auf " + newDate + " ändern? Das Ändern des Datums kann bei " +
-                        "bestehenden Händlern und abgeschlossenen Käufen zu Problemen führen und sollte nur einmal zu" +
+                .message("Wollen Sie das Datum wirklich auf " + newDate + " ändern? Das Ändern des Datums führt bei " +
+                        "bestehenden Händlern und abgeschlossenen Käufen eventuell zu nicht sinnvollen relativen Zeitangaben und sollte daher nur einmal zu" +
                         " Beginn einer Spielwelt gemacht werden. \nBeachten Sie, dass es zum Vorstellen des Datums, wegen im Spiel " +
                         "vergangener Zeit, einen eigenen Button im Hauptmenü gibt!")
                 .showConfirm();

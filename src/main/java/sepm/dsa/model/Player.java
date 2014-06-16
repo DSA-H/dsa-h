@@ -2,6 +2,7 @@ package sepm.dsa.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,7 +23,8 @@ public class Player implements Serializable, BaseModel {
 	@Column(nullable = false)
 	private String name;
 
-	@Column
+    @Size(max = 1000)
+	@Column(length = 1000)
 	private String comment;
 
     @OneToMany(mappedBy = "player", cascade = CascadeType.REMOVE)

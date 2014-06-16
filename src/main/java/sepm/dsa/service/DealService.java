@@ -1,7 +1,9 @@
 package sepm.dsa.service;
 
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Deal;
 import sepm.dsa.model.Player;
+import sepm.dsa.model.Product;
 import sepm.dsa.model.Trader;
 
 import java.util.List;
@@ -52,5 +54,25 @@ public interface DealService {
      */
     List<Deal> getAllBetweenPlayerAndTraderLastXDays(Player player, Trader trader, long days);
 
+    /**
+     * @param product the Product, not null
+     * @return all deals involving this product, might be an empty list (not null)
+     */
+    List<Deal> getAllByProduct(Product product);
+
+
+    /**
+     * @param player the Player, not null
+     * @return all deals with this player involved, might be an empty list (not null)
+     */
+    List<Deal> getAllByPlayer(Player player);
+
+    /**
+     * Validates a deal
+     *
+     * @param deal the deal to be validated
+     * @throws sepm.dsa.exceptions.DSAValidationException if deal is not valid
+     */
+    void validate(Deal deal) throws DSAValidationException;
 
 }

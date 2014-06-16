@@ -2,15 +2,11 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -24,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MovingTraderListController implements Initializable {
+public class MovingTraderListController extends BaseControllerImpl {
 
 	private static final Logger log = LoggerFactory.getLogger(MovingTraderListController.class);
 	private SpringFxmlLoader loader;
@@ -32,6 +28,7 @@ public class MovingTraderListController implements Initializable {
 	private TraderService traderService;
 
 	private MovingTrader selectedTrader;
+    private LocationConnection connection;
 
 	@FXML
 	private TableView traderTable;
@@ -43,11 +40,17 @@ public class MovingTraderListController implements Initializable {
 	private Button detailsButton;
 	@FXML
 	private Label locationsLabel;
-
+    @FXML
+    private Label commentLabel;
+    @FXML
+    private Accordion accordion;
 
 	@Override
 	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
+		super.initialize(location, resources);
 		log.debug("initialise MovingTraderListController");
+
+        accordion.setExpandedPane(accordion.getPanes().get(0));
 
 		traderColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<MovingTrader, String>, ObservableValue<String>>() {
 			@Override
@@ -62,11 +65,29 @@ public class MovingTraderListController implements Initializable {
 		locationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
 	}
 
-	@FXML
+    @Override
+    public void reload() {
+        log.debug("reload MovingTraderListController");
+        locationsLabel.setText("in den Orten " + connection.getLocation1() + " und " + connection.getLocation2());
+
+        List<Trader> traders = traderService.getAllForLocation(connection.getLocation1());
+        traders.addAll(traderService.getAllForLocation(connection.getLocation2()));
+        List<MovingTrader> movingTraders = new ArrayList<MovingTrader>();
+        for (Trader t : traders) {
+            if (t instanceof MovingTrader) {
+                movingTraders.add((MovingTrader) t);
+            }
+        }
+	    traderTable.getItems().setAll(movingTraders);
+
+        checkFocus();
+    }
+
+    @FXML
 	private void onDetailsButtonPressed() {
 		log.debug("calling onDetailsPressed");
 		Stage stage = new Stage();
-		Parent scene = (Parent) loader.load("/gui/traderdetails.fxml");
+		Parent scene = (Parent) loader.load("/gui/traderdetails.fxml", stage);
 		stage.setTitle("Händler-Details");
 
 		TraderDetailsController controller = loader.getController();
@@ -90,19 +111,8 @@ public class MovingTraderListController implements Initializable {
 	}
 
 	public void setLocationConnection(LocationConnection connection) {
-		locationsLabel.setText("in den Orten " + connection.getLocation1() + " und " + connection.getLocation2());
-
-		List<Trader> traders = traderService.getAllForLocation(connection.getLocation1());
-		traders.addAll(traderService.getAllForLocation(connection.getLocation2()));
-		List<MovingTrader> movingTraders = new ArrayList<MovingTrader>();
-		for (Trader t : traders) {
-			if (t instanceof MovingTrader) {
-				movingTraders.add((MovingTrader) t);
-			}
-		}
-		traderTable.setItems(FXCollections.observableArrayList(movingTraders));
-
-		checkFocus();
+        this.connection = connection;
+        commentLabel.setText(connection.getComment());
 	}
 
 	public void setTraderService(TraderService traderService) {

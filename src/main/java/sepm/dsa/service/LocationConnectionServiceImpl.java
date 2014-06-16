@@ -186,7 +186,7 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
      * @param locationConnection
      * @throws sepm.dsa.exceptions.DSAValidationException if region is not valid
      */
-    private void validate(LocationConnection locationConnection) throws DSAValidationException {
+    public void validate(LocationConnection locationConnection) throws DSAValidationException {
         log.info("calling validate(" + locationConnection + ")");
         Set<ConstraintViolation<LocationConnection>> violations = validator.validate(locationConnection);
         if (violations.size() > 0) {

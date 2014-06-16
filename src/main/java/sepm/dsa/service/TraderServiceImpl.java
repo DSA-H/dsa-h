@@ -1,8 +1,6 @@
 package sepm.dsa.service;
 
 import org.apache.commons.collections.IteratorUtils;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,15 +11,12 @@ import sepm.dsa.dao.OfferDao;
 import sepm.dsa.dao.TraderDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
-import sepm.dsa.model.Currency;
 import sepm.dsa.service.path.NoPathException;
 import sepm.dsa.service.path.PathService;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 public class TraderServiceImpl implements TraderService {
@@ -41,8 +36,6 @@ public class TraderServiceImpl implements TraderService {
 
     private static final Double EPSILON = 1E-5;
 
-	private SessionFactory sessionFactory;
-
 	@Override
     public Trader get(int id) {
         log.debug("calling get(" + id + ")");
@@ -55,7 +48,7 @@ public class TraderServiceImpl implements TraderService {
     }
 
     /**
-     * Adds a new trader and generate and save a set of offers for him
+     * Adds a new offer and generate and save a set of offers for him
      * @param t (Trader) to be persisted must not be null
      * @return
      */
@@ -71,6 +64,7 @@ public class TraderServiceImpl implements TraderService {
 		    trader = traderDao.add(t);
 	    }
 		List<Offer> offers = calculateOffers(t);
+        offers.forEach(this::validateOffer);
         offerDao.addList(offers);
         trader.setOffers(new HashSet<>(offers));
 
@@ -187,14 +181,12 @@ public class TraderServiceImpl implements TraderService {
         return buyFromPlayer(trader, player, product, productQuality, unit, amount, baseValuePrice);
     }
 
-    //     * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
-//     *      or the amount is greater than the trader offers <br />
+    //     * @throws sepm.dsa.exceptions.DSAValidationException if offer does not have the product with this quality <br />
+//     *      or the amount is greater than the offer offers <br />
 //     *      or unit does does not match the product unit <br />
 //     *      or totalPrice is negative
     @Override
     public Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, Integer totalPrice, Integer discount) {
-        // TODO discuss Currency question with jotschi
-
         Offer offer = null;
         Set<Offer> traderOffers = trader.getOffers(); // get from dao
         for (Offer o : traderOffers) {
@@ -239,7 +231,7 @@ public class TraderServiceImpl implements TraderService {
         newDeal.setquality(productQuality);
         newDeal.setTrader(trader);
         newDeal.setUnit(unit);
-        validateDeal(newDeal);
+        dealService.validate(newDeal);
 
         Deal result = dealService.add(newDeal);
 
@@ -256,7 +248,7 @@ public class TraderServiceImpl implements TraderService {
     @Override
     public Integer suggesstDiscount(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount) {
 
-        long lookDaysBackwards = 365L;    // consider all deals between player and trader in the last year
+        long lookDaysBackwards = 365L;    // consider all deals between player and offer in the last year
         List<Deal> deals = dealService.getAllBetweenPlayerAndTraderLastXDays(player, trader, lookDaysBackwards);
 
         // TODO some logic that decides about the discount value
@@ -265,9 +257,6 @@ public class TraderServiceImpl implements TraderService {
 
     @Override
     public Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, Integer totalPrice) {
-
-        // TODO discuss Currency question with jotschi
-
         Offer offer = null;
         Set<Offer> traderOffers = trader.getOffers(); // get from dao
         for (Offer o : traderOffers) {
@@ -277,13 +266,7 @@ public class TraderServiceImpl implements TraderService {
             }
         }
 
-//        TODO Jotschi: Der Haendler hat bekommt ja normalerweise immer ein volles Sortiment wenn Zeit vorwaerts gestellt wird
-//        TODO          wenn jetzt ein Spieler etwas verkaufen will, muss er zuerst was vom Haendler kaufen, sonst hat dieser keinen Platz. Bitte klaeren mit Michael
         Double offerAmountDifference = unit.exchange(productAmount.doubleValue(), product.getUnit());
-//        double newUsedspace = trader.usedSpace() + offerAmountDifference;
-//        if (newUsedspace > trader.getSize()) {
-//            throw new DSAValidationException("Der Händler kann so viele Waren nicht besitzen");
-//        }
 
         if (totalPrice.doubleValue() < 0) {
             throw new DSAValidationException("Der Preis darf nicht negativ sein");
@@ -309,7 +292,7 @@ public class TraderServiceImpl implements TraderService {
         newDeal.setquality(productQuality);
         newDeal.setTrader(trader);
         newDeal.setUnit(unit);
-        validateDeal(newDeal);
+        dealService.validate(newDeal);
 
         Deal result = dealService.add(newDeal);
 
@@ -334,7 +317,7 @@ public class TraderServiceImpl implements TraderService {
     /**
      * todo: offers have to integrate product-occurerence (in a later ms)
      * @param trader
-     * @return a new calculated list of offers this trader at this position has.
+     * @return a new calculated list of offers this offer at this position has.
      */
     @Override
     @Transactional(readOnly = true)
@@ -380,7 +363,7 @@ public class TraderServiceImpl implements TraderService {
             }
         }
 
-        // random pick a weight product, till the trader is full
+        // random pick a weight product, till the offer is full
         Map<Product, Integer> productAmmountMap = new HashMap<>();
         for (int i = 0; i < number; i++) {
             double random = Math.random() * topWeight;
@@ -446,7 +429,7 @@ public class TraderServiceImpl implements TraderService {
 
     /**
      * @param trader
-     * @return a new calculated list of offers this trader at this position has.
+     * @return a new calculated list of offers this offer at this position has.
      */
     @Override
     public List<Offer> calculateOffers(Trader trader) {
@@ -466,7 +449,7 @@ public class TraderServiceImpl implements TraderService {
     }
 
     /**
-     * Returns the price for the product for the given trader
+     * Returns the price for the product for the given offer
      *
      * @param product
      * @param trader
@@ -576,23 +559,23 @@ public class TraderServiceImpl implements TraderService {
     }
 
     /**
-     * Validates a Deal
+     * Validates an Offer
      *
-     * @param deal must not be null
+     * @param offer must not be null
      * @throws sepm.dsa.exceptions.DSAValidationException if location is not valid
      */
-    private void validateDeal(Deal deal) throws DSAValidationException {
-        Set<ConstraintViolation<Deal>> violations = validator.validate(deal);
+    private void validateOffer(Offer offer) throws DSAValidationException {
+        Set<ConstraintViolation<Offer>> violations = validator.validate(offer);
         if (violations.size() > 0) {
-            throw new DSAValidationException("Deal ist nicht valide.", violations);
+            throw new DSAValidationException("Händler ist nicht valide.", violations);
         }
     }
 
 	/**
-	 * Returns a list of Offers of the specified trader.
+	 * Returns a list of Offers of the specified offer.
 	 *
-	 * @param trader the trader whose offers are requested.
-	 * @return a list of the trader's offers.
+	 * @param trader the offer whose offers are requested.
+	 * @return a list of the offer's offers.
 	 */
 	@Override
 	@Transactional(readOnly = true)
@@ -601,10 +584,6 @@ public class TraderServiceImpl implements TraderService {
 		trader.getOffers().size();
 
 		return trader.getOffers();
-	}
-
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
 	}
 
     public void setTimeService(TimeService timeService) {

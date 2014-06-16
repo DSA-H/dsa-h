@@ -13,4 +13,10 @@ public interface ProductCategoryDao extends BaseDao<ProductCategory> {
      */
     List<ProductCategory> getAllByParent(ProductCategory parent);
 
+    /**
+     * @param name
+     * @return all ProductCategory by name, may be an empty list (not null)
+     */
+    List<ProductCategory> getAllByName(String name);
+
 }

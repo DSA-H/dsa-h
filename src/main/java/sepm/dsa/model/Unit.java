@@ -76,7 +76,7 @@ public class Unit implements BaseModel {
     }
 
     public Double exchange(Double amount, Unit to) {
-        Double result = (amount * to.getValueToBaseUnit() / this.getValueToBaseUnit());
+        Double result = (amount * this.getValueToBaseUnit() / to.getValueToBaseUnit());
         return result;
     }
 

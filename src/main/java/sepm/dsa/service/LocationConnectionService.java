@@ -1,5 +1,6 @@
 package sepm.dsa.service;
 
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
 import sepm.dsa.service.path.NoPathException;
@@ -14,7 +15,7 @@ public interface LocationConnectionService {
      * @param locationConnection to be persisted must not be null
      * @return The created locationConnection model.
      */
-    public LocationConnection add(LocationConnection locationConnection);
+    LocationConnection add(LocationConnection locationConnection);
 
     /**
      * Updates a already existing {@code LocationConnection} in the database
@@ -22,14 +23,14 @@ public interface LocationConnectionService {
      * @param locationConnection to update must not be null
      * @return The updated locationConnection model.
      */
-    public LocationConnection update(LocationConnection locationConnection);
+    LocationConnection update(LocationConnection locationConnection);
 
     /**
      * Delete a locationConnection permanently
      *
      * @param locationConnection to be deleted must not be null
      */
-    public void remove(LocationConnection locationConnection);
+    void remove(LocationConnection locationConnection);
 
     /**
      * Gets the {@code LocationConnection} between two locations
@@ -109,6 +110,14 @@ public interface LocationConnectionService {
      * @param locationId
      * @return all connections of a location
      */
-    public List<LocationConnection> getAllByLocation(int locationId);
+    List<LocationConnection> getAllByLocation(int locationId);
+
+    /**
+     * Validates a locationConnection
+     *
+     * @param locationConnection
+     * @throws sepm.dsa.exceptions.DSAValidationException if region is not valid
+     */
+    void validate(LocationConnection locationConnection) throws DSAValidationException;
 
 }

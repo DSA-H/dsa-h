@@ -7,4 +7,10 @@
         <![CDATA[from Region ORDER BY name ASC]]>
     </query>
 
+    <query name="Region.findAllByPreferredCurrencySet">
+        <![CDATA[   FROM Region
+                    WHERE preferredCurrencySet.id = :preferredCurrencySetId
+                    ORDER BY name ASC]]>
+    </query>
+
 </hibernate-mapping>

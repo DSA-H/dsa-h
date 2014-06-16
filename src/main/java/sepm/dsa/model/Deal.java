@@ -42,11 +42,10 @@ public class Deal implements BaseModel {
     @JoinColumn     // => nullable = true !!
     private Trader trader;
 
-    @Transient
     @ManyToOne
     @JoinColumn
     // => nullable = true; product can be deleted, therefore store productName to keep history for player
-    private transient Product product;
+    private Product product;
 
     @ManyToOne
     @JoinColumn(nullable = false)

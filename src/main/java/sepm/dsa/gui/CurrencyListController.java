@@ -1,7 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -21,7 +19,10 @@ import sepm.dsa.model.Currency;
 import sepm.dsa.service.CurrencyService;
 import sepm.dsa.service.SaveCancelService;
 
-public class CurrencyListController implements Initializable {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class CurrencyListController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(CurrencyListController.class);
     SpringFxmlLoader loader;
@@ -42,15 +43,17 @@ public class CurrencyListController implements Initializable {
     private Button editButton;
 
     @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize CurrencyListController");
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
         // init table
         currencyColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         valueToBaseRateColumn.setCellValueFactory(new PropertyValueFactory<>("valueToBaseRate"));
+    }
 
-        ObservableList<Currency> data = FXCollections.observableArrayList(currencyService.getAll());
-        currencyTable.setItems(data);
-
+    @Override
+    public void reload() {
+        log.debug("reload CurrencyListController");
+		currencyTable.getItems().setAll(currencyService.getAll());
         checkFocus();
     }
 
@@ -58,10 +61,11 @@ public class CurrencyListController implements Initializable {
     private void onCreateButtonPressed() {
         log.debug("onCreateClicked - open Currency Window");
 
-	    EditCurrencyController.setCurrency(null);
-
         Stage stage = (Stage) currencyTable.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/editcurrency.fxml");
+        Parent scene = (Parent) loader.load("/gui/editcurrency.fxml", stage);
+        EditCurrencyController ctrl = loader.getController();
+        ctrl.setCurrency(null);
+        ctrl.reload();
 
         stage.setTitle("Währungen");
         stage.setScene(new Scene(scene, 464, 279));
@@ -72,10 +76,11 @@ public class CurrencyListController implements Initializable {
     private void onEditButtonPressed() {
         log.debug("onEditButtonPressed - open Currency Window");
 
-        EditCurrencyController.setCurrency(currencyTable.getSelectionModel().getSelectedItem());//.getFocusModel().getFocusedItem());
-
         Stage stage = (Stage) currencyTable.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/editcurrency.fxml");
+        Parent scene = (Parent) loader.load("/gui/editcurrency.fxml", stage);
+        EditCurrencyController ctrl = loader.getController();
+        ctrl.setCurrency(currencyTable.getSelectionModel().getSelectedItem());
+        ctrl.reload();
 
         stage.setTitle("Währungen");
         stage.setScene(new Scene(scene, 464, 279));

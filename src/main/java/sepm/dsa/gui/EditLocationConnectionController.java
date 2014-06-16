@@ -8,11 +8,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
 import sepm.dsa.service.LocationConnectionService;
@@ -24,7 +27,7 @@ import java.util.ResourceBundle;
 
 
 @Service("EditLocationConnectionController")
-public class EditLocationConnectionController implements Initializable {
+public class EditLocationConnectionController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(EditLocationConnectionController.class);
     private SpringFxmlLoader loader;
@@ -32,7 +35,8 @@ public class EditLocationConnectionController implements Initializable {
     private LocationConnectionService locationConnectionService;
     private LocationService locationService;
 
-    private static LocationConnection locationConnection;
+    private LocationConnection locationConnection;
+    private Location selectedLocation;
 
     @FXML
     private Label lbl_Location1;
@@ -46,15 +50,9 @@ public class EditLocationConnectionController implements Initializable {
     @FXML
     private TextArea ta_Comment;
 
-
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        log.debug("initialise");
-        lbl_Location1.setText(locationConnection.getLocation1().getName());
-        lbl_Location2.setText(locationConnection.getLocation2().getName());
-        tf_TravelTime.setText(locationConnection.getTravelTime() + "");
-        String comment = locationConnection.getComment();
-        ta_Comment.setText(comment == null ? "" : comment);
+    public void reload() {
+        log.debug("reload EditLocationConnectionController");
     }
 
     public void setLocationConnectionService(LocationConnectionService locationConnectionService) {
@@ -73,11 +71,20 @@ public class EditLocationConnectionController implements Initializable {
         Integer travelTime = null;
         try {
             travelTime = Integer.parseInt(tf_TravelTime.getText());
-        } catch (NumberFormatException ex) {}
+        } catch (NumberFormatException ex) {
+            throw new DSAValidationException("Reisezeit muss eine positive ganze Zahl sein!");
+        }
+        if(travelTime < 0) {
+            throw new DSAValidationException("Reisezeit muss eine positive ganze Zahl sein!");
+        }
+
+        LocationConnection editedLocationConnection = new LocationConnection(locationConnection);
+        editedLocationConnection.setTravelTime(travelTime);
+        editedLocationConnection.setComment(ta_Comment.getText());
+        locationConnectionService.validate(editedLocationConnection); // once this passes, the real locationConnection can be changed
 
         locationConnection.setTravelTime(travelTime);
         locationConnection.setComment(ta_Comment.getText());
-//        locationConnectionService.update(locationConnection);
         goBack();
     }
 
@@ -85,22 +92,38 @@ public class EditLocationConnectionController implements Initializable {
     public void onAbortClicked() {
         log.debug("onAbortClicked");
         goBack();
-
     }
 
     private void goBack() {
+        Stage myStage = (Stage)lbl_Location1.getScene().getWindow();
+        myStage.close();
 
-        Stage stage = (Stage) lbl_Location1.getScene().getWindow();
-        Parent root = (Parent) loader.load("/gui/editlocationconnections.fxml");
+        Stage stage = new Stage();
+        Parent root = (Parent) loader.load("/gui/editlocationconnections.fxml", stage);
+        EditLocationConnectionsController ctrl = loader.getController();
+        ctrl.setLoadSelectedLocation_Connections_OnInitialize(true);
+        ctrl.setSelectedLocation(selectedLocation);
+        ctrl.reload();
 
         stage.setScene(new Scene(root, 900, 500));
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
 
-        EditLocationConnectionsController.setLoadSelectedLocation_Connections_OnInitialize(true);
+        ctrl.setLoadSelectedLocation_Connections_OnInitialize(true);
     }
 
-    public static void setLocationConnection(LocationConnection locationConnection) {
-        EditLocationConnectionController.locationConnection = locationConnection;
+    public void setLocationConnection(LocationConnection locationConnection) {
+        this.locationConnection = locationConnection;
+        lbl_Location1.setText(locationConnection.getLocation1().getName());
+        lbl_Location2.setText(locationConnection.getLocation2().getName());
+        tf_TravelTime.setText(locationConnection.getTravelTime() + "");
+        String comment = locationConnection.getComment();
+        ta_Comment.setText(comment == null ? "" : comment);
+    }
+
+    public void setSelectedLocation(Location selectedLocation) {
+        this.selectedLocation = selectedLocation;
     }
 
     public void setLocationService(LocationService locationService) {

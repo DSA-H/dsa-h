@@ -37,7 +37,7 @@
   <center>
     <GridPane BorderPane.alignment="CENTER">
       <children>
-        <ScrollPane fx:id="scrollPane" onMouseClicked="#onScrollPaneClicked" GridPane.rowSpan="2" />
+        <ScrollPane fx:id="scrollPane" GridPane.rowSpan="2" />
         <ListView fx:id="traderList" visible="false" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowSpan="2" />
         <TableView fx:id="locationTable" GridPane.columnIndex="1" GridPane.hgrow="NEVER">
           <columns>
@@ -90,6 +90,7 @@
           <items>
             <MenuItem disable="true" mnemonicParsing="false" text="Import" fx:id="dateiImport" />
             <MenuItem disable="true" mnemonicParsing="false" text="Export" fx:id="dateiExport" />
+              <MenuItem mnemonicParsing="false" onAction="#onPrintTraderClicked" text="Händler drucken" />
             <MenuItem mnemonicParsing="false" onAction="#onExitClicked" text="Beenden" fx:id="dateiExit" />
           </items>
         </Menu>
@@ -104,6 +105,7 @@
             <MenuItem mnemonicParsing="false" onAction="#onTraderCategoriesClicked" text="Händlerkategorie" fx:id="verwaltenHaendlerKategorie" />
             <MenuItem mnemonicParsing="false" onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen" fx:id="verwaltenGebieteGrenzen" />
             <MenuItem mnemonicParsing="false" onAction="#onCurrencyClicked" text="Währungen" fx:id="verwaltenWaehrungen" />
+            <MenuItem mnemonicParsing="false" onAction="#onCurrencySetClicked" text="Währungssysteme" fx:id="verwaltenWaehrungssysteme" />
             <MenuItem mnemonicParsing="false" onAction="#onWarenClicked" text="Waren" fx:id="verwaltenWaren" />
             <MenuItem mnemonicParsing="false" onAction="#onWarenKategorieClicked" text="Warenkategorie" fx:id="verwaltenWarenKategorie" />
             <MenuItem onAction="#onEditDateClicked" text="Datum einstellen" />
@@ -114,11 +116,6 @@
             <MenuItem mnemonicParsing="false" onAction="#onPlayerClicked" text="Spieler" />
             <MenuItem mnemonicParsing="false" onAction="#onCalculateCurrencyClicked" text="Währungen umrechnen" fx:id="berechneWährung" />
               <MenuItem mnemonicParsing="false" onAction="#onCalculateProductPrice" text="Preise berechnen" fx:id="berechnePreis" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Export">
-          <items>
-            <MenuItem mnemonicParsing="false" onAction="#onPrintTraderClicked" text="Händler drucken" />
           </items>
         </Menu>
       </menus>

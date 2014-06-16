@@ -2,8 +2,6 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -26,7 +24,7 @@ import sepm.dsa.model.TraderCategory;
 import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TraderCategoryService;
 
-public class TraderCategoryListController implements Initializable {
+public class TraderCategoryListController extends BaseControllerImpl {
     private TraderCategoryService traderCategoryService;
     private static final Logger log = LoggerFactory.getLogger(TraderCategoryListController.class);
     private SpringFxmlLoader loader;
@@ -48,12 +46,13 @@ public class TraderCategoryListController implements Initializable {
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialise TraderCategoryListController");
+	    super.initialize(location, resources);
+
+	    log.debug("initialise TraderCategoryListController");
         // init table
         traderCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         prodcutCategoryColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TraderCategory, String>, ObservableValue<String>>() {
             @Override
-            @Transactional(readOnly = true)
             public ObservableValue<String> call(TableColumn.CellDataFeatures<TraderCategory, String> r) {
                 if (r.getValue() != null) {
                    StringBuilder sb = new StringBuilder();
@@ -71,10 +70,12 @@ public class TraderCategoryListController implements Initializable {
                 }
             }
         });
+    }
 
-
-        ObservableList<TraderCategory> data = FXCollections.observableArrayList(traderCategoryService.getAll());
-        traderCategoryTable.setItems(data);
+    @Override
+    public void reload() {
+        log.debug("reload TraderCategoryListController");
+	    traderCategoryTable.getItems().setAll(traderCategoryService.getAll());
 
         checkFocus();
     }
@@ -83,10 +84,11 @@ public class TraderCategoryListController implements Initializable {
     private void onCreateButtonPressed() {
         log.debug("onCreateButtonPressed - open Trader-Category-Details Window");
 
-        EditTraderCategoryController.setTraderCategory(null);
-
         Stage stage = (Stage) traderCategoryTable.getScene().getWindow();
-        Parent root = (Parent) loader.load("/gui/edittradercategory.fxml");
+        Parent root = (Parent) loader.load("/gui/edittradercategory.fxml", stage);
+        EditTraderCategoryController ctrl = loader.getController();
+        ctrl.setTraderCategory(null);
+        ctrl.reload();
 
         stage.setTitle("Händlerkategorie");
         stage.setScene(new Scene(root, 600, 438));
@@ -98,10 +100,12 @@ public class TraderCategoryListController implements Initializable {
         log.debug("onEditButtonPressed - open Gebiet-Details Window");
 
         TraderCategory selectedTraderCategory = traderCategoryTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
-        EditTraderCategoryController.setTraderCategory(selectedTraderCategory);
 
         Stage stage = (Stage) traderCategoryTable.getScene().getWindow();
-        Parent root = (Parent) loader.load("/gui/edittradercategory.fxml");
+        Parent root = (Parent) loader.load("/gui/edittradercategory.fxml", stage);
+        EditTraderCategoryController ctrl = loader.getController();
+        ctrl.setTraderCategory(selectedTraderCategory);
+        ctrl.reload();
 
         stage.setTitle("Händler Kategorie bearbeiten");
         stage.setScene(new Scene(root, 600, 438));

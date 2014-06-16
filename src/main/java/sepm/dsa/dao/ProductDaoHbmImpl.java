@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
+import sepm.dsa.model.Region;
 
 import java.util.List;
 import java.util.Vector;
@@ -50,6 +51,22 @@ public class ProductDaoHbmImpl
         log.debug("calling getAllByName(" + name + ")");
         Query query = sessionFactory.getCurrentSession().getNamedQuery("Product.findAllByName");
         query.setParameter("name", name);
+        List<?> list = query.list();
+
+        List<Product> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((Product) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Product> getAllByRegion(Region region) {
+        log.debug("calling getAllByRegion(" + region + ")");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("Product.findAllByRegion");
+        query.setParameter("regionId", region == null ? null : region.getId());
         List<?> list = query.list();
 
         List<Product> result = new Vector<>(list.size());

@@ -5,10 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.dao.DealDao;
+import sepm.dsa.dao.OfferDao;
 import sepm.dsa.dao.ProductDao;
 import sepm.dsa.exceptions.DSAValidationException;
-import sepm.dsa.model.Product;
-import sepm.dsa.model.ProductCategory;
+import sepm.dsa.model.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -25,6 +26,9 @@ public class ProductServiceImpl implements ProductService {
     private static final Logger log = LoggerFactory.getLogger(RegionServiceImpl.class);
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
     private ProductDao productDao;
+    private ProductCategoryService productCategoryService;
+    private OfferDao offerDao;
+    private DealDao dealDao;
 
     @Override
     public Product get(int id) {
@@ -55,6 +59,15 @@ public class ProductServiceImpl implements ProductService {
     public void remove(Product p) {
         log.debug("calling removeConnection(" + p + ")");
         //productDao.removeConnection(get(p.getId()));
+
+        List<Offer> offers = offerDao.getAllByProduct(p);
+        offers.forEach(offerDao::remove);
+
+        List<Deal> deals = dealDao.getAllByProduct(p);
+        for (Deal d : deals) {
+            d.setProduct(null);
+        }
+
         productDao.remove(p);
     }
 
@@ -87,6 +100,20 @@ public class ProductServiceImpl implements ProductService {
     public Set<Product> getBySearchTerm(String searchTerm) {
         log.debug("calling getBySearchTerm(" + searchTerm + ")");
         Set<Product> result = new HashSet<>(productDao.getAllByName(searchTerm == null ? null : "%" + searchTerm + "%"));
+        List<ProductCategory> matchingCategories = productCategoryService.getAllByName(searchTerm);
+        for (ProductCategory c : matchingCategories) {
+            for (Product p : getAllFromProductcategory(c)) {
+                result.add(p);
+            }
+        }
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Product> getAllByProductionRegion(Region region) {
+        log.debug("calling getAllByProductionRegion(" + region + ")");
+        List<Product> result = productDao.getAllByRegion(region);
         log.trace("returning " + result);
         return result;
     }
@@ -122,4 +149,15 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    public void setProductCategoryService(ProductCategoryService productCategoryService) {
+        this.productCategoryService = productCategoryService;
+    }
+
+    public void setOfferDao(OfferDao offerDao) {
+        this.offerDao = offerDao;
+    }
+
+    public void setDealDao(DealDao dealDao) {
+        this.dealDao = dealDao;
+    }
 }

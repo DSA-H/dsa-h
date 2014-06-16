@@ -62,6 +62,7 @@
                 <value>sepm/dsa/model/hibernate/UnitType.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Unit.hbm.xml</value>
                 <value>sepm/dsa/model/hibernate/Deal.hbm.xml</value>
+                <value>sepm/dsa/model/hibernate/Offer.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -172,10 +173,12 @@
         <property name="regionDao" ref="regionDao"/>
         <property name="regionBorderDao" ref="regionBorderDao"/>
         <property name="locationService" ref="locationService"/>
+        <property name="productService" ref="productService"/>
     </bean>
 
     <bean id="playerService" class="sepm.dsa.service.PlayerServiceImpl">
         <property name="playerDao" ref="playerDao"/>
+        <property name="dealDao" ref="dealDao"/>
     </bean>
 
     <bean id="regionBorderService" class="sepm.dsa.service.RegionBorderServiceImpl">
@@ -203,11 +206,15 @@
 
     <bean id="productService" class="sepm.dsa.service.ProductServiceImpl">
         <property name="productDao" ref="productDao"/>
+        <property name="productCategoryService" ref="productCategoryService"/>
+        <property name="offerDao" ref="offerDao"/>
+        <property name="dealDao" ref="dealDao"/>
     </bean>
 
     <bean id="productCategoryService" class="sepm.dsa.service.ProductCategoryServiceImpl">
         <property name="productCategoryDao" ref="productCategoryDao"/>
         <property name="assortmentNatureService" ref="assortmentNatureService"/>
+        <property name="productService" ref="productService"/>
     </bean>
 
     <bean id="unitService" class="sepm.dsa.service.UnitServiceImpl">
@@ -254,6 +261,7 @@
     <bean id="currencySetService" class="sepm.dsa.service.CurrencySetServiceImpl">
         <property name="currencySetDao" ref="currencySetDao"/>
         <property name="currencyService" ref="currencyService"/>
+        <property name="regionService" ref="regionService"/>
     </bean>
 
     <bean id="timeService" class="sepm.dsa.service.TimeServiceImpl">
@@ -270,7 +278,7 @@
     </bean>
 
     <!-- GUI DI -->
-    <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController">
+    <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController" scope="prototype">
 	    <property name="loader" ref="loader"/>
         <property name="mapService" ref="mapService"/>
         <property name="locationService" ref="locationService"/>
@@ -281,7 +289,7 @@
         <property name="traderPdfService" ref="traderPdfService"/>
     </bean>
 
-    <bean id="RegionListController" class="sepm.dsa.gui.RegionListController">
+    <bean id="RegionListController" class="sepm.dsa.gui.RegionListController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
@@ -289,14 +297,14 @@
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 
-    <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController">
+    <bean id="EditRegionController" class="sepm.dsa.gui.EditRegionController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="regionService" ref="regionService"/>
         <property name="regionBorderService" ref="regionBorderService"/>
         <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
-    <bean id="EditLocationController" class="sepm.dsa.gui.EditLocationController">
+    <bean id="EditLocationController" class="sepm.dsa.gui.EditLocationController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
         <property name="regionService" ref="regionService"/>
@@ -305,40 +313,43 @@
         <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
-    <bean id="ProductListController" class="sepm.dsa.gui.ProductListController">
+    <bean id="ProductListController" class="sepm.dsa.gui.ProductListController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="productService" ref="productService"/>
         <property name="saveCancelService" ref="saveCancelService" />
+        <property name="currencySetService" ref="currencySetService" />
     </bean>
 
-    <bean id="EditProductController" class="sepm.dsa.gui.EditProductController">
+    <bean id="EditProductController" class="sepm.dsa.gui.EditProductController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="productService" ref="productService"/>
         <property name="productCategoryService" ref="productCategoryService"/>
         <property name="regionService" ref="regionService"/>
         <property name="saveCancelService" ref="saveCancelService" />
         <property name="unitService" ref="unitService" />
+        <property name="currencyService" ref="currencyService" />
+        <property name="currencySetService" ref="currencySetService" />
     </bean>
 
-    <bean id="ProductCategoryListController" class="sepm.dsa.gui.ProductCategoryListController">
+    <bean id="ProductCategoryListController" class="sepm.dsa.gui.ProductCategoryListController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="productCategoryService" ref="productCategoryService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 
-    <bean id="EditProductCategoryController" class="sepm.dsa.gui.EditProductCategoryController">
+    <bean id="EditProductCategoryController" class="sepm.dsa.gui.EditProductCategoryController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="productCategoryService" ref="productCategoryService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 
-    <bean id="TraderCategoryList" class="sepm.dsa.gui.TraderCategoryListController">
+    <bean id="TraderCategoryList" class="sepm.dsa.gui.TraderCategoryListController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
         <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
-    <bean id="editTraderCategory" class="sepm.dsa.gui.EditTraderCategoryController">
+    <bean id="editTraderCategory" class="sepm.dsa.gui.EditTraderCategoryController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
         <property name="productCategoryService" ref="productCategoryService"/>
@@ -346,7 +357,7 @@
         <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
-    <bean id="editTrader" class="sepm.dsa.gui.EditTraderController">
+    <bean id="editTrader" class="sepm.dsa.gui.EditTraderController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>
         <property name="traderCategoryService" ref="traderCategoryService"/>
@@ -354,7 +365,7 @@
         <property name="saveCancelService" ref="saveCancelService" />
         <property name="timeService" ref="timeService"/>
     </bean>
-    <bean id="traderDetails" class="sepm.dsa.gui.TraderDetailsController">
+    <bean id="traderDetails" class="sepm.dsa.gui.TraderDetailsController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>
         <property name="timeService" ref="timeService"/>
@@ -362,7 +373,7 @@
         <property name="currencySetService" ref="currencySetService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
-    <bean id="traderSellToPlayer" class="sepm.dsa.gui.TradeSellToPlayerController">
+    <bean id="traderSellToPlayer" class="sepm.dsa.gui.TradeSellToPlayerController" scope="prototype">
         <property name="traderService" ref="traderService"/>
         <property name="unitService" ref="unitService"/>
         <property name="currencyService" ref="currencyService"/>
@@ -370,7 +381,7 @@
         <property name="saveCancelService" ref="saveCancelService"/>
         <property name="playerService" ref="playerService"/>
     </bean>
-    <bean id="traderBuyFromPlayer" class="sepm.dsa.gui.TradeBuyFromPlayerController">
+    <bean id="traderBuyFromPlayer" class="sepm.dsa.gui.TradeBuyFromPlayerController" scope="prototype">
         <property name="traderService" ref="traderService"/>
         <property name="unitService" ref="unitService"/>
         <property name="currencyService" ref="currencyService"/>
@@ -379,50 +390,44 @@
         <property name="playerService" ref="playerService"/>
         <property name="productService" ref="productService"/>
     </bean>
-    <bean id="calculatePrice" class="sepm.dsa.gui.CalculatePriceController">
+    <bean id="calculatePrice" class="sepm.dsa.gui.CalculatePriceController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
         <property name="productService" ref="productService"/>
         <property name="traderService" ref="traderService"/>
         <property name="currencySetService" ref="currencySetService"/>
     </bean>
-    <bean id="editTavern" class="sepm.dsa.gui.EditTavernController">
+    <bean id="editTavern" class="sepm.dsa.gui.EditTavernController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
         <property name="tavernService" ref="tavernService"/>
         <property name="currencySetService" ref="currencySetService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
-    <bean id="tavernList" class="sepm.dsa.gui.TavernListController">
-        <property name="loader" ref="loader"/>
-        <property name="locationService" ref="locationService"/>
-        <property name="saveCancelService" ref="saveCancelService"/>
-        <property name="tavernService" ref="tavernService"/>
-    </bean>
-    <bean id="EditLocationConnectionsController" class="sepm.dsa.gui.EditLocationConnectionsController">
+    <bean id="EditLocationConnectionsController" class="sepm.dsa.gui.EditLocationConnectionsController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="locationConnectionService" ref="locationConnectionService"/>
         <property name="locationService" ref="locationService"/>
     </bean>
-    <bean id="EditLocationConnectionController" class="sepm.dsa.gui.EditLocationConnectionController">
+    <bean id="EditLocationConnectionController" class="sepm.dsa.gui.EditLocationConnectionController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="locationConnectionService" ref="locationConnectionService"/>
         <property name="locationService" ref="locationService"/>
     </bean>
 
-    <bean id="PlacementController" class="sepm.dsa.gui.PlacementController">
+    <bean id="PlacementController" class="sepm.dsa.gui.PlacementController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="locationService" ref="locationService"/>
         <property name="traderService" ref="traderService"/>
         <property name="tavernService" ref="tavernService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
-    <bean id="PlayerListController" class="sepm.dsa.gui.PlayerListController">
+    <bean id="PlayerListController" class="sepm.dsa.gui.PlayerListController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="playerService" ref="playerService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
-    <bean id="EditPlayerController" class="sepm.dsa.gui.EditPlayerController">
+    <bean id="EditPlayerController" class="sepm.dsa.gui.EditPlayerController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="playerService" ref="playerService"/>
         <property name="dealService" ref="dealService"/>
@@ -430,29 +435,41 @@
         <property name="currencySetService" ref="currencySetService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
-    <bean id="currencyList" class="sepm.dsa.gui.CurrencyListController">
+    <bean id="currencyList" class="sepm.dsa.gui.CurrencyListController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="currencyService" ref="currencyService"/>
         <property name="saveCancelService" ref="saveCancelService" />
     </bean>
-    <bean id="editCurrency" class="sepm.dsa.gui.EditCurrencyController">
+    <bean id="editCurrency" class="sepm.dsa.gui.EditCurrencyController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="currencyService" ref="currencyService"/>
         <property name="saveCancelService" ref="saveCancelService" />
     </bean>
-    <bean id="calculateCurrency" class="sepm.dsa.gui.CurrencyCalculateController">
+    <bean id="currencySetListController" class="sepm.dsa.gui.CurrencySetListController" scope="prototype">
+        <property name="loader" ref="loader"/>
+        <property name="currencySetService" ref="currencySetService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
+    </bean>
+    <bean id="editCurrencySetController" class="sepm.dsa.gui.EditCurrencySetController" scope="prototype">
+        <property name="loader" ref="loader"/>
+        <property name="currencyService" ref="currencyService"/>
+        <property name="currencySetService" ref="currencySetService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
+    </bean>
+    <bean id="calculateCurrency" class="sepm.dsa.gui.CurrencyCalculateController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="currencyService" ref="currencyService"/>
     </bean>
-    <bean id="editDate" class="sepm.dsa.gui.EditDateController">
+    <bean id="editDate" class="sepm.dsa.gui.EditDateController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="timeService" ref="timeService"/>
     </bean>
-    <bean id="forwardDate" class="sepm.dsa.gui.ForwardDateController">
+    <bean id="forwardDate" class="sepm.dsa.gui.ForwardDateController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="timeService" ref="timeService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
-    <bean id="movingTraderList" class="sepm.dsa.gui.MovingTraderListController">
+    <bean id="movingTraderList" class="sepm.dsa.gui.MovingTraderListController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>
     </bean>
@@ -461,4 +478,7 @@
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+
+    <bean class="sepm.dsa.application.ApplicationListenerBeanPostProcessor"/>
+
 </beans>

@@ -8,18 +8,28 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.MovingTraderListController">
     <children>
-        <Label alignment="CENTER" layoutX="8.0" layoutY="14.0" prefHeight="17.0" prefWidth="584.0" text="Fahrende Händler">
+        <Label alignment="CENTER" layoutX="8.0" layoutY="14.0" prefHeight="17.0" prefWidth="584.0" text="Reiseverbindung">
             <font>
                 <Font name="System Bold" size="18.0" />
             </font>
         </Label>
-        <TableView fx:id="traderTable" layoutX="12.0" layoutY="102.0" onMousePressed="#checkFocus" prefHeight="289.0" prefWidth="576.0">
+      <Label fx:id="locationsLabel" alignment="CENTER" layoutX="8.0" layoutY="41.0" prefHeight="17.0" prefWidth="584.0" text="zwischen den Orten Ort A und Ort B">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label><Accordion fx:id="accordion" layoutX="12.0" layoutY="69.0" prefHeight="323.0" prefWidth="576.0">
+<panes>
+    <TitledPane animated="false" layoutX="54.0" layoutY="-1.0" prefHeight="294.0" prefWidth="576.0" text="Fahrende Händler">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+<children>
+        <TableView fx:id="traderTable" layoutX="14.0" layoutY="47.0" onMousePressed="#checkFocus" prefHeight="220.0" prefWidth="553.0">
             <columns>
-                <TableColumn fx:id="traderColumn" prefWidth="286.0" text="Händler" />
-                <TableColumn fx:id="locationColumn" prefWidth="289.0" text="Ort" />
+                <TableColumn fx:id="traderColumn" prefWidth="277.0" text="Händler" />
+                <TableColumn fx:id="locationColumn" prefWidth="298.0" text="Ort" />
             </columns>
         </TableView>
-        <HBox alignment="CENTER_LEFT" layoutX="12.0" layoutY="66.0" prefHeight="25.0" prefWidth="576.0" spacing="10.0">
+        <HBox alignment="CENTER_LEFT" layoutX="12.0" layoutY="14.0" prefHeight="25.0" prefWidth="567.0" spacing="10.0">
             <children>
                 <Button fx:id="detailsButton" layoutX="141.1875" layoutY="63.5" mnemonicParsing="false" onAction="#onDetailsButtonPressed" text="Details" />
             </children>
@@ -27,10 +37,17 @@
                 <Insets />
             </opaqueInsets>
         </HBox>
-      <Label fx:id="locationsLabel" alignment="CENTER" layoutX="8.0" layoutY="41.0" prefHeight="17.0" prefWidth="584.0" text="in den Orten Ort A und Ort B">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
+</children></AnchorPane>
+      </content>
+    </TitledPane>
+    <TitledPane animated="false" layoutX="-66.0" layoutY="-71.0" text="Beschreibung">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+<children><Label fx:id="commentLabel" alignment="TOP_LEFT" layoutX="14.0" layoutY="14.0" prefHeight="236.0" prefWidth="546.0" text="Label" wrapText="true" />
+</children></AnchorPane>
+      </content>
+    </TitledPane>
+</panes>
+</Accordion>
     </children>
 </Pane>

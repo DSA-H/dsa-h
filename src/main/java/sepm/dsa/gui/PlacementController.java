@@ -1,6 +1,5 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -27,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class PlacementController implements Initializable {
+public class PlacementController extends BaseControllerImpl {
 	private static final Logger log = LoggerFactory.getLogger(PlacementController.class);
 	private SpringFxmlLoader loader;
 	private LocationService locationService;
@@ -36,7 +35,6 @@ public class PlacementController implements Initializable {
 	private SaveCancelService saveCancelService;
 	private Location selectedLocation;
 	private Point2D pos;
-	private Object selectedObj;
 
 	@FXML
 	private Label headline;
@@ -49,11 +47,33 @@ public class PlacementController implements Initializable {
 	@FXML
 	private Button commitButton;
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-	}
+    @Override
+    public void reload() {
+        // reload dropdown list
+        Object selectedObject = choiceBox.getSelectionModel().getSelectedItem();
+        if(selectedLocation == null) {
+            choiceBox.getItems().setAll(locationService.getAll());
+        }else {
+            List<Trader> traders = traderService.getAllForLocation(selectedLocation);
+            List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
+            List<Object> all = new ArrayList<Object>();
+            for (Trader t : traders) {
+                all.add(t);
+            }
+            for (Tavern t : taverns) {
+                all.add(t);
+            }
+            choiceBox.getItems().setAll(all);
+        }
+        if(choiceBox.getItems().contains(selectedObject)) {
+            choiceBox.getSelectionModel().select(selectedObject);
+        }else {
+            choiceBox.getSelectionModel().clearSelection();
+            choiceBox.setValue(null);
+        }
+    }
 
-	@FXML
+    @FXML
 	private void onConfirmPressed() {
 		if (choiceBox.getSelectionModel().getSelectedItem() == null) {
 			Dialogs.create()
@@ -92,50 +112,49 @@ public class PlacementController implements Initializable {
 
 	@FXML
 	private void onNewPressed() {
+        Stage placementStage = (Stage) choiceBox.getScene().getWindow();
+        placementStage.close();
+
 		if (selectedLocation == null) {
-			EditLocationController.setLocation(null);
-
 			Stage stage = new Stage();
-			Parent scene = (Parent) loader.load("/gui/editlocation.fxml");
-
+			Parent scene = (Parent) loader.load("/gui/editlocation.fxml", stage);
 			EditLocationController controller = loader.getController();
+            controller.setLocation(null);
 			controller.setPosition(pos);
+            controller.reload();
 
 			stage.setTitle("Ort erstellen");
 			stage.setScene(new Scene(scene, 900, 438));
 			stage.setResizable(false);
-			stage.showAndWait();
+			stage.show();
 		} else {
 			Stage stage = new Stage();
-			Parent scene = (Parent) loader.load("/gui/edittrader.fxml");
-			stage.setTitle("Händler erstellen");
-
+            stage.setTitle("Händler erstellen");
+			Parent scene = (Parent) loader.load("/gui/edittrader.fxml", stage);
 			EditTraderController controller = loader.getController();
 			controller.setTrader(null);
 			controller.setPosition(pos);
 			controller.setLocation(selectedLocation);
+            controller.reload();
 			stage.setScene(new Scene(scene, 785, 513));
 			stage.setResizable(false);
-			stage.showAndWait();
+			stage.show();
 		}
-
-		Stage stage = (Stage) choiceBox.getScene().getWindow();
-		stage.close();
 	}
 
 	@FXML
 	private void onNewTavernPressed() {
 		Stage stage = new Stage();
-		Parent scene = (Parent) loader.load("/gui/edittavern.fxml");
+		Parent scene = (Parent) loader.load("/gui/edittavern.fxml", stage);
 		stage.setTitle("Wirtshaus erstellen");
-
 		EditTavernController controller = loader.getController();
 		controller.setTavern(null);
 		controller.setPosition(pos);
 		controller.setLocation(selectedLocation);
+		controller.reload();
 		stage.setScene(new Scene(scene, 600, 400));
 		stage.setResizable(false);
-		stage.showAndWait();
+		stage.show();
 
 		stage = (Stage) choiceBox.getScene().getWindow();
 		stage.close();
@@ -149,7 +168,6 @@ public class PlacementController implements Initializable {
 
 	public void setUp(Location location, Point2D pos, Object selectedObj, boolean noMap) {
 		this.selectedLocation = location;
-		this.selectedObj = selectedObj;
 		this.pos = pos;
 		if (noMap) {
 			choiceBox.setVisible(false);
@@ -162,22 +180,10 @@ public class PlacementController implements Initializable {
 				headline.setText("Ort platzieren");
 				newButton.setText("Neuer Ort");
 				newTavernButton.setVisible(false);
-				List<Location> locations = locationService.getAll();
-				choiceBox.setItems(FXCollections.observableArrayList(locations));
 			} else {
 				headline.setText("Händler/Wirtshaus platzieren");
 				newButton.setText("Neuer Händler");
 				newTavernButton.setVisible(true);
-				List<Trader> traders = traderService.getAllForLocation(selectedLocation);
-				List<Tavern> taverns = tavernService.getAllByLocation(selectedLocation.getId());
-				List<Object> all = new ArrayList<Object>();
-				for (Trader t : traders) {
-					all.add(t);
-				}
-				for (Tavern t : taverns) {
-					all.add(t);
-				}
-				choiceBox.setItems(FXCollections.observableArrayList(all));
 			}
 			if (selectedObj != null) {
 				choiceBox.getSelectionModel().select(selectedObj);

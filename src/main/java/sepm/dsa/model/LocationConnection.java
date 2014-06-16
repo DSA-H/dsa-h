@@ -4,7 +4,9 @@ import sepm.dsa.service.path.PathEdge;
 import sepm.dsa.service.path.PathNode;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -21,11 +23,22 @@ public class LocationConnection implements BaseModel, PathEdge {
     private Pk pk = new Pk();
 
     @NotNull
+    @Min(value = 0)
     @Column(nullable = false)
     private Integer travelTime;
 
-    @Column(nullable = true)
+    @Size(max = 1000)
+    @Column(nullable = true, length = 1000)
     private String comment;
+
+    public LocationConnection() {}
+
+    public LocationConnection(LocationConnection toCopy) {
+        this.pk.location1 = toCopy.getLocation1();
+        this.pk.location2 = toCopy.getLocation2();
+        this.travelTime = toCopy.getTravelTime();
+        this.comment = toCopy.getComment();
+    }
 
     public Pk getPk() {
         return pk;

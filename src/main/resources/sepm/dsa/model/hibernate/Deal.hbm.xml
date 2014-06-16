@@ -15,4 +15,14 @@
                     ORDER BY id asc]]>
     </query>
 
+    <query name="Deal.findAllByProduct">
+        <![CDATA[   FROM Deal
+                    WHERE product.id = :productId]]>
+    </query>
+
+    <query name="Deal.findAllByPlayer">
+        <![CDATA[   FROM Deal
+                    WHERE player.id = :playerId]]>
+    </query>
+
 </hibernate-mapping>

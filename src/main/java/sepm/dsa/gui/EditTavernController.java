@@ -1,7 +1,5 @@
 package sepm.dsa.gui;
 
-
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -27,9 +25,11 @@ import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TavernService;
 import sepm.dsa.util.CurrencyFormatUtil;
 
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class EditTavernController implements Initializable {
+public class EditTavernController extends BaseControllerImpl {
 
 	private static final Logger log = LoggerFactory.getLogger(EditTavernController.class);
 	private SpringFxmlLoader loader;
@@ -56,15 +56,20 @@ public class EditTavernController implements Initializable {
 	@FXML
 	private TextField bedsField;
 
-
 	@Override
-	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-		log.debug("initialise EditTavernController");
-		qualityCoicheBox.setItems(FXCollections.observableArrayList(ProductQuality.values()));
-        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+	public void initialize(URL location, ResourceBundle resources) {
+		super.initialize(location, resources);
+		qualityCoicheBox.getItems().setAll(ProductQuality.values());
+        qualityCoicheBox.setValue(ProductQuality.NORMAL);
+		defaultCurrencySet = currencySetService.getDefaultCurrencySet();
 	}
 
-	@FXML
+	@Override
+    public void reload() {
+        log.debug("reload EditTavernController");
+    }
+
+    @FXML
 	private void onSavePressed() {
 		log.debug("called onSavePressed");
 
@@ -73,7 +78,7 @@ public class EditTavernController implements Initializable {
 		try {
 			beds = Integer.parseInt(bedsField.getText());
 		} catch (NumberFormatException ex) {
-			throw new DSAValidationException("Anzahl der Betten muss eine ganze Zahl sein!");
+			throw new DSAValidationException("Anzahl der Betten muss eine ganze positive Zahl sein!");
 		}
 		ProductQuality quality = qualityCoicheBox.getValue();
 
@@ -129,7 +134,7 @@ public class EditTavernController implements Initializable {
 			selectedTavern = new Tavern();
 		} else {
 			isNewTavern = false;
-			this.selectedTavern = tavern;
+			selectedTavern = tavern;
 			fillGuiWithData(selectedTavern);
 		}
 	}
@@ -143,7 +148,7 @@ public class EditTavernController implements Initializable {
 		qualityCoicheBox.getSelectionModel().select(tavern.getQuality());
 		useageLabel.setText(tavern.getUsage() + "");
         List<CurrencyAmount> currencyAmounts = currencySetService.toCurrencySet(defaultCurrencySet, tavern.getPrice());
-		priceLabel.setText(CurrencyFormatUtil.currencySetShortString(currencyAmounts, ", "));
+		priceLabel.setText(CurrencyFormatUtil.currencySetString(currencyAmounts));
 		commentArea.setText(tavern.getComment() == null ? "" : tavern.getComment());
 	}
 

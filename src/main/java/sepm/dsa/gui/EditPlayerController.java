@@ -2,7 +2,6 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -20,9 +19,11 @@ import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 import sepm.dsa.util.CurrencyFormatUtil;
 
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class EditPlayerController implements Initializable {
+public class EditPlayerController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(EditPlayerController.class);
     private SpringFxmlLoader loader;
@@ -34,7 +35,7 @@ public class EditPlayerController implements Initializable {
 
     private SaveCancelService saveCancelService;
 
-    private static Player selectedPlayer;
+    private Player selectedPlayer;
     private boolean isNewPlaper;
     private CurrencySet defaultCurrencySet;
 
@@ -60,25 +61,16 @@ public class EditPlayerController implements Initializable {
     private TableColumn<Deal, String> amountColumn;
 
     @Override
-    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-        log.debug("initialize EditPlayerController");
-
-        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
-        
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
         //initialize table
         initialzeTableWithColums();
+        defaultCurrencySet = currencySetService.getDefaultCurrencySet();
+    }
 
-        if (selectedPlayer != null) {
-            isNewPlaper = false;
-            nameField.setText(selectedPlayer.getName());
-            commentField.setText(selectedPlayer.getComment());
-            if (selectedPlayer.getDeals().size() > 0) {
-                dealsTable.setItems(FXCollections.observableArrayList(selectedPlayer.getDeals()));
-            }
-        } else {
-            isNewPlaper = true;
-            selectedPlayer = new Player();
-        }
+    @Override
+    public void reload() {
+        log.debug("reload EditPlayerController");
     }
 
     @FXML
@@ -88,9 +80,11 @@ public class EditPlayerController implements Initializable {
         saveCancelService.save();
         Stage stage = (Stage) nameField.getScene().getWindow();
 
-        Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
+        Parent scene = (Parent) loader.load("/gui/playerlist.fxml", stage);
+        PlayerListController ctrl = loader.getController();
+        ctrl.reload();
 
-        stage.setScene(new Scene(scene, 850, 438));
+        stage.setScene(new Scene(scene, 600, 438));
     }
 
     @FXML
@@ -114,8 +108,10 @@ public class EditPlayerController implements Initializable {
 
         // return to players-list
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/playerlist.fxml");
-        stage.setScene(new Scene(scene, 850, 438));
+        Parent scene = (Parent) loader.load("/gui/playerlist.fxml", stage);
+        PlayerListController ctrl = loader.getController();
+        ctrl.reload();
+        stage.setScene(new Scene(scene, 600, 438));
     }
 
     private void initialzeTableWithColums() {
@@ -189,8 +185,19 @@ public class EditPlayerController implements Initializable {
         this.loader = loader;
     }
 
-    public static void setPlayer(Player player) {
+    public void setPlayer(Player player) {
         selectedPlayer = player;
+        if(selectedPlayer != null) {
+            isNewPlaper = false;
+            nameField.setText(selectedPlayer.getName());
+            commentField.setText(selectedPlayer.getComment());
+            if (selectedPlayer.getDeals().size() > 0) {
+                dealsTable.getItems().setAll(selectedPlayer.getDeals());
+            }
+        }else {
+            isNewPlaper = true;
+            selectedPlayer = new Player();
+        }
     }
 
     public void setSaveCancelService(SaveCancelService saveCancelService) {
