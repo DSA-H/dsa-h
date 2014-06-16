@@ -24,6 +24,7 @@ import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 import sepm.dsa.util.CurrencyFormatUtil;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -89,7 +90,24 @@ public class TraderDetailsController extends BaseControllerImpl {
 
 		log.debug("initialize TraderDetailsController");
 
-		amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
+		amountColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Offer, String> r) {
+                if (r.getValue() != null) {
+                    Offer offer = r.getValue();
+                    Unit unit = offer.getProduct().getUnit();
+                    Double amount = offer.getAmount();
+
+                    DecimalFormat format = new DecimalFormat("#0.##");
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(format.format(amount)).append(" ").append(unit.getShortName());
+                    return new SimpleStringProperty(sb.toString());
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
 
         productColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
             @Override
@@ -99,7 +117,7 @@ public class TraderDetailsController extends BaseControllerImpl {
                     StringBuilder sb = new StringBuilder();
                     sb.append(offer.getProduct().getName());
                     if (offer.getProduct().getQuality()) {
-                        sb.append("(" + r.getValue().getQuality().getName() + ")");
+                        sb.append(" (" + r.getValue().getQuality().getName() + ")");
                     }
                     return new SimpleStringProperty(sb.toString());
                 } else {
@@ -186,7 +204,22 @@ public class TraderDetailsController extends BaseControllerImpl {
 			return new SimpleStringProperty(sb.toString());
 		});
 
-		productDealColumn.setCellValueFactory(new PropertyValueFactory<Deal, String>("productName"));
+		productDealColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> r) {
+                if (r.getValue() != null) {
+                    Deal deal = r.getValue();
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(deal.getProduct().getName());
+                    if (deal.getProduct().getQuality()) {
+                        sb.append(" (" + deal.getQuality().getName() + ")");
+                    }
+                    return new SimpleStringProperty(sb.toString());
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            }
+        });
 
         amountDealColumn.setCellValueFactory(d -> {
             Unit unit = d.getValue().getUnit();
