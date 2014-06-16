@@ -243,7 +243,9 @@ public class TraderDetailsController extends BaseControllerImpl {
 		log.debug("called onBackPressed");
 
 		Stage stage = (Stage) offerTable.getScene().getWindow();
-		stage.close();
+        if(stage != null) {
+            stage.close();
+        }
 	}
 
 	@FXML
@@ -255,6 +257,7 @@ public class TraderDetailsController extends BaseControllerImpl {
 		controller.setTrader(trader);
 		controller.setLocation(trader.getLocation());
 		controller.setPosition(new Point2D(trader.getxPos(), trader.getyPos()));
+        controller.reload();
 		stage.setScene(new Scene(scene, 785, 513));
 	}
 

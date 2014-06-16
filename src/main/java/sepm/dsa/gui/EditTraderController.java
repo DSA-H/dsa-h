@@ -18,9 +18,11 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class EditTraderController extends BaseControllerImpl {
 
@@ -63,9 +65,9 @@ public class EditTraderController extends BaseControllerImpl {
     @FXML
     private TextField convinceField;
     @FXML
-    private ChoiceBox locationBox;
+    private ChoiceBox<Location> locationBox;
     @FXML
-    private ChoiceBox categoryBox;
+    private ChoiceBox<TraderCategory> categoryBox;
     @FXML
     private TextArea commentArea;
 
@@ -87,14 +89,10 @@ public class EditTraderController extends BaseControllerImpl {
 	private CheckBox movingCheck;
 
     @Override
-    public void reload() {
-        log.debug("reload EditTraderController");
-
-        //init choiceBoxes
-	    categoryBox.getItems().setAll(categoryService.getAll());
-	locationBox.getItems().setAll(locationService.getAll());
-	areaBox.getItems().setAll(DistancePreferrence.values());
-	citySizeBox.getItems().setAll(TownSize.values());
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
+        areaBox.getItems().setAll(DistancePreferrence.values());
+        citySizeBox.getItems().setAll(TownSize.values());
 
         movingCheck.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -120,24 +118,37 @@ public class EditTraderController extends BaseControllerImpl {
                 }
             }
         });
+    }
 
-        if (selectedTrader == null) {
-            isNewTrader = true;
-            selectedTrader = new Trader();
-            initialType = TRADER;
-            currentType = TRADER;
-        } else {
-            isNewTrader = false;
-            if (selectedTrader instanceof MovingTrader) {
-                lastmoved = new DSADate(((MovingTrader) selectedTrader).getLastMoved());
-                initialType = MOVINGTRADER;
-                currentType = MOVINGTRADER;
-            } else {
-                initialType = TRADER;
-                currentType = TRADER;
+    @Override
+    public void reload() {
+        log.debug("reload EditTraderController");
+
+        if(!isNewTrader) {
+            if (traderService.get(selectedTrader.getId()) == null) {
+                Stage stage = (Stage)categoryBox.getScene().getWindow();
+                stage.close();
+                return;
             }
         }
-        setUp();
+
+        //init choiceBoxes
+        TraderCategory category = categoryBox.getValue();
+	    categoryBox.getItems().setAll(categoryService.getAll());
+        if(categoryBox.getItems().contains(category)) {
+            categoryBox.setValue(category);
+        }else {
+            categoryBox.setValue(null);
+            categoryBox.getSelectionModel().clearSelection();
+        }
+        Location location = locationBox.getValue();
+       	locationBox.getItems().setAll(locationService.getAll());
+        if(locationBox.getItems().contains(location)) {
+            locationBox.setValue(location);
+        }else {
+            locationBox.setValue(null);
+            locationBox.getSelectionModel().clearSelection();
+        }
     }
 
     private void setUp() {
@@ -446,8 +457,6 @@ public class EditTraderController extends BaseControllerImpl {
 
         Stage stage = (Stage) nameField.getScene().getWindow();
         stage.close();
-
-
     }
 
     @FXML
@@ -476,6 +485,24 @@ public class EditTraderController extends BaseControllerImpl {
     public void setTrader(Trader trader) {
         log.debug("calling setTrader(" + trader + ")");
         selectedTrader = trader;
+
+        if (selectedTrader == null) {
+            isNewTrader = true;
+            selectedTrader = new Trader();
+            initialType = TRADER;
+            currentType = TRADER;
+        } else {
+            isNewTrader = false;
+            if (selectedTrader instanceof MovingTrader) {
+                lastmoved = new DSADate(((MovingTrader) selectedTrader).getLastMoved());
+                initialType = MOVINGTRADER;
+                currentType = MOVINGTRADER;
+            } else {
+                initialType = TRADER;
+                currentType = TRADER;
+            }
+        }
+        setUp();
     }
 
     public void setLocation(Location location) {
