@@ -46,7 +46,8 @@ public class Tavern implements BaseModel {
 	@Column(nullable = false)
 	private Integer quality;
 
-	@Column
+    @Size(min = 0, max = 1000)
+	@Column(length = 1000)
 	private String comment;
 
 	public Integer getBeds() {
