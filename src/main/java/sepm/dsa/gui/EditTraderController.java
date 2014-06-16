@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 
@@ -126,10 +127,21 @@ public class EditTraderController extends BaseControllerImpl {
 
         if(!isNewTrader) {
             if (traderService.get(selectedTrader.getId()) == null) {
-                Stage stage = (Stage)categoryBox.getScene().getWindow();
-                stage.close();
+                onCancelPressed();
                 return;
             }
+            if(traderService.get(selectedTrader.getId()) instanceof MovingTrader) {
+                if(currentType != MOVINGTRADER) {
+                    onCancelPressed();
+                    return;
+                }
+            }else {
+                if(currentType != TRADER) {
+                    onCancelPressed();
+                    return;
+                }
+            }
+            categoryBox.setDisable(true);
         }
 
         //init choiceBoxes
@@ -242,6 +254,7 @@ public class EditTraderController extends BaseControllerImpl {
 
 	    if (initialType != currentType) {
 		    if (currentType == MOVINGTRADER) {
+
 			    if (!isNewTrader) {
 				    traderService.remove(selectedTrader);
 			    }
@@ -255,76 +268,52 @@ public class EditTraderController extends BaseControllerImpl {
 	    }
 
         //name
+        String name;
         int count = StringUtils.countOccurrencesOf(nameField.getText(), " ");
         if (count != nameField.getText().length()) {
-            selectedTrader.setName(nameField.getText());
+            name = nameField.getText();
         } else {
-            Dialogs.create()
-                    .title("Ungültige Eingabe")
-                    .masthead(null)
-                    .message("Der Name des Händlers darf nicht nur aus Leerzeichen bestehen!")
-                    .showWarning();
-            return;
+            throw new DSAValidationException("Der Name des Händlers darf nicht nur aus Leerzeichen bestehen!");
         }
 
         //size
+        Integer size;
         try {
-            selectedTrader.setSize(Integer.parseInt(sizeField.getText()));
+            size = Integer.parseInt(sizeField.getText());
         } catch (NumberFormatException e) {
-            Dialogs.create()
-                    .title("Ungültige Eingabe")
-                    .masthead(null)
-                    .message("Die Größe des Händler muss eine Zahl sein, die die Anzahl an seiner Waren darstellt!")
-                    .showWarning();
-            return;
+            throw new DSAValidationException("Die Größe des Händler muss eine Zahl sein, die die Anzahl an seiner Waren darstellt!");
         }
 
         //mut
+        Integer mut;
         try {
-            selectedTrader.setMut(Integer.parseInt(muField.getText()));
+            mut = Integer.parseInt(muField.getText());
         } catch (NumberFormatException e) {
-            Dialogs.create()
-                    .title("Ungültige Eingabe")
-                    .masthead(null)
-                    .message("Der Mut-Wert des Händler muss eine Zahl sein!")
-                    .showWarning();
-            return;
+            throw new DSAValidationException("Der Mut-Wert des Händler muss eine Zahl sein!");
         }
 
         //intelligenz
+        Integer in;
         try {
-            selectedTrader.setIntelligence(Integer.parseInt(inField.getText()));
+            in = Integer.parseInt(inField.getText());
         } catch (NumberFormatException e) {
-            Dialogs.create()
-                    .title("Ungültige Eingabe")
-                    .masthead(null)
-                    .message("Der Intelligenz-Wert des Händler muss eine Zahl sein!")
-                    .showWarning();
-            return;
+            throw new DSAValidationException("Der Intelligenz-Wert des Händler muss eine Zahl sein!");
         }
 
         //charisma
+        Integer ch;
         try {
-            selectedTrader.setCharisma(Integer.parseInt(chField.getText()));
+            ch = Integer.parseInt(chField.getText());
         } catch (NumberFormatException e) {
-            Dialogs.create()
-                    .title("Ungültige Eingabe")
-                    .masthead(null)
-                    .message("Der Charisma-Wert des Händler muss eine Zahl sein!")
-                    .showWarning();
-            return;
+            throw new DSAValidationException("Der Charisma-Wert des Händler muss eine Zahl sein!");
         }
 
         //convince
+        Integer convince;
         try {
-            selectedTrader.setConvince(Integer.parseInt(convinceField.getText()));
+            convince = Integer.parseInt(convinceField.getText());
         } catch (NumberFormatException e) {
-            Dialogs.create()
-                    .title("Ungültige Eingabe")
-                    .masthead(null)
-                    .message("Der Überreden-Wert des Händler muss eine Zahl sein!")
-                    .showWarning();
-            return;
+            throw new DSAValidationException("Der Überreden-Wert des Händler muss eine Zahl sein!");
         }
 
         //location
@@ -333,86 +322,67 @@ public class EditTraderController extends BaseControllerImpl {
             selectedTrader.setxPos(0);
             selectedTrader.setyPos(0);
         }
-        if (location != null) {
-            selectedTrader.setLocation(location);
-        } else {
-            Dialogs.create()
-                    .title("Ungültige Eingabe")
-                    .masthead(null)
-                    .message("Ein Ort muss ausgewählt werden!")
-                    .showWarning();
-            return;
+        if (location == null) {
+            throw new DSAValidationException("Ein Ort muss ausgewählt werden!");
         }
 
         //category
         TraderCategory category = (TraderCategory) categoryBox.getSelectionModel().getSelectedItem();
-        if (category != null) {
-            selectedTrader.setCategory(category);
-        } else {
-            Dialogs.create()
-                    .title("Ungültige Eingabe")
-                    .masthead(null)
-                    .message("Eine Händlerkategorie muss ausgewählt werden!")
-                    .showWarning();
-            return;
+        if (category == null) {
+            throw new DSAValidationException("Eine Händlerkategorie muss ausgewählt werden!");
         }
 
-        //comment
-        selectedTrader.setComment(commentArea.getText());
-
-	    //position
-	    selectedTrader.setxPos((int) position.getX());
-	    selectedTrader.setyPos((int) position.getY());
-
+        Integer avgStayDays = null;
+        TownSize townsize = null;
+        DistancePreferrence area = null;
 	    if (selectedTrader instanceof MovingTrader) {
 		    //avg. stayTime
 		    try {
-			    ((MovingTrader) selectedTrader).setAvgStayDays(Integer.parseInt(stayTimeField.getText()));
+                avgStayDays = Integer.parseInt(stayTimeField.getText());
 		    } catch (NumberFormatException e) {
-			    Dialogs.create()
-					    .title("Ungültige Eingabe")
-					    .masthead(null)
-					    .message("Die Durchschnittliche Verweilzeit des Händler muss eine Zahl sein!")
-					    .showWarning();
-			    return;
+                throw new DSAValidationException("Die Durchschnittliche Verweilzeit des Händler muss eine Zahl sein!");
 		    }
 
 		    //pref. townSize
-		    TownSize size = citySizeBox.getValue();
-		    if (size != null) {
-			    ((MovingTrader) selectedTrader).setPreferredTownSize(size);
-		    } else {
-			    Dialogs.create()
-					    .title("Ungültige Eingabe")
-					    .masthead(null)
-					    .message("Eine bevorzugte Stadtgröße muss ausgewählt werden!")
-					    .showWarning();
-			    return;
+            townsize = citySizeBox.getValue();
+		    if (townsize == null) {
+                throw new DSAValidationException("Eine bevorzugte Stadtgröße muss ausgewählt werden!");
 		    }
 
+            area = areaBox.getValue();
 		    //travel area
-		    DistancePreferrence area = areaBox.getValue();
-		    if (area != null) {
-			    ((MovingTrader) selectedTrader).setPreferredDistance(area);
-		    } else {
-			    Dialogs.create()
-					    .title("Ungültige Eingabe")
-					    .masthead(null)
-					    .message("Ein Reisegebiet muss ausgewählt werden!")
-					    .showWarning();
-			    return;
+		    if (area == null) {
+                throw new DSAValidationException("Ein Reisegebiet muss ausgewählt werden!");
 		    }
-
-		    //lastmoved
-		    DSADate date = timeService.getCurrentDate();
-		    ((MovingTrader) selectedTrader).setLastMoved(date);
-
 	    }
 
+        if(!isNewTrader) {
+
+        }
+
         if (isNewTrader) {
+            selectedTrader.setName(name);
+            selectedTrader.setSize(size);
+            selectedTrader.setMut(mut);
+            selectedTrader.setIntelligence(in);
+            selectedTrader.setCharisma(ch);
+            selectedTrader.setConvince(convince);
+            selectedTrader.setLocation(location);
+            selectedTrader.setCategory(category);
+            selectedTrader.setComment(commentArea.getText());
+            selectedTrader.setxPos((int) position.getX());
+            selectedTrader.setyPos((int) position.getY());
+            if(selectedTrader instanceof MovingTrader) {
+                ((MovingTrader) selectedTrader).setAvgStayDays(avgStayDays);
+                ((MovingTrader) selectedTrader).setPreferredTownSize(townsize);
+                ((MovingTrader) selectedTrader).setPreferredDistance(area);
+                //lastmoved
+                DSADate date = timeService.getCurrentDate();
+                ((MovingTrader) selectedTrader).setLastMoved(date);
+            }
             traderService.add(selectedTrader);
         } else {
-            if (currentType == TRADER && !oldLocation.equals(selectedTrader.getLocation())) {
+            if (!oldLocation.equals(location)) {
                 Action response = Dialogs.create()
                         .title("Sortiment neu berechnen?")
                         .masthead(null)
@@ -420,14 +390,31 @@ public class EditTraderController extends BaseControllerImpl {
                         .showConfirm();
 
                 if (response == Dialog.Actions.YES) {
+                    selectedTrader.setName(name);
+                    selectedTrader.setSize(size);
+                    selectedTrader.setMut(mut);
+                    selectedTrader.setIntelligence(in);
+                    selectedTrader.setCharisma(ch);
+                    selectedTrader.setConvince(convince);
+                    selectedTrader.setLocation(location);
+                    selectedTrader.setCategory(category);
+                    selectedTrader.setComment(commentArea.getText());
+                    selectedTrader.setxPos((int) position.getX());
+                    selectedTrader.setyPos((int) position.getY());
+                    if(selectedTrader instanceof MovingTrader) {
+                        ((MovingTrader) selectedTrader).setAvgStayDays(avgStayDays);
+                        ((MovingTrader) selectedTrader).setPreferredTownSize(townsize);
+                        ((MovingTrader) selectedTrader).setPreferredDistance(area);
+                        //lastmoved
+                        DSADate date = timeService.getCurrentDate();
+                        ((MovingTrader) selectedTrader).setLastMoved(date);
+                    }
                     selectedTrader = traderService.recalculateOffers(selectedTrader);
                 } else if (response == Dialog.Actions.NO) {
-
                     List<Dialogs.CommandLink> links = Arrays.asList(
                             new Dialogs.CommandLink("Alle Preise neu berechnen!", "Hierdurch werden die Preise von allen im Sortiment enthaltenen Waren neu berechnet."),
                             new Dialogs.CommandLink("Nur bestimmte Preise erhöhen!", "Hierdurch werden nur die Preise von Produkten die teurer werden neu berechnet")
                     );
-
                     Action response2 = Dialogs.create()
                             .title("Preise neu berechnen?")
                             .masthead(null)
@@ -435,18 +422,76 @@ public class EditTraderController extends BaseControllerImpl {
                             .showCommandLinks(links.get(1), links);
 
                     if (response2 == links.get(0)) {
+                        selectedTrader.setName(name);
+                        selectedTrader.setSize(size);
+                        selectedTrader.setMut(mut);
+                        selectedTrader.setIntelligence(in);
+                        selectedTrader.setCharisma(ch);
+                        selectedTrader.setConvince(convince);
+                        selectedTrader.setLocation(location);
+                        selectedTrader.setCategory(category);
+                        selectedTrader.setComment(commentArea.getText());
+                        selectedTrader.setxPos((int) position.getX());
+                        selectedTrader.setyPos((int) position.getY());
+                        if(selectedTrader instanceof MovingTrader) {
+                            ((MovingTrader) selectedTrader).setAvgStayDays(avgStayDays);
+                            ((MovingTrader) selectedTrader).setPreferredTownSize(townsize);
+                            ((MovingTrader) selectedTrader).setPreferredDistance(area);
+                            //lastmoved
+                            DSADate date = timeService.getCurrentDate();
+                            ((MovingTrader) selectedTrader).setLastMoved(date);
+                        }
                         //Recalculate pricing
                         traderService.reCalculatePriceForOffer(/*selectedTrader.getOffers(), */selectedTrader);
-                    } else {
+                    } else if(response2 == links.get(1)) {
+                        selectedTrader.setName(name);
+                        selectedTrader.setSize(size);
+                        selectedTrader.setMut(mut);
+                        selectedTrader.setIntelligence(in);
+                        selectedTrader.setCharisma(ch);
+                        selectedTrader.setConvince(convince);
+                        selectedTrader.setLocation(location);
+                        selectedTrader.setCategory(category);
+                        selectedTrader.setComment(commentArea.getText());
+                        selectedTrader.setxPos((int) position.getX());
+                        selectedTrader.setyPos((int) position.getY());
+                        if(selectedTrader instanceof MovingTrader) {
+                            ((MovingTrader) selectedTrader).setAvgStayDays(avgStayDays);
+                            ((MovingTrader) selectedTrader).setPreferredTownSize(townsize);
+                            ((MovingTrader) selectedTrader).setPreferredDistance(area);
+                            //lastmoved
+                            DSADate date = timeService.getCurrentDate();
+                            ((MovingTrader) selectedTrader).setLastMoved(date);
+                        }
                         //Recalculate pricing if new price is higher
                         traderService.reCalculatePriceForOfferIfNewPriceIsHigher(/*selectedTrader.getOffers(), */selectedTrader);
-
+                    }else {
+                        return;
                     }
                 } else {
                     return;
                 }
             }
 
+            selectedTrader.setName(name);
+            selectedTrader.setSize(size);
+            selectedTrader.setMut(mut);
+            selectedTrader.setIntelligence(in);
+            selectedTrader.setCharisma(ch);
+            selectedTrader.setConvince(convince);
+            selectedTrader.setLocation(location);
+            selectedTrader.setCategory(category);
+            selectedTrader.setComment(commentArea.getText());
+            selectedTrader.setxPos((int) position.getX());
+            selectedTrader.setyPos((int) position.getY());
+            if(selectedTrader instanceof MovingTrader) {
+                ((MovingTrader) selectedTrader).setAvgStayDays(avgStayDays);
+                ((MovingTrader) selectedTrader).setPreferredTownSize(townsize);
+                ((MovingTrader) selectedTrader).setPreferredDistance(area);
+                //lastmoved
+                DSADate date = timeService.getCurrentDate();
+                ((MovingTrader) selectedTrader).setLastMoved(date);
+            }
 	        if (currentType == initialType) {
 		        traderService.update(selectedTrader);
 	        } else {
