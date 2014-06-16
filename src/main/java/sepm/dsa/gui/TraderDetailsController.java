@@ -321,22 +321,14 @@ public class TraderDetailsController extends BaseControllerImpl {
 	}
 
     @FXML
-    private void checkFocus(){
-        Offer o = offerTable.getSelectionModel().getSelectedItem();
-        if (o!=null){
-            removeButton.setDisable(false);
-        }else{
-            removeButton.setDisable(true);
-        }
-    }
-
-    @FXML
     private void onAddPressed() {
         log.debug("called onAddPressed");
         Stage stage = (Stage) offerTable.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/addoffer.fxml");
+        Parent scene = (Parent) loader.load("/gui/addoffer.fxml", stage);
         AddOfferController controller = loader.getController();
         controller.setTrader(trader);
+        controller.reload();
+
         stage.setScene(new Scene(scene, 600, 400));
     }
 
@@ -494,6 +486,12 @@ public class TraderDetailsController extends BaseControllerImpl {
             tradeButtonSell.setDisable(true);
         } else {
             tradeButtonSell.setDisable(false);
+        }
+
+        if (selectedOffer!=null){
+            removeButton.setDisable(false);
+        }else{
+            removeButton.setDisable(true);
         }
     }
 

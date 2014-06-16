@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class AddOfferController implements Initializable {
+public class AddOfferController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(AddOfferController.class);
     private SpringFxmlLoader loader;
@@ -126,9 +126,12 @@ public class AddOfferController implements Initializable {
 
         Stage stage = (Stage) textName.getScene().getWindow();
 
-        Parent scene = (Parent) loader.load("/gui/traderdetails.fxml");
+        Parent scene = (Parent) loader.load("/gui/traderdetails.fxml", stage);
+
         TraderDetailsController controller = loader.getController();
         controller.setTrader(selectedTrader);
+        controller.reload();
+
         stage.setScene(new Scene(scene, 800, 552));
     }
 
@@ -154,7 +157,7 @@ public class AddOfferController implements Initializable {
         saveCancelService.cancel();
         Stage stage = (Stage) textName.getScene().getWindow();
 
-        Parent scene = (Parent) loader.load("/gui/traderdetails.fxml");
+        Parent scene = (Parent) loader.load("/gui/traderdetails.fxml", stage);
         TraderDetailsController controller = loader.getController();
         controller.setTrader(selectedTrader);
         stage.setScene(new Scene(scene, 800, 552));
@@ -174,5 +177,11 @@ public class AddOfferController implements Initializable {
     }
     public void setTrader(Trader t) {
         this.selectedTrader = t;
+    }
+
+    @Override
+    public void reload() {
+        log.debug("reload TraderDetailsController");
+        checkFocus();
     }
 }

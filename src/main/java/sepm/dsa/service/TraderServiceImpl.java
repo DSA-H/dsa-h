@@ -36,8 +36,6 @@ public class TraderServiceImpl implements TraderService {
 
     private static final Double EPSILON = 1E-5;
 
-	private SessionFactory sessionFactory;
-
     @Override
     public void addManualOffer(Trader trader, Offer offer)
     {
