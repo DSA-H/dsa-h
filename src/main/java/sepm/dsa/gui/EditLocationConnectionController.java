@@ -78,9 +78,13 @@ public class EditLocationConnectionController extends BaseControllerImpl {
             throw new DSAValidationException("Reisezeit muss eine positive ganze Zahl sein!");
         }
 
+        LocationConnection editedLocationConnection = new LocationConnection(locationConnection);
+        editedLocationConnection.setTravelTime(travelTime);
+        editedLocationConnection.setComment(ta_Comment.getText());
+        locationConnectionService.validate(editedLocationConnection); // once this passes, the real locationConnection can be changed
+
         locationConnection.setTravelTime(travelTime);
         locationConnection.setComment(ta_Comment.getText());
-//        locationConnectionService.update(locationConnection);
         goBack();
     }
 

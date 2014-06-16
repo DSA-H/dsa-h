@@ -31,6 +31,15 @@ public class LocationConnection implements BaseModel, PathEdge {
     @Column(nullable = true, length = 1000)
     private String comment;
 
+    public LocationConnection() {}
+
+    public LocationConnection(LocationConnection toCopy) {
+        this.pk.location1 = toCopy.getLocation1();
+        this.pk.location2 = toCopy.getLocation2();
+        this.travelTime = toCopy.getTravelTime();
+        this.comment = toCopy.getComment();
+    }
+
     public Pk getPk() {
         return pk;
     }
