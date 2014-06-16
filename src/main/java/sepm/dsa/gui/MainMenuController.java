@@ -711,10 +711,11 @@ public class MainMenuController extends BaseControllerImpl {
 		Stage stage = new Stage();
 
 		Parent scene = (Parent) loader.load("/gui/mapoptions.fxml", stage);
+		stage.setScene(new Scene(scene, 600, 400));
 		BaseController ctrl = loader.getController();
+		ctrl.reload();
 
 		stage.setTitle("Kartenoptionen");
-		stage.setScene(new Scene(scene, 600, 400));
 		stage.setResizable(false);
 		stage.show();
 	}
@@ -1532,7 +1533,7 @@ public class MainMenuController extends BaseControllerImpl {
 			if ((selectedObject instanceof Trader && ((Trader) selectedObject).getxPos() > 0 && ((Trader) selectedObject).getyPos() > 0) ||
 					(selectedObject instanceof Tavern && ((Tavern) selectedObject).getxPos() > 0 && ((Tavern) selectedObject).getyPos() > 0)) {     // mark on map
 				double iconSize = mapService.getLocationIconSize(selectedLocation);
-				selectionCanvas = new Canvas(iconSize*3, iconSize*3);
+				selectionCanvas = new Canvas(iconSize*2, iconSize*2);
 				selectionCanvas.getGraphicsContext2D().setLineWidth(iconSize*0.6);
 				selectionCanvas.getGraphicsContext2D().setStroke(mapService.getSelectionColor());
 				selectionCanvas.getGraphicsContext2D().strokeLine((iconSize*0.4), (iconSize*0.4), (iconSize*1.6), (iconSize*1.6));
