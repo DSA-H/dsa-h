@@ -49,6 +49,7 @@ public class CurrencySetServiceImpl implements CurrencySetService {
     @Transactional(readOnly = false)
     public CurrencySet update(CurrencySet r) {
         log.debug("calling update(" + r + ")");
+        validate(r);
         return currencySetDao.update(r);
     }
 

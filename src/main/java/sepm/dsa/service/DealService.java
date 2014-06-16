@@ -1,5 +1,6 @@
 package sepm.dsa.service;
 
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Deal;
 import sepm.dsa.model.Player;
 import sepm.dsa.model.Product;
@@ -66,5 +67,12 @@ public interface DealService {
      */
     List<Deal> getAllByPlayer(Player player);
 
+    /**
+     * Validates a deal
+     *
+     * @param deal the deal to be validated
+     * @throws sepm.dsa.exceptions.DSAValidationException if deal is not valid
+     */
+    void validate(Deal deal) throws DSAValidationException;
 
 }

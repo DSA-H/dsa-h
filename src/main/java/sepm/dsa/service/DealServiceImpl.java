@@ -44,6 +44,7 @@ public class DealServiceImpl implements DealService {
     @Transactional(readOnly = false)
     public Deal update(Deal r) {
         log.debug("calling update(" + r + ")");
+        validate(r);
         return dealDao.update(r);
     }
 
@@ -93,7 +94,7 @@ public class DealServiceImpl implements DealService {
      * @param deal the deal to be validated
      * @throws sepm.dsa.exceptions.DSAValidationException if deal is not valid
      */
-    private void validate(Deal deal) throws DSAValidationException {
+    public void validate(Deal deal) throws DSAValidationException {
         Set<ConstraintViolation<Deal>> violations = validator.validate(deal);
         if (violations.size() > 0) {
             throw new DSAValidationException("Deal ist nicht valide.", violations);

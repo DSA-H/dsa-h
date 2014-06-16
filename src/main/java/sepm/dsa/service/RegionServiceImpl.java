@@ -31,7 +31,7 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public Region get(int id) {
-        log.info("calling get(" + id + ")");
+        log.debug("calling get(" + id + ")");
         Region result = regionDao.get(id);
         log.trace("returning " + result);
         return result;
@@ -40,7 +40,7 @@ public class RegionServiceImpl implements RegionService {
     @Override
     @Transactional(readOnly = false)
     public Region add(Region r) {
-        log.info("calling addConnection(" + r + ")");
+        log.debug("calling addConnection(" + r + ")");
         validate(r);
         return regionDao.add(r);
     }
@@ -48,7 +48,7 @@ public class RegionServiceImpl implements RegionService {
     @Override
     @Transactional(readOnly = false)
     public Region update(Region r) {
-        log.info("calling update(" + r + ")");
+        log.debug("calling update(" + r + ")");
         validate(r);
         return regionDao.update(r);
     }
@@ -64,7 +64,7 @@ public class RegionServiceImpl implements RegionService {
     @Override
     @Transactional(readOnly = false)
     public void remove(Region r) {
-        log.info("calling removeConnection(" + r + ")");
+        log.debug("calling removeConnection(" + r + ")");
 //        List<RegionBorder> borders = regionBorderDao.getAllByRegion(r.getId());
 //        List<Location> locations = locationService.getAllByRegion(r.getId());
 
@@ -82,7 +82,7 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public List<Region> getAll() {
-        log.info("calling getAll()");
+        log.debug("calling getAll()");
         List<Region> result = regionDao.getAll();
         log.trace("returning " + result);
         return result;
@@ -105,7 +105,7 @@ public class RegionServiceImpl implements RegionService {
      * @throws DSAValidationException if region is not valid
      */
     private void validate(Region region) throws DSAValidationException {
-        log.info("calling validate(" + region + ")");
+        log.debug("calling validate(" + region + ")");
         Set<ConstraintViolation<Region>> violations = validator.validate(region);
         if (violations.size() > 0) {
             throw new DSAValidationException("Gebiet ist nicht valide.", violations);
