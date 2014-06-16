@@ -47,29 +47,6 @@
                 </filesets>
             </configuration>
 	    </plugin>
-        <!--<plugin>
-            <artifactId>maven-clean-plugin</artifactId>
-            <version>2.5</version>
-            <executions>
-                <execution>
-                    <id>auto-clean-fooDB</id>
-                    <phase>install</phase>
-                    <goals>
-                        <goal>clean</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <configuration>
-                <filesets>
-                    <fileset>
-                        <directory>database</directory>
-                        <includes>
-                            <include>fooDB.*</include>
-                        </includes>
-                    </fileset>
-                </filesets>
-            </configuration>
-        </plugin>-->
         <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
