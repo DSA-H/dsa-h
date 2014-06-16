@@ -261,9 +261,6 @@ public class TraderServiceImpl implements TraderService {
 
     @Override
     public Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, Integer totalPrice) {
-
-        // TODO discuss Currency question with jotschi
-
         Offer offer = null;
         Set<Offer> traderOffers = trader.getOffers(); // get from dao
         for (Offer o : traderOffers) {
@@ -273,13 +270,7 @@ public class TraderServiceImpl implements TraderService {
             }
         }
 
-//        TODO Jotschi: Der Haendler hat bekommt ja normalerweise immer ein volles Sortiment wenn Zeit vorwaerts gestellt wird
-//        TODO          wenn jetzt ein Spieler etwas verkaufen will, muss er zuerst was vom Haendler kaufen, sonst hat dieser keinen Platz. Bitte klaeren mit Michael
         Double offerAmountDifference = unit.exchange(productAmount.doubleValue(), product.getUnit());
-//        double newUsedspace = trader.usedSpace() + offerAmountDifference;
-//        if (newUsedspace > trader.getSize()) {
-//            throw new DSAValidationException("Der Händler kann so viele Waren nicht besitzen");
-//        }
 
         if (totalPrice.doubleValue() < 0) {
             throw new DSAValidationException("Der Preis darf nicht negativ sein");

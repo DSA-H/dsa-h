@@ -264,7 +264,7 @@ public class MainMenuController extends BaseControllerImpl {
 				TraderDetailsController controller = loader.getController();
 				controller.setTrader((Trader) selectedObject);
                 controller.reload();
-				stage.setScene(new Scene(scene, 781, 830));
+				stage.setScene(new Scene(scene, 780, 720));
 				stage.setResizable(false);
 				stage.show();
 			} else {

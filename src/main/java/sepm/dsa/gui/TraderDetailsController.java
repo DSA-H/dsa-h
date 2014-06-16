@@ -225,6 +225,7 @@ public class TraderDetailsController extends BaseControllerImpl {
 		stage.setScene(new Scene(scene, 785, 513));
 	}
 
+    // todo: Move to service layer
 	@FXML
 	private void onRolePressed() {
 		log.debug("called onRolePressed");
@@ -290,7 +291,7 @@ public class TraderDetailsController extends BaseControllerImpl {
         log.debug("called onDeleteDealClicked");
         Deal selectedDeal = dealsTable.getSelectionModel().getSelectedItem();
         if (selectedDeal == null) {
-            throw new DSAValidationException("Bitte einen Deal zum Löschen auswählen");
+            throw new DSAValidationException("Bitte einen Handel zum Löschen auswählen");
         }
         dealService.remove(selectedDeal);
         saveCancelService.save();
@@ -326,7 +327,7 @@ public class TraderDetailsController extends BaseControllerImpl {
         log.debug("called onTradeBuyPressed");
         //Player wants to sell stuff to the trader
         Stage dialog = new Stage(StageStyle.DECORATED);
-        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(dealsTable.getParent().getScene().getWindow());
         Parent scene = (Parent) loader.load("/gui/traderBuy.fxml", dialog);
         TradeBuyFromPlayerController ctrl = loader.getController();
@@ -351,7 +352,12 @@ public class TraderDetailsController extends BaseControllerImpl {
     }
 
     private void refreshView() {
-        saveCancelService.refresh(trader);
+        if(traderService.get(trader.getId()) != null) {
+            saveCancelService.refresh(trader);
+        }else {
+            onBackPressed();
+            return;
+        }
 
         nameLabel.setText(trader.getName());
         categoryLabel.setText(trader.getCategory().getName());
