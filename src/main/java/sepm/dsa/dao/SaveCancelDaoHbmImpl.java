@@ -14,22 +14,22 @@ public class SaveCancelDaoHbmImpl implements SaveCancelDao {
 
     @Override
     public void save() {
-        log.info("calling save()");
+        log.debug("calling save()");
     }
 
     @Override
     public void cancel() {
-        log.info("calling cancel()");
+        log.debug("calling cancel()");
     }
 
     @Override
     public void closeSession() {
-        log.info("calling closeSession()");
+        log.debug("calling closeSession()");
     }
 
     @Override
     public void refresh(BaseModel... objects) {
-        log.info("calling refresh(" + objects + ")");
+        log.debug("calling refresh(" + objects + ")");
         for (Object o : objects) {
             sessionFactory.getCurrentSession().refresh(o);
         }
@@ -37,7 +37,7 @@ public class SaveCancelDaoHbmImpl implements SaveCancelDao {
 
     @Override
     public void refresh(Collection<? extends BaseModel> objects) {
-        log.info("calling refresh(" + objects + ")");
+        log.debug("calling refresh(" + objects + ")");
         for (Object o : objects) {
             sessionFactory.getCurrentSession().refresh(o);
         }
