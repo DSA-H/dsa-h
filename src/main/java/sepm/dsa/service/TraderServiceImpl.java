@@ -36,6 +36,45 @@ public class TraderServiceImpl implements TraderService {
 
     private static final Double EPSILON = 1E-5;
 
+	private SessionFactory sessionFactory;
+
+    @Override
+    public void addManualOffer(Trader trader, Offer offer)
+    {
+        Set<Offer> offers = trader.getOffers();
+        Offer raiseOffer = null;
+        for (Offer o : offers){
+            if (offer.getProduct().equals(o.getProduct())){
+                if (offer.getQuality().equals(o.getQuality())){
+                    raiseOffer=o;
+                    break;
+                }
+            }
+        }
+        if (raiseOffer!=null){
+            raiseOffer.setAmount(raiseOffer.getAmount()+offer.getAmount());
+        }else {
+            offerDao.add(offer);
+            offers.add(offer);
+        }
+        trader.setOffers(offers);
+    }
+
+    @Override
+    public void removeManualOffer(Trader trader, Offer offer, int amount)
+    {
+        if (amount >= offer.getAmount()) {
+            offerDao.remove(offer);
+            Set<Offer> offers = trader.getOffers();
+            offers.remove(offer);
+            trader.setOffers(offers);
+        }else {
+            offer.setAmount(offer.getAmount()-amount);
+            offerDao.update(offer);
+        }
+        traderDao.update(trader);
+    }
+
 	@Override
     public Trader get(int id) {
         log.debug("calling get(" + id + ")");
@@ -48,7 +87,7 @@ public class TraderServiceImpl implements TraderService {
     }
 
     /**
-     * Adds a new offer and generate and save a set of offers for him
+     * Adds a new trader and generate and save a set of offers for him
      * @param t (Trader) to be persisted must not be null
      * @return
      */
@@ -181,8 +220,8 @@ public class TraderServiceImpl implements TraderService {
         return buyFromPlayer(trader, player, product, productQuality, unit, amount, baseValuePrice);
     }
 
-    //     * @throws sepm.dsa.exceptions.DSAValidationException if offer does not have the product with this quality <br />
-//     *      or the amount is greater than the offer offers <br />
+    //     * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
+//     *      or the amount is greater than the trader offers <br />
 //     *      or unit does does not match the product unit <br />
 //     *      or totalPrice is negative
     @Override
@@ -385,7 +424,7 @@ public class TraderServiceImpl implements TraderService {
         }
 
         // create Offers
-        List<Offer> offers = new ArrayList<>();
+        List<Offer> offers = new ArrayList<Offer>();
         for (Product product : productAmmountMap.keySet()) {
             int amount = productAmmountMap.get(product);
 

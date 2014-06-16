@@ -2,6 +2,7 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -14,44 +15,57 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.Dialogs;
 import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.model.Offer;
+import sepm.dsa.model.Trader;
+import sepm.dsa.service.TraderService;
+import sepm.dsa.service.TraderServiceImpl;
 import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
+import sepm.dsa.service.DealService;
+import sepm.dsa.service.SaveCancelService;
+import sepm.dsa.service.TimeService;
 import sepm.dsa.service.*;
 import sepm.dsa.util.CurrencyFormatUtil;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class TraderDetailsController extends BaseControllerImpl {
 
-	private static final Logger log = LoggerFactory.getLogger(TraderDetailsController.class);
-	private SpringFxmlLoader loader;
+    private static final Logger log = LoggerFactory.getLogger(TraderDetailsController.class);
+    private SpringFxmlLoader loader;
 	private TraderService traderService;
 
     private Trader trader;
+    private Offer selectedOffer;
     private TimeService timeService;
     private DealService dealService;
     private CurrencySetService currencySetService;
     private SaveCancelService saveCancelService;
 
-
-	@FXML
-	private TableView<Offer> offerTable;
-	@FXML
-	private TableColumn amountColumn;
-	@FXML
-	private TableColumn productColumn;
-	@FXML
-	private TableColumn localPriceColumn;
-	@FXML
-	private TableColumn standardPriceColumn;
+    @FXML
+    private TableView<Offer> offerTable;
+    @FXML
+    private TableColumn amountColumn;
+    @FXML
+    private TableColumn productColumn;
+    @FXML
+    private TableColumn localPriceColumn;
+    @FXML
+    private TableColumn standardPriceColumn;
 
 	@FXML
 	private Label nameLabel;
@@ -59,28 +73,29 @@ public class TraderDetailsController extends BaseControllerImpl {
 	private Label categoryLabel;
 
 	@FXML
-	private TextField difficultyField;
-	@FXML
-	private Label resultLabel;
-	@FXML
-	private TextArea commentArea;
-
-	@FXML
     private Button tradeButtonSell;
+    @FXML
+    private TextField difficultyField;
+    @FXML
+    private Label resultLabel;
+    @FXML
+    private TextArea commentArea;
+    @FXML
+    private Button removeButton;
     @FXML
     private Button tradeButtonBuy;
     @FXML
-	private TableView<Deal> dealsTable;
-	@FXML
-	private TableColumn<Deal, String> playerColumn;
-	@FXML
-	private TableColumn<Deal, String> productDealColumn;
-	@FXML
-	private TableColumn<Deal, String> priceColumn;
-	@FXML
-	private TableColumn<Deal, String> amountDealColumn;
-	@FXML
-	private TableColumn<Deal, String> dateColumn;
+    private TableView<Deal> dealsTable;
+    @FXML
+    private TableColumn<Deal, String> playerColumn;
+    @FXML
+    private TableColumn<Deal, String> productDealColumn;
+    @FXML
+    private TableColumn<Deal, String> priceColumn;
+    @FXML
+    private TableColumn<Deal, String> amountDealColumn;
+    @FXML
+    private TableColumn<Deal, String> dateColumn;
 
     private CurrencySet defaultCurrencySet;
 
@@ -120,13 +135,11 @@ public class TraderDetailsController extends BaseControllerImpl {
                         sb.append(" (" + r.getValue().getQuality().getName() + ")");
                     }
                     return new SimpleStringProperty(sb.toString());
-                } else {
+                }else {
                     return new SimpleStringProperty("");
                 }
             }
         });
-//        localPriceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
-//        standardPriceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
         localPriceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Offer, String> r) {
@@ -307,29 +320,82 @@ public class TraderDetailsController extends BaseControllerImpl {
 		}
 	}
 
-	@FXML
-	private void onAddPressed() {
-		log.debug("called onAddPressed");
-		//TODO not part of version 1
-	}
-
-	@FXML
-	private void onDeletePressed() {
-		log.debug("called onDeletePressed");
-		//TODO not part of version 1
-	}
-
     @FXML
-    private void onDeleteDealClicked() {
-        log.debug("called onDeleteDealClicked");
-        Deal selectedDeal = dealsTable.getSelectionModel().getSelectedItem();
-        if (selectedDeal == null) {
-            throw new DSAValidationException("Bitte einen Handel zum Löschen auswählen");
+    private void checkFocus(){
+        Offer o = offerTable.getSelectionModel().getSelectedItem();
+        if (o!=null){
+            removeButton.setDisable(false);
+        }else{
+            removeButton.setDisable(true);
         }
-        dealService.remove(selectedDeal);
-        saveCancelService.save();
     }
 
+    @FXML
+    private void onAddPressed() {
+        log.debug("called onAddPressed");
+        Stage stage = (Stage) offerTable.getScene().getWindow();
+        Parent scene = (Parent) loader.load("/gui/addoffer.fxml");
+        AddOfferController controller = loader.getController();
+        controller.setTrader(trader);
+        stage.setScene(new Scene(scene, 600, 400));
+    }
+
+    @FXML
+    private void onDeletePressed() {
+        log.debug("called onDeletePressed");
+        Offer o = offerTable.getSelectionModel().getSelectedItem();
+
+        Optional<String> response = Dialogs.create()
+                .title("Löschen?")
+                .masthead(null)
+                .message("Wie viel wollen sie entfernen?")
+                .showTextInput();
+
+        int amount = 0;
+        if (response.isPresent()){
+            try{
+                amount = Integer.parseInt(response.get());
+                if (amount < 0){
+                    Dialogs.create()
+                            .title("Ungültige Eingabe")
+                            .masthead(null)
+                            .message("Ungültige Eingabe")
+                            .showError();
+                    return;
+                }
+            }catch (NumberFormatException nfe){
+                Dialogs.create()
+                        .title("Ungültige Eingabe")
+                        .masthead(null)
+                        .message("Ungültige Eingabe")
+                        .showError();
+                return;
+            }
+        }else {
+            /*Dialogs.create()
+                    .title("Ungültige Eingabe")
+                    .masthead(null)
+                    .message("Ungültige Eingabe")
+                    .showError();*/
+            return;
+        }
+
+        boolean remove = false;
+        if (amount>=o.getAmount()){
+            remove = true;
+        }
+
+        traderService.removeManualOffer(trader, o, amount);
+
+        if (remove){
+            offerTable.getItems().remove(o);
+        }else{
+            offerTable.getItems().set(offerTable.getItems().indexOf(o),o);
+        }
+
+        checkFocus();
+        saveCancelService.save();
+    }
 
     @FXML
     private void onTradePressed() {
@@ -353,6 +419,53 @@ public class TraderDetailsController extends BaseControllerImpl {
         } else {
             throw new DSAValidationException("Kein Angebot ausgewählt");
         }
+    }
+
+    @FXML
+    private void onChangePricePressed() {
+        log.debug("called onChangePricePressed");
+        Offer o = offerTable.getSelectionModel().getSelectedItem();
+
+        Optional<String> response = Dialogs.create()
+                .title("Preis ändern")
+                .masthead(null)
+                .message("Wie hoch soll der neue Standardpreis sein?")
+                .showTextInput();
+
+        int price = 0;
+        if (response.isPresent()){
+            try{
+                price = Integer.parseInt(response.get());
+                if (price < 0){
+                    Dialogs.create()
+                            .title("Ungültige Eingabe")
+                            .masthead(null)
+                            .message("Ungültige Eingabe")
+                            .showError();
+                    return;
+                }
+            }catch (NumberFormatException nfe){
+                Dialogs.create()
+                        .title("Ungültige Eingabe")
+                        .masthead(null)
+                        .message("Ungültige Eingabe")
+                        .showError();
+                return;
+            }
+        }else {
+            /*Dialogs.create()
+                    .title("Ungültige Eingabe")
+                    .masthead(null)
+                    .message("Ungültige Eingabe")
+                    .showError();*/
+            return;
+        }
+
+        o.setPricePerUnit(price);
+        offerTable.getItems().set(offerTable.getItems().indexOf(o),o);
+
+        checkFocus();
+        saveCancelService.save();
     }
 
     @FXML

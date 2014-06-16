@@ -279,7 +279,7 @@
 
     <!-- GUI DI -->
     <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController" scope="prototype">
-	    <property name="loader" ref="loader"/>
+        <property name="loader" ref="loader"/>
         <property name="mapService" ref="mapService"/>
         <property name="locationService" ref="locationService"/>
         <property name="traderService" ref="traderService"/>
@@ -357,6 +357,13 @@
         <property name="saveCancelService" ref="saveCancelService" />
     </bean>
 
+    <bean id="addOffer" class="sepm.dsa.gui.AddOfferController">
+        <property name="loader" ref="loader"/>
+        <property name="saveCancelService" ref="saveCancelService" />
+        <property name="traderService" ref="traderService" />
+        <property name="productService" ref="productService" />
+    </bean>
+    
     <bean id="editTrader" class="sepm.dsa.gui.EditTraderController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>
