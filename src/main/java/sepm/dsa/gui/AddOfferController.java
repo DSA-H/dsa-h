@@ -32,7 +32,8 @@ public class AddOfferController extends BaseControllerImpl {
     private List<Product> allProducts;
     private Trader selectedTrader;
 
-
+    @FXML
+    private Label lbl_Unit;
     @FXML
     private TextField textName;
     @FXML
@@ -134,6 +135,10 @@ public class AddOfferController extends BaseControllerImpl {
     private void checkFocus(){
         log.debug("called checkFocus");
         Product p = productTable.getSelectionModel().getSelectedItem();
+
+        if (p != null) {
+            lbl_Unit.setText(p.getUnit().getName());
+        }
 
         saveButton.setDisable(true);
         choiceQuality.setDisable(true);

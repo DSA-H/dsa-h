@@ -22,9 +22,11 @@
 <opaqueInsets>
 <Insets />
 </opaqueInsets>
-</HBox><Label layoutX="361.0" layoutY="110.0" text="Menge:" /><Label layoutX="353.0" layoutY="148.0" text="Qualität:" /><ChoiceBox fx:id="choiceQuality" layoutX="410.25390625" layoutY="144.0" prefWidth="150.0" /><TableView fx:id="productTable" layoutX="30.0" layoutY="119.0" onMouseClicked="#checkFocus" prefHeight="261.0" prefWidth="304.0">
+</HBox><Label layoutX="361.0" layoutY="110.0" text="Menge:" /><Label layoutX="353.0" layoutY="181.0" text="Qualität:" /><ChoiceBox fx:id="choiceQuality" layoutX="410.25390625" layoutY="177.0" prefWidth="150.0" /><TableView fx:id="productTable" layoutX="30.0" layoutY="119.0" onMouseClicked="#checkFocus" prefHeight="261.0" prefWidth="304.0">
   <columns>
     <TableColumn fx:id="columnProduct" prefWidth="303.0" text="Ware" />
   </columns>
 </TableView><Button layoutX="273.0" layoutY="66.0" mnemonicParsing="false" onAction="#onFilterPressed" prefHeight="25.0" prefWidth="61.0" text="Filter" />
+      <Label layoutX="362.0" layoutY="148.0" text="Einheit:" />
+      <Label fx:id="lbl_Unit" layoutX="411.0" layoutY="148.0" text="&lt;Einheit&gt;" />
 </children></Pane>
