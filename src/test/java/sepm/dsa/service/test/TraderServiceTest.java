@@ -235,7 +235,7 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         int dealSizeBefore = dealService.getAll().size();
         int offerSizeBefore = trader.getOffers().size();
 
-        Deal deal = traderService.sellToPlayer(trader, player, product, productQuality, unit, amount, totalPrice, discount);
+        Deal deal = traderService.sellToPlayer(trader, player, product, productQuality, unit, amount, totalPrice, discount, false);
         saveCancelService.save();
 
         Trader traderAfter = traderService.get(1);

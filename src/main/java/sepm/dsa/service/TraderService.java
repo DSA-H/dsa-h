@@ -4,7 +4,6 @@ package sepm.dsa.service;
 import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.model.*;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -145,12 +144,14 @@ public interface TraderService {
      * @param amount product amount, > 0
      * @param totalPrice total price for this deal in base rate
      * @param discount discount int percent [0..100]
+     * @param removeRemainingOfferAmount the remaining product amount of the offer will be removed from the trader
+     *
      * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
      *      or the amount is greater than the trader offers <br />
      *      or unit type does does not match the product unit type <br />
      *      or totalPrice is negative
      */
-    Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, Integer totalPrice, Integer discount);
+    Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, Integer totalPrice, Integer discount, boolean removeRemainingOfferAmount);
 
     /**
      * A trader sells a product to a player. The trader's amount for this product decreases. If the amount becomes zero,
@@ -163,6 +164,7 @@ public interface TraderService {
      * @param amount product amount, > 0
      * @param totalPrice total price for this deal in multiple currencies (e.g. deriving from a currency set)
      * @param discount discount int percent [0..100]
+     * @param removeRemainingOfferAmount the remaining product amount of the offer will be removed from the trader
      *
      * @return converts the total price to base rate and calls 'Deal sellToPlayer(Trader, Player, Product, ProductQuality, Unit, Integer, Integer)'
      *
@@ -171,7 +173,7 @@ public interface TraderService {
      *      or unit type does does not match the product unit type <br />
      *      or totalPrice is negative
      */
-    Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, List<CurrencyAmount> totalPrice, Integer discount);
+    Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, List<CurrencyAmount> totalPrice, Integer discount, boolean removeRemainingOfferAmount);
 
     /**
      * A trader buys a product from a player. The trader's amount for this product increases

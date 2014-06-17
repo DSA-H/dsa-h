@@ -207,9 +207,9 @@ public class TraderServiceImpl implements TraderService {
     }
 
     @Override
-    public Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, List<CurrencyAmount> totalPrice, Integer discount) {
+    public Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, List<CurrencyAmount> totalPrice, Integer discount, boolean removeRemainingOfferAmount) {
         Integer baseValuePrice = currencyService.exchangeToBaseRate(totalPrice);
-        return sellToPlayer(trader, player, product, productQuality, unit, amount, baseValuePrice, discount);
+        return sellToPlayer(trader, player, product, productQuality, unit, amount, baseValuePrice, discount, removeRemainingOfferAmount);
     }
 
     @Override
@@ -223,7 +223,7 @@ public class TraderServiceImpl implements TraderService {
 //     *      or unit does does not match the product unit <br />
 //     *      or totalPrice is negative
     @Override
-    public Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, Integer totalPrice, Integer discount) {
+    public Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, Integer totalPrice, Integer discount, boolean removeRemainingOfferAmount) {
         Offer offer = null;
         Set<Offer> traderOffers = trader.getOffers(); // get from dao
         for (Offer o : traderOffers) {
@@ -238,7 +238,7 @@ public class TraderServiceImpl implements TraderService {
 
         Double offerAmountDifference = unit.exchange(productAmount.doubleValue(), product.getUnit());
         Double remainingAmount = offer.getAmount() - offerAmountDifference;
-        log.info("remaing amount would be " + remainingAmount);
+        log.debug("remaing amount would be " + remainingAmount);
         if (remainingAmount < 0) {
             throw new DSAValidationException("Der Händler hat nicht genug Waren dieser Art in dieser Qualitätsstufe");
         }
@@ -273,7 +273,7 @@ public class TraderServiceImpl implements TraderService {
         Deal result = dealService.add(newDeal);
 
         offer.addAmount(-offerAmountDifference);
-        if (offer.isEmpty()) {
+        if (offer.isEmpty() || removeRemainingOfferAmount) {
             offerDao.remove(offer);
         } else {
             offerDao.update(offer);

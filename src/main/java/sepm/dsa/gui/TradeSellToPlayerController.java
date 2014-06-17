@@ -6,6 +6,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -268,7 +270,45 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
         //PRICE STUFF ###########
         Integer discount = retrieveDiscount();
 
-        traderService.sellToPlayer(trader, playerToCreateDealFor, offer.getProduct(), offer.getQuality(), selectedUnit.getSelectionModel().getSelectedItem(), amount, currencyAmounts, discount);
+        Product product = offer.getProduct();
+        Unit unit = selectedUnit.getSelectionModel().getSelectedItem();
+        Double offerAmountDifference = unit.exchange((double) amount, product.getUnit());
+        boolean removeRemainingOfferAmount = false;
+        if (offer.getAmount() - offerAmountDifference < 0) {
+            // ask to buy all remaining
+            // TODO do it
+            Unit productUnit = offer.getProduct().getUnit();
+            int newAmount = offer.getAmount().intValue();
+
+            if (newAmount == 0) {
+                Dialogs.create()
+                        .title("Händler hat nicht genug von dieser Ware?")
+                        .masthead(null)
+                        .message("Der Händler hat nicht die gewollte Menge dieser Ware.\n" +
+                                "Benutzen Sie ggf. eine feinere Einheit, um noch etwas vom Rest der Ware zu erhalten.")
+                        .showInformation();
+                return;
+            }
+            Action response = Dialogs.create()
+                    .title("Händler hat nicht genug von dieser Ware?")
+                    .masthead(null)
+                    .message("Der Händler hat nicht die gewollte Menge dieser Ware. Soll der Rest von " +
+                            newAmount + " " + productUnit.getName() + " trotzdem gekauft werden?\n\n" +
+                            "Hinweis: Der Preis wird nicht neu berechnet, bitte geben Sie ggf. einen entsprechenden Preis für die " +
+                            "reduzierte Menge ein.")
+                    .actions(Dialog.Actions.NO, Dialog.Actions.YES)
+                    .showConfirm();
+
+            if (response == Dialog.Actions.YES) {
+                amount = newAmount;
+                unit = productUnit;
+                removeRemainingOfferAmount = true;
+            } else {
+                return;
+            }
+        }
+
+        traderService.sellToPlayer(trader, playerToCreateDealFor, product, offer.getQuality(), unit, amount, currencyAmounts, discount, removeRemainingOfferAmount);
         saveCancelService.save();
 
         saveCancelService.refresh(trader);
