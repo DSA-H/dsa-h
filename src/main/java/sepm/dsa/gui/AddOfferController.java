@@ -83,12 +83,7 @@ public class AddOfferController extends BaseControllerImpl {
         List<Product> filteredProducts;
         String filter = textName.getText();
 
-        filteredProducts = new ArrayList<Product>();
-        for (int i = 0; i<allProducts.size();i++){
-            if (allProducts.get(i).getName().contains(filter)){
-                filteredProducts.add(allProducts.get(i));
-            }
-        }
+        filteredProducts = new ArrayList<>(productService.getBySearchTerm(filter));
 
         showProducts(filteredProducts);
         checkFocus();

@@ -27,7 +27,7 @@
                   <Insets bottom="4.0" right="3.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#onSavePressed" prefHeight="26.0" prefWidth="150.0" text="Ankauf durchführen" />
+            <Button mnemonicParsing="false" onAction="#onSavePressed" prefHeight="26.0" prefWidth="150.0" text="Verkauf durchführen" />
          </children>
       </HBox>
       <Label layoutX="331.0" layoutY="240.0" text="Währung:" />
