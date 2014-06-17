@@ -160,6 +160,7 @@ public class AddOfferController extends BaseControllerImpl {
         Parent scene = (Parent) loader.load("/gui/traderdetails.fxml", stage);
         TraderDetailsController controller = loader.getController();
         controller.setTrader(selectedTrader);
+        controller.reload();
         stage.setScene(new Scene(scene, 800, 552));
     }
 

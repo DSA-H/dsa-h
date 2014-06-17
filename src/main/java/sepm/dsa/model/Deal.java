@@ -221,7 +221,7 @@ public class Deal implements BaseModel {
     }
 
     public Integer priceWithDiscount() {
-        return price.intValue() - discount;
+        return price.intValue() * (100 - discount) / 100;
     }
 
 }
