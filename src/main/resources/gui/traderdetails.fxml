@@ -47,6 +47,7 @@
          </columns>
       </TableView>
       <Button fx:id="tradeButtonBuy" layoutX="656.0" layoutY="299.0" mnemonicParsing="false" onAction="#onTradeBuyPressed" prefHeight="26.0" prefWidth="118.0" text="Verkauf Buchen" />
+      <Button layoutX="585.0" layoutY="396.0" mnemonicParsing="false" onMouseClicked="#onDeleteDealClicked" prefHeight="26.0" prefWidth="187.0" text="Bestehenden Handel löschen" />
       <Label layoutX="22.0" layoutY="428.0" prefHeight="16.0" prefWidth="754.0" text="(+) bei Menge: Kauf von Spieler, (-) Ankauf durch Händler" />
         <Separator layoutX="580.0" layoutY="145.0" prefWidth="200.0" /><Button layoutX="632.0" layoutY="220.0" mnemonicParsing="false" onAction="#onChangePricePressed" prefHeight="25.0" prefWidth="133.0" text="Standardpreis ändern" />
     </children>

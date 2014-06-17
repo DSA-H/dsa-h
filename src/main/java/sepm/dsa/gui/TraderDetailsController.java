@@ -393,6 +393,18 @@ public class TraderDetailsController extends BaseControllerImpl {
     }
 
     @FXML
+    private void onDeleteDealClicked() {
+        log.debug("called onDeleteDealClicked");
+        Deal selectedDeal = dealsTable.getSelectionModel().getSelectedItem();
+        if (selectedDeal == null) {
+            throw new DSAValidationException("Bitte einen Deal zum Löschen auswählen");
+        }
+        dealService.remove(selectedDeal);
+        saveCancelService.save();
+        refreshView();
+    }
+
+    @FXML
     private void onTradePressed() {
         log.debug("called onTradePressed");
         //trader wants to sell stuff to the player
