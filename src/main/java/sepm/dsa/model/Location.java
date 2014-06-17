@@ -1,5 +1,6 @@
 package sepm.dsa.model;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import sepm.dsa.service.path.PathNode;
 
@@ -21,8 +22,8 @@ public class Location implements BaseModel, PathNode {
     @Column(nullable = false, unique = true)
     private Integer id;
 
-    @NotBlank
-    @Size(max = 100, min = 1)
+    @NotNull
+    @Length(max = 100, min = 1)
     @Column(nullable = false, length = 100)
     private String name;
 
