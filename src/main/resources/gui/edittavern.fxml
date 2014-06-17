@@ -27,7 +27,7 @@
                 <Insets />
             </opaqueInsets>
         </HBox>
-        <Label alignment="CENTER_RIGHT" layoutX="21.0" layoutY="176.0" prefHeight="17.0" prefWidth="94.0" text="Belegte Betten:" />
+        <Label alignment="CENTER_RIGHT" layoutX="21.0" layoutY="176.0" prefHeight="17.0" prefWidth="94.0" text="Freie Betten:" />
         <TextField fx:id="bedsField" layoutX="115.0" layoutY="101.0" prefHeight="25.0" prefWidth="150.0" />
         <ChoiceBox fx:id="qualityCoicheBox" layoutX="115.0" layoutY="136.0" prefWidth="150.0" />
         <Label alignment="CENTER_RIGHT" layoutX="15.0" layoutY="140.0" prefHeight="17.0" prefWidth="97.0" text="Qualität:" />

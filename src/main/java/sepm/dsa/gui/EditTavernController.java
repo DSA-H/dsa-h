@@ -1,10 +1,7 @@
 package sepm.dsa.gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -146,7 +143,7 @@ public class EditTavernController extends BaseControllerImpl {
 		nameField.setText(tavern.getName());
 		bedsField.setText("" + tavern.getBeds());
 		qualityCoicheBox.getSelectionModel().select(tavern.getQuality());
-		useageLabel.setText(tavern.getUsage() + "");
+		useageLabel.setText(tavern.getFreeBeds() + "");
         List<CurrencyAmount> currencyAmounts = currencySetService.toCurrencySet(defaultCurrencySet, tavern.getPrice());
 		priceLabel.setText(CurrencyFormatUtil.currencySetString(currencyAmounts));
 		commentArea.setText(tavern.getComment() == null ? "" : tavern.getComment());

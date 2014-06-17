@@ -135,9 +135,9 @@ public class Tavern implements BaseModel {
 		this.quality = quality.getValue();
 	}
 
-	public static long getSerialVersionUID() {
-		return serialVersionUID;
-	}
+    public Integer getFreeBeds() {
+        return beds - usage;
+    }
 
 	@Override
 	public boolean equals(Object o) {
