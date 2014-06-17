@@ -123,7 +123,7 @@ public class EditProductController extends BaseControllerImpl {
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
 	    unitBox.getItems().setAll(unitService.getAll());
-	attributeBox.getItems().setAll(ProductAttribute.values());
+	    attributeBox.getItems().setAll(ProductAttribute.values());
     }
 
     @Override

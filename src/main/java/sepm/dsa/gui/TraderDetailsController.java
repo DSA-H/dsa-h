@@ -150,7 +150,7 @@ public class TraderDetailsController extends BaseControllerImpl {
                         traderCurrencySet = defaultCurrencySet;
                     }
                     List<CurrencyAmount> ca = currencySetService.toCurrencySet(traderCurrencySet, offer.getPricePerUnit());
-                    String str = CurrencyFormatUtil.currencySetShortString(ca, ", ");
+                    String str = CurrencyFormatUtil.currencySetShortString(ca);
                     return new SimpleStringProperty(str);
                 } else {
                     return new SimpleStringProperty("");

@@ -20,14 +20,18 @@ public class ProductDaoHbmImpl
     @Override
     public Product add(Product model) {
         Product result = super.add(model);
-
+        for (ProductCategory c : model.getCategories()) {
+            c.getProducts().add(result);
+        }
         return result;
     }
 
     @Override
     public void remove(Product model) {
         super.remove(model);
-
+        for (ProductCategory c : model.getCategories()) {
+            c.getProducts().remove(model);
+        }
     }
 
     @Override
