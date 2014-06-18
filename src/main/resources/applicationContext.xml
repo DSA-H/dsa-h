@@ -251,6 +251,8 @@
     </bean>
 
     <bean id="mapService" class="sepm.dsa.service.MapServiceImpl">
+        <property name="locationService" ref="locationService"/>
+        <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 
     <bean id="dealService" class="sepm.dsa.service.DealServiceImpl">
@@ -479,6 +481,11 @@
     <bean id="movingTraderList" class="sepm.dsa.gui.MovingTraderListController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="traderService" ref="traderService"/>
+    </bean>
+    <bean id="mapOptions" class="sepm.dsa.gui.MapOptionsController" scope="prototype">
+        <property name="mapService" ref="mapService" />
+        <property name="saveCancelService" ref="saveCancelService" />
+        <property name="locationService" ref="locationService"/>
     </bean>
     <!-- Transaction -->
     <tx:annotation-driven transaction-manager="transactionManager"/>

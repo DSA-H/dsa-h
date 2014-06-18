@@ -1,5 +1,6 @@
 package sepm.dsa.service;
 
+import javafx.scene.paint.Color;
 import sepm.dsa.model.Location;
 
 import java.io.File;
@@ -56,4 +57,65 @@ public interface MapService {
 	 * @return an Error Image or null if none exists
 	 */
 	public File getNoMapImage();
+
+	/**
+	 * @return Color of Traders in Location View
+	 */
+	public Color getTraderColor();
+
+	/**
+	 * @return Color of MovingTraders in Location View
+	 */
+	public Color getMovingTraderColor();
+
+	/**
+	 * @return Color of Taverns in Location View
+	 */
+	public Color getTavernColor();
+
+	/**
+	 * @return Color of Highlights
+	 */
+	public Color getHighlightColor();
+
+	/**
+	 * @return Color of Selection
+	 */
+	public Color getSelectionColor();
+
+	/**
+	 * @return Color of LocationBorders
+	 */
+	public Color getBorderColor();
+
+	/**
+	 * @return Color of Names
+	 */
+	public Color getNameColor();
+
+	/**
+	 * @return Size of Location-Icons
+	 */
+	public int getWorldIconSize();
+
+	/**
+	 * @return Size of Trader/Tavern-Icons
+	 */
+	public double getLocationIconSize(Location location);
+
+	/**
+	 * @return the Size of Names on the Map relative to icons
+	 */
+	public double getTextSize();
+
+	public void setTraderColor(Color c);
+	public void setMovingTraderColor(Color c);
+	public void setTavernColor(Color c);
+	public void setHighlightColor(Color c);
+	public void setSelectionColor(Color c);
+	public void setBorderColor(Color c);
+	public void setNameColor(Color c);
+	public void setWorldIconSize(int size);
+	public void setLocationIconSize(Location location, double size);
+	public void setTextSize(double size);
 }
