@@ -170,7 +170,11 @@ public class MapOptionsController extends BaseControllerImpl {
 		highlightColorPicker.setValue(mapService.getHighlightColor());
 		locationSizeSlider.adjustValue(mapService.getWorldIconSize());
 		textSizeSlider.adjustValue(mapService.getTextSize());
-		traderSizeSlider.adjustValue(mapService.getLocationIconSize((Location) locationBox.getSelectionModel().getSelectedItem()));
+		if (locationBox.getSelectionModel().getSelectedItem() != null) {
+			traderSizeSlider.adjustValue(mapService.getLocationIconSize((Location) locationBox.getSelectionModel().getSelectedItem()));
+		} else {
+			traderSizeSlider.adjustValue(10.0);
+		}
 		drawExample();
 	}
 
