@@ -482,6 +482,8 @@
     </bean>
     <bean id="mapOptions" class="sepm.dsa.gui.MapOptionsController" scope="prototype">
         <property name="mapService" ref="mapService" />
+        <property name="saveCancelService" ref="saveCancelService" />
+        <property name="locationService" ref="locationService"/>
     </bean>
     <!-- Transaction -->
     <tx:annotation-driven transaction-manager="transactionManager"/>

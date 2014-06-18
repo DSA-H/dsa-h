@@ -459,7 +459,7 @@ public class MapServiceImpl implements MapService {
 	@Override
 	public void setWorldIconSize(int size) {
 		try {
-			properties.put("worldIconSize", size);
+			properties.put("worldIconSize", ""+size);
 			OutputStream os = Files.newOutputStream(Paths.get("properties"));
 			properties.store(os, "");
 			os.close();
@@ -478,7 +478,7 @@ public class MapServiceImpl implements MapService {
 	@Override
 	public void setTextSize(double size) {
 		try {
-			properties.put("textSize", size);
+			properties.put("textSize", ""+size);
 			OutputStream os = Files.newOutputStream(Paths.get("properties"));
 			properties.store(os, "");
 			os.close();
