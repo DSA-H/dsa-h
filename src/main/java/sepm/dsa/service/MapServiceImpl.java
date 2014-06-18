@@ -48,7 +48,7 @@ public class MapServiceImpl implements MapService {
 		}
 	}
 
-	private String colorToString(Color color) {
+	public String colorToString(Color color) {
 		String colorString = "";
 		String red = Integer.toHexString((int) (color.getRed() * 255));
 		if (red.length() == 1) {
@@ -66,7 +66,7 @@ public class MapServiceImpl implements MapService {
 		return colorString;
 	}
 
-	private Color stringToColor(String colorString) {
+	public Color stringToColor(String colorString) {
 		return new Color(
 				(double) Integer.valueOf(colorString.substring(0, 2), 16) / 255,
 				(double) Integer.valueOf(colorString.substring(2, 4), 16) / 255,

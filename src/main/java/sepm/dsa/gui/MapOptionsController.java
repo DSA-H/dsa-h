@@ -143,6 +143,13 @@ public class MapOptionsController extends BaseControllerImpl {
 				drawExample();
 			}
 		});
+
+		locationBox.valueProperty().addListener(new ChangeListener() {
+			@Override
+			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				drawExample();
+			}
+		});
 	}
 
 	@Override
@@ -195,7 +202,11 @@ public class MapOptionsController extends BaseControllerImpl {
 		}
 		demoCanvas = new Canvas(360, 250);
 		GraphicsContext gc = demoCanvas.getGraphicsContext2D();
-		gc.setFill(Color.GREY);
+		if (locationBox.getSelectionModel().getSelectedItem() != null) {
+			gc.setFill(mapService.stringToColor(((Location) locationBox.getSelectionModel().getSelectedItem()).getRegion().getColor()));
+		} else {
+			gc.setFill(Color.GREY);
+		}
 		double iconSize = locationSizeSlider.getValue();
 		gc.fillRoundRect(100 - (iconSize * 0.5), 150 - (iconSize * 0.5), iconSize, iconSize, (iconSize * 0.5), (iconSize * 0.5));
 		gc.setStroke(borderColorPicker.getValue());

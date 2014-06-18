@@ -59,6 +59,18 @@ public interface MapService {
 	public File getNoMapImage();
 
 	/**
+	 * @param color the color to convert to String
+	 * @return a String representation of the @param color (e.g. "FF00FF")
+	 */
+	public String colorToString(Color color);
+
+	/**
+	 * @param colorString a String representation of the wanted color (e.g. "FF00FF")
+	 * @return the Color object represented by @param colorString
+	 */
+	public Color stringToColor(String colorString);
+
+	/**
 	 * @return Color of Traders in Location View
 	 */
 	public Color getTraderColor();
