@@ -366,7 +366,7 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
                 .title("neuer Preis nach Rabatt")
                 .masthead(null)
                 .message(reducePriceString)
-                .showWarning();
+                .showInformation();
     }
 
 
