@@ -279,6 +279,10 @@
         <property name="traderService" ref="traderService"/>
     </bean>
 
+    <bean id="dataSetService" class="sepm.dsa.service.DataSetServiceImpl">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
     <!-- GUI DI -->
     <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController" scope="prototype">
         <property name="loader" ref="loader"/>
@@ -289,6 +293,7 @@
         <property name="saveCancelService" ref="saveCancelService"/>
         <property name="locationConnectionService" ref="locationConnectionService"/>
         <property name="traderPdfService" ref="traderPdfService"/>
+        <property name="dataSetService" ref="dataSetService"/>
     </bean>
 
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController" scope="prototype">
