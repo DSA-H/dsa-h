@@ -511,7 +511,7 @@ public class MainMenuController extends BaseControllerImpl {
 
 	@FXML
 	private void onCurrencyClicked() {
-		log.debug("onWarenClicked - open Currency Window");
+		log.debug("onCurrencyClicked - open Currency Window");
 		Stage stage = new Stage();
 
 		Parent scene = (Parent) loader.load("/gui/currencyList.fxml", stage);
@@ -526,7 +526,7 @@ public class MainMenuController extends BaseControllerImpl {
 
     @FXML
     private void onCurrencySetClicked() {
-        log.debug("onWarenClicked - open Currency Window");
+        log.debug("onCurrencySetClicked - open Currency Window");
         Stage stage = new Stage();
 
         Parent scene = (Parent) loader.load("/gui/currencysetlist.fxml", stage);
@@ -608,7 +608,7 @@ public class MainMenuController extends BaseControllerImpl {
         ctrl.reload();
 
 		stage.setTitle("Waren");
-		stage.setScene(new Scene(scene, 600, 438));
+		stage.setScene(new Scene(scene, 600, 500));
 		stage.setResizable(false);
 		stage.show();
 	}
