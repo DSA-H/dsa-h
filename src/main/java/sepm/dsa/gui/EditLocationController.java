@@ -204,6 +204,7 @@ public class EditLocationController extends BaseControllerImpl {
         if (isNew()) {
             log.info("addConnection location");
             locationService.add(selectedLocation);
+            selectedLocation.setWeather(Weather.getNewWeather(selectedLocation.getRegion().getTemperature(), selectedLocation.getRegion().getRainfallChance()));
         } else {
             log.info("update location");
             locationService.update(selectedLocation);
@@ -228,7 +229,7 @@ public class EditLocationController extends BaseControllerImpl {
             locationConnectionService.add(connection);
         }
 
-        selectedLocation.setWeather(Weather.getNewWeather(selectedLocation.getRegion().getTemperature(), selectedLocation.getRegion().getRainfallChance()));
+
         saveCancelService.save();
 //        locationService.update(selectedLocation);
         saveCancelService.refresh(selectedLocation);

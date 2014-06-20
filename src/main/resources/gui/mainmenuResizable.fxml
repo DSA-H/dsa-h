@@ -8,7 +8,7 @@
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.MainMenuController">
   <bottom>
     <HBox alignment="CENTER_RIGHT" maxWidth="-1.0" prefHeight="37.0" prefWidth="1077.0" spacing="50.0">
-      <children>
+      <children><Label fx:id="weatherLabel" text="Label" visible="false" />
         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="220.0" spacing="10.0">
           <children>
             <Button mnemonicParsing="false" onAction="#onZoomOutPressed" text="-" />
@@ -41,8 +41,8 @@
         <ListView fx:id="traderList" visible="false" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowSpan="2" />
         <TableView fx:id="locationTable" GridPane.columnIndex="1" GridPane.hgrow="NEVER">
           <columns>
-            <TableColumn fx:id="locationColumn" prefWidth="79.0" text="Ort" />
-            <TableColumn fx:id="regionColumn" prefWidth="95.0" text="Gebiet" /><TableColumn fx:id="weatherColumn" prefWidth="71.0" text="Wetter" />
+            <TableColumn fx:id="locationColumn" prefWidth="111.0" text="Ort" />
+            <TableColumn fx:id="regionColumn" prefWidth="134.0" text="Gebiet" />
           </columns>
         </TableView>
         <GridPane fx:id="pathCalcGrid" disable="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
