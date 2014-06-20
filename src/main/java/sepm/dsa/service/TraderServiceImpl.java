@@ -352,7 +352,6 @@ public class TraderServiceImpl implements TraderService {
     }
 
     /**
-     * todo: offers have to integrate product-occurerence (in a later ms)
      * @param trader
      * @return a new calculated list of offers this offer at this position has.
      */

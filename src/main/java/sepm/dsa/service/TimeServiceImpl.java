@@ -91,6 +91,7 @@ public class TimeServiceImpl implements TimeService {
 		date.setTimestamp(date.getTimestamp() + days);
 		setCurrentDate(date);
 
+        // todo: implentation is not 100% correct (should not simply "add" turnover per day)
         // change sortiment for all traders
         forwardMessage = "Berechne Sortiments Fluktuation aller Händler ...";
 		for (Trader trader : traders) {
@@ -100,7 +101,7 @@ public class TimeServiceImpl implements TimeService {
 			if (newOffersCount > trader.getSize()) {
 				newOffersCount = trader.getSize();
 			}
-			int actOffersCount = 0;
+			int actOffersCount = 0;   // TODO: is Double now
 			Set<Offer> offers = trader.getOffers();
 			for (Offer offer : offers) {
 				actOffersCount += offer.getAmount();
