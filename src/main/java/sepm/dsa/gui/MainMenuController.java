@@ -557,7 +557,7 @@ public class MainMenuController extends BaseControllerImpl {
         ctrl.reload();
 
         stage.setTitle("Preis berechnen");
-        stage.setScene(new Scene(scene, 600, 400));
+        stage.setScene(new Scene(scene, 600, 360));
         stage.setResizable(false);
         stage.show();
     }
@@ -586,7 +586,7 @@ public class MainMenuController extends BaseControllerImpl {
         ctrl.reload();
 
 		stage.setTitle("Händlerkategorien");
-		stage.setScene(new Scene(scene, 600, 438));
+		stage.setScene(new Scene(scene, 600, 432));
 		stage.setResizable(false);
 		stage.show();
 	}

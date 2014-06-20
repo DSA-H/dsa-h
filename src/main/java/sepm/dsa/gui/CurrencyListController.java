@@ -122,6 +122,12 @@ public class CurrencyListController extends BaseControllerImpl {
         }
     }
 
+    @FXML
+    private void onClosePressed() {
+        Stage stage = (Stage) currencyTable.getScene().getWindow();
+        stage.close();
+    }
+
 
     public void setCurrencyService(CurrencyService currencyService) {
         this.currencyService = currencyService;

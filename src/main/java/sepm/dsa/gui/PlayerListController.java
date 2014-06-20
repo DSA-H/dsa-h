@@ -118,6 +118,11 @@ public class PlayerListController extends BaseControllerImpl {
         }
     }
 
+    @FXML
+    private void onClosePressed() {
+        Stage stage = (Stage) playerTable.getScene().getWindow();
+        stage.close();
+    }
 
     public void setPlayerService(PlayerService playerService) {
         this.playerService = playerService;

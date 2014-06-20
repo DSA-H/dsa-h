@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.TraderCategoryListController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.TraderCategoryListController">
     <children>
         <Label alignment="CENTER" layoutX="8.0" layoutY="14.0" prefHeight="17.0" prefWidth="584.0" text="Händlerkategorie">
             <font>
@@ -28,6 +28,6 @@
             <opaqueInsets>
                 <Insets />
             </opaqueInsets>
-        </HBox>
+        </HBox><Button layoutX="14.1875" layoutY="398.5" mnemonicParsing="false" onAction="#onClosePressed" text="Schließen" />
     </children>
 </Pane>
