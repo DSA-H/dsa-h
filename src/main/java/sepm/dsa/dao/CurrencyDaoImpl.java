@@ -16,6 +16,23 @@ public class CurrencyDaoImpl
 
 
     @Override
+    public Currency add(Currency model) {
+        Currency result = super.add(model);
+        for (CurrencySet c : result.getCurrencySets()) {
+            c.getCurrencies().add(result);
+        }
+        return result;
+    }
+
+    @Override
+    public void remove(Currency model) {
+        super.remove(model);
+        for (CurrencySet c : model.getCurrencySets()) {
+            c.getCurrencies().remove(model);
+        }
+    }
+
+    @Override
     public List<Currency> getAllByCurrencySet(CurrencySet currencySet) {
         log.debug("calling getAllByCurrencySet(" + currencySet + ")");
         Query query = sessionFactory.getCurrentSession().getNamedQuery("Currency.findAllByCurrencySet");

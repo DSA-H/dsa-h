@@ -34,10 +34,7 @@ public class Currency implements BaseModel {
     @Column(nullable = false)
     private Integer valueToBaseRate;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "currencySet_currencies",
-            joinColumns = { @JoinColumn(name = "currency_id") },
-            inverseJoinColumns = { @JoinColumn(name = "currencySet_id") })
+    @ManyToMany(mappedBy = "currencies", fetch = FetchType.LAZY)
     private Set<CurrencySet> currencySets = new HashSet<>(5);
 
 
@@ -117,5 +114,13 @@ public class Currency implements BaseModel {
 
     public void setShortName(String shortName) {
         this.shortName = shortName;
+    }
+
+    public Set<CurrencySet> getCurrencySets() {
+        return currencySets;
+    }
+
+    public void setCurrencySets(Set<CurrencySet> currencySets) {
+        this.currencySets = currencySets;
     }
 }
