@@ -16,6 +16,7 @@ public enum Weather {
     TROPIC(8,"Tropisch"),
     HOT(9, "Heiß");
 
+    private static final int weatherTypeCount = 10;
     private int value;
     private String name;
 
@@ -40,41 +41,44 @@ public enum Weather {
     }
 
     public static Weather getNewWeather(Temperature temperature, RainfallChance rainFallChance){
-        ArrayList<Integer> ret = new ArrayList<Integer>();
-        for (int i = 0; i < 9; i++){
-            ret.add(i);
+        ArrayList<Weather> ret = new ArrayList<Weather>();
+        for (int i = 0; i < weatherTypeCount; i++){
+            ret.add(Weather.parse(i));//add every weather once
         }
-        int t = temperature.getValue();
-        int r = rainFallChance.getValue();
+        Temperature t = temperature;
+        RainfallChance r = rainFallChance;
 
-        if (t==0){
-            ret.remove(8);
-            ret.remove(7);
-            ret.remove(2);
-            ret.remove(3);
-        }else if (t==1){
-            ret.remove(8);
-            ret.remove(7);
-        }else if (t==2){
+        if (t.equals(Temperature.VERY_LOW)){//remove all weather types that need temperature > 0°
+            ret.remove(Weather.HOT);
+            ret.remove(Weather.TROPIC);
+            ret.remove(Weather.SUNNY);
+            ret.remove(Weather.WET);
+            ret.remove(Weather.RAINY);
+        }else if (t.equals(Temperature.LOW)){//remove all really hot weather types
+            ret.remove(Weather.HOT);
+            ret.remove(Weather.TROPIC);
+            ret.remove(Weather.SUNNY);
+        }else if (t.equals(Temperature.MEDIUM)){
             //nothing
-        }else if (t==3){
-            ret.remove(5);
-        }else if (t==4){
-            ret.remove(5);
-            ret.remove(6);
-            ret.remove(0);
+        }else if (t.equals(Temperature.HIGH)){
+            ret.remove(Weather.ICY);
+        }else if (t.equals(Temperature.VERY_HIGH)){
+            ret.remove(Weather.ICY);
+            ret.remove(Weather.COLD);
+            ret.remove(Weather.SNOW);
         }
 
-        int val = 0;
+        Weather val = Weather.SNOW;
 
-        for (int i = 0; i<r+1;i++){
+        //take the value of the rainfallChance as a factor how often a random weather is calculated if it is not a rainy one
+        for (int i = 0; i<r.getValue()+1;i++){
             val = ret.get((int) (Math.random() * ret.size())); //[0,ret.size]
-            if (val < 5) { //rainy state
-                return Weather.parse(val);
+            if (val.getValue() < 5) { //rainy state
+                return val;
             }
         }
 
-        return Weather.parse(val);
+        return val;
     }
 
     @Override

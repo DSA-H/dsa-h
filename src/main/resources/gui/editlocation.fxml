@@ -41,14 +41,12 @@
 <GridPane.margin>
 <Insets right="5.0" />
 </GridPane.margin></Label>
-                <Label text="Wetter:" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
                 <Label text="Kommentar:" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
 <GridPane.margin>
 <Insets right="5.0" />
 </GridPane.margin></Label>
                 <TextField fx:id="nameField" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                 <TextArea fx:id="commentArea" prefHeight="62.0" prefWidth="134.0" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="4" GridPane.rowSpan="2" />
-                <ChoiceBox fx:id="weatherChoiceBox" prefWidth="150.0" GridPane.columnIndex="7" GridPane.rowIndex="3" />
                 <ChoiceBox fx:id="sizeChoiceBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                 <Label text="Ort editieren" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                     <font>
