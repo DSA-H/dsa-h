@@ -138,7 +138,7 @@ public class CurrencySetListController extends BaseControllerImpl {
     }
 
     @FXML
-    public void closeClicked() {
+    private void onClosePressed() {
         Stage stage = (Stage) currencySetTable.getScene().getWindow();
         stage.close();
     }

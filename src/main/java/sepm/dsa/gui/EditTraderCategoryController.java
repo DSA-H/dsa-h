@@ -149,7 +149,7 @@ public class EditTraderCategoryController extends BaseControllerImpl {
         TraderCategoryListController ctrl = loader.getController();
         ctrl.reload();
 
-        stage.setScene(new Scene(scene, 600, 438));
+        stage.setScene(new Scene(scene, 600, 432));
     }
 
     @FXML
@@ -205,7 +205,7 @@ public class EditTraderCategoryController extends BaseControllerImpl {
         TraderCategoryListController ctrl = loader.getController();
         ctrl.reload();
 
-        stage.setScene(new Scene(scene, 600, 438));
+        stage.setScene(new Scene(scene, 600, 432));
     }
 
     @FXML

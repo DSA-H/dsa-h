@@ -1,6 +1,7 @@
 package sepm.dsa.service;
 
 import sepm.dsa.model.DSADate;
+import sepm.dsa.model.Location;
 
 public interface TimeService {
     DSADate getCurrentDate();
@@ -12,7 +13,6 @@ public interface TimeService {
      * @param days
      */
     void forwardTime(int days);
-
 
     public int getForwardProgress();
 

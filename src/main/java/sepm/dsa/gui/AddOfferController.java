@@ -18,6 +18,8 @@ import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -97,16 +99,18 @@ public class AddOfferController extends BaseControllerImpl {
         Product p = productTable.getSelectionModel().getSelectedItem();
         o.setProduct(p);
 
+        Number amount = 0d;
         try {
-            o.setAmount(Double.parseDouble(textAmount.getText()));
-        } catch (NumberFormatException e) {
-            Dialogs.create()
-                    .title("Ungültige Eingabe")
-                    .masthead(null)
-                    .message("Anzahl ist keine gültige Nummer")
-                    .showWarning();
-            return;
+            DecimalFormat df = new DecimalFormat();
+            amount = df.parse(textAmount.getText());
+        } catch (ParseException e) {
+            throw new DSAValidationException("Anzahl muss eine ganze positive Zahl sein!");
         }
+        if(!(amount.doubleValue() > 0)) {
+            throw new DSAValidationException("Anzahl muss eine ganze positive Zahl sein!");
+        }
+
+        o.setAmount(amount.doubleValue());
 
         o.setTrader(selectedTrader);
         if (!choiceQuality.isDisabled()){
@@ -121,14 +125,7 @@ public class AddOfferController extends BaseControllerImpl {
         saveCancelService.save();
 
         Stage stage = (Stage) textName.getScene().getWindow();
-
-        Parent scene = (Parent) loader.load("/gui/traderdetails.fxml", stage);
-
-        TraderDetailsController controller = loader.getController();
-        controller.setTrader(selectedTrader);
-        controller.reload();
-
-        stage.setScene(new Scene(scene, 800, 552));
+        stage.close();
     }
 
     @FXML
@@ -156,12 +153,7 @@ public class AddOfferController extends BaseControllerImpl {
         log.debug("called onCancelPressed - return to TraderDetailsController");
         saveCancelService.cancel();
         Stage stage = (Stage) textName.getScene().getWindow();
-
-        Parent scene = (Parent) loader.load("/gui/traderdetails.fxml", stage);
-        TraderDetailsController controller = loader.getController();
-        controller.setTrader(selectedTrader);
-        controller.reload();
-        stage.setScene(new Scene(scene, 800, 552));
+        stage.close();
     }
 
     public void setLoader(SpringFxmlLoader loader) {

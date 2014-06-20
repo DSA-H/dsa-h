@@ -118,6 +118,8 @@ public class MainMenuController extends BaseControllerImpl {
 	private TableColumn locationColumn;
 	@FXML
 	private TableColumn regionColumn;
+    @FXML
+    private TableColumn weatherColumn;
 	@FXML
 	private ListView traderList;
 	@FXML
@@ -159,6 +161,7 @@ public class MainMenuController extends BaseControllerImpl {
 		// init location-table
 		locationColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 		regionColumn.setCellValueFactory(new PropertyValueFactory<>("region"));
+        weatherColumn.setCellValueFactory(new PropertyValueFactory<>("weather"));
 		locationTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Location>() {
             @Override
             public void changed(ObservableValue<? extends Location> observable, Location oldValue, Location newValue) {
@@ -557,7 +560,7 @@ public class MainMenuController extends BaseControllerImpl {
         ctrl.reload();
 
         stage.setTitle("Preis berechnen");
-        stage.setScene(new Scene(scene, 600, 400));
+        stage.setScene(new Scene(scene, 600, 360));
         stage.setResizable(false);
         stage.show();
     }
@@ -586,7 +589,7 @@ public class MainMenuController extends BaseControllerImpl {
         ctrl.reload();
 
 		stage.setTitle("Händlerkategorien");
-		stage.setScene(new Scene(scene, 600, 438));
+		stage.setScene(new Scene(scene, 600, 432));
 		stage.setResizable(false);
 		stage.show();
 	}

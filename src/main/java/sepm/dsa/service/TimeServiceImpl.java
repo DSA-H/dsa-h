@@ -81,11 +81,12 @@ public class TimeServiceImpl implements TimeService {
 	public void forwardTime(int days) {
 		log.debug("calling forwardTime(" + days + ")");
 
+        List<Location> locations = locationService.getAll();
         List<Trader> traders = traderService.getAll();
         List<Tavern> taverns = tavernService.getAll();
         List<MovingTrader> movingTraders = traderService.getAllMovingTraders();
 
-        forwardMaxProgress = traders.size() + taverns.size() + movingTraders.size() + 1;
+        forwardMaxProgress = traders.size() + taverns.size() + movingTraders.size() + locations.size() + 1;
 
 		// save new time
 		date.setTimestamp(date.getTimestamp() + days);
@@ -236,6 +237,12 @@ public class TimeServiceImpl implements TimeService {
 			tavern.setPrice(tavernService.calculatePrice(tavern));
 			tavernService.update(tavern);
 		}
+
+        forwardMessage = "Berechne neues Wetter ...";
+        for (Location location: locations){
+            forwardProgress++;
+            location.setWeather(Weather.getNewWeather(location.getRegion().getTemperature(), location.getRegion().getRainfallChance()));
+        }
 
         // complete
         forwardProgress++;

@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0"
-      prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="sepm.dsa.gui.PlayerListController">
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.PlayerListController">
     <children>
-        <TableView fx:id="playerTable" layoutX="11.0" layoutY="86.0" onMouseClicked="#checkFocus" prefHeight="338.0"
-                   prefWidth="577.0">
+        <TableView fx:id="playerTable" layoutX="11.0" layoutY="86.0" onMouseClicked="#checkFocus" prefHeight="311.0" prefWidth="577.0">
             <columns>
-                <TableColumn fx:id="currencyColumn" prefWidth="576.0" text="Name"/>
+                <TableColumn fx:id="currencyColumn" prefWidth="576.0" text="Name" />
             </columns>
         </TableView>
-        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="233.0" layoutY="6.0" prefHeight="47.0"
-               prefWidth="132.0" text="Spieler" textAlignment="CENTER">
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="233.0" layoutY="6.0" prefHeight="47.0" prefWidth="132.0" text="Spieler" textAlignment="CENTER">
             <font>
-                <Font name="System Bold" size="18.0"/>
+                <Font name="System Bold" size="18.0" />
             </font>
         </Label>
         <HBox layoutX="12.0" layoutY="53.0" prefHeight="27.0" prefWidth="577.0" spacing="10.0">
             <children>
-                <Button layoutX="98.0" layoutY="39.0" mnemonicParsing="false" onAction="#onCreateButtonPressed"
-                        onMouseClicked="#onCreateButtonPressed" prefHeight="25.0" prefWidth="85.0" text="Erstellen"/>
-                <Button fx:id="editButton" mnemonicParsing="false" onAction="#onEditButtonPressed"
-                        onMouseClicked="#onEditButtonPressed" prefHeight="26.0" prefWidth="88.0" text="Bearbeiten"/>
-                <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDeleteButtonPressed"
-                        onMouseClicked="#onDeleteButtonPressed" text="Löschen"/>
+                <Button layoutX="98.0" layoutY="39.0" mnemonicParsing="false" onAction="#onCreateButtonPressed" onMouseClicked="#onCreateButtonPressed" prefHeight="25.0" prefWidth="85.0" text="Erstellen" />
+                <Button fx:id="editButton" mnemonicParsing="false" onAction="#onEditButtonPressed" onMouseClicked="#onEditButtonPressed" prefHeight="26.0" prefWidth="88.0" text="Bearbeiten" />
+                <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDeleteButtonPressed" onMouseClicked="#onDeleteButtonPressed" text="Löschen" />
             </children>
-        </HBox>
+        </HBox><Button layoutX="11.0" layoutY="405.0" mnemonicParsing="false" onAction="#onClosePressed" text="Schließen" />
     </children>
 </Pane>

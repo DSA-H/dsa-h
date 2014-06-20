@@ -39,10 +39,11 @@ public class SpringFxmlLoader implements ApplicationContextAware {
             throw new RuntimeException(ioException);
         }
         EventHandler<WindowEvent> event = stage.getOnHidden();
+        final BaseController ctrl = ((BaseController)getController());
         stage.setOnHidden(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
-                ((BaseController)getController()).unload();
+                ctrl.unload();
                 // event chaining
                 if(event != null) {
                     event.handle(windowEvent);

@@ -113,6 +113,12 @@ public class TraderCategoryListController extends BaseControllerImpl {
     }
 
     @FXML
+    private void onClosePressed() {
+        Stage stage = (Stage) traderCategoryTable.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
     private void onDeleteButtonPressed() {
         log.debug("onDeleteButtonPressed - deleting selected Region");
         TraderCategory selectedTraderCategory = traderCategoryTable.getSelectionModel().getSelectedItem();

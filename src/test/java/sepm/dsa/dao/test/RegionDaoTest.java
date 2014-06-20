@@ -22,7 +22,7 @@ public class RegionDaoTest extends AbstractDatabaseTest {
 		region.setName("Region1");
 		region.setColor("65A3EF");
 		region.setComment("comment");
-		region.setRainfallChance(RainfallChance.MONSUN);
+		region.setRainfallChance(RainfallChance.VERY_LOW);
 		region.setTemperature(Temperature.LOW);
 		regionDao.add(region);
 		Region persistedRegion = regionDao.get(region.getId());
@@ -42,7 +42,7 @@ public class RegionDaoTest extends AbstractDatabaseTest {
         Region region = new Region();
         region.setName("Region1");
         region.setComment("comment");
-        region.setRainfallChance(RainfallChance.MONSUN);
+        region.setRainfallChance(RainfallChance.VERY_LOW);
         regionDao.add(region);
         Region persistedRegion = regionDao.get(region.getId());
         assertTrue(persistedRegion == null);
