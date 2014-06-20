@@ -15,12 +15,10 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
+import sepm.dsa.model.Currency;
 import sepm.dsa.service.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class EditProductController extends BaseControllerImpl {
 
@@ -147,8 +145,8 @@ public class EditProductController extends BaseControllerImpl {
             refreshPriceView(0);
             unitBox.getSelectionModel().selectFirst();
         }
-
-    	categorieChoiceBox.getItems().setAll(categoryList);
+        categorieChoiceBox.getItems().setAll(categoryList);
+        Collections.sort(regionList, (r1, r2) -> r1.getName().compareTo(r2.getName()));
 	    regionChoiceBox.getItems().setAll(regionList);
     }
 
@@ -200,6 +198,7 @@ public class EditProductController extends BaseControllerImpl {
             regionTable.getItems().remove(r);
             regionChoiceBox.getItems().add(r);
         }
+//        Collections.sort(regionChoiceBox.getItems(), (r1, r2) -> r1.getName().compareTo(r2.getName()));
         checkFocusRegion();
     }
 
@@ -330,7 +329,12 @@ public class EditProductController extends BaseControllerImpl {
     @FXML
     public void onRemoveAllProductionRegionsPressed() {
         log.debug("onRemoveAllProductionRegionsPressed");
-        regionChoiceBox.getItems().addAll(regionTable.getItems());
+
+        List<Region> regions = new ArrayList<>(regionChoiceBox.getItems().size() + regionTable.getItems().size());
+        regions.addAll(regionChoiceBox.getItems());
+        regions.addAll(regionTable.getItems());
+        Collections.sort(regions, (r1, r2) -> r1.getName().compareTo(r2.getName()));
+        regionChoiceBox.getItems().setAll(regions);
         regionTable.getItems().clear();
         checkFocusRegion();
     }
