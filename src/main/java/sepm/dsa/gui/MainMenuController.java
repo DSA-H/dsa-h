@@ -25,6 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.controlsfx.control.action.Action;
 import org.controlsfx.dialog.Dialog;
@@ -639,6 +640,7 @@ public class MainMenuController extends BaseControllerImpl {
 	private void onForwardTimeClicked() {
 		log.debug("onForwardTimeClicked - open ForwardTime Window");
 		Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
 
 		Parent scene = (Parent) loader.load("/gui/forwardtime.fxml", stage);
         BaseController ctrl = loader.getController();
