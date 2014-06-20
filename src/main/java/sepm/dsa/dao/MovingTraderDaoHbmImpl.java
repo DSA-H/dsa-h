@@ -51,4 +51,30 @@ public class MovingTraderDaoHbmImpl
 		log.trace("returning " + result);
 		return result;
 	}
+
+    @Override
+    public void addMovingToTrader(MovingTrader movingTrader) {
+        sessionFactory.getCurrentSession()
+                .getNamedQuery("MovingTrader.insertMovingTraderFromTrader")
+                .setParameter(0, movingTrader.getId())
+                .setParameter(1, movingTrader.getLastMoved())
+                .setParameter(2, movingTrader.getAvgStayDays())
+                .setParameter(3, movingTrader.getPreferredTownSize() == null ? null : movingTrader.getPreferredTownSize().getValue())
+                .setParameter(4, movingTrader.getPreferredDistance() == null ? null : movingTrader.getPreferredDistance().getValue())
+                .executeUpdate();
+        Trader traderBefore = (Trader) sessionFactory.getCurrentSession().get(Trader.class, movingTrader.getId());
+        sessionFactory.getCurrentSession().evict(traderBefore);
+        sessionFactory.getCurrentSession().get(MovingTrader.class, movingTrader.getId());
+    }
+
+    @Override
+    public void removeMovingFromMovingTrader(MovingTrader movingTrader) {
+        sessionFactory.getCurrentSession()
+                .getNamedQuery("MovingTrader.deleteMovingTraderFromTrader")
+                .setParameter(0, movingTrader.getId())
+                .executeUpdate();
+        MovingTrader traderBefore = (MovingTrader) sessionFactory.getCurrentSession().get(MovingTrader.class, movingTrader.getId());
+        sessionFactory.getCurrentSession().evict(traderBefore);
+        sessionFactory.getCurrentSession().get(Trader.class, movingTrader.getId());
+    }
 }

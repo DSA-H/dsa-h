@@ -84,6 +84,12 @@ public class TraderServiceImpl implements TraderService {
         return result;
     }
 
+    @Override
+    public void makeTraderToMovingTrader(MovingTrader trader) {
+        log.debug("calling makeTraderToMovingTrader(" + trader + ")");
+        movingTraderDao.addMovingToTrader(trader);
+    }
+
     /**
      * Adds a new trader and generate and save a set of offers for him
      * @param t (Trader) to be persisted must not be null
@@ -96,9 +102,11 @@ public class TraderServiceImpl implements TraderService {
         validate(t);
 	    Trader trader;
 	    if (t instanceof MovingTrader) {
+            log.info("movingTraderDao.add((MovingTrader) " + t + ")");
 		    trader = movingTraderDao.add((MovingTrader) t);
 	    } else {
-		    trader = traderDao.add(t);
+            log.info("traderDao.add((MovingTrader) " + t + ")");
+            trader = traderDao.add(t);
 	    }
 		List<Offer> offers = calculateOffers(t);
         offers.forEach(this::validateOffer);
@@ -114,9 +122,19 @@ public class TraderServiceImpl implements TraderService {
         log.debug("calling update(" + t + ")");
         validate(t);
 	    if (t instanceof MovingTrader) {
-		    return movingTraderDao.update((MovingTrader) t);
+            log.info("movingTraderDao.update((MovingTrader) " + t + ")");
+            return movingTraderDao.update((MovingTrader) t);
 	    }
+        log.info("traderDao.update((MovingTrader) " + t + ")");
         return traderDao.update(t);
+    }
+
+    @Override
+    public void makeMovingTraderToTrader(Trader trader) {
+        log.debug("calling makeMovingTraderToTrader(" + trader + ")");
+        MovingTrader mt = new MovingTrader();
+        mt.setId(trader.getId());
+        movingTraderDao.removeMovingFromMovingTrader(mt);
     }
 
     @Override

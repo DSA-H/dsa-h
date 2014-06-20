@@ -511,7 +511,7 @@ public class TraderDetailsController extends BaseControllerImpl {
     }
 
     private void refreshView() {
-        if(traderService.get(trader.getId()) != null) {
+        if(trader != null && (trader = traderService.get(trader.getId())) != null) {
             saveCancelService.refresh(trader);
         }else {
             onBackPressed();
