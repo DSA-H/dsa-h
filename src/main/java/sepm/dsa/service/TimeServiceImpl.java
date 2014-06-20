@@ -86,15 +86,11 @@ public class TimeServiceImpl implements TimeService {
         List<Tavern> taverns = tavernService.getAll();
         List<MovingTrader> movingTraders = traderService.getAllMovingTraders();
 
-        forwardMaxProgress = traders.size() + taverns.size() + movingTraders.size() + 1;
+        forwardMaxProgress = traders.size() + taverns.size() + movingTraders.size() + locations.size() + 1;
 
 		// save new time
 		date.setTimestamp(date.getTimestamp() + days);
 		setCurrentDate(date);
-
-        for (Location location: locations){
-            location.setWeather(Weather.getNewWeather(location.getRegion().getTemperature(), location.getRegion().getRainfallChance()));
-        }
 
         // todo: implentation is not 100% correct (should not simply "add" turnover per day)
         // change sortiment for all traders
@@ -241,6 +237,12 @@ public class TimeServiceImpl implements TimeService {
 			tavern.setPrice(tavernService.calculatePrice(tavern));
 			tavernService.update(tavern);
 		}
+
+        forwardMessage = "Berechne neues Wetter ...";
+        for (Location location: locations){
+            forwardProgress++;
+            location.setWeather(Weather.getNewWeather(location.getRegion().getTemperature(), location.getRegion().getRainfallChance()));
+        }
 
         // complete
         forwardProgress++;
