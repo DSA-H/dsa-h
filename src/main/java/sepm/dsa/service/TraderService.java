@@ -33,6 +33,26 @@ public interface TraderService {
      */
     Trader update(Trader t);
 
+//    /**
+//     * Updates a already existing {@code Trader} in the database
+//     *
+//     * @param t to update must not be null
+//     * @return The updated trader model.
+//     */
+//    Trader update(Trader t, boolean forceIsMovingTrader);
+
+    /**
+     * Makes a MovingTrader to a normal Trader
+     * @param trader
+     */
+    void makeMovingTraderToTrader(Trader trader);
+
+    /**
+     * Makes a MovingTrader to a normal Trader
+     * @param trader
+     */
+    void makeTraderToMovingTrader(MovingTrader trader);
+
     /**
      * Delete a {@code Trader} permanently from the DB
      *

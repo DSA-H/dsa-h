@@ -311,7 +311,9 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
         traderService.sellToPlayer(trader, playerToCreateDealFor, product, offer.getQuality(), unit, amount, currencyAmounts, discount, removeRemainingOfferAmount);
         saveCancelService.save();
 
-        saveCancelService.refresh(trader);
+        if(trader != null && (trader = traderService.get(trader.getId())) != null) {
+            saveCancelService.refresh(trader);
+        }
         saveCancelService.refresh(trader.getDeals());
 
         Stage stage = (Stage) selectedOffer.getScene().getWindow();
