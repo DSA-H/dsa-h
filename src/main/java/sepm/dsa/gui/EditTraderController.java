@@ -93,7 +93,8 @@ public class EditTraderController extends BaseControllerImpl {
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
         areaBox.getItems().setAll(DistancePreferrence.values());
-        citySizeBox.getItems().setAll(TownSize.values());
+        citySizeBox.getItems().add(0, null);
+        citySizeBox.getItems().addAll(TownSize.values());
 
         movingCheck.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -183,7 +184,11 @@ public class EditTraderController extends BaseControllerImpl {
 
 	        if (currentType == MOVINGTRADER) {
 		        stayTimeField.setText("" + ((MovingTrader) selectedTrader).getAvgStayDays());
-		        citySizeBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredTownSize());
+                if(((MovingTrader) selectedTrader).getPreferredTownSize() != null) {
+                    citySizeBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredTownSize());
+                }else {
+                    citySizeBox.getSelectionModel().select(0);
+                }
 				areaBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredDistance());
 		        movingCheck.setSelected(true);
 	        }
@@ -253,18 +258,20 @@ public class EditTraderController extends BaseControllerImpl {
         log.debug("called onSavePressed");
 
 	    if (initialType != currentType) {
-		    if (currentType == MOVINGTRADER) {
+            Integer idBefore = selectedTrader.getId();
+            if (currentType == MOVINGTRADER) {
 
-			    if (!isNewTrader) {
-				    traderService.remove(selectedTrader);
-			    }
+//			    if (!isNewTrader) {
+//				    traderService.remove(selectedTrader);
+//			    }
 			    selectedTrader = new MovingTrader();
 		    } else {
-			    if (!isNewTrader) {
-				    traderService.remove(selectedTrader);
-			    }
+//                if (selectedTrader instanceof MovingTrader) {
+//                    traderService.makeMovingTraderToTrader((MovingTrader) selectedTrader);
+//                }
 				selectedTrader = new Trader();
 		    }
+            selectedTrader.setId(idBefore);
 	    }
 
         //name
@@ -345,9 +352,6 @@ public class EditTraderController extends BaseControllerImpl {
 
 		    //pref. townSize
             townsize = citySizeBox.getValue();
-		    if (townsize == null) {
-                throw new DSAValidationException("Eine bevorzugte Stadtgröße muss ausgewählt werden!");
-		    }
 
             area = areaBox.getValue();
 		    //travel area
@@ -355,10 +359,6 @@ public class EditTraderController extends BaseControllerImpl {
                 throw new DSAValidationException("Ein Reisegebiet muss ausgewählt werden!");
 		    }
 	    }
-
-        if(!isNewTrader) {
-
-        }
 
         if (isNewTrader) {
             selectedTrader.setName(name);
@@ -402,12 +402,13 @@ public class EditTraderController extends BaseControllerImpl {
                     selectedTrader.setxPos((int) position.getX());
                     selectedTrader.setyPos((int) position.getY());
                     if(selectedTrader instanceof MovingTrader) {
-                        ((MovingTrader) selectedTrader).setAvgStayDays(avgStayDays);
-                        ((MovingTrader) selectedTrader).setPreferredTownSize(townsize);
-                        ((MovingTrader) selectedTrader).setPreferredDistance(area);
+                        MovingTrader selectedMovingTrader = (MovingTrader) selectedTrader;
+                        selectedMovingTrader.setAvgStayDays(avgStayDays);
+                        selectedMovingTrader.setPreferredTownSize(townsize);
+                        selectedMovingTrader.setPreferredDistance(area);
                         //lastmoved
                         DSADate date = timeService.getCurrentDate();
-                        ((MovingTrader) selectedTrader).setLastMoved(date);
+                        selectedMovingTrader.setLastMoved(date);
                     }
                     selectedTrader = traderService.recalculateOffers(selectedTrader);
                 } else if (response == Dialog.Actions.NO) {
@@ -492,11 +493,17 @@ public class EditTraderController extends BaseControllerImpl {
                 DSADate date = timeService.getCurrentDate();
                 ((MovingTrader) selectedTrader).setLastMoved(date);
             }
+
 	        if (currentType == initialType) {
 		        traderService.update(selectedTrader);
 	        } else {
-		        traderService.add(selectedTrader);
-	        }
+                if (currentType == MOVINGTRADER) {
+                    traderService.makeTraderToMovingTrader((MovingTrader) selectedTrader);
+//			    if (!isNewTra
+                } else {
+                    traderService.makeMovingTraderToTrader(selectedTrader);
+                }
+            }
         }
         saveCancelService.save();
 

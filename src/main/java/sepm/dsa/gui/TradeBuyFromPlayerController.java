@@ -258,7 +258,9 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
 
-        saveCancelService.refresh(trader);
+        if(trader != null && (trader = traderService.get(trader.getId())) != null) {
+            saveCancelService.refresh(trader);
+        }
 
         Stage stage = (Stage) selectedUnit.getScene().getWindow();
         stage.close();
@@ -326,7 +328,9 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
         traderService.buyFromPlayer(trader, playerToCreateDealFor, product, quality, unit, amount, currencyAmounts);
         saveCancelService.save();
 
-        saveCancelService.refresh(trader);
+        if(trader != null && (trader = traderService.get(trader.getId())) != null) {
+            saveCancelService.refresh(trader);
+        }
         saveCancelService.refresh(trader.getDeals());
 
         Stage stage = (Stage) selectedUnit.getScene().getWindow();

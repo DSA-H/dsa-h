@@ -5,10 +5,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="sepm.dsa.gui.MainMenuController">
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.MainMenuController">
   <bottom>
     <HBox alignment="CENTER_RIGHT" maxWidth="-1.0" prefHeight="37.0" prefWidth="1077.0" spacing="50.0">
-      <children>
+      <children><Label fx:id="weatherLabel" text="Label" visible="false" />
         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="220.0" spacing="10.0">
           <children>
             <Button mnemonicParsing="false" onAction="#onZoomOutPressed" text="-" />
@@ -41,8 +41,8 @@
         <ListView fx:id="traderList" visible="false" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowSpan="2" />
         <TableView fx:id="locationTable" GridPane.columnIndex="1" GridPane.hgrow="NEVER">
           <columns>
-            <TableColumn prefWidth="120.0" text="Ort" fx:id="locationColumn" />
-            <TableColumn prefWidth="125.0" text="Gebiet" fx:id="regionColumn" />
+            <TableColumn fx:id="locationColumn" prefWidth="111.0" text="Ort" />
+            <TableColumn fx:id="regionColumn" prefWidth="134.0" text="Gebiet" />
           </columns>
         </TableView>
         <GridPane fx:id="pathCalcGrid" disable="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -86,37 +86,37 @@
   <top>
     <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
       <menus>
-        <Menu mnemonicParsing="false" text="Datei" fx:id="dateiMenu">
+        <Menu fx:id="dateiMenu" mnemonicParsing="false" text="Datei">
           <items>
-            <MenuItem disable="true" mnemonicParsing="false" text="Import" fx:id="dateiImport" />
-            <MenuItem disable="true" mnemonicParsing="false" text="Export" fx:id="dateiExport" />
+            <MenuItem fx:id="dateiImport" disable="true" mnemonicParsing="false" text="Import" />
+            <MenuItem fx:id="dateiExport" disable="true" mnemonicParsing="false" text="Export" />
             <MenuItem mnemonicParsing="false" onAction="#onPrintTraderClicked" text="Händler drucken" />
             <MenuItem mnemonicParsing="false" onAction="#onMapOptionsClicked" text="Kartenoptionen" />
-            <MenuItem mnemonicParsing="false" onAction="#onExitClicked" text="Beenden" fx:id="dateiExit" />
+            <MenuItem fx:id="dateiExit" mnemonicParsing="false" onAction="#onExitClicked" text="Beenden" />
           </items>
         </Menu>
-        <Menu mnemonicParsing="false" text="Daten Verwalten" fx:id="dateiVerwaltenMenu">
+        <Menu fx:id="dateiVerwaltenMenu" mnemonicParsing="false" text="Daten Verwalten">
           <items>
-            <Menu mnemonicParsing="false" text="Weltkarte" fx:id="verwaltenWeltkarte">
+            <Menu fx:id="verwaltenWeltkarte" mnemonicParsing="false" text="Weltkarte">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#onWeltkarteImportierenPressed" text="Importieren" fx:id="weltkarteImportieren" />
-                <MenuItem mnemonicParsing="false" onAction="#onWeltkarteExportierenPressed" text="Exportieren" fx:id="weltkarteExportieren" />
+                <MenuItem fx:id="weltkarteImportieren" mnemonicParsing="false" onAction="#onWeltkarteImportierenPressed" text="Importieren" />
+                <MenuItem fx:id="weltkarteExportieren" mnemonicParsing="false" onAction="#onWeltkarteExportierenPressed" text="Exportieren" />
               </items>
             </Menu>
-            <MenuItem mnemonicParsing="false" onAction="#onTraderCategoriesClicked" text="Händlerkategorie" fx:id="verwaltenHaendlerKategorie" />
-            <MenuItem mnemonicParsing="false" onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen" fx:id="verwaltenGebieteGrenzen" />
-            <MenuItem mnemonicParsing="false" onAction="#onCurrencyClicked" text="Währungen" fx:id="verwaltenWaehrungen" />
-            <MenuItem mnemonicParsing="false" onAction="#onCurrencySetClicked" text="Währungssysteme" fx:id="verwaltenWaehrungssysteme" />
-            <MenuItem mnemonicParsing="false" onAction="#onWarenClicked" text="Waren" fx:id="verwaltenWaren" />
-            <MenuItem mnemonicParsing="false" onAction="#onWarenKategorieClicked" text="Warenkategorie" fx:id="verwaltenWarenKategorie" />
+            <MenuItem fx:id="verwaltenHaendlerKategorie" mnemonicParsing="false" onAction="#onTraderCategoriesClicked" text="Händlerkategorie" />
+            <MenuItem fx:id="verwaltenGebieteGrenzen" mnemonicParsing="false" onAction="#onGrenzenGebieteClicked" text="Gebiete &amp; Grenzen" />
+            <MenuItem fx:id="verwaltenWaehrungen" mnemonicParsing="false" onAction="#onCurrencyClicked" text="Währungen" />
+            <MenuItem fx:id="verwaltenWaehrungssysteme" mnemonicParsing="false" onAction="#onCurrencySetClicked" text="Währungssysteme" />
+            <MenuItem fx:id="verwaltenWaren" mnemonicParsing="false" onAction="#onWarenClicked" text="Waren" />
+            <MenuItem fx:id="verwaltenWarenKategorie" mnemonicParsing="false" onAction="#onWarenKategorieClicked" text="Warenkategorie" />
             <MenuItem onAction="#onEditDateClicked" text="Datum einstellen" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Spiel">
           <items>
             <MenuItem mnemonicParsing="false" onAction="#onPlayerClicked" text="Spieler" />
-            <MenuItem mnemonicParsing="false" onAction="#onCalculateCurrencyClicked" text="Währungen umrechnen" fx:id="berechneWährung" />
-              <MenuItem mnemonicParsing="false" onAction="#onCalculateProductPrice" text="Preise berechnen" fx:id="berechnePreis" />
+            <MenuItem fx:id="berechneWährung" mnemonicParsing="false" onAction="#onCalculateCurrencyClicked" text="Währungen umrechnen" />
+              <MenuItem fx:id="berechnePreis" mnemonicParsing="false" onAction="#onCalculateProductPrice" text="Preise berechnen" />
           </items>
         </Menu>
       </menus>

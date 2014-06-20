@@ -5,11 +5,11 @@ package sepm.dsa.model;
  */
 public enum Temperature {
 
-    ARCTIC(0, "kalt"),
+    VERY_LOW(0, "kalt"),
     LOW(1, "kühl"),
     MEDIUM(2, "mittel"),
     HIGH(3, "warm"),
-    VULCANO(4, "heiß");
+    VERY_HIGH(4, "heiß");
 
     private int value;
     private String name;

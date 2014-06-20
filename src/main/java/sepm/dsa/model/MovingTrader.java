@@ -28,7 +28,11 @@ public class MovingTrader extends Trader implements Serializable {
     private Integer preferredDistance;
 
     public void setPreferredTownSize(TownSize townSize) {
-        preferredTownSize = townSize.getValue();
+        if(townSize != null) {
+            preferredTownSize = townSize.getValue();
+        }else {
+            preferredTownSize = null;
+        }
     }
 
     public TownSize getPreferredTownSize(){

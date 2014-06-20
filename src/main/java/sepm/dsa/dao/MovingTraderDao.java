@@ -22,4 +22,17 @@ public interface MovingTraderDao extends BaseDao<MovingTrader> {
 	 * @return the list of MovingTraders matching this category or empty list if nothing found
 	 */
 	public List<MovingTrader> getAllByCategory(TraderCategory category);
+
+    /**
+     * Makes a normal Trader to a MovingTrader
+     * @param movingTrader
+     */
+    void addMovingToTrader(MovingTrader movingTrader);
+
+    /**
+     * Makes a MovingTrader to a normal Trader
+     * @param movingTrader
+     */
+    void removeMovingFromMovingTrader(MovingTrader movingTrader);
+
 }

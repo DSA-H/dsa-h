@@ -1,5 +1,6 @@
 package sepm.dsa.application;
 
+import impl.org.controlsfx.i18n.Localization;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -17,21 +18,21 @@ import sepm.dsa.service.pdf.TraderPdfService;
 import sepm.dsa.util.ValidationMessageUtil;
 
 import javax.validation.ConstraintViolation;
+import java.util.Locale;
 
 public class Main extends Application {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-
+        Localization.setLocale(new Locale("de", "DE"));
         Application.launch(Main.class, (java.lang.String[]) null);
-
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
+             Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
 
 
             String causeString = "";

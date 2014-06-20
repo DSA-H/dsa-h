@@ -118,6 +118,9 @@ public class MainMenuController extends BaseControllerImpl {
 	private TableColumn locationColumn;
 	@FXML
 	private TableColumn regionColumn;
+    @FXML
+    private Label weatherLabel;
+    //private TableColumn weatherColumn;
 	@FXML
 	private ListView traderList;
 	@FXML
@@ -159,6 +162,7 @@ public class MainMenuController extends BaseControllerImpl {
 		// init location-table
 		locationColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 		regionColumn.setCellValueFactory(new PropertyValueFactory<>("region"));
+        //weatherColumn.setCellValueFactory(new PropertyValueFactory<>("weather"));
 		locationTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Location>() {
             @Override
             public void changed(ObservableValue<? extends Location> observable, Location oldValue, Location newValue) {
@@ -450,6 +454,8 @@ public class MainMenuController extends BaseControllerImpl {
 				pathCalcGrid.setVisible(false);
 				locationTable.setVisible(false);
 				traderList.setVisible(true);
+                weatherLabel.setVisible(true);
+                weatherLabel.setText("Wetter: " + selectedLocation.getWeather().getName());
 				selectedObject = null;
 				deleteButton.setDisable(true);
 				editButton.setDisable(true);
@@ -468,6 +474,7 @@ public class MainMenuController extends BaseControllerImpl {
 				pathCalcGrid.setVisible(true);
 				locationTable.setVisible(true);
 				traderList.setVisible(false);
+                weatherLabel.setVisible(false);
 				chooseButton.setText("Ortsansicht");
 				createButton.setText("Ort platzieren");
 				editButton.setText("Bearbeiten");

@@ -130,7 +130,7 @@ public class ProductListController extends BaseControllerImpl {
         ctrl.reload();
 
         stage.setTitle("Waren");
-        stage.setScene(new Scene(scene, 600, 479));
+        stage.setScene(new Scene(scene, 600, 530));
         stage.show();
     }
 
@@ -146,7 +146,7 @@ public class ProductListController extends BaseControllerImpl {
         ctrl.reload();
 
         stage.setTitle("Waren");
-        stage.setScene(new Scene(scene, 600, 479));
+        stage.setScene(new Scene(scene, 600, 530));
         stage.show();
     }
 
