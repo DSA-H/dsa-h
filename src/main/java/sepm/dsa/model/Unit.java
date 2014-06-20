@@ -80,6 +80,11 @@ public class Unit implements BaseModel {
         return result;
     }
 
+	public boolean isDevisable() {
+		if (id == 1) return false;
+		return true;
+	}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

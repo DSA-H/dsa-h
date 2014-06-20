@@ -360,8 +360,6 @@ public class TraderServiceImpl implements TraderService {
     public List<Offer> calculateOffers(Trader trader, int number) {
         log.debug("calling calculateOffers()");
 
-        // TODO Jotschi: Offer.amount changed from Integer to Double, might cause problems!
-
         List<Product> weightProducts = new ArrayList<>();
         List<Float> weights = new ArrayList<>();
         float topWeight = 0;
@@ -460,6 +458,15 @@ public class TraderServiceImpl implements TraderService {
             }
 
         }
+
+	    // add after-coma-part
+	    for (Offer offer : offers) {
+		    if (offer.getProduct().getUnit().isDevisable()) {
+			    double cent = (int) (Math.random()*100);
+			    offer.setAmount((double) offer.getAmount().intValue() + cent/100);
+		    }
+	    }
+
         return offers;
     }
 
