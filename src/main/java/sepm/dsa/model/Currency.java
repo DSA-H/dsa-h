@@ -32,7 +32,7 @@ public class Currency implements BaseModel {
 
     @NotNull
     @Column(nullable = false)
-    private Integer valueToBaseRate;  // relative value to base rate TODO change to Integer
+    private Integer valueToBaseRate;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "currencySet_currencies",

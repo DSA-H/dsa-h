@@ -45,6 +45,7 @@ public class CurrencyListController extends BaseControllerImpl {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
+        log.debug("initialize CurrencyListController");
         // init table
         currencyColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         valueToBaseRateColumn.setCellValueFactory(new PropertyValueFactory<>("valueToBaseRate"));
