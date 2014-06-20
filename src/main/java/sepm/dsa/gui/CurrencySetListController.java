@@ -56,8 +56,6 @@ public class CurrencySetListController extends BaseControllerImpl {
             }
         });
 
-        currencySetTable.getItems().setAll(currencySetService.getAll());
-
         checkFocus();
     }
 

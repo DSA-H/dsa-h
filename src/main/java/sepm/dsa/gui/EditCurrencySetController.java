@@ -108,6 +108,8 @@ public class EditCurrencySetController extends BaseControllerImpl {
         Stage stage = (Stage) tf_Name.getScene().getWindow();
 
         Parent scene = (Parent) loader.load("/gui/currencysetlist.fxml", stage);
+        CurrencySetListController ctrl = loader.getController();
+        ctrl.reload();
 
         stage.setScene(new Scene(scene, 600, 440));
     }
@@ -140,6 +142,9 @@ public class EditCurrencySetController extends BaseControllerImpl {
         // return to currencies-list
         Stage stage = (Stage) tf_Name.getScene().getWindow();
         Parent scene = (Parent) loader.load("/gui/currencysetlist.fxml", stage);
+        CurrencySetListController ctrl = loader.getController();
+        ctrl.reload();
+
         stage.setScene(new Scene(scene, 600, 440));
     }
 
