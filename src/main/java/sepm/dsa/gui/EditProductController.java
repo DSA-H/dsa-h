@@ -319,6 +319,22 @@ public class EditProductController extends BaseControllerImpl {
         }
     }
 
+    @FXML
+    public void onAddAllProductionRegionsPressed() {
+        log.debug("onAddAllProductionRegionsPressed");
+        regionTable.getItems().addAll(regionChoiceBox.getItems());
+        regionChoiceBox.getItems().clear();
+        checkFocusRegion();
+    }
+
+    @FXML
+    public void onRemoveAllProductionRegionsPressed() {
+        log.debug("onRemoveAllProductionRegionsPressed");
+        regionChoiceBox.getItems().addAll(regionTable.getItems());
+        regionTable.getItems().clear();
+        checkFocusRegion();
+    }
+
     private void refreshPriceView(int baseRatePrice) {
         log.info("calling refreshPriceView()");
         CurrencySet selected = currencySetService.getDefaultCurrencySet();
@@ -388,4 +404,5 @@ public class EditProductController extends BaseControllerImpl {
     public void setCalledFromCategorie(boolean calledFromCategorie) {
         this.calledFromCategorie = calledFromCategorie;
     }
+
 }
