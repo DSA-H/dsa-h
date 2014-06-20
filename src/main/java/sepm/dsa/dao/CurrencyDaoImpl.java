@@ -26,6 +26,8 @@ public class CurrencyDaoImpl
 
     @Override
     public void remove(Currency model) {
+        model = (Currency) sessionFactory.getCurrentSession().get(Currency.class, model.getId());
+        sessionFactory.getCurrentSession().refresh(model);
         super.remove(model);
         for (CurrencySet c : model.getCurrencySets()) {
             c.getCurrencies().remove(model);
