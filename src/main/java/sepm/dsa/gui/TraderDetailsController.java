@@ -326,13 +326,15 @@ public class TraderDetailsController extends BaseControllerImpl {
     @FXML
     private void onAddPressed() {
         log.debug("called onAddPressed");
-        Stage stage = (Stage) offerTable.getScene().getWindow();
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
         Parent scene = (Parent) loader.load("/gui/addoffer.fxml", stage);
         AddOfferController controller = loader.getController();
         controller.setTrader(trader);
         controller.reload();
 
         stage.setScene(new Scene(scene, 600, 400));
+        stage.show();
     }
 
     @FXML
