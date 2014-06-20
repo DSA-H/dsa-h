@@ -15,8 +15,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Transactional(readOnly = true)
 public class CurrencyServiceImpl implements CurrencyService {
@@ -25,6 +24,8 @@ public class CurrencyServiceImpl implements CurrencyService {
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private CurrencyDao currencyDao;
+
+    private final static List<Integer> defaultCurrencies = Arrays.asList(1, 2, 3, 4);   // IDs
 
     @Override
     public Currency get(int id) {
@@ -54,6 +55,10 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Transactional(readOnly = false)
     public void remove(Currency r) {
         log.debug("calling removeConnection(" + r + ")");
+
+        if (defaultCurrencies.contains(r.getId())) {
+            throw new DSAValidationException("Standardwährungen dürfen nicht gelöscht werden!");
+        }
         currencyDao.remove(r);
     }
 

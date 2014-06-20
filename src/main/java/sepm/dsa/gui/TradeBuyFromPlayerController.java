@@ -118,6 +118,7 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
 
         selectedAmount.setText("1");
         selectedQuality.getItems().setAll(ProductQuality.values());
+        selectedQuality.getSelectionModel().select(ProductQuality.NORMAL);
     }
 
     @Override

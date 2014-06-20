@@ -51,6 +51,20 @@ public class ProductCategoryDaoHbmImpl
     }
 
     @Override
+    public List<ProductCategory> getAll() {
+        log.debug("calling getAll()");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("ProductCategory.findAll");
+        List<?> list = query.list();
+        List<ProductCategory> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((ProductCategory) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
     public List<ProductCategory> getAllByParent(ProductCategory parent) {
         log.debug("calling getAllByParent(" + parent + ")");
         Query query = sessionFactory.getCurrentSession().getNamedQuery("ProductCategory.findAllByParent");

@@ -16,6 +16,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -28,6 +29,8 @@ public class CurrencySetServiceImpl implements CurrencySetService {
     private CurrencySetDao currencySetDao;
     private CurrencyService currencyService;
     private RegionService regionService;
+
+    private final static List<Integer> defaultCurrencySets = Arrays.asList(1);   // IDs
 
     @Override
     public CurrencySet get(int id) {
@@ -57,6 +60,9 @@ public class CurrencySetServiceImpl implements CurrencySetService {
     @Transactional(readOnly = false)
     public void remove(CurrencySet r) {
         log.debug("calling removeConnection(" + r + ")");
+        if (defaultCurrencySets.contains(r.getId())) {
+            throw new DSAValidationException("Standardwährungssysteme dürfen nicht gelöscht werden!");
+        }
         List<Region> regions = regionService.getAllByPreferredCurrencySet(r);
         currencySetDao.remove(r);
         for (Region region : regions) {

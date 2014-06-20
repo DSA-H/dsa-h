@@ -39,4 +39,18 @@ public class RegionDaoHbmImpl
         log.trace("returning " + result);
         return result;
     }
+
+    @Override
+    public List<Region> getAll() {
+        log.debug("calling getAll()");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("Region.findAll");
+        List<?> list = query.list();
+
+        List<Region> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((Region) o);
+        }
+        log.trace("returning " + result);
+        return result;
+    }
 }

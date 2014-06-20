@@ -198,7 +198,6 @@ public class EditProductController extends BaseControllerImpl {
             regionTable.getItems().remove(r);
             regionChoiceBox.getItems().add(r);
         }
-//        Collections.sort(regionChoiceBox.getItems(), (r1, r2) -> r1.getName().compareTo(r2.getName()));
         checkFocusRegion();
     }
 
