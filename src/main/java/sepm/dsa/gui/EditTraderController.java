@@ -93,7 +93,8 @@ public class EditTraderController extends BaseControllerImpl {
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
         areaBox.getItems().setAll(DistancePreferrence.values());
-        citySizeBox.getItems().setAll(TownSize.values());
+        citySizeBox.getItems().add(0, null);
+        citySizeBox.getItems().addAll(TownSize.values());
 
         movingCheck.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -183,7 +184,11 @@ public class EditTraderController extends BaseControllerImpl {
 
 	        if (currentType == MOVINGTRADER) {
 		        stayTimeField.setText("" + ((MovingTrader) selectedTrader).getAvgStayDays());
-		        citySizeBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredTownSize());
+                if(((MovingTrader) selectedTrader).getPreferredTownSize() != null) {
+                    citySizeBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredTownSize());
+                }else {
+                    citySizeBox.getSelectionModel().select(0);
+                }
 				areaBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredDistance());
 		        movingCheck.setSelected(true);
 	        }
@@ -345,9 +350,6 @@ public class EditTraderController extends BaseControllerImpl {
 
 		    //pref. townSize
             townsize = citySizeBox.getValue();
-		    if (townsize == null) {
-                throw new DSAValidationException("Eine bevorzugte Stadtgröße muss ausgewählt werden!");
-		    }
 
             area = areaBox.getValue();
 		    //travel area
@@ -355,10 +357,6 @@ public class EditTraderController extends BaseControllerImpl {
                 throw new DSAValidationException("Ein Reisegebiet muss ausgewählt werden!");
 		    }
 	    }
-
-        if(!isNewTrader) {
-
-        }
 
         if (isNewTrader) {
             selectedTrader.setName(name);
