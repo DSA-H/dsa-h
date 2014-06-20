@@ -12,4 +12,13 @@ public interface TimeService {
      * @param days
      */
     void forwardTime(int days);
+
+
+    public int getForwardProgress();
+
+    public int getForwardMaxProgress();
+
+    public String getForwardMessage();
+
+    public void resetProgress();
 }

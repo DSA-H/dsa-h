@@ -25,8 +25,12 @@ public class TimeServiceImpl implements TimeService {
     private OfferDao offerDao;
     private LocationService locationService;
     private TavernService tavernService;
-	private SaveCancelService saveCancelService;
 	private MapService mapService;
+
+    // Loading Bar Service
+    private int forwardProgress = 0;
+    private int forwardMaxProgress = 100;
+    private String forwardMessage = "Lade ...";
 
 	private DSADate date;
 	private Properties properties;
@@ -76,15 +80,22 @@ public class TimeServiceImpl implements TimeService {
 	@Override
 	public void forwardTime(int days) {
 		log.debug("calling forwardTime(" + days + ")");
-		if (days < 1) {
-			throw new DSAValidationException("Das Datum muss mindestens einen Tag nach vorne gestellt werden!");
-		}
+
+        List<Trader> traders = traderService.getAll();
+        List<Tavern> taverns = tavernService.getAll();
+        List<MovingTrader> movingTraders = traderService.getAllMovingTraders();
+
+        forwardMaxProgress = traders.size() + taverns.size() + movingTraders.size() + 1;
+
 		// save new time
 		date.setTimestamp(date.getTimestamp() + days);
 		setCurrentDate(date);
 
-		// change sortiment for all traders
-		for (Trader trader : traderService.getAll()) {
+        // change sortiment for all traders
+        forwardMessage = "Berechne Sortiments Fluktuation aller Händler ...";
+		for (Trader trader : traders) {
+            forwardProgress++;
+
 			int newOffersCount = (int) (PRODUCT_TURNOVER_PERCENT_PER_DAY * trader.getSize() * days);
 			if (newOffersCount > trader.getSize()) {
 				newOffersCount = trader.getSize();
@@ -144,8 +155,10 @@ public class TimeServiceImpl implements TimeService {
 		}
 
         // move moving traders
-        List<MovingTrader> movingTraders = traderService.getAllMovingTraders();
+        forwardMessage = "Bewege fahrende Händler ...";
         for(MovingTrader movingTrader : movingTraders) {
+            forwardProgress++;
+
             long daysSinceMove = date.getTimestamp() - movingTrader.getLastMoved();
             // chance to move 5 days around the average move day
             double moveChance = (float)(daysSinceMove - movingTrader.getAvgStayDays() + 5) / 10f;
@@ -209,21 +222,43 @@ public class TimeServiceImpl implements TimeService {
 	            }
 
                 traderService.update(movingTrader);
-	            saveCancelService.save();
             }
         }
 
 		// new tavern useage and price calculation
-		List<Tavern> taverns = tavernService.getAll();
+        forwardMessage = "Berechne Wirthäuser Auslastung und Preise ...";
 		for (Tavern tavern : taverns) {
+            forwardProgress++;
+
 			// update useage and price
 			tavern.setUsage(tavernService.calculateBedsUseage(tavern));
 			tavern.setPrice(tavernService.calculatePrice(tavern));
 			tavernService.update(tavern);
 		}
+
+        // complete
+        forwardProgress++;
 	}
 
-	public void setTraderService(TraderService traderService) {
+    public void resetProgress() {
+        forwardProgress = 0;
+        forwardMaxProgress = 100;
+        forwardMessage = "Lade ...";
+    }
+
+    public int getForwardProgress() {
+        return forwardProgress;
+    }
+
+    public int getForwardMaxProgress() {
+        return forwardMaxProgress;
+    }
+
+    public String getForwardMessage() {
+        return forwardMessage;
+    }
+
+    public void setTraderService(TraderService traderService) {
 		this.traderService = traderService;
 	}
 
@@ -238,10 +273,6 @@ public class TimeServiceImpl implements TimeService {
     public void setLocationService(LocationService locationService) {
         this.locationService = locationService;
     }
-
-	public void setSaveCancelService(SaveCancelService saveCancelService) {
-		this.saveCancelService = saveCancelService;
-	}
 
 	public void setMapService(MapService mapService) {
 		this.mapService = mapService;

@@ -271,7 +271,6 @@
         <property name="offerDao" ref="offerDao" />
         <property name="locationService" ref="locationService" />
         <property name="tavernService" ref="tavernService" />
-        <property name="saveCancelService" ref="saveCancelService"/>
         <property name="mapService" ref="mapService"/>
     </bean>
 
