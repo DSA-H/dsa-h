@@ -24,9 +24,13 @@ public class ValidationMessageUtil {
     }
 
     private static String getPropertyName(String key, Locale locale) {
-        if (locale == null) {
-            return ResourceBundle.getBundle(BEAN_PROPERTIES_FILE).getString(key);
+        try {
+            if (locale == null) {
+                return ResourceBundle.getBundle(BEAN_PROPERTIES_FILE).getString(key);
+            }
+            return ResourceBundle.getBundle(BEAN_PROPERTIES_FILE, locale).getString(key);
+        } catch (java.util.MissingResourceException ex) {
+            return key;
         }
-        return ResourceBundle.getBundle(BEAN_PROPERTIES_FILE, locale).getString(key);
     }
 }

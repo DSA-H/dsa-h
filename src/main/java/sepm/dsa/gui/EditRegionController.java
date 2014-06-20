@@ -2,6 +2,7 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -25,9 +26,7 @@ import sepm.dsa.service.RegionService;
 import sepm.dsa.service.SaveCancelService;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class EditRegionController extends BaseControllerImpl {
 
@@ -41,6 +40,8 @@ public class EditRegionController extends BaseControllerImpl {
     private SaveCancelService saveCancelService;
     // true if the region is not editing
     private boolean isNewRegion;
+
+    private ArrayList<Region> remainingBorders;
 
     @FXML
     private TextField nameField;
@@ -106,7 +107,7 @@ public class EditRegionController extends BaseControllerImpl {
             temperatureChoiceBox.getSelectionModel().select(Temperature.MEDIUM.getValue());
             rainfallChoiceBox.getSelectionModel().select(RainfallChance.MEDIUM.getValue());
 
-	    borderTable.getItems().retainAll();
+	        borderTable.getItems().retainAll();
         }
 
 
@@ -121,8 +122,8 @@ public class EditRegionController extends BaseControllerImpl {
             otherRegions.remove(regionBorder.getRegion1());
             otherRegions.remove(regionBorder.getRegion2());
         }
-
-	borderChoiceBox.getItems().setAll(otherRegions);
+        remainingBorders = new ArrayList<>(otherRegions);
+	    borderChoiceBox.getItems().setAll(otherRegions);
     }
 
     public void setRegionService(RegionService regionService) {
@@ -249,7 +250,13 @@ public class EditRegionController extends BaseControllerImpl {
 
         borderTable.getItems().add(border);
 
-        borderChoiceBox.getItems().remove(border.getRegion2());
+        long startTime = System.currentTimeMillis();
+        remainingBorders.remove(border.getRegion2());
+        long endTime1 = System.currentTimeMillis();
+        borderChoiceBox.setItems(FXCollections.observableArrayList(remainingBorders));//getItems().setAll(remainingBorders);
+        long endTime2 = System.currentTimeMillis();
+        log.info((endTime1 - startTime) + " ms, gesamt: " + (endTime2 - startTime));
+//        borderChoiceBox.getItems().remove(borderChoiceBox.getSelectionModel().getSelectedIndex());
         borderChoiceBox.getSelectionModel().selectFirst();
 
     }
