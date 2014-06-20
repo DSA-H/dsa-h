@@ -1,6 +1,5 @@
 package sepm.dsa.service;
 
-import sepm.dsa.model.Location;
 import sepm.dsa.model.Tavern;
 
 import java.util.List;

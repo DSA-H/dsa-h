@@ -3,10 +3,8 @@ package sepm.dsa.service;
 import javafx.scene.image.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import sepm.dsa.dao.OfferDao;
 import sepm.dsa.exceptions.DSARuntimeException;
-import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 
 import java.io.*;
@@ -14,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.logging.FileHandler;
 
 public class TimeServiceImpl implements TimeService {
 	private static final Logger log = LoggerFactory.getLogger(TimeServiceImpl.class);

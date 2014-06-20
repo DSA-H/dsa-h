@@ -1,7 +1,6 @@
 package sepm.dsa.gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -13,7 +12,6 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.AssortmentNature;
 import sepm.dsa.model.ProductCategory;
-import sepm.dsa.model.RegionBorder;
 import sepm.dsa.model.TraderCategory;
 import sepm.dsa.service.AssortmentNatureService;
 import sepm.dsa.service.ProductCategoryService;
@@ -22,8 +20,6 @@ import sepm.dsa.service.TraderCategoryService;
 
 import java.net.URL;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EditTraderCategoryController extends BaseControllerImpl {
 

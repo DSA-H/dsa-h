@@ -9,7 +9,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import sepm.dsa.gui.BaseController;
 
-import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 

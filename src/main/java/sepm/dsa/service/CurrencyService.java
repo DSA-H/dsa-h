@@ -4,7 +4,6 @@ import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.model.Currency;
 import sepm.dsa.model.CurrencySet;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface CurrencyService {

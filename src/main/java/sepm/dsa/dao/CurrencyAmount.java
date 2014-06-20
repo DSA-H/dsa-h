@@ -2,8 +2,6 @@ package sepm.dsa.dao;
 
 import sepm.dsa.model.Currency;
 
-import java.math.BigDecimal;
-
 public class CurrencyAmount {
 
     private Currency currency;

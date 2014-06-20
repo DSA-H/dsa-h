@@ -1,7 +1,6 @@
 package sepm.dsa.model;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 import sepm.dsa.service.path.PathNode;
 
 import javax.persistence.*;

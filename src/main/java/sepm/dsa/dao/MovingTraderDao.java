@@ -2,7 +2,6 @@ package sepm.dsa.dao;
 
 import sepm.dsa.model.Location;
 import sepm.dsa.model.MovingTrader;
-import sepm.dsa.model.Trader;
 import sepm.dsa.model.TraderCategory;
 
 import java.util.List;

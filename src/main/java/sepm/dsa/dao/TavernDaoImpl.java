@@ -2,7 +2,6 @@ package sepm.dsa.dao;
 
 import org.hibernate.Query;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.model.Location;
 import sepm.dsa.model.Tavern;
 
 import java.util.List;

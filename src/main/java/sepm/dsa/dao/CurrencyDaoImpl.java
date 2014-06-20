@@ -4,7 +4,6 @@ import org.hibernate.Query;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Currency;
 import sepm.dsa.model.CurrencySet;
-import sepm.dsa.model.Deal;
 
 import java.util.List;
 import java.util.Vector;

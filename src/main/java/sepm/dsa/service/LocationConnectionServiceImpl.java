@@ -7,11 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.LocationConnectionDao;
 import sepm.dsa.dao.LocationDao;
 import sepm.dsa.exceptions.DSAAlreadyExistsException;
-import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
-import sepm.dsa.model.Region;
 import sepm.dsa.service.path.NoPathException;
 import sepm.dsa.service.path.PathService;
 

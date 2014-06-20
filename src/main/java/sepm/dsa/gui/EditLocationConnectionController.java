@@ -1,8 +1,6 @@
 package sepm.dsa.gui;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -12,7 +10,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
@@ -20,10 +17,6 @@ import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
 import sepm.dsa.service.LocationConnectionService;
 import sepm.dsa.service.LocationService;
-
-import java.net.URL;
-import java.text.ParseException;
-import java.util.ResourceBundle;
 
 
 @Service("EditLocationConnectionController")

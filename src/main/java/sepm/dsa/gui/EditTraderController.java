@@ -4,7 +4,6 @@ package sepm.dsa.gui;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.control.*;
 import javafx.stage.Stage;

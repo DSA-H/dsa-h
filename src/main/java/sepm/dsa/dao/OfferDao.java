@@ -2,7 +2,6 @@ package sepm.dsa.dao;
 
 import sepm.dsa.model.Offer;
 import sepm.dsa.model.Product;
-import sepm.dsa.model.Trader;
 
 import java.util.Collection;
 import java.util.List;

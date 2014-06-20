@@ -1,7 +1,6 @@
 package sepm.dsa.gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -17,14 +16,9 @@ import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 import sepm.dsa.util.CurrencyFormatUtil;
 
-import java.math.BigDecimal;
 import java.net.URL;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class TradeSellToPlayerController extends BaseControllerImpl {

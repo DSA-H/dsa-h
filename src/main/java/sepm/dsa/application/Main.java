@@ -14,7 +14,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.gui.MainMenuController;
-import sepm.dsa.service.pdf.TraderPdfService;
 import sepm.dsa.util.ValidationMessageUtil;
 
 import javax.validation.ConstraintViolation;

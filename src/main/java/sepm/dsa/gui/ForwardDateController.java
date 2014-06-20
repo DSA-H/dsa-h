@@ -2,16 +2,13 @@ package sepm.dsa.gui;
 
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
-import org.omg.PortableServer.THREAD_POLICY_ID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
@@ -22,7 +19,6 @@ import sepm.dsa.service.TimeService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutorService;
 
 public class ForwardDateController extends BaseControllerImpl {
     private static final Logger log = LoggerFactory.getLogger(ForwardDateController.class);

@@ -10,7 +10,6 @@ import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.CurrencySet;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.Region;
-import sepm.dsa.model.RegionBorder;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;

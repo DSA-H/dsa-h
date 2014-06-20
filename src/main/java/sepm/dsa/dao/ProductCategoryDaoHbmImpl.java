@@ -3,7 +3,6 @@ package sepm.dsa.dao;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.model.LocationConnection;
 import sepm.dsa.model.ProductCategory;
 
 import java.util.List;

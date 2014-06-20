@@ -1,7 +1,6 @@
 package sepm.dsa.dao;
 
 import sepm.dsa.model.AssortmentNature;
-import sepm.dsa.model.RegionBorder;
 
 import java.util.List;
 import java.util.Vector;

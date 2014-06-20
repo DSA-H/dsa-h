@@ -1,7 +1,6 @@
 package sepm.dsa.service;
 
 import sepm.dsa.model.DSADate;
-import sepm.dsa.model.Location;
 
 public interface TimeService {
     DSADate getCurrentDate();

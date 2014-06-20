@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.TavernDao;
 import sepm.dsa.exceptions.DSAValidationException;
-import sepm.dsa.model.ProductQuality;
 import sepm.dsa.model.Tavern;
 
 import javax.validation.ConstraintViolation;

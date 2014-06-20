@@ -2,45 +2,30 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
-import org.controlsfx.control.action.Action;
-import org.controlsfx.dialog.Dialogs;
 import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.model.Offer;
-import sepm.dsa.model.Trader;
-import sepm.dsa.service.TraderService;
-import sepm.dsa.service.TraderServiceImpl;
 import sepm.dsa.dao.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
-import sepm.dsa.service.DealService;
-import sepm.dsa.service.SaveCancelService;
-import sepm.dsa.service.TimeService;
 import sepm.dsa.service.*;
 import sepm.dsa.util.CurrencyFormatUtil;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class TraderDetailsController extends BaseControllerImpl {

@@ -5,7 +5,6 @@ import sepm.dsa.model.ProductCategory;
 import sepm.dsa.model.Region;
 
 import java.util.List;
-import java.util.Set;
 
 public interface ProductDao extends BaseDao<Product> {
 

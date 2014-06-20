@@ -2,7 +2,6 @@ package sepm.dsa.service;
 
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.AssortmentNature;
-import sepm.dsa.model.AssortmentNature;
 import sepm.dsa.model.ProductCategory;
 import sepm.dsa.model.TraderCategory;
 

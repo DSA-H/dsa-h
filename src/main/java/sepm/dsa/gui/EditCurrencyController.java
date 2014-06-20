@@ -1,7 +1,6 @@
 package sepm.dsa.gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,7 +14,6 @@ import sepm.dsa.model.Currency;
 import sepm.dsa.service.CurrencyService;
 import sepm.dsa.service.SaveCancelService;
 
-import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 

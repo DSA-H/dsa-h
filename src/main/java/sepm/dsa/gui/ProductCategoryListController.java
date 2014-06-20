@@ -3,7 +3,6 @@ package sepm.dsa.gui;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,7 +18,6 @@ import sepm.dsa.model.ProductCategory;
 import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.SaveCancelService;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
