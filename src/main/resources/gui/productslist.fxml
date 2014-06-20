@@ -5,8 +5,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.ProductListController">
-<children><TableView fx:id="productTable" layoutX="11.0" layoutY="86.0" onMouseClicked="#checkFocus" prefHeight="322.0" prefWidth="577.0">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="501.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.ProductListController">
+<children><TableView fx:id="productTable" layoutX="11.0" layoutY="130.0" onMouseClicked="#checkFocus" prefHeight="322.0" prefWidth="577.0">
 <columns>
 <TableColumn fx:id="productColumn" prefWidth="151.0" text="Ware" />
 <TableColumn fx:id="costColumn" minWidth="0.0" prefWidth="94.0" text="Basispreis" />
@@ -17,7 +17,10 @@
 <font>
 <Font name="System Bold" size="18.0" />
 </font>
-</Label><HBox layoutX="12.0" layoutY="53.0" prefHeight="27.0" prefWidth="577.0" spacing="10.0">
+</Label><HBox layoutX="12.0" layoutY="97.0" prefHeight="27.0" prefWidth="577.0" spacing="10.0">
 <children><Button layoutX="98.0" layoutY="39.0" mnemonicParsing="false" onAction="#onCreateButtonPressed" onMouseClicked="#onCreateButtonPressed" prefHeight="25.0" prefWidth="85.0" text="Erstellen" /><Button fx:id="editButton" mnemonicParsing="false" onAction="#onEditButtonPressed" onMouseClicked="#onEditButtonPressed" prefHeight="25.0" prefWidth="83.0" text="Bearbeiten" /><Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDeleteButtonPressed" onMouseClicked="#onDeleteButtonPressed" text="Löschen" />
-</children></HBox><Button layoutX="14.0" layoutY="412.0" mnemonicParsing="false" onAction="#closeClicked" text="Schließen" />
+</children></HBox><Button layoutX="14.0" layoutY="456.0" mnemonicParsing="false" onAction="#closeClicked" text="Schließen" />
+      <TextField fx:id="tf_ProductOrCategoryName" layoutX="14.0" layoutY="53.0" prefHeight="31.0" prefWidth="150.0" promptText="Ware/Kategorie" />
+      <TextField fx:id="tf_RegionName" layoutX="171.0" layoutY="53.0" prefWidth="150.0" promptText="Produktionsgebiet" />
+      <Button layoutX="333.0" layoutY="53.0" mnemonicParsing="false" onAction="#onFilterProductsPressed" text="Filtern" />
 </children></Pane>

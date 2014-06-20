@@ -23,6 +23,11 @@
                     WHERE :regionId in (SELECT id FROM p.productionRegions)]]>
     </query>
 
+    <query name="Product.findAllByRegionName">
+        <![CDATA[   FROM Product p
+                    WHERE exists (SELECT r.id FROM p.productionRegions r WHERE lower(r.name) like lower(:regionName))]]>
+    </query>
+
     <!--<query name="Product.findAllByDeals">-->
         <!--<![CDATA[   FROM Product p-->
                     <!--WHERE :categoryId in (SELECT  FROM Deal d)-->

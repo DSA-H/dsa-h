@@ -82,4 +82,20 @@ public class ProductDaoHbmImpl
         return result;
     }
 
+    @Override
+    public List<Product> getAllByRegionName(String regionName) {
+        log.debug("calling getAllByRegion(" + regionName + ")");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("Product.findAllByRegionName");
+        query.setParameter("regionName", regionName);
+        List<?> list = query.list();
+
+        List<Product> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((Product) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
+
 }

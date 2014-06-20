@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -50,6 +51,10 @@ public class ProductListController extends BaseControllerImpl {
     private Button deleteButton;
     @FXML
     private Button editButton;
+    @FXML
+    private TextField tf_ProductOrCategoryName;
+    @FXML
+    private TextField tf_RegionName;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
@@ -171,6 +176,16 @@ public class ProductListController extends BaseControllerImpl {
         }
 
         checkFocus();
+    }
+
+    @FXML
+    private void onFilterProductsPressed() {
+        String productOrCategoryName = tf_ProductOrCategoryName.getText();
+        String regionName = tf_RegionName.getText();
+        if (productOrCategoryName.length() == 0) productOrCategoryName = null;
+        if (regionName.length() == 0) regionName = null;
+
+        productTable.getItems().setAll(productService.getAllByFilter(productOrCategoryName, regionName));
     }
 
     @FXML

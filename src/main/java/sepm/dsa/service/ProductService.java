@@ -64,4 +64,15 @@ public interface ProductService {
      */
     List<Product> getAllByProductionRegion(Region region);
 
+    /**
+     * @param productOrCategoryName use null for not filter this parameter
+     * @param regionName use null for not filter this parameter
+     * @return all Products metting following conditions: <br />
+     *          (Product.name like :productOrCategoryName or :productOrCategoryName in Product.categories.name)
+     *          and (:regionName in Product.productionRegions.name) <br />
+     *          might be an empty list (not null)
+     *
+     */
+    List<Product> getAllByFilter(String productOrCategoryName, String regionName);
+
 }

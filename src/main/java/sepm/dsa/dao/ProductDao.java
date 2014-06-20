@@ -30,4 +30,10 @@ public interface ProductDao extends BaseDao<Product> {
      */
     List<Product> getAllByRegion(Region region);
 
+    /**
+     * @param regionName the regionName, not null
+     * @return all products produced in this region, might be an empty list (not null)
+     */
+    List<Product> getAllByRegionName(String regionName);
+
 }
