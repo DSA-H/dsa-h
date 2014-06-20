@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.exceptions.DSARuntimeException;
-import sepm.dsa.model.DSADate;
 import sepm.dsa.model.Location;
 
 import java.io.*;
@@ -26,83 +25,83 @@ import java.util.Properties;
 @Transactional(readOnly = true)
 public class MapServiceImpl implements MapService {
     private static final Logger log = LoggerFactory.getLogger(MapServiceImpl.class);
-	private LocationService locationService;
-	private SaveCancelService saveCancelService;
+    private LocationService locationService;
+    private SaveCancelService saveCancelService;
     private File alternativeDir = new File("maps/alternative");
     private File activeDir = new File("maps/active");
     private File ressourceDir = new File("maps/ressource");
-	private Properties properties;
+    private Properties properties;
 
-	public MapServiceImpl(){
-		try {
-			properties = new Properties();
-			Path path = Paths.get("properties");
-			if (!Files.exists(path)) {
-				Files.createFile(path);
-			}
-			InputStream is = Files.newInputStream(path);
-			properties.load(is);
-			is.close();
-		} catch (IOException e) {
-			throw new DSARuntimeException("Probleme beim Laden der Properties Datei! \n" + e.getMessage());
-		}
-	}
+    public MapServiceImpl() {
+        try {
+            properties = new Properties();
+            Path path = Paths.get("properties");
+            if (!Files.exists(path)) {
+                Files.createFile(path);
+            }
+            InputStream is = Files.newInputStream(path);
+            properties.load(is);
+            is.close();
+        } catch (IOException e) {
+            throw new DSARuntimeException("Probleme beim Laden der Properties Datei! \n" + e.getMessage());
+        }
+    }
 
-	public String colorToString(Color color) {
-		String colorString = "";
-		String red = Integer.toHexString((int) (color.getRed() * 255));
-		if (red.length() == 1) {
-			red = "0" + red;
-		}
-		String green = Integer.toHexString((int) (color.getGreen() * 255));
-		if (green.length() == 1) {
-			green = "0" + green;
-		}
-		String blue = Integer.toHexString((int) (color.getBlue() * 255));
-		if (blue.length() == 1) {
-			blue = "0" + blue;
-		}
-		colorString = red + green + blue;
-		return colorString;
-	}
+    public String colorToString(Color color) {
+        String colorString = "";
+        String red = Integer.toHexString((int) (color.getRed() * 255));
+        if (red.length() == 1) {
+            red = "0" + red;
+        }
+        String green = Integer.toHexString((int) (color.getGreen() * 255));
+        if (green.length() == 1) {
+            green = "0" + green;
+        }
+        String blue = Integer.toHexString((int) (color.getBlue() * 255));
+        if (blue.length() == 1) {
+            blue = "0" + blue;
+        }
+        colorString = red + green + blue;
+        return colorString;
+    }
 
-	public Color stringToColor(String colorString) {
-		return new Color(
-				(double) Integer.valueOf(colorString.substring(0, 2), 16) / 255,
-				(double) Integer.valueOf(colorString.substring(2, 4), 16) / 255,
-				(double) Integer.valueOf(colorString.substring(4, 6), 16) / 255,
-				1.0);
-	}
+    public Color stringToColor(String colorString) {
+        return new Color(
+                (double) Integer.valueOf(colorString.substring(0, 2), 16) / 255,
+                (double) Integer.valueOf(colorString.substring(2, 4), 16) / 255,
+                (double) Integer.valueOf(colorString.substring(4, 6), 16) / 255,
+                1.0);
+    }
 
     @Override
     public File chooseMap() {
 
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Karte auswählen");
-		if (alternativeDir.isDirectory() && alternativeDir.list().length > 0) {
-				fileChooser.setInitialDirectory(new File("maps/alternative"));
-		}
-		List<String> extensions = new ArrayList<String>();
-		extensions.add("*.jpg");
-		extensions.add("*.png");
-		extensions.add("*.gif");
-		fileChooser.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("All Images", extensions),
-				new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-				new FileChooser.ExtensionFilter("GIF", "*.gif"),
-				new FileChooser.ExtensionFilter("PNG", "*.png")
-		);
-		File newMap = fileChooser.showOpenDialog(new Stage());
-		if (newMap != null && newMap.length() > 11000000) {
-			Dialogs.create()
-					.title("Fehler")
-					.masthead(null)
-					.message("Die Datei darf maximal 10 MB groß sein!")
-					.showWarning();
-			return null;
-		}
-		return newMap;
-	}
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Karte auswählen");
+        if (alternativeDir.isDirectory() && alternativeDir.list().length > 0) {
+            fileChooser.setInitialDirectory(new File("maps/alternative"));
+        }
+        List<String> extensions = new ArrayList<String>();
+        extensions.add("*.jpg");
+        extensions.add("*.png");
+        extensions.add("*.gif");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Images", extensions),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                new FileChooser.ExtensionFilter("GIF", "*.gif"),
+                new FileChooser.ExtensionFilter("PNG", "*.png")
+        );
+        File newMap = fileChooser.showOpenDialog(new Stage());
+        if (newMap != null && newMap.length() > 11000000) {
+            Dialogs.create()
+                    .title("Fehler")
+                    .masthead(null)
+                    .message("Die Datei darf maximal 10 MB groß sein!")
+                    .showWarning();
+            return null;
+        }
+        return newMap;
+    }
 
     @Override
     public void setWorldMap(File newMap) {
@@ -257,17 +256,17 @@ public class MapServiceImpl implements MapService {
             String extSource = FilenameUtils.getExtension(worldMap.getAbsolutePath());
             String extTarget = FilenameUtils.getExtension(exportFile.getAbsolutePath());
             if (exportFile.exists() && !exportFile.isDirectory()) {
-            }
-            try {
-                if (extTarget == "") {
-                    FileUtils.copyFile(worldMap, new File(exportFile.getAbsolutePath() + "." + extSource));
-                    exportFile.delete();
-                } else {
-                    FileUtils.copyFile(worldMap, exportFile);
+                try {
+                    if (extTarget.equals("")) {
+                        FileUtils.copyFile(worldMap, new File(exportFile.getAbsolutePath() + "." + extSource));
+                        exportFile.delete();
+                    } else {
+                        FileUtils.copyFile(worldMap, exportFile);
+                    }
+                    log.debug("exported Map " + mapName);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                log.debug("exported Map " + mapName);
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -318,180 +317,180 @@ public class MapServiceImpl implements MapService {
         return null;
     }
 
-	@Override
-	public Color getTraderColor() {
-		return stringToColor(properties.getProperty("traderColor", "0000FF"));
-	}
+    @Override
+    public Color getTraderColor() {
+        return stringToColor(properties.getProperty("traderColor", "0000FF"));
+    }
 
-	@Override
-	public Color getMovingTraderColor() {
-		return stringToColor(properties.getProperty("movingTraderColor", "ADD8E6"));
-	}
+    @Override
+    public Color getMovingTraderColor() {
+        return stringToColor(properties.getProperty("movingTraderColor", "ADD8E6"));
+    }
 
-	@Override
-	public Color getTavernColor() {
-		return stringToColor(properties.getProperty("tavernColor", "FFFF00"));
-	}
+    @Override
+    public Color getTavernColor() {
+        return stringToColor(properties.getProperty("tavernColor", "FFFF00"));
+    }
 
-	@Override
-	public Color getHighlightColor() {
-		return stringToColor(properties.getProperty("highlightColor", "000000"));
-	}
+    @Override
+    public Color getHighlightColor() {
+        return stringToColor(properties.getProperty("highlightColor", "000000"));
+    }
 
-	@Override
-	public Color getSelectionColor() {
-		return stringToColor(properties.getProperty("selectionColor", "008000"));
-	}
+    @Override
+    public Color getSelectionColor() {
+        return stringToColor(properties.getProperty("selectionColor", "008000"));
+    }
 
-	@Override
-	public Color getBorderColor() {
-		return stringToColor(properties.getProperty("borderColor", "000000"));
-	}
+    @Override
+    public Color getBorderColor() {
+        return stringToColor(properties.getProperty("borderColor", "000000"));
+    }
 
-	@Override
-	public Color getNameColor() {
-		return stringToColor(properties.getProperty("nameColor", "000000"));
-	}
+    @Override
+    public Color getNameColor() {
+        return stringToColor(properties.getProperty("nameColor", "000000"));
+    }
 
-	@Override
-	public int getWorldIconSize() {
-		return Integer.parseInt(properties.getProperty("worldIconSize", "20"));
-	}
+    @Override
+    public int getWorldIconSize() {
+        return Integer.parseInt(properties.getProperty("worldIconSize", "20"));
+    }
 
-	@Override
-	public double getLocationIconSize(Location location) {
-		if (location.getIconSize() == null) {
-			return 10;
-		}
-		return location.getIconSize();
-	}
+    @Override
+    public double getLocationIconSize(Location location) {
+        if (location.getIconSize() == null) {
+            return 10;
+        }
+        return location.getIconSize();
+    }
 
-	@Override
-	public double getTextSize() {
-		return Double.parseDouble(properties.getProperty("textSize", "1.0"));
-	}
+    @Override
+    public double getTextSize() {
+        return Double.parseDouble(properties.getProperty("textSize", "1.0"));
+    }
 
 
-	@Override
-	public void setTraderColor(Color c) {
-		try {
-			properties.put("traderColor", colorToString(c));
-			OutputStream os = Files.newOutputStream(Paths.get("properties"));
-			properties.store(os, "");
-			os.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void setTraderColor(Color c) {
+        try {
+            properties.put("traderColor", colorToString(c));
+            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            properties.store(os, "");
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public void setMovingTraderColor(Color c) {
-		try {
-			properties.put("movingTraderColor", colorToString(c));
-			OutputStream os = Files.newOutputStream(Paths.get("properties"));
-			properties.store(os, "");
-			os.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void setMovingTraderColor(Color c) {
+        try {
+            properties.put("movingTraderColor", colorToString(c));
+            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            properties.store(os, "");
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public void setTavernColor(Color c) {
-		try {
-			properties.put("tavernColor", colorToString(c));
-			OutputStream os = Files.newOutputStream(Paths.get("properties"));
-			properties.store(os, "");
-			os.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void setTavernColor(Color c) {
+        try {
+            properties.put("tavernColor", colorToString(c));
+            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            properties.store(os, "");
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public void setHighlightColor(Color c) {
-		try {
-			properties.put("highlightColor", colorToString(c));
-			OutputStream os = Files.newOutputStream(Paths.get("properties"));
-			properties.store(os, "");
-			os.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void setHighlightColor(Color c) {
+        try {
+            properties.put("highlightColor", colorToString(c));
+            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            properties.store(os, "");
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public void setSelectionColor(Color c) {
-		try {
-			properties.put("selectionColor", colorToString(c));
-			OutputStream os = Files.newOutputStream(Paths.get("properties"));
-			properties.store(os, "");
-			os.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void setSelectionColor(Color c) {
+        try {
+            properties.put("selectionColor", colorToString(c));
+            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            properties.store(os, "");
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public void setBorderColor(Color c) {
-		try {
-			properties.put("borderColor", colorToString(c));
-			OutputStream os = Files.newOutputStream(Paths.get("properties"));
-			properties.store(os, "");
-			os.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void setBorderColor(Color c) {
+        try {
+            properties.put("borderColor", colorToString(c));
+            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            properties.store(os, "");
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public void setNameColor(Color c) {
-		try {
-			properties.put("nameColor", colorToString(c));
-			OutputStream os = Files.newOutputStream(Paths.get("properties"));
-			properties.store(os, "");
-			os.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void setNameColor(Color c) {
+        try {
+            properties.put("nameColor", colorToString(c));
+            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            properties.store(os, "");
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public void setWorldIconSize(int size) {
-		try {
-			properties.put("worldIconSize", ""+size);
-			OutputStream os = Files.newOutputStream(Paths.get("properties"));
-			properties.store(os, "");
-			os.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void setWorldIconSize(int size) {
+        try {
+            properties.put("worldIconSize", "" + size);
+            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            properties.store(os, "");
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public void setLocationIconSize(Location location, double size) {
-		location.setIconSize(size);
-		locationService.update(location);
-		saveCancelService.save();
-	}
+    @Override
+    public void setLocationIconSize(Location location, double size) {
+        location.setIconSize(size);
+        locationService.update(location);
+        saveCancelService.save();
+    }
 
-	@Override
-	public void setTextSize(double size) {
-		try {
-			properties.put("textSize", ""+size);
-			OutputStream os = Files.newOutputStream(Paths.get("properties"));
-			properties.store(os, "");
-			os.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void setTextSize(double size) {
+        try {
+            properties.put("textSize", "" + size);
+            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            properties.store(os, "");
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void setLocationService(LocationService locationService) {
-		this.locationService = locationService;
-	}
+    public void setLocationService(LocationService locationService) {
+        this.locationService = locationService;
+    }
 
-	public void setSaveCancelService(SaveCancelService saveConcelService) {
-		this.saveCancelService = saveConcelService;
-	}
+    public void setSaveCancelService(SaveCancelService saveConcelService) {
+        this.saveCancelService = saveConcelService;
+    }
 }
