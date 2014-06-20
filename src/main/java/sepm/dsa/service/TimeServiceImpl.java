@@ -98,14 +98,14 @@ public class TimeServiceImpl implements TimeService {
 		for (Trader trader : traders) {
             forwardProgress++;
 
-			int newOffersCount = (int) (PRODUCT_TURNOVER_PERCENT_PER_DAY * trader.getSize() * days);
+			int newOffersCount = (int) (PRODUCT_TURNOVER_PERCENT_PER_DAY/100 * trader.getSize() * days);
 			if (newOffersCount > trader.getSize()) {
 				newOffersCount = trader.getSize();
 			}
-			int actOffersCount = 0;   // TODO: is Double now
+			int actOffersCount = 0;
 			Set<Offer> offers = trader.getOffers();
 			for (Offer offer : offers) {
-				actOffersCount += offer.getAmount();
+				actOffersCount += offer.getAmount().intValue();
 			}
 			// if to much offers sold, make more new offers
 			if (trader.getSize() - newOffersCount > actOffersCount) {
@@ -113,7 +113,7 @@ public class TimeServiceImpl implements TimeService {
 			}
 			// if not enough offer sold, delete some random offers
 			else {
-				int deleteOffersCount = actOffersCount - (trader.getSize() - newOffersCount);
+				double deleteOffersCount = actOffersCount - (trader.getSize() - newOffersCount);
 				for (int j = 0; j < deleteOffersCount; j++) {
 					int random = (int) (Math.random() * (actOffersCount - j));
 					int i = 0;
@@ -122,7 +122,7 @@ public class TimeServiceImpl implements TimeService {
 						i += offer.getAmount();
 						if (random <= i) {
 							offer.setAmount(offer.getAmount() - 1);
-							if (offer.getAmount() == 0) {
+							if (offer.getAmount() <= 0) {
 								deleteOffer = offer;
 							}
 							break;
@@ -134,8 +134,16 @@ public class TimeServiceImpl implements TimeService {
 					}
 				}
 			}
+			// add after-coma-part
+			for (Offer offer : trader.getOffers()) {
+				if (offer.getProduct().getUnit().isDevisable()) {
+					double cent = (int) (Math.random()*100);
+					offer.setAmount((double) offer.getAmount().intValue() + cent/100);
+					offerDao.update(offer);
+				}
+			}
 			// add new generated offers
-			List<Offer> newOffers = traderService.calculateOffers(trader, newOffersCount);
+			List<Offer> newOffers = traderService.calculateOffers(trader, (int) newOffersCount);
 			for (Offer newOffer : newOffers) {
 				boolean containing = false;
 				// if offer already exist, change amount

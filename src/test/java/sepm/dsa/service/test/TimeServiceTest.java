@@ -85,7 +85,9 @@ public class TimeServiceTest extends AbstractDatabaseTest {
             actAmount += offer.getAmount();
         }
 
-        Assert.assertTrue(actAmount == trader.getSize());
+	    double maxSize = trader.getSize() + trader.getOffers().size()*0.99;
+        Assert.assertTrue(actAmount <= maxSize);
+	    Assert.assertTrue(actAmount >= trader.getSize());
     }
 
 //    @Ignore
@@ -111,7 +113,10 @@ public class TimeServiceTest extends AbstractDatabaseTest {
         for(Offer offer : offers) {
             actAmount += offer.getAmount();
         }
-        Assert.assertTrue(actAmount == trader.getSize());
+
+	    double maxSize = trader.getSize() + trader.getOffers().size()*0.99;
+	    Assert.assertTrue(actAmount <= maxSize);
+	    Assert.assertTrue(actAmount >= trader.getSize());
     }
 
 //    @Ignore
@@ -141,6 +146,9 @@ public class TimeServiceTest extends AbstractDatabaseTest {
         for(Offer offer : offers) {
             actAmount += offer.getAmount();
         }
-        Assert.assertTrue(actAmount == trader.getSize());
+
+	    double maxSize = trader.getSize() + trader.getOffers().size()*0.99;
+	    Assert.assertTrue(actAmount <= maxSize);
+	    Assert.assertTrue(actAmount >= trader.getSize());
     }
 }
