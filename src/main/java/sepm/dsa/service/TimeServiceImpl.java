@@ -81,6 +81,7 @@ public class TimeServiceImpl implements TimeService {
 	public void forwardTime(int days) {
 		log.debug("calling forwardTime(" + days + ")");
 
+        List<Location> locations = locationService.getAll();
         List<Trader> traders = traderService.getAll();
         List<Tavern> taverns = tavernService.getAll();
         List<MovingTrader> movingTraders = traderService.getAllMovingTraders();
@@ -90,6 +91,10 @@ public class TimeServiceImpl implements TimeService {
 		// save new time
 		date.setTimestamp(date.getTimestamp() + days);
 		setCurrentDate(date);
+
+        for (Location location: locations){
+            location.setWeather(Weather.getNewWeather(location.getRegion().getTemperature(), location.getRegion().getRainfallChance()));
+        }
 
         // todo: implentation is not 100% correct (should not simply "add" turnover per day)
         // change sortiment for all traders
