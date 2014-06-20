@@ -68,7 +68,6 @@ public class MovingTraderListController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("reload MovingTraderListController");
-        locationsLabel.setText("in den Orten " + connection.getLocation1() + " und " + connection.getLocation2());
 
         List<Trader> traders = traderService.getAllForLocation(connection.getLocation1());
         traders.addAll(traderService.getAllForLocation(connection.getLocation2()));
@@ -79,6 +78,8 @@ public class MovingTraderListController extends BaseControllerImpl {
             }
         }
 	    traderTable.getItems().setAll(movingTraders);
+
+        commentLabel.setText(connection.getComment());
 
         checkFocus();
     }
@@ -97,6 +98,12 @@ public class MovingTraderListController extends BaseControllerImpl {
 		stage.showAndWait();
 	}
 
+    @FXML
+    private void onClosePressed() {
+        Stage stage = (Stage)traderTable.getScene().getWindow();
+        stage.close();
+    }
+
 	@FXML
 	private void checkFocus() {
 		selectedTrader = (MovingTrader) traderTable.getSelectionModel().getSelectedItem();
@@ -112,7 +119,7 @@ public class MovingTraderListController extends BaseControllerImpl {
 
 	public void setLocationConnection(LocationConnection connection) {
         this.connection = connection;
-        commentLabel.setText(connection.getComment());
+        locationsLabel.setText("in den Orten " + connection.getLocation1() + " und " + connection.getLocation2());
 	}
 
 	public void setTraderService(TraderService traderService) {

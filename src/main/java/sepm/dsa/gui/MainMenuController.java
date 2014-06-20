@@ -899,7 +899,7 @@ public class MainMenuController extends BaseControllerImpl {
 													controller.setLocationConnection(lc);
 													controller.reload();
 													stage.setTitle("Fahrende Händler");
-													stage.setScene(new Scene(scene, 600, 400));
+													stage.setScene(new Scene(scene, 600, 430));
 													stage.setResizable(false);
 													stage.show();
 												}
@@ -1154,7 +1154,7 @@ public class MainMenuController extends BaseControllerImpl {
 														controller.setLocationConnection(lc);
 														controller.reload();
 														stage.setTitle("Fahrende Händler");
-														stage.setScene(new Scene(scene, 600, 400));
+														stage.setScene(new Scene(scene, 600, 430));
 														stage.setResizable(false);
 														stage.show();
 													}
