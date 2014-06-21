@@ -3,9 +3,15 @@ package sepm.dsa.service;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.DatabaseSequenceFilter;
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.FilteredDataSet;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.filter.ITableFilter;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.dataset.xml.FlatXmlProducer;
+import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import sepm.dsa.exceptions.DSARuntimeException;
@@ -42,12 +48,19 @@ public class DataSetServiceImpl implements DataSetService {
 	}
 
 	private void addDatabaseDump(ZipOutputStream zip) throws IOException, SQLException, DatabaseUnitException {
-		IDatabaseConnection sourceConnection = new DatabaseConnection(dataSource.getConnection());
-		sourceConnection.getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
-		IDataSet dataSet = sourceConnection.createDataSet();
+		IDatabaseConnection connection = getDatabaseConnection();
+
+		ITableFilter filter = new DatabaseSequenceFilter(connection);
+		IDataSet dataSet = new FilteredDataSet(filter, connection.createDataSet());
 
 		zip.putNextEntry(new ZipEntry("dataset.xml"));
-		FlatXmlDataSet.write(dataSet, zip);
+		XmlDataSet.write(dataSet, zip);
+	}
+
+	private IDatabaseConnection getDatabaseConnection() throws DatabaseUnitException, SQLException {
+		IDatabaseConnection connection = new DatabaseConnection(dataSource.getConnection());
+		connection.getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
+		return connection;
 	}
 
 	public void setDataSource(DriverManagerDataSource dataSource) {
