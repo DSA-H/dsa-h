@@ -28,10 +28,10 @@ public class TimeServiceImpl implements TimeService {
 	private SaveCancelService saveCancelService;
 	private MapService mapService;
 
-	private DSADate date;
 	private Properties properties;
 
-	public TimeServiceImpl() {
+	@Override
+	public DSADate getCurrentDate() {
 		try {
 			properties = new Properties();
 			Path path = Paths.get("properties");
@@ -42,15 +42,10 @@ public class TimeServiceImpl implements TimeService {
 			properties.load(is);
 			long timestamp = Long.parseLong(properties.getProperty("time", "0"));
 			is.close();
-			date = new DSADate(timestamp);
+			return new DSADate(timestamp);
 		} catch (IOException e) {
 			throw new DSARuntimeException("Probleme beim Laden der Properties Datei! \n" + e.getMessage());
 		}
-	}
-
-	@Override
-	public DSADate getCurrentDate() {
-		return date;
 	}
 
 	@Override
@@ -61,7 +56,6 @@ public class TimeServiceImpl implements TimeService {
 			OutputStream os = Files.newOutputStream(Paths.get("properties"));
 			properties.store(os, "");
 			os.close();
-			date = dsaDate;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -80,6 +74,7 @@ public class TimeServiceImpl implements TimeService {
 			throw new DSAValidationException("Das Datum muss mindestens einen Tag nach vorne gestellt werden!");
 		}
 		// save new time
+		DSADate date = getCurrentDate();
 		date.setTimestamp(date.getTimestamp() + days);
 		setCurrentDate(date);
 
