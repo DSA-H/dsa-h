@@ -88,8 +88,8 @@
       <menus>
         <Menu fx:id="dateiMenu" mnemonicParsing="false" text="Datei">
           <items>
-            <MenuItem fx:id="dateiImport" disable="true" mnemonicParsing="false" text="Import" />
-            <MenuItem fx:id="dateiExport" disable="true" mnemonicParsing="false" text="Export" />
+            <MenuItem mnemonicParsing="false" onAction="#onImportClicked" text="Import" fx:id="dateiImport" />
+            <MenuItem mnemonicParsing="false" onAction="#onExportClicked" text="Export" fx:id="dateiExport" />
             <MenuItem mnemonicParsing="false" onAction="#onPrintTraderClicked" text="Händler drucken" />
             <MenuItem mnemonicParsing="false" onAction="#onMapOptionsClicked" text="Kartenoptionen" />
             <MenuItem fx:id="dateiExit" mnemonicParsing="false" onAction="#onExitClicked" text="Beenden" />

@@ -25,6 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.controlsfx.control.action.Action;
@@ -33,6 +34,7 @@ import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 import sepm.dsa.service.path.NoPathException;
@@ -59,6 +61,7 @@ public class MainMenuController extends BaseControllerImpl {
 	private SaveCancelService saveCancelService;
 	private LocationConnectionService locationConnectionService;
 	private TraderPdfService traderPdfService;
+	private DataSetService dataSetService;
 
 	private Canvas mapCanvas, selectionCanvas, pathCanvas, highlight; // 3 canvases on top of each other in zoomGroup; bottom: mapCanvas, top: pathCanvas, additionally: highlight
 
@@ -657,6 +660,49 @@ public class MainMenuController extends BaseControllerImpl {
 		stage.setScene(new Scene(scene, 462, 217));
 		stage.setResizable(false);
 		stage.show();
+	}
+
+	@FXML
+	private void onImportClicked(ActionEvent actionEvent) {
+		log.debug("onImportClicked");
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("DSA Zip Dateien", "*.zip"));
+
+		File file = fileChooser.showOpenDialog(menuBar.getScene().getWindow());
+		if (file != null) {
+			try {
+				dataSetService.importDataSet(file);
+				Dialogs.create()
+					.title("Import erfolgreich")
+					.message("Import erfolgreich")
+					.showInformation();
+			} catch (DSARuntimeException e) {
+				Dialogs.create()
+					.title("Fehler")
+					.message("Fehler beim Import: " + e.getMessage())
+					.showError();
+			}
+		}
+	}
+
+	@FXML
+	private void onExportClicked(ActionEvent actionEvent) {
+		log.debug("onExportClicked");
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setInitialFileName("DSA.zip");
+
+		File file = fileChooser.showSaveDialog(menuBar.getScene().getWindow());
+		if (file != null) {
+			try {
+				dataSetService.saveCurrentDataSet(file);
+			} catch (DSARuntimeException e) {
+				Dialogs.create()
+					.title("Fehler")
+					.masthead(null)
+					.message("Export Fehler: " + e.getMessage())
+					.showError();
+			}
+		}
 	}
 
 	@FXML
@@ -1595,4 +1641,7 @@ public class MainMenuController extends BaseControllerImpl {
 		this.loader = loader;
 	}
 
+	public void setDataSetService(DataSetServiceImpl dataSetService) {
+		this.dataSetService = dataSetService;
+	}
 }
