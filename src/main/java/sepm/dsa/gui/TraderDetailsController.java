@@ -32,7 +32,7 @@ public class TraderDetailsController extends BaseControllerImpl {
 
     private static final Logger log = LoggerFactory.getLogger(TraderDetailsController.class);
     private SpringFxmlLoader loader;
-	private TraderService traderService;
+    private TraderService traderService;
 
     private Trader trader;
     private Offer selectedOffer;
@@ -52,13 +52,15 @@ public class TraderDetailsController extends BaseControllerImpl {
     @FXML
     private TableColumn standardPriceColumn;
 
-	@FXML
-	private Label nameLabel;
-	@FXML
-	private Label categoryLabel;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private Label categoryLabel;
 
-	@FXML
+    @FXML
     private Button tradeButtonSell;
+    @FXML
+    private Button changePriceButton;
     @FXML
     private TextField difficultyField;
     @FXML
@@ -84,13 +86,13 @@ public class TraderDetailsController extends BaseControllerImpl {
 
     private CurrencySet defaultCurrencySet;
 
-	@Override
-	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
-		super.initialize(location, resources);
+    @Override
+    public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
+        super.initialize(location, resources);
 
-		log.debug("initialize TraderDetailsController");
+        log.debug("initialize TraderDetailsController");
 
-		amountColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
+        amountColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Offer, String> r) {
                 if (r.getValue() != null) {
@@ -120,7 +122,7 @@ public class TraderDetailsController extends BaseControllerImpl {
                         sb.append(" (" + r.getValue().getQuality().getName() + ")");
                     }
                     return new SimpleStringProperty(sb.toString());
-                }else {
+                } else {
                     return new SimpleStringProperty("");
                 }
             }
@@ -157,7 +159,7 @@ public class TraderDetailsController extends BaseControllerImpl {
         });
         defaultCurrencySet = currencySetService.getDefaultCurrencySet();
         initialzeTableWithColums();
-	}
+    }
 
     @Override
     public void reload() {
@@ -168,7 +170,7 @@ public class TraderDetailsController extends BaseControllerImpl {
 
     private void initialzeTableWithColums() {
 
-		dateColumn.setCellValueFactory(d -> {
+        dateColumn.setCellValueFactory(d -> {
             DSADate date = d.getValue().getDate();
             long timestamp = d.getValue().getDate().getTimestamp();
             long current = timeService.getCurrentDate().getTimestamp();
@@ -178,7 +180,7 @@ public class TraderDetailsController extends BaseControllerImpl {
             return new SimpleStringProperty(sb.toString());
         });
 
-		priceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
+        priceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> r) {
                 if (r.getValue() != null) {
@@ -193,16 +195,16 @@ public class TraderDetailsController extends BaseControllerImpl {
         });
 
 
-		playerColumn.setCellValueFactory(d -> {
-			Player player = d.getValue().getPlayer();
-			String pName = player.getName();
+        playerColumn.setCellValueFactory(d -> {
+            Player player = d.getValue().getPlayer();
+            String pName = player.getName();
 
-			StringBuilder sb = new StringBuilder();
-			sb.append(pName);
-			return new SimpleStringProperty(sb.toString());
-		});
+            StringBuilder sb = new StringBuilder();
+            sb.append(pName);
+            return new SimpleStringProperty(sb.toString());
+        });
 
-		productDealColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
+        productDealColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> r) {
                 if (r.getValue() != null) {
@@ -236,77 +238,77 @@ public class TraderDetailsController extends BaseControllerImpl {
         });
     }
 
-	@FXML
-	private void onBackPressed() {
-		log.debug("called onBackPressed");
+    @FXML
+    private void onBackPressed() {
+        log.debug("called onBackPressed");
 
-		Stage stage = (Stage) offerTable.getScene().getWindow();
-        if(stage != null) {
+        Stage stage = (Stage) offerTable.getScene().getWindow();
+        if (stage != null) {
             stage.close();
         }
-	}
+    }
 
-	@FXML
-	private void onEditPressed() {
-		log.debug("called onEditPressed");
-		Stage stage = (Stage) offerTable.getScene().getWindow();
-		Parent scene = (Parent) loader.load("/gui/edittrader.fxml", stage);
-		EditTraderController controller = loader.getController();
-		controller.setTrader(trader);
-		controller.setLocation(trader.getLocation());
-		controller.setPosition(new Point2D(trader.getxPos(), trader.getyPos()));
+    @FXML
+    private void onEditPressed() {
+        log.debug("called onEditPressed");
+        Stage stage = (Stage) offerTable.getScene().getWindow();
+        Parent scene = (Parent) loader.load("/gui/edittrader.fxml", stage);
+        EditTraderController controller = loader.getController();
+        controller.setTrader(trader);
+        controller.setLocation(trader.getLocation());
+        controller.setPosition(new Point2D(trader.getxPos(), trader.getyPos()));
         controller.reload();
-		stage.setScene(new Scene(scene, 785, 513));
-	}
+        stage.setScene(new Scene(scene, 785, 513));
+    }
 
     // todo: Move to service layer
-	@FXML
-	private void onRolePressed() {
-		log.debug("called onRolePressed");
-		int difficulty = 0;
-		try {
-			difficulty = Integer.parseInt(difficultyField.getText());
-		} catch (NumberFormatException e) {
-			Dialogs.create()
-					.title("Ungültige Eingabe")
-					.masthead(null)
-					.message("Die Erschwernis muss eine Zahl sein!")
-					.showWarning();
-			return;
-		}
-		int dice1 = (int) (Math.random() * 20) + 1;
-		int dice2 = (int) (Math.random() * 20) + 1;
-		int dice3 = (int) (Math.random() * 20) + 1;
-		int result = trader.getConvince() - difficulty;
-		if (result < 0) {
-			difficulty = result;
-			result = 0;
-		} else {
-			difficulty = 0;
-		}
-		if (dice1 > (trader.getMut() + difficulty)) {
-			result -= (dice1 - (trader.getMut() + difficulty));
-		}
-		if (dice2 > (trader.getIntelligence() + difficulty)) {
-			result -= (dice2 - (trader.getIntelligence() + difficulty));
-		}
-		if (dice3 > (trader.getCharisma() + difficulty)) {
-			result -= (dice3 - (trader.getCharisma() + difficulty));
-		}
-		if (dice1 == 20 && dice2 == 20 || dice2 == 20 && dice3 == 20 || dice1 == 20 && dice3 == 20) {
-			resultLabel.setText("PATZER");
-			resultLabel.setTextFill(Color.RED);
-		} else if (dice1 == 1 && dice2 == 1 || dice2 == 1 && dice3 == 1 || dice1 == 1 && dice3 == 1) {
-			resultLabel.setText("MEISTERHAFT");
-			resultLabel.setTextFill(Color.GREEN);
-		} else if (result >= 0) {
-			resultLabel.setText("" + result);
-			resultLabel.setTextFill(Color.GREEN);
-		} else if (result < 0) {
-			resultLabel.setText("" + result);
-			resultLabel.setTextFill(Color.RED);
-		}
-	}
+    @FXML
+    private void onRolePressed() {
+        log.debug("called onRolePressed");
+        int difficulty = 0;
+        try {
+            difficulty = Integer.parseInt(difficultyField.getText());
+        } catch (NumberFormatException e) {
+            Dialogs.create()
+                    .title("Ungültige Eingabe")
+                    .masthead(null)
+                    .message("Die Erschwernis muss eine Zahl sein!")
+                    .showWarning();
+            return;
+        }
+        int dice1 = (int) (Math.random() * 20) + 1;
+        int dice2 = (int) (Math.random() * 20) + 1;
+        int dice3 = (int) (Math.random() * 20) + 1;
+        int result = trader.getConvince() - difficulty;
+        if (result < 0) {
+            difficulty = result;
+            result = 0;
+        } else {
+            difficulty = 0;
+        }
+        if (dice1 > (trader.getMut() + difficulty)) {
+            result -= (dice1 - (trader.getMut() + difficulty));
+        }
+        if (dice2 > (trader.getIntelligence() + difficulty)) {
+            result -= (dice2 - (trader.getIntelligence() + difficulty));
+        }
+        if (dice3 > (trader.getCharisma() + difficulty)) {
+            result -= (dice3 - (trader.getCharisma() + difficulty));
+        }
+        if (dice1 == 20 && dice2 == 20 || dice2 == 20 && dice3 == 20 || dice1 == 20 && dice3 == 20) {
+            resultLabel.setText("PATZER");
+            resultLabel.setTextFill(Color.RED);
+        } else if (dice1 == 1 && dice2 == 1 || dice2 == 1 && dice3 == 1 || dice1 == 1 && dice3 == 1) {
+            resultLabel.setText("MEISTERHAFT");
+            resultLabel.setTextFill(Color.GREEN);
+        } else if (result >= 0) {
+            resultLabel.setText("" + result);
+            resultLabel.setTextFill(Color.GREEN);
+        } else if (result < 0) {
+            resultLabel.setText("" + result);
+            resultLabel.setTextFill(Color.RED);
+        }
+    }
 
     @FXML
     private void onAddPressed() {
@@ -334,10 +336,10 @@ public class TraderDetailsController extends BaseControllerImpl {
                 .showTextInput();
 
         int amount = 0;
-        if (response.isPresent()){
-            try{
+        if (response.isPresent()) {
+            try {
                 amount = Integer.parseInt(response.get());
-                if (amount < 0){
+                if (amount < 0) {
                     Dialogs.create()
                             .title("Ungültige Eingabe")
                             .masthead(null)
@@ -345,7 +347,7 @@ public class TraderDetailsController extends BaseControllerImpl {
                             .showError();
                     return;
                 }
-            }catch (NumberFormatException nfe){
+            } catch (NumberFormatException nfe) {
                 Dialogs.create()
                         .title("Ungültige Eingabe")
                         .masthead(null)
@@ -353,7 +355,7 @@ public class TraderDetailsController extends BaseControllerImpl {
                         .showError();
                 return;
             }
-        }else {
+        } else {
             /*Dialogs.create()
                     .title("Ungültige Eingabe")
                     .masthead(null)
@@ -363,16 +365,16 @@ public class TraderDetailsController extends BaseControllerImpl {
         }
 
         boolean remove = false;
-        if (amount>=o.getAmount()){
+        if (amount >= o.getAmount()) {
             remove = true;
         }
 
         traderService.removeManualOffer(trader, o, amount);
 
-        if (remove){
+        if (remove) {
             offerTable.getItems().remove(o);
-        }else{
-            offerTable.getItems().set(offerTable.getItems().indexOf(o),o);
+        } else {
+            offerTable.getItems().set(offerTable.getItems().indexOf(o), o);
         }
 
         checkFocus();
@@ -427,10 +429,10 @@ public class TraderDetailsController extends BaseControllerImpl {
                 .showTextInput();
 
         int price = 0;
-        if (response.isPresent()){
-            try{
+        if (response.isPresent()) {
+            try {
                 price = Integer.parseInt(response.get());
-                if (price < 0){
+                if (price < 0) {
                     Dialogs.create()
                             .title("Ungültige Eingabe")
                             .masthead(null)
@@ -438,7 +440,7 @@ public class TraderDetailsController extends BaseControllerImpl {
                             .showError();
                     return;
                 }
-            }catch (NumberFormatException nfe){
+            } catch (NumberFormatException nfe) {
                 Dialogs.create()
                         .title("Ungültige Eingabe")
                         .masthead(null)
@@ -446,7 +448,7 @@ public class TraderDetailsController extends BaseControllerImpl {
                         .showError();
                 return;
             }
-        }else {
+        } else {
             /*Dialogs.create()
                     .title("Ungültige Eingabe")
                     .masthead(null)
@@ -456,7 +458,7 @@ public class TraderDetailsController extends BaseControllerImpl {
         }
 
         o.setPricePerUnit(price);
-        offerTable.getItems().set(offerTable.getItems().indexOf(o),o);
+        offerTable.getItems().set(offerTable.getItems().indexOf(o), o);
 
         checkFocus();
         saveCancelService.save();
@@ -486,21 +488,19 @@ public class TraderDetailsController extends BaseControllerImpl {
         Offer selectedOffer = offerTable.getSelectionModel().getSelectedItem();
         if (selectedOffer == null) {
             tradeButtonSell.setDisable(true);
+            changePriceButton.setDisable(true);
+            removeButton.setDisable(true);
         } else {
             tradeButtonSell.setDisable(false);
-        }
-
-        if (selectedOffer!=null){
+            changePriceButton.setDisable(false);
             removeButton.setDisable(false);
-        }else{
-            removeButton.setDisable(true);
         }
     }
 
     private void refreshView() {
-        if(trader != null && (trader = traderService.get(trader.getId())) != null) {
+        if (trader != null && (trader = traderService.get(trader.getId())) != null) {
             saveCancelService.refresh(trader);
-        }else {
+        } else {
             onBackPressed();
             return;
         }
@@ -519,8 +519,8 @@ public class TraderDetailsController extends BaseControllerImpl {
             return result;
         }).collect(Collectors.toList());
 
-	    offerTable.getItems().setAll(offers);
-	    dealsTable.getItems().setAll(trader.getDeals());
+        offerTable.getItems().setAll(offers);
+        dealsTable.getItems().setAll(trader.getDeals());
     }
 
     public void setDealService(DealService dealService) {
