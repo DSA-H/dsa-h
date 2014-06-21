@@ -654,6 +654,24 @@ public class MainMenuController extends BaseControllerImpl {
 	@FXML
 	private void onImportClicked(ActionEvent actionEvent) {
 		log.debug("onImportClicked");
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("DSA Zip Dateien", "*.zip"));
+
+		File file = fileChooser.showOpenDialog(menuBar.getScene().getWindow());
+		if (file != null) {
+			try {
+				dataSetService.importDataSet(file);
+				Dialogs.create()
+					.title("Import erfolgreich")
+					.message("Import erfolgreich")
+					.showInformation();
+			} catch (DSARuntimeException e) {
+				Dialogs.create()
+					.title("Fehler")
+					.message("Fehler beim Import: " + e.getMessage())
+					.showError();
+			}
+		}
 	}
 
 	@FXML
