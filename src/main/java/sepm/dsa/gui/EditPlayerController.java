@@ -69,6 +69,11 @@ public class EditPlayerController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("reload EditPlayerController");
+        saveCancelService.refresh(selectedPlayer);
+        if (selectedPlayer.getDeals().size() > 0) {
+            dealsTable.getItems().clear();
+            dealsTable.getItems().setAll(selectedPlayer.getDeals());
+        }
     }
 
     @FXML
