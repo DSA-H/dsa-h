@@ -39,18 +39,20 @@ public class DataSetServiceImpl implements DataSetService, ApplicationEventPubli
 
 			while (entries.hasMoreElements()) {
 				ZipEntry zipEntry = entries.nextElement();
+				InputStream inputStream = zipFile.getInputStream(zipEntry);
 				switch (zipEntry.getName()) {
 					case "dataset.xml":
-						restoreDatabase(zipFile.getInputStream(zipEntry));
+						restoreDatabase(inputStream);
 						break;
 					case "properties":
+						restoreProperties(inputStream);
 						break;
 					case "maps/active/":
 						clearMapDirectory();
 						break;
 					default:
 						if (zipEntry.getName().startsWith("maps/active")) {
-							restoreMap(zipEntry, zipFile.getInputStream(zipEntry));
+							restoreMap(zipEntry, inputStream);
 						}
 				}
 			}
@@ -61,6 +63,17 @@ public class DataSetServiceImpl implements DataSetService, ApplicationEventPubli
 		} catch (IOException | SQLException | DatabaseUnitException e) {
 			throw new DSARuntimeException("Importieren des Datensets fehlgeschlagen", e);
 		}
+	}
+
+	private void restoreProperties(InputStream inputStream) throws IOException {
+		File file = new File("properties");
+		BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
+		byte[] buffer = new byte[1024];
+		int bytes;
+		while ((bytes = inputStream.read(buffer)) > -1){
+			out.write(buffer, 0, bytes);
+		}
+		out.close();
 	}
 
 	private void restoreMap(ZipEntry zipEntry, InputStream inputStream) throws IOException {
