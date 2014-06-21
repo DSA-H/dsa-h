@@ -42,8 +42,6 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
     private TextField selectedAmount;
     @FXML
     private ChoiceBox<CurrencySet> selectedCurrency;
-//    @FXML
-//    private TextField selectedPrice;
     @FXML
     private TableView<Product> productsTable;
     @FXML
@@ -216,19 +214,11 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
             if (selProduct.getQuality()) {
                 selectedQuality.setDisable(false);
                 quality = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
-                int setQuality = 0;
-                if (quality != null) {
-//                    setQuality = traderService.calculatePricePerUnit(quality, productsTable.getSelectionModel().getSelectedItem(), trader);
-                } else {
+                if (quality == null) {
                     selectedQuality.getSelectionModel().select(ProductQuality.NORMAL);
-//                    setQuality = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
                 }
-//                selectedPrice.setText(Integer.toString(setQuality));
-//                updatePrice(); TODO just commented it out, now broken?
             } else {
                 selectedQuality.getSelectionModel().select(ProductQuality.NORMAL);
-//                int priceDefault = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
-//                selectedPrice.setText(Integer.toString(priceDefault));
                 selectedQuality.setDisable(true);
             }
 	        selectedUnit.getItems().setAll(unitService.getAllByType(selProduct.getUnit().getUnitType()));
