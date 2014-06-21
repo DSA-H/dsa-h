@@ -281,6 +281,7 @@
 
     <bean id="dataSetService" class="sepm.dsa.service.DataSetServiceImpl">
         <property name="dataSource" ref="dataSource"/>
+        <property name="mapService" ref="mapService"/>
     </bean>
 
     <!-- GUI DI -->

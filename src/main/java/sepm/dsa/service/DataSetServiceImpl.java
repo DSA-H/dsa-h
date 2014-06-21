@@ -1,5 +1,6 @@
 package sepm.dsa.service;
 
+import org.apache.commons.io.FileUtils;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
@@ -29,6 +30,7 @@ import java.util.zip.ZipOutputStream;
 public class DataSetServiceImpl implements DataSetService, ApplicationEventPublisherAware {
 	private DriverManagerDataSource dataSource;
 	private ApplicationEventPublisher applicationEventPublisher;
+	private MapService mapService;
 
 	public void importDataSet(File file) throws DSARuntimeException {
 		try {
@@ -43,7 +45,13 @@ public class DataSetServiceImpl implements DataSetService, ApplicationEventPubli
 						break;
 					case "properties":
 						break;
+					case "maps/active/":
+						clearMapDirectory();
+						break;
 					default:
+						if (zipEntry.getName().startsWith("maps/active")) {
+							restoreMap(zipEntry, zipFile.getInputStream(zipEntry));
+						}
 				}
 			}
 
@@ -55,11 +63,28 @@ public class DataSetServiceImpl implements DataSetService, ApplicationEventPubli
 		}
 	}
 
+	private void restoreMap(ZipEntry zipEntry, InputStream inputStream) throws IOException {
+		File file = new File(zipEntry.getName());
+		BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
+		byte[] buffer = new byte[1024];
+		int bytes;
+		while ((bytes = inputStream.read(buffer)) > -1){
+			out.write(buffer, 0, bytes);
+		}
+		out.close();
+	}
+
+	private void clearMapDirectory() throws IOException {
+		FileUtils.deleteDirectory(mapService.getActiveDir());
+		mapService.getActiveDir().mkdir();
+	}
+
 	public void saveCurrentDataSet(File file) throws DSARuntimeException {
 		try {
 			ZipOutputStream zip = getZipOutputStream(file);
 			addPropertyFile(zip);
 			addDatabaseDump(zip);
+			addMapDirectory(zip);
 			zip.close();
 		} catch (IOException|SQLException|DatabaseUnitException e) {
 			throw new DSARuntimeException("Speichern der Datei fehlgeschlagen", e);
@@ -91,6 +116,20 @@ public class DataSetServiceImpl implements DataSetService, ApplicationEventPubli
 		DatabaseOperation.CLEAN_INSERT.execute(getDatabaseConnection(), dataSet);
 	}
 
+	private void addMapDirectory(ZipOutputStream zip) throws IOException {
+		File activeDir = mapService.getActiveDir();
+		File[] files = activeDir.listFiles();
+		if (files == null) {
+			return;
+		}
+
+		zip.putNextEntry(new ZipEntry("maps/active/"));
+		for (File file: files) {
+			zip.putNextEntry(new ZipEntry("maps/active/" + file.getName()));
+			zip.write(Files.readAllBytes(file.toPath()));
+		}
+	}
+
 	private IDatabaseConnection getDatabaseConnection() throws DatabaseUnitException, SQLException {
 		IDatabaseConnection connection = new DatabaseConnection(dataSource.getConnection());
 		connection.getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new HsqldbDataTypeFactory());
@@ -104,5 +143,9 @@ public class DataSetServiceImpl implements DataSetService, ApplicationEventPubli
 	@Override
 	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 		this.applicationEventPublisher = applicationEventPublisher;
+	}
+
+	public void setMapService(MapService mapService) {
+		this.mapService = mapService;
 	}
 }
