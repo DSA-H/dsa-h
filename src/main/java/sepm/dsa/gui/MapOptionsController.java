@@ -74,82 +74,18 @@ public class MapOptionsController extends BaseControllerImpl {
 
 		previewPane.getChildren().addAll(canvasGroup);
 
-		traderColorPicker.valueProperty().addListener(new ChangeListener<Color>() {
-			@Override
-			public void changed(ObservableValue<? extends Color> observable, Color oldValue, Color newValue) {
-				drawExample();
-			}
-		});
-
-		movingTraderColorPicker.valueProperty().addListener(new ChangeListener<Color>() {
-			@Override
-			public void changed(ObservableValue<? extends Color> observable, Color oldValue, Color newValue) {
-				drawExample();
-			}
-		});
-
-		tavernColorPicker.valueProperty().addListener(new ChangeListener<Color>() {
-			@Override
-			public void changed(ObservableValue<? extends Color> observable, Color oldValue, Color newValue) {
-				drawExample();
-			}
-		});
-
-		borderColorPicker.valueProperty().addListener(new ChangeListener<Color>() {
-			@Override
-			public void changed(ObservableValue<? extends Color> observable, Color oldValue, Color newValue) {
-				drawExample();
-			}
-		});
-
-		textColorPicker.valueProperty().addListener(new ChangeListener<Color>() {
-			@Override
-			public void changed(ObservableValue<? extends Color> observable, Color oldValue, Color newValue) {
-				drawExample();
-			}
-		});
-
-		highlightColorPicker.valueProperty().addListener(new ChangeListener<Color>() {
-			@Override
-			public void changed(ObservableValue<? extends Color> observable, Color oldValue, Color newValue) {
-				drawExample();
-			}
-		});
-
-		selectionColorPicker.valueProperty().addListener(new ChangeListener<Color>() {
-			@Override
-			public void changed(ObservableValue<? extends Color> observable, Color oldValue, Color newValue) {
-				drawExample();
-			}
-		});
-
-		locationSizeSlider.valueProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				drawExample();
-			}
-		});
-
-		textSizeSlider.valueProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				drawExample();
-			}
-		});
-
-		traderSizeSlider.valueProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				drawExample();
-			}
-		});
-
-		locationBox.valueProperty().addListener(new ChangeListener() {
-			@Override
-			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				drawExample();
-			}
-		});
+		ChangeListener drawListener = (observable, oldValue, newValue) -> drawExample();
+		traderColorPicker.valueProperty().addListener(drawListener);
+		movingTraderColorPicker.valueProperty().addListener(drawListener);
+		tavernColorPicker.valueProperty().addListener(drawListener);
+		borderColorPicker.valueProperty().addListener(drawListener);
+		textColorPicker.valueProperty().addListener(drawListener);
+		highlightColorPicker.valueProperty().addListener(drawListener);
+		selectionColorPicker.valueProperty().addListener(drawListener);
+		locationSizeSlider.valueProperty().addListener(drawListener);
+		textSizeSlider.valueProperty().addListener(drawListener);
+		traderSizeSlider.valueProperty().addListener(drawListener);
+		locationBox.valueProperty().addListener(drawListener);
 	}
 
 	@Override
