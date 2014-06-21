@@ -238,6 +238,7 @@ public class MainMenuController extends BaseControllerImpl {
 		    checkLocationFocus();
 	    } else {
 		    checkTraderFocus();
+            weatherLabel.setText("Wetter: " + selectedLocation.getWeather().getName());
 	    }
         updateZoom();
     }
