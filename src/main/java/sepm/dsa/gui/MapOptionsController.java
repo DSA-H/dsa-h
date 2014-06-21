@@ -60,6 +60,7 @@ public class MapOptionsController extends BaseControllerImpl {
 
 	@Override
 	public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
+		super.initialize(location, resources);
 		locationSizeSlider.setMin(5);
 		locationSizeSlider.setMax(50);
 		textSizeSlider.setMin(0.2);

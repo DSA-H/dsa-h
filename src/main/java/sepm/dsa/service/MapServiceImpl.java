@@ -30,11 +30,10 @@ public class MapServiceImpl implements MapService {
     private File alternativeDir = new File("maps/alternative");
     private File activeDir = new File("maps/active");
     private File ressourceDir = new File("maps/ressource");
-    private Properties properties;
 
-    public MapServiceImpl() {
+    private Properties getProperties() {
         try {
-            properties = new Properties();
+            Properties properties = new Properties();
             Path path = Paths.get("properties");
             if (!Files.exists(path)) {
                 Files.createFile(path);
@@ -42,6 +41,7 @@ public class MapServiceImpl implements MapService {
             InputStream is = Files.newInputStream(path);
             properties.load(is);
             is.close();
+	        return properties;
         } catch (IOException e) {
             throw new DSARuntimeException("Probleme beim Laden der Properties Datei! \n" + e.getMessage());
         }
@@ -319,42 +319,42 @@ public class MapServiceImpl implements MapService {
 
     @Override
     public Color getTraderColor() {
-        return stringToColor(properties.getProperty("traderColor", "0000FF"));
+        return stringToColor(getProperties().getProperty("traderColor", "0000FF"));
     }
 
     @Override
     public Color getMovingTraderColor() {
-        return stringToColor(properties.getProperty("movingTraderColor", "ADD8E6"));
+        return stringToColor(getProperties().getProperty("movingTraderColor", "ADD8E6"));
     }
 
     @Override
     public Color getTavernColor() {
-        return stringToColor(properties.getProperty("tavernColor", "FFFF00"));
+        return stringToColor(getProperties().getProperty("tavernColor", "FFFF00"));
     }
 
     @Override
     public Color getHighlightColor() {
-        return stringToColor(properties.getProperty("highlightColor", "000000"));
+        return stringToColor(getProperties().getProperty("highlightColor", "000000"));
     }
 
     @Override
     public Color getSelectionColor() {
-        return stringToColor(properties.getProperty("selectionColor", "008000"));
+        return stringToColor(getProperties().getProperty("selectionColor", "008000"));
     }
 
     @Override
     public Color getBorderColor() {
-        return stringToColor(properties.getProperty("borderColor", "000000"));
+        return stringToColor(getProperties().getProperty("borderColor", "000000"));
     }
 
     @Override
     public Color getNameColor() {
-        return stringToColor(properties.getProperty("nameColor", "000000"));
+        return stringToColor(getProperties().getProperty("nameColor", "000000"));
     }
 
     @Override
     public int getWorldIconSize() {
-        return Integer.parseInt(properties.getProperty("worldIconSize", "20"));
+        return Integer.parseInt(getProperties().getProperty("worldIconSize", "20"));
     }
 
     @Override
@@ -367,13 +367,14 @@ public class MapServiceImpl implements MapService {
 
     @Override
     public double getTextSize() {
-        return Double.parseDouble(properties.getProperty("textSize", "1.0"));
+        return Double.parseDouble(getProperties().getProperty("textSize", "1.0"));
     }
 
 
     @Override
     public void setTraderColor(Color c) {
         try {
+	        Properties properties = getProperties();
             properties.put("traderColor", colorToString(c));
             OutputStream os = Files.newOutputStream(Paths.get("properties"));
             properties.store(os, "");
@@ -386,7 +387,8 @@ public class MapServiceImpl implements MapService {
     @Override
     public void setMovingTraderColor(Color c) {
         try {
-            properties.put("movingTraderColor", colorToString(c));
+	        Properties properties = getProperties();
+	        properties.put("movingTraderColor", colorToString(c));
             OutputStream os = Files.newOutputStream(Paths.get("properties"));
             properties.store(os, "");
             os.close();
@@ -398,7 +400,8 @@ public class MapServiceImpl implements MapService {
     @Override
     public void setTavernColor(Color c) {
         try {
-            properties.put("tavernColor", colorToString(c));
+	        Properties properties = getProperties();
+	        properties.put("tavernColor", colorToString(c));
             OutputStream os = Files.newOutputStream(Paths.get("properties"));
             properties.store(os, "");
             os.close();
@@ -410,7 +413,8 @@ public class MapServiceImpl implements MapService {
     @Override
     public void setHighlightColor(Color c) {
         try {
-            properties.put("highlightColor", colorToString(c));
+	        Properties properties = getProperties();
+	        properties.put("highlightColor", colorToString(c));
             OutputStream os = Files.newOutputStream(Paths.get("properties"));
             properties.store(os, "");
             os.close();
@@ -422,7 +426,8 @@ public class MapServiceImpl implements MapService {
     @Override
     public void setSelectionColor(Color c) {
         try {
-            properties.put("selectionColor", colorToString(c));
+	        Properties properties = getProperties();
+	        properties.put("selectionColor", colorToString(c));
             OutputStream os = Files.newOutputStream(Paths.get("properties"));
             properties.store(os, "");
             os.close();
@@ -434,7 +439,8 @@ public class MapServiceImpl implements MapService {
     @Override
     public void setBorderColor(Color c) {
         try {
-            properties.put("borderColor", colorToString(c));
+	        Properties properties = getProperties();
+	        properties.put("borderColor", colorToString(c));
             OutputStream os = Files.newOutputStream(Paths.get("properties"));
             properties.store(os, "");
             os.close();
@@ -446,7 +452,8 @@ public class MapServiceImpl implements MapService {
     @Override
     public void setNameColor(Color c) {
         try {
-            properties.put("nameColor", colorToString(c));
+	        Properties properties = getProperties();
+	        properties.put("nameColor", colorToString(c));
             OutputStream os = Files.newOutputStream(Paths.get("properties"));
             properties.store(os, "");
             os.close();
@@ -458,7 +465,8 @@ public class MapServiceImpl implements MapService {
     @Override
     public void setWorldIconSize(int size) {
         try {
-            properties.put("worldIconSize", "" + size);
+	        Properties properties = getProperties();
+	        properties.put("worldIconSize", "" + size);
             OutputStream os = Files.newOutputStream(Paths.get("properties"));
             properties.store(os, "");
             os.close();
@@ -477,7 +485,8 @@ public class MapServiceImpl implements MapService {
     @Override
     public void setTextSize(double size) {
         try {
-            properties.put("textSize", "" + size);
+	        Properties properties = getProperties();
+	        properties.put("textSize", "" + size);
             OutputStream os = Files.newOutputStream(Paths.get("properties"));
             properties.store(os, "");
             os.close();
