@@ -16,7 +16,7 @@ import java.io.Serializable;
 })
 public class RegionBorder implements BaseModel, PathEdge {
 
-    private static final long serialVersionUID = -5121547134534726826L;
+    private static final long serialVersionUID = -2931477972036755704L;
 
     @EmbeddedId
     private Pk pk = new Pk();        // invariant: not null

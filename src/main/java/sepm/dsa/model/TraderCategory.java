@@ -10,7 +10,8 @@ import java.util.Map;
 @Entity
 @Table(name = "traderCategories")
 public class TraderCategory implements BaseModel {
-    private static final long serialVersionUID = 2957793850231481713L;
+
+    private static final long serialVersionUID = -8189277740899189290L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

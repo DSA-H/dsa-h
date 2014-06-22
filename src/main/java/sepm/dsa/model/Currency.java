@@ -12,7 +12,7 @@ import java.util.Set;
 @Table(name = "currencies")
 public class Currency implements BaseModel {
 
-    private static final long serialVersionUID = 5329256729754963420L;
+    private static final long serialVersionUID = 1524655153502866478L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

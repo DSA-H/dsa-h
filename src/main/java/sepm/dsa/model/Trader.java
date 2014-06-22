@@ -14,7 +14,7 @@ import java.util.Set;
 @Table(name = "traders")
 public class Trader implements BaseModel {
 
-    private static final long serialVersionUID = 2857293850231481712L;
+    private static final long serialVersionUID = -1922659748655610405L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

@@ -9,9 +9,9 @@ import javax.validation.constraints.Size;
 @Table(name = "taverns")
 public class Tavern implements BaseModel {
 
-	private static final long serialVersionUID = -2259554288598225744L;
+    private static final long serialVersionUID = -2965397764275583075L;
 
-	@Id
+    @Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(nullable = false, unique = true)
 	private Integer id;

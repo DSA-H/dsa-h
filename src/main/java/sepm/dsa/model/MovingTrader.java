@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Table(name = "movingTraders")
 public class MovingTrader extends Trader implements Serializable {
 
-    private static final long serialVersionUID = 2857234550231481712L;
+    private static final long serialVersionUID = 8961602390107311003L;
 
     @Column
     private Long lastMoved;

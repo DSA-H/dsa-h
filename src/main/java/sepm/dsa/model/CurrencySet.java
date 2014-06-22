@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name = "currencySets")
 public class CurrencySet implements BaseModel {
 
-    private static final long serialVersionUID = -6854851722589807382L;
+    private static final long serialVersionUID = -5140281446209346385L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

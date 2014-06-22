@@ -6,7 +6,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "deals")
 public class Deal implements BaseModel {
-    private static final long serialVersionUID = 2957293850231481770L;
+
+    private static final long serialVersionUID = -5132370376436032659L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

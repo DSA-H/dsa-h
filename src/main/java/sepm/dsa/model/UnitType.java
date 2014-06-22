@@ -9,6 +9,8 @@ import javax.validation.constraints.Size;
 @Table(name = "unittypes")
 public class UnitType implements BaseModel {
 
+    private static final long serialVersionUID = -2937498027920740592L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)

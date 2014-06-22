@@ -13,7 +13,8 @@ import java.util.Set;
 @Entity
 @Table(name = "products")
 public class Product implements BaseModel {
-    private static final long serialVersionUID = 5890354733231481712L;
+
+    private static final long serialVersionUID = -8844302216771387723L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

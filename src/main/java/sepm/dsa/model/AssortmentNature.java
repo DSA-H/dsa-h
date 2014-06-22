@@ -9,7 +9,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "assortmentNatures")
 public class AssortmentNature implements BaseModel {
-    private static final long serialVersionUID = 2957293850231481715L;
+
+    private static final long serialVersionUID = -1982914119560763175L;
 
     @EmbeddedId
     private Pk pk = new Pk();

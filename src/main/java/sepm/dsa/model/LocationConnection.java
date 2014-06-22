@@ -17,7 +17,7 @@ import java.io.Serializable;
 })
 public class LocationConnection implements BaseModel, PathEdge {
 
-    private static final long serialVersionUID = 5915927914933432772L;
+    private static final long serialVersionUID = -4409427630400818496L;
 
     @EmbeddedId
     private Pk pk = new Pk();

@@ -14,7 +14,7 @@ import java.util.Set;
 @Table(name = "locations")
 public class Location implements BaseModel, PathNode {
 
-    private static final long serialVersionUID = 1616654812413948966L;
+    private static final long serialVersionUID = -4234487077765494928L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
