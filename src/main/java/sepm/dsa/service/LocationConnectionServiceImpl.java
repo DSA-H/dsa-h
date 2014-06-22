@@ -33,14 +33,14 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
     private LocationDao locationDao;
 
     public void setLocationConnectionDao(LocationConnectionDao locationConnectionDao) {
-        log.debug("calling setLocationConnectionDao()");
+        log.debug("calling setLocationConnectionDao(" + locationConnectionDao + ")");
         this.locationConnectionDao = locationConnectionDao;
     }
 
     @Transactional(readOnly = false)
     @Override
     public LocationConnection add(LocationConnection locationConnection) {
-        log.debug("calling addConnection(" + locationConnection + ")");
+        log.debug("calling add(" + locationConnection + ")");
         validate(locationConnection);
         if (get(locationConnection.getLocation1(), locationConnection.getLocation2()) != null) {
             throw new DSAAlreadyExistsException("Die Verbindung zwischen "
@@ -86,7 +86,8 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
 	public List<LocationConnection> getAll() {
 		log.debug("calling getAll()");
 		List<LocationConnection> result = locationConnectionDao.getAll();
-		return result;
+        log.trace("returning " + result);
+        return result;
 	}
 
     @Override
@@ -97,7 +98,9 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
 	    List<LocationConnection> allConnections = locationConnectionDao.getAll();
 	    List<Location> endLocation = new ArrayList<>();
 	    endLocation.add(location2);
-	    return pathService.findShortestPath(allLocations, allConnections, location1, endLocation);
+        List<LocationConnection> result = pathService.findShortestPath(allLocations, allConnections, location1, endLocation);
+        log.trace("returning " + result);
+        return result;
     }
 
     @Override
@@ -171,11 +174,13 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
     }
 
     public void setLocationDao(LocationDao locationDao) {
+        log.debug("calling setLocationDao(" + locationDao + ")");
         this.locationDao = locationDao;
     }
 
 	public void setPathService(PathService pathService) {
-		this.pathService = pathService;
+        log.debug("calling setPathService(" + pathService + ")");
+        this.pathService = pathService;
 	}
 
     /**
@@ -185,7 +190,7 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
      * @throws sepm.dsa.exceptions.DSAValidationException if region is not valid
      */
     public void validate(LocationConnection locationConnection) throws DSAValidationException {
-        log.info("calling validate(" + locationConnection + ")");
+        log.debug("calling validate(" + locationConnection + ")");
         Set<ConstraintViolation<LocationConnection>> violations = validator.validate(locationConnection);
         if (violations.size() > 0) {
             throw new DSAValidationException("Reiseverbindung ist nicht valide.", violations);

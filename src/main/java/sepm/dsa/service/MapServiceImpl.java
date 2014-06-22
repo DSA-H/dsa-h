@@ -24,6 +24,7 @@ import java.util.Properties;
 @Service("mapService")
 @Transactional(readOnly = true)
 public class MapServiceImpl implements MapService {
+
     private static final Logger log = LoggerFactory.getLogger(MapServiceImpl.class);
     private LocationService locationService;
     private SaveCancelService saveCancelService;
@@ -47,8 +48,10 @@ public class MapServiceImpl implements MapService {
         }
     }
 
+    @Override
     public String colorToString(Color color) {
-        String colorString = "";
+        log.debug("calling colorToString(" + color + ")");
+        String result = "";
         String red = Integer.toHexString((int) (color.getRed() * 255));
         if (red.length() == 1) {
             red = "0" + red;
@@ -61,20 +64,28 @@ public class MapServiceImpl implements MapService {
         if (blue.length() == 1) {
             blue = "0" + blue;
         }
-        colorString = red + green + blue;
-        return colorString;
+        result = red + green + blue;
+        log.trace("returning " + result + ")");
+        return result;
     }
 
+    @Override
     public Color stringToColor(String colorString) {
-        return new Color(
+        log.debug("calling stringToColor(" + colorString + ")");
+
+        Color result = new Color(
                 (double) Integer.valueOf(colorString.substring(0, 2), 16) / 255,
                 (double) Integer.valueOf(colorString.substring(2, 4), 16) / 255,
                 (double) Integer.valueOf(colorString.substring(4, 6), 16) / 255,
                 1.0);
+
+        log.trace("returning " + result + ")");
+        return result;
     }
 
     @Override
     public File chooseMap() {
+        log.debug("calling chooseMap()");
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Karte auswählen");
@@ -91,8 +102,8 @@ public class MapServiceImpl implements MapService {
                 new FileChooser.ExtensionFilter("GIF", "*.gif"),
                 new FileChooser.ExtensionFilter("PNG", "*.png")
         );
-        File newMap = fileChooser.showOpenDialog(new Stage());
-        if (newMap != null && newMap.length() > 11000000) {
+        File result = fileChooser.showOpenDialog(new Stage());
+        if (result != null && result.length() > 11000000) {
             Dialogs.create()
                     .title("Fehler")
                     .masthead(null)
@@ -100,11 +111,13 @@ public class MapServiceImpl implements MapService {
                     .showWarning();
             return null;
         }
-        return newMap;
+        log.trace("returning " + result + ")");
+        return result;
     }
 
     @Override
     public void setWorldMap(File newMap) {
+        log.debug("calling setWorldMap(" + newMap + ")");
 
         //check if old File exists
         File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
@@ -165,6 +178,7 @@ public class MapServiceImpl implements MapService {
 
     @Override
     public void setLocationMap(Location location, File newMap) {
+        log.debug("calling setLocationMap(" + location + ", " + newMap + ")");
 
         //check if old File exists
         File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
@@ -225,6 +239,8 @@ public class MapServiceImpl implements MapService {
 
     @Override
     public void exportMap(String mapName) {
+        log.debug("calling exportMap(" + mapName + ")");
+
         //choose File to export
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Export-Datei auswählen");
@@ -272,54 +288,72 @@ public class MapServiceImpl implements MapService {
     }
 
     public File getActiveDir() {
+        log.debug("calling getActiveDir()");
+        log.trace("returning " + activeDir);
         return activeDir;
     }
 
     public File getAlternativeDir() {
+        log.debug("calling getAlternativeDir()");
+        log.trace("returning " + alternativeDir);
         return alternativeDir;
     }
 
     public File getWorldMap() {
+        log.debug("calling getWorldMap()");
+        File result = null;
         File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 return name.startsWith("worldMap");
             }
         });
         if (matchingFiles != null && matchingFiles.length >= 1) {
-            return matchingFiles[0];
+            result =  matchingFiles[0];
+            log.trace("returning " + result);
+            return result;
         }
+        log.trace("returning " + null);
         return null;
     }
 
     @Override
     public File getLocationMap(Location location) {
+        log.debug("calling getLocationMap(" + location + ")");
         File[] matchingFiles = activeDir.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 return name.startsWith(location.getId() + "map");
             }
         });
         if (matchingFiles != null && matchingFiles.length >= 1) {
+            log.trace("returning " + matchingFiles[0]);
             return matchingFiles[0];
         }
+        log.trace("returning " + null);
         return null;
     }
 
     @Override
     public File getNoMapImage() {
+        log.debug("calling getNoMapImage()");
         File[] matchingFiles = ressourceDir.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 return name.startsWith("noMapFound");
             }
         });
         if (matchingFiles != null && matchingFiles.length >= 1) {
+            log.trace("returning " + matchingFiles[0]);
             return matchingFiles[0];
         }
+        log.trace("returning " + null);
         return null;
     }
 
     @Override
     public Color getTraderColor() {
-        return stringToColor(getProperties().getProperty("traderColor", "0000FF"));
+        log.debug("calling getTraderColor()");
+        Color result = stringToColor(getProperties().getProperty("traderColor", "0000FF"));
+        log.trace("returning " + result);
+        return result;
     }
 
     @Override
@@ -496,10 +530,12 @@ public class MapServiceImpl implements MapService {
     }
 
     public void setLocationService(LocationService locationService) {
+        log.trace("calling setLocationService(" + locationService + ")");
         this.locationService = locationService;
     }
 
     public void setSaveCancelService(SaveCancelService saveConcelService) {
+        log.trace("calling setSaveCancelService(" + saveConcelService + ")");
         this.saveCancelService = saveConcelService;
     }
 }

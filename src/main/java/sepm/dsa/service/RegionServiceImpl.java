@@ -64,11 +64,6 @@ public class RegionServiceImpl implements RegionService {
     @Transactional(readOnly = false)
     public void remove(Region r) {
         log.debug("calling removeConnection(" + r + ")");
-//        List<RegionBorder> borders = regionBorderDao.getAllByRegion(r.getId());
-//        List<Location> locations = locationService.getAllByRegion(r.getId());
-
-//        borders.forEach(regionBorderDao::removeConnection);
-//        locations.forEach(locationService::removeConnection);
         List<Product> associatedProducts = productService.getAllByProductionRegion(r);
         locationService.getAllByRegion(r.getId()).forEach(locationService::remove);
 
@@ -113,10 +108,12 @@ public class RegionServiceImpl implements RegionService {
 
 
     public void setLocationService(LocationService locationService) {
+        log.debug("calling setLocationService(" + locationService + ")");
         this.locationService = locationService;
     }
 
     public void setProductService(ProductService productService) {
+        log.debug("calling setProductService(" + productService + ")");
         this.productService = productService;
     }
 }

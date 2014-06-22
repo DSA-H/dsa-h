@@ -84,6 +84,7 @@ public class UnitServiceImpl implements UnitService {
      * @throws sepm.dsa.exceptions.DSAValidationException if product is not valid
      */
     private void validate(Unit product) throws DSAValidationException {
+        log.debug("calling validate(" + product + ")");
         Set<ConstraintViolation<Unit>> violations = validator.validate(product);
         if (violations.size() > 0) {
             throw new DSAValidationException("Produktunit ist nicht valide.", violations);

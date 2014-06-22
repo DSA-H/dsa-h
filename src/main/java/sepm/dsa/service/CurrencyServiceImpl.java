@@ -86,22 +86,27 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Override
     public Integer exchangeToBaseRate(List<CurrencyAmount> currencyAmounts) {
+        log.debug("calling exchangeToBaseRate(" + currencyAmounts + ")");
         int result = 0;
         for (CurrencyAmount a : currencyAmounts) {
             result += exchangeToBaseRate(a.getCurrency(), a.getAmount());
         }
+        log.trace("returning " + result + ")");
         return result;
     }
 
     @Override
     public CurrencyAmount exchange(Currency from, Currency to, Integer amount) {
+        log.debug("calling exchange(" + from + ", " + to  + ", " + amount + ")");
         CurrencyAmount result = new CurrencyAmount();
         result.setAmount((int) ((((double) amount) * from.getValueToBaseRate()) / (to.getValueToBaseRate()) + 0.5)); //,4, RoundingMode.HALF_UP));
         result.setCurrency(to);
+        log.trace("returning " + result + ")");
         return result;
     }
 
     public void setCurrencyDao(CurrencyDao currencyDao) {
+        log.debug("calling setCurrencyDao(" + currencyDao + ")");
         this.currencyDao = currencyDao;
     }
 
@@ -112,6 +117,7 @@ public class CurrencyServiceImpl implements CurrencyService {
      * @throws DSAValidationException if currency is not valid
      */
     private void validate(Currency currency) throws DSAValidationException {
+        log.debug("calling validate(" + currency + ")");
         Set<ConstraintViolation<Currency>> violations = validator.validate(currency);
         if (violations.size() > 0) {
             throw new DSAValidationException("Währung ist nicht valide.", violations);

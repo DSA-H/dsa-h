@@ -37,8 +37,8 @@ public class TraderServiceImpl implements TraderService {
     private static final Double EPSILON = 1E-5;
 
     @Override
-    public void addManualOffer(Trader trader, Offer offer)
-    {
+    public void addManualOffer(Trader trader, Offer offer) {
+        log.debug("calling addManualOffer(" + trader + ", " + offer + ")");
         Set<Offer> offers = trader.getOffers();
         Offer raiseOffer = null;
         for (Offer o : offers){
@@ -59,8 +59,8 @@ public class TraderServiceImpl implements TraderService {
     }
 
     @Override
-    public void removeManualOffer(Trader trader, Offer offer, int amount)
-    {
+    public void removeManualOffer(Trader trader, Offer offer, int amount) {
+        log.debug("calling removeManualOffer(" + trader + ", " + offer + ", " + amount + ")");
         if (amount >= offer.getAmount()) {
             offerDao.remove(offer);
             Set<Offer> offers = trader.getOffers();
@@ -84,6 +84,7 @@ public class TraderServiceImpl implements TraderService {
         return result;
     }
 
+    @Transactional(readOnly = false)
     @Override
     public void makeTraderToMovingTrader(MovingTrader trader) {
         log.debug("calling makeTraderToMovingTrader(" + trader + ")");
@@ -236,14 +237,11 @@ public class TraderServiceImpl implements TraderService {
         return buyFromPlayer(trader, player, product, productQuality, unit, amount, baseValuePrice);
     }
 
-    //     * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
-//     *      or the amount is greater than the trader offers <br />
-//     *      or unit does does not match the product unit <br />
-//     *      or totalPrice is negative
     @Override
     public Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, Integer totalPrice, Integer discount, boolean removeRemainingOfferAmount) {
+        log.debug("calling sellToPlayer(" + trader + ", " + player + ", " + product + ", " + productQuality + ", " + unit + ", " + productAmount + ", " + totalPrice + ", " + discount + ", " + removeRemainingOfferAmount + ")");
         Offer offer = null;
-        Set<Offer> traderOffers = trader.getOffers(); // get from dao
+        Set<Offer> traderOffers = trader.getOffers();
         for (Offer o : traderOffers) {
             if (o.getProduct().equals(product) && o.getQuality().equals(productQuality)) {
                 offer = o;
@@ -265,12 +263,11 @@ public class TraderServiceImpl implements TraderService {
             throw new DSAValidationException("Der Preis darf nicht negativ sein");
         }
 
-        if (!unit.getUnitType().equals(offer.getProduct().getUnit().getUnitType())) {     // offer needs unit?
+        if (!unit.getUnitType().equals(offer.getProduct().getUnit().getUnitType())) {
             throw new DSAValidationException("Einheit der Ware " + product.getUnit().getUnitType().getName() + " passt nicht mit " +
                 "angegebener Einheit " + unit.getUnitType().getName() + " zusammen.");
         }
 
-//        Integer priceInBaseRate = currencyService.exchangeToBaseRate(currency, totalPrice);
         Integer priceInBaseRate = totalPrice;
 
         Deal newDeal = new Deal();
@@ -297,6 +294,7 @@ public class TraderServiceImpl implements TraderService {
             offerDao.update(offer);
         }
 
+        log.trace("returning " + result);
         return result;
     }
 
@@ -306,14 +304,17 @@ public class TraderServiceImpl implements TraderService {
         long lookDaysBackwards = 365L;    // consider all deals between player and offer in the last year
         List<Deal> deals = dealService.getAllBetweenPlayerAndTraderLastXDays(player, trader, lookDaysBackwards);
 
-        // TODO some logic that decides about the discount value
-        return deals.size();
+        Integer result = deals.size();  // TODO Johannes: some logic that decides about the discount value
+
+        log.trace("returning " + result);
+        return result;
     }
 
     @Override
     public Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, Integer totalPrice) {
+        log.debug("calling buyFromPlayer(" + trader + ", " + player + ", " + product + ", " + productQuality + ", " + unit + ", " + productAmount + ", " + totalPrice + ")");
         Offer offer = null;
-        Set<Offer> traderOffers = trader.getOffers(); // get from dao
+        Set<Offer> traderOffers = trader.getOffers();
         for (Offer o : traderOffers) {
             if (o.getProduct().equals(product) && o.getQuality().equals(productQuality)) {
                 offer = o;
@@ -327,12 +328,11 @@ public class TraderServiceImpl implements TraderService {
             throw new DSAValidationException("Der Preis darf nicht negativ sein");
         }
 
-        if (!unit.getUnitType().equals(product.getUnit().getUnitType())) {     // offer needs unit?
+        if (!unit.getUnitType().equals(product.getUnit().getUnitType())) {
             throw new DSAValidationException("Einheit der Ware " + product.getUnit().getUnitType().getName() + " passt nicht mit " +
                     "angegebener Einheit " + unit.getUnitType().getName() + " zusammen.");
         }
 
-//        Integer priceInBaseRate = currencyService.exchangeToBaseRate(currency, totalPrice);
         Integer priceInBaseRate = totalPrice;
 
         Deal newDeal = new Deal();
@@ -365,8 +365,8 @@ public class TraderServiceImpl implements TraderService {
             offerDao.update(offer);
         }
 
+        log.trace("returning " + result);
         return result;
-
     }
 
     /**
@@ -376,7 +376,7 @@ public class TraderServiceImpl implements TraderService {
     @Override
     @Transactional(readOnly = true)
     public List<Offer> calculateOffers(Trader trader, int number) {
-        log.debug("calling calculateOffers()");
+        log.debug("calling calculateOffers(" + trader + ", " + number + ")");
 
         List<Product> weightProducts = new ArrayList<>();
         List<Float> weights = new ArrayList<>();
@@ -484,8 +484,9 @@ public class TraderServiceImpl implements TraderService {
 			    offer.setAmount((double) offer.getAmount().intValue() + cent/100);
 		    }
 	    }
-
-        return offers;
+        List<Offer> result = offers;
+        log.trace("returning " + result);
+        return result;
     }
 
     /**
@@ -506,6 +507,7 @@ public class TraderServiceImpl implements TraderService {
      * @return
      */
     public int calculatePricePerUnit(ProductQuality productQuality, Product product, Trader trader){
+        log.debug("calling calculatePricePerUnit(" + productQuality + ", " + product + ", " + trader + ")");
         return (int) (calculatePriceForProduct(product, trader) * productQuality.getQualityPriceFactor());
     }
 
@@ -517,6 +519,7 @@ public class TraderServiceImpl implements TraderService {
      * @return the price or -1
      */
     public int calculatePriceForProduct(Product product, Trader trader) {
+        log.debug("calling calculatePriceForProduct(" + product + ", " + trader + ")");
         List<RegionBorder> borders;
         int price = product.getCost();
 
@@ -532,12 +535,14 @@ public class TraderServiceImpl implements TraderService {
                     * product.getAttribute().getProductTransporabilityFactor();
         }
 
+        log.trace("returning " + price);
         return price;
     }
 
 
     @Override
-    public void reCalculatePriceForOffer(/*Set<Offer> offers, */Trader trader) {
+    public void reCalculatePriceForOffer(Trader trader) {
+        log.debug("calling reCalculatePriceForOffer(" + trader + ")");
         Set<Offer> offers = trader.getOffers();
         if (offers==null){
             return;
@@ -552,7 +557,8 @@ public class TraderServiceImpl implements TraderService {
     }
 
     @Override
-    public void reCalculatePriceForOfferIfNewPriceIsHigher(/*Set<Offer> offers, */Trader trader) {
+    public void reCalculatePriceForOfferIfNewPriceIsHigher(Trader trader) {
+        log.debug("calling reCalculatePriceForOfferIfNewPriceIsHigher(" + trader + ")");
         Set<Offer> offers = trader.getOffers();
         if (offers==null){
             return;
@@ -579,30 +585,37 @@ public class TraderServiceImpl implements TraderService {
 
 
     public void setTraderDao(TraderDao traderDao) {
+        log.debug("calling setTraderDao(" + traderDao + ")");
         this.traderDao = traderDao;
     }
 
 	public void setMovingTraderDao(MovingTraderDao movingTraderDao) {
-		this.movingTraderDao = movingTraderDao;
+        log.debug("calling setMovingTraderDao(" + movingTraderDao + ")");
+        this.movingTraderDao = movingTraderDao;
 	}
 
     public void setProductService(ProductService productService) {
+        log.debug("calling setProductService(" + productService + ")");
         this.productService = productService;
     }
 
     public void setPathService(PathService pathService) {
+        log.debug("calling setPathService(" + pathService + ")");
         this.pathService = pathService;
     }
 
     public void setRegionService(RegionService regionService) {
+        log.debug("calling setRegionService(" + regionService + ")");
         this.regionService = regionService;
     }
 
     public void setRegionBorderService(RegionBorderService regionBorderService) {
+        log.debug("calling setRegionBorderService(" + regionBorderService + ")");
         this.regionBorderService = regionBorderService;
     }
 
     public void setOfferDao(OfferDao offerDao) {
+        log.debug("calling setOfferDao(" + offerDao + ")");
         this.offerDao = offerDao;
     }
 
@@ -613,6 +626,7 @@ public class TraderServiceImpl implements TraderService {
      * @throws sepm.dsa.exceptions.DSAValidationException if location is not valid
      */
     private void validate(Trader trader) throws DSAValidationException {
+        log.debug("calling validate(" + trader + ")");
         Set<ConstraintViolation<Trader>> violations = validator.validate(trader);
         if (violations.size() > 0) {
             throw new DSAValidationException("Händler ist nicht valide.", violations);
@@ -626,6 +640,7 @@ public class TraderServiceImpl implements TraderService {
      * @throws sepm.dsa.exceptions.DSAValidationException if location is not valid
      */
     private void validateOffer(Offer offer) throws DSAValidationException {
+        log.debug("calling validateOffer(" + offer + ")");
         Set<ConstraintViolation<Offer>> violations = validator.validate(offer);
         if (violations.size() > 0) {
             throw new DSAValidationException("Händler ist nicht valide.", violations);
@@ -639,23 +654,26 @@ public class TraderServiceImpl implements TraderService {
 	 * @return a list of the offer's offers.
 	 */
 	@Override
-	@Transactional(readOnly = true)
 	public Collection<Offer> getOffers(Trader trader) {
-		// Initialize the set the mëh way
+        log.debug("calling getOffers(" + trader + ")");
+        // Initialize the set the mëh way
 		trader.getOffers().size();
 
 		return trader.getOffers();
 	}
 
     public void setTimeService(TimeService timeService) {
+        log.debug("calling setTimeService(" + timeService + ")");
         this.timeService = timeService;
     }
 
     public void setDealService(DealService dealService) {
+        log.debug("calling setDealService(" + dealService + ")");
         this.dealService = dealService;
     }
 
     public void setCurrencyService(CurrencyService currencyService) {
+        log.debug("calling setCurrencyService(" + currencyService + ")");
         this.currencyService = currencyService;
     }
 }

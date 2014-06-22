@@ -78,6 +78,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     public void setLocationDao(LocationDao locationDao) {
+        log.debug("calling setLocationDao(" + locationDao + ")");
         this.locationDao = locationDao;
     }
 
@@ -88,6 +89,7 @@ public class LocationServiceImpl implements LocationService {
      * @throws DSAValidationException if location is not valid
      */
     private void validate(Location location) throws DSAValidationException {
+        log.debug("calling validate(" + location + ")");
         Set<ConstraintViolation<Location>> violations = validator.validate(location);
         if (violations.size() > 0) {
             throw new DSAValidationException("Ort ist nicht valide.", violations);
@@ -95,6 +97,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     public void setTraderService(TraderService traderService) {
+        log.debug("calling setTraderService(" + traderService + ")");
         this.traderService = traderService;
     }
 }

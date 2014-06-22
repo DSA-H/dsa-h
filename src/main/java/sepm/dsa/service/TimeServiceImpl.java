@@ -33,7 +33,8 @@ public class TimeServiceImpl implements TimeService {
 
 	@Override
 	public DSADate getCurrentDate() {
-		try {
+        log.debug("calling getCurrentDate()");
+        try {
 			properties = new Properties();
 			Path path = Paths.get("properties");
 			if (!Files.exists(path)) {
@@ -43,7 +44,9 @@ public class TimeServiceImpl implements TimeService {
 			properties.load(is);
 			long timestamp = Long.parseLong(properties.getProperty("time", "0"));
 			is.close();
-			return new DSADate(timestamp);
+            DSADate result = new DSADate(timestamp);
+            log.debug("returning " + result);
+            return result;
 		} catch (IOException e) {
 			throw new DSARuntimeException("Probleme beim Laden der Properties Datei! \n" + e.getMessage());
 		}
@@ -249,40 +252,49 @@ public class TimeServiceImpl implements TimeService {
 	}
 
     public void resetProgress() {
+        log.debug("calling resetProgress()");
         forwardProgress = 0;
         forwardMaxProgress = 100;
         forwardMessage = "Lade ...";
     }
 
     public int getForwardProgress() {
+        log.debug("calling getForwardProgress()");
         return forwardProgress;
     }
 
     public int getForwardMaxProgress() {
+        log.debug("calling getForwardMaxProgress()");
         return forwardMaxProgress;
     }
 
     public String getForwardMessage() {
+        log.debug("calling getForwardMessage()");
         return forwardMessage;
     }
 
     public void setTraderService(TraderService traderService) {
-		this.traderService = traderService;
+        log.debug("calling setTraderService(" + traderService + ")");
+        this.traderService = traderService;
 	}
 
 	public void setOfferDao(OfferDao offerDao) {
-		this.offerDao = offerDao;
+        log.debug("calling setOfferDao(" + offerDao + ")");
+        this.offerDao = offerDao;
 	}
 
 	public void setTavernService(TavernService tavernService) {
-		this.tavernService = tavernService;
+        log.debug("calling setTavernService(" + tavernService + ")");
+        this.tavernService = tavernService;
 	}
 
     public void setLocationService(LocationService locationService) {
+        log.debug("calling setLocationService(" + locationService + ")");
         this.locationService = locationService;
     }
 
 	public void setMapService(MapService mapService) {
-		this.mapService = mapService;
+        log.debug("calling setMapService(" + mapService + ")");
+        this.mapService = mapService;
 	}
 }

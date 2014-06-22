@@ -67,6 +67,7 @@ public class TavernServiceImpl implements TavernService {
 
     @Override
     public int calculatePrice(Tavern tavern) {
+        log.debug("calling calculatePrice(" + tavern + ")");
         double result = 0;
         switch (tavern.getQuality()) {
             case MIES:
@@ -122,7 +123,7 @@ public class TavernServiceImpl implements TavernService {
 
     @Override
     public int calculateBedsUseage(Tavern tavern) {
-        log.debug("calling getBedsUseage(" + tavern + ")");
+        log.debug("calling getBedsUsage(" + tavern + ")");
         Random random = new Random();
         double gaus = random.nextGaussian() / 4f;
         gaus += 0.5f;
@@ -133,6 +134,7 @@ public class TavernServiceImpl implements TavernService {
         if (result < 0) {
             result = 0;
         }
+        log.trace("returning " + result);
         return result;
     }
 
@@ -143,6 +145,7 @@ public class TavernServiceImpl implements TavernService {
      * @throws sepm.dsa.exceptions.DSAValidationException if tavern is not valid
      */
     private void validate(Tavern tavern) throws DSAValidationException {
+        log.debug("calling validate(" + tavern + ")");
         Set<ConstraintViolation<Tavern>> violations = validator.validate(tavern);
         if (violations.size() > 0) {
             throw new DSAValidationException("Wirtshaus ist nicht valide.", violations);
@@ -150,6 +153,7 @@ public class TavernServiceImpl implements TavernService {
     }
 
     public void setTavernDao(TavernDao tavernDao) {
+        log.debug("calling setTavernDao(" + tavernDao + ")");
         this.tavernDao = tavernDao;
     }
 }

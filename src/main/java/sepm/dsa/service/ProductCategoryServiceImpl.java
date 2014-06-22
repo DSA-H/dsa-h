@@ -71,7 +71,6 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
              productCategoryChild = get(productCategoryChild.getId());
              assortmentNatureService.getAllByProductCategory(productCategoryChild.getId()).forEach(assortmentNatureService::remove);
         }
-//        p.getProducts().forEach(productService::remove); SHOULD NOT BE REMOVED :)
         Set<ProductCategory> children = new HashSet<>(p.getChilds());
         children.forEach(this::remove);
         productCategoryDao.remove(p);
@@ -126,25 +125,25 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
      * @throws sepm.dsa.exceptions.DSAValidationException if product is not valid
      */
     private void validate(ProductCategory product) throws DSAValidationException {
+        log.debug("calling validate(" + product + ")");
         Set<ConstraintViolation<ProductCategory>> violations = validator.validate(product);
         if (violations.size() > 0) {
             throw new DSAValidationException("Produktkategorie ist nicht valide.", violations);
         }
     }
 
-    public ProductCategoryDao getProductCategoryDao() {
-        return productCategoryDao;
-    }
-
     public void setProductCategoryDao(ProductCategoryDao productCategoryDao) {
+        log.debug("calling setProductCategoryDao(" + productCategoryDao + ")");
         this.productCategoryDao = productCategoryDao;
     }
 
     public void setAssortmentNatureService(AssortmentNatureService assortmentNatureService) {
+        log.debug("calling setAssortmentNatureService(" + assortmentNatureService + ")");
         this.assortmentNatureService = assortmentNatureService;
     }
 
     public void setProductService(ProductService productService) {
+        log.debug("calling setProductService(" + productService + ")");
         this.productService = productService;
     }
 }

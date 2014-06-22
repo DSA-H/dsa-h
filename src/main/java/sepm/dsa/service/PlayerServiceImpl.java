@@ -27,7 +27,6 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     @Transactional(readOnly = false)
     public void add(Player player) {
-
         log.debug("calling add(" + player + ")");
         validate(player);
         playerDao.add(player);
@@ -72,6 +71,7 @@ public class PlayerServiceImpl implements PlayerService {
      * @throws sepm.dsa.exceptions.DSAValidationException if player is not valid
      */
     private void validate(Player player) throws DSAValidationException {
+        log.debug("calling validate(" + player + ")");
         Set<ConstraintViolation<Player>> violations = validator.validate(player);
         if (violations.size() > 0) {
             throw new DSAValidationException("Gebiet ist nicht valide.", violations);
@@ -79,10 +79,12 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     public void setPlayerDao(PlayerDao playerDao) {
+        log.debug("calling setPlayerDao(" + playerDao + ")");
         this.playerDao = playerDao;
     }
 
     public void setDealDao(DealDao dealDao) {
+        log.debug("calling setDealDao(" + dealDao + ")");
         this.dealDao = dealDao;
     }
 }

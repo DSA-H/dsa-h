@@ -55,7 +55,6 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = false)
     public void remove(Product p) {
         log.debug("calling removeConnection(" + p + ")");
-        //productDao.removeConnection(get(p.getId()));
 
         List<Offer> offers = offerDao.getAllByProduct(p);
         offers.forEach(offerDao::remove);
@@ -79,12 +78,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Set<Product> getAllFromProductcategory(ProductCategory productCategory) {
         log.debug("calling getAllFromProductcategory");
-//        List<Product> result = productDao.getAllByCategoryPlusChildren(productCategory);  // TODO this will be used when solved the (n+1) problem when changing ProductCategory.products to fetch=LAZY again
 
         LinkedList<ProductCategory> categories = new LinkedList<>();
         int productCount = addAllProductCategoryChildren(productCategory, categories);
 
-        Set<Product> result = new HashSet<Product>(productCount);
+        Set<Product> result = new HashSet<>(productCount);
 
         for (ProductCategory c : categories) {
             result.addAll(c.getProducts());
@@ -173,6 +171,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws sepm.dsa.exceptions.DSAValidationException if product is not valid
      */
     private void validate(Product product) throws DSAValidationException {
+        log.debug("calling validate(" + product + ")");
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
         if (violations.size() > 0) {
             throw new DSAValidationException("Produkt ist nicht valide.", violations);
@@ -180,14 +179,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public void setProductCategoryService(ProductCategoryService productCategoryService) {
+        log.debug("calling setProductCategoryService(" + productCategoryService + ")");
         this.productCategoryService = productCategoryService;
     }
 
     public void setOfferDao(OfferDao offerDao) {
+        log.debug("calling setOfferDao(" + offerDao + ")");
         this.offerDao = offerDao;
     }
 
     public void setDealDao(DealDao dealDao) {
+        log.debug("calling setDealDao(" + dealDao + ")");
         this.dealDao = dealDao;
     }
 }
