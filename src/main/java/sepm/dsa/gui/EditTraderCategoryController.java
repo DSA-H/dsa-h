@@ -124,8 +124,6 @@ public class EditTraderCategoryController extends BaseControllerImpl {
 
         productCategoryChoiceBox.getItems().remove(selectedProductCategory);
         productCategoryChoiceBox.getSelectionModel().selectFirst();
-        //TODO besser / schöner gestalten -> evtl. inkrementelle Suche oder sonstwas
-        //TODO multiple select ermöglichen
     }
 
     @FXML

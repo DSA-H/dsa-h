@@ -131,14 +131,14 @@
     <currencySet_currencies currencySet_id="1" currency_id="6"/>
     <currencySet_currencies currencySet_id="2" currency_id="3"/>
     <currencySet_currencies currencySet_id="2" currency_id="2"/>
-    <deals id="1" amount="5" date="1" locationName="location1" price="100.00" productName="product1" purchase="true" qualityid="3" player_id="1" trader_id="2" unit_id="1" discount="0"/>
-    <deals id="2" amount="8" date="100" locationName="location1" price="200.00" productName="product1" purchase="true" qualityid="3" player_id="1" trader_id="2" unit_id="1" discount="0"/>
-    <deals id="3" amount="3" date="200" locationName="location1" price="130.00" productName="product1" purchase="false" qualityid="3" player_id="1" trader_id="2" unit_id="1" discount="0"/>
-    <deals id="4" amount="19" date="300" locationName="location1" price="160.00" productName="product1" purchase="false" qualityid="3" player_id="1" trader_id="2" unit_id="1" discount="0"/>
-    <deals id="5" amount="6" date="400" locationName="location1" price="50.00" productName="product1" purchase="true" qualityid="3" player_id="1" trader_id="2" unit_id="1" discount="0"/>
-    <deals id="6" amount="5" date="1" locationName="location1" price="100.00" productName="product1" purchase="true" qualityid="3" player_id="2" trader_id="2" unit_id="1" discount="0"/>
-    <deals id="7" amount="8" date="100" locationName="location1" price="200.00" productName="product1" purchase="true" qualityid="3" player_id="2" trader_id="2" unit_id="1" discount="0"/>
-    <deals id="8" amount="3" date="200" locationName="location1" price="130.00" productName="product1" purchase="false" qualityid="3" player_id="1" trader_id="1" unit_id="1" discount="0"/>
-    <deals id="9" amount="19" date="300" locationName="location1" price="160.00" productName="product1" purchase="false" qualityid="3" player_id="1" trader_id="1" unit_id="1" discount="0"/>
-    <deals id="10" amount="6" date="400" locationName="location1" price="50.00" productName="product1" purchase="true" qualityid="3" player_id="2" trader_id="1" unit_id="1" discount="0"/>
+    <deals id="1" amount="5" date="1" locationName="location1" price="100.00" product_id="1" productName="product1" purchase="true" qualityid="3" player_id="1" trader_id="2" unit_id="1" discount="0"/>
+    <deals id="2" amount="8" date="100" locationName="location1" price="200.00" product_id="1" productName="product1" purchase="true" qualityid="3" player_id="1" trader_id="2" unit_id="1" discount="0"/>
+    <deals id="3" amount="3" date="200" locationName="location1" price="130.00" product_id="1" productName="product1" purchase="false" qualityid="3" player_id="1" trader_id="2" unit_id="1" discount="0"/>
+    <deals id="4" amount="19" date="300" locationName="location1" price="160.00" product_id="3" productName="product2" purchase="false" qualityid="3" player_id="1" trader_id="2" unit_id="1" discount="0"/>
+    <deals id="5" amount="6" date="400" locationName="location1" price="50.00" product_id="3" productName="product2" purchase="true" qualityid="3" player_id="1" trader_id="2" unit_id="1" discount="0"/>
+    <deals id="6" amount="5" date="1" locationName="location1" price="100.00" product_id="4" productName="product3" purchase="true" qualityid="3" player_id="2" trader_id="2" unit_id="1" discount="0"/>
+    <deals id="7" amount="8" date="100" locationName="location1" price="200.00" product_id="5" productName="product5" purchase="true" qualityid="3" player_id="2" trader_id="2" unit_id="1" discount="0"/>
+    <deals id="8" amount="3" date="200" locationName="location1" price="130.00" product_id="5" productName="product5" purchase="false" qualityid="3" player_id="1" trader_id="1" unit_id="1" discount="0"/>
+    <deals id="9" amount="19" date="300" locationName="location1" price="160.00" product_id="5" productName="product5" purchase="false" qualityid="3" player_id="1" trader_id="1" unit_id="1" discount="0"/>
+    <!--<deals id="10" amount="6" date="400" locationName="location1" price="50.00" product_id="6" productName="product6" purchase="true" qualityid="3" player_id="2" trader_id="1" unit_id="1" discount="0"/>-->
 </dataset>

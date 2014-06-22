@@ -77,11 +77,9 @@ public class Main extends Application {
                 Dialogs.create()
                         .title("Interner Fehler")
                         .masthead(null)
-                        .message(DSARuntimeException.INTERNAL_ERROR_MSG)
+                        .message(DSARuntimeException.ERROR_INTERNAL_UNKNOWN + ": " + DSARuntimeException.INTERNAL_ERROR_MSG + " (" + cause.getClass().getName() + ")")
                         .showError();
             }
-            // show error msg dialog
-//                if (e instanceof )
         });
 
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");

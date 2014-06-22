@@ -7,6 +7,7 @@ public class DSARuntimeException extends RuntimeException {
 
     public final static int ERROR_GENERAL = 0;
     public final static int ERROR_VALIDATION = 1;
+    public final static int ERROR_INTERNAL_UNKNOWN = 2;
 
     public final static String INTERNAL_ERROR_MSG = "Ein interner Fehler ist aufgetreten.";
 

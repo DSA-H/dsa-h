@@ -307,14 +307,14 @@ public class MainMenuController extends BaseControllerImpl {
 				String connectedEntries = "";
 				connectedEntries += "\n" + traderSize + " Händler";
 				connectedEntries += "\n" + tavernsSize + " Wirtshäuser";
-				// TODO ? make a 'DeleteService' to providing information of all entities, which connected entities exist
 
 				Action response = Dialogs.create()
 						.title("Löschen?")
 						.masthead(null)
 						.message("Wollen Sie den Ort '" + selectedLocation.getName() + "' wirklich löschen? Folgende verbundenden Einträge würden ebenfalls gelöscht werden:" + connectedEntries)
 						.actions(Dialog.Actions.NO, Dialog.Actions.YES)
-						.showConfirm(); // TODO was ist hier sinnvoll?
+						.showConfirm();
+
 				if (response == Dialog.Actions.YES) {
 					locationService.remove(selectedLocation);
 					saveCancelService.save();

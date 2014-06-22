@@ -243,7 +243,7 @@ public class TimeServiceImpl implements TimeService {
         forwardMessage = "Berechne neues Wetter ...";
         for (Location location: locations){
             forwardProgress++;
-            location.setWeather(Weather.getNewWeather(location.getRegion().getTemperature(), location.getRegion().getRainfallChance()));
+            location.setWeather(location.getWeather().calcNextWeatehr(location.getRegion().getTemperature(), location.getRegion().getRainfallChance(), days));
         }
 
         // complete

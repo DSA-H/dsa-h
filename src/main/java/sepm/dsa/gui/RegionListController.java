@@ -157,7 +157,7 @@ public class RegionListController extends BaseControllerImpl {
             int regionalProductions = 0;
             String connectedEntries = "";
             connectedEntries += "\n" + connectedLocations + " Orte";
-            connectedEntries += "\n" + regionalProductions + " Zuordnungen von Produkt zu Produktionsort";    // TODO RegionalProduction (m:n)
+            connectedEntries += "\n" + regionalProductions + " Zuordnungen von Produkt zu Produktionsort";
 
             Action response = Dialogs.create()
                     .title("Löschen?")

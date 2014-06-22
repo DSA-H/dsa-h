@@ -24,6 +24,26 @@
 
     <build>
 	<plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.9.1</version>
+            <configuration>
+                <show>public</show>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>attach-javadocs</id>
+                    <phase>prepare-package</phase>
+                    <goals>
+                        <goal>jar</goal>
+                    </goals>
+                    <configuration>
+                        <additionalparam>-Xdoclint:none</additionalparam>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
 	    <plugin>
             <artifactId>maven-clean-plugin</artifactId>
             <version>2.5</version>
@@ -64,6 +84,11 @@
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>
+            <executions>
+                <execution>
+                    <phase>prepare-package</phase>
+                </execution>
+            </executions>
             <configuration>
                 <archive>
                     <manifest>
@@ -80,7 +105,7 @@
             <artifactId>maven-dependency-plugin</artifactId>
             <executions>
                 <execution>
-                    <phase>package</phase>
+                    <phase>prepare-package</phase>
                     <goals>
                         <goal>copy-dependencies</goal>
                     </goals>
@@ -89,24 +114,6 @@
                     </configuration>
                 </execution>
             </executions>
-        </plugin>
-        <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>2.4</version>
-            <executions>
-                <execution>
-                    <id>make-assembly</id>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>single</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <configuration>
-                <descriptors>
-                    <descriptor>conf/release-assembly.xml</descriptor>
-                </descriptors>
-            </configuration>
         </plugin>
         <plugin>
             <artifactId>maven-resources-plugin</artifactId>
@@ -226,28 +233,50 @@
                         </resources>
                     </configuration>
                 </execution>
-            </executions>
-        </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.9.1</version>
-            <configuration>
-                <show>private</show>
-            </configuration>
-            <executions>
                 <execution>
-                    <id>attach-javadocs</id>
+                    <id>copy-release-dir-for-javadoc-version</id>
+                    <phase>package</phase>
                     <goals>
-                        <goal>jar</goal>
+                        <goal>copy-resources</goal>
                     </goals>
                     <configuration>
-                        <additionalparam>-Xdoclint:none</additionalparam>
+                        <outputDirectory>target/release-with-javadoc</outputDirectory>
+                        <!--<overwrite>true</overwrite>-->
+                        <resources>
+                            <resource>
+                                <directory>target/release</directory>
+                            </resource>
+                            <resource>
+                                <directory>target</directory>
+                                <includes>
+                                    <include>apidocs/**/*</include>
+                                </includes>
+                            </resource>
+                        </resources>
                     </configuration>
                 </execution>
             </executions>
         </plugin>
-	</plugins>
+        <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>2.4</version>
+            <executions>
+                <execution>
+                    <id>make-assembly</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <descriptors>
+                    <descriptor>conf/release-assembly.xml</descriptor>
+                    <descriptor>conf/release-with-javadoc-assembly.xml</descriptor>
+                </descriptors>
+            </configuration>
+        </plugin>
+    </plugins>
     </build>
 
     <dependencies>
