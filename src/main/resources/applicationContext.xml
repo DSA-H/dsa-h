@@ -283,6 +283,9 @@
         <property name="mapService" ref="mapService"/>
     </bean>
 
+    <bean id="rollDiceService" class="sepm.dsa.service.RollDiceServiceImpl">
+    </bean>
+
     <!-- GUI DI -->
     <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController" scope="prototype">
         <property name="loader" ref="loader"/>
@@ -392,6 +395,7 @@
         <property name="dealService" ref="dealService"/>
         <property name="currencySetService" ref="currencySetService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
+        <property name="rollDiceService" ref="rollDiceService" />
     </bean>
     <bean id="traderSellToPlayer" class="sepm.dsa.gui.TradeSellToPlayerController" scope="prototype">
         <property name="traderService" ref="traderService"/>

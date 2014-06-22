@@ -34,6 +34,7 @@ public class TraderDetailsController extends BaseControllerImpl {
     private static final Logger log = LoggerFactory.getLogger(TraderDetailsController.class);
     private SpringFxmlLoader loader;
     private TraderService traderService;
+    private RollDiceService rollDiceService;
 
     private Trader trader;
     private Offer selectedOffer;
@@ -262,7 +263,6 @@ public class TraderDetailsController extends BaseControllerImpl {
         stage.setScene(new Scene(scene, 785, 513));
     }
 
-    // todo: Move to service layer
     @FXML
     private void onRolePressed() {
         log.debug("called onRolePressed");
@@ -277,37 +277,25 @@ public class TraderDetailsController extends BaseControllerImpl {
                     .showWarning();
             return;
         }
-        int dice1 = (int) (Math.random() * 20) + 1;
-        int dice2 = (int) (Math.random() * 20) + 1;
-        int dice3 = (int) (Math.random() * 20) + 1;
-        int result = trader.getConvince() - difficulty;
-        if (result < 0) {
-            difficulty = result;
-            result = 0;
-        } else {
-            difficulty = 0;
-        }
-        if (dice1 > (trader.getMut() + difficulty)) {
-            result -= (dice1 - (trader.getMut() + difficulty));
-        }
-        if (dice2 > (trader.getIntelligence() + difficulty)) {
-            result -= (dice2 - (trader.getIntelligence() + difficulty));
-        }
-        if (dice3 > (trader.getCharisma() + difficulty)) {
-            result -= (dice3 - (trader.getCharisma() + difficulty));
-        }
-        if (dice1 == 20 && dice2 == 20 || dice2 == 20 && dice3 == 20 || dice1 == 20 && dice3 == 20) {
-            resultLabel.setText("PATZER");
-            resultLabel.setTextFill(Color.RED);
-        } else if (dice1 == 1 && dice2 == 1 || dice2 == 1 && dice3 == 1 || dice1 == 1 && dice3 == 1) {
-            resultLabel.setText("MEISTERHAFT");
-            resultLabel.setTextFill(Color.GREEN);
-        } else if (result >= 0) {
-            resultLabel.setText("" + result);
-            resultLabel.setTextFill(Color.GREEN);
-        } else if (result < 0) {
-            resultLabel.setText("" + result);
-            resultLabel.setTextFill(Color.RED);
+        String result = rollDiceService.talentThrow(trader.getMut(),
+                trader.getIntelligence(),
+                trader.getCharisma(),
+                trader.getConvince(),
+                difficulty);
+        resultLabel.setText(result);
+        // color the result text
+        try{
+            if(Integer.parseInt(result) >= 0) {
+                resultLabel.setTextFill(Color.GREEN);
+            }else {
+                resultLabel.setTextFill(Color.RED);
+            }
+        }catch (NumberFormatException ex) {
+            if(result.equals("MEISTERHAFT")) {
+                resultLabel.setTextFill(Color.GREEN);
+            }else {
+                resultLabel.setTextFill(Color.RED);
+            }
         }
     }
 
@@ -511,5 +499,9 @@ public class TraderDetailsController extends BaseControllerImpl {
 
     public void setCurrencySetService(CurrencySetService currencySetService) {
         this.currencySetService = currencySetService;
+    }
+
+    public void setRollDiceService(RollDiceService rollDiceService) {
+        this.rollDiceService = rollDiceService;
     }
 }
