@@ -329,12 +329,25 @@ public class TraderDetailsController extends BaseControllerImpl {
     private void onDeletePressed() {
         log.debug("called onDeletePressed");
         Offer o = offerTable.getSelectionModel().getSelectedItem();
+        if(o == null) {
+            throw new DSAValidationException("Kein Angebot ausgewählt");
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Wie viel ");
+        sb.append(o.getProduct().getName());
+        if(o.getProduct().getQuality()) {
+            sb.append(" (").append(o.getQuality()).append(")");
+        }
+        sb.append(" wollen sie entfernen?");
 
         Optional<String> response = Dialogs.create()
                 .title("Löschen?")
+                .owner(null)
                 .masthead(null)
-                .message("Wie viel" + o.getProduct().getName() + " (" + o.getQuality().getName() + ") wollen sie entfernen?")
+                .message(sb.toString())
                 .showTextInput("1");
+
         Double amount = 0d;
         if (response.isPresent()) {
             try {
@@ -350,19 +363,7 @@ public class TraderDetailsController extends BaseControllerImpl {
             throw new DSAValidationException("Die zu entfernende Menge muss eine positive Zahl sein!");
         }
 
-  /*      boolean remove = false;
-        if (amount >= o.getAmount()) {
-            remove = true;
-        }*/
-
         traderService.removeManualOffer(trader, o, amount);
-/*
-        if (remove) {
-            offerTable.getItems().remove(o);
-        } else {
-            offerTable.getItems().set(offerTable.getItems().indexOf(o), o);
-        }
-*/
         saveCancelService.save();
     }
 
@@ -407,46 +408,22 @@ public class TraderDetailsController extends BaseControllerImpl {
         log.debug("called onChangePricePressed");
         Offer o = offerTable.getSelectionModel().getSelectedItem();
 
-        Optional<String> response = Dialogs.create()
-                .title("Preis ändern")
-                .masthead(null)
-                .message("Wie hoch soll der neue Standardpreis sein?")
-                .showTextInput();
+        if (o != null) {
+            // open modal window
+            Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            Parent scene = (Parent) loader.load("/gui/changeOfferPrice.fxml", dialog);
+            ChangeOfferPriceController ctrl = loader.getController();
+            ctrl.setOffer(o);
+            ctrl.reload();
 
-        int price = 0;
-        if (response.isPresent()) {
-            try {
-                price = Integer.parseInt(response.get());
-                if (price < 0) {
-                    Dialogs.create()
-                            .title("Ungültige Eingabe")
-                            .masthead(null)
-                            .message("Ungültige Eingabe")
-                            .showError();
-                    return;
-                }
-            } catch (NumberFormatException nfe) {
-                Dialogs.create()
-                        .title("Ungültige Eingabe")
-                        .masthead(null)
-                        .message("Ungültige Eingabe")
-                        .showError();
-                return;
-            }
+            dialog.setTitle("Preis ändern");
+            dialog.setScene(new Scene(scene, 307, 321));
+            dialog.setResizable(false);
+            dialog.show();
         } else {
-            /*Dialogs.create()
-                    .title("Ungültige Eingabe")
-                    .masthead(null)
-                    .message("Ungültige Eingabe")
-                    .showError();*/
-            return;
+            throw new DSAValidationException("Kein Angebot ausgewählt");
         }
-
-        o.setPricePerUnit(price);
-        offerTable.getItems().set(offerTable.getItems().indexOf(o), o);
-
-        checkFocus();
-        saveCancelService.save();
     }
 
     @FXML

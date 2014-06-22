@@ -370,6 +370,12 @@
         <property name="traderService" ref="traderService" />
         <property name="productService" ref="productService" />
     </bean>
+
+    <bean id="changeOfferPrice" class="sepm.dsa.gui.ChangeOfferPriceController">
+        <property name="saveCancelService" ref="saveCancelService" />
+        <property name="currencyService" ref="currencyService"/>
+        <property name="currencySetService" ref="currencySetService"/>
+    </bean>
     
     <bean id="editTrader" class="sepm.dsa.gui.EditTraderController" scope="prototype">
         <property name="loader" ref="loader"/>

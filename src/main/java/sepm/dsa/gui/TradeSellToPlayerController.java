@@ -328,7 +328,7 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
                 result.add(a);
             }
         } catch (NumberFormatException ex) {
-            throw new DSAValidationException("Der Preis muss aus lauter Zahlen bestehen!");
+            throw new DSAValidationException("Der Preis muss aus lauter ganzen Zahlen bestehen!");
         }
         return result;
     }
