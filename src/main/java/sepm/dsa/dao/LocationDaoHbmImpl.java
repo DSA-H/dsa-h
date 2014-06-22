@@ -10,7 +10,7 @@ import java.util.Vector;
 
 @Repository
 @Transactional(readOnly = true)
-public class LocationDaoImpl
+public class LocationDaoHbmImpl
 	extends BaseDaoHbmImpl<Location>
 	implements LocationDao {
 

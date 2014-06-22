@@ -6,11 +6,10 @@ import java.util.List;
 
 
 public interface RegionBorderDao extends BaseDao<RegionBorder> {
+
     /**
-     * Hands you a list of all regions in the database.
-     *
      * @param regionId
-     * @return
+     * @return all RegionBorders by a specific Region, might be an empty list (not null)
      */
     List<RegionBorder> getAllByRegion(int regionId);
 }

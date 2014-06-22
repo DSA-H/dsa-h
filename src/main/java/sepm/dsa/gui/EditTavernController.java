@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.CurrencySet;
 import sepm.dsa.model.Location;

@@ -4,7 +4,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.dao.CurrencyDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Currency;
@@ -13,8 +13,6 @@ import sepm.dsa.model.CurrencySet;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 @Transactional(readOnly = true)

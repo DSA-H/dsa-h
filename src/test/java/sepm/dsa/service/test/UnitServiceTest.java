@@ -2,7 +2,7 @@ package sepm.dsa.service.test;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import sepm.dsa.dao.UnitAmount;
+import sepm.dsa.model.UnitAmount;
 import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Unit;
 import sepm.dsa.model.UnitType;

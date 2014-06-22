@@ -1,6 +1,4 @@
-package sepm.dsa.dao;
-
-import sepm.dsa.model.Currency;
+package sepm.dsa.model;
 
 public class CurrencyAmount {
 

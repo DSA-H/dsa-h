@@ -17,7 +17,7 @@ import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.model.*;
 import sepm.dsa.service.CurrencySetService;
 import sepm.dsa.service.ProductService;

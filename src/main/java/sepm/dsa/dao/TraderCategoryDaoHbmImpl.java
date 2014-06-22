@@ -4,7 +4,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.TraderCategory;
 
 @Transactional(readOnly = true)
-public class TraderCategoryDaoImpl
+public class TraderCategoryDaoHbmImpl
 	extends BaseDaoHbmImpl<TraderCategory>
 	implements TraderCategoryDao {
 }

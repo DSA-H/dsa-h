@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Vector;
 
 @Transactional(readOnly = true)
-public class TavernDaoImpl
+public class TavernDaoHbmImpl
 	extends BaseDaoHbmImpl<Tavern>
 	implements TavernDao {
 
