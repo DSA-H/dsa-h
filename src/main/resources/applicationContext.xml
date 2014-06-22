@@ -117,11 +117,11 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="traderCategoryDao" class="sepm.dsa.dao.TraderCategoryDaoImpl">
+    <bean id="traderCategoryDao" class="sepm.dsa.dao.TraderCategoryDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="locationDao" class="sepm.dsa.dao.LocationDaoImpl">
+    <bean id="locationDao" class="sepm.dsa.dao.LocationDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
@@ -132,11 +132,11 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="tavernDao" class="sepm.dsa.dao.TavernDaoImpl">
+    <bean id="tavernDao" class="sepm.dsa.dao.TavernDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="playerDao" class="sepm.dsa.dao.PlayerDaoImpl">
+    <bean id="playerDao" class="sepm.dsa.dao.PlayerDaoHbmImpl">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 

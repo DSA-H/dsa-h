@@ -1,6 +1,6 @@
 package sepm.dsa.util;
 
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 
 import java.util.*;
 

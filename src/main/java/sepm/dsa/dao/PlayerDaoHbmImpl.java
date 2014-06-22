@@ -7,7 +7,7 @@ import sepm.dsa.model.Player;
 
 @Repository
 @Transactional
-public class PlayerDaoImpl
+public class PlayerDaoHbmImpl
         extends BaseDaoHbmImpl<Player>
         implements PlayerDao {
 

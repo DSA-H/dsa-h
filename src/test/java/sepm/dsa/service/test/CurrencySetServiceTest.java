@@ -2,7 +2,7 @@ package sepm.dsa.service.test;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.CurrencySet;
 import sepm.dsa.service.CurrencyService;

@@ -1,7 +1,7 @@
 package sepm.dsa.service;
 
 
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.model.*;
 
 import java.util.Collection;

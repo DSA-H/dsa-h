@@ -41,7 +41,6 @@ public class TimeServiceTest extends AbstractDatabaseTest {
             offerDao.remove(offer);
         }
         trader.getOffers().clear();
-//        saveCancelService.save();
 
         List<Offer> offers = traderService.calculateOffers(trader);
         offerDao.addList(offers);
@@ -55,10 +54,10 @@ public class TimeServiceTest extends AbstractDatabaseTest {
         timeService.setCurrentDate(dsaDate);
         dsaDate = timeService.getCurrentDate();
 
-        Assert.assertEquals(dsaDate.getTimestamp(), 17);
+        // TODO check this, sometimes failes
+        Assert.assertEquals(17, dsaDate.getTimestamp());
     }
 
- //   @Ignore
     @Test
     public void forwardTimeTestmovingTrader() {
         Trader trader = traderDao.get(2);
@@ -72,7 +71,6 @@ public class TimeServiceTest extends AbstractDatabaseTest {
         Assert.assertTrue(!oldLocation.equals(newLocation));
     }
 
-//    @Ignore
     @Test
     public void forwardTimeTestChangeSortiment1() {
         Trader trader = traderDao.get(1);
@@ -90,7 +88,6 @@ public class TimeServiceTest extends AbstractDatabaseTest {
 	    Assert.assertTrue(actAmount >= trader.getSize());
     }
 
-//    @Ignore
     @Test
     public void forwardTimeTestChangeSortiment2() {
         Trader trader = traderDao.get(1);
@@ -119,7 +116,6 @@ public class TimeServiceTest extends AbstractDatabaseTest {
 	    Assert.assertTrue(actAmount >= trader.getSize());
     }
 
-//    @Ignore
     @Test
     public void forwardTimeTestChangeSortiment3() {
         Trader trader = traderDao.get(1);

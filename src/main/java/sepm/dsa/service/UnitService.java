@@ -1,6 +1,6 @@
 package sepm.dsa.service;
 
-import sepm.dsa.dao.UnitAmount;
+import sepm.dsa.model.UnitAmount;
 import sepm.dsa.model.Unit;
 import sepm.dsa.model.UnitType;
 

@@ -4,7 +4,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.dao.UnitAmount;
+import sepm.dsa.model.UnitAmount;
 import sepm.dsa.dao.UnitDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Unit;
