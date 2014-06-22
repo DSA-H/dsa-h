@@ -22,7 +22,7 @@ public class Trader implements BaseModel {
     private Integer id;
 
     @NotBlank
-    @Size(max = 60, min = 1)
+    @Size(max = 60)
     @Column(nullable = false, length = 60)
     private String name;
 
@@ -65,8 +65,6 @@ public class Trader implements BaseModel {
     @JoinColumn(nullable = false)
     private Location location;
 
-//    @OneToMany(cascade = CascadeType.ALL)// LAZY, otherwise offer will not be delted cascading!
-//    @JoinColumn(nullable = false)
     @OneToMany(mappedBy = "trader", cascade = { CascadeType.REMOVE, CascadeType.REFRESH })
     private Set<Offer> offers = new HashSet<>();
 

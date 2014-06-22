@@ -157,7 +157,6 @@ public class EditLocationController extends BaseControllerImpl {
         }
         selectedLocation.setName(name);
         selectedLocation.setComment(comment);
-        //selectedLocation.setWeather(weather);
         selectedLocation.setSize(townSize);
         selectedLocation.setRegion(seletcedRegionForLocation);
         selectedLocation.setxCoord(xCoord);
@@ -167,14 +166,6 @@ public class EditLocationController extends BaseControllerImpl {
         } catch (NumberFormatException e) {
             throw new DSAValidationException("Höhe muss eine Zahl sein.");
         }
-
-        log.info("connections now in selected Location");
-        for (LocationConnection con : selectedLocation.getAllConnections()) {
-            log.info("location: " + con);
-        }
-
-        log.info("selectedLocation.id = " + selectedLocation.getId());
-//        selectedLocation = locationService.get(selectedLocation.getId());
 
     }
 

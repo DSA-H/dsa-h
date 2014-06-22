@@ -78,16 +78,16 @@ public class UnitServiceTest extends AbstractDatabaseTest {
     @Test
     public void testExchange() throws Exception {
 
-        Unit p1 = unitService.get(1);
-        Unit p2 = unitService.get(2);
+        Unit p1 = unitService.get(6);   // value 5
+        Unit p2 = unitService.get(4);   // value 20
 
         Double amount = new Double(100);
-        UnitAmount result = new UnitAmount();
+        UnitAmount expected = new UnitAmount();
 
         //exchange from p1 to p2 --> via base rate --> divide by first & multiply second
-        result.setAmount(amount * p2.getValueToBaseUnit() / p1.getValueToBaseUnit());
-        result.setUnit(p2);
+        expected.setAmount(amount * p1.getValueToBaseUnit() / p2.getValueToBaseUnit());
+        expected.setUnit(p2);
 
-        assertEquals(result, unitService.exchange(p1, p2, new Double(100)));
+        assertEquals(expected, unitService.exchange(p1, p2, new Double(100)));
     }
 }

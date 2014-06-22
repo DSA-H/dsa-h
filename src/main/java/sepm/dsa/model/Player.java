@@ -1,5 +1,7 @@
 package sepm.dsa.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -18,7 +20,8 @@ public class Player implements Serializable, BaseModel {
 	@Column(nullable = false, unique = true)
 	private Integer id;
 
-	@NotNull
+	@NotBlank
+    @Size(max = 50)
 	@Column(nullable = false)
 	private String name;
 

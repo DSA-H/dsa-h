@@ -18,12 +18,12 @@ public class Unit implements BaseModel {
     private Integer id;
 
     @NotBlank
-    @Size(max = 60, min = 1)
+    @Size(max = 60)
     @Column(nullable = false, length = 60)
     private String name;
 
     @NotBlank
-    @Size(max = 12, min = 1)
+    @Size(max = 12)
     @Column(nullable = false, length = 10)
     private String shortName;
 
@@ -33,9 +33,8 @@ public class Unit implements BaseModel {
 
     @NotNull
     @Column(nullable = false)
-    private Double valueToBaseUnit;  // relative value to base unit
-
-    //TODO besprechen exchange direkt im Modell -> @Michael will das gerne
+    private Double valueToBaseUnit;  // relative value to base unit, e.g. 10 means this unit is worth 10 times compared
+                                     // to the base unit 'kreuzer' (with value 1)
 
     public Integer getId() {
         return id;

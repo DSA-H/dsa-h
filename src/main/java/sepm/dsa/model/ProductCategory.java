@@ -19,7 +19,7 @@ public class ProductCategory implements BaseModel {
     private Integer id;
 
     @NotBlank
-    @Size(max = 60, min = 1)
+    @Size(max = 60)
     @Column(nullable = false, length = 60)
     private String name;
 
@@ -31,34 +31,7 @@ public class ProductCategory implements BaseModel {
     private Set<ProductCategory> childs = new HashSet<>();
 
     @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER)
-//    @JoinTable(name = "product_categories",
-//            joinColumns = { @JoinColumn(name = "categoryId") },     // is joinColumns/inverse correct here?
-//            inverseJoinColumns = { @JoinColumn(name = "productId") })
     private Set<Product> products = new HashSet<>();
-
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.productCategory", cascade = CascadeType.REMOVE, orphanRemoval = true)
-//    @MapKey(name="pk.traderCategory")
-//    private Map<TraderCategory, AssortmentNature> assortments = new HashMap<>();u
-//
-//    public Map<TraderCategory, AssortmentNature> getAssortments() {
-//        return assortments;
-//    }
-//
-//    public void setAssortments(Map<TraderCategory, AssortmentNature> assortments) {
-//        this.assortments = assortments;
-//    }
-
-    //    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "productcategory_id", nullable = false)
-//    private Set<AssortmentNature> assortmentNatures = new HashSet<>();
-
-//    public Set<AssortmentNature> getAssortmentNatures() {
-//        return assortmentNatures;
-//    }
-//
-//    public void setAssortments(Map<TraderCategory, AssortmentNature> assortments) {
-//        this.assortments = assortments;
-//    }
 
     public Integer getId() {
         return id;

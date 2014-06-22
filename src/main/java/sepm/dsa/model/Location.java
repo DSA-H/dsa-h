@@ -1,6 +1,6 @@
 package sepm.dsa.model;
 
-import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 import sepm.dsa.service.path.PathNode;
 
 import javax.persistence.*;
@@ -21,8 +21,8 @@ public class Location implements BaseModel, PathNode {
     @Column(nullable = false, unique = true)
     private Integer id;
 
-    @NotNull
-    @Length(max = 100, min = 1)
+    @NotBlank
+    @Size(max = 100)
     @Column(nullable = false, length = 100)
     private String name;
 
@@ -49,13 +49,6 @@ public class Location implements BaseModel, PathNode {
 
     @Column(nullable = true)
     private Integer weatherId;
-
-    /*
-    @Column(nullable = true)
-    @Embedded
-    //TODO abklären martin johannes
-    private DSADate weatherCollectedDate;
-    */
 
     @Size(max = 1000)
     @Column(nullable = true, length = 1000)
@@ -170,16 +163,6 @@ public class Location implements BaseModel, PathNode {
         }
     }
 
-    /*
-    public DSADate getWeatherCollectedDate() {
-        return weatherCollectedDate;
-    }
-
-    public void setWeatherCollectedDate(DSADate weatherCollectedDate) {
-        this.weatherCollectedDate = weatherCollectedDate;
-    }
-    */
-
     public String getComment() {
         return comment;
     }
@@ -255,17 +238,5 @@ public class Location implements BaseModel, PathNode {
 	public String toString() {
 		return name;
 	}
-
-	/*
-    @Override
-    public String toString() {
-        return "Location{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", region=" + region +
-                '}';
-    }
-    */
-
 
 }

@@ -87,20 +87,6 @@ public class LocationConnection implements BaseModel, PathEdge {
         return null;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//
-//        LocationConnection that = (LocationConnection) o;
-//
-//        if (comment != null ? !comment.equals(that.comment) : that.comment != null) return false;
-//        if (pk != null ? !pk.equals(that.pk) : that.pk != null) return false;
-//        if (travelTime != null ? !travelTime.equals(that.travelTime) : that.travelTime != null) return false;
-//
-//        return true;
-//    }
-
     public boolean equalsById(LocationConnection that) {
         if (this == that) return true;
 
@@ -113,15 +99,6 @@ public class LocationConnection implements BaseModel, PathEdge {
 
         return false;
     }
-
-//    @Override
-//    public int hashCode() {
-//        int result = pk != null ? pk.hashCode() : 0;
-//        result = 31 * result + (travelTime != null ? travelTime.hashCode() : 0);
-//        result = 31 * result + (comment != null ? comment.hashCode() : 0);
-//        return result;
-//    }
-
 
     @Override
     public boolean equals(Object o) {
@@ -152,8 +129,6 @@ public class LocationConnection implements BaseModel, PathEdge {
     public static class Pk implements Serializable {
 
         private static final long serialVersionUID = 5989205421915335466L;
-
-        // TODO BeanValidation for location1 != location2
 
         @NotNull
         @ManyToOne

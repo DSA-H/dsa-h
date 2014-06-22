@@ -188,7 +188,10 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
         log.info("calling validate(" + locationConnection + ")");
         Set<ConstraintViolation<LocationConnection>> violations = validator.validate(locationConnection);
         if (violations.size() > 0) {
-            throw new DSAValidationException("Gebiet ist nicht valide.", violations);
+            throw new DSAValidationException("Reiseverbindung ist nicht valide.", violations);
+        }
+        if (locationConnection.getLocation1().equals(locationConnection.getLocation2())) {
+            throw new DSAValidationException("Reiseverbindung ist nicht valide, es darf keine Reiseverbindung mit sich selbst existieren.");
         }
     }
 }

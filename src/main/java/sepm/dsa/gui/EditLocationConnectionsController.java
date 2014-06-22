@@ -109,7 +109,6 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("initialize");
-        log.info("--- going to edit location connections for location '" + selectedLocation + "'");
 
         if (loadSelectedLocation_Connections_OnReload) {
             Set<LocationConnection> allConnections = selectedLocation.getAllConnections();

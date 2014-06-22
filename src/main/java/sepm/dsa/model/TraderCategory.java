@@ -19,7 +19,7 @@ public class TraderCategory implements BaseModel {
     private Integer id;
 
     @NotBlank
-    @Size(max = 60, min = 1)
+    @Size(max = 60)
     @Column(nullable = false, length = 60)
     private String name;
 
@@ -50,10 +50,6 @@ public class TraderCategory implements BaseModel {
     public Map<ProductCategory, AssortmentNature> getAssortments() {
         return assortments;
     }
-
-//    public void setAssortments(Map<ProductCategory, AssortmentNature> assortments) {
-//        this.assortments = assortments;
-//    }
 
     public void putAssortment(AssortmentNature assortment) {
         this.assortments.put(assortment.getProductCategory(), assortment);

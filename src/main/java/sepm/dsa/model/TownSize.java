@@ -1,8 +1,5 @@
 package sepm.dsa.model;
 
-/**
- * Created by Michael on 16.05.2014.
- */
 public enum TownSize {
 
     MINI(0, "Mini"),
@@ -24,7 +21,7 @@ public enum TownSize {
     }
 
     public static TownSize parse(int value) {
-        TownSize right = null;        // Default
+        TownSize right = null;
         for (TownSize item : TownSize.values()) {
             if (item.getValue() == value) {
                 right = item;

@@ -1,8 +1,5 @@
 package sepm.dsa.model;
 
-/**
- * Created by Michael on 13.05.2014.
- */
 public enum RainfallChance {
 
     VERY_LOW(0, "sehr niedrig"),

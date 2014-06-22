@@ -63,7 +63,7 @@ public class UnitServiceImpl implements UnitService {
     @Override
     public UnitAmount exchange(Unit from, Unit to, Double amount) {
         UnitAmount result = new UnitAmount();
-        result.setAmount(amount * to.getValueToBaseUnit() / from.getValueToBaseUnit());
+        result.setAmount(from.exchange(amount, to));
         result.setUnit(to);
 
         return result;

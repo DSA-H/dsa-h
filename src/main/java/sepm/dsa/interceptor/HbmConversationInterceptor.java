@@ -60,7 +60,7 @@ public class HbmConversationInterceptor implements MethodInterceptor, Applicatio
             currentSession.getTransaction().rollback();
             disconnectedSession = currentSession;
         } else if (invocation.getMethod().getName().equals("closeSession")) {
-            log.info("closeSession");
+            log.debug("closeSession");
             currentSession.close();
             disconnectedSession = null;
         } else {

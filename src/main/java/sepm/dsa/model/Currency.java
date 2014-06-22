@@ -66,30 +66,6 @@ public class Currency implements BaseModel {
         return name;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof Currency)) return false;
-//
-//        Currency currency = (Currency) o;
-//
-//        if (id != null ? !id.equals(currency.id) : currency.id != null) return false;
-//        if (name != null ? !name.equals(currency.name) : currency.name != null) return false;
-//        if (valueToBaseRate != null ? !valueToBaseRate.equals(currency.valueToBaseRate) : currency.valueToBaseRate != null)
-//            return false;
-//
-//        return true;
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        int result = id != null ? id.hashCode() : 0;
-//        result = 31 * result + (name != null ? name.hashCode() : 0);
-//        result = 31 * result + (valueToBaseRate != null ? valueToBaseRate.hashCode() : 0);
-//        return result;
-//    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

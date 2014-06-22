@@ -21,7 +21,7 @@ public class Region implements BaseModel, PathNode {
     private Integer id;
 
     @NotBlank
-    @Size(max = 60, min = 1)
+    @Size(max = 60)
     @Column(nullable = false, length = 60)
     private String name;
 

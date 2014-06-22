@@ -22,7 +22,7 @@ public class Product implements BaseModel {
     private Integer id;
 
     @NotBlank
-    @Size(max = 60, min = 1)
+    @Size(max = 60)
     @Column(nullable = false, length = 60)
     private String name;
 
@@ -62,12 +62,6 @@ public class Product implements BaseModel {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "product_regions", joinColumns = { @JoinColumn(name = "productId") }, inverseJoinColumns = { @JoinColumn(name = "regionId") })
     private Set<Region> productionRegions = new HashSet<>();
-
-    //    @JoinColumn(name = "product_id")
-//    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-
-//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)//, cascade = CascadeType.REMOVE) // owning side
-//    @JoinColumn(name = "product_id", nullable = false)
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private Set<Offer> offer = new HashSet<>();

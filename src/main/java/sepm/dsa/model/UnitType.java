@@ -10,14 +10,14 @@ import javax.validation.constraints.Size;
 public class UnitType implements BaseModel {
 
     private static final long serialVersionUID = -2937498027920740592L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Integer id;
 
     @NotBlank
-    @Size(max = 60, min = 1)
+    @Size(max = 60)
     @Column(nullable = false, length = 60)
     private String name;
 
