@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.controlsfx.dialog.Dialogs;
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -74,10 +75,15 @@ public class Main extends Application {
                 // show "internal error" message dialog
                 log.info("Uncaught error (details): ", throwable);    // exception trace at info log level
 
+                int errorNumber = DSARuntimeException.ERROR_INTERNAL_UNKNOWN_GENERAL;
+                if (cause instanceof HibernateException) {
+                    errorNumber = DSARuntimeException.ERROR_INTERNAL_UNKNOWN_DATABASE;
+                }
+
                 Dialogs.create()
                         .title("Interner Fehler")
                         .masthead(null)
-                        .message(DSARuntimeException.ERROR_INTERNAL_UNKNOWN + ": " + DSARuntimeException.INTERNAL_ERROR_MSG + " (" + cause.getClass().getName() + ")")
+                        .message(DSARuntimeException.INTERNAL_ERROR_MSG + " (" + cause.getClass().getName() + "[" + errorNumber + "])")
                         .showError();
             }
         });
