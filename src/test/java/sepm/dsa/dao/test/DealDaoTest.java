@@ -1,6 +1,5 @@
 package sepm.dsa.dao.test;
 
-import static org.junit.Assert.assertEquals;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,25 +11,27 @@ import sepm.dsa.service.ProductService;
 import sepm.dsa.service.TraderService;
 import sepm.dsa.service.UnitService;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.Assert.*;
+
 public class DealDaoTest extends AbstractDatabaseTest {
 
     @Autowired
     private DealDao dealDao;
+    @Autowired
     private ProductService productService;
+    @Autowired
     private TraderService traderService;
+    @Autowired
     private PlayerService playerService;
+    @Autowired
     private UnitService unitService;
 
 
-
-    @Ignore
-    @Test
-    public void test() {
-
-    }
-    // TODO test things...
-
-    @Ignore
     @Test
     public void add_shouldPersistEntry() {
 
@@ -70,11 +71,74 @@ public class DealDaoTest extends AbstractDatabaseTest {
 
     }
 
+    @Test
     public void update_shouldUpdateEntity() {
+        Deal deal = dealDao.get(1);
+        deal.setDiscount(10);
 
+        dealDao.update(deal);
+        saveCancelService.save();
+
+        assertEquals(new Integer(10), dealDao.get(1).getDiscount());
     }
 
-//    public void playerDealsWithTraderInTimeRange
+    @Test
+    public void remove_shouldRemoveEntity() {
+        int dealsBefore = dealDao.getAll().size();
+        Deal deal = dealDao.get(1);
+
+        dealDao.remove(deal);
+        saveCancelService.save();
+
+        assertEquals(dealsBefore - 1, dealDao.getAll().size());
+    }
+
+
+    @Test
+    public void get_shouldRetrieveEntity() {
+        assertNotNull(dealDao.get(1));
+    }
+
+    @Test
+    public void get_shouldReturnNull() {
+        assertNull(dealDao.get(100));
+    }
+
+    @Test
+    public void getAll_shouldRetrieveAll() {
+        assertEquals(9, dealDao.getAll().size());
+    }
+
+    @Test
+    public void getAllByProduct_shouldRetrieveAllFilteredByProduct() {
+        Product product = productService.get(1);
+        Deal deal1 = dealDao.get(1);
+        Deal deal2 = dealDao.get(2);
+        Deal deal3 = dealDao.get(3);
+        Set<Deal> expected = new HashSet<>(Arrays.<Deal>asList(deal1, deal2, deal3));
+
+        Set<Deal> deals = new HashSet<>(dealDao.getAllByProduct(product));
+
+        assertEquals(expected, deals);
+    }
+
+    @Test
+    public void playerDealsWithTraderInTimeRange_should() {
+
+        long fromDate = 0;
+        long toDate = 365;
+
+        Player player = playerService.get(1);
+        Trader trader = traderService.get(2);
+        Deal deal1 = dealDao.get(1);
+        Deal deal2 = dealDao.get(2);
+        Deal deal3 = dealDao.get(3);
+        Deal deal4 = dealDao.get(4);
+        Set<Deal> expectedDeals = new HashSet<>(Arrays.asList(deal1, deal2, deal3, deal4));
+        Set<Deal> deals = new HashSet<>(dealDao.playerDealsWithTraderInTimeRange(player, trader, fromDate, toDate));
+
+        assertEquals(expectedDeals, deals);
+    }
 
 
 }
