@@ -1,6 +1,8 @@
 package sepm.dsa.model;
 
 
+import sepm.dsa.exceptions.DSARuntimeException;
+
 import java.util.ArrayList;
 
 public enum Weather {
@@ -40,45 +42,119 @@ public enum Weather {
         return right;
     }
 
+    public Weather calcNextWeatehr(Temperature temperature, RainfallChance rainFallChance, int days) {
+        // Weather changes not every day
+        if(Math.random() < 1 - 0.33f*days) {
+            return this;
+        }
+        return getNewWeather(temperature, rainFallChance);
+    }
+
     public static Weather getNewWeather(Temperature temperature, RainfallChance rainFallChance){
-        ArrayList<Weather> ret = new ArrayList<Weather>();
-        for (int i = 0; i < weatherTypeCount; i++){
-            ret.add(Weather.parse(i));//add every weather once
+        float weatherProbability[] = new float[Weather.values().length];
+
+        if (temperature.equals(Temperature.VERY_LOW)){
+            weatherProbability[Weather.CLOUDY.getValue()] = 1f;
+            weatherProbability[Weather.SUNNY.getValue()] = 0.2f;
+            weatherProbability[Weather.HOT.getValue()] = 0;
+            weatherProbability[Weather.TROPIC.getValue()] = 0;
+            weatherProbability[Weather.ICY.getValue()] = 1;
+            weatherProbability[Weather.COLD.getValue()] = 1;
+            weatherProbability[Weather.SNOW.getValue()] = 1;
+            weatherProbability[Weather.WET.getValue()] = 0;
+            weatherProbability[Weather.RAINY.getValue()] = 0;
+            weatherProbability[Weather.STORM.getValue()] = 0.1f;
+        }else if (temperature.equals(Temperature.LOW)){
+            weatherProbability[Weather.CLOUDY.getValue()] = 1f;
+            weatherProbability[Weather.SUNNY.getValue()] = 0.7f;
+            weatherProbability[Weather.HOT.getValue()] = 0.05f;
+            weatherProbability[Weather.TROPIC.getValue()] = 0;
+            weatherProbability[Weather.ICY.getValue()] = 0.5f;
+            weatherProbability[Weather.COLD.getValue()] = 1;
+            weatherProbability[Weather.SNOW.getValue()] = 0.7f;
+            weatherProbability[Weather.WET.getValue()] = 0.2f;
+            weatherProbability[Weather.RAINY.getValue()] = 0.2f;
+            weatherProbability[Weather.STORM.getValue()] = 0.1f;
+        }else if (temperature.equals(Temperature.MEDIUM)){
+            weatherProbability[Weather.CLOUDY.getValue()] = 1f;
+            weatherProbability[Weather.SUNNY.getValue()] = 1f;
+            weatherProbability[Weather.HOT.getValue()] = 0.6f;
+            weatherProbability[Weather.TROPIC.getValue()] = 0.1f;
+            weatherProbability[Weather.ICY.getValue()] = 0.1f;
+            weatherProbability[Weather.COLD.getValue()] = 0.6f;
+            weatherProbability[Weather.SNOW.getValue()] = 0.1f;
+            weatherProbability[Weather.WET.getValue()] = 1f;
+            weatherProbability[Weather.RAINY.getValue()] = 1f;
+            weatherProbability[Weather.STORM.getValue()] = 0.1f;
+        }else if (temperature.equals(Temperature.HIGH)){
+            weatherProbability[Weather.CLOUDY.getValue()] = 0.7f;
+            weatherProbability[Weather.SUNNY.getValue()] = 0.7f;
+            weatherProbability[Weather.HOT.getValue()] = 1f;
+            weatherProbability[Weather.TROPIC.getValue()] = 0.5f;
+            weatherProbability[Weather.ICY.getValue()] = 0f;
+            weatherProbability[Weather.COLD.getValue()] = 0.05f;
+            weatherProbability[Weather.SNOW.getValue()] = 0f;
+            weatherProbability[Weather.WET.getValue()] = 1f;
+            weatherProbability[Weather.RAINY.getValue()] = 1f;
+            weatherProbability[Weather.STORM.getValue()] = 0.1f;
+        }else if (temperature.equals(Temperature.VERY_HIGH)){
+            weatherProbability[Weather.CLOUDY.getValue()] = 1f;
+            weatherProbability[Weather.SUNNY.getValue()] = 1f;
+            weatherProbability[Weather.HOT.getValue()] = 1f;
+            weatherProbability[Weather.TROPIC.getValue()] = 1f;
+            weatherProbability[Weather.ICY.getValue()] = 0f;
+            weatherProbability[Weather.COLD.getValue()] = 0f;
+            weatherProbability[Weather.SNOW.getValue()] = 0f;
+            weatherProbability[Weather.WET.getValue()] = 1f;
+            weatherProbability[Weather.RAINY.getValue()] = 1f;
+            weatherProbability[Weather.STORM.getValue()] = 0.1f;
         }
-        Temperature t = temperature;
-        RainfallChance r = rainFallChance;
 
-        if (t.equals(Temperature.VERY_LOW)){//remove all weather types that need temperature > 0°
-            ret.remove(Weather.HOT);
-            ret.remove(Weather.TROPIC);
-            ret.remove(Weather.SUNNY);
-            ret.remove(Weather.WET);
-            ret.remove(Weather.RAINY);
-        }else if (t.equals(Temperature.LOW)){//remove all really hot weather types
-            ret.remove(Weather.HOT);
-            ret.remove(Weather.TROPIC);
-            ret.remove(Weather.SUNNY);
-        }else if (t.equals(Temperature.MEDIUM)){
-            //nothing
-        }else if (t.equals(Temperature.HIGH)){
-            ret.remove(Weather.ICY);
-        }else if (t.equals(Temperature.VERY_HIGH)){
-            ret.remove(Weather.ICY);
-            ret.remove(Weather.COLD);
-            ret.remove(Weather.SNOW);
+        if(rainFallChance.equals(RainfallChance.VERY_LOW)) {
+            weatherProbability[Weather.CLOUDY.getValue()] *= 0.1f;
+            weatherProbability[Weather.TROPIC.getValue()] *= 0;
+            weatherProbability[Weather.SNOW.getValue()] *= 0.1f;
+            weatherProbability[Weather.WET.getValue()] *= 0.1f;
+            weatherProbability[Weather.RAINY.getValue()] *= 0.1f;
+        }else if(rainFallChance.equals(RainfallChance.LOW)) {
+            weatherProbability[Weather.CLOUDY.getValue()] *= 0.5f;
+            weatherProbability[Weather.TROPIC.getValue()] *= 0.1f;
+            weatherProbability[Weather.SNOW.getValue()] *= 0.5f;
+            weatherProbability[Weather.WET.getValue()] *= 0.5f;
+            weatherProbability[Weather.RAINY.getValue()] *= 0.5f;
+        }else if(rainFallChance.equals(RainfallChance.MEDIUM)) {
+            // *= 1;
+        }else if(rainFallChance.equals(RainfallChance.HIGH)) {
+            weatherProbability[Weather.CLOUDY.getValue()] *= 2f;
+            weatherProbability[Weather.TROPIC.getValue()] *= 1.5f;
+            weatherProbability[Weather.SNOW.getValue()] *= 2f;
+            weatherProbability[Weather.WET.getValue()] *= 2f;
+            weatherProbability[Weather.RAINY.getValue()] *= 2f;
+        }else if(rainFallChance.equals(RainfallChance.VERY_HIGH)) {
+            weatherProbability[Weather.CLOUDY.getValue()] *= 8f;
+            weatherProbability[Weather.TROPIC.getValue()] *= 3f;
+            weatherProbability[Weather.SNOW.getValue()] *= 8f;
+            weatherProbability[Weather.WET.getValue()] *= 8f;
+            weatherProbability[Weather.RAINY.getValue()] *= 8f;
         }
 
-        Weather val = Weather.SNOW;
+        float sumProbability = 0;
+        for(float wp : weatherProbability) {
+            sumProbability += wp;
+        }
 
-        //take the value of the rainfallChance as a factor how often a random weather is calculated if it is not a rainy one
-        for (int i = 0; i<r.getValue()+1;i++){
-            val = ret.get((int) (Math.random() * ret.size())); //[0,ret.size]
-            if (val.getValue() < 5) { //rainy state
-                return val;
+        double rand = Math.random() * sumProbability;
+
+        int i = 0;
+        float preWp = 0;
+        for(float wp : weatherProbability) {
+            preWp = wp + preWp;
+            if(rand <= preWp) {
+                return Weather.values()[i];
             }
+            i++;
         }
-
-        return val;
+        throw new DSARuntimeException("Kein gültiges Wetter generiert!");
     }
 
     @Override
