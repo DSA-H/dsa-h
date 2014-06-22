@@ -101,7 +101,7 @@ public class AddOfferController extends BaseControllerImpl {
         } catch (ParseException e) {
             throw new DSAValidationException("Anzahl muss eine ganze positive Zahl sein!");
         }
-        if(!(amount.doubleValue() > 0)) {
+        if(amount.doubleValue() <= 0) {
             throw new DSAValidationException("Anzahl muss eine ganze positive Zahl sein!");
         }
 

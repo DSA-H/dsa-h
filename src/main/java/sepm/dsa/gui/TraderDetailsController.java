@@ -23,6 +23,7 @@ import sepm.dsa.service.*;
 import sepm.dsa.util.CurrencyFormatUtil;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -164,8 +165,8 @@ public class TraderDetailsController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("reload TraderDetailsController");
-        checkFocus();
         refreshView();
+        checkFocus();
     }
 
     private void initialzeTableWithColums() {
@@ -332,52 +333,36 @@ public class TraderDetailsController extends BaseControllerImpl {
         Optional<String> response = Dialogs.create()
                 .title("Löschen?")
                 .masthead(null)
-                .message("Wie viel wollen sie entfernen?")
-                .showTextInput();
-
-        int amount = 0;
+                .message("Wie viel" + o.getProduct().getName() + " (" + o.getQuality().getName() + ") wollen sie entfernen?")
+                .showTextInput("1");
+        Double amount = 0d;
         if (response.isPresent()) {
             try {
-                amount = Integer.parseInt(response.get());
-                if (amount < 0) {
-                    Dialogs.create()
-                            .title("Ungültige Eingabe")
-                            .masthead(null)
-                            .message("Ungültige Eingabe")
-                            .showError();
-                    return;
-                }
-            } catch (NumberFormatException nfe) {
-                Dialogs.create()
-                        .title("Ungültige Eingabe")
-                        .masthead(null)
-                        .message("Ungültige Eingabe")
-                        .showError();
-                return;
+                DecimalFormat df = new DecimalFormat();
+                amount = df.parse(response.get()).doubleValue();
+            } catch (ParseException nfe) {
+                throw new DSAValidationException("Die zu entfernende Menge muss eine Zahl sein!");
             }
         } else {
-            /*Dialogs.create()
-                    .title("Ungültige Eingabe")
-                    .masthead(null)
-                    .message("Ungültige Eingabe")
-                    .showError();*/
             return;
         }
-
-        boolean remove = false;
-        if (amount >= o.getAmount()) {
-            remove = true;
+        if (amount <= 0) {
+            throw new DSAValidationException("Die zu entfernende Menge muss eine positive Zahl sein!");
         }
 
-        traderService.removeManualOffer(trader, o, amount);
+  /*      boolean remove = false;
+        if (amount >= o.getAmount()) {
+            remove = true;
+        }*/
 
+        traderService.removeManualOffer(trader, o, amount);
+/*
         if (remove) {
             offerTable.getItems().remove(o);
         } else {
             offerTable.getItems().set(offerTable.getItems().indexOf(o), o);
         }
-
-        checkFocus();
+*/
         saveCancelService.save();
     }
 
