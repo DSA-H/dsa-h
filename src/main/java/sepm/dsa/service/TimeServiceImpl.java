@@ -36,7 +36,7 @@ public class TimeServiceImpl implements TimeService {
         log.debug("calling getCurrentDate()");
         try {
 			properties = new Properties();
-			Path path = Paths.get("properties");
+			Path path = Paths.get("resources/properties");
 			if (!Files.exists(path)) {
 				Files.createFile(path);
 			}
@@ -57,7 +57,7 @@ public class TimeServiceImpl implements TimeService {
 		log.debug("calling setCurrentDate(" + dsaDate + ")");
 		try {
 			properties.put("time", dsaDate.getTimestamp() + "");
-			OutputStream os = Files.newOutputStream(Paths.get("properties"));
+			OutputStream os = Files.newOutputStream(Paths.get("resources/properties"));
 			properties.store(os, "");
 			os.close();
 		} catch (IOException e) {
@@ -93,7 +93,6 @@ public class TimeServiceImpl implements TimeService {
             forwardProgress++;
 
 			int newOffersCount = (int) ( 100 - (100 * Math.pow(Math.E, (-1 * PRODUCT_TURNOVER_PERCENT_PER_DAY/100 * days)) ) );
-			log.info("NEW :"+newOffersCount);
 			if (newOffersCount > trader.getSize()) {
 				newOffersCount = trader.getSize();
 			}

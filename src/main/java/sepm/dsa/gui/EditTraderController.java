@@ -3,6 +3,7 @@ package sepm.dsa.gui;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.control.*;
@@ -46,14 +47,15 @@ public class EditTraderController extends BaseControllerImpl {
 	private Point2D position;
 	private DSADate lastmoved;
 
-    //TODO fill with better names
-    ArrayList<String> firstNames = new ArrayList<String>(
-            Arrays.asList("Max", "Paul", "Tom"));
-    ArrayList<String> lastNames = new ArrayList<String>(
-            Arrays.asList("Huber", "Kurz", "Lang"));
-
     @FXML
     private TextField nameField;
+	@FXML
+	private ChoiceBox cultureBox;
+	@FXML
+	private CheckBox maleCheck;
+	@FXML
+	private CheckBox femaleCheck;
+
     @FXML
     private TextField sizeField;
     @FXML
@@ -94,6 +96,37 @@ public class EditTraderController extends BaseControllerImpl {
         areaBox.getItems().setAll(DistancePreferrence.values());
         citySizeBox.getItems().add(0, null);
         citySizeBox.getItems().addAll(TownSize.values());
+	    cultureBox.setItems(FXCollections.observableArrayList(traderService.getAllCultures()));
+	    if (Math.random() < 0.5) {
+		    maleCheck.setSelected(true);
+		    femaleCheck.setSelected(false);
+	    } else {
+		    maleCheck.setSelected(false);
+		    femaleCheck.setSelected(true);
+	    }
+	    if (traderService.getAllCultures().size() != 0) {
+		    cultureBox.getSelectionModel().select(0);
+	    }
+	    maleCheck.selectedProperty().addListener(new ChangeListener<Boolean>() {
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+			    if (newValue == true) {
+				    femaleCheck.setSelected(false);
+			    } else {
+				    femaleCheck.setSelected(true);
+			    }
+		    }
+	    });
+	    femaleCheck.selectedProperty().addListener(new ChangeListener<Boolean>() {
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+			    if (newValue == true) {
+				    maleCheck.setSelected(false);
+			    } else {
+				    maleCheck.setSelected(true);
+			    }
+		    }
+	    });
 
         movingCheck.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -167,7 +200,11 @@ public class EditTraderController extends BaseControllerImpl {
         log.debug("calling setUp");
 
         if (isNewTrader) {
-            generateRandoms();
+	        onGenerateNamePressed();
+	        muField.setText(""+traderService.getRandomValue(15, 5));
+	        inField.setText(""+traderService.getRandomValue(15, 5));
+	        chField.setText(""+traderService.getRandomValue(15, 5));
+	        convinceField.setText(""+traderService.getRandomValue(6, 6));
         } else {
             nameField.setText(selectedTrader.getName());
             sizeField.setText("" + selectedTrader.getSize());
@@ -194,63 +231,17 @@ public class EditTraderController extends BaseControllerImpl {
         }
     }
 
-    //TODO: move to service laer. This calculations should not be in GUI layer!
-    private void generateRandoms() {
-        double rand;
-        double rand2;
-        int result;
-
-        String name = "";
-        rand = Math.random() * firstNames.size();
-        name += firstNames.get((int) rand);
-        rand = Math.random() * lastNames.size();
-        name += " " + lastNames.get((int) rand);
-        nameField.setText(name);
-
-        rand = Math.random();
-        rand *= rand;
-        rand *= 5;
-        rand2 = Math.random();
-        if (rand2 < 0.5) {
-            result = (int) (15 + rand);
-        } else {
-            result = (int) (15 - rand);
-        }
-        muField.setText("" + result);
-
-        rand = Math.random();
-        rand *= rand;
-        rand *= 5;
-        rand2 = Math.random();
-        if (rand2 < 0.5) {
-            result = (int) (15 + rand);
-        } else {
-            result = (int) (15 - rand);
-        }
-        inField.setText("" + result);
-
-        rand = Math.random();
-        rand *= rand;
-        rand *= 5;
-        rand2 = Math.random();
-        if (rand2 < 0.5) {
-            result = (int) (15 + rand);
-        } else {
-            result = (int) (15 - rand);
-        }
-        chField.setText("" + result);
-
-        rand = Math.random();
-        rand *= rand;
-        rand *= 6;
-        rand2 = Math.random();
-        if (rand2 < 0.5) {
-            result = (int) (6 + rand);
-        } else {
-            result = (int) (6 - rand);
-        }
-        convinceField.setText("" + result);
-    }
+	@FXML
+	private void onGenerateNamePressed() {
+		if (cultureBox.getSelectionModel().getSelectedItem() == null) {
+			Action response = Dialogs.create()
+					.title("Fehler")
+					.masthead(null)
+					.message("Es muss eine Kultur ausgewählt werden!")
+					.showWarning();
+		}
+		nameField.setText(traderService.getRandomName((String) cultureBox.getSelectionModel().getSelectedItem(), maleCheck.isSelected()));
+	}
 
     @FXML
     private void onSavePressed() {

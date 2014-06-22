@@ -229,5 +229,10 @@ public interface TraderService {
      */
     Integer suggesstDiscount(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount);
 
+	int getRandomValue(int median, int variation);
+
+	String getRandomName(String culture, boolean male);
+
+	List<String> getAllCultures();
 
 }
