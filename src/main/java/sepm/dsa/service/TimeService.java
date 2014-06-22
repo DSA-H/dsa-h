@@ -13,6 +13,7 @@ public interface TimeService {
      */
     void forwardTime(int days);
 
+    // TODO Johannes: javadoc this methods
     public int getForwardProgress();
 
     public int getForwardMaxProgress();

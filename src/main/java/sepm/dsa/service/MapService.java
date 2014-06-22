@@ -120,6 +120,7 @@ public interface MapService {
 	 */
 	public double getTextSize();
 
+    // TODO Flo: javadoc this methods
 	public void setTraderColor(Color c);
 	public void setMovingTraderColor(Color c);
 	public void setTavernColor(Color c);
