@@ -5,6 +5,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.dao.MovingTraderDao;
 import sepm.dsa.dao.OfferDao;
@@ -17,6 +18,7 @@ import sepm.dsa.service.path.PathService;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.io.*;
 import java.util.*;
 
 public class TraderServiceImpl implements TraderService {
@@ -36,7 +38,9 @@ public class TraderServiceImpl implements TraderService {
 
     private static final Double EPSILON = 1E-5;
 
-    @Override
+	private static final File nameFile = new File("resources/nameFile.txt");
+
+	@Override
     public void addManualOffer(Trader trader, Offer offer) {
         log.debug("calling addManualOffer(" + trader + ", " + offer + ")");
         Set<Offer> offers = trader.getOffers();
@@ -310,7 +314,207 @@ public class TraderServiceImpl implements TraderService {
         return result;
     }
 
-    @Override
+	@Override
+	public int getRandomValue(int median, int variation) {
+		double rand = Math.random();
+		rand *= rand;
+		rand *= variation;
+		double rand2 = Math.random();
+		int result;
+		if (rand2 < 0.5) {
+			result = (int) (median + rand);
+		} else {
+			result = (int) (median - rand);
+		}
+		return result;
+	}
+
+	@Override
+	public String getRandomName(String culture, boolean male) {
+		log.debug("getRandomName called");
+		int lastNameMode = -1;
+		boolean prefix = false;
+		boolean suffix = false;
+		final int NORMAL = 0;
+		final int BOTH = 1;
+		final int FATHER = 2;
+		final int MOTHER = 3;
+		String sonOf;
+		String daughterOf;
+		List<String> maleFirstNames = null, femaleFirstNames = null, lastNames = null;
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(nameFile));
+			String line = reader.readLine();
+			while (line != null) {
+				if (line.startsWith("culture "+culture)) {
+					line = reader.readLine();
+					boolean maleFirstNamesLoaded = false, femaleFirstNamesLoaded = false, lastNamesLoaded = false;
+					while (!maleFirstNamesLoaded || !femaleFirstNamesLoaded || !lastNamesLoaded) {
+						if (line.startsWith("maleFirstNames")) {
+							line = line.substring(line.indexOf("START") + 6);
+							maleFirstNames = new ArrayList<>();
+							String name;
+							while (line.length() > 0) {
+								if (line.startsWith("END")) {
+									break;
+								}
+								name = line.substring(0, line.indexOf(", "));
+								line = line.substring(line.indexOf(", ") + 2);
+								maleFirstNames.add(name);
+							}
+							maleFirstNamesLoaded = true;
+							log.info("" + maleFirstNames);
+						} else if (line.startsWith("femaleFirstNames")) {
+							line = line.substring(line.indexOf("START") + 6);
+							femaleFirstNames = new ArrayList<>();
+							String name;
+							while (line.length() > 0) {
+								if (line.startsWith("END")) {
+									break;
+								}
+								name = line.substring(0, line.indexOf(", "));
+								line = line.substring(line.indexOf(", ") + 2);
+								femaleFirstNames.add(name);
+							}
+							femaleFirstNamesLoaded = true;
+							log.info("" + femaleFirstNames);
+						} else if (line.startsWith("lastNames")) {
+
+							line = line.substring(line.indexOf("MODE") + 5);
+							if (line.startsWith("CHILDOF")) {
+								line = line.substring(8);
+								if (line.startsWith("BOTH")) {
+									lastNameMode = BOTH;
+									line = line.substring(5);
+								} else if (line.startsWith("FATHER")) {
+									lastNameMode = FATHER;
+									line = line.substring(5);
+								} else if (line.startsWith("MOTHER")) {
+									lastNameMode = MOTHER;
+									line = line.substring(5);
+								} else {
+									throw new DSARuntimeException("Fehler beim Lesen der Namens Datei ('MODE CHILDOF <UNKNOWN>')!");
+								}
+							} else if (line.startsWith("NORMAL")) {
+								lastNameMode = NORMAL;
+								line = line.substring(7);
+							} else {
+								throw new DSARuntimeException("Fehler beim Lesen der Namens Datei ('MODE <UNKNOWN>')!");
+							}
+
+							if (lastNameMode == NORMAL) {
+								line = line.substring(line.indexOf("START") + 6);
+								lastNames = new ArrayList<>();
+								String name;
+								while (line.length() > 0) {
+									if (line.startsWith("END")) {
+										break;
+									}
+									name = line.substring(0, line.indexOf(", "));
+									line = line.substring(line.indexOf(", ") + 2);
+									lastNames.add(name);
+								}
+							} else {
+								if (line.startsWith("PREFIX")) {
+									prefix = true;
+									line = line.substring(7);
+								} else if (line.startsWith("SUFFIX")) {
+									suffix = true;
+									line = line.substring(7);
+								} else {
+									throw new DSARuntimeException("Fehler beim Lesen der Namens Datei ('MODE CHILDOF <option> <UNKNOWN>')!");
+								}
+								line = line.substring(line.indexOf("START") + 6);
+								sonOf = line.substring(0, line.indexOf(", "));
+								line = line.substring(line.indexOf(", ") + 2);
+								daughterOf = line.substring(0, line.indexOf(", "));
+								if (!line.substring(line.indexOf(", ") + 2).startsWith("END")) {
+									throw new DSARuntimeException("Fehler beim Lesen der Namens Datei ('MODE CHILDOF <option> <pre/suffix> START <Sohn des> <Tochter der> <UNKNOWN>')!");
+								}
+								if (prefix) {
+									if (male) {
+										lastNames = new ArrayList<>();
+										for (String n : maleFirstNames) {
+											lastNames.add(sonOf + n);
+										}
+									} else {
+										lastNames = new ArrayList<>();
+										for (String n : femaleFirstNames) {
+											lastNames.add(daughterOf + n);
+										}
+									}
+								} else if (suffix) {
+									if (male) {
+										lastNames = new ArrayList<>();
+										for (String n : maleFirstNames) {
+											lastNames.add(n + sonOf);
+										}
+									} else {
+										lastNames = new ArrayList<>();
+										for (String n : femaleFirstNames) {
+											lastNames.add(n + daughterOf);
+										}
+									}
+								}
+							}
+							lastNamesLoaded = true;
+							log.info("" + lastNames);
+						} else if (line.equals("")) {
+							if (maleFirstNames == null || femaleFirstNames == null || lastNames == null) {
+								throw new DSARuntimeException("Fehler beim Lesen der Namens Datei (unvollständige Kultur: "+culture+")");
+							} else {
+								line = reader.readLine();
+							}
+						} else {
+							throw new DSARuntimeException("Fehler beim Lesen der Namens Datei (unbekannte Zeile)");
+						}
+						line = reader.readLine();
+					}
+				} else {
+					line = reader.readLine();
+				}
+			}
+		} catch (FileNotFoundException e) {
+			throw new DSARuntimeException("Namens Datei nicht gefunden!");
+		} catch (IOException e) {
+			throw new DSARuntimeException("Fehler beim Lesen der Namens Datei!");
+		}
+
+		String fullName = "";
+		if (male) {
+			int firstSelection = (int) (Math.random() * maleFirstNames.size());
+			fullName += maleFirstNames.get(firstSelection);
+		} else {
+			int firstSelection = (int) (Math.random() * femaleFirstNames.size());
+			fullName += femaleFirstNames.get(firstSelection);
+		}
+		fullName += " ";
+		int secondSelection = (int) (Math.random() * lastNames.size());
+		fullName += lastNames.get(secondSelection);
+		return fullName;
+	}
+
+	@Override
+	public List<String> getAllCultures() {
+		List<String> cultures = new ArrayList<>();
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(nameFile));
+			String line = reader.readLine();
+			while (line != null) {
+				if (line.startsWith("culture ")) {
+					cultures.add(line.substring(8));
+				}
+				line = reader.readLine();
+			}
+		} catch (FileNotFoundException e) {
+			throw new DSARuntimeException("Namens Datei nicht gefunden!");
+		} catch (IOException e) {
+			throw new DSARuntimeException("Fehler beim Lesen der Namens Datei!");
+		}
+		return cultures;
+	}
+
+	@Override
     public Deal buyFromPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer productAmount, Integer totalPrice) {
         log.debug("calling buyFromPlayer(" + trader + ", " + player + ", " + product + ", " + productQuality + ", " + unit + ", " + productAmount + ", " + totalPrice + ")");
         Offer offer = null;

@@ -35,7 +35,7 @@ public class MapServiceImpl implements MapService {
     private Properties getProperties() {
         try {
             Properties properties = new Properties();
-            Path path = Paths.get("properties");
+            Path path = Paths.get("resources/properties");
             if (!Files.exists(path)) {
                 Files.createFile(path);
             }
@@ -410,7 +410,7 @@ public class MapServiceImpl implements MapService {
         try {
 	        Properties properties = getProperties();
             properties.put("traderColor", colorToString(c));
-            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            OutputStream os = Files.newOutputStream(Paths.get("resources/properties"));
             properties.store(os, "");
             os.close();
         } catch (IOException e) {
@@ -423,7 +423,7 @@ public class MapServiceImpl implements MapService {
         try {
 	        Properties properties = getProperties();
 	        properties.put("movingTraderColor", colorToString(c));
-            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            OutputStream os = Files.newOutputStream(Paths.get("resources/properties"));
             properties.store(os, "");
             os.close();
         } catch (IOException e) {
@@ -436,7 +436,7 @@ public class MapServiceImpl implements MapService {
         try {
 	        Properties properties = getProperties();
 	        properties.put("tavernColor", colorToString(c));
-            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            OutputStream os = Files.newOutputStream(Paths.get("resources/properties"));
             properties.store(os, "");
             os.close();
         } catch (IOException e) {
@@ -449,7 +449,7 @@ public class MapServiceImpl implements MapService {
         try {
 	        Properties properties = getProperties();
 	        properties.put("highlightColor", colorToString(c));
-            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            OutputStream os = Files.newOutputStream(Paths.get("resources/properties"));
             properties.store(os, "");
             os.close();
         } catch (IOException e) {
@@ -462,7 +462,7 @@ public class MapServiceImpl implements MapService {
         try {
 	        Properties properties = getProperties();
 	        properties.put("selectionColor", colorToString(c));
-            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            OutputStream os = Files.newOutputStream(Paths.get("resources/properties"));
             properties.store(os, "");
             os.close();
         } catch (IOException e) {
@@ -475,7 +475,7 @@ public class MapServiceImpl implements MapService {
         try {
 	        Properties properties = getProperties();
 	        properties.put("borderColor", colorToString(c));
-            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            OutputStream os = Files.newOutputStream(Paths.get("resources/properties"));
             properties.store(os, "");
             os.close();
         } catch (IOException e) {
@@ -488,7 +488,7 @@ public class MapServiceImpl implements MapService {
         try {
 	        Properties properties = getProperties();
 	        properties.put("nameColor", colorToString(c));
-            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            OutputStream os = Files.newOutputStream(Paths.get("resources/properties"));
             properties.store(os, "");
             os.close();
         } catch (IOException e) {
@@ -501,7 +501,7 @@ public class MapServiceImpl implements MapService {
         try {
 	        Properties properties = getProperties();
 	        properties.put("worldIconSize", "" + size);
-            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            OutputStream os = Files.newOutputStream(Paths.get("resources/properties"));
             properties.store(os, "");
             os.close();
         } catch (IOException e) {
@@ -521,7 +521,7 @@ public class MapServiceImpl implements MapService {
         try {
 	        Properties properties = getProperties();
 	        properties.put("textSize", "" + size);
-            OutputStream os = Files.newOutputStream(Paths.get("properties"));
+            OutputStream os = Files.newOutputStream(Paths.get("resources/properties"));
             properties.store(os, "");
             os.close();
         } catch (IOException e) {

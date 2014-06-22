@@ -1,0 +1,14 @@
+culture Garethisch
+maleFirstNames START Anton, Hugo, Klaus, END
+femaleFirstNames START Berta, Klara, Misty, END
+lastNames MODE NORMAL START Huber, Schmied, END
+
+culture Zwergisch
+maleFirstNames START Ramox, Topax, Remax, END
+femaleFirstNames START Agescha, Andra, Artrima, END
+lastNames MODE CHILDOF BOTH PREFIX START Sohn des , Tochter der , END
+
+culture Thorwalsch
+maleFirstNames START Aki, Angar, Aril, END
+femaleFirstNames START Akja, Alfhild, Algrid, END
+lastNames MODE CHILDOF BOTH SUFFIX START son, dottir, END 
