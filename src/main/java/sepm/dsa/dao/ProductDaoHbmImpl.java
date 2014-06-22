@@ -1,8 +1,6 @@
 package sepm.dsa.dao;
 
 import org.hibernate.Query;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
 import sepm.dsa.model.Region;
@@ -10,8 +8,6 @@ import sepm.dsa.model.Region;
 import java.util.List;
 import java.util.Vector;
 
-@Repository
-@Transactional(readOnly = true)
 public class ProductDaoHbmImpl
 	extends BaseDaoHbmImpl<Product>
 	implements ProductDao {

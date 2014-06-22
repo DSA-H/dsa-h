@@ -17,7 +17,6 @@ public class AssortmentNatureDaoHbmImpl extends BaseDaoHbmImpl<AssortmentNature>
     @Override
     public AssortmentNature update(AssortmentNature model) {
         AssortmentNature result = super.update(model);
-//        model.getTraderCategory().putAssortment(model);
         return result;
     }
 

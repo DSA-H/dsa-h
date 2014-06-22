@@ -17,14 +17,6 @@ public class OfferDaoHbmImpl extends BaseDaoHbmImpl<Offer> implements OfferDao {
         model.getTrader().getOffers().remove(model);
     }
 
-//    @Override
-//    public Offer update(Offer model) {
-//        Offer result = super.update(model);
-//        result.getTrader().getOffers().remove(result);
-//        result.getTrader().getOffers().add(result);
-//        return result;
-//    }
-
     @Override
     public Offer add(Offer model) {
         Offer result = super.add(model);

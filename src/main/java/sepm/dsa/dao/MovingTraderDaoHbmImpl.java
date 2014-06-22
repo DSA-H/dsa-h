@@ -1,13 +1,11 @@
 package sepm.dsa.dao;
 
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-@Transactional(readOnly = true)
 public class MovingTraderDaoHbmImpl
 		extends BaseDaoHbmImpl<MovingTrader>
 		implements MovingTraderDao {

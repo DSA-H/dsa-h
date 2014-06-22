@@ -1,14 +1,12 @@
 package sepm.dsa.dao;
 
 import org.hibernate.Query;
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.CurrencySet;
 import sepm.dsa.model.Region;
 
 import java.util.List;
 import java.util.Vector;
 
-@Transactional(readOnly = true)
 public class RegionDaoHbmImpl
 	extends BaseDaoHbmImpl<Region>
 	implements RegionDao {

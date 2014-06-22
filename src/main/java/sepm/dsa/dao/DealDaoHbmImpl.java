@@ -1,7 +1,10 @@
 package sepm.dsa.dao;
 
 import org.hibernate.Query;
-import sepm.dsa.model.*;
+import sepm.dsa.model.Deal;
+import sepm.dsa.model.Player;
+import sepm.dsa.model.Product;
+import sepm.dsa.model.Trader;
 
 import java.util.List;
 import java.util.Vector;

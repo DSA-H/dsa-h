@@ -1,19 +1,16 @@
 package sepm.dsa.dao;
 
 import org.hibernate.Query;
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Tavern;
 
 import java.util.List;
 import java.util.Vector;
 
-@Transactional(readOnly = true)
 public class TavernDaoHbmImpl
 	extends BaseDaoHbmImpl<Tavern>
 	implements TavernDao {
 
     @Override
-    @Transactional(readOnly = false)
     public List<Tavern> getAllByLocation(int locationId) {
         log.debug("calling getAll()");
         Query query = sessionFactory.getCurrentSession().getNamedQuery("Tavern.findAllByLocation");

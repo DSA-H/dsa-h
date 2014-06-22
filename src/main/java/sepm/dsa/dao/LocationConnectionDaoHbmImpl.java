@@ -1,9 +1,6 @@
 package sepm.dsa.dao;
 
 import org.hibernate.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
 
@@ -11,12 +8,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
-@Transactional(readOnly = true)
 public class LocationConnectionDaoHbmImpl
         extends BaseDaoHbmImpl<LocationConnection>
         implements LocationConnectionDao {
-
-    private static final Logger log = LoggerFactory.getLogger(LocationConnectionDaoHbmImpl.class);
 
     @Override
     public LocationConnection add(LocationConnection model) {

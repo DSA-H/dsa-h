@@ -1,15 +1,11 @@
 package sepm.dsa.dao;
 
 import org.hibernate.Query;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.ProductCategory;
 
 import java.util.List;
 import java.util.Vector;
 
-@Repository
-@Transactional(readOnly = true)
 public class ProductCategoryDaoHbmImpl
 	extends BaseDaoHbmImpl<ProductCategory>
 	implements ProductCategoryDao {
@@ -20,24 +16,6 @@ public class ProductCategoryDaoHbmImpl
         if (model.getParent() != null) {
             result.getParent().getChilds().add(model);
         }
-        return result;
-    }
-
-    @Override
-    public ProductCategory update(ProductCategory model) {
-
-        // this should work if a transient model (not in the persistence context) is the parameter
-//        ProductCategory p = (ProductCategory) sessionFactory.getCurrentSession().load(ProductCategory.class, model.getId());
-//        if (p.getParent() != null) {
-//            p.getParent().getChilds().remove(model);
-//        }
-//        if (model.getParent() != null) {
-//            ProductCategory newParent = (ProductCategory) sessionFactory.getCurrentSession().load(ProductCategory.class, model.getParent().getId());
-//            newParent.getChilds().add(model);
-//        }
-
-        ProductCategory result = super.update(model);
-
         return result;
     }
 

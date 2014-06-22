@@ -1,6 +1,5 @@
 package sepm.dsa.dao;
 
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Deal;
 import sepm.dsa.model.Player;
 import sepm.dsa.model.Product;
@@ -8,7 +7,6 @@ import sepm.dsa.model.Trader;
 
 import java.util.List;
 
-@Transactional(readOnly = true)
 public interface DealDao extends BaseDao<Deal> {
 
     /**

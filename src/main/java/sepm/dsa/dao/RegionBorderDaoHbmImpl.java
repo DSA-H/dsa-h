@@ -1,14 +1,12 @@
 package sepm.dsa.dao;
 
 import org.hibernate.Query;
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.RegionBorder;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
-@Transactional(readOnly = true)
 public class RegionBorderDaoHbmImpl
 	extends BaseDaoHbmImpl<RegionBorder>
 	implements RegionBorderDao {
