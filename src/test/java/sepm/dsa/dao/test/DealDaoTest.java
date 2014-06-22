@@ -30,6 +30,7 @@ public class DealDaoTest extends AbstractDatabaseTest {
     }
     // TODO test things...
 
+    @Ignore
     @Test
     public void add_shouldPersistEntry() {
 
@@ -66,6 +67,10 @@ public class DealDaoTest extends AbstractDatabaseTest {
         saveCancelService.save();
 
         assertEquals(dealsBefore + 1, dealDao.getAll().size());
+
+    }
+
+    public void update_shouldUpdateEntity() {
 
     }
 
