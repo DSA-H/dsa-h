@@ -269,6 +269,7 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
         Double offerAmountDifference = unit.exchange((double) amount, product.getUnit());
         boolean removeRemainingOfferAmount = false;
         if (offer.getAmount() - offerAmountDifference < 0) {
+            // ask to buy all remaining
             Unit productUnit = offer.getProduct().getUnit();
             int newAmount = offer.getAmount().intValue();
 

@@ -118,7 +118,7 @@ public interface TraderService {
 
     void addManualOffer(Trader trader, Offer offer);
 
-    void removeManualOffer(Trader trader, Offer offer, int amount);
+    void removeManualOffer(Trader trader, Offer offer, double amount);
 
     /**
      *

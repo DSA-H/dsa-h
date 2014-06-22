@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="307.0" prefWidth="321.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.ChangeOfferPriceController">
+<children><Label layoutX="76.0" layoutY="26.0" text="Angebot bearbeiten">
+<font>
+<Font name="System Bold" size="18.0" />
+</font></Label>
+    <HBox alignment="CENTER_RIGHT" layoutX="12.0" layoutY="266.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="27.0" prefWidth="297.0" spacing="10.0">
+<children>
+<Button fx:id="cancelButton" alignment="CENTER" mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="25.0" prefWidth="94.0" text="Abbrechen" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
+<Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSavePressed" text="Speichern" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
+</children>
+<opaqueInsets>
+<Insets />
+</opaqueInsets>
+</HBox><Label fx:id="offerLabel" layoutX="27.0" layoutY="71.0" prefHeight="17.0" prefWidth="277.0" text="Angebot A (Qualität)" /><TextField fx:id="tf_CurrencyAmount1" layoutX="83.0" layoutY="103.0" prefHeight="25.0" prefWidth="59.0" /><Label fx:id="lbl_CurrencyAmount1" layoutX="144.0" layoutY="107.0" text="Currency1" /><Label fx:id="lbl_CurrencyAmount2" layoutX="144.0" layoutY="136.0" text="Currency2" /><TextField fx:id="tf_CurrencyAmount2" layoutX="83.0" layoutY="132.0" prefHeight="25.0" prefWidth="59.0" /><TextField fx:id="tf_CurrencyAmount4" layoutX="83.0" layoutY="190.0" prefHeight="25.0" prefWidth="59.0" /><Label fx:id="lbl_CurrencyAmount4" layoutX="144.0" layoutY="194.0" text="Currency4" /><Label fx:id="lbl_CurrencyAmount3" layoutX="144.0" layoutY="165.0" text="Currency3" /><TextField fx:id="tf_CurrencyAmount3" layoutX="83.0" layoutY="161.0" prefHeight="25.0" prefWidth="59.0" /><Label fx:id="lbl_CurrencyAmount5" layoutX="144.0" layoutY="223.0" text="Currency5" /><TextField fx:id="tf_CurrencyAmount5" layoutX="83.0" layoutY="219.0" prefHeight="25.0" prefWidth="59.0" /><Label layoutX="27.0" layoutY="107.0" text="Preis:" />
+</children></Pane>

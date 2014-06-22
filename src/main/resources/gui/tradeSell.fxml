@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="458.0" prefWidth="334.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.TradeSellToPlayerController">
    <children>
@@ -32,7 +32,7 @@
       <ChoiceBox fx:id="selectedUnit" layoutX="172.0" layoutY="143.0" prefWidth="150.0" />
       <Label fx:id="selectedOffer" layoutX="172.0" layoutY="80.0" prefHeight="26.0" prefWidth="150.0" text="gewählte Ware" />
       <TextField fx:id="selectedAmount" layoutX="172.0" layoutY="110.0" />
-      <Label layoutX="119.0" layoutY="212.0" text="Preis:" />
+      <Label layoutX="117.0" layoutY="216.0" text="Preis:" />
       <ChoiceBox fx:id="selectedCurrency" layoutX="172.0" layoutY="175.0" prefWidth="150.0" />
       <Label layoutX="95.0" layoutY="180.0" text="Währung:" />
       <Label layoutX="108.0" layoutY="57.0" text="Spieler:" />

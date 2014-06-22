@@ -314,7 +314,7 @@ public class MainMenuController extends BaseControllerImpl {
 						.message("Wollen Sie den Ort '" + selectedLocation.getName() + "' wirklich löschen? Folgende verbundenden Einträge würden ebenfalls gelöscht werden:" + connectedEntries)
 						.actions(Dialog.Actions.NO, Dialog.Actions.YES)
 						.showConfirm();
-                
+
 				if (response == Dialog.Actions.YES) {
 					locationService.remove(selectedLocation);
 					saveCancelService.save();

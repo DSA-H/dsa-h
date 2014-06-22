@@ -23,6 +23,7 @@ import sepm.dsa.service.*;
 import sepm.dsa.util.CurrencyFormatUtil;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,7 @@ public class TraderDetailsController extends BaseControllerImpl {
     private static final Logger log = LoggerFactory.getLogger(TraderDetailsController.class);
     private SpringFxmlLoader loader;
     private TraderService traderService;
+    private RollDiceService rollDiceService;
 
     private Trader trader;
     private Offer selectedOffer;
@@ -164,8 +166,8 @@ public class TraderDetailsController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("reload TraderDetailsController");
-        checkFocus();
         refreshView();
+        checkFocus();
     }
 
     private void initialzeTableWithColums() {
@@ -261,7 +263,6 @@ public class TraderDetailsController extends BaseControllerImpl {
         stage.setScene(new Scene(scene, 785, 513));
     }
 
-    // todo: Move to service layer
     @FXML
     private void onRolePressed() {
         log.debug("called onRolePressed");
@@ -276,37 +277,25 @@ public class TraderDetailsController extends BaseControllerImpl {
                     .showWarning();
             return;
         }
-        int dice1 = (int) (Math.random() * 20) + 1;
-        int dice2 = (int) (Math.random() * 20) + 1;
-        int dice3 = (int) (Math.random() * 20) + 1;
-        int result = trader.getConvince() - difficulty;
-        if (result < 0) {
-            difficulty = result;
-            result = 0;
-        } else {
-            difficulty = 0;
-        }
-        if (dice1 > (trader.getMut() + difficulty)) {
-            result -= (dice1 - (trader.getMut() + difficulty));
-        }
-        if (dice2 > (trader.getIntelligence() + difficulty)) {
-            result -= (dice2 - (trader.getIntelligence() + difficulty));
-        }
-        if (dice3 > (trader.getCharisma() + difficulty)) {
-            result -= (dice3 - (trader.getCharisma() + difficulty));
-        }
-        if (dice1 == 20 && dice2 == 20 || dice2 == 20 && dice3 == 20 || dice1 == 20 && dice3 == 20) {
-            resultLabel.setText("PATZER");
-            resultLabel.setTextFill(Color.RED);
-        } else if (dice1 == 1 && dice2 == 1 || dice2 == 1 && dice3 == 1 || dice1 == 1 && dice3 == 1) {
-            resultLabel.setText("MEISTERHAFT");
-            resultLabel.setTextFill(Color.GREEN);
-        } else if (result >= 0) {
-            resultLabel.setText("" + result);
-            resultLabel.setTextFill(Color.GREEN);
-        } else if (result < 0) {
-            resultLabel.setText("" + result);
-            resultLabel.setTextFill(Color.RED);
+        String result = rollDiceService.talentThrow(trader.getMut(),
+                trader.getIntelligence(),
+                trader.getCharisma(),
+                trader.getConvince(),
+                difficulty);
+        resultLabel.setText(result);
+        // color the result text
+        try{
+            if(Integer.parseInt(result) >= 0) {
+                resultLabel.setTextFill(Color.GREEN);
+            }else {
+                resultLabel.setTextFill(Color.RED);
+            }
+        }catch (NumberFormatException ex) {
+            if(result.equals("MEISTERHAFT")) {
+                resultLabel.setTextFill(Color.GREEN);
+            }else {
+                resultLabel.setTextFill(Color.RED);
+            }
         }
     }
 
@@ -328,56 +317,41 @@ public class TraderDetailsController extends BaseControllerImpl {
     private void onDeletePressed() {
         log.debug("called onDeletePressed");
         Offer o = offerTable.getSelectionModel().getSelectedItem();
+        if(o == null) {
+            throw new DSAValidationException("Kein Angebot ausgewählt");
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Wie viel ");
+        sb.append(o.getProduct().getName());
+        if(o.getProduct().getQuality()) {
+            sb.append(" (").append(o.getQuality()).append(")");
+        }
+        sb.append(" wollen sie entfernen?");
 
         Optional<String> response = Dialogs.create()
                 .title("Löschen?")
+                .owner(null)
                 .masthead(null)
-                .message("Wie viel wollen sie entfernen?")
-                .showTextInput();
+                .message(sb.toString())
+                .showTextInput("1");
 
-        int amount = 0;
+        Double amount = 0d;
         if (response.isPresent()) {
             try {
-                amount = Integer.parseInt(response.get());
-                if (amount < 0) {
-                    Dialogs.create()
-                            .title("Ungültige Eingabe")
-                            .masthead(null)
-                            .message("Ungültige Eingabe")
-                            .showError();
-                    return;
-                }
-            } catch (NumberFormatException nfe) {
-                Dialogs.create()
-                        .title("Ungültige Eingabe")
-                        .masthead(null)
-                        .message("Ungültige Eingabe")
-                        .showError();
-                return;
+                DecimalFormat df = new DecimalFormat();
+                amount = df.parse(response.get()).doubleValue();
+            } catch (ParseException nfe) {
+                throw new DSAValidationException("Die zu entfernende Menge muss eine Zahl sein!");
             }
         } else {
-            /*Dialogs.create()
-                    .title("Ungültige Eingabe")
-                    .masthead(null)
-                    .message("Ungültige Eingabe")
-                    .showError();*/
             return;
         }
-
-        boolean remove = false;
-        if (amount >= o.getAmount()) {
-            remove = true;
+        if (amount <= 0) {
+            throw new DSAValidationException("Die zu entfernende Menge muss eine positive Zahl sein!");
         }
 
         traderService.removeManualOffer(trader, o, amount);
-
-        if (remove) {
-            offerTable.getItems().remove(o);
-        } else {
-            offerTable.getItems().set(offerTable.getItems().indexOf(o), o);
-        }
-
-        checkFocus();
         saveCancelService.save();
     }
 
@@ -422,46 +396,22 @@ public class TraderDetailsController extends BaseControllerImpl {
         log.debug("called onChangePricePressed");
         Offer o = offerTable.getSelectionModel().getSelectedItem();
 
-        Optional<String> response = Dialogs.create()
-                .title("Preis ändern")
-                .masthead(null)
-                .message("Wie hoch soll der neue Standardpreis sein?")
-                .showTextInput();
+        if (o != null) {
+            // open modal window
+            Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            Parent scene = (Parent) loader.load("/gui/changeOfferPrice.fxml", dialog);
+            ChangeOfferPriceController ctrl = loader.getController();
+            ctrl.setOffer(o);
+            ctrl.reload();
 
-        int price = 0;
-        if (response.isPresent()) {
-            try {
-                price = Integer.parseInt(response.get());
-                if (price < 0) {
-                    Dialogs.create()
-                            .title("Ungültige Eingabe")
-                            .masthead(null)
-                            .message("Ungültige Eingabe")
-                            .showError();
-                    return;
-                }
-            } catch (NumberFormatException nfe) {
-                Dialogs.create()
-                        .title("Ungültige Eingabe")
-                        .masthead(null)
-                        .message("Ungültige Eingabe")
-                        .showError();
-                return;
-            }
+            dialog.setTitle("Preis ändern");
+            dialog.setScene(new Scene(scene, 307, 321));
+            dialog.setResizable(false);
+            dialog.show();
         } else {
-            /*Dialogs.create()
-                    .title("Ungültige Eingabe")
-                    .masthead(null)
-                    .message("Ungültige Eingabe")
-                    .showError();*/
-            return;
+            throw new DSAValidationException("Kein Angebot ausgewählt");
         }
-
-        o.setPricePerUnit(price);
-        offerTable.getItems().set(offerTable.getItems().indexOf(o), o);
-
-        checkFocus();
-        saveCancelService.save();
     }
 
     @FXML
@@ -549,5 +499,9 @@ public class TraderDetailsController extends BaseControllerImpl {
 
     public void setCurrencySetService(CurrencySetService currencySetService) {
         this.currencySetService = currencySetService;
+    }
+
+    public void setRollDiceService(RollDiceService rollDiceService) {
+        this.rollDiceService = rollDiceService;
     }
 }
