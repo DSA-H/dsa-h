@@ -16,9 +16,7 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 public class DealServiceTest extends AbstractDatabaseTest {
 
@@ -65,7 +63,6 @@ public class DealServiceTest extends AbstractDatabaseTest {
         Set<Deal> deals = new HashSet<>(dealService.getAllBetweenPlayerAndTraderLastXDays(player, trader, 365));
 
         assertEquals(expectedDeals, deals);
-//        verify(timeServiceMock, times(1)).getCurrentDate();
     }
 
 

@@ -126,7 +126,6 @@ public class EditLocationConnectionsController extends BaseControllerImpl {
         }
 
         checkFocus();
-        // TODO suggest connections click
     }
 
     public void setLoader(SpringFxmlLoader loader) {
