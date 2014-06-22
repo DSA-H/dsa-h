@@ -29,7 +29,7 @@ public class TimeServiceImpl implements TimeService {
     private int forwardMaxProgress = 100;
     private String forwardMessage = "Lade ...";
 
-	private Properties properties;
+	private Properties properties = new Properties();;
 
 	@Override
 	public DSADate getCurrentDate() {
