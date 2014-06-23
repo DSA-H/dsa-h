@@ -12,6 +12,7 @@ import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.DSADate;
 import sepm.dsa.service.SaveCancelService;
@@ -86,10 +87,15 @@ public class ForwardDateController extends BaseControllerImpl {
         service.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent t) {
-                saveCancelService.save();
-                Stage stage = (Stage) day.getScene().getWindow();
-                stage.close();
+            saveCancelService.save();
+            Stage stage = (Stage) day.getScene().getWindow();
+            stage.close();
             }
+        });
+
+        service.setOnFailed((t) -> {
+            saveCancelService.save();
+            throw new DSAValidationException("Fehler! Zeit vorwärtsstellen konnte nicht abgeschlossen werden!");
         });
 
         Dialogs.create()
