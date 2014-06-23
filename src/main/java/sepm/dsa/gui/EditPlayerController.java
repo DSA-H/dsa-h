@@ -69,7 +69,14 @@ public class EditPlayerController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("reload EditPlayerController");
-        saveCancelService.refresh(selectedPlayer);
+	    if (selectedPlayer.getId() != null) {
+		    try {
+			    saveCancelService.refresh(selectedPlayer);
+		    } catch (Exception e) {
+			    Stage stage = (Stage) dealsTable.getScene().getWindow();
+			    stage.close();
+		    }
+	    }
         if (selectedPlayer.getDeals().size() > 0) {
             dealsTable.getItems().clear();
             dealsTable.getItems().setAll(selectedPlayer.getDeals());
@@ -82,12 +89,7 @@ public class EditPlayerController extends BaseControllerImpl {
 
         saveCancelService.save();
         Stage stage = (Stage) nameField.getScene().getWindow();
-
-        Parent scene = (Parent) loader.load("/gui/playerlist.fxml", stage);
-        PlayerListController ctrl = loader.getController();
-        ctrl.reload();
-
-        stage.setScene(new Scene(scene, 600, 438));
+		stage.close();
     }
 
     @FXML
@@ -111,10 +113,7 @@ public class EditPlayerController extends BaseControllerImpl {
 
         // return to players-list
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/playerlist.fxml", stage);
-        PlayerListController ctrl = loader.getController();
-        ctrl.reload();
-        stage.setScene(new Scene(scene, 600, 438));
+	    stage.close();
     }
 
     private void initialzeTableWithColums() {
