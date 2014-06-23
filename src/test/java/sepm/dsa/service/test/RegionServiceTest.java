@@ -92,7 +92,6 @@ public class RegionServiceTest extends AbstractDatabaseTest {
 	    saveCancelService.save();
 
         assertEquals(size + 1, regionService.getAll().size());
-        //TODO: equals is not working right now => DONE
         assertTrue(regionService.get(addRegion.getId()).equals(addRegion));
         assertEquals(regionService.get(addRegion.getId()), addRegion);
     }
