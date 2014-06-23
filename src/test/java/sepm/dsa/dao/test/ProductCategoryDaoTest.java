@@ -34,6 +34,7 @@ public class ProductCategoryDaoTest extends AbstractDatabaseTest {
         productCategory.setProducts(products);
 
         productCategoryDao.add(productCategory);
+        saveCancelService.save();
 
         productCategory = productCategoryDao.get(productCategory.getId());
         assertNotNull(productCategory);
@@ -54,22 +55,9 @@ public class ProductCategoryDaoTest extends AbstractDatabaseTest {
         productCategory.setParent(parent);
 
         productCategoryDao.add(productCategory);
+        saveCancelService.save();
         productCategory = productCategoryDao.get(productCategory.getId());
         assertNotNull(productCategory);
-    }
-
-    @Test
-    public void add_WithParentCycle() {
-        ProductCategory parent = productCategoryDao.get(5);
-        ProductCategory productCategory = new ProductCategory();
-        productCategory.setName("test2");
-        productCategory.setParent(parent);
-
-        parent.setParent(productCategory);
-
-        productCategoryDao.add(productCategory);
-        productCategoryDao.update(parent);
-        // todo: Should throw a exception because of the Cycle
     }
 
     @Test

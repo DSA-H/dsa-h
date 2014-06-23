@@ -130,6 +130,10 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         if (violations.size() > 0) {
             throw new DSAValidationException("Produktkategorie ist nicht valide.", violations);
         }
+        if (product.getParent() != null && getAllChilds(product).contains(product.getParent())) {
+            throw new DSAValidationException("Produktkategorie ist nicht valide. Die Produktkategorie hat als " +
+                    "Oberkategorie einen seiner Unterkategorien, Zyklen sind nicht erlaubt.");
+        }
     }
 
     public void setProductCategoryDao(ProductCategoryDao productCategoryDao) {
