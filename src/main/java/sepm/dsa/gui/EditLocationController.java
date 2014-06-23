@@ -51,7 +51,7 @@ public class EditLocationController extends BaseControllerImpl {
     @FXML
     private ChoiceBox<TownSize> sizeChoiceBox;
     @FXML
-    private ChoiceBox<Region> regionChoiceBox;
+    private ComboBox<Region> regionChoiceBox;
     @FXML
     private TextField height;
     @FXML

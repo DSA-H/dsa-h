@@ -209,5 +209,11 @@ public class Trader implements BaseModel {
     }
 
 	@Override
-	public String toString() { return category.getName() + " " + name; }
+	public String toString() {
+        if(category != null) {
+            return category.getName() + " " + name;
+        }else {
+            return name;
+        }
+    }
 }

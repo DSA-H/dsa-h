@@ -2,6 +2,7 @@ package sepm.dsa.gui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -28,13 +29,13 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
     @FXML
     private Label selectedOffer;
     @FXML
-    private ChoiceBox<Unit> selectedUnit;
+    private ComboBox<Unit> selectedUnit;
     @FXML
-    private ChoiceBox<Player> selectedPlayer;
+    private ComboBox<Player> selectedPlayer;
     @FXML
     private TextField selectedAmount;
     @FXML
-    private ChoiceBox<CurrencySet> selectedCurrency;
+    private ComboBox<CurrencySet> selectedCurrency;
     @FXML
     private TextField selectedDiscount;
 

@@ -12,8 +12,10 @@ import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 import sepm.dsa.util.CurrencyFormatUtil;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 public class CalculatePriceController extends BaseControllerImpl {
@@ -26,7 +28,7 @@ public class CalculatePriceController extends BaseControllerImpl {
     private ProductService productService;
     private CurrencySetService currencySetService;
     private List<Product> allProducts;
-    private Trader calculationTrader = new Trader();
+    private Trader calculationTrader;
 
     private CurrencySet defaultCurrencySet;
 
@@ -37,7 +39,7 @@ public class CalculatePriceController extends BaseControllerImpl {
     @FXML
     private ChoiceBox<ProductQuality> choiceQuality;
     @FXML
-    private ChoiceBox<Location> choiceLocation;
+    private ComboBox<Location> choiceLocation;
     @FXML
     private TableView<Product> productTable;
     @FXML
@@ -46,6 +48,13 @@ public class CalculatePriceController extends BaseControllerImpl {
     private Button cancelButton;
     @FXML
     private Button calcButton;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
+        calculationTrader = new Trader();
+        calculationTrader.setName("CalculatePriceDummyTrader");
+    }
 
     @Override
     public void reload() {

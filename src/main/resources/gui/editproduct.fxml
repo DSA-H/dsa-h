@@ -42,14 +42,14 @@
         </HBox>
         <HBox alignment="CENTER_RIGHT" layoutX="15.0" layoutY="396.0" prefHeight="36.0" prefWidth="282.0" spacing="10.0">
             <children>
-                <ChoiceBox fx:id="categorieChoiceBox" layoutX="31.0" layoutY="307.0" prefHeight="25.0" prefWidth="114.0" />
+                <ComboBox fx:id="categorieChoiceBox" layoutX="31.0" layoutY="307.0" prefHeight="25.0" prefWidth="114.0" />
                 <Button fx:id="addCategorieButton" layoutX="160.0" layoutY="307.0" mnemonicParsing="false" onAction="#onAddCategoryPressed" prefHeight="25.0" prefWidth="81.0" text="Hinzufügen" />
                 <Button fx:id="removeCategorieButton" layoutX="248.0" layoutY="307.0" mnemonicParsing="false" onAction="#onRemoveCategoryPressed" prefHeight="25.0" prefWidth="68.0" text="Entfernen" />
             </children>
         </HBox>
         <HBox alignment="CENTER_RIGHT" layoutX="301.0" layoutY="396.0" prefHeight="36.0" prefWidth="282.0" spacing="10.0">
             <children>
-                <ChoiceBox fx:id="regionChoiceBox" layoutX="31.0" layoutY="307.0" prefHeight="25.0" prefWidth="106.0" />
+                <ComboBox fx:id="regionChoiceBox" layoutX="31.0" layoutY="307.0" prefHeight="25.0" prefWidth="106.0" />
                 <Button fx:id="addRegionButton" layoutX="160.0" layoutY="307.0" mnemonicParsing="false" onAction="#onAddProductionPressed" prefHeight="25.0" prefWidth="81.0" text="Hinzufügen" />
                 <Button fx:id="removeRegionButton" layoutX="248.0" layoutY="307.0" mnemonicParsing="false" onAction="#onRemoveProductionPressed" prefHeight="25.0" prefWidth="68.0" text="Entfernen" />
             </children>

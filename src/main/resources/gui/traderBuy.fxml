@@ -13,7 +13,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="selectedPlayer" layoutX="408.0" layoutY="130.0" prefWidth="150.0" />
+      <ComboBox fx:id="selectedPlayer" layoutX="408.0" layoutY="130.0" prefWidth="150.0" />
       <Label layoutX="343.0" layoutY="135.0" text="Spieler:" />
       <TableView fx:id="productsTable" layoutX="14.0" layoutY="100.0" onMouseClicked="#checkFocus" prefHeight="312.0" prefWidth="290.0">
         <columns>
@@ -31,11 +31,11 @@
          </children>
       </HBox>
       <Label layoutX="331.0" layoutY="240.0" text="Währung:" />
-      <ChoiceBox fx:id="selectedCurrency" layoutX="408.0" layoutY="236.0" prefWidth="150.0" />
+      <ComboBox fx:id="selectedCurrency" layoutX="408.0" layoutY="236.0" prefWidth="150.0" />
       <Label layoutX="350.0" layoutY="275.0" text="Preis:" />
       <TextField fx:id="tf_CurrencyAmount1" layoutX="408.0" layoutY="271.0" prefHeight="25.0" prefWidth="59.0" />
       <TextField fx:id="selectedAmount" layoutX="408.0" layoutY="202.0" />
-      <ChoiceBox fx:id="selectedUnit" layoutX="407.0" layoutY="167.0" prefWidth="150.0" />
+      <ComboBox fx:id="selectedUnit" layoutX="407.0" layoutY="167.0" prefWidth="150.0" />
       <Label layoutX="343.0" layoutY="207.0" text="Menge:" />
       <Label layoutX="14.0" layoutY="80.0" text="gefundene Waren:" />
       <TextField fx:id="searchField" layoutX="107.0" layoutY="40.0" prefHeight="26.0" prefWidth="290.0" />

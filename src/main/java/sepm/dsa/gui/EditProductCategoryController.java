@@ -29,7 +29,7 @@ public class EditProductCategoryController extends BaseControllerImpl {
     @FXML
     private TextField nameField;
     @FXML
-    private ChoiceBox<ProductCategory> choiceParent;
+    private ComboBox<ProductCategory> choiceParent;
 
     @Override
     public void reload() {

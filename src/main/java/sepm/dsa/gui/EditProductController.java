@@ -49,9 +49,9 @@ public class EditProductController extends BaseControllerImpl {
     @FXML
     private CheckBox qualityBox;
     @FXML
-    private ChoiceBox<ProductCategory> categorieChoiceBox;
+    private ComboBox<ProductCategory> categorieChoiceBox;
     @FXML
-    private ChoiceBox<Region> regionChoiceBox;
+    private ComboBox<Region> regionChoiceBox;
     @FXML
     private Button addCategorieButton;
     @FXML

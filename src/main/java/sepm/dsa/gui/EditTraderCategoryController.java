@@ -1,5 +1,7 @@
 package sepm.dsa.gui;
 
+import com.sun.deploy.uitoolkit.impl.fx.ui.FXConsole;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -41,7 +43,7 @@ public class EditTraderCategoryController extends BaseControllerImpl {
     @FXML
     private TextArea commentField;
     @FXML
-    private ChoiceBox<ProductCategory> productCategoryChoiceBox;
+    private ComboBox<ProductCategory> productCategoryComboBox;
     @FXML
     private TableView<AssortmentNature> assortmentTable;
     @FXML
@@ -76,10 +78,10 @@ public class EditTraderCategoryController extends BaseControllerImpl {
             for(AssortmentNature as : assortmentTable.getItems()) {
                 productCategories.remove(as.getProductCategory());
             }
-            productCategoryChoiceBox.getItems().setAll(productCategories);
+            productCategoryComboBox.getItems().setAll(productCategories);
         } else {
             traderCategory = new TraderCategory();
-	        productCategoryChoiceBox.getItems().setAll(productCategories);
+            productCategoryComboBox.getItems().setAll(productCategories);
         }
 
         checkFocus();
@@ -91,7 +93,7 @@ public class EditTraderCategoryController extends BaseControllerImpl {
         AssortmentNature selAssortment = assortmentTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         if (selAssortment != null) {
             assortmentTable.getItems().remove(selAssortment);
-            productCategoryChoiceBox.getItems().add(selAssortment.getProductCategory());
+            productCategoryComboBox.getItems().add(selAssortment.getProductCategory());
         }
         checkFocus();
     }
@@ -100,7 +102,7 @@ public class EditTraderCategoryController extends BaseControllerImpl {
     private void addAssortmentClicked() {
         log.debug("calling addAssortmentClicked");
 
-        ProductCategory selectedProductCategory = productCategoryChoiceBox.getSelectionModel().getSelectedItem();
+        ProductCategory selectedProductCategory = productCategoryComboBox.getSelectionModel().getSelectedItem();
         if (selectedProductCategory == null) {
             throw new DSAValidationException("Wählen sie eine Warenkategorie aus");
         }
@@ -122,8 +124,10 @@ public class EditTraderCategoryController extends BaseControllerImpl {
         assortmentNatureService.validate(assortToSave);
         assortmentTable.getItems().add(assortToSave);
 
-        productCategoryChoiceBox.getItems().remove(selectedProductCategory);
-        productCategoryChoiceBox.getSelectionModel().selectFirst();
+        reload();
+
+        productCategoryComboBox.getItems().remove(selectedProductCategory);
+        productCategoryComboBox.getSelectionModel().selectFirst();
     }
 
     @FXML

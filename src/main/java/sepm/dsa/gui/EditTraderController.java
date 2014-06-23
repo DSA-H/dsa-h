@@ -67,9 +67,9 @@ public class EditTraderController extends BaseControllerImpl {
     @FXML
     private TextField convinceField;
     @FXML
-    private ChoiceBox<Location> locationBox;
+    private ComboBox<Location> locationBox;
     @FXML
-    private ChoiceBox<TraderCategory> categoryBox;
+    private ComboBox<TraderCategory> categoryBox;
     @FXML
     private TextArea commentArea;
 

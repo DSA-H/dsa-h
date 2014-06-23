@@ -25,14 +25,14 @@
          </opaqueInsets>
       </HBox>
       <Label layoutX="88.0" layoutY="129.0" text="Währung 1:" />
-      <ChoiceBox fx:id="choice_Currency1" layoutX="166.0" layoutY="125.0" prefWidth="150.0" />
-      <ChoiceBox fx:id="choice_Currency2" layoutX="166.0" layoutY="160.0" prefWidth="150.0" />
+      <ComboBox fx:id="choice_Currency1" layoutX="166.0" layoutY="125.0" prefWidth="150.0" />
+      <ComboBox fx:id="choice_Currency2" layoutX="166.0" layoutY="160.0" prefWidth="150.0" />
       <Label layoutX="88.0" layoutY="164.0" text="Währung 2:" />
       <Label layoutX="88.0" layoutY="235.0" text="Währung 4:" />
-      <ChoiceBox fx:id="choice_Currency4" layoutX="166.0" layoutY="231.0" prefWidth="150.0" />
-      <ChoiceBox fx:id="choice_Currency3" layoutX="166.0" layoutY="196.0" prefWidth="150.0" />
+      <ComboBox fx:id="choice_Currency4" layoutX="166.0" layoutY="231.0" prefWidth="150.0" />
+      <ComboBox fx:id="choice_Currency3" layoutX="166.0" layoutY="196.0" prefWidth="150.0" />
       <Label layoutX="88.0" layoutY="200.0" text="Währung 3:" />
-      <ChoiceBox fx:id="choice_Currency5" layoutX="166.0" layoutY="265.0" prefWidth="150.0" />
+      <ComboBox fx:id="choice_Currency5" layoutX="166.0" layoutY="265.0" prefWidth="150.0" />
       <Label layoutX="88.0" layoutY="269.0" text="Währung 5:" />
    </children>
 </Pane>

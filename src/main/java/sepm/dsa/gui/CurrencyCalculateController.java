@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -27,9 +28,9 @@ public class CurrencyCalculateController extends BaseControllerImpl {
     private CurrencyService currencyService;
 
     @FXML
-    private ChoiceBox<Currency> choiceFirst;
+    private ComboBox<Currency> choiceFirst;
     @FXML
-    private ChoiceBox<Currency> choiceSecond;
+    private ComboBox<Currency> choiceSecond;
     @FXML
     private TextField textFirst;
     @FXML

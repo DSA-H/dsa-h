@@ -27,8 +27,8 @@
         <TextField fx:id="chField" layoutX="686.0" layoutY="118.0" prefHeight="25.0" prefWidth="34.0" />
         <TextField fx:id="convinceField" layoutX="686.0" layoutY="155.0" prefHeight="25.0" prefWidth="34.0" />
         <TextField fx:id="sizeField" layoutX="394.0" layoutY="155.0" />
-        <ChoiceBox fx:id="categoryBox" layoutX="392.0" layoutY="79.0" prefWidth="150.0" />
-        <ChoiceBox fx:id="locationBox" layoutX="393.0" layoutY="118.0" prefWidth="150.0" />
+        <ComboBox fx:id="categoryBox" layoutX="392.0" layoutY="79.0" prefWidth="150.0" />
+        <ComboBox fx:id="locationBox" layoutX="393.0" layoutY="118.0" prefWidth="150.0" />
         <Label layoutX="29.0" layoutY="352.0" text="Kommentare:" />
         <TextArea fx:id="commentArea" layoutX="27.0" layoutY="377.0" prefHeight="96.0" prefWidth="741.0" />
         <HBox alignment="CENTER_LEFT" layoutX="568.0" layoutY="446.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="90.0" prefWidth="200.0" spacing="10.0">
@@ -54,6 +54,6 @@
       <CheckBox fx:id="maleCheck" layoutX="115.0" layoutY="122.0" mnemonicParsing="false" text="männlich" />
       <Label alignment="CENTER_RIGHT" layoutY="83.0" prefWidth="100.0" text="Kultur:" />
       <Label alignment="CENTER_RIGHT" layoutY="122.0" prefWidth="100.0" text="Geschlecht:" />
-      <Button layoutX="114.0" layoutY="155.0" mnemonicParsing="false" onAction="#onGenerateNamePressed" prefWidth="150.0" text="Neu Generieren" />
+      <Button layoutX="114.0" layoutY="155.0" mnemonicParsing="false" onAction="#onGenerateNamePressed" prefWidth="150.0" text="Name Generieren" />
     </children>
 </Pane>

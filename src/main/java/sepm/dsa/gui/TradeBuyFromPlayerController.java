@@ -33,15 +33,15 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
     private List<Currency> currencies;
 
     @FXML
-    private ChoiceBox<Unit> selectedUnit;
+    private ComboBox<Unit> selectedUnit;
     @FXML
-    private ChoiceBox<Player> selectedPlayer;
+    private ComboBox<Player> selectedPlayer;
     @FXML
     private ChoiceBox<ProductQuality> selectedQuality;
     @FXML
     private TextField selectedAmount;
     @FXML
-    private ChoiceBox<CurrencySet> selectedCurrency;
+    private ComboBox<CurrencySet> selectedCurrency;
     @FXML
     private TableView<Product> productsTable;
     @FXML

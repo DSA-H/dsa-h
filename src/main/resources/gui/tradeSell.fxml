@@ -29,14 +29,14 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="selectedUnit" layoutX="172.0" layoutY="143.0" prefWidth="150.0" />
+      <ComboBox fx:id="selectedUnit" layoutX="172.0" layoutY="143.0" prefWidth="150.0" />
       <Label fx:id="selectedOffer" layoutX="172.0" layoutY="80.0" prefHeight="26.0" prefWidth="150.0" text="gewählte Ware" />
       <TextField fx:id="selectedAmount" layoutX="172.0" layoutY="110.0" />
       <Label layoutX="117.0" layoutY="216.0" text="Preis:" />
-      <ChoiceBox fx:id="selectedCurrency" layoutX="172.0" layoutY="175.0" prefWidth="150.0" />
+      <ComboBox fx:id="selectedCurrency" layoutX="172.0" layoutY="175.0" prefWidth="150.0" />
       <Label layoutX="95.0" layoutY="180.0" text="Währung:" />
       <Label layoutX="108.0" layoutY="57.0" text="Spieler:" />
-      <ChoiceBox fx:id="selectedPlayer" layoutX="172.0" layoutY="52.0" prefWidth="150.0" />
+      <ComboBox fx:id="selectedPlayer" layoutX="172.0" layoutY="52.0" prefWidth="150.0" />
       <TextField fx:id="selectedDiscount" layoutX="173.0" layoutY="360.0" prefHeight="25.0" prefWidth="40.0" />
       <Button layoutX="24.0" layoutY="360.0" mnemonicParsing="false" onAction="#calculateDiscount" prefHeight="26.0" prefWidth="122.0" text="Rabatt vorschlagen" />
       <TextField fx:id="tf_CurrencyAmount5" layoutX="173.0" layoutY="328.0" prefHeight="25.0" prefWidth="59.0" />
