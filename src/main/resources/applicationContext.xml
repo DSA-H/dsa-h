@@ -168,104 +168,96 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <!-- Services DI -->
+    <!-- ********** SERVICES ********* -->
+
+    <!-- Region Services -->
     <bean id="regionService" class="sepm.dsa.service.RegionServiceImpl">
         <property name="regionDao" ref="regionDao"/>
         <property name="regionBorderDao" ref="regionBorderDao"/>
         <property name="locationService" ref="locationService"/>
         <property name="productService" ref="productService"/>
     </bean>
-
-    <bean id="playerService" class="sepm.dsa.service.PlayerServiceImpl">
-        <property name="playerDao" ref="playerDao"/>
-        <property name="dealDao" ref="dealDao"/>
-    </bean>
-
     <bean id="regionBorderService" class="sepm.dsa.service.RegionBorderServiceImpl">
         <property name="regionBorderDao" ref="regionBorderDao"/>
     </bean>
 
-    <bean id="locationService" class="sepm.dsa.service.LocationServiceImpl">
-        <property name="locationDao" ref="locationDao"/>
-        <property name="traderService" ref="traderService"/>
-    </bean>
+    <!-- @TODO BorderCost Srevice??? -->
 
+    <!-- Currency Services -->
     <bean id="currencyService" class="sepm.dsa.service.CurrencyServiceImpl">
         <property name="currencyDao" ref="currencyDao"/>
     </bean>
+    <bean id="currencySetService" class="sepm.dsa.service.CurrencySetServiceImpl">
+	<property name="currencySetDao" ref="currencySetDao"/>
+	<property name="currencyService" ref="currencyService"/>
+	<property name="regionService" ref="regionService"/>
+    </bean>
 
+    <!-- Tavern Services -->
+    <bean id="tavernService" class="sepm.dsa.service.TavernServiceImpl">
+	<property name="tavernDao" ref="tavernDao"/>
+    </bean>
+
+    <!-- Location Services -->
+    <bean id="locationService" class="sepm.dsa.service.LocationServiceImpl">
+	<property name="locationDao" ref="locationDao"/>
+	<property name="traderService" ref="traderService"/>
+    </bean>
     <bean id="locationConnectionService" class="sepm.dsa.service.LocationConnectionServiceImpl">
         <property name="locationConnectionDao" ref="locationConnectionDao"/>
         <property name="locationDao" ref="locationDao"/>
         <property name="pathService" ref="pathService"/>
     </bean>
 
-    <bean id="tavernService" class="sepm.dsa.service.TavernServiceImpl">
-        <property name="tavernDao" ref="tavernDao"/>
-    </bean>
+    <!-- @TODO Weather??  & Path Service -->
 
+    <!-- Product Services -->
     <bean id="productService" class="sepm.dsa.service.ProductServiceImpl">
         <property name="productDao" ref="productDao"/>
         <property name="productCategoryService" ref="productCategoryService"/>
         <property name="offerDao" ref="offerDao"/>
         <property name="dealDao" ref="dealDao"/>
     </bean>
-
     <bean id="productCategoryService" class="sepm.dsa.service.ProductCategoryServiceImpl">
         <property name="productCategoryDao" ref="productCategoryDao"/>
         <property name="assortmentNatureService" ref="assortmentNatureService"/>
         <property name="productService" ref="productService"/>
     </bean>
 
+    <!-- Assortment Nature Services -->
+    <bean id="assortmentNatureService" class="sepm.dsa.service.AssortmentNatureServiceImpl">
+	<property name="assortmentNatureDao" ref="assortmentNatureDao" />
+    </bean>
+
+    <!-- Player Services -->
+    <bean id="playerService" class="sepm.dsa.service.PlayerServiceImpl">
+	<property name="playerDao" ref="playerDao"/>
+	<property name="dealDao" ref="dealDao"/>
+    </bean>
+
+    <!-- Unit Services -->
     <bean id="unitService" class="sepm.dsa.service.UnitServiceImpl">
         <property name="unitDao" ref="unitDao"/>
     </bean>
-
     <bean id="unitTypeService" class="sepm.dsa.service.UnitTypeServiceImpl">
         <property name="unitTypeDao" ref="unitTypeDao"/>
     </bean>
 
-    <bean id="traderCategoryService" class="sepm.dsa.service.TraderCategoryServiceImpl">
-        <property name="traderCategoryDao" ref="traderCategoryDao"/>
-        <property name="traderService" ref="traderService"/>
+    <!-- Dice Service -->
+    <bean id="rollDiceService" class="sepm.dsa.service.RollDiceServiceImpl">
     </bean>
 
-    <bean id="traderService" class="sepm.dsa.service.TraderServiceImpl">
-        <property name="traderDao" ref="traderDao"/>
-        <property name="movingTraderDao" ref="movingTraderDao"/>
-        <property name="offerDao" ref="offerDao" />
-        <property name="productService" ref="productService"/>
-        <property name="pathService" ref="pathService"/>
-        <property name="regionService" ref="regionService"/>
-        <property name="regionBorderService" ref="regionBorderService"/>
-        <property name="timeService" ref="timeService" />
-        <property name="dealService" ref="dealService" />
-        <property name="currencyService" ref="currencyService"/>
-    </bean>
-
+    <!-- Path Services -->
     <bean id="pathService" class="sepm.dsa.service.path.PathServiceDijkstraJGraphImpl">
     </bean>
 
-    <bean id="assortmentNatureService" class="sepm.dsa.service.AssortmentNatureServiceImpl">
-        <property name="assortmentNatureDao" ref="assortmentNatureDao" />
-    </bean>
-
-    <bean id="mapService" class="sepm.dsa.service.MapServiceImpl">
-        <property name="locationService" ref="locationService"/>
-        <property name="saveCancelService" ref="saveCancelService"/>
-    </bean>
-
+    <!-- Deal Services -->
     <bean id="dealService" class="sepm.dsa.service.DealServiceImpl">
         <property name="dealDao" ref="dealDao"/>
         <property name="timeService" ref="timeService"/>
     </bean>
 
-    <bean id="currencySetService" class="sepm.dsa.service.CurrencySetServiceImpl">
-        <property name="currencySetDao" ref="currencySetDao"/>
-        <property name="currencyService" ref="currencyService"/>
-        <property name="regionService" ref="regionService"/>
-    </bean>
-
+    <!-- Time Service -->
     <bean id="timeService" class="sepm.dsa.service.TimeServiceImpl">
         <property name="traderService" ref="traderService"/>
         <property name="offerDao" ref="offerDao" />
@@ -274,19 +266,41 @@
         <property name="mapService" ref="mapService"/>
     </bean>
 
+    <!--@TODO  map Service ??!?!?! -->
+    <bean id="mapService" class="sepm.dsa.service.MapServiceImpl">
+	<property name="locationService" ref="locationService"/>
+	<property name="saveCancelService" ref="saveCancelService"/>
+    </bean>
+
+    <!-- Trader Services -->
+    <bean id="traderService" class="sepm.dsa.service.TraderServiceImpl">
+	<property name="traderDao" ref="traderDao"/>
+	<property name="movingTraderDao" ref="movingTraderDao"/>
+	<property name="offerDao" ref="offerDao" />
+	<property name="productService" ref="productService"/>
+	<property name="pathService" ref="pathService"/>
+	<property name="regionService" ref="regionService"/>
+	<property name="regionBorderService" ref="regionBorderService"/>
+	<property name="timeService" ref="timeService" />
+	<property name="dealService" ref="dealService" />
+	<property name="currencyService" ref="currencyService"/>
+    </bean>
+    <bean id="traderCategoryService" class="sepm.dsa.service.TraderCategoryServiceImpl">
+	<property name="traderCategoryDao" ref="traderCategoryDao"/>
+	<property name="traderService" ref="traderService"/>
+    </bean>
     <bean id="traderPdfService" class="sepm.dsa.service.pdf.TraderPdfServiceImpl">
         <property name="traderService" ref="traderService"/>
     </bean>
 
+    <!-- Data Set Service -->
     <bean id="dataSetService" class="sepm.dsa.service.DataSetServiceImpl">
         <property name="dataSource" ref="dataSource"/>
         <property name="mapService" ref="mapService"/>
     </bean>
 
-    <bean id="rollDiceService" class="sepm.dsa.service.RollDiceServiceImpl">
-    </bean>
+    <!-- ****************** GUI **************** -->
 
-    <!-- GUI DI -->
     <bean id="MainMenuController" class="sepm.dsa.gui.MainMenuController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="mapService" ref="mapService"/>
