@@ -335,6 +335,8 @@ public class TraderServiceImpl implements TraderService {
 		int lastNameMode = -1;
 		boolean prefix = false;
 		boolean suffix = false;
+		boolean maleOnly = false;
+		boolean femaleOnly = false;
 		final int NORMAL = 0;
 		final int BOTH = 1;
 		final int FATHER = 2;
@@ -363,8 +365,11 @@ public class TraderServiceImpl implements TraderService {
 								maleFirstNames.add(name);
 							}
 							maleFirstNamesLoaded = true;
-							log.info("" + maleFirstNames);
-						} else if (line.startsWith("femaleFirstNames")) {
+						} else {
+							throw new DSARuntimeException("Fehler beim Lesen der Namens Datei (männliche Vornamen fehlen: "+culture+")");
+						}
+						line = reader.readLine();
+						if (line.startsWith("femaleFirstNames")) {
 							line = line.substring(line.indexOf("START") + 6);
 							femaleFirstNames = new ArrayList<>();
 							String name;
@@ -377,8 +382,11 @@ public class TraderServiceImpl implements TraderService {
 								femaleFirstNames.add(name);
 							}
 							femaleFirstNamesLoaded = true;
-							log.info("" + femaleFirstNames);
-						} else if (line.startsWith("lastNames")) {
+						} else{
+							throw new DSARuntimeException("Fehler beim Lesen der Namens Datei (weibliche Vornamen fehlen: "+culture+")");
+						}
+						line = reader.readLine();
+						if (line.startsWith("lastNames")) {
 
 							line = line.substring(line.indexOf("MODE") + 5);
 							if (line.startsWith("CHILDOF")) {
@@ -425,8 +433,16 @@ public class TraderServiceImpl implements TraderService {
 									throw new DSARuntimeException("Fehler beim Lesen der Namens Datei ('MODE CHILDOF <option> <UNKNOWN>')!");
 								}
 								line = line.substring(line.indexOf("START") + 6);
+								if (line.startsWith("ONLY")) {
+									maleOnly = true;
+									line = line.substring(5);
+								}
 								sonOf = line.substring(0, line.indexOf(", "));
 								line = line.substring(line.indexOf(", ") + 2);
+								if (line.startsWith("ONLY")) {
+									femaleOnly = true;
+									line = line.substring(5);
+								}
 								daughterOf = line.substring(0, line.indexOf(", "));
 								if (!line.substring(line.indexOf(", ") + 2).startsWith("END")) {
 									throw new DSARuntimeException("Fehler beim Lesen der Namens Datei ('MODE CHILDOF <option> <pre/suffix> START <Sohn des> <Tochter der> <UNKNOWN>')!");
@@ -434,42 +450,56 @@ public class TraderServiceImpl implements TraderService {
 								if (prefix) {
 									if (male) {
 										lastNames = new ArrayList<>();
-										for (String n : maleFirstNames) {
-											lastNames.add(sonOf + n);
+										if (maleOnly) {
+											lastNames.add(sonOf);
+										} else {
+											for (String n : maleFirstNames) {
+												lastNames.add(sonOf + n);
+											}
 										}
 									} else {
 										lastNames = new ArrayList<>();
-										for (String n : femaleFirstNames) {
-											lastNames.add(daughterOf + n);
+										if (femaleOnly) {
+											lastNames.add(daughterOf);
+										} else {
+											for (String n : femaleFirstNames) {
+												lastNames.add(daughterOf + n);
+											}
 										}
 									}
 								} else if (suffix) {
 									if (male) {
 										lastNames = new ArrayList<>();
-										for (String n : maleFirstNames) {
-											lastNames.add(n + sonOf);
+										if (maleOnly) {
+											lastNames.add(sonOf);
+										} else {
+											for (String n : maleFirstNames) {
+												lastNames.add(n + sonOf);
+											}
 										}
 									} else {
 										lastNames = new ArrayList<>();
-										for (String n : femaleFirstNames) {
-											lastNames.add(n + daughterOf);
+										if (femaleOnly) {
+											lastNames.add(daughterOf);
+										} else {
+											for (String n : femaleFirstNames) {
+												lastNames.add(n + daughterOf);
+											}
 										}
 									}
 								}
 							}
 							lastNamesLoaded = true;
-							log.info("" + lastNames);
-						} else if (line.equals("")) {
-							if (maleFirstNames == null || femaleFirstNames == null || lastNames == null) {
-								throw new DSARuntimeException("Fehler beim Lesen der Namens Datei (unvollständige Kultur: "+culture+")");
-							} else {
-								line = reader.readLine();
-							}
-						} else {
-							throw new DSARuntimeException("Fehler beim Lesen der Namens Datei (unbekannte Zeile)");
+						} else{
+							throw new DSARuntimeException("Fehler beim Lesen der Namens Datei (Nachnamen fehlen: "+culture+")");
 						}
 						line = reader.readLine();
+						if (maleFirstNames == null || femaleFirstNames == null || lastNames == null) {
+							throw new DSARuntimeException("Fehler beim Lesen der Namens Datei (unvollständige Kultur: " + culture + ")");
+						}
 					}
+				} else if (line.startsWith("/////")) {
+					break;
 				} else {
 					line = reader.readLine();
 				}
@@ -488,9 +518,11 @@ public class TraderServiceImpl implements TraderService {
 			int firstSelection = (int) (Math.random() * femaleFirstNames.size());
 			fullName += femaleFirstNames.get(firstSelection);
 		}
-		fullName += " ";
-		int secondSelection = (int) (Math.random() * lastNames.size());
-		fullName += lastNames.get(secondSelection);
+		if (lastNames.size() != 0) {
+			fullName += " ";
+			int secondSelection = (int) (Math.random() * lastNames.size());
+			fullName += lastNames.get(secondSelection);
+		}
 		return fullName;
 	}
 
@@ -503,6 +535,8 @@ public class TraderServiceImpl implements TraderService {
 			while (line != null) {
 				if (line.startsWith("culture ")) {
 					cultures.add(line.substring(8));
+				} else if (line.startsWith("/////")) {
+					break;
 				}
 				line = reader.readLine();
 			}
