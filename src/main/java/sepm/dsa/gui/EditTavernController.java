@@ -64,6 +64,11 @@ public class EditTavernController extends BaseControllerImpl {
 	@Override
     public void reload() {
         log.debug("reload EditTavernController");
+        if (selectedTavern.getId() != null && tavernService.get(selectedTavern.getId()) == null) {
+            onCancelPressed();
+            return;
+        }
+
     }
 
     @FXML
