@@ -104,12 +104,7 @@ public class EditCurrencySetController extends BaseControllerImpl {
         log.debug("CancelButtonPressed");
         saveCancelService.cancel();
         Stage stage = (Stage) tf_Name.getScene().getWindow();
-
-        Parent scene = (Parent) loader.load("/gui/currencysetlist.fxml", stage);
-        CurrencySetListController ctrl = loader.getController();
-        ctrl.reload();
-
-        stage.setScene(new Scene(scene, 600, 440));
+        stage.close();
     }
 
     @FXML
@@ -137,13 +132,9 @@ public class EditCurrencySetController extends BaseControllerImpl {
         }
         saveCancelService.save();
 
-        // return to currencies-list
+        // close stage
         Stage stage = (Stage) tf_Name.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/currencysetlist.fxml", stage);
-        CurrencySetListController ctrl = loader.getController();
-        ctrl.reload();
-
-        stage.setScene(new Scene(scene, 600, 440));
+        stage.close();
     }
 
     public void setCurrencyService(CurrencyService currencyService) {

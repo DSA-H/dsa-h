@@ -122,7 +122,7 @@ public class ProductCategoryListController extends BaseControllerImpl {
     private void onCreateButtonPressed() {
         log.debug("onCreateClicked - open Waren Window");
 
-        Stage stage = (Stage) productView.getScene().getWindow();
+        Stage stage = new Stage();
         Parent scene = (Parent) loader.load("/gui/editproductcategory.fxml", stage);
         EditProductCategoryController ctrl = loader.getController();
         ctrl.setProductCategory(null);
@@ -137,8 +137,7 @@ public class ProductCategoryListController extends BaseControllerImpl {
     private void onEditButtonPressed() {
         log.debug("onWarenClicked - open Waren Window");
 
-
-        Stage stage = (Stage) productView.getScene().getWindow();
+        Stage stage = new Stage();
         Parent scene = (Parent) loader.load("/gui/editproductcategory.fxml", stage);
         EditProductCategoryController ctrl = loader.getController();
         ctrl.setProductCategory(treeview.getSelectionModel().getSelectedItem().getValue());
@@ -175,11 +174,10 @@ public class ProductCategoryListController extends BaseControllerImpl {
 
     @FXML
     public void onEditProduct() {
-        Stage stage = (Stage) treeview.getScene().getWindow();
+        Stage stage = new Stage();
         Parent scene = (Parent) loader.load("/gui/editproduct.fxml", stage);
         EditProductController ctrl = loader.getController();
         ctrl.setProduct(productView.getSelectionModel().getSelectedItem());
-        ctrl.setCalledFromCategorie(true);
         ctrl.reload();
 
         stage.setTitle("Waren");

@@ -60,11 +60,7 @@ public class EditProductCategoryController extends BaseControllerImpl {
         saveCancelService.cancel();
         Stage stage = (Stage) nameField.getScene().getWindow();
 
-        Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml", stage);
-        ProductCategoryListController ctrl = loader.getController();
-        ctrl.reload();
-
-        stage.setScene(new Scene(scene, 600, 438));
+        stage.close();
     }
 
     @FXML
@@ -89,12 +85,9 @@ public class EditProductCategoryController extends BaseControllerImpl {
         }
         saveCancelService.save();
 
-        // return to productcategorylist
+        // close
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml", stage);
-        ProductCategoryListController ctrl = loader.getController();
-        ctrl.reload();
-        stage.setScene(new Scene(scene, 600, 438));
+        stage.close();
     }
 
 

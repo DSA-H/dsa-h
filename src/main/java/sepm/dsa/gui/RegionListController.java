@@ -118,7 +118,7 @@ public class RegionListController extends BaseControllerImpl {
     private void onCreateButtonPressed() {
         log.debug("onCreateButtonPressed - open Gebiet-Details Window");
 
-        Stage stage = (Stage) regionTable.getScene().getWindow();
+        Stage stage = new Stage();
         Parent root = (Parent) loader.load("/gui/editregion.fxml", stage);
         EditRegionController ctrl = loader.getController();
         ctrl.setRegion(null);
@@ -135,7 +135,7 @@ public class RegionListController extends BaseControllerImpl {
 
         Region selectedRegion = regionTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
 
-        Stage stage = (Stage) regionTable.getScene().getWindow();
+        Stage stage = new Stage();
         Parent root = (Parent) loader.load("/gui/editregion.fxml", stage);
         EditRegionController ctrl = loader.getController();
         ctrl.setRegion(selectedRegion);

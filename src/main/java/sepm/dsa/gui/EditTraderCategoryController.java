@@ -136,14 +136,9 @@ public class EditTraderCategoryController extends BaseControllerImpl {
         log.debug("CancelButtonPressed");
 
         saveCancelService.cancel();
-//        saveCancelService.refresh(assortmentTable.getItems());
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml", stage);
-        TraderCategoryListController ctrl = loader.getController();
-        ctrl.reload();
-
-        stage.setScene(new Scene(scene, 600, 432));
+        stage.close();
     }
 
     @FXML
@@ -195,11 +190,7 @@ public class EditTraderCategoryController extends BaseControllerImpl {
 
         // return to traderCategoryList
         Stage stage = (Stage) cancelButton.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml", stage);
-        TraderCategoryListController ctrl = loader.getController();
-        ctrl.reload();
-
-        stage.setScene(new Scene(scene, 600, 432));
+        stage.close();
     }
 
     @FXML

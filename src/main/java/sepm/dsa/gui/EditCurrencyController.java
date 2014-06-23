@@ -67,7 +67,7 @@ public class EditCurrencyController extends BaseControllerImpl {
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
         saveCancelService.cancel();
-        returnToCurrenciesList();
+        close();
     }
 
     @FXML
@@ -101,16 +101,13 @@ public class EditCurrencyController extends BaseControllerImpl {
         }
         saveCancelService.save();
 
-        returnToCurrenciesList();
+        close();
     }
 
-    private void returnToCurrenciesList() {
+    private void close() {
         // return to currencies-list
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/currencyList.fxml", stage);
-        CurrencyListController ctrl = loader.getController();
-        ctrl.reload();
-        stage.setScene(new Scene(scene, 600, 438));
+        stage.close();
     }
 
     public void setCurrencyService(CurrencyService currencyService) {

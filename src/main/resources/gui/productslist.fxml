@@ -18,7 +18,7 @@
 <Font name="System Bold" size="18.0" />
 </font>
 </Label><HBox layoutX="12.0" layoutY="97.0" prefHeight="27.0" prefWidth="577.0" spacing="10.0">
-<children><Button layoutX="98.0" layoutY="39.0" mnemonicParsing="false" onAction="#onCreateButtonPressed" onMouseClicked="#onCreateButtonPressed" prefHeight="25.0" prefWidth="85.0" text="Erstellen" /><Button fx:id="editButton" mnemonicParsing="false" onAction="#onEditButtonPressed" onMouseClicked="#onEditButtonPressed" prefHeight="25.0" prefWidth="83.0" text="Bearbeiten" /><Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDeleteButtonPressed" onMouseClicked="#onDeleteButtonPressed" text="Löschen" />
+<children><Button layoutX="98.0" layoutY="39.0" mnemonicParsing="false" onAction="#onCreateButtonPressed" prefHeight="25.0" prefWidth="85.0" text="Erstellen" /><Button fx:id="editButton" mnemonicParsing="false" onAction="#onEditButtonPressed" prefHeight="25.0" prefWidth="83.0" text="Bearbeiten" /><Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" />
 </children></HBox><Button layoutX="14.0" layoutY="456.0" mnemonicParsing="false" onAction="#closeClicked" text="Schließen" />
       <TextField fx:id="tf_ProductOrCategoryName" layoutX="14.0" layoutY="53.0" prefHeight="31.0" prefWidth="150.0" promptText="Ware/Kategorie" />
       <TextField fx:id="tf_RegionName" layoutX="171.0" layoutY="53.0" prefWidth="150.0" promptText="Produktionsgebiet" />

@@ -31,7 +31,6 @@ public class EditProductController extends BaseControllerImpl {
 
     private Product selectedProduct;
     private boolean isNewProduct;
-    private boolean calledFromCategorie = false;
 
     @FXML
     private TextField nameField;
@@ -226,22 +225,7 @@ public class EditProductController extends BaseControllerImpl {
         saveCancelService.cancel();
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-
-        if(calledFromCategorie) {
-            Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml", stage);
-            BaseController ctrl = loader.getController();
-            ctrl.reload();
-
-            stage.setTitle("Warenkategorie");
-            stage.setScene(new Scene(scene, 600, 438));
-            stage.setResizable(false);
-        }else {
-            Parent scene = (Parent) loader.load("/gui/productslist.fxml", stage);
-            ProductListController ctrl = loader.getController();
-            ctrl.reload();
-
-            stage.setScene(new Scene(scene, 600, 438));
-        }
+        stage.close();
     }
 
     @FXML
@@ -297,21 +281,7 @@ public class EditProductController extends BaseControllerImpl {
 
         // return to productslist / productcategorie
         Stage stage = (Stage) nameField.getScene().getWindow();
-        if(calledFromCategorie) {
-            Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml", stage);
-            BaseController ctrl = loader.getController();
-            ctrl.reload();
-
-            stage.setTitle("Warenkategorie");
-            stage.setScene(new Scene(scene, 600, 438));
-            stage.setResizable(false);
-        }else {
-            Parent scene = (Parent) loader.load("/gui/productslist.fxml", stage);
-            ProductListController ctrl = loader.getController();
-            ctrl.reload();
-
-            stage.setScene(new Scene(scene, 600, 438));
-        }
+        stage.close();
     }
 
     @FXML
@@ -399,10 +369,6 @@ public class EditProductController extends BaseControllerImpl {
 
     public void setCurrencyService(CurrencyService currencyService) {
         this.currencyService = currencyService;
-    }
-
-    public void setCalledFromCategorie(boolean calledFromCategorie) {
-        this.calledFromCategorie = calledFromCategorie;
     }
 
 }
