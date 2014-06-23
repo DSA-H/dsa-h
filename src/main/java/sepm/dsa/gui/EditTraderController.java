@@ -201,10 +201,10 @@ public class EditTraderController extends BaseControllerImpl {
 
         if (isNewTrader) {
 	        onGenerateNamePressed();
-	        muField.setText(""+traderService.getRandomValue(15, 5));
-	        inField.setText(""+traderService.getRandomValue(15, 5));
-	        chField.setText(""+traderService.getRandomValue(15, 5));
-	        convinceField.setText(""+traderService.getRandomValue(6, 6));
+	        muField.setText(""+traderService.getRandomValue(13, 3));
+	        inField.setText(""+traderService.getRandomValue(13, 3));
+	        chField.setText(""+traderService.getRandomValue(13, 3));
+	        convinceField.setText(""+traderService.getRandomValue(10, 5));
         } else {
             nameField.setText(selectedTrader.getName());
             sizeField.setText("" + selectedTrader.getSize());

@@ -503,7 +503,7 @@ public class MainMenuController extends BaseControllerImpl {
 	public void onPlayerClicked(ActionEvent event) {
 		log.debug("onPlayerClicked - open Player Window");
 		Stage stage = new Stage();
-		Parent scene = (Parent) loader.load("/gui/playerlist.fxml", stage);
+		Parent scene = (Parent) loader.load("/gui/playerList.fxml", stage);
         BaseController ctrl = loader.getController();
         ctrl.reload();
 
