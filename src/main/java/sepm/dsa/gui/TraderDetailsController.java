@@ -323,6 +323,8 @@ public class TraderDetailsController extends BaseControllerImpl {
 
         StringBuilder sb = new StringBuilder();
         sb.append("Wie viel ");
+        sb.append(o.getProduct().getUnit().getName());
+        sb.append(" ");
         sb.append(o.getProduct().getName());
         if(o.getProduct().getQuality()) {
             sb.append(" (").append(o.getQuality()).append(")");
