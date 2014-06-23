@@ -43,6 +43,7 @@ public class SpringFxmlLoader implements ApplicationContextAware {
             @Override
             public void handle(WindowEvent windowEvent) {
                 ctrl.unload();
+                stage.setOnHidden(null);   // free for garbage collecting
                 // event chaining
                 if(event != null) {
                     event.handle(windowEvent);
