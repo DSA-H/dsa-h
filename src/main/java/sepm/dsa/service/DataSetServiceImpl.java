@@ -45,8 +45,14 @@ public class DataSetServiceImpl implements DataSetService, ApplicationEventPubli
 					case "dataset.xml":
 						restoreDatabase(inputStream);
 						break;
-					case "properties":
+					case "resources":
+						clearResourcesDirectory();
+						break;
+					case "resources/properties":
 						restoreProperties(inputStream);
+						break;
+					case "resources/nameFile.txt":
+						restoreNameFile(inputStream);
 						break;
 					case "maps/active/":
 						clearMapDirectory();
@@ -67,7 +73,18 @@ public class DataSetServiceImpl implements DataSetService, ApplicationEventPubli
 	}
 
 	private void restoreProperties(InputStream inputStream) throws IOException {
-		File file = new File("properties");
+		File file = new File("resources/properties");
+		BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
+		byte[] buffer = new byte[1024];
+		int bytes;
+		while ((bytes = inputStream.read(buffer)) > -1){
+			out.write(buffer, 0, bytes);
+		}
+		out.close();
+	}
+
+	private void restoreNameFile(InputStream inputStream) throws IOException {
+		File file = new File("resources/nameFile.txt");
 		BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
 		byte[] buffer = new byte[1024];
 		int bytes;
@@ -93,11 +110,17 @@ public class DataSetServiceImpl implements DataSetService, ApplicationEventPubli
 		mapService.getActiveDir().mkdir();
 	}
 
+	private void clearResourcesDirectory() throws IOException {
+		File resourcesDirectory = new File("resources");
+		FileUtils.deleteDirectory(resourcesDirectory);
+		resourcesDirectory.mkdir();
+	}
+
     @Override
     public void saveCurrentDataSet(File file) throws DSARuntimeException {
 		try {
 			ZipOutputStream zip = getZipOutputStream(file);
-			addPropertyFile(zip);
+			addResourceDirectory(zip);
 			addDatabaseDump(zip);
 			addMapDirectory(zip);
 			zip.close();
@@ -111,9 +134,18 @@ public class DataSetServiceImpl implements DataSetService, ApplicationEventPubli
 		return new ZipOutputStream(outputStream);
 	}
 
-	private void addPropertyFile(ZipOutputStream zip) throws IOException {
-		zip.putNextEntry(new ZipEntry("properties"));
-		zip.write(Files.readAllBytes(Paths.get("properties")));
+	private void addResourceDirectory(ZipOutputStream zip) throws IOException {
+		zip.putNextEntry(new ZipEntry("resources/"));
+
+		// Add properties file
+		String propertiesPath = "resources/properties";
+		zip.putNextEntry(new ZipEntry(propertiesPath));
+		zip.write(Files.readAllBytes(Paths.get(propertiesPath)));
+
+		// Add nameFile.txt
+		String nameFilePath = "resources/nameFile.txt";
+		zip.putNextEntry(new ZipEntry(nameFilePath));
+		zip.write(Files.readAllBytes(Paths.get(nameFilePath)));
 	}
 
 	private void addDatabaseDump(ZipOutputStream zip) throws IOException, SQLException, DatabaseUnitException {
