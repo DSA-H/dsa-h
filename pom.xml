@@ -158,6 +158,24 @@
                     </configuration>
                 </execution>
                 <execution>
+                    <id>copy-name-file</id> <!-- also creates resources folder for properties file! -->
+                    <phase>generate-resources</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${project.build.directory}/release/resources</outputDirectory>
+                        <resources>
+                            <resource>
+                                <directory>resources</directory>
+                                <includes>
+                                    <include>nameFile.txt</include>
+                                </includes>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution>
+                <execution>
                     <id>copy-errorMap</id>
                     <phase>generate-resources</phase>
                     <goals>
