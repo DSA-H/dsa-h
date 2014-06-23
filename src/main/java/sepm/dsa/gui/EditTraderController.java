@@ -158,7 +158,16 @@ public class EditTraderController extends BaseControllerImpl {
     public void reload() {
         log.debug("reload EditTraderController");
 
-        if(!isNewTrader) {
+	    String culture = (String) cultureBox.getSelectionModel().getSelectedItem();
+	    List<String> cultures = traderService.getAllCultures();
+	    cultureBox.setItems(FXCollections.observableArrayList(cultures));
+		if (cultures.contains(culture)) {
+			cultureBox.getSelectionModel().select(culture);
+		} else if (cultures.size() > 0) {
+			cultureBox.getSelectionModel().select(0);
+		}
+
+	    if(!isNewTrader) {
             if (traderService.get(selectedTrader.getId()) == null) {
                 onCancelPressed();
                 return;
