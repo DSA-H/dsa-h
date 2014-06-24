@@ -144,7 +144,7 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
         refreshPriceView();
         if (offer.getProduct() != null) {
             log.info(selectedQuality() + ", " + selectedProduct() + " " + trader);
-            int pricePerUnit = traderService.calculatePricePerUnit(selectedQuality(), selectedProduct(), trader);
+            int pricePerUnit = traderService.calculatePricePerUnit(selectedQuality(), selectedProduct(), trader, false);
             int amount = 0;
             //##### get amount
             if (!selectedAmount.getText().isEmpty()) {

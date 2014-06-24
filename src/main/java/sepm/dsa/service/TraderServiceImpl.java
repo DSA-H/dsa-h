@@ -704,7 +704,7 @@ public class TraderServiceImpl implements TraderService {
                     Offer offer = new Offer();
                     offer.setTrader(trader);
                     offer.setQuality(productQuality);
-                    int price = calculatePricePerUnit(productQuality, product, trader);
+                    int price = calculatePricePerUnit(productQuality, product, trader, false);
                     offer.setPricePerUnit(price);
                     offer.setProduct(product);
                     offer.setAmount(amountQualities[i]);
@@ -744,9 +744,9 @@ public class TraderServiceImpl implements TraderService {
      * @param trader
      * @return
      */
-    public int calculatePricePerUnit(ProductQuality productQuality, Product product, Trader trader){
+    public int calculatePricePerUnit(ProductQuality productQuality, Product product, Trader trader, boolean throwExceptionOnNoPath){
         log.debug("calling calculatePricePerUnit(" + productQuality + ", " + product + ", " + trader + ")");
-        return (int) (calculatePriceForProduct(product, trader) * productQuality.getQualityPriceFactor());
+        return (int) (calculatePriceForProduct(product, trader, throwExceptionOnNoPath) * productQuality.getQualityPriceFactor());
     }
 
     /**
@@ -756,21 +756,28 @@ public class TraderServiceImpl implements TraderService {
      * @param trader
      * @return the price or -1
      */
-    public int calculatePriceForProduct(Product product, Trader trader) {
+    public int calculatePriceForProduct(Product product, Trader trader, boolean throwExceptionOnNoPath) {
         log.debug("calling calculatePriceForProduct(" + product + ", " + trader + ")");
-        List<RegionBorder> borders;
+        List<RegionBorder> borders = null;
         int price = product.getCost();
-
+        boolean noPathFound = false;
         try {
             borders = getCheapestWayBordersBetween(product.getRegions(), trader.getLocation().getRegion());
         } catch (NoPathException e) {
-            throw new DSAValidationException("Preis nicht berechenbar, da keine Verbindung zwischen Produktionsgebieten und Händlergebiet besteht.");
+            if (throwExceptionOnNoPath) {
+                throw new DSAValidationException("Preis nicht berechenbar, da keine Verbindung zwischen Produktionsgebieten und Händlergebiet besteht.");
+            }
+            noPathFound = true;
         }
 
-        for (RegionBorder border : borders) {
-            price += product.getCost() *
-                    (border.getBorderCost() / 100f)
-                    * product.getAttribute().getProductTransporabilityFactor();
+        if (noPathFound) {
+            price += product.getCost() * (1000 / 100f) * product.getAttribute().getProductTransporabilityFactor();
+        } else {
+            for (RegionBorder border : borders) {
+                price += product.getCost() *
+                        (border.getBorderCost() / 100f)
+                        * product.getAttribute().getProductTransporabilityFactor();
+            }
         }
 
         log.trace("returning " + price);
@@ -779,7 +786,7 @@ public class TraderServiceImpl implements TraderService {
 
 
     @Override
-    public void reCalculatePriceForOffer(Trader trader) {
+    public void reCalculatePriceForOffer(Trader trader, boolean throwExceptionOnNoPath) {
         log.debug("calling reCalculatePriceForOffer(" + trader + ")");
         Set<Offer> offers = trader.getOffers();
         if (offers==null){
@@ -788,14 +795,14 @@ public class TraderServiceImpl implements TraderService {
         Iterator i = offers.iterator();
         while(i.hasNext()){
             Offer offer = (Offer)i.next();
-            int pricePerUnit = calculatePricePerUnit(offer.getQuality(), offer.getProduct(), trader);
+            int pricePerUnit = calculatePricePerUnit(offer.getQuality(), offer.getProduct(), trader, throwExceptionOnNoPath);
             offer.setPricePerUnit(pricePerUnit);
         }
         trader.setOffers(offers);
     }
 
     @Override
-    public void reCalculatePriceForOfferIfNewPriceIsHigher(Trader trader) {
+    public void reCalculatePriceForOfferIfNewPriceIsHigher(Trader trader, boolean throwExceptionOnNoPath) {
         log.debug("calling reCalculatePriceForOfferIfNewPriceIsHigher(" + trader + ")");
         Set<Offer> offers = trader.getOffers();
         if (offers==null){
@@ -804,7 +811,7 @@ public class TraderServiceImpl implements TraderService {
         Iterator i = offers.iterator();
         while(i.hasNext()){
             Offer offer = (Offer)i.next();
-            int pricePerUnit = calculatePricePerUnit(offer.getQuality(), offer.getProduct(), trader);
+            int pricePerUnit = calculatePricePerUnit(offer.getQuality(), offer.getProduct(), trader, throwExceptionOnNoPath);
             if (pricePerUnit > offer.getPricePerUnit()){
                 offer.setPricePerUnit(pricePerUnit);
             }

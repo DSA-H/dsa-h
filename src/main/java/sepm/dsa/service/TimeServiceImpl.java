@@ -215,7 +215,7 @@ public class TimeServiceImpl implements TimeService {
                 movingTrader.setLastMoved(date.getTimestamp());
                 // calculate new prices
                 for(Offer offer : movingTrader.getOffers()) {
-                    int price = traderService.calculatePriceForProduct(offer.getProduct(), movingTrader);
+                    int price = traderService.calculatePriceForProduct(offer.getProduct(), movingTrader, false);
                     if(offer.getProduct().getQuality()) {
                         offer.setPricePerUnit((int)(price*offer.getQuality().getQualityPriceFactor()));
                         offerDao.update(offer);

@@ -105,9 +105,9 @@ public class CalculatePriceController extends BaseControllerImpl {
 
         int price = 0;
         if (choiceQuality.isDisabled()){
-            price = traderService.calculatePriceForProduct(productTable.getSelectionModel().getSelectedItem(),calculationTrader);
+            price = traderService.calculatePriceForProduct(productTable.getSelectionModel().getSelectedItem(),calculationTrader, true);
         }else{
-            price = traderService.calculatePricePerUnit(choiceQuality.getSelectionModel().getSelectedItem(),productTable.getSelectionModel().getSelectedItem(),calculationTrader);
+            price = traderService.calculatePricePerUnit(choiceQuality.getSelectionModel().getSelectedItem(),productTable.getSelectionModel().getSelectedItem(),calculationTrader, true);
         }
 
 //        labelPrice.setText(price+"");

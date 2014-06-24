@@ -102,9 +102,12 @@ public interface TraderService {
      *
      * @param product the product to calculate the offer for - must not be null
      * @param trader  the trader
+     * @param throwExceptionOnNoPath true if an exception should be thrown if there is no path from the Traders current
+     *                               location.region to the product.productionRegion, <br/>
+     *                               false if no exception should be thrown and instead a standard border cost will be used
      * @return the price in default (base-rate) currency
      */
-    int calculatePriceForProduct(Product product, Trader trader);
+    int calculatePriceForProduct(Product product, Trader trader, boolean throwExceptionOnNoPath);
 
 	/**
 	 * Returns a list of Offers of the specified trader.
@@ -127,7 +130,7 @@ public interface TraderService {
      * @param trader
      * @return
      */
-    int calculatePricePerUnit(ProductQuality productQuality, Product product, Trader trader);
+    int calculatePricePerUnit(ProductQuality productQuality, Product product, Trader trader, boolean throwExceptionOnNoPath);
 
     /**
      * Recalculates the prices for all offers of a trader
@@ -135,7 +138,7 @@ public interface TraderService {
      * @param trader the trader
      * @return the price in default (base-rate) currency
      */
-    void reCalculatePriceForOffer(/*Set<Offer> offers, */Trader trader);
+    void reCalculatePriceForOffer(/*Set<Offer> offers, */Trader trader, boolean throwExceptionOnNoPath);
 
     /**
      * Recalculates the price for all offers of a trader if the new price of the product is higher
@@ -143,7 +146,7 @@ public interface TraderService {
      * @param trader the trader
      * @return the price in default (base-rate) currency
      */
-    void reCalculatePriceForOfferIfNewPriceIsHigher(/*Set<Offer> offers, */Trader trader);
+    void reCalculatePriceForOfferIfNewPriceIsHigher(/*Set<Offer> offers, */Trader trader, boolean throwExceptionOnNoPath);
 
     /**
      * A trader sells a product to a player. The trader's amount for this product decreases. If the amount becomes zero,

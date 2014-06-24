@@ -120,7 +120,7 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         Collection<AssortmentNature> assortments = trader.getCategory().getAssortments().values();
         for (AssortmentNature a : assortments) {
             for (Product p : a.getProductCategory().getProducts()) {
-                assertTrue("Preis muss positiv sein", traderService.calculatePriceForProduct(p, trader) > 0);
+                assertTrue("Preis muss positiv sein", traderService.calculatePriceForProduct(p, trader, false) > 0);
             }
         }
         assertTrue("There were no assortments set in test data", assortments.size() > 0);

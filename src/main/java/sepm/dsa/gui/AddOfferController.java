@@ -110,10 +110,10 @@ public class AddOfferController extends BaseControllerImpl {
         o.setTrader(selectedTrader);
         if (!choiceQuality.isDisabled()){
             o.setQuality(choiceQuality.getSelectionModel().getSelectedItem());
-            o.setPricePerUnit(traderService.calculatePricePerUnit(o.getQuality(), p, selectedTrader));
+            o.setPricePerUnit(traderService.calculatePricePerUnit(o.getQuality(), p, selectedTrader, false));
         }else{
             o.setQuality(ProductQuality.NORMAL);
-            o.setPricePerUnit(traderService.calculatePriceForProduct(p,selectedTrader));
+            o.setPricePerUnit(traderService.calculatePriceForProduct(p, selectedTrader, false));
         }
 
         traderService.addManualOffer(selectedTrader, o);
