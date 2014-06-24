@@ -10,7 +10,7 @@
 <children><Label alignment="CENTER" contentDisplay="CENTER" layoutX="1.0" layoutY="25.0" prefHeight="27.0" prefWidth="440.0" text="Warenkategorie bearbeiten" textAlignment="CENTER">
 <font>
 <Font name="System Bold" size="18.0" />
-</font></Label><Label layoutX="102.0" layoutY="73.0" text="Name:" /><Label layoutX="55.0" layoutY="107.0" text="Oberkategorie:" /><TextField fx:id="nameField" layoutX="143.0" layoutY="69.0" /><ComboBox fx:id="choiceParent" layoutX="142.0" layoutY="103.0" prefWidth="150.0" /><HBox alignment="CENTER_LEFT" layoutX="231.0" layoutY="143.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="27.0" prefWidth="195.0" spacing="10.0">
+</font></Label><Label layoutX="102.0" layoutY="73.0" text="Name:" /><Label layoutX="55.0" layoutY="107.0" text="Oberkategorie:" /><TextField fx:id="nameField" layoutX="143.0" layoutY="69.0" /><ComboBox fx:id="choiceParent" layoutX="142.0" layoutY="103.0" prefWidth="150.0" /><Button layoutX="302.6875" layoutY="103.0" mnemonicParsing="false" onAction="#noParentClicked" text="Keine Oberkategorie" /><HBox alignment="CENTER_LEFT" layoutX="231.0" layoutY="143.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="27.0" prefWidth="195.0" spacing="10.0">
 <children>
 <Button mnemonicParsing="false" onAction="#onSavePressed" text="Speichern" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
 <Button mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="25.0" prefWidth="94.0" text="Abbrechen" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
@@ -18,5 +18,5 @@
 <opaqueInsets>
 <Insets />
 </opaqueInsets>
-</HBox><Button layoutX="302.6875" layoutY="103.0" mnemonicParsing="false" onAction="#noParentClicked" text="Keine Oberkategorie" />
+</HBox>
 </children></Pane>

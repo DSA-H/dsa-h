@@ -22,13 +22,21 @@
         <Label alignment="CENTER_RIGHT" layoutX="283.0" layoutY="83.0" prefWidth="100.0" text="Kategorie:" />
         <Label alignment="CENTER_RIGHT" layoutX="283.0" layoutY="122.0" prefWidth="100.0" text="Ort:" />
         <TextField fx:id="nameField" layoutX="115.0" layoutY="41.0" />
+      <ChoiceBox fx:id="cultureBox" layoutX="114.0" layoutY="79.0" prefWidth="150.0" />
+        <ComboBox fx:id="categoryBox" layoutX="392.0" layoutY="79.0" prefWidth="150.0" />
+      <CheckBox fx:id="maleCheck" layoutX="115.0" layoutY="122.0" mnemonicParsing="false" text="männlich" />
+      <CheckBox fx:id="femaleCheck" layoutX="200.0" layoutY="122.0" mnemonicParsing="false" text="weiblich" />
+        <ComboBox fx:id="locationBox" layoutX="393.0" layoutY="118.0" prefWidth="150.0" />
+      <Button layoutX="114.0" layoutY="155.0" mnemonicParsing="false" onAction="#onGenerateNamePressed" prefWidth="150.0" text="Name Generieren" />
+        <TextField fx:id="sizeField" layoutX="394.0" layoutY="155.0" />
         <TextField fx:id="muField" layoutX="686.0" layoutY="41.0" prefHeight="25.0" prefWidth="34.0" />
         <TextField fx:id="inField" layoutX="686.0" layoutY="79.0" prefHeight="25.0" prefWidth="34.0" />
         <TextField fx:id="chField" layoutX="686.0" layoutY="118.0" prefHeight="25.0" prefWidth="34.0" />
         <TextField fx:id="convinceField" layoutX="686.0" layoutY="155.0" prefHeight="25.0" prefWidth="34.0" />
-        <TextField fx:id="sizeField" layoutX="394.0" layoutY="155.0" />
-        <ComboBox fx:id="categoryBox" layoutX="392.0" layoutY="79.0" prefWidth="150.0" />
-        <ComboBox fx:id="locationBox" layoutX="393.0" layoutY="118.0" prefWidth="150.0" />
+        <CheckBox fx:id="movingCheck" layoutX="25.0" layoutY="194.0" mnemonicParsing="false" text="Fahrender Händler" />
+        <TextField fx:id="stayTimeField" disable="true" layoutX="265.0" layoutY="228.0" />
+        <ChoiceBox fx:id="areaBox" disable="true" layoutX="264.0" layoutY="262.0" prefWidth="150.0" />
+        <ChoiceBox fx:id="citySizeBox" disable="true" layoutX="264.0" layoutY="299.0" prefWidth="150.0" />
         <Label layoutX="29.0" layoutY="352.0" text="Kommentare:" />
         <TextArea fx:id="commentArea" layoutX="27.0" layoutY="377.0" prefHeight="96.0" prefWidth="741.0" />
         <HBox alignment="CENTER_LEFT" layoutX="568.0" layoutY="446.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="90.0" prefWidth="200.0" spacing="10.0">
@@ -40,20 +48,12 @@
                 <Insets />
             </opaqueInsets>
         </HBox>
-        <CheckBox fx:id="movingCheck" layoutX="25.0" layoutY="194.0" mnemonicParsing="false" text="Fahrender Händler" />
         <Separator layoutX="22.0" layoutY="217.0" prefHeight="0.0" prefWidth="741.0" />
         <Label fx:id="stayTimeLabel" alignment="CENTER_RIGHT" disable="true" layoutX="23.0" layoutY="232.0" prefWidth="200.0" text="durchschnittliche Verweilzeit:" />
         <Label fx:id="areaLabel" alignment="CENTER_RIGHT" disable="true" layoutX="23.0" layoutY="266.0" prefWidth="200.0" text="Reisegebiet:" />
         <Label fx:id="citySizeLabel" alignment="CENTER_RIGHT" disable="true" layoutX="23.0" layoutY="303.0" prefWidth="200.0" text="bevorzugte Stadtgröße:" />
-        <TextField fx:id="stayTimeField" disable="true" layoutX="265.0" layoutY="228.0" />
         <Label fx:id="daysLabel" disable="true" layoutX="418.0" layoutY="232.0" text="Tage" />
-        <ChoiceBox fx:id="areaBox" disable="true" layoutX="264.0" layoutY="262.0" prefWidth="150.0" />
-        <ChoiceBox fx:id="citySizeBox" disable="true" layoutX="264.0" layoutY="299.0" prefWidth="150.0" />
-      <ChoiceBox fx:id="cultureBox" layoutX="114.0" layoutY="79.0" prefWidth="150.0" />
-      <CheckBox fx:id="femaleCheck" layoutX="200.0" layoutY="122.0" mnemonicParsing="false" text="weiblich" />
-      <CheckBox fx:id="maleCheck" layoutX="115.0" layoutY="122.0" mnemonicParsing="false" text="männlich" />
       <Label alignment="CENTER_RIGHT" layoutY="83.0" prefWidth="100.0" text="Kultur:" />
       <Label alignment="CENTER_RIGHT" layoutY="122.0" prefWidth="100.0" text="Geschlecht:" />
-      <Button layoutX="114.0" layoutY="155.0" mnemonicParsing="false" onAction="#onGenerateNamePressed" prefWidth="150.0" text="Name Generieren" />
     </children>
 </Pane>
