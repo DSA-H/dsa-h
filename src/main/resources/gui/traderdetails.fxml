@@ -35,12 +35,12 @@
       <Button layoutX="587.0" layoutY="415.0" mnemonicParsing="false" onMouseClicked="#onDeleteDealClicked" prefHeight="26.0" prefWidth="187.0" text="Bestehenden Handel löschen" />
             <TextArea fx:id="commentArea" editable="false" layoutX="21.0" layoutY="581.0" prefHeight="94.0" prefWidth="754.0" wrapText="true" />
         <Button layoutX="24.0" layoutY="684.0" mnemonicParsing="false" onAction="#onBackPressed" text="Schließen" />
-        <Label fx:id="nameLabel" alignment="CENTER" layoutY="14.0" prefHeight="27.0" prefWidth="800.0" text="Vorname Nachname" textAlignment="CENTER">
+        <Label fx:id="nameLabel" alignment="CENTER" layoutX="109.0" layoutY="14.0" prefHeight="27.0" prefWidth="576.0" text="Vorname Nachname" textAlignment="CENTER">
             <font>
                 <Font name="System Bold" size="18.0" />
             </font>
         </Label>
-        <Label fx:id="categoryLabel" alignment="CENTER" layoutX="-1.0" layoutY="41.0" prefHeight="17.0" prefWidth="800.0" text="Händlerkategorie" textAlignment="CENTER" />
+        <Label fx:id="categoryLabel" alignment="CENTER" layoutX="163.0" layoutY="41.0" prefHeight="17.0" prefWidth="474.0" text="Händlerkategorie" textAlignment="CENTER" />
         <Label layoutX="591.0" layoutY="67.0" text="Überreden:" underline="true" />
         <Label layoutX="591.0" layoutY="91.0" text="Erschwernis:" />
         <Label layoutX="607.0" layoutY="121.0" text="Ergebnis:" />
@@ -49,7 +49,7 @@
         <Separator layoutX="580.0" layoutY="145.0" prefWidth="200.0" />
         <Separator layoutX="580.0" layoutY="251.0" prefWidth="200.0" />
         <Label layoutX="591.0" layoutY="261.0" text="Handel:" underline="true" />
-      <Label layoutX="22.0" layoutY="428.0" prefHeight="16.0" prefWidth="754.0" text="(+) bei Menge: Kauf von Spieler, (-) Ankauf durch Händler" />
+      <Label layoutX="22.0" layoutY="428.0" prefHeight="17.0" prefWidth="550.0" text="(+) bei Menge: Kauf von Spieler, (-) Ankauf durch Händler" />
         <Separator layoutX="580.0" layoutY="145.0" prefWidth="200.0" />
     </children>
 </Pane>

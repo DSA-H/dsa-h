@@ -12,6 +12,7 @@ import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.TraderService;
 
@@ -30,7 +31,7 @@ public class MovingTraderListController extends BaseControllerImpl {
     private LocationConnection connection;
 
 	@FXML
-	private TableView traderTable;
+	private TableView<MovingTrader> traderTable;
 	@FXML
 	private TableColumn traderColumn;
 	@FXML
@@ -86,15 +87,23 @@ public class MovingTraderListController extends BaseControllerImpl {
     @FXML
 	private void onDetailsButtonPressed() {
 		log.debug("calling onDetailsPressed");
+        selectedTrader = traderTable.getSelectionModel().getSelectedItem();
+
+        if(selectedTrader == null) {
+            throw new DSAValidationException("Kein Händler ausgegewählt!");
+        }
+
 		Stage stage = new Stage();
 		Parent scene = (Parent) loader.load("/gui/traderdetails.fxml", stage);
 		stage.setTitle("Händler-Details");
 
 		TraderDetailsController controller = loader.getController();
 		controller.setTrader(selectedTrader);
+        controller.reload();
+
 		stage.setScene(new Scene(scene, 830, 781));
 		stage.setResizable(false);
-		stage.showAndWait();
+		stage.show();
 	}
 
     @FXML
