@@ -669,6 +669,15 @@ public class MainMenuController extends BaseControllerImpl {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("DSA Zip Dateien", "*.zip"));
 
+		Action response = Dialogs.create()
+			.title("Datenimport")
+			.message("Der Datenimport entfernt den gesamten aktuellen Daten- und Spielstand. Wollen Sie fortfahren?")
+			.showConfirm();
+
+		if (response != Dialog.Actions.YES) {
+			return;
+		}
+
 		File file = fileChooser.showOpenDialog(menuBar.getScene().getWindow());
 		if (file != null) {
 			try {
