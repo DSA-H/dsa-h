@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.text.*?>
 <?import java.lang.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="440.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.CurrencySetListController">
    <children>
-      <TableView fx:id="currencySetTable" layoutX="11.0" layoutY="86.0" onMouseClicked="#onTableClicked" prefHeight="338.0" prefWidth="577.0">
+      <TableView fx:id="currencySetTable" layoutX="11.0" layoutY="86.0" onMouseClicked="#onTableClicked" prefHeight="318.0" prefWidth="577.0">
          <columns>
             <TableColumn fx:id="nameColumn" prefWidth="391.0" text="Name" />
             <TableColumn fx:id="currenciesColumn" prefWidth="185.0" text="Währungen" />
@@ -20,10 +20,10 @@
       </Label>
       <HBox layoutX="12.0" layoutY="53.0" prefHeight="27.0" prefWidth="577.0" spacing="10.0">
          <children>
-            <Button layoutX="98.0" layoutY="39.0" mnemonicParsing="false" onAction="#onCreateButtonPressed" onMouseClicked="#onCreateButtonPressed" prefHeight="25.0" prefWidth="85.0" text="Erstellen" />
-            <Button fx:id="editButton" mnemonicParsing="false" onAction="#onEditButtonPressed" onMouseClicked="#onEditButtonPressed" prefHeight="26.0" prefWidth="88.0" text="Bearbeiten" />
-            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDeleteButtonPressed" onMouseClicked="#onDeleteButtonPressed" text="Löschen" />
+            <Button layoutX="98.0" layoutY="39.0" mnemonicParsing="false" onAction="#onCreateButtonPressed" prefHeight="25.0" prefWidth="85.0" text="Erstellen" />
+            <Button fx:id="editButton" mnemonicParsing="false" onAction="#onEditButtonPressed"  prefHeight="26.0" prefWidth="88.0" text="Bearbeiten" />
+            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDeleteButtonPressed" text="Löschen" />
          </children>
-      </HBox>
+      </HBox><Button layoutX="11.0" layoutY="409.0" mnemonicParsing="false" onAction="#onClosePressed" prefHeight="25.0" prefWidth="72.0" text="Schließen" />
    </children>
 </Pane>

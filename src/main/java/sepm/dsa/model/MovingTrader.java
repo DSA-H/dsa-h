@@ -1,7 +1,9 @@
 package sepm.dsa.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -11,7 +13,7 @@ import java.io.Serializable;
 @Table(name = "movingTraders")
 public class MovingTrader extends Trader implements Serializable {
 
-    private static final long serialVersionUID = 2857234550231481712L;
+    private static final long serialVersionUID = 8961602390107311003L;
 
     @Column
     private Long lastMoved;
@@ -28,7 +30,11 @@ public class MovingTrader extends Trader implements Serializable {
     private Integer preferredDistance;
 
     public void setPreferredTownSize(TownSize townSize) {
-        preferredTownSize = townSize.getValue();
+        if(townSize != null) {
+            preferredTownSize = townSize.getValue();
+        }else {
+            preferredTownSize = null;
+        }
     }
 
     public TownSize getPreferredTownSize(){

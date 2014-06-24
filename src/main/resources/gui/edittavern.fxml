@@ -16,6 +16,8 @@
         <Label alignment="CENTER_RIGHT" layoutX="15.0" layoutY="70.0" prefHeight="17.0" prefWidth="97.0" text="Name:" />
         <Label layoutX="16.0" layoutY="105.0" text="Anzahl der Betten:" />
         <TextField fx:id="nameField" layoutX="115.0" layoutY="66.0" prefHeight="25.0" prefWidth="150.0" />
+        <TextField fx:id="bedsField" layoutX="115.0" layoutY="101.0" prefHeight="25.0" prefWidth="150.0" />
+        <ChoiceBox fx:id="qualityCoicheBox" layoutX="115.0" layoutY="136.0" prefWidth="150.0" />
         <Label layoutX="31.0" layoutY="236.0" text="Beschreibung" />
         <TextArea fx:id="commentArea" layoutX="27.0" layoutY="253.0" prefHeight="96.0" prefWidth="334.0" />
         <HBox alignment="CENTER_LEFT" layoutX="190.0" layoutY="326.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="90.0" prefWidth="174.0" spacing="10.0">
@@ -27,9 +29,7 @@
                 <Insets />
             </opaqueInsets>
         </HBox>
-        <Label alignment="CENTER_RIGHT" layoutX="21.0" layoutY="176.0" prefHeight="17.0" prefWidth="94.0" text="Belegte Betten:" />
-        <TextField fx:id="bedsField" layoutX="115.0" layoutY="101.0" prefHeight="25.0" prefWidth="150.0" />
-        <ChoiceBox fx:id="qualityCoicheBox" layoutX="115.0" layoutY="136.0" prefWidth="150.0" />
+        <Label alignment="CENTER_RIGHT" layoutX="21.0" layoutY="176.0" prefHeight="17.0" prefWidth="94.0" text="Freie Betten:" />
         <Label alignment="CENTER_RIGHT" layoutX="15.0" layoutY="140.0" prefHeight="17.0" prefWidth="97.0" text="Qualität:" />
         <Label fx:id="useageLabel" layoutX="119.0" layoutY="176.0" prefHeight="17.0" prefWidth="125.0" text="-" />
         <Label fx:id="priceLabel" alignment="TOP_LEFT" layoutX="119.0" layoutY="200.0" prefHeight="44.0" prefWidth="242.0" text="-" wrapText="true" />

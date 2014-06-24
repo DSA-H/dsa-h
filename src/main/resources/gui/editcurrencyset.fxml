@@ -8,13 +8,12 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="460.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.EditCurrencySetController">
    <children>
-      <Label alignment="CENTER" layoutY="27.0" prefHeight="27.0" prefWidth="464.0" text="Währungssystem bearbeiten" textAlignment="CENTER">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Label>
-      <Label layoutX="115.0" layoutY="90.0" text="Name:" />
       <TextField fx:id="tf_Name" layoutX="167.0" layoutY="86.0" />
+      <ComboBox fx:id="choice_Currency1" layoutX="166.0" layoutY="125.0" prefWidth="150.0" />
+      <ComboBox fx:id="choice_Currency2" layoutX="166.0" layoutY="160.0" prefWidth="150.0" />
+      <ComboBox fx:id="choice_Currency3" layoutX="166.0" layoutY="196.0" prefWidth="150.0" />
+      <ComboBox fx:id="choice_Currency4" layoutX="166.0" layoutY="231.0" prefWidth="150.0" />
+      <ComboBox fx:id="choice_Currency5" layoutX="166.0" layoutY="265.0" prefWidth="150.0" />
       <HBox alignment="CENTER_LEFT" layoutX="226.0" layoutY="321.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="35.0" prefWidth="220.0" spacing="10.0">
          <children>
             <Button mnemonicParsing="false" onAction="#onSavePressed" prefHeight="26.0" prefWidth="80.0" text="Speichern" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
@@ -24,15 +23,16 @@
             <Insets />
          </opaqueInsets>
       </HBox>
+      <Label alignment="CENTER" layoutY="27.0" prefHeight="27.0" prefWidth="464.0" text="Währungssystem bearbeiten" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="115.0" layoutY="90.0" text="Name:" />
       <Label layoutX="88.0" layoutY="129.0" text="Währung 1:" />
-      <ChoiceBox fx:id="choice_Currency1" layoutX="166.0" layoutY="125.0" prefWidth="150.0" />
-      <ChoiceBox fx:id="choice_Currency2" layoutX="166.0" layoutY="160.0" prefWidth="150.0" />
       <Label layoutX="88.0" layoutY="164.0" text="Währung 2:" />
       <Label layoutX="88.0" layoutY="235.0" text="Währung 4:" />
-      <ChoiceBox fx:id="choice_Currency4" layoutX="166.0" layoutY="231.0" prefWidth="150.0" />
-      <ChoiceBox fx:id="choice_Currency3" layoutX="166.0" layoutY="196.0" prefWidth="150.0" />
       <Label layoutX="88.0" layoutY="200.0" text="Währung 3:" />
-      <ChoiceBox fx:id="choice_Currency5" layoutX="166.0" layoutY="265.0" prefWidth="150.0" />
       <Label layoutX="88.0" layoutY="269.0" text="Währung 5:" />
    </children>
 </Pane>

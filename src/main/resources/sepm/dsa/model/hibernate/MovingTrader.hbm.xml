@@ -11,4 +11,7 @@
         <![CDATA[from MovingTrader WHERE category = :category ORDER BY id ASC]]>
     </query>
 
+    <sql-query name="MovingTrader.insertMovingTraderFromTrader">INSERT INTO movingTraders (trader, lastMoved, avgStayDays, preferredTownSize, preferredDistance) VALUES (?, ?, ?, ?, ?)</sql-query>
+    <sql-query name="MovingTrader.deleteMovingTraderFromTrader">DELETE FROM movingTraders WHERE trader = ?</sql-query>
+
 </hibernate-mapping>

@@ -1,11 +1,10 @@
 package sepm.dsa.gui;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -36,21 +35,21 @@ public class EditCurrencySetController extends BaseControllerImpl {
     @FXML
     private TextField tf_Name;
     @FXML
-    private ChoiceBox<Currency> choice_Currency1;
+    private ComboBox<Currency> choice_Currency1;
     @FXML
-    private ChoiceBox<Currency> choice_Currency2;
+    private ComboBox<Currency> choice_Currency2;
     @FXML
-    private ChoiceBox<Currency> choice_Currency3;
+    private ComboBox<Currency> choice_Currency3;
     @FXML
-    private ChoiceBox<Currency> choice_Currency4;
+    private ComboBox<Currency> choice_Currency4;
     @FXML
-    private ChoiceBox<Currency> choice_Currency5;
-    private ChoiceBox<Currency>[] choiceBoxes;
+    private ComboBox<Currency> choice_Currency5;
+    private ComboBox<Currency>[] choiceBoxes;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-        choiceBoxes = new ChoiceBox[] { choice_Currency1, choice_Currency2, choice_Currency3, choice_Currency4, choice_Currency5 };
+        choiceBoxes = new ComboBox[] { choice_Currency1, choice_Currency2, choice_Currency3, choice_Currency4, choice_Currency5 };
     }
 
     @Override
@@ -67,7 +66,7 @@ public class EditCurrencySetController extends BaseControllerImpl {
         List<Currency> availableCurrencies = currencyService.getAll();
         availableCurrencies.add(0, null);
 
-        for (ChoiceBox<Currency> choiceBox : choiceBoxes) {
+        for (ComboBox<Currency> choiceBox : choiceBoxes) {
             choiceBox.getItems().setAll(availableCurrencies);
         }
 
@@ -106,10 +105,7 @@ public class EditCurrencySetController extends BaseControllerImpl {
         log.debug("CancelButtonPressed");
         saveCancelService.cancel();
         Stage stage = (Stage) tf_Name.getScene().getWindow();
-
-        Parent scene = (Parent) loader.load("/gui/currencysetlist.fxml", stage);
-
-        stage.setScene(new Scene(scene, 600, 440));
+        stage.close();
     }
 
     @FXML
@@ -123,7 +119,7 @@ public class EditCurrencySetController extends BaseControllerImpl {
 
         selectedCurrencySet.setName(name);
         selectedCurrencySet.clearCurrencies();
-        for (ChoiceBox<Currency> choiceBox : choiceBoxes) {
+        for (ComboBox<Currency> choiceBox : choiceBoxes) {
             Currency currency = choiceBox.getSelectionModel().getSelectedItem();
             if (currency != null) {
                 selectedCurrencySet.addCurrency(currency);
@@ -137,10 +133,9 @@ public class EditCurrencySetController extends BaseControllerImpl {
         }
         saveCancelService.save();
 
-        // return to currencies-list
+        // close stage
         Stage stage = (Stage) tf_Name.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/currencysetlist.fxml", stage);
-        stage.setScene(new Scene(scene, 600, 440));
+        stage.close();
     }
 
     public void setCurrencyService(CurrencyService currencyService) {

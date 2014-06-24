@@ -1,7 +1,8 @@
 package sepm.dsa.gui;
 
+import com.sun.deploy.uitoolkit.impl.fx.ui.FXConsole;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -13,7 +14,6 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.AssortmentNature;
 import sepm.dsa.model.ProductCategory;
-import sepm.dsa.model.RegionBorder;
 import sepm.dsa.model.TraderCategory;
 import sepm.dsa.service.AssortmentNatureService;
 import sepm.dsa.service.ProductCategoryService;
@@ -22,8 +22,6 @@ import sepm.dsa.service.TraderCategoryService;
 
 import java.net.URL;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EditTraderCategoryController extends BaseControllerImpl {
 
@@ -45,7 +43,7 @@ public class EditTraderCategoryController extends BaseControllerImpl {
     @FXML
     private TextArea commentField;
     @FXML
-    private ChoiceBox<ProductCategory> productCategoryChoiceBox;
+    private ComboBox<ProductCategory> productCategoryComboBox;
     @FXML
     private TableView<AssortmentNature> assortmentTable;
     @FXML
@@ -80,10 +78,10 @@ public class EditTraderCategoryController extends BaseControllerImpl {
             for(AssortmentNature as : assortmentTable.getItems()) {
                 productCategories.remove(as.getProductCategory());
             }
-            productCategoryChoiceBox.getItems().setAll(productCategories);
+            productCategoryComboBox.getItems().setAll(productCategories);
         } else {
             traderCategory = new TraderCategory();
-	        productCategoryChoiceBox.getItems().setAll(productCategories);
+            productCategoryComboBox.getItems().setAll(productCategories);
         }
 
         checkFocus();
@@ -95,7 +93,7 @@ public class EditTraderCategoryController extends BaseControllerImpl {
         AssortmentNature selAssortment = assortmentTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
         if (selAssortment != null) {
             assortmentTable.getItems().remove(selAssortment);
-            productCategoryChoiceBox.getItems().add(selAssortment.getProductCategory());
+            productCategoryComboBox.getItems().add(selAssortment.getProductCategory());
         }
         checkFocus();
     }
@@ -104,7 +102,7 @@ public class EditTraderCategoryController extends BaseControllerImpl {
     private void addAssortmentClicked() {
         log.debug("calling addAssortmentClicked");
 
-        ProductCategory selectedProductCategory = productCategoryChoiceBox.getSelectionModel().getSelectedItem();
+        ProductCategory selectedProductCategory = productCategoryComboBox.getSelectionModel().getSelectedItem();
         if (selectedProductCategory == null) {
             throw new DSAValidationException("Wählen sie eine Warenkategorie aus");
         }
@@ -126,10 +124,10 @@ public class EditTraderCategoryController extends BaseControllerImpl {
         assortmentNatureService.validate(assortToSave);
         assortmentTable.getItems().add(assortToSave);
 
-        productCategoryChoiceBox.getItems().remove(selectedProductCategory);
-        productCategoryChoiceBox.getSelectionModel().selectFirst();
-        //TODO besser / schöner gestalten -> evtl. inkrementelle Suche oder sonstwas
-        //TODO multiple select ermöglichen
+        reload();
+
+        productCategoryComboBox.getItems().remove(selectedProductCategory);
+        productCategoryComboBox.getSelectionModel().selectFirst();
     }
 
     @FXML
@@ -142,14 +140,9 @@ public class EditTraderCategoryController extends BaseControllerImpl {
         log.debug("CancelButtonPressed");
 
         saveCancelService.cancel();
-//        saveCancelService.refresh(assortmentTable.getItems());
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml", stage);
-        TraderCategoryListController ctrl = loader.getController();
-        ctrl.reload();
-
-        stage.setScene(new Scene(scene, 600, 438));
+        stage.close();
     }
 
     @FXML
@@ -201,11 +194,7 @@ public class EditTraderCategoryController extends BaseControllerImpl {
 
         // return to traderCategoryList
         Stage stage = (Stage) cancelButton.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/tradercategorylist.fxml", stage);
-        TraderCategoryListController ctrl = loader.getController();
-        ctrl.reload();
-
-        stage.setScene(new Scene(scene, 600, 438));
+        stage.close();
     }
 
     @FXML

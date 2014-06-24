@@ -14,10 +14,7 @@ import sepm.dsa.model.*;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service("ProductService")
@@ -58,7 +55,6 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = false)
     public void remove(Product p) {
         log.debug("calling removeConnection(" + p + ")");
-        //productDao.removeConnection(get(p.getId()));
 
         List<Offer> offers = offerDao.getAllByProduct(p);
         offers.forEach(offerDao::remove);
@@ -82,12 +78,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Set<Product> getAllFromProductcategory(ProductCategory productCategory) {
         log.debug("calling getAllFromProductcategory");
-//        List<Product> result = productDao.getAllByCategoryPlusChildren(productCategory);  // TODO this will be used when solved the (n+1) problem when changing ProductCategory.products to fetch=LAZY again
 
         LinkedList<ProductCategory> categories = new LinkedList<>();
         int productCount = addAllProductCategoryChildren(productCategory, categories);
 
-        Set<Product> result = new HashSet<Product>(productCount);
+        Set<Product> result = new HashSet<>(productCount);
 
         for (ProductCategory c : categories) {
             result.addAll(c.getProducts());
@@ -104,6 +99,39 @@ public class ProductServiceImpl implements ProductService {
         for (ProductCategory c : matchingCategories) {
             for (Product p : getAllFromProductcategory(c)) {
                 result.add(p);
+            }
+        }
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Product> getAllByFilter(String productOrCategoryName, String regionName) {
+        log.debug("calling getAllByFilter(" + productOrCategoryName + ", " + regionName + ")");
+        List<Product> result = null;
+        if (productOrCategoryName == null && regionName == null) {
+            result = getAll();
+        } else {
+            Set<Product> byName = null;
+            List<Product> byRegionName = null;
+            if (productOrCategoryName != null) {
+                byName = getBySearchTerm(productOrCategoryName);
+            }
+            if (regionName != null) {
+                byRegionName = productDao.getAllByRegionName(regionName == null ? null : "%" + regionName + "%");
+            }
+            if (byName == null) {
+                result = byRegionName;
+            } else if (byRegionName == null) {
+                result = new ArrayList<>(byName);
+            } else {
+                result = new ArrayList<>(byName.size());
+                for (Product p : byRegionName) {
+                    if (byName.contains(p)) {
+                        result.add(p);
+                        byName.remove(p);
+                    }
+                }
             }
         }
         log.trace("returning " + result);
@@ -143,6 +171,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws sepm.dsa.exceptions.DSAValidationException if product is not valid
      */
     private void validate(Product product) throws DSAValidationException {
+        log.debug("calling validate(" + product + ")");
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
         if (violations.size() > 0) {
             throw new DSAValidationException("Produkt ist nicht valide.", violations);
@@ -150,14 +179,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public void setProductCategoryService(ProductCategoryService productCategoryService) {
+        log.debug("calling setProductCategoryService(" + productCategoryService + ")");
         this.productCategoryService = productCategoryService;
     }
 
     public void setOfferDao(OfferDao offerDao) {
+        log.debug("calling setOfferDao(" + offerDao + ")");
         this.offerDao = offerDao;
     }
 
     public void setDealDao(DealDao dealDao) {
+        log.debug("calling setDealDao(" + dealDao + ")");
         this.dealDao = dealDao;
     }
 }

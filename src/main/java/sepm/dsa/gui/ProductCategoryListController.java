@@ -3,7 +3,6 @@ package sepm.dsa.gui;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,7 +18,6 @@ import sepm.dsa.model.ProductCategory;
 import sepm.dsa.service.ProductCategoryService;
 import sepm.dsa.service.SaveCancelService;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -124,7 +122,7 @@ public class ProductCategoryListController extends BaseControllerImpl {
     private void onCreateButtonPressed() {
         log.debug("onCreateClicked - open Waren Window");
 
-        Stage stage = (Stage) productView.getScene().getWindow();
+        Stage stage = new Stage();
         Parent scene = (Parent) loader.load("/gui/editproductcategory.fxml", stage);
         EditProductCategoryController ctrl = loader.getController();
         ctrl.setProductCategory(null);
@@ -132,6 +130,7 @@ public class ProductCategoryListController extends BaseControllerImpl {
 
         stage.setTitle("Warenkategorie");
         stage.setScene(new Scene(scene, 440, 178));
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -139,8 +138,7 @@ public class ProductCategoryListController extends BaseControllerImpl {
     private void onEditButtonPressed() {
         log.debug("onWarenClicked - open Waren Window");
 
-
-        Stage stage = (Stage) productView.getScene().getWindow();
+        Stage stage = new Stage();
         Parent scene = (Parent) loader.load("/gui/editproductcategory.fxml", stage);
         EditProductCategoryController ctrl = loader.getController();
         ctrl.setProductCategory(treeview.getSelectionModel().getSelectedItem().getValue());
@@ -148,6 +146,7 @@ public class ProductCategoryListController extends BaseControllerImpl {
 
         stage.setTitle("Warenkategorie");
         stage.setScene(new Scene(scene, 440, 178));
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -177,15 +176,15 @@ public class ProductCategoryListController extends BaseControllerImpl {
 
     @FXML
     public void onEditProduct() {
-        Stage stage = (Stage) treeview.getScene().getWindow();
+        Stage stage = new Stage();
         Parent scene = (Parent) loader.load("/gui/editproduct.fxml", stage);
         EditProductController ctrl = loader.getController();
         ctrl.setProduct(productView.getSelectionModel().getSelectedItem());
-        ctrl.setCalledFromCategorie(true);
         ctrl.reload();
 
         stage.setTitle("Waren");
-        stage.setScene(new Scene(scene, 600, 479));
+        stage.setScene(new Scene(scene, 600, 530));
+        stage.setResizable(false);
         stage.show();
     }
 

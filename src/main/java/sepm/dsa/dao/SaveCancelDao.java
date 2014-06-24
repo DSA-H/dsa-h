@@ -6,6 +6,9 @@ import java.util.Collection;
 
 public interface SaveCancelDao {
 
+    /**
+     * Makes all changes in the persistence context persistent.
+     */
     void save();
 
     /**
@@ -14,14 +17,21 @@ public interface SaveCancelDao {
      */
     void cancel();
 
+    /**
+     * Closes the current HibernateSession
+     */
     void closeSession();
 
     /**
      * Synchronizes the persisted objects in the persistence context to the database state
      *
-     * @param objects
+     * @param objects (not null)
      */
     void refresh(BaseModel... objects);
 
+    /**
+     * Synchronizes the persisted objects in the persistence context to the database state
+     * @param objects (not null)
+     */
     void refresh(Collection<? extends BaseModel> objects);
 }

@@ -4,7 +4,6 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Offer;
-import sepm.dsa.model.Product;
 import sepm.dsa.model.Trader;
 import sepm.dsa.service.TraderService;
 

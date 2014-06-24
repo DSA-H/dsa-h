@@ -3,12 +3,12 @@ package sepm.dsa.gui;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -17,7 +17,7 @@ import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.model.*;
 import sepm.dsa.service.CurrencySetService;
 import sepm.dsa.service.ProductService;
@@ -50,6 +50,10 @@ public class ProductListController extends BaseControllerImpl {
     private Button deleteButton;
     @FXML
     private Button editButton;
+    @FXML
+    private TextField tf_ProductOrCategoryName;
+    @FXML
+    private TextField tf_RegionName;
 
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
@@ -122,15 +126,15 @@ public class ProductListController extends BaseControllerImpl {
     private void onCreateButtonPressed() {
         log.debug("onCreateClicked - open Waren Window");
 
-        Stage stage = (Stage) productTable.getScene().getWindow();
+        Stage stage = new Stage();
         Parent scene = (Parent) loader.load("/gui/editproduct.fxml", stage);
         EditProductController ctrl = loader.getController();
         ctrl.setProduct(null);
-        ctrl.setCalledFromCategorie(false);
         ctrl.reload();
 
         stage.setTitle("Waren");
-        stage.setScene(new Scene(scene, 600, 479));
+        stage.setScene(new Scene(scene, 600, 530));
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -138,15 +142,15 @@ public class ProductListController extends BaseControllerImpl {
     private void onEditButtonPressed() {
         log.debug("onWarenClicked - open Waren Window");
 
-        Stage stage = (Stage) productTable.getScene().getWindow();
+        Stage stage = new Stage();
         Parent scene = (Parent) loader.load("/gui/editproduct.fxml", stage);
         EditProductController ctrl = loader.getController();
         ctrl.setProduct(productTable.getSelectionModel().getSelectedItem());
-        ctrl.setCalledFromCategorie(false);
         ctrl.reload();
 
         stage.setTitle("Waren");
-        stage.setScene(new Scene(scene, 600, 479));
+        stage.setScene(new Scene(scene, 600, 530));
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -171,6 +175,16 @@ public class ProductListController extends BaseControllerImpl {
         }
 
         checkFocus();
+    }
+
+    @FXML
+    private void onFilterProductsPressed() {
+        String productOrCategoryName = tf_ProductOrCategoryName.getText();
+        String regionName = tf_RegionName.getText();
+        if (productOrCategoryName.length() == 0) productOrCategoryName = null;
+        if (regionName.length() == 0) regionName = null;
+
+        productTable.getItems().setAll(productService.getAllByFilter(productOrCategoryName, regionName));
     }
 
     @FXML

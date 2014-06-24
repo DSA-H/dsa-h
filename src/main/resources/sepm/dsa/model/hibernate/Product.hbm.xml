@@ -12,7 +12,6 @@
                     WHERE :categoryId in (SELECT c.id FROM p.categories c)
                     ORDER BY p.name asc]]>
     </query>
-<!-- TODO childs also -->
 
     <query name="Product.findAllByName">
         <![CDATA[from Product WHERE :name is null or lower(name) like lower(:name) ORDER BY name ASC]]>
@@ -21,6 +20,11 @@
     <query name="Product.findAllByRegion">
         <![CDATA[   FROM Product p
                     WHERE :regionId in (SELECT id FROM p.productionRegions)]]>
+    </query>
+
+    <query name="Product.findAllByRegionName">
+        <![CDATA[   FROM Product p
+                    WHERE exists (SELECT r.id FROM p.productionRegions r WHERE lower(r.name) like lower(:regionName))]]>
     </query>
 
     <!--<query name="Product.findAllByDeals">-->

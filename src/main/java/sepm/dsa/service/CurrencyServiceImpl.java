@@ -4,7 +4,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.dao.CurrencyDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Currency;
@@ -13,10 +13,7 @@ import sepm.dsa.model.CurrencySet;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Transactional(readOnly = true)
 public class CurrencyServiceImpl implements CurrencyService {
@@ -25,6 +22,8 @@ public class CurrencyServiceImpl implements CurrencyService {
     private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
 
     private CurrencyDao currencyDao;
+
+    private final static List<Integer> defaultCurrencies = Arrays.asList(1, 2, 3, 4);   // IDs
 
     @Override
     public Currency get(int id) {
@@ -54,6 +53,10 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Transactional(readOnly = false)
     public void remove(Currency r) {
         log.debug("calling removeConnection(" + r + ")");
+
+        if (defaultCurrencies.contains(r.getId())) {
+            throw new DSAValidationException("Standardwährungen dürfen nicht gelöscht werden!");
+        }
         currencyDao.remove(r);
     }
 
@@ -83,22 +86,27 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Override
     public Integer exchangeToBaseRate(List<CurrencyAmount> currencyAmounts) {
+        log.debug("calling exchangeToBaseRate(" + currencyAmounts + ")");
         int result = 0;
         for (CurrencyAmount a : currencyAmounts) {
             result += exchangeToBaseRate(a.getCurrency(), a.getAmount());
         }
+        log.trace("returning " + result + ")");
         return result;
     }
 
     @Override
     public CurrencyAmount exchange(Currency from, Currency to, Integer amount) {
+        log.debug("calling exchange(" + from + ", " + to  + ", " + amount + ")");
         CurrencyAmount result = new CurrencyAmount();
         result.setAmount((int) ((((double) amount) * from.getValueToBaseRate()) / (to.getValueToBaseRate()) + 0.5)); //,4, RoundingMode.HALF_UP));
         result.setCurrency(to);
+        log.trace("returning " + result + ")");
         return result;
     }
 
     public void setCurrencyDao(CurrencyDao currencyDao) {
+        log.debug("calling setCurrencyDao(" + currencyDao + ")");
         this.currencyDao = currencyDao;
     }
 
@@ -109,6 +117,7 @@ public class CurrencyServiceImpl implements CurrencyService {
      * @throws DSAValidationException if currency is not valid
      */
     private void validate(Currency currency) throws DSAValidationException {
+        log.debug("calling validate(" + currency + ")");
         Set<ConstraintViolation<Currency>> violations = validator.validate(currency);
         if (violations.size() > 0) {
             throw new DSAValidationException("Währung ist nicht valide.", violations);

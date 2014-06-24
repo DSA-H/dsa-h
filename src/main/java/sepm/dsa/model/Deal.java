@@ -1,13 +1,16 @@
 package sepm.dsa.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "deals")
 public class Deal implements BaseModel {
-    private static final long serialVersionUID = 2957293850231481770L;
+
+    private static final long serialVersionUID = -5132370376436032659L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -39,12 +42,11 @@ public class Deal implements BaseModel {
     private Long date;
 
     @ManyToOne
-    @JoinColumn     // => nullable = true !!
+    @JoinColumn
     private Trader trader;
 
     @ManyToOne
     @JoinColumn
-    // => nullable = true; product can be deleted, therefore store productName to keep history for player
     private Product product;
 
     @ManyToOne
@@ -55,11 +57,12 @@ public class Deal implements BaseModel {
     @JoinColumn(nullable = false)
     private Player player;
 
-    @NotNull
-    @Column(nullable = false)//product could be null after delete
+    @NotBlank
+    @Column(nullable = false)
     private String productName;
 
-    @NotNull
+    @NotBlank
+    @Size(max = 100)
     @Column(nullable = false)
     private String locationName;
 
@@ -221,7 +224,7 @@ public class Deal implements BaseModel {
     }
 
     public Integer priceWithDiscount() {
-        return price.intValue() - discount;
+        return price.intValue() * (100 - discount) / 100;
     }
 
 }

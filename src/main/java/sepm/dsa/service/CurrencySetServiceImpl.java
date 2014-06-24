@@ -4,7 +4,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.dao.CurrencySetDao;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
@@ -16,6 +16,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -28,6 +29,8 @@ public class CurrencySetServiceImpl implements CurrencySetService {
     private CurrencySetDao currencySetDao;
     private CurrencyService currencyService;
     private RegionService regionService;
+
+    private final static List<Integer> defaultCurrencySets = Arrays.asList(1);   // IDs
 
     @Override
     public CurrencySet get(int id) {
@@ -57,6 +60,9 @@ public class CurrencySetServiceImpl implements CurrencySetService {
     @Transactional(readOnly = false)
     public void remove(CurrencySet r) {
         log.debug("calling removeConnection(" + r + ")");
+        if (defaultCurrencySets.contains(r.getId())) {
+            throw new DSAValidationException("Standardwährungssysteme dürfen nicht gelöscht werden!");
+        }
         List<Region> regions = regionService.getAllByPreferredCurrencySet(r);
         currencySetDao.remove(r);
         for (Region region : regions) {
@@ -74,23 +80,22 @@ public class CurrencySetServiceImpl implements CurrencySetService {
 
     @Override
     public CurrencySet getDefaultCurrencySet() {
+        log.debug("calling getDefaultCurrencySet()");
         CurrencySet result = currencySetDao.get(1);
         if (result == null) {
             throw new DSARuntimeException("Keine Standardwährung gespeichert, importieren Sie bitte einen geeigneten Datensatz!");
-//            result = new CurrencySet();
-//            result.setName("<generated-currency-set>");     // TODO use the correct name
-//            result.setId(1);
-//            //...
         }
+        log.trace("returning " + result);
         return result;
     }
 
     @Override
     public List<CurrencyAmount> toCurrencySet(CurrencySet currencySet, final Integer baseRateAmount) {
+        log.debug("calling toCurrencySet(" + currencySet + ", " + currencySet + ")");
 
         Integer remaingAmount = baseRateAmount;
         List<Currency> currencies = currencyService.getAllByCurrencySet(currencySet);
-        List<CurrencyAmount> result = new ArrayList<>(currencies.size());
+        List<CurrencyAmount> result = new ArrayList<>(currencies.size()); 
         for (int i=0; i<currencies.size(); i++) {
             Currency c = currencies.get(i);
             CurrencyAmount a = new CurrencyAmount();
@@ -101,10 +106,12 @@ public class CurrencySetServiceImpl implements CurrencySetService {
             }
             result.add(a);
         }
+        log.trace("returning " + result);
         return result;
     }
 
     public void setCurrencySetDao(CurrencySetDao currencySetDao) {
+        log.debug("calling setCurrencySetDao(" + currencySetDao + ")");
         this.currencySetDao = currencySetDao;
     }
 
@@ -115,6 +122,7 @@ public class CurrencySetServiceImpl implements CurrencySetService {
      * @throws sepm.dsa.exceptions.DSAValidationException if currencySet is not valid
      */
     private void validate(CurrencySet currencySet) throws DSAValidationException {
+        log.debug("calling validate(" + currencySet + ")");
         Set<ConstraintViolation<CurrencySet>> violations = validator.validate(currencySet);
         if (violations.size() > 0) {
             throw new DSAValidationException("CurrencySet ist nicht valide.", violations);
@@ -122,10 +130,12 @@ public class CurrencySetServiceImpl implements CurrencySetService {
     }
 
     public void setCurrencyService(CurrencyService currencyService) {
+        log.debug("calling setCurrencyService(" + currencyService + ")");
         this.currencyService = currencyService;
     }
 
     public void setRegionService(RegionService regionService) {
+        log.debug("calling setRegionService(" + regionService + ")");
         this.regionService = regionService;
     }
 }

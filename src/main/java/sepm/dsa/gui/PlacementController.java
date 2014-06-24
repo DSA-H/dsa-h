@@ -1,7 +1,6 @@
 package sepm.dsa.gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,10 +20,8 @@ import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TavernService;
 import sepm.dsa.service.TraderService;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class PlacementController extends BaseControllerImpl {
 	private static final Logger log = LoggerFactory.getLogger(PlacementController.class);

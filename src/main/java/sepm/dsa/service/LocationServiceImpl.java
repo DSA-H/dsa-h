@@ -3,14 +3,11 @@ package sepm.dsa.service;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.LocationDao;
-import sepm.dsa.exceptions.DSAModelNotFoundException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Location;
-import sepm.dsa.model.Trader;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -52,7 +49,6 @@ public class LocationServiceImpl implements LocationService {
 
         traderService.getAllForLocation(location).forEach(traderService::remove);
 
-        // TODO add param 'boolean moveMovingTradersOutOfLocation' true -> move them, don't delete them, false -> delete them
         locationDao.remove(location);
     }
 
@@ -81,6 +77,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     public void setLocationDao(LocationDao locationDao) {
+        log.debug("calling setLocationDao(" + locationDao + ")");
         this.locationDao = locationDao;
     }
 
@@ -91,6 +88,7 @@ public class LocationServiceImpl implements LocationService {
      * @throws DSAValidationException if location is not valid
      */
     private void validate(Location location) throws DSAValidationException {
+        log.debug("calling validate(" + location + ")");
         Set<ConstraintViolation<Location>> violations = validator.validate(location);
         if (violations.size() > 0) {
             throw new DSAValidationException("Ort ist nicht valide.", violations);
@@ -98,6 +96,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     public void setTraderService(TraderService traderService) {
+        log.debug("calling setTraderService(" + traderService + ")");
         this.traderService = traderService;
     }
 }

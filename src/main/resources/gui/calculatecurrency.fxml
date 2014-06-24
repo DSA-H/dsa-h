@@ -6,14 +6,14 @@
 <?import javafx.scene.text.*?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="215.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.CurrencyCalculateController">
-    <children>
+    <children><ComboBox fx:id="choiceFirst" layoutX="115.25390625" layoutY="70.0" prefWidth="150.0" /><ComboBox fx:id="choiceSecond" layoutX="381.0" layoutY="70.0" prefWidth="150.0" />
+        <TextField fx:id="textFirst" layoutX="116.0" layoutY="103.0" /><Button layoutX="492.0" layoutY="176.0" mnemonicParsing="false" onAction="#onCalculatePressed" prefHeight="25.0" prefWidth="94.0" text="Berechnen" /><Button layoutX="19.1875" layoutY="176.0" mnemonicParsing="false" onAction="#onCloseClicked" text="Schließen" />
         <Label layoutX="228.0" layoutY="27.0" text="Währung umrechnen">
             <font>
                 <Font name="System Bold" size="18.0" />
             </font>
         </Label>
         <Label alignment="CENTER_RIGHT" layoutX="30.0" layoutY="74.0" prefHeight="17.0" prefWidth="82.0" text="von:" />
-        <Label fx:id="labelvon" alignment="BOTTOM_RIGHT" layoutX="30.0" layoutY="108.0" prefHeight="17.0" prefWidth="82.0" text="WährungA" />
-        <TextField fx:id="textFirst" layoutX="116.0" layoutY="103.0" /><ChoiceBox fx:id="choiceFirst" layoutX="115.25390625" layoutY="70.0" prefWidth="150.0" /><ChoiceBox fx:id="choiceSecond" layoutX="381.0" layoutY="70.0" prefWidth="150.0" /><Label alignment="CENTER_RIGHT" layoutX="289.0" layoutY="74.0" prefHeight="17.0" prefWidth="88.0" text="in:" /><Label fx:id="labelin" alignment="CENTER_RIGHT" layoutX="289.0" layoutY="108.0" prefHeight="17.0" prefWidth="88.0" text="WährungB" /><Label fx:id="labelresult" layoutX="381.0" layoutY="108.0" prefHeight="17.0" prefWidth="149.0" text="0" /><Button layoutX="492.0" layoutY="176.0" mnemonicParsing="false" onAction="#onCalculatePressed" prefHeight="25.0" prefWidth="94.0" text="Berechnen" /><Button layoutX="19.1875" layoutY="176.0" mnemonicParsing="false" onAction="#onCloseClicked" text="Schließen" />
+        <Label fx:id="labelvon" alignment="BOTTOM_RIGHT" layoutX="30.0" layoutY="108.0" prefHeight="17.0" prefWidth="82.0" text="WährungA" /><Label alignment="CENTER_RIGHT" layoutX="289.0" layoutY="74.0" prefHeight="17.0" prefWidth="88.0" text="in:" /><Label fx:id="labelin" alignment="CENTER_RIGHT" layoutX="289.0" layoutY="108.0" prefHeight="17.0" prefWidth="88.0" text="WährungB" /><Label fx:id="labelresult" layoutX="381.0" layoutY="108.0" prefHeight="17.0" prefWidth="149.0" text="0" />
     </children>
 </Pane>

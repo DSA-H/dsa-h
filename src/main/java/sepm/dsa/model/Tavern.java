@@ -1,5 +1,7 @@
 package sepm.dsa.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -9,15 +11,15 @@ import javax.validation.constraints.Size;
 @Table(name = "taverns")
 public class Tavern implements BaseModel {
 
-	private static final long serialVersionUID = -2259554288598225744L;
+    private static final long serialVersionUID = -2965397764275583075L;
 
-	@Id
+    @Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(nullable = false, unique = true)
 	private Integer id;
 
-	@NotNull
-	@Size(min = 1, max = 100)
+	@NotBlank
+	@Size(max = 100)
 	@Column(nullable = false, length = 100)
 	private String name;
 
@@ -46,7 +48,7 @@ public class Tavern implements BaseModel {
 	@Column(nullable = false)
 	private Integer quality;
 
-    @Size(min = 0, max = 1000)
+    @Size(max = 1000)
 	@Column(length = 1000)
 	private String comment;
 
@@ -135,9 +137,9 @@ public class Tavern implements BaseModel {
 		this.quality = quality.getValue();
 	}
 
-	public static long getSerialVersionUID() {
-		return serialVersionUID;
-	}
+    public Integer getFreeBeds() {
+        return beds - usage;
+    }
 
 	@Override
 	public boolean equals(Object o) {

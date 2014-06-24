@@ -84,11 +84,14 @@ public class RegionBorderServiceImpl implements RegionBorderService {
      * @throws sepm.dsa.exceptions.DSAValidationException if region border is not valid
      */
     private void validate(RegionBorder regionBorder) throws DSAValidationException {
-//        TODO region1 must not equals region2
         log.debug("calling validate(" + regionBorder + ")");
         Set<ConstraintViolation<RegionBorder>> violations = validator.validate(regionBorder);
         if (violations.size() > 0) {
             throw new DSAValidationException("Gebietsgrenze ist nicht valide.", violations);
+        }
+        if (regionBorder.getRegion1().equals(regionBorder.getRegion2())) {
+            throw new DSAValidationException("Gebietsgrenze ist nicht valide, es darf keine Grenze zwischen ein und" +
+                    " dem selben Gebiet bestehen.", violations);
         }
     }
 

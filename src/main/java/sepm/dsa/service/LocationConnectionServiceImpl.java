@@ -7,11 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.LocationConnectionDao;
 import sepm.dsa.dao.LocationDao;
 import sepm.dsa.exceptions.DSAAlreadyExistsException;
-import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.LocationConnection;
-import sepm.dsa.model.Region;
 import sepm.dsa.service.path.NoPathException;
 import sepm.dsa.service.path.PathService;
 
@@ -35,14 +33,14 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
     private LocationDao locationDao;
 
     public void setLocationConnectionDao(LocationConnectionDao locationConnectionDao) {
-        log.debug("calling setLocationConnectionDao()");
+        log.debug("calling setLocationConnectionDao(" + locationConnectionDao + ")");
         this.locationConnectionDao = locationConnectionDao;
     }
 
     @Transactional(readOnly = false)
     @Override
     public LocationConnection add(LocationConnection locationConnection) {
-        log.debug("calling addConnection(" + locationConnection + ")");
+        log.debug("calling add(" + locationConnection + ")");
         validate(locationConnection);
         if (get(locationConnection.getLocation1(), locationConnection.getLocation2()) != null) {
             throw new DSAAlreadyExistsException("Die Verbindung zwischen "
@@ -88,7 +86,8 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
 	public List<LocationConnection> getAll() {
 		log.debug("calling getAll()");
 		List<LocationConnection> result = locationConnectionDao.getAll();
-		return result;
+        log.trace("returning " + result);
+        return result;
 	}
 
     @Override
@@ -99,7 +98,9 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
 	    List<LocationConnection> allConnections = locationConnectionDao.getAll();
 	    List<Location> endLocation = new ArrayList<>();
 	    endLocation.add(location2);
-	    return pathService.findShortestPath(allLocations, allConnections, location1, endLocation);
+        List<LocationConnection> result = pathService.findShortestPath(allLocations, allConnections, location1, endLocation);
+        log.trace("returning " + result);
+        return result;
     }
 
     @Override
@@ -167,17 +168,19 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
     public int suggestedTravelTimeForDistance(double distance) {
         log.debug("calling suggestedTravelTimeForDistance(" + distance + ")");
 
-        int result = (int) (distance / 10); // TODO find good value
+        int result = (int) (distance / 10);
         log.trace("returning " + result);
         return result;
     }
 
     public void setLocationDao(LocationDao locationDao) {
+        log.debug("calling setLocationDao(" + locationDao + ")");
         this.locationDao = locationDao;
     }
 
 	public void setPathService(PathService pathService) {
-		this.pathService = pathService;
+        log.debug("calling setPathService(" + pathService + ")");
+        this.pathService = pathService;
 	}
 
     /**
@@ -187,10 +190,13 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
      * @throws sepm.dsa.exceptions.DSAValidationException if region is not valid
      */
     public void validate(LocationConnection locationConnection) throws DSAValidationException {
-        log.info("calling validate(" + locationConnection + ")");
+        log.debug("calling validate(" + locationConnection + ")");
         Set<ConstraintViolation<LocationConnection>> violations = validator.validate(locationConnection);
         if (violations.size() > 0) {
-            throw new DSAValidationException("Gebiet ist nicht valide.", violations);
+            throw new DSAValidationException("Reiseverbindung ist nicht valide.", violations);
+        }
+        if (locationConnection.getLocation1().equals(locationConnection.getLocation2())) {
+            throw new DSAValidationException("Reiseverbindung ist nicht valide, es darf keine Reiseverbindung mit sich selbst existieren.");
         }
     }
 }

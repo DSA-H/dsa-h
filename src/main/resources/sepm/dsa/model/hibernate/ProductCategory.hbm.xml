@@ -4,7 +4,7 @@
 <hibernate-mapping>
 
     <query name="ProductCategory.findAll">
-        <![CDATA[from ProductCategory ORDER BY name ASC]]>
+        <![CDATA[from ProductCategory ORDER BY name asc]]>
     </query>
 
     <query name="ProductCategory.findAllByParent">

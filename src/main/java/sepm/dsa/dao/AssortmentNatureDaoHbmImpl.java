@@ -1,7 +1,6 @@
 package sepm.dsa.dao;
 
 import sepm.dsa.model.AssortmentNature;
-import sepm.dsa.model.RegionBorder;
 
 import java.util.List;
 import java.util.Vector;
@@ -18,7 +17,6 @@ public class AssortmentNatureDaoHbmImpl extends BaseDaoHbmImpl<AssortmentNature>
     @Override
     public AssortmentNature update(AssortmentNature model) {
         AssortmentNature result = super.update(model);
-//        model.getTraderCategory().putAssortment(model);
         return result;
     }
 

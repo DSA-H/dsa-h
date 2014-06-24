@@ -53,7 +53,7 @@
                 </TableView>
                 <Button fx:id="removeBorderButton" disable="true" mnemonicParsing="false" onAction="#onRemoveBorderPressed" text="Entfernen" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
                 <Button fx:id="AddBorder" mnemonicParsing="false" onAction="#onAddBorderPressed" text="Grenze Hinzufügen" GridPane.columnIndex="5" GridPane.rowIndex="8" />
-                <TextField fx:id="borderCost" prefHeight="25.0" prefWidth="81.0" GridPane.columnIndex="3" GridPane.rowIndex="8" text="120" />
+                <TextField fx:id="borderCost" prefHeight="25.0" prefWidth="81.0" text="40" GridPane.columnIndex="3" GridPane.rowIndex="8" />
                 <Label text="Grenzkosten" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
                 <Label text="Gebiet editieren" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                     <font>
@@ -62,7 +62,7 @@
                 </Label>
                 <Separator prefHeight="3.0" prefWidth="491.0" GridPane.columnIndex="1" GridPane.columnSpan="7" GridPane.rowIndex="6" />
                 <Label text="Gebiet auswählen" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
-                <ChoiceBox fx:id="borderChoiceBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+                <ComboBox fx:id="borderComboBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="7" />
                 <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="10">
                     <children>
                         <Button fx:id="save" mnemonicParsing="false" onAction="#onSavePressed" text="Speichern" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />

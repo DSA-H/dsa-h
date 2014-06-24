@@ -3,7 +3,6 @@ package sepm.dsa.gui;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -13,6 +12,7 @@ import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.TraderService;
 
@@ -31,7 +31,7 @@ public class MovingTraderListController extends BaseControllerImpl {
     private LocationConnection connection;
 
 	@FXML
-	private TableView traderTable;
+	private TableView<MovingTrader> traderTable;
 	@FXML
 	private TableColumn traderColumn;
 	@FXML
@@ -68,7 +68,6 @@ public class MovingTraderListController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("reload MovingTraderListController");
-        locationsLabel.setText("in den Orten " + connection.getLocation1() + " und " + connection.getLocation2());
 
         List<Trader> traders = traderService.getAllForLocation(connection.getLocation1());
         traders.addAll(traderService.getAllForLocation(connection.getLocation2()));
@@ -80,22 +79,38 @@ public class MovingTraderListController extends BaseControllerImpl {
         }
 	    traderTable.getItems().setAll(movingTraders);
 
+        commentLabel.setText(connection.getComment());
+
         checkFocus();
     }
 
     @FXML
 	private void onDetailsButtonPressed() {
 		log.debug("calling onDetailsPressed");
+        selectedTrader = traderTable.getSelectionModel().getSelectedItem();
+
+        if(selectedTrader == null) {
+            throw new DSAValidationException("Kein Händler ausgegewählt!");
+        }
+
 		Stage stage = new Stage();
 		Parent scene = (Parent) loader.load("/gui/traderdetails.fxml", stage);
 		stage.setTitle("Händler-Details");
 
 		TraderDetailsController controller = loader.getController();
 		controller.setTrader(selectedTrader);
+        controller.reload();
+
 		stage.setScene(new Scene(scene, 830, 781));
 		stage.setResizable(false);
-		stage.showAndWait();
+		stage.show();
 	}
+
+    @FXML
+    private void onClosePressed() {
+        Stage stage = (Stage)traderTable.getScene().getWindow();
+        stage.close();
+    }
 
 	@FXML
 	private void checkFocus() {
@@ -112,7 +127,7 @@ public class MovingTraderListController extends BaseControllerImpl {
 
 	public void setLocationConnection(LocationConnection connection) {
         this.connection = connection;
-        commentLabel.setText(connection.getComment());
+        locationsLabel.setText("in den Orten " + connection.getLocation1() + " und " + connection.getLocation2());
 	}
 
 	public void setTraderService(TraderService traderService) {

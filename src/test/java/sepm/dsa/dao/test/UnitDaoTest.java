@@ -28,8 +28,6 @@ public class UnitDaoTest extends AbstractDatabaseTest {
 
     @Test
     public void testAdd() throws Exception {
-        // TODO really test unit and not currency
-
         UnitType unitType = unitTypeService.get(2);
 
         Unit c1 = new Unit();

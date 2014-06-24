@@ -1,7 +1,6 @@
 package sepm.dsa.gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,7 +14,8 @@ import sepm.dsa.model.Currency;
 import sepm.dsa.service.CurrencyService;
 import sepm.dsa.service.SaveCancelService;
 
-import java.math.BigDecimal;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class EditCurrencyController extends BaseControllerImpl {
 
@@ -40,8 +40,18 @@ public class EditCurrencyController extends BaseControllerImpl {
     private Button saveButton;
 
     @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
+        log.debug("initialize EditCurrencyController");
+    }
+
+    @Override
     public void reload() {
         log.debug("reload EditCurrencyController");
+    }
+
+    public void setCurrency(Currency selectedCurrency) {
+        this.selectedCurrency = selectedCurrency;
         if (selectedCurrency != null) {
             isNewCurrency = false;
             nameField.setText(selectedCurrency.getName());
@@ -49,19 +59,15 @@ public class EditCurrencyController extends BaseControllerImpl {
             valueToBaseRateField.setText(selectedCurrency.getValueToBaseRate().toString());
         } else {
             isNewCurrency = true;
-            selectedCurrency = new Currency();
+            this.selectedCurrency = new Currency();
         }
-    }
-
-    public void setCurrency(Currency selectedCurrency) {
-        this.selectedCurrency = selectedCurrency;
     }
 
     @FXML
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
         saveCancelService.cancel();
-        returnToCurrenciesList();
+        close();
     }
 
     @FXML
@@ -95,16 +101,13 @@ public class EditCurrencyController extends BaseControllerImpl {
         }
         saveCancelService.save();
 
-        returnToCurrenciesList();
+        close();
     }
 
-    private void returnToCurrenciesList() {
+    private void close() {
         // return to currencies-list
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/currencyList.fxml", stage);
-        CurrencyListController ctrl = loader.getController();
-        ctrl.reload();
-        stage.setScene(new Scene(scene, 600, 438));
+        stage.close();
     }
 
     public void setCurrencyService(CurrencyService currencyService) {

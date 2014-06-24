@@ -4,7 +4,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.dao.UnitAmount;
+import sepm.dsa.model.UnitAmount;
 import sepm.dsa.dao.UnitDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.Unit;
@@ -63,7 +63,7 @@ public class UnitServiceImpl implements UnitService {
     @Override
     public UnitAmount exchange(Unit from, Unit to, Double amount) {
         UnitAmount result = new UnitAmount();
-        result.setAmount(amount * to.getValueToBaseUnit() / from.getValueToBaseUnit());
+        result.setAmount(from.exchange(amount, to));
         result.setUnit(to);
 
         return result;
@@ -84,6 +84,7 @@ public class UnitServiceImpl implements UnitService {
      * @throws sepm.dsa.exceptions.DSAValidationException if product is not valid
      */
     private void validate(Unit product) throws DSAValidationException {
+        log.debug("calling validate(" + product + ")");
         Set<ConstraintViolation<Unit>> violations = validator.validate(product);
         if (violations.size() > 0) {
             throw new DSAValidationException("Produktunit ist nicht valide.", violations);

@@ -3,8 +3,8 @@ package sepm.dsa.gui;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -47,14 +47,15 @@ public class EditTraderController extends BaseControllerImpl {
 	private Point2D position;
 	private DSADate lastmoved;
 
-    //TODO fill with better names
-    ArrayList<String> firstNames = new ArrayList<String>(
-            Arrays.asList("Max", "Paul", "Tom"));
-    ArrayList<String> lastNames = new ArrayList<String>(
-            Arrays.asList("Huber", "Kurz", "Lang"));
-
     @FXML
     private TextField nameField;
+	@FXML
+	private ChoiceBox cultureBox;
+	@FXML
+	private CheckBox maleCheck;
+	@FXML
+	private CheckBox femaleCheck;
+
     @FXML
     private TextField sizeField;
     @FXML
@@ -66,9 +67,9 @@ public class EditTraderController extends BaseControllerImpl {
     @FXML
     private TextField convinceField;
     @FXML
-    private ChoiceBox<Location> locationBox;
+    private ComboBox<Location> locationBox;
     @FXML
-    private ChoiceBox<TraderCategory> categoryBox;
+    private ComboBox<TraderCategory> categoryBox;
     @FXML
     private TextArea commentArea;
 
@@ -93,7 +94,39 @@ public class EditTraderController extends BaseControllerImpl {
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
         areaBox.getItems().setAll(DistancePreferrence.values());
-        citySizeBox.getItems().setAll(TownSize.values());
+        citySizeBox.getItems().add(0, null);
+        citySizeBox.getItems().addAll(TownSize.values());
+	    cultureBox.setItems(FXCollections.observableArrayList(traderService.getAllCultures()));
+	    if (Math.random() < 0.5) {
+		    maleCheck.setSelected(true);
+		    femaleCheck.setSelected(false);
+	    } else {
+		    maleCheck.setSelected(false);
+		    femaleCheck.setSelected(true);
+	    }
+	    if (traderService.getAllCultures().size() != 0) {
+		    cultureBox.getSelectionModel().select(0);
+	    }
+	    maleCheck.selectedProperty().addListener(new ChangeListener<Boolean>() {
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+			    if (newValue == true) {
+				    femaleCheck.setSelected(false);
+			    } else {
+				    femaleCheck.setSelected(true);
+			    }
+		    }
+	    });
+	    femaleCheck.selectedProperty().addListener(new ChangeListener<Boolean>() {
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+			    if (newValue == true) {
+				    maleCheck.setSelected(false);
+			    } else {
+				    maleCheck.setSelected(true);
+			    }
+		    }
+	    });
 
         movingCheck.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -125,7 +158,16 @@ public class EditTraderController extends BaseControllerImpl {
     public void reload() {
         log.debug("reload EditTraderController");
 
-        if(!isNewTrader) {
+	    String culture = (String) cultureBox.getSelectionModel().getSelectedItem();
+	    List<String> cultures = traderService.getAllCultures();
+	    cultureBox.setItems(FXCollections.observableArrayList(cultures));
+		if (cultures.contains(culture)) {
+			cultureBox.getSelectionModel().select(culture);
+		} else if (cultures.size() > 0) {
+			cultureBox.getSelectionModel().select(0);
+		}
+
+	    if(!isNewTrader) {
             if (traderService.get(selectedTrader.getId()) == null) {
                 onCancelPressed();
                 return;
@@ -167,7 +209,11 @@ public class EditTraderController extends BaseControllerImpl {
         log.debug("calling setUp");
 
         if (isNewTrader) {
-            generateRandoms();
+	        onGenerateNamePressed();
+	        muField.setText(""+traderService.getRandomValue(13, 3));
+	        inField.setText(""+traderService.getRandomValue(13, 3));
+	        chField.setText(""+traderService.getRandomValue(13, 3));
+	        convinceField.setText(""+traderService.getRandomValue(10, 5));
         } else {
             nameField.setText(selectedTrader.getName());
             sizeField.setText("" + selectedTrader.getSize());
@@ -183,88 +229,48 @@ public class EditTraderController extends BaseControllerImpl {
 
 	        if (currentType == MOVINGTRADER) {
 		        stayTimeField.setText("" + ((MovingTrader) selectedTrader).getAvgStayDays());
-		        citySizeBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredTownSize());
+                if(((MovingTrader) selectedTrader).getPreferredTownSize() != null) {
+                    citySizeBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredTownSize());
+                }else {
+                    citySizeBox.getSelectionModel().select(0);
+                }
 				areaBox.getSelectionModel().select(((MovingTrader) selectedTrader).getPreferredDistance());
 		        movingCheck.setSelected(true);
 	        }
         }
     }
 
-    //TODO: move to service laer. This calculations should not be in GUI layer!
-    private void generateRandoms() {
-        double rand;
-        double rand2;
-        int result;
-
-        String name = "";
-        rand = Math.random() * firstNames.size();
-        name += firstNames.get((int) rand);
-        rand = Math.random() * lastNames.size();
-        name += " " + lastNames.get((int) rand);
-        nameField.setText(name);
-
-        rand = Math.random();
-        rand *= rand;
-        rand *= 5;
-        rand2 = Math.random();
-        if (rand2 < 0.5) {
-            result = (int) (15 + rand);
-        } else {
-            result = (int) (15 - rand);
-        }
-        muField.setText("" + result);
-
-        rand = Math.random();
-        rand *= rand;
-        rand *= 5;
-        rand2 = Math.random();
-        if (rand2 < 0.5) {
-            result = (int) (15 + rand);
-        } else {
-            result = (int) (15 - rand);
-        }
-        inField.setText("" + result);
-
-        rand = Math.random();
-        rand *= rand;
-        rand *= 5;
-        rand2 = Math.random();
-        if (rand2 < 0.5) {
-            result = (int) (15 + rand);
-        } else {
-            result = (int) (15 - rand);
-        }
-        chField.setText("" + result);
-
-        rand = Math.random();
-        rand *= rand;
-        rand *= 6;
-        rand2 = Math.random();
-        if (rand2 < 0.5) {
-            result = (int) (6 + rand);
-        } else {
-            result = (int) (6 - rand);
-        }
-        convinceField.setText("" + result);
-    }
+	@FXML
+	private void onGenerateNamePressed() {
+		if (cultureBox.getSelectionModel().getSelectedItem() == null) {
+			Action response = Dialogs.create()
+					.title("Fehler")
+					.masthead(null)
+					.message("Es muss eine Kultur ausgewählt werden!")
+					.showWarning();
+		}
+		nameField.setText(traderService.getRandomName((String) cultureBox.getSelectionModel().getSelectedItem(), maleCheck.isSelected()));
+	}
 
     @FXML
     private void onSavePressed() {
         log.debug("called onSavePressed");
 
 	    if (initialType != currentType) {
-		    if (currentType == MOVINGTRADER) {
+            Integer idBefore = selectedTrader.getId();
+            if (currentType == MOVINGTRADER) {
 
-			    if (!isNewTrader) {
-				    traderService.remove(selectedTrader);
-			    }
+//			    if (!isNewTrader) {
+//				    traderService.remove(selectedTrader);
+//			    }
 			    selectedTrader = new MovingTrader();
 		    } else {
-			    if (!isNewTrader) {
-				    traderService.remove(selectedTrader);
-			    }
+//                if (selectedTrader instanceof MovingTrader) {
+//                    traderService.makeMovingTraderToTrader((MovingTrader) selectedTrader);
+//                }
 				selectedTrader = new Trader();
 		    }
+            selectedTrader.setId(idBefore);
 	    }
 
         //name
@@ -345,9 +351,6 @@ public class EditTraderController extends BaseControllerImpl {
 
 		    //pref. townSize
             townsize = citySizeBox.getValue();
-		    if (townsize == null) {
-                throw new DSAValidationException("Eine bevorzugte Stadtgröße muss ausgewählt werden!");
-		    }
 
             area = areaBox.getValue();
 		    //travel area
@@ -355,10 +358,6 @@ public class EditTraderController extends BaseControllerImpl {
                 throw new DSAValidationException("Ein Reisegebiet muss ausgewählt werden!");
 		    }
 	    }
-
-        if(!isNewTrader) {
-
-        }
 
         if (isNewTrader) {
             selectedTrader.setName(name);
@@ -402,12 +401,13 @@ public class EditTraderController extends BaseControllerImpl {
                     selectedTrader.setxPos((int) position.getX());
                     selectedTrader.setyPos((int) position.getY());
                     if(selectedTrader instanceof MovingTrader) {
-                        ((MovingTrader) selectedTrader).setAvgStayDays(avgStayDays);
-                        ((MovingTrader) selectedTrader).setPreferredTownSize(townsize);
-                        ((MovingTrader) selectedTrader).setPreferredDistance(area);
+                        MovingTrader selectedMovingTrader = (MovingTrader) selectedTrader;
+                        selectedMovingTrader.setAvgStayDays(avgStayDays);
+                        selectedMovingTrader.setPreferredTownSize(townsize);
+                        selectedMovingTrader.setPreferredDistance(area);
                         //lastmoved
                         DSADate date = timeService.getCurrentDate();
-                        ((MovingTrader) selectedTrader).setLastMoved(date);
+                        selectedMovingTrader.setLastMoved(date);
                     }
                     selectedTrader = traderService.recalculateOffers(selectedTrader);
                 } else if (response == Dialog.Actions.NO) {
@@ -442,7 +442,7 @@ public class EditTraderController extends BaseControllerImpl {
                             ((MovingTrader) selectedTrader).setLastMoved(date);
                         }
                         //Recalculate pricing
-                        traderService.reCalculatePriceForOffer(/*selectedTrader.getOffers(), */selectedTrader);
+                        traderService.reCalculatePriceForOffer(/*selectedTrader.getOffers(), */selectedTrader, false);
                     } else if(response2 == links.get(1)) {
                         selectedTrader.setName(name);
                         selectedTrader.setSize(size);
@@ -464,7 +464,7 @@ public class EditTraderController extends BaseControllerImpl {
                             ((MovingTrader) selectedTrader).setLastMoved(date);
                         }
                         //Recalculate pricing if new price is higher
-                        traderService.reCalculatePriceForOfferIfNewPriceIsHigher(/*selectedTrader.getOffers(), */selectedTrader);
+                        traderService.reCalculatePriceForOfferIfNewPriceIsHigher(/*selectedTrader.getOffers(), */selectedTrader, false);
                     }else {
                         return;
                     }
@@ -492,11 +492,17 @@ public class EditTraderController extends BaseControllerImpl {
                 DSADate date = timeService.getCurrentDate();
                 ((MovingTrader) selectedTrader).setLastMoved(date);
             }
+
 	        if (currentType == initialType) {
 		        traderService.update(selectedTrader);
 	        } else {
-		        traderService.add(selectedTrader);
-	        }
+                if (currentType == MOVINGTRADER) {
+                    traderService.makeTraderToMovingTrader((MovingTrader) selectedTrader);
+//			    if (!isNewTra
+                } else {
+                    traderService.makeMovingTraderToTrader(selectedTrader);
+                }
+            }
         }
         saveCancelService.save();
 

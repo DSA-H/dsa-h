@@ -1,25 +1,27 @@
 package sepm.dsa.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name="players")
 public class Player implements Serializable, BaseModel {
-	private static final long serialVersionUID = 3102323283798472344L;
 
-	@Id
+    private static final long serialVersionUID = 9037654172639011341L;
+
+    @Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(nullable = false, unique = true)
 	private Integer id;
 
-	@NotNull
+	@NotBlank
+    @Size(max = 50)
 	@Column(nullable = false)
 	private String name;
 

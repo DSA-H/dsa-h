@@ -24,6 +24,26 @@
 
     <build>
 	<plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.9.1</version>
+            <configuration>
+                <show>public</show>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>attach-javadocs</id>
+                    <phase>prepare-package</phase>
+                    <goals>
+                        <goal>jar</goal>
+                    </goals>
+                    <configuration>
+                        <additionalparam>-Xdoclint:none</additionalparam>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
 	    <plugin>
             <artifactId>maven-clean-plugin</artifactId>
             <version>2.5</version>
@@ -64,6 +84,11 @@
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>
+            <executions>
+                <execution>
+                    <phase>prepare-package</phase>
+                </execution>
+            </executions>
             <configuration>
                 <archive>
                     <manifest>
@@ -80,7 +105,7 @@
             <artifactId>maven-dependency-plugin</artifactId>
             <executions>
                 <execution>
-                    <phase>package</phase>
+                    <phase>prepare-package</phase>
                     <goals>
                         <goal>copy-dependencies</goal>
                     </goals>
@@ -89,24 +114,6 @@
                     </configuration>
                 </execution>
             </executions>
-        </plugin>
-        <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>2.4</version>
-            <executions>
-                <execution>
-                    <id>make-assembly</id>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>single</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <configuration>
-                <descriptors>
-                    <descriptor>conf/release-assembly.xml</descriptor>
-                </descriptors>
-            </configuration>
         </plugin>
         <plugin>
             <artifactId>maven-resources-plugin</artifactId>
@@ -145,6 +152,24 @@
                                 <directory>database.dist</directory>
                                 <includes>
                                     <include>fooDB.*</include>
+                                </includes>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>copy-name-file</id> <!-- also creates resources folder for properties file! -->
+                    <phase>generate-resources</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${project.build.directory}/release/resources</outputDirectory>
+                        <resources>
+                            <resource>
+                                <directory>resources</directory>
+                                <includes>
+                                    <include>nameFile.txt</include>
                                 </includes>
                             </resource>
                         </resources>
@@ -226,10 +251,50 @@
                         </resources>
                     </configuration>
                 </execution>
+                <execution>
+                    <id>copy-release-dir-for-javadoc-version</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>target/release-with-javadoc</outputDirectory>
+                        <!--<overwrite>true</overwrite>-->
+                        <resources>
+                            <resource>
+                                <directory>target/release</directory>
+                            </resource>
+                            <resource>
+                                <directory>target</directory>
+                                <includes>
+                                    <include>apidocs/**/*</include>
+                                </includes>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution>
             </executions>
         </plugin>
-
-	</plugins>
+        <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>2.4</version>
+            <executions>
+                <execution>
+                    <id>make-assembly</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <descriptors>
+                    <descriptor>conf/release-assembly.xml</descriptor>
+                    <descriptor>conf/release-with-javadoc-assembly.xml</descriptor>
+                </descriptors>
+            </configuration>
+        </plugin>
+    </plugins>
     </build>
 
     <dependencies>
@@ -252,7 +317,12 @@
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
             <version>1.6.2</version>
         </dependency>
 
@@ -274,7 +344,6 @@
             <groupId>org.dbunit</groupId>
             <artifactId>dbunit</artifactId>
             <version>2.5.0</version>
-            <scope>test</scope>
         </dependency>
 
         <!-- BeanValidation -->

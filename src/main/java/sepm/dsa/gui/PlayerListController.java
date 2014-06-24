@@ -1,7 +1,6 @@
 package sepm.dsa.gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -58,30 +57,34 @@ public class PlayerListController extends BaseControllerImpl {
     private void onCreateButtonPressed() {
         log.debug("onCreateClicked - open Player Window");
 
-        Stage stage = (Stage) playerTable.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/editplayer.fxml", stage);
-        EditPlayerController ctrl = loader.getController();
-        ctrl.setPlayer(null);
-        ctrl.reload();
+	    Stage stage = new Stage();
+	    Parent scene = (Parent) loader.load("/gui/editplayer.fxml", stage);
+	    EditPlayerController ctrl = loader.getController();
+	    ctrl.setPlayer(null);
+	    ctrl.reload();
 
-        stage.setTitle("Spieler Erstellen");
-        stage.setScene(new Scene(scene, 850, 414));
-        stage.show();
+	    stage.setTitle("Spieler bearbeiten");
+	    stage.setScene(new Scene(scene, 850, 414));
+	    stage.setResizable(false);
+        stage.setResizable(false);
+	    stage.show();
     }
 
     @FXML
     private void onEditButtonPressed() {
         log.debug("onWarenClicked - open Player Window");
 
-        Stage stage = (Stage) playerTable.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/editplayer.fxml", stage);
-        EditPlayerController ctrl = loader.getController();
-        ctrl.setPlayer(playerTable.getSelectionModel().getSelectedItem());
-        ctrl.reload();
+	    Stage stage = new Stage();
+	    Parent scene = (Parent) loader.load("/gui/editplayer.fxml", stage);
+	    EditPlayerController ctrl = loader.getController();
+	    ctrl.setPlayer(playerTable.getSelectionModel().getSelectedItem());
+	    ctrl.reload();
 
-        stage.setTitle("Spieler bearbeiten");
-        stage.setScene(new Scene(scene, 850, 414));
-        stage.show();
+	    stage.setTitle("Spieler bearbeiten");
+	    stage.setScene(new Scene(scene, 850, 414));
+	    stage.setResizable(false);
+        stage.setResizable(false);
+	    stage.show();
     }
 
     @FXML
@@ -118,6 +121,11 @@ public class PlayerListController extends BaseControllerImpl {
         }
     }
 
+    @FXML
+    private void onClosePressed() {
+        Stage stage = (Stage) playerTable.getScene().getWindow();
+        stage.close();
+    }
 
     public void setPlayerService(PlayerService playerService) {
         this.playerService = playerService;

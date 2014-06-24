@@ -2,15 +2,11 @@ package sepm.dsa.service.test;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.dbunit.AbstractDatabaseTest;
 import sepm.dsa.model.Currency;
-import sepm.dsa.model.CurrencySet;
 import sepm.dsa.service.CurrencyService;
-import sepm.dsa.service.CurrencySetService;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +38,8 @@ public class CurrencyServiceTest extends AbstractDatabaseTest {
 
     @Test
     public void testRemove() throws Exception {
-        currencyService.remove(currencyService.get(1));
-        assertNull(currencyService.get(1));
+        currencyService.remove(currencyService.get(5));
+        assertNull(currencyService.get(5));
     }
 
     @Test

@@ -3,10 +3,8 @@ package sepm.dsa.service;
 import javafx.scene.image.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import sepm.dsa.dao.OfferDao;
 import sepm.dsa.exceptions.DSARuntimeException;
-import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 
 import java.io.*;
@@ -14,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.logging.FileHandler;
 
 public class TimeServiceImpl implements TimeService {
 	private static final Logger log = LoggerFactory.getLogger(TimeServiceImpl.class);
@@ -25,16 +22,21 @@ public class TimeServiceImpl implements TimeService {
     private OfferDao offerDao;
     private LocationService locationService;
     private TavernService tavernService;
-	private SaveCancelService saveCancelService;
 	private MapService mapService;
 
-	private DSADate date;
-	private Properties properties;
+    // Loading Bar Service
+    private int forwardProgress = 0;
+    private int forwardMaxProgress = 100;
+    private String forwardMessage = "Lade ...";
 
-	public TimeServiceImpl() {
-		try {
+	private Properties properties = new Properties();;
+
+	@Override
+	public DSADate getCurrentDate() {
+        log.debug("calling getCurrentDate()");
+        try {
 			properties = new Properties();
-			Path path = Paths.get("properties");
+			Path path = Paths.get("resources/properties");
 			if (!Files.exists(path)) {
 				Files.createFile(path);
 			}
@@ -42,15 +44,12 @@ public class TimeServiceImpl implements TimeService {
 			properties.load(is);
 			long timestamp = Long.parseLong(properties.getProperty("time", "0"));
 			is.close();
-			date = new DSADate(timestamp);
+            DSADate result = new DSADate(timestamp);
+            log.debug("returning " + result);
+            return result;
 		} catch (IOException e) {
 			throw new DSARuntimeException("Probleme beim Laden der Properties Datei! \n" + e.getMessage());
 		}
-	}
-
-	@Override
-	public DSADate getCurrentDate() {
-		return date;
 	}
 
 	@Override
@@ -58,10 +57,9 @@ public class TimeServiceImpl implements TimeService {
 		log.debug("calling setCurrentDate(" + dsaDate + ")");
 		try {
 			properties.put("time", dsaDate.getTimestamp() + "");
-			OutputStream os = Files.newOutputStream(Paths.get("properties"));
+			OutputStream os = Files.newOutputStream(Paths.get("resources/properties"));
 			properties.store(os, "");
 			os.close();
-			date = dsaDate;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -76,23 +74,32 @@ public class TimeServiceImpl implements TimeService {
 	@Override
 	public void forwardTime(int days) {
 		log.debug("calling forwardTime(" + days + ")");
-		if (days < 1) {
-			throw new DSAValidationException("Das Datum muss mindestens einen Tag nach vorne gestellt werden!");
-		}
+
+        List<Location> locations = locationService.getAll();
+        List<Trader> traders = traderService.getAll();
+        List<Tavern> taverns = tavernService.getAll();
+        List<MovingTrader> movingTraders = traderService.getAllMovingTraders();
+
+        forwardMaxProgress = traders.size() + taverns.size() + movingTraders.size() + locations.size() + 1;
+
 		// save new time
+		DSADate date = getCurrentDate();
 		date.setTimestamp(date.getTimestamp() + days);
 		setCurrentDate(date);
 
-		// change sortiment for all traders
-		for (Trader trader : traderService.getAll()) {
-			int newOffersCount = (int) (PRODUCT_TURNOVER_PERCENT_PER_DAY * trader.getSize() * days);
+        // change sortiment for all traders
+        forwardMessage = "Berechne Sortiments Fluktuation aller Händler ...";
+		for (Trader trader : traders) {
+            forwardProgress++;
+
+			int newOffersCount = (int) ( 100 - (100 * Math.pow(Math.E, (-1 * PRODUCT_TURNOVER_PERCENT_PER_DAY/100 * days)) ) );
 			if (newOffersCount > trader.getSize()) {
 				newOffersCount = trader.getSize();
 			}
 			int actOffersCount = 0;
 			Set<Offer> offers = trader.getOffers();
 			for (Offer offer : offers) {
-				actOffersCount += offer.getAmount();
+				actOffersCount += offer.getAmount().intValue();
 			}
 			// if to much offers sold, make more new offers
 			if (trader.getSize() - newOffersCount > actOffersCount) {
@@ -100,7 +107,7 @@ public class TimeServiceImpl implements TimeService {
 			}
 			// if not enough offer sold, delete some random offers
 			else {
-				int deleteOffersCount = actOffersCount - (trader.getSize() - newOffersCount);
+				double deleteOffersCount = actOffersCount - (trader.getSize() - newOffersCount);
 				for (int j = 0; j < deleteOffersCount; j++) {
 					int random = (int) (Math.random() * (actOffersCount - j));
 					int i = 0;
@@ -109,7 +116,7 @@ public class TimeServiceImpl implements TimeService {
 						i += offer.getAmount();
 						if (random <= i) {
 							offer.setAmount(offer.getAmount() - 1);
-							if (offer.getAmount() == 0) {
+							if (offer.getAmount() <= 0) {
 								deleteOffer = offer;
 							}
 							break;
@@ -121,8 +128,16 @@ public class TimeServiceImpl implements TimeService {
 					}
 				}
 			}
+			// add after-coma-part
+			for (Offer offer : trader.getOffers()) {
+				if (offer.getProduct().getUnit().isDevisable()) {
+					double cent = (int) (Math.random()*100);
+					offer.setAmount((double) offer.getAmount().intValue() + cent/100);
+					offerDao.update(offer);
+				}
+			}
 			// add new generated offers
-			List<Offer> newOffers = traderService.calculateOffers(trader, newOffersCount);
+			List<Offer> newOffers = traderService.calculateOffers(trader, (int) newOffersCount);
 			for (Offer newOffer : newOffers) {
 				boolean containing = false;
 				// if offer already exist, change amount
@@ -144,8 +159,10 @@ public class TimeServiceImpl implements TimeService {
 		}
 
         // move moving traders
-        List<MovingTrader> movingTraders = traderService.getAllMovingTraders();
+        forwardMessage = "Bewege fahrende Händler ...";
         for(MovingTrader movingTrader : movingTraders) {
+            forwardProgress++;
+
             long daysSinceMove = date.getTimestamp() - movingTrader.getLastMoved();
             // chance to move 5 days around the average move day
             double moveChance = (float)(daysSinceMove - movingTrader.getAvgStayDays() + 5) / 10f;
@@ -155,26 +172,35 @@ public class TimeServiceImpl implements TimeService {
                 Location actLocation = movingTrader.getLocation();
 
                 // possible locations
-                List<Location> possibleLocations = null;
-                // distance filter
-                if(movingTrader.getPreferredDistance() == DistancePreferrence.GLOBAL) {
-                    possibleLocations = locationService.getAll();
-                }else if(movingTrader.getPreferredDistance() == DistancePreferrence.REGION) {
-                    possibleLocations = locationService.getAllByRegion(actLocation.getRegion().getId());
-                }
+                List<Location> possibleLocations = new ArrayList<>();
+	            for (LocationConnection lc : actLocation.getAllConnections()) {
+		            if (lc.getLocation1() == actLocation) {
+			            if (movingTrader.getPreferredDistance() == DistancePreferrence.GLOBAL) {
+				            possibleLocations.add(lc.getLocation2());
+			            } else if (actLocation.getRegion() == lc.getLocation2().getRegion()) {
+				            possibleLocations.add(lc.getLocation2());
+			            }
+		            } else {
+			            if (movingTrader.getPreferredDistance() == DistancePreferrence.GLOBAL) {
+				            possibleLocations.add(lc.getLocation1());
+			            } else if (actLocation.getRegion() == lc.getLocation1().getRegion()) {
+				            possibleLocations.add(lc.getLocation1());
+			            }
+		            }
+	            }
                 // TownSize filter
                 if (movingTrader.getPreferredTownSize() != null) {
                     List<Location> removeList = new ArrayList<>();
                     for(Location location : possibleLocations) {
 	                    // if not preferred town size, than its a 80% chance to remove the town from the possible goals
                         if(location.getSize() != movingTrader.getPreferredTownSize()) {
-                            if(Math.random() <= 0.8f) {
+                            if(Math.random() <= 0.5f) {
                                 removeList.add(location);
                             }
                         }
                     }
                     possibleLocations.remove(removeList);
-                }
+	            }
 	            // not allowed to move to same location
 	            possibleLocations.remove(movingTrader.getLocation());
                 // no possible Locations -> not moving
@@ -189,7 +215,7 @@ public class TimeServiceImpl implements TimeService {
                 movingTrader.setLastMoved(date.getTimestamp());
                 // calculate new prices
                 for(Offer offer : movingTrader.getOffers()) {
-                    int price = traderService.calculatePriceForProduct(offer.getProduct(), movingTrader);
+                    int price = traderService.calculatePriceForProduct(offer.getProduct(), movingTrader, false);
                     if(offer.getProduct().getQuality()) {
                         offer.setPricePerUnit((int)(price*offer.getQuality().getQualityPriceFactor()));
                         offerDao.update(offer);
@@ -209,41 +235,74 @@ public class TimeServiceImpl implements TimeService {
 	            }
 
                 traderService.update(movingTrader);
-	            saveCancelService.save();
             }
         }
 
 		// new tavern useage and price calculation
-		List<Tavern> taverns = tavernService.getAll();
+        forwardMessage = "Berechne Wirthäuser Auslastung und Preise ...";
 		for (Tavern tavern : taverns) {
+            forwardProgress++;
+
 			// update useage and price
 			tavern.setUsage(tavernService.calculateBedsUseage(tavern));
 			tavern.setPrice(tavernService.calculatePrice(tavern));
 			tavernService.update(tavern);
 		}
+
+        forwardMessage = "Berechne neues Wetter ...";
+        for (Location location: locations){
+            forwardProgress++;
+            location.setWeather(location.getWeather().calcNextWeatehr(location.getRegion().getTemperature(), location.getRegion().getRainfallChance(), days));
+        }
+
+        // complete
+        forwardProgress++;
 	}
 
-	public void setTraderService(TraderService traderService) {
-		this.traderService = traderService;
+    public void resetProgress() {
+        log.debug("calling resetProgress()");
+        forwardProgress = 0;
+        forwardMaxProgress = 100;
+        forwardMessage = "Lade ...";
+    }
+
+    public int getForwardProgress() {
+        log.debug("calling getForwardProgress()");
+        return forwardProgress;
+    }
+
+    public int getForwardMaxProgress() {
+        log.debug("calling getForwardMaxProgress()");
+        return forwardMaxProgress;
+    }
+
+    public String getForwardMessage() {
+        log.debug("calling getForwardMessage()");
+        return forwardMessage;
+    }
+
+    public void setTraderService(TraderService traderService) {
+        log.debug("calling setTraderService(" + traderService + ")");
+        this.traderService = traderService;
 	}
 
 	public void setOfferDao(OfferDao offerDao) {
-		this.offerDao = offerDao;
+        log.debug("calling setOfferDao(" + offerDao + ")");
+        this.offerDao = offerDao;
 	}
 
 	public void setTavernService(TavernService tavernService) {
-		this.tavernService = tavernService;
+        log.debug("calling setTavernService(" + tavernService + ")");
+        this.tavernService = tavernService;
 	}
 
     public void setLocationService(LocationService locationService) {
+        log.debug("calling setLocationService(" + locationService + ")");
         this.locationService = locationService;
     }
 
-	public void setSaveCancelService(SaveCancelService saveCancelService) {
-		this.saveCancelService = saveCancelService;
-	}
-
 	public void setMapService(MapService mapService) {
-		this.mapService = mapService;
+        log.debug("calling setMapService(" + mapService + ")");
+        this.mapService = mapService;
 	}
 }

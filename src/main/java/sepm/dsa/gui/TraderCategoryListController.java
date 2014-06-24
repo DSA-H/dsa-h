@@ -3,7 +3,6 @@ package sepm.dsa.gui;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,7 +16,6 @@ import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.AssortmentNature;
 import sepm.dsa.model.TraderCategory;
@@ -84,7 +82,7 @@ public class TraderCategoryListController extends BaseControllerImpl {
     private void onCreateButtonPressed() {
         log.debug("onCreateButtonPressed - open Trader-Category-Details Window");
 
-        Stage stage = (Stage) traderCategoryTable.getScene().getWindow();
+        Stage stage = new Stage();
         Parent root = (Parent) loader.load("/gui/edittradercategory.fxml", stage);
         EditTraderCategoryController ctrl = loader.getController();
         ctrl.setTraderCategory(null);
@@ -92,6 +90,7 @@ public class TraderCategoryListController extends BaseControllerImpl {
 
         stage.setTitle("Händlerkategorie");
         stage.setScene(new Scene(root, 600, 438));
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -101,7 +100,7 @@ public class TraderCategoryListController extends BaseControllerImpl {
 
         TraderCategory selectedTraderCategory = traderCategoryTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
 
-        Stage stage = (Stage) traderCategoryTable.getScene().getWindow();
+        Stage stage = new Stage();
         Parent root = (Parent) loader.load("/gui/edittradercategory.fxml", stage);
         EditTraderCategoryController ctrl = loader.getController();
         ctrl.setTraderCategory(selectedTraderCategory);
@@ -109,7 +108,14 @@ public class TraderCategoryListController extends BaseControllerImpl {
 
         stage.setTitle("Händler Kategorie bearbeiten");
         stage.setScene(new Scene(root, 600, 438));
+        stage.setResizable(false);
         stage.show();
+    }
+
+    @FXML
+    private void onClosePressed() {
+        Stage stage = (Stage) traderCategoryTable.getScene().getWindow();
+        stage.close();
     }
 
     @FXML

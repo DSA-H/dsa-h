@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.AssortmentNatureDao;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.AssortmentNature;
-import sepm.dsa.model.Location;
 import sepm.dsa.model.ProductCategory;
 import sepm.dsa.model.TraderCategory;
 
@@ -34,6 +33,7 @@ public class AssortmentNatureServiceImpl implements AssortmentNatureService {
      * @throws sepm.dsa.exceptions.DSAValidationException if assortmentNature is not valid
      */
     public void validate(AssortmentNature assortmentNature) throws DSAValidationException {
+        log.debug("calling validate(" + assortmentNature + ")");
         Set<ConstraintViolation<AssortmentNature>> violations = validator.validate(assortmentNature);
         if (violations.size() > 0) {
             throw new DSAValidationException("Assortment Nature ist nicht valide.", violations);
@@ -95,6 +95,7 @@ public class AssortmentNatureServiceImpl implements AssortmentNatureService {
     }
 
     public void setAssortmentNatureDao(AssortmentNatureDao assortmentNatureDao) {
+        log.debug("calling setAssortmentNatureDao(" + assortmentNatureDao + ")");
         this.assortmentNatureDao = assortmentNatureDao;
     }
 }

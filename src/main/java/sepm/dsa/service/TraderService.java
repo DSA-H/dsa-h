@@ -1,10 +1,9 @@
 package sepm.dsa.service;
 
 
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.model.*;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,6 +32,18 @@ public interface TraderService {
      * @return The updated trader model.
      */
     Trader update(Trader t);
+
+    /**
+     * Makes a MovingTrader to a normal Trader
+     * @param trader
+     */
+    void makeMovingTraderToTrader(Trader trader);
+
+    /**
+     * Makes a MovingTrader to a normal Trader
+     * @param trader
+     */
+    void makeTraderToMovingTrader(MovingTrader trader);
 
     /**
      * Delete a {@code Trader} permanently from the DB
@@ -91,9 +102,12 @@ public interface TraderService {
      *
      * @param product the product to calculate the offer for - must not be null
      * @param trader  the trader
+     * @param throwExceptionOnNoPath true if an exception should be thrown if there is no path from the Traders current
+     *                               location.region to the product.productionRegion, <br/>
+     *                               false if no exception should be thrown and instead a standard border cost will be used
      * @return the price in default (base-rate) currency
      */
-    int calculatePriceForProduct(Product product, Trader trader);
+    int calculatePriceForProduct(Product product, Trader trader, boolean throwExceptionOnNoPath);
 
 	/**
 	 * Returns a list of Offers of the specified trader.
@@ -105,6 +119,10 @@ public interface TraderService {
 
     Trader recalculateOffers(Trader t);
 
+    void addManualOffer(Trader trader, Offer offer);
+
+    void removeManualOffer(Trader trader, Offer offer, double amount);
+
     /**
      *
      * @param productQuality
@@ -112,7 +130,7 @@ public interface TraderService {
      * @param trader
      * @return
      */
-    int calculatePricePerUnit(ProductQuality productQuality, Product product, Trader trader);
+    int calculatePricePerUnit(ProductQuality productQuality, Product product, Trader trader, boolean throwExceptionOnNoPath);
 
     /**
      * Recalculates the prices for all offers of a trader
@@ -120,7 +138,7 @@ public interface TraderService {
      * @param trader the trader
      * @return the price in default (base-rate) currency
      */
-    void reCalculatePriceForOffer(/*Set<Offer> offers, */Trader trader);
+    void reCalculatePriceForOffer(/*Set<Offer> offers, */Trader trader, boolean throwExceptionOnNoPath);
 
     /**
      * Recalculates the price for all offers of a trader if the new price of the product is higher
@@ -128,7 +146,7 @@ public interface TraderService {
      * @param trader the trader
      * @return the price in default (base-rate) currency
      */
-    void reCalculatePriceForOfferIfNewPriceIsHigher(/*Set<Offer> offers, */Trader trader);
+    void reCalculatePriceForOfferIfNewPriceIsHigher(/*Set<Offer> offers, */Trader trader, boolean throwExceptionOnNoPath);
 
     /**
      * A trader sells a product to a player. The trader's amount for this product decreases. If the amount becomes zero,
@@ -141,12 +159,14 @@ public interface TraderService {
      * @param amount product amount, > 0
      * @param totalPrice total price for this deal in base rate
      * @param discount discount int percent [0..100]
+     * @param removeRemainingOfferAmount the remaining product amount of the offer will be removed from the trader
+     *
      * @throws sepm.dsa.exceptions.DSAValidationException if trader does not have the product with this quality <br />
      *      or the amount is greater than the trader offers <br />
      *      or unit type does does not match the product unit type <br />
      *      or totalPrice is negative
      */
-    Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, Integer totalPrice, Integer discount);
+    Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, Integer totalPrice, Integer discount, boolean removeRemainingOfferAmount);
 
     /**
      * A trader sells a product to a player. The trader's amount for this product decreases. If the amount becomes zero,
@@ -159,6 +179,7 @@ public interface TraderService {
      * @param amount product amount, > 0
      * @param totalPrice total price for this deal in multiple currencies (e.g. deriving from a currency set)
      * @param discount discount int percent [0..100]
+     * @param removeRemainingOfferAmount the remaining product amount of the offer will be removed from the trader
      *
      * @return converts the total price to base rate and calls 'Deal sellToPlayer(Trader, Player, Product, ProductQuality, Unit, Integer, Integer)'
      *
@@ -167,7 +188,7 @@ public interface TraderService {
      *      or unit type does does not match the product unit type <br />
      *      or totalPrice is negative
      */
-    Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, List<CurrencyAmount> totalPrice, Integer discount);
+    Deal sellToPlayer(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount, List<CurrencyAmount> totalPrice, Integer discount, boolean removeRemainingOfferAmount);
 
     /**
      * A trader buys a product from a player. The trader's amount for this product increases
@@ -211,5 +232,10 @@ public interface TraderService {
      */
     Integer suggesstDiscount(Trader trader, Player player, Product product, ProductQuality productQuality, Unit unit, Integer amount);
 
+	int getRandomValue(int median, int variation);
+
+	String getRandomName(String culture, boolean male);
+
+	List<String> getAllCultures();
 
 }

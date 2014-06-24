@@ -56,8 +56,6 @@ public class CurrencySetListController extends BaseControllerImpl {
             }
         });
 
-        currencySetTable.getItems().setAll(currencySetService.getAll());
-
         checkFocus();
     }
 
@@ -89,7 +87,7 @@ public class CurrencySetListController extends BaseControllerImpl {
     private void onCreateButtonPressed() {
         log.debug("onCreateClicked - open CurrencySet Window");
 
-        Stage stage = (Stage) currencySetTable.getScene().getWindow();
+        Stage stage = new Stage();
         Parent scene = (Parent) loader.load("/gui/editcurrencyset.fxml", stage);
 
         EditCurrencySetController ctrl = loader.getController();
@@ -98,6 +96,7 @@ public class CurrencySetListController extends BaseControllerImpl {
 
         stage.setTitle("Währungssystem");
         stage.setScene(new Scene(scene, 460, 370));
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -105,7 +104,7 @@ public class CurrencySetListController extends BaseControllerImpl {
     private void onEditButtonPressed() {
         log.debug("onWarenClicked - open CurrencySet Window");
 
-        Stage stage = (Stage) currencySetTable.getScene().getWindow();
+        Stage stage = new Stage();
         Parent scene = (Parent) loader.load("/gui/editcurrencyset.fxml", stage);
         EditCurrencySetController ctrl = loader.getController();
         ctrl.setCurrencySet(currencySetTable.getSelectionModel().getSelectedItem());
@@ -113,6 +112,7 @@ public class CurrencySetListController extends BaseControllerImpl {
 
         stage.setTitle("Währungssystem");
         stage.setScene(new Scene(scene, 460, 370));
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -140,7 +140,7 @@ public class CurrencySetListController extends BaseControllerImpl {
     }
 
     @FXML
-    public void closeClicked() {
+    private void onClosePressed() {
         Stage stage = (Stage) currencySetTable.getScene().getWindow();
         stage.close();
     }

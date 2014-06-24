@@ -4,16 +4,14 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 @Entity
 @Table(name = "productCategories")
 public class ProductCategory implements BaseModel {
-    private static final long serialVersionUID = 2997293850231481717L;
+
+    private static final long serialVersionUID = 3899365080989423282L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -21,7 +19,7 @@ public class ProductCategory implements BaseModel {
     private Integer id;
 
     @NotBlank
-    @Size(max = 60, min = 1)
+    @Size(max = 60)
     @Column(nullable = false, length = 60)
     private String name;
 
@@ -32,35 +30,8 @@ public class ProductCategory implements BaseModel {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "parent", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<ProductCategory> childs = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "product_categories",
-            joinColumns = { @JoinColumn(name = "categoryId") },     // is joinColumns/inverse correct here?
-            inverseJoinColumns = { @JoinColumn(name = "productId") })
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER)
     private Set<Product> products = new HashSet<>();
-
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.productCategory", cascade = CascadeType.REMOVE, orphanRemoval = true)
-//    @MapKey(name="pk.traderCategory")
-//    private Map<TraderCategory, AssortmentNature> assortments = new HashMap<>();u
-//
-//    public Map<TraderCategory, AssortmentNature> getAssortments() {
-//        return assortments;
-//    }
-//
-//    public void setAssortments(Map<TraderCategory, AssortmentNature> assortments) {
-//        this.assortments = assortments;
-//    }
-
-    //    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "productcategory_id", nullable = false)
-//    private Set<AssortmentNature> assortmentNatures = new HashSet<>();
-
-//    public Set<AssortmentNature> getAssortmentNatures() {
-//        return assortmentNatures;
-//    }
-//
-//    public void setAssortments(Map<TraderCategory, AssortmentNature> assortments) {
-//        this.assortments = assortments;
-//    }
 
     public Integer getId() {
         return id;

@@ -1,15 +1,12 @@
 package sepm.dsa.model;
 
-/**
- * Created by Michael on 13.05.2014.
- */
 public enum RainfallChance {
 
-    DESSERT(0, "Wüste"),
+    VERY_LOW(0, "sehr niedrig"),
     LOW(1, "niedrig"),
     MEDIUM(2, "mittel"),
     HIGH(3, "hoch"),
-    MONSUN(4, "Monsun");
+    VERY_HIGH(4, "sehr hoch");
 
     private int value;
     private String name;

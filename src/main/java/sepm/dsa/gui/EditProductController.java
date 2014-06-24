@@ -1,26 +1,21 @@
 package sepm.dsa.gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import org.dom4j.Text;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
+import sepm.dsa.model.Currency;
 import sepm.dsa.service.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class EditProductController extends BaseControllerImpl {
 
@@ -36,7 +31,6 @@ public class EditProductController extends BaseControllerImpl {
 
     private Product selectedProduct;
     private boolean isNewProduct;
-    private boolean calledFromCategorie = false;
 
     @FXML
     private TextField nameField;
@@ -55,9 +49,9 @@ public class EditProductController extends BaseControllerImpl {
     @FXML
     private CheckBox qualityBox;
     @FXML
-    private ChoiceBox<ProductCategory> categorieChoiceBox;
+    private ComboBox<ProductCategory> categorieChoiceBox;
     @FXML
-    private ChoiceBox<Region> regionChoiceBox;
+    private ComboBox<Region> regionChoiceBox;
     @FXML
     private Button addCategorieButton;
     @FXML
@@ -123,7 +117,7 @@ public class EditProductController extends BaseControllerImpl {
         regionColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
 	    unitBox.getItems().setAll(unitService.getAll());
-	attributeBox.getItems().setAll(ProductAttribute.values());
+	    attributeBox.getItems().setAll(ProductAttribute.values());
     }
 
     @Override
@@ -147,8 +141,8 @@ public class EditProductController extends BaseControllerImpl {
             refreshPriceView(0);
             unitBox.getSelectionModel().selectFirst();
         }
-
-    	categorieChoiceBox.getItems().setAll(categoryList);
+        categorieChoiceBox.getItems().setAll(categoryList);
+        Collections.sort(regionList, (r1, r2) -> r1.getName().compareTo(r2.getName()));
 	    regionChoiceBox.getItems().setAll(regionList);
     }
 
@@ -231,22 +225,7 @@ public class EditProductController extends BaseControllerImpl {
         saveCancelService.cancel();
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-
-        if(calledFromCategorie) {
-            Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml", stage);
-            BaseController ctrl = loader.getController();
-            ctrl.reload();
-
-            stage.setTitle("Warenkategorie");
-            stage.setScene(new Scene(scene, 600, 438));
-            stage.setResizable(false);
-        }else {
-            Parent scene = (Parent) loader.load("/gui/productslist.fxml", stage);
-            ProductListController ctrl = loader.getController();
-            ctrl.reload();
-
-            stage.setScene(new Scene(scene, 600, 438));
-        }
+        stage.close();
     }
 
     @FXML
@@ -302,21 +281,28 @@ public class EditProductController extends BaseControllerImpl {
 
         // return to productslist / productcategorie
         Stage stage = (Stage) nameField.getScene().getWindow();
-        if(calledFromCategorie) {
-            Parent scene = (Parent) loader.load("/gui/productcategorylist.fxml", stage);
-            BaseController ctrl = loader.getController();
-            ctrl.reload();
+        stage.close();
+    }
 
-            stage.setTitle("Warenkategorie");
-            stage.setScene(new Scene(scene, 600, 438));
-            stage.setResizable(false);
-        }else {
-            Parent scene = (Parent) loader.load("/gui/productslist.fxml", stage);
-            ProductListController ctrl = loader.getController();
-            ctrl.reload();
+    @FXML
+    public void onAddAllProductionRegionsPressed() {
+        log.debug("onAddAllProductionRegionsPressed");
+        regionTable.getItems().addAll(regionChoiceBox.getItems());
+        regionChoiceBox.getItems().clear();
+        checkFocusRegion();
+    }
 
-            stage.setScene(new Scene(scene, 600, 438));
-        }
+    @FXML
+    public void onRemoveAllProductionRegionsPressed() {
+        log.debug("onRemoveAllProductionRegionsPressed");
+
+        List<Region> regions = new ArrayList<>(regionChoiceBox.getItems().size() + regionTable.getItems().size());
+        regions.addAll(regionChoiceBox.getItems());
+        regions.addAll(regionTable.getItems());
+        Collections.sort(regions, (r1, r2) -> r1.getName().compareTo(r2.getName()));
+        regionChoiceBox.getItems().setAll(regions);
+        regionTable.getItems().clear();
+        checkFocusRegion();
     }
 
     private void refreshPriceView(int baseRatePrice) {
@@ -385,7 +371,4 @@ public class EditProductController extends BaseControllerImpl {
         this.currencyService = currencyService;
     }
 
-    public void setCalledFromCategorie(boolean calledFromCategorie) {
-        this.calledFromCategorie = calledFromCategorie;
-    }
 }

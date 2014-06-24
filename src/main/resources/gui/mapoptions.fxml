@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.MapOptionsController">
+   <children>
+      <ColorPicker fx:id="traderColorPicker" layoutX="129.0" layoutY="46.0" minWidth="-Infinity" prefWidth="110.0" />
+      <ColorPicker fx:id="movingTraderColorPicker" layoutX="129.0" layoutY="79.0" minWidth="-Infinity" prefWidth="110.0" />
+      <ColorPicker fx:id="tavernColorPicker" layoutX="129.0" layoutY="111.0" minWidth="-Infinity" prefWidth="110.0" />
+      <ColorPicker fx:id="selectionColorPicker" layoutX="129.0" layoutY="145.0" minWidth="-Infinity" prefWidth="110.0" />
+      <ColorPicker fx:id="textColorPicker" layoutX="129.0" layoutY="178.0" minWidth="-Infinity" prefWidth="110.0" />
+      <ColorPicker fx:id="borderColorPicker" layoutX="129.0" layoutY="212.0" minWidth="-Infinity" prefWidth="110.0" />
+      <ColorPicker fx:id="highlightColorPicker" layoutX="129.0" layoutY="245.0" minWidth="-Infinity" prefWidth="110.0" />
+      <Label layoutX="234.0" layoutY="8.0" text="Kartenoptionen">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="50.0" prefWidth="100.0" text="Händler:" />
+      <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="83.0" prefWidth="100.0" text="fahrender Händler:" />
+      <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="115.0" prefWidth="100.0" text="Wirtshaus:" />
+      <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="149.0" prefWidth="100.0" text="Auswahl:" />
+      <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="216.0" prefWidth="100.0" text="Orts-Ramen:" />
+      <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="182.0" prefWidth="100.0" text="Schrift:" />
+      <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="23.0" prefWidth="100.0" text="Farbe" underline="true" />
+      <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="282.0" prefWidth="100.0" text="Größe" underline="true" />
+      <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="307.0" prefWidth="100.0" text="Ortssymbole:" />
+      <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="337.0" prefWidth="100.0" text="Schrift:" />
+      <Slider fx:id="locationSizeSlider" layoutX="129.0" layoutY="309.0" />
+      <Slider fx:id="textSizeSlider" layoutX="129.0" layoutY="339.0" />
+      <Slider fx:id="traderSizeSlider" layoutX="129.0" layoutY="366.0" />
+      <ChoiceBox fx:id="locationBox" layoutX="9.0" layoutY="360.0" prefWidth="110.0" />
+      <HBox alignment="CENTER_RIGHT" layoutX="386.0" layoutY="360.0" prefHeight="25.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#onSaveButtonPressed" text="Speichern" />
+            <Button mnemonicParsing="false" onAction="#onCancelButtonPressed" text="Abbrechen" />
+         </children>
+      </HBox>
+      <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="249.0" prefWidth="100.0" text="Highlight:" />
+      <AnchorPane fx:id="previewPane" layoutX="225.0" layoutY="43.0" prefHeight="250.0" prefWidth="360.0" />
+   </children>
+</Pane>

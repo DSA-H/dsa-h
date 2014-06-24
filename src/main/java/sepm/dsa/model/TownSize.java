@@ -1,14 +1,11 @@
 package sepm.dsa.model;
 
-/**
- * Created by Michael on 16.05.2014.
- */
 public enum TownSize {
 
-    MINI(0, "Mini"),
-    LITTLE(1, "klein"),
-    MEDIUM(2, "mittel"),
-    BIG(3, "hoch"),
+    MINI(0, "Winzig"),
+    LITTLE(1, "Klein"),
+    MEDIUM(2, "Mittel"),
+    BIG(3, "Groß"),
     METROPOL(4, "Metropole");
 
     private int value;
@@ -24,7 +21,7 @@ public enum TownSize {
     }
 
     public static TownSize parse(int value) {
-        TownSize right = null;        // Default
+        TownSize right = null;
         for (TownSize item : TownSize.values()) {
             if (item.getValue() == value) {
                 right = item;

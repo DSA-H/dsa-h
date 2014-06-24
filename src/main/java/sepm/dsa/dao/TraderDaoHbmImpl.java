@@ -1,6 +1,5 @@
 package sepm.dsa.dao;
 
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Deal;
 import sepm.dsa.model.Location;
 import sepm.dsa.model.Trader;
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-@Transactional(readOnly = true)
 public class TraderDaoHbmImpl
 	extends BaseDaoHbmImpl<Trader>
 	implements TraderDao {

@@ -12,7 +12,8 @@ import java.util.Set;
 @Entity
 @Table(name = "regions")
 public class Region implements BaseModel, PathNode {
-    private static final long serialVersionUID = 5890354733231481712L;
+
+    private static final long serialVersionUID = 7051618227562263723L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -20,7 +21,7 @@ public class Region implements BaseModel, PathNode {
     private Integer id;
 
     @NotBlank
-    @Size(max = 60, min = 1)
+    @Size(max = 60)
     @Column(nullable = false, length = 60)
     private String name;
 

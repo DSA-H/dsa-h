@@ -1,6 +1,4 @@
-package sepm.dsa.dao;
-
-import sepm.dsa.model.Unit;
+package sepm.dsa.model;
 
 public class UnitAmount {
 

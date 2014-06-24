@@ -1,16 +1,12 @@
 package sepm.dsa.dao;
 
 import org.hibernate.Query;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Location;
 
 import java.util.List;
 import java.util.Vector;
 
-@Repository
-@Transactional(readOnly = true)
-public class LocationDaoImpl
+public class LocationDaoHbmImpl
 	extends BaseDaoHbmImpl<Location>
 	implements LocationDao {
 

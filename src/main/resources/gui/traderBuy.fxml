@@ -8,18 +8,29 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="565.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.TradeBuyFromPlayerController">
    <children>
-      <Label alignment="CENTER" layoutY="14.0" prefHeight="27.0" prefWidth="565.0" text="Ware verkaufen an Händler" textAlignment="CENTER">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Label>
-      <ChoiceBox fx:id="selectedPlayer" layoutX="408.0" layoutY="130.0" prefWidth="150.0" />
-      <Label layoutX="343.0" layoutY="135.0" text="Spieler:" />
+      <TextField fx:id="searchField" layoutX="107.0" layoutY="40.0" prefHeight="26.0" prefWidth="290.0" />
+      <Button layoutX="409.0" layoutY="40.0" mnemonicParsing="false" onAction="#onSearchPressed" prefHeight="26.0" prefWidth="145.0" text="Waren Suchen" />
       <TableView fx:id="productsTable" layoutX="14.0" layoutY="100.0" onMouseClicked="#checkFocus" prefHeight="312.0" prefWidth="290.0">
         <columns>
           <TableColumn fx:id="productColumn" prefWidth="289.0" text="Ware" />
         </columns>
       </TableView>
+      <ChoiceBox fx:id="selectedQuality" disable="true" layoutX="408.0" layoutY="96.0" prefWidth="150.0" />
+      <ComboBox fx:id="selectedPlayer" layoutX="408.0" layoutY="130.0" prefWidth="150.0" />
+      <ComboBox fx:id="selectedUnit" layoutX="407.0" layoutY="167.0" prefWidth="150.0" />
+      <TextField fx:id="selectedAmount" layoutX="408.0" layoutY="202.0" />
+      <ComboBox fx:id="selectedCurrency" layoutX="408.0" layoutY="236.0" prefWidth="150.0" />
+      <TextField fx:id="tf_CurrencyAmount1" layoutX="408.0" layoutY="271.0" prefHeight="25.0" prefWidth="59.0" />
+      <TextField fx:id="tf_CurrencyAmount2" layoutX="408.0" layoutY="300.0" prefHeight="25.0" prefWidth="59.0" />
+      <TextField fx:id="tf_CurrencyAmount3" layoutX="408.0" layoutY="329.0" prefHeight="25.0" prefWidth="59.0" />
+      <TextField fx:id="tf_CurrencyAmount4" layoutX="408.0" layoutY="358.0" prefHeight="25.0" prefWidth="59.0" />
+      <TextField fx:id="tf_CurrencyAmount5" layoutX="408.0" layoutY="387.0" prefHeight="25.0" prefWidth="59.0" />
+      <Label alignment="CENTER" layoutY="14.0" prefHeight="27.0" prefWidth="565.0" text="Ware verkaufen an Händler" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="343.0" layoutY="135.0" text="Spieler:" />
       <HBox layoutX="307.0" layoutY="429.0" prefHeight="33.0" prefWidth="262.0" spacing="10.0">
          <children>
             <Button mnemonicParsing="false" onAction="#onCancelPressed" prefHeight="26.0" prefWidth="91.0" text="Abbrechen">
@@ -27,31 +38,20 @@
                   <Insets bottom="4.0" right="3.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#onSavePressed" prefHeight="26.0" prefWidth="150.0" text="Ankauf durchführen" />
+            <Button mnemonicParsing="false" onAction="#onSavePressed" prefHeight="26.0" prefWidth="150.0" text="Verkauf durchführen" />
          </children>
       </HBox>
       <Label layoutX="331.0" layoutY="240.0" text="Währung:" />
-      <ChoiceBox fx:id="selectedCurrency" layoutX="408.0" layoutY="236.0" prefWidth="150.0" />
       <Label layoutX="350.0" layoutY="275.0" text="Preis:" />
-      <TextField fx:id="tf_CurrencyAmount1" layoutX="408.0" layoutY="271.0" prefHeight="25.0" prefWidth="59.0" />
-      <TextField fx:id="selectedAmount" layoutX="408.0" layoutY="202.0" />
-      <ChoiceBox fx:id="selectedUnit" layoutX="407.0" layoutY="167.0" prefWidth="150.0" />
       <Label layoutX="343.0" layoutY="207.0" text="Menge:" />
       <Label layoutX="14.0" layoutY="80.0" text="gefundene Waren:" />
-      <TextField fx:id="searchField" layoutX="107.0" layoutY="40.0" prefHeight="26.0" prefWidth="290.0" />
       <Label layoutX="14.0" layoutY="45.0" text="Ware suchen:" />
-      <Button layoutX="409.0" layoutY="40.0" mnemonicParsing="false" onAction="#onSearchPressed" prefHeight="26.0" prefWidth="145.0" text="Waren Suchen" />
       <Label layoutX="339.0" layoutY="101.0" text="Qualität:" />
-      <ChoiceBox fx:id="selectedQuality" disable="true" layoutX="408.0" layoutY="96.0" prefWidth="150.0" />
       <Label layoutX="343.0" layoutY="172.0" text="Einheit:" />
       <Label fx:id="lbl_CurrencyAmount1" layoutX="469.0" layoutY="275.0" text="Currency1" />
       <Label fx:id="lbl_CurrencyAmount2" layoutX="469.0" layoutY="304.0" text="Currency2" />
-      <TextField fx:id="tf_CurrencyAmount2" layoutX="408.0" layoutY="300.0" prefHeight="25.0" prefWidth="59.0" />
-      <TextField fx:id="tf_CurrencyAmount4" layoutX="408.0" layoutY="358.0" prefHeight="25.0" prefWidth="59.0" />
       <Label fx:id="lbl_CurrencyAmount4" layoutX="469.0" layoutY="362.0" text="Currency4" />
       <Label fx:id="lbl_CurrencyAmount3" layoutX="469.0" layoutY="333.0" text="Currency3" />
-      <TextField fx:id="tf_CurrencyAmount3" layoutX="408.0" layoutY="329.0" prefHeight="25.0" prefWidth="59.0" />
       <Label fx:id="lbl_CurrencyAmount5" layoutX="469.0" layoutY="391.0" text="Currency5" />
-      <TextField fx:id="tf_CurrencyAmount5" layoutX="408.0" layoutY="387.0" prefHeight="25.0" prefWidth="59.0" />
    </children>
 </Pane>

@@ -12,16 +12,19 @@ public class SaveCancelDaoHbmImpl implements SaveCancelDao {
     private static final Logger log = LoggerFactory.getLogger(SaveCancelDaoHbmImpl.class);
     private SessionFactory sessionFactory;
 
+    // This method call is recognized by AOP and triggers actions this way
     @Override
     public void save() {
         log.debug("calling save()");
     }
 
+    // This method call is recognized by AOP and triggers actions this way
     @Override
     public void cancel() {
         log.debug("calling cancel()");
     }
 
+    // This method call is recognized by AOP and triggers actions this way
     @Override
     public void closeSession() {
         log.debug("calling closeSession()");

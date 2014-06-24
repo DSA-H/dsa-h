@@ -1,9 +1,6 @@
 package sepm.dsa.dao;
 
 import org.hibernate.Query;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-import sepm.dsa.model.Location;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
 import sepm.dsa.model.Region;
@@ -11,8 +8,6 @@ import sepm.dsa.model.Region;
 import java.util.List;
 import java.util.Vector;
 
-@Repository
-@Transactional(readOnly = true)
 public class ProductDaoHbmImpl
 	extends BaseDaoHbmImpl<Product>
 	implements ProductDao {
@@ -20,14 +15,18 @@ public class ProductDaoHbmImpl
     @Override
     public Product add(Product model) {
         Product result = super.add(model);
-
+        for (ProductCategory c : model.getCategories()) {
+            c.getProducts().add(result);
+        }
         return result;
     }
 
     @Override
     public void remove(Product model) {
         super.remove(model);
-
+        for (ProductCategory c : model.getCategories()) {
+            c.getProducts().remove(model);
+        }
     }
 
     @Override
@@ -67,6 +66,22 @@ public class ProductDaoHbmImpl
         log.debug("calling getAllByRegion(" + region + ")");
         Query query = sessionFactory.getCurrentSession().getNamedQuery("Product.findAllByRegion");
         query.setParameter("regionId", region == null ? null : region.getId());
+        List<?> list = query.list();
+
+        List<Product> result = new Vector<>(list.size());
+        for (Object o : list) {
+            result.add((Product) o);
+        }
+
+        log.trace("returning " + result);
+        return result;
+    }
+
+    @Override
+    public List<Product> getAllByRegionName(String regionName) {
+        log.debug("calling getAllByRegion(" + regionName + ")");
+        Query query = sessionFactory.getCurrentSession().getNamedQuery("Product.findAllByRegionName");
+        query.setParameter("regionName", regionName);
         List<?> list = query.list();
 
         List<Product> result = new Vector<>(list.size());

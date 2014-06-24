@@ -5,7 +5,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,7 +12,7 @@ import java.util.Set;
 @Table(name = "currencies")
 public class Currency implements BaseModel {
 
-    private static final long serialVersionUID = 5329256729754963420L;
+    private static final long serialVersionUID = 1524655153502866478L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -32,12 +31,9 @@ public class Currency implements BaseModel {
 
     @NotNull
     @Column(nullable = false)
-    private Integer valueToBaseRate;  // relative value to base rate TODO change to Integer
+    private Integer valueToBaseRate;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "currencySet_currencies",
-            joinColumns = { @JoinColumn(name = "currency_id") },
-            inverseJoinColumns = { @JoinColumn(name = "currencySet_id") })
+    @ManyToMany(mappedBy = "currencies", fetch = FetchType.LAZY)
     private Set<CurrencySet> currencySets = new HashSet<>(5);
 
 
@@ -70,30 +66,6 @@ public class Currency implements BaseModel {
         return name;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof Currency)) return false;
-//
-//        Currency currency = (Currency) o;
-//
-//        if (id != null ? !id.equals(currency.id) : currency.id != null) return false;
-//        if (name != null ? !name.equals(currency.name) : currency.name != null) return false;
-//        if (valueToBaseRate != null ? !valueToBaseRate.equals(currency.valueToBaseRate) : currency.valueToBaseRate != null)
-//            return false;
-//
-//        return true;
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        int result = id != null ? id.hashCode() : 0;
-//        result = 31 * result + (name != null ? name.hashCode() : 0);
-//        result = 31 * result + (valueToBaseRate != null ? valueToBaseRate.hashCode() : 0);
-//        return result;
-//    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -117,5 +89,13 @@ public class Currency implements BaseModel {
 
     public void setShortName(String shortName) {
         this.shortName = shortName;
+    }
+
+    public Set<CurrencySet> getCurrencySets() {
+        return currencySets;
+    }
+
+    public void setCurrencySets(Set<CurrencySet> currencySets) {
+        this.currencySets = currencySets;
     }
 }

@@ -1,7 +1,6 @@
 package sepm.dsa.gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,7 +10,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
@@ -45,6 +43,7 @@ public class CurrencyListController extends BaseControllerImpl {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
+        log.debug("initialize CurrencyListController");
         // init table
         currencyColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         valueToBaseRateColumn.setCellValueFactory(new PropertyValueFactory<>("valueToBaseRate"));
@@ -61,7 +60,7 @@ public class CurrencyListController extends BaseControllerImpl {
     private void onCreateButtonPressed() {
         log.debug("onCreateClicked - open Currency Window");
 
-        Stage stage = (Stage) currencyTable.getScene().getWindow();
+        Stage stage = new Stage();
         Parent scene = (Parent) loader.load("/gui/editcurrency.fxml", stage);
         EditCurrencyController ctrl = loader.getController();
         ctrl.setCurrency(null);
@@ -69,6 +68,7 @@ public class CurrencyListController extends BaseControllerImpl {
 
         stage.setTitle("Währungen");
         stage.setScene(new Scene(scene, 464, 279));
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -76,7 +76,7 @@ public class CurrencyListController extends BaseControllerImpl {
     private void onEditButtonPressed() {
         log.debug("onEditButtonPressed - open Currency Window");
 
-        Stage stage = (Stage) currencyTable.getScene().getWindow();
+        Stage stage = new Stage();
         Parent scene = (Parent) loader.load("/gui/editcurrency.fxml", stage);
         EditCurrencyController ctrl = loader.getController();
         ctrl.setCurrency(currencyTable.getSelectionModel().getSelectedItem());
@@ -84,6 +84,7 @@ public class CurrencyListController extends BaseControllerImpl {
 
         stage.setTitle("Währungen");
         stage.setScene(new Scene(scene, 464, 279));
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -119,6 +120,12 @@ public class CurrencyListController extends BaseControllerImpl {
             deleteButton.setDisable(false);
             editButton.setDisable(false);
         }
+    }
+
+    @FXML
+    private void onClosePressed() {
+        Stage stage = (Stage) currencyTable.getScene().getWindow();
+        stage.close();
     }
 
 

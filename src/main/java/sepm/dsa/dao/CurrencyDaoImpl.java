@@ -1,19 +1,35 @@
 package sepm.dsa.dao;
 
 import org.hibernate.Query;
-import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.model.Currency;
 import sepm.dsa.model.CurrencySet;
-import sepm.dsa.model.Deal;
 
 import java.util.List;
 import java.util.Vector;
 
-@Transactional(readOnly = true)
 public class CurrencyDaoImpl
 	extends BaseDaoHbmImpl<Currency>
 	implements CurrencyDao {
 
+
+    @Override
+    public Currency add(Currency model) {
+        Currency result = super.add(model);
+        for (CurrencySet c : result.getCurrencySets()) {
+            c.getCurrencies().add(result);
+        }
+        return result;
+    }
+
+    @Override
+    public void remove(Currency model) {
+        model = (Currency) sessionFactory.getCurrentSession().get(Currency.class, model.getId());
+        sessionFactory.getCurrentSession().refresh(model);
+        super.remove(model);
+        for (CurrencySet c : model.getCurrencySets()) {
+            c.getCurrencies().remove(model);
+        }
+    }
 
     @Override
     public List<Currency> getAllByCurrencySet(CurrencySet currencySet) {

@@ -3,7 +3,6 @@ package sepm.dsa.service;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.dao.ProductCategoryDao;
 import sepm.dsa.exceptions.DSAValidationException;
@@ -72,7 +71,6 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
              productCategoryChild = get(productCategoryChild.getId());
              assortmentNatureService.getAllByProductCategory(productCategoryChild.getId()).forEach(assortmentNatureService::remove);
         }
-//        p.getProducts().forEach(productService::remove); SHOULD NOT BE REMOVED :)
         Set<ProductCategory> children = new HashSet<>(p.getChilds());
         children.forEach(this::remove);
         productCategoryDao.remove(p);
@@ -127,25 +125,29 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
      * @throws sepm.dsa.exceptions.DSAValidationException if product is not valid
      */
     private void validate(ProductCategory product) throws DSAValidationException {
+        log.debug("calling validate(" + product + ")");
         Set<ConstraintViolation<ProductCategory>> violations = validator.validate(product);
         if (violations.size() > 0) {
             throw new DSAValidationException("Produktkategorie ist nicht valide.", violations);
         }
-    }
-
-    public ProductCategoryDao getProductCategoryDao() {
-        return productCategoryDao;
+        if (product.getParent() != null && getAllChilds(product).contains(product.getParent())) {
+            throw new DSAValidationException("Produktkategorie ist nicht valide. Die Produktkategorie hat als " +
+                    "Oberkategorie einen seiner Unterkategorien, Zyklen sind nicht erlaubt.");
+        }
     }
 
     public void setProductCategoryDao(ProductCategoryDao productCategoryDao) {
+        log.debug("calling setProductCategoryDao(" + productCategoryDao + ")");
         this.productCategoryDao = productCategoryDao;
     }
 
     public void setAssortmentNatureService(AssortmentNatureService assortmentNatureService) {
+        log.debug("calling setAssortmentNatureService(" + assortmentNatureService + ")");
         this.assortmentNatureService = assortmentNatureService;
     }
 
     public void setProductService(ProductService productService) {
+        log.debug("calling setProductService(" + productService + ")");
         this.productService = productService;
     }
 }

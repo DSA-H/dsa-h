@@ -2,12 +2,11 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.*;
@@ -34,17 +33,15 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
     private List<Currency> currencies;
 
     @FXML
-    private ChoiceBox<Unit> selectedUnit;
+    private ComboBox<Unit> selectedUnit;
     @FXML
-    private ChoiceBox<Player> selectedPlayer;
+    private ComboBox<Player> selectedPlayer;
     @FXML
     private ChoiceBox<ProductQuality> selectedQuality;
     @FXML
     private TextField selectedAmount;
     @FXML
-    private ChoiceBox<CurrencySet> selectedCurrency;
-//    @FXML
-//    private TextField selectedPrice;
+    private ComboBox<CurrencySet> selectedCurrency;
     @FXML
     private TableView<Product> productsTable;
     @FXML
@@ -118,6 +115,7 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
 
         selectedAmount.setText("1");
         selectedQuality.getItems().setAll(ProductQuality.values());
+        selectedQuality.getSelectionModel().select(ProductQuality.NORMAL);
     }
 
     @Override
@@ -158,7 +156,7 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
         refreshPriceView();
         if (productsTable.getSelectionModel().getSelectedItem() != null) {
             log.info(productQuality + ", " + selectedProduct() + " " + trader);
-            int pricePerUnit = traderService.calculatePricePerUnit(productQuality, selectedProduct(), trader);
+            int pricePerUnit = traderService.calculatePricePerUnit(productQuality, selectedProduct(), trader, false);
             int amount = 0;
             //##### get amount
             if (!selectedAmount.getText().isEmpty()) {
@@ -216,19 +214,11 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
             if (selProduct.getQuality()) {
                 selectedQuality.setDisable(false);
                 quality = ProductQuality.parse(selectedQuality.getSelectionModel().getSelectedIndex());
-                int setQuality = 0;
-                if (quality != null) {
-//                    setQuality = traderService.calculatePricePerUnit(quality, productsTable.getSelectionModel().getSelectedItem(), trader);
-                } else {
+                if (quality == null) {
                     selectedQuality.getSelectionModel().select(ProductQuality.NORMAL);
-//                    setQuality = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
                 }
-//                selectedPrice.setText(Integer.toString(setQuality));
-//                updatePrice(); TODO just commented it out, now broken?
             } else {
                 selectedQuality.getSelectionModel().select(ProductQuality.NORMAL);
-//                int priceDefault = traderService.calculatePricePerUnit(ProductQuality.NORMAL, productsTable.getSelectionModel().getSelectedItem(), trader);
-//                selectedPrice.setText(Integer.toString(priceDefault));
                 selectedQuality.setDisable(true);
             }
 	        selectedUnit.getItems().setAll(unitService.getAllByType(selProduct.getUnit().getUnitType()));
@@ -258,7 +248,9 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
     private void onCancelPressed() {
         log.debug("CancelButtonPressed");
 
-        saveCancelService.refresh(trader);
+        if(trader != null && (trader = traderService.get(trader.getId())) != null) {
+            saveCancelService.refresh(trader);
+        }
 
         Stage stage = (Stage) selectedUnit.getScene().getWindow();
         stage.close();
@@ -326,7 +318,9 @@ public class TradeBuyFromPlayerController extends BaseControllerImpl {
         traderService.buyFromPlayer(trader, playerToCreateDealFor, product, quality, unit, amount, currencyAmounts);
         saveCancelService.save();
 
-        saveCancelService.refresh(trader);
+        if(trader != null && (trader = traderService.get(trader.getId())) != null) {
+            saveCancelService.refresh(trader);
+        }
         saveCancelService.refresh(trader.getDeals());
 
         Stage stage = (Stage) selectedUnit.getScene().getWindow();

@@ -5,59 +5,63 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="479.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.EditProductController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.EditProductController">
     <children>
+        <TextField fx:id="nameField" layoutX="85.0" layoutY="56.0" prefHeight="25.0" prefWidth="209.0" />
+        <TextField fx:id="tf_CurrencyAmount1" layoutX="85.0" layoutY="87.0" prefHeight="25.0" prefWidth="41.0" />
+        <TextField fx:id="tf_CurrencyAmount2" layoutX="150.0" layoutY="87.0" prefHeight="25.0" prefWidth="41.0" /><TextField fx:id="tf_CurrencyAmount3" layoutX="218.0" layoutY="87.0" prefHeight="25.0" prefWidth="41.0" /><TextField fx:id="tf_CurrencyAmount4" layoutX="284.0" layoutY="87.0" prefHeight="25.0" prefWidth="41.0" />
+        <TextField fx:id="occurenceField" layoutX="85.0" layoutY="119.0" prefHeight="25.0" prefWidth="209.0" text="100" />
+        <ChoiceBox fx:id="attributeBox" layoutX="416.0" layoutY="56.0" prefHeight="25.0" prefWidth="166.0" />
+        <ChoiceBox fx:id="unitBox" layoutX="416.0" layoutY="87.0" prefHeight="25.0" prefWidth="166.0" />
         <CheckBox fx:id="qualityBox" layoutX="416.0" layoutY="123.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="149.0" selected="true" text="Qualitätsstufen zulassen" />
-        <Label layoutX="18.0" layoutY="152.0" text="Kommentar" />
-        <TextArea fx:id="commentField" layoutX="86.0" layoutY="152.0" prefHeight="89.0" prefWidth="499.0" />
-        <Label alignment="CENTER_RIGHT" layoutX="309.0" layoutY="60.0" prefHeight="17.0" prefWidth="99.0" text="Attribut" />
-        <TableView fx:id="regionTable" layoutX="310.0" layoutY="249.0" onMouseClicked="#checkFocusRegion" prefHeight="147.0" prefWidth="275.0">
-            <columns>
-                <TableColumn fx:id="regionColumn" prefWidth="274.0" text="Produktionsgebiete" />
-            </columns>
-        </TableView>
         <TableView fx:id="categorieTable" layoutX="16.0" layoutY="249.0" onMouseClicked="#checkFocusCategory" prefHeight="147.0" prefWidth="282.0">
             <columns>
                 <TableColumn fx:id="categorieColumn" prefWidth="280.0" text="Kategorie" />
             </columns>
         </TableView>
-        <ChoiceBox fx:id="attributeBox" layoutX="416.0" layoutY="56.0" prefHeight="25.0" prefWidth="166.0" />
-        <TextField fx:id="nameField" layoutX="85.0" layoutY="56.0" prefHeight="25.0" prefWidth="209.0" />
-        <Label layoutX="44.0" layoutY="91.0" text="Kosten" />
-        <Label fx:id="lbl_CurrencyAmount1" layoutX="129.0" layoutY="91.0" prefHeight="17.0" prefWidth="21.0" text="Currency1" />
-        <Label fx:id="lbl_CurrencyAmount2" layoutX="197.0" layoutY="91.0" prefHeight="17.0" prefWidth="21.0" text="Currency2" />
-        <TextField fx:id="tf_CurrencyAmount1" layoutX="85.0" layoutY="87.0" prefHeight="25.0" prefWidth="41.0" />
-        <TextField fx:id="tf_CurrencyAmount2" layoutX="150.0" layoutY="87.0" prefHeight="25.0" prefWidth="41.0" />
-        <Label layoutX="49.0" layoutY="60.0" prefHeight="17.0" prefWidth="41.0" text="Name" />
-        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="273.0" layoutY="14.0" text="Waren" textAlignment="CENTER">
-            <font>
-                <Font name="System Bold" size="18.0" />
-            </font>
-        </Label>
-        <HBox alignment="CENTER_RIGHT" layoutX="16.0" layoutY="438.0" prefHeight="27.0" prefWidth="571.0" spacing="10.0">
-            <children>
-                <Button fx:id="cancelButton" layoutX="343.0" layoutY="339.0" mnemonicParsing="false" onAction="#onCancelPressed" text="Abbrechen" />
-                <Button fx:id="saveButton" layoutX="427.0" layoutY="339.0" mnemonicParsing="false" onAction="#onSavePressed" text="Speichern" />
-            </children>
-        </HBox>
+        <TableView fx:id="regionTable" layoutX="310.0" layoutY="249.0" onMouseClicked="#checkFocusRegion" prefHeight="147.0" prefWidth="275.0">
+            <columns>
+                <TableColumn fx:id="regionColumn" prefWidth="274.0" text="Produktionsgebiete" />
+            </columns>
+        </TableView>
         <HBox alignment="CENTER_RIGHT" layoutX="15.0" layoutY="396.0" prefHeight="36.0" prefWidth="282.0" spacing="10.0">
             <children>
-                <ChoiceBox fx:id="categorieChoiceBox" layoutX="31.0" layoutY="307.0" prefHeight="25.0" prefWidth="114.0" />
+                <ComboBox fx:id="categorieChoiceBox" layoutX="31.0" layoutY="307.0" prefHeight="25.0" prefWidth="114.0" />
                 <Button fx:id="addCategorieButton" layoutX="160.0" layoutY="307.0" mnemonicParsing="false" onAction="#onAddCategoryPressed" prefHeight="25.0" prefWidth="81.0" text="Hinzufügen" />
                 <Button fx:id="removeCategorieButton" layoutX="248.0" layoutY="307.0" mnemonicParsing="false" onAction="#onRemoveCategoryPressed" prefHeight="25.0" prefWidth="68.0" text="Entfernen" />
             </children>
         </HBox>
         <HBox alignment="CENTER_RIGHT" layoutX="301.0" layoutY="396.0" prefHeight="36.0" prefWidth="282.0" spacing="10.0">
             <children>
-                <ChoiceBox fx:id="regionChoiceBox" layoutX="31.0" layoutY="307.0" prefHeight="25.0" prefWidth="106.0" />
+                <ComboBox fx:id="regionChoiceBox" layoutX="31.0" layoutY="307.0" prefHeight="25.0" prefWidth="106.0" />
                 <Button fx:id="addRegionButton" layoutX="160.0" layoutY="307.0" mnemonicParsing="false" onAction="#onAddProductionPressed" prefHeight="25.0" prefWidth="81.0" text="Hinzufügen" />
                 <Button fx:id="removeRegionButton" layoutX="248.0" layoutY="307.0" mnemonicParsing="false" onAction="#onRemoveProductionPressed" prefHeight="25.0" prefWidth="68.0" text="Entfernen" />
             </children>
         </HBox>
+      <Button layoutX="339.0" layoutY="439.0" mnemonicParsing="false" onAction="#onAddAllProductionRegionsPressed" text="Alle hinzufügen" />
+      <Button layoutX="470.0" layoutY="439.0" mnemonicParsing="false" onAction="#onRemoveAllProductionRegionsPressed" text="Alle entfernen" />
+        <Label layoutX="18.0" layoutY="152.0" text="Kommentar">
+         <graphic>
+              <TextArea fx:id="commentField" prefHeight="89.0" prefWidth="499.0" />
+         </graphic></Label>
+        <HBox alignment="CENTER_RIGHT" layoutX="19.0" layoutY="485.0" prefHeight="27.0" prefWidth="571.0" spacing="10.0">
+            <children>
+                <Button fx:id="cancelButton" layoutX="343.0" layoutY="339.0" mnemonicParsing="false" onAction="#onCancelPressed" text="Abbrechen" />
+                <Button fx:id="saveButton" layoutX="427.0" layoutY="339.0" mnemonicParsing="false" onAction="#onSavePressed" text="Speichern" />
+            </children>
+        </HBox>
+        <Label alignment="CENTER_RIGHT" layoutX="309.0" layoutY="60.0" prefHeight="17.0" prefWidth="99.0" text="Attribut" />
+        <Label layoutX="44.0" layoutY="91.0" text="Kosten" />
+        <Label fx:id="lbl_CurrencyAmount1" layoutX="129.0" layoutY="91.0" prefHeight="17.0" prefWidth="21.0" text="Currency1" />
+        <Label fx:id="lbl_CurrencyAmount2" layoutX="197.0" layoutY="91.0" prefHeight="17.0" prefWidth="21.0" text="Currency2" />
+        <Label layoutX="49.0" layoutY="60.0" prefHeight="17.0" prefWidth="41.0" text="Name" />
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="273.0" layoutY="14.0" text="Waren" textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
         <Label layoutX="18.0" layoutY="123.0" text="Verbreitung" />
-        <TextField fx:id="occurenceField" layoutX="85.0" layoutY="119.0" prefHeight="25.0" prefWidth="209.0" text="100" />
         <Label layoutX="295.0048828125" layoutY="123.0" text="%%" />
-        <ChoiceBox fx:id="unitBox" layoutX="416.0" layoutY="87.0" prefHeight="25.0" prefWidth="166.0" />
-        <Label alignment="CENTER_RIGHT" layoutX="309.0" layoutY="91.0" prefHeight="17.0" prefWidth="99.0" text="Einheit" /><TextField fx:id="tf_CurrencyAmount3" layoutX="218.0" layoutY="87.0" prefHeight="25.0" prefWidth="41.0" /><Label fx:id="lbl_CurrencyAmount3" layoutX="263.0" layoutY="91.0" prefHeight="17.0" prefWidth="21.0" text="Currency3" /><Label fx:id="lbl_CurrencyAmount4" layoutX="329.0" layoutY="91.0" prefHeight="17.0" prefWidth="21.0" text="Currency3" /><TextField fx:id="tf_CurrencyAmount4" layoutX="284.0" layoutY="87.0" prefHeight="25.0" prefWidth="41.0" />
+        <Label alignment="CENTER_RIGHT" layoutX="309.0" layoutY="91.0" prefHeight="17.0" prefWidth="99.0" text="Einheit" /><Label fx:id="lbl_CurrencyAmount3" layoutX="263.0" layoutY="91.0" prefHeight="17.0" prefWidth="21.0" text="Currency3" /><Label fx:id="lbl_CurrencyAmount4" layoutX="329.0" layoutY="91.0" prefHeight="17.0" prefWidth="21.0" text="Currency3" />
     </children>
 </Pane>

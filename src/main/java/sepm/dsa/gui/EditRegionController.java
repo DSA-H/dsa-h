@@ -2,8 +2,8 @@ package sepm.dsa.gui;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.RainfallChance;
@@ -25,9 +24,7 @@ import sepm.dsa.service.RegionService;
 import sepm.dsa.service.SaveCancelService;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class EditRegionController extends BaseControllerImpl {
 
@@ -42,6 +39,8 @@ public class EditRegionController extends BaseControllerImpl {
     // true if the region is not editing
     private boolean isNewRegion;
 
+    private ArrayList<Region> remainingBorders;
+
     @FXML
     private TextField nameField;
     @FXML
@@ -51,7 +50,7 @@ public class EditRegionController extends BaseControllerImpl {
     @FXML
     private ChoiceBox<RainfallChance> rainfallChoiceBox;
     @FXML
-    private ChoiceBox borderChoiceBox;
+    private ComboBox borderComboBox;
     @FXML
     private TextField borderCost;
     @FXML
@@ -106,7 +105,7 @@ public class EditRegionController extends BaseControllerImpl {
             temperatureChoiceBox.getSelectionModel().select(Temperature.MEDIUM.getValue());
             rainfallChoiceBox.getSelectionModel().select(RainfallChance.MEDIUM.getValue());
 
-	    borderTable.getItems().retainAll();
+	        borderTable.getItems().retainAll();
         }
 
 
@@ -121,8 +120,8 @@ public class EditRegionController extends BaseControllerImpl {
             otherRegions.remove(regionBorder.getRegion1());
             otherRegions.remove(regionBorder.getRegion2());
         }
-
-	borderChoiceBox.getItems().setAll(otherRegions);
+        remainingBorders = new ArrayList<>(otherRegions);
+        borderComboBox.getItems().setAll(otherRegions);
     }
 
     public void setRegionService(RegionService regionService) {
@@ -148,11 +147,7 @@ public class EditRegionController extends BaseControllerImpl {
         saveCancelService.cancel();
 
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/regionlist.fxml", stage);
-        RegionListController ctrl = loader.getController();
-        ctrl.reload();
-
-        stage.setScene(new Scene(scene, 600, 438));
+        stage.close();
     }
 
     @FXML
@@ -217,11 +212,7 @@ public class EditRegionController extends BaseControllerImpl {
 
         // return to regionlist
         Stage stage = (Stage) cancelButton.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/regionlist.fxml", stage);
-        RegionListController ctrl = loader.getController();
-        ctrl.reload();
-
-        stage.setScene(new Scene(scene, 600, 438));
+        stage.close();
     }
 
     @FXML
@@ -233,7 +224,7 @@ public class EditRegionController extends BaseControllerImpl {
 
         try {
             border.setRegion1(selectedRegion);
-            Region borderTo = (Region) borderChoiceBox.getSelectionModel().getSelectedItem();
+            Region borderTo = (Region) borderComboBox.getSelectionModel().getSelectedItem();
             if (borderTo == null) {
                 throw new DSAValidationException("Wählen sie ein Gebiet aus, welches an dieses Gebiet grenzen soll.");
             }
@@ -249,8 +240,13 @@ public class EditRegionController extends BaseControllerImpl {
 
         borderTable.getItems().add(border);
 
-        borderChoiceBox.getItems().remove(border.getRegion2());
-        borderChoiceBox.getSelectionModel().selectFirst();
+        long startTime = System.currentTimeMillis();
+        remainingBorders.remove(border.getRegion2());
+        long endTime1 = System.currentTimeMillis();
+        borderComboBox.setItems(FXCollections.observableArrayList(remainingBorders));//getItems().setAll(remainingBorders);
+        long endTime2 = System.currentTimeMillis();
+        log.info((endTime1 - startTime) + " ms, gesamt: " + (endTime2 - startTime));
+        borderComboBox.getSelectionModel().selectFirst();
 
     }
 
@@ -261,9 +257,9 @@ public class EditRegionController extends BaseControllerImpl {
         if (selectedborder != null) {
             borderTable.getItems().remove(selectedborder);
             if (selectedborder.getRegion1().equals(selectedRegion)) {
-                borderChoiceBox.getItems().add(selectedborder.getRegion2());
+                borderComboBox.getItems().add(selectedborder.getRegion2());
             } else {
-                borderChoiceBox.getItems().add(selectedborder.getRegion1());
+                borderComboBox.getItems().add(selectedborder.getRegion1());
             }
         }
         checkFocus();

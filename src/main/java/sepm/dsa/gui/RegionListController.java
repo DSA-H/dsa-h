@@ -3,7 +3,6 @@ package sepm.dsa.gui;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -119,7 +118,7 @@ public class RegionListController extends BaseControllerImpl {
     private void onCreateButtonPressed() {
         log.debug("onCreateButtonPressed - open Gebiet-Details Window");
 
-        Stage stage = (Stage) regionTable.getScene().getWindow();
+        Stage stage = new Stage();
         Parent root = (Parent) loader.load("/gui/editregion.fxml", stage);
         EditRegionController ctrl = loader.getController();
         ctrl.setRegion(null);
@@ -127,6 +126,7 @@ public class RegionListController extends BaseControllerImpl {
 
         stage.setTitle("Gebiet-Details");
         stage.setScene(new Scene(root, 600, 438));
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -136,7 +136,7 @@ public class RegionListController extends BaseControllerImpl {
 
         Region selectedRegion = regionTable.getSelectionModel().getSelectedItem();//.getFocusModel().getFocusedItem();
 
-        Stage stage = (Stage) regionTable.getScene().getWindow();
+        Stage stage = new Stage();
         Parent root = (Parent) loader.load("/gui/editregion.fxml", stage);
         EditRegionController ctrl = loader.getController();
         ctrl.setRegion(selectedRegion);
@@ -144,6 +144,7 @@ public class RegionListController extends BaseControllerImpl {
 
         stage.setTitle("Gebiet-Details");
         stage.setScene(new Scene(root, 600, 438));
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -158,7 +159,7 @@ public class RegionListController extends BaseControllerImpl {
             int regionalProductions = 0;
             String connectedEntries = "";
             connectedEntries += "\n" + connectedLocations + " Orte";
-            connectedEntries += "\n" + regionalProductions + " Zuordnungen von Produkt zu Produktionsort";    // TODO RegionalProduction (m:n)
+            connectedEntries += "\n" + regionalProductions + " Zuordnungen von Produkt zu Produktionsort";
 
             Action response = Dialogs.create()
                     .title("Löschen?")

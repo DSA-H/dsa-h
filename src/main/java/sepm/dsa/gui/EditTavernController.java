@@ -1,10 +1,7 @@
 package sepm.dsa.gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -13,7 +10,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.CurrencySet;
 import sepm.dsa.model.Location;
@@ -67,6 +64,11 @@ public class EditTavernController extends BaseControllerImpl {
 	@Override
     public void reload() {
         log.debug("reload EditTavernController");
+        if (selectedTavern.getId() != null && tavernService.get(selectedTavern.getId()) == null) {
+            onCancelPressed();
+            return;
+        }
+
     }
 
     @FXML
@@ -146,7 +148,7 @@ public class EditTavernController extends BaseControllerImpl {
 		nameField.setText(tavern.getName());
 		bedsField.setText("" + tavern.getBeds());
 		qualityCoicheBox.getSelectionModel().select(tavern.getQuality());
-		useageLabel.setText(tavern.getUsage() + "");
+		useageLabel.setText(tavern.getFreeBeds() + "");
         List<CurrencyAmount> currencyAmounts = currencySetService.toCurrencySet(defaultCurrencySet, tavern.getPrice());
 		priceLabel.setText(CurrencyFormatUtil.currencySetString(currencyAmounts));
 		commentArea.setText(tavern.getComment() == null ? "" : tavern.getComment());

@@ -39,11 +39,12 @@ public class SaveCancelServiceImpl implements SaveCancelService {
 
     @Override
     public void refresh(Collection<? extends BaseModel> objects) {
+        log.debug("calling refresh(" + objects + ")");
         saveCancelDao.refresh(objects);
     }
 
     public void setSaveCancelDao(SaveCancelDao saveCancelDao) {
-        log.debug("calling setSaveCancelDao()");
+        log.debug("calling setSaveCancelDao(" + saveCancelDao + ")");
         this.saveCancelDao = saveCancelDao;
     }
 }

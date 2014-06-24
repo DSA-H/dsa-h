@@ -1,6 +1,5 @@
 package sepm.dsa.service.test;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,15 +10,11 @@ import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 import sepm.dsa.util.MathUtil;
 
-import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -125,7 +120,7 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         Collection<AssortmentNature> assortments = trader.getCategory().getAssortments().values();
         for (AssortmentNature a : assortments) {
             for (Product p : a.getProductCategory().getProducts()) {
-                assertTrue("Preis muss positiv sein", traderService.calculatePriceForProduct(p, trader) > 0);
+                assertTrue("Preis muss positiv sein", traderService.calculatePriceForProduct(p, trader, false) > 0);
             }
         }
         assertTrue("There were no assortments set in test data", assortments.size() > 0);
@@ -235,7 +230,7 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         int dealSizeBefore = dealService.getAll().size();
         int offerSizeBefore = trader.getOffers().size();
 
-        Deal deal = traderService.sellToPlayer(trader, player, product, productQuality, unit, amount, totalPrice, discount);
+        Deal deal = traderService.sellToPlayer(trader, player, product, productQuality, unit, amount, totalPrice, discount, false);
         saveCancelService.save();
 
         Trader traderAfter = traderService.get(1);
@@ -259,7 +254,6 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         assertTrue("Amount afterwards was expected to be " + (offerAmountBefore - amount) + ", but was " + offerAfter.getAmount(),
                 Math.abs((offerAmountBefore - amount) - offerAfter.getAmount()) < MathUtil.EPSILON);
 
-        // TODO we need to remove this, otherwise all tests coming later would fail, but WHY ??
         dealService.remove(deal);
         saveCancelService.save();
 
@@ -306,7 +300,6 @@ public class TraderServiceTest extends AbstractDatabaseTest {
         assertTrue("Amount afterwards was expected to be " + amount + ", but was " + offerAfter.getAmount(),
                 Math.abs(amount - offerAfter.getAmount()) < MathUtil.EPSILON);
 
-        // TODO we need to remove this, otherwise all tests coming later would fail, but WHY ??
         dealService.remove(deal);
         saveCancelService.save();
 

@@ -8,14 +8,9 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="279.0" prefWidth="464.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.EditCurrencyController">
     <children>
-        <Label layoutX="160.0" layoutY="27.0" text="Währung bearbeiten">
-            <font>
-                <Font name="System Bold" size="18.0" />
-            </font>
-        </Label>
-        <Label layoutX="115.0" layoutY="90.0" text="Name:" />
-        <Label layoutX="82.0" layoutY="164.0" text="Wechselkurs:" />
         <TextField fx:id="nameField" layoutX="167.0" layoutY="86.0" />
+      <TextField fx:id="shortNameField" layoutX="167.0" layoutY="124.0" prefHeight="25.0" prefWidth="80.0" />
+        <TextField fx:id="valueToBaseRateField" layoutX="168.0" layoutY="159.0" prefHeight="25.0" prefWidth="80.0" />
         <HBox alignment="CENTER_LEFT" layoutX="229.0" layoutY="230.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="35.0" prefWidth="220.0" spacing="10.0">
             <children>
                 <Button mnemonicParsing="false" onAction="#onSavePressed" prefHeight="26.0" prefWidth="80.0" text="Speichern" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
@@ -25,8 +20,13 @@
                 <Insets />
             </opaqueInsets>
         </HBox>
-        <TextField fx:id="valueToBaseRateField" layoutX="168.0" layoutY="159.0" prefHeight="25.0" prefWidth="80.0" /><Label layoutX="269.0" layoutY="164.0" text="ganze Zahl größer als 0" />
-      <TextField fx:id="shortNameField" layoutX="167.0" layoutY="124.0" prefHeight="25.0" prefWidth="80.0" />
+        <Label layoutX="160.0" layoutY="27.0" text="Währung bearbeiten">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        <Label layoutX="115.0" layoutY="90.0" text="Name:" />
+        <Label layoutX="82.0" layoutY="164.0" text="Wechselkurs:" /><Label layoutX="269.0" layoutY="164.0" text="ganze Zahl größer als 0" />
       <Label layoutX="95.0" layoutY="129.0" text="Kurzname:" />
     </children>
 </Pane>

@@ -3,17 +3,15 @@ package sepm.dsa.gui;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.*;
@@ -71,6 +69,18 @@ public class EditPlayerController extends BaseControllerImpl {
     @Override
     public void reload() {
         log.debug("reload EditPlayerController");
+	    if (selectedPlayer.getId() != null) {
+		    try {
+			    saveCancelService.refresh(selectedPlayer);
+		    } catch (Exception e) {
+			    Stage stage = (Stage) dealsTable.getScene().getWindow();
+			    stage.close();
+		    }
+	    }
+        if (selectedPlayer.getDeals().size() > 0) {
+            dealsTable.getItems().clear();
+            dealsTable.getItems().setAll(selectedPlayer.getDeals());
+        }
     }
 
     @FXML
@@ -79,12 +89,7 @@ public class EditPlayerController extends BaseControllerImpl {
 
         saveCancelService.save();
         Stage stage = (Stage) nameField.getScene().getWindow();
-
-        Parent scene = (Parent) loader.load("/gui/playerlist.fxml", stage);
-        PlayerListController ctrl = loader.getController();
-        ctrl.reload();
-
-        stage.setScene(new Scene(scene, 600, 438));
+		stage.close();
     }
 
     @FXML
@@ -108,10 +113,7 @@ public class EditPlayerController extends BaseControllerImpl {
 
         // return to players-list
         Stage stage = (Stage) nameField.getScene().getWindow();
-        Parent scene = (Parent) loader.load("/gui/playerlist.fxml", stage);
-        PlayerListController ctrl = loader.getController();
-        ctrl.reload();
-        stage.setScene(new Scene(scene, 600, 438));
+	    stage.close();
     }
 
     private void initialzeTableWithColums() {

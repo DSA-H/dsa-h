@@ -35,13 +35,11 @@ public class RegionServiceTest extends AbstractDatabaseTest {
 
     @Before
     public void setup() {
-
-        //TODO: Import directly into testDB
         addRegion = new Region();
         addRegion.setName("testRegionAdd");
         addRegion.setColor("000000");
         addRegion.setComment("comment");
-        addRegion.setTemperature(Temperature.ARCTIC);
+        addRegion.setTemperature(Temperature.VERY_LOW);
         addRegion.setRainfallChance(RainfallChance.LOW);
 
         deleteRegion = new Region();
@@ -64,14 +62,14 @@ public class RegionServiceTest extends AbstractDatabaseTest {
         addRegion2.setName("testRegionAdd 2");
         addRegion2.setColor("222222");
         addRegion2.setComment("comment 2");
-        addRegion2.setTemperature(Temperature.VULCANO);
+        addRegion2.setTemperature(Temperature.VERY_HIGH);
         addRegion2.setRainfallChance(RainfallChance.HIGH);
 
         addRegion3 = new Region();
         addRegion3.setName("testRegionAdd 2");
         addRegion3.setColor("222222");
         addRegion3.setComment("comment 2");
-        addRegion3.setTemperature(Temperature.VULCANO);
+        addRegion3.setTemperature(Temperature.VERY_HIGH);
         addRegion3.setRainfallChance(RainfallChance.HIGH);
 
 //        regionBorder1 = new RegionBorder();
@@ -92,7 +90,6 @@ public class RegionServiceTest extends AbstractDatabaseTest {
 	    saveCancelService.save();
 
         assertEquals(size + 1, regionService.getAll().size());
-        //TODO: equals is not working right now => DONE
         assertTrue(regionService.get(addRegion.getId()).equals(addRegion));
         assertEquals(regionService.get(addRegion.getId()), addRegion);
     }

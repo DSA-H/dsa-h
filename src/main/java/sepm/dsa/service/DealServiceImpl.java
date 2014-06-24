@@ -95,6 +95,7 @@ public class DealServiceImpl implements DealService {
      * @throws sepm.dsa.exceptions.DSAValidationException if deal is not valid
      */
     public void validate(Deal deal) throws DSAValidationException {
+        log.debug("calling validate(" + deal + ")");
         Set<ConstraintViolation<Deal>> violations = validator.validate(deal);
         if (violations.size() > 0) {
             throw new DSAValidationException("Deal ist nicht valide.", violations);
@@ -102,10 +103,12 @@ public class DealServiceImpl implements DealService {
     }
 
     public void setDealDao(DealDao dealDao) {
+        log.debug("calling setDealDao(" + dealDao + ")");
         this.dealDao = dealDao;
     }
 
     public void setTimeService(TimeService timeService) {
+        log.debug("calling setTimeService(" + timeService + ")");
         this.timeService = timeService;
     }
 }

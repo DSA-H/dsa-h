@@ -9,7 +9,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import sepm.dsa.gui.BaseController;
 
-import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -39,10 +38,12 @@ public class SpringFxmlLoader implements ApplicationContextAware {
             throw new RuntimeException(ioException);
         }
         EventHandler<WindowEvent> event = stage.getOnHidden();
+        final BaseController ctrl = ((BaseController)getController());
         stage.setOnHidden(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
-                ((BaseController)getController()).unload();
+                ctrl.unload();
+                stage.setOnHidden(null);   // free for garbage collecting
                 // event chaining
                 if(event != null) {
                     event.handle(windowEvent);

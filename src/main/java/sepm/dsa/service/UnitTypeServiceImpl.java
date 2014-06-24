@@ -67,6 +67,7 @@ public class UnitTypeServiceImpl implements UnitTypeService {
      * @throws sepm.dsa.exceptions.DSAValidationException if unitType is not valid
      */
     private void validate(UnitType unitType) throws DSAValidationException {
+        log.debug("calling validate(" + unitType + ")");
         Set<ConstraintViolation<UnitType>> violations = validator.validate(unitType);
         if (violations.size() > 0) {
             throw new DSAValidationException("UnitType ist nicht valide.", violations);

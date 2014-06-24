@@ -14,7 +14,7 @@ import java.util.Set;
 @Table(name = "traders")
 public class Trader implements BaseModel {
 
-    private static final long serialVersionUID = 2857293850231481712L;
+    private static final long serialVersionUID = -1922659748655610405L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -22,7 +22,7 @@ public class Trader implements BaseModel {
     private Integer id;
 
     @NotBlank
-    @Size(max = 60, min = 1)
+    @Size(max = 60)
     @Column(nullable = false, length = 60)
     private String name;
 
@@ -65,8 +65,6 @@ public class Trader implements BaseModel {
     @JoinColumn(nullable = false)
     private Location location;
 
-//    @OneToMany(cascade = CascadeType.ALL)// LAZY, otherwise offer will not be delted cascading!
-//    @JoinColumn(nullable = false)
     @OneToMany(mappedBy = "trader", cascade = { CascadeType.REMOVE, CascadeType.REFRESH })
     private Set<Offer> offers = new HashSet<>();
 
@@ -211,5 +209,11 @@ public class Trader implements BaseModel {
     }
 
 	@Override
-	public String toString() { return category.getName() + " " + name; }
+	public String toString() {
+        if(category != null) {
+            return category.getName() + " " + name;
+        }else {
+            return name;
+        }
+    }
 }

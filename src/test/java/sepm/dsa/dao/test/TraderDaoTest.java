@@ -62,8 +62,7 @@ public class TraderDaoTest extends AbstractDatabaseTest {
         assertTrue(trader instanceof MovingTrader);
     }
 
-	//TODO was org.hibernate.PropertyValueException
-    @Test(expected = NullPointerException.class)
+    @Test(expected = org.hibernate.PropertyValueException.class)
     public void add_incompleteShouldNotPersist() {
         Trader trader = new Trader();
         trader.setName("TestTrader1");

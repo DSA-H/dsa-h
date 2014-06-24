@@ -73,6 +73,7 @@ public class TraderCategoryServiceImpl implements TraderCategoryService {
     }
 
     public void setTraderCategoryDao(TraderCategoryDao traderCategoryDao) {
+        log.debug("calling setTraderCategoryDao(" + traderCategoryDao + ")");
         this.traderCategoryDao = traderCategoryDao;
     }
 
@@ -83,6 +84,7 @@ public class TraderCategoryServiceImpl implements TraderCategoryService {
      * @throws sepm.dsa.exceptions.DSAValidationException if location is not valid
      */
     private void validate(TraderCategory traderCategory) throws DSAValidationException {
+        log.debug("calling validate(" + traderCategory + ")");
         Set<ConstraintViolation<TraderCategory>> violations = validator.validate(traderCategory);
         if (violations.size() > 0) {
             throw new DSAValidationException("Händlerkategorie ist nicht valide.", violations);
@@ -90,6 +92,7 @@ public class TraderCategoryServiceImpl implements TraderCategoryService {
     }
 
 	public void setTraderService(TraderService traderService) {
-		this.traderService = traderService;
+        log.debug("calling setTraderService(" + traderService + ")");
+        this.traderService = traderService;
 	}
 }

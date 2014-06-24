@@ -14,7 +14,7 @@ import java.util.Set;
 @Table(name = "locations")
 public class Location implements BaseModel, PathNode {
 
-    private static final long serialVersionUID = 1616654812413948966L;
+    private static final long serialVersionUID = -4234487077765494928L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -22,7 +22,7 @@ public class Location implements BaseModel, PathNode {
     private Integer id;
 
     @NotBlank
-    @Size(max = 100, min = 1)
+    @Size(max = 100)
     @Column(nullable = false, length = 100)
     private String name;
 
@@ -49,13 +49,6 @@ public class Location implements BaseModel, PathNode {
 
     @Column(nullable = true)
     private Integer weatherId;
-
-    /*
-    @Column(nullable = true)
-    @Embedded
-    //TODO abklären martin johannes
-    private DSADate weatherCollectedDate;
-    */
 
     @Size(max = 1000)
     @Column(nullable = true, length = 1000)
@@ -170,16 +163,6 @@ public class Location implements BaseModel, PathNode {
         }
     }
 
-    /*
-    public DSADate getWeatherCollectedDate() {
-        return weatherCollectedDate;
-    }
-
-    public void setWeatherCollectedDate(DSADate weatherCollectedDate) {
-        this.weatherCollectedDate = weatherCollectedDate;
-    }
-    */
-
     public String getComment() {
         return comment;
     }
@@ -255,17 +238,5 @@ public class Location implements BaseModel, PathNode {
 	public String toString() {
 		return name;
 	}
-
-	/*
-    @Override
-    public String toString() {
-        return "Location{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", region=" + region +
-                '}';
-    }
-    */
-
 
 }

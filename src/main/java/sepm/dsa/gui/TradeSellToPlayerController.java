@@ -1,28 +1,25 @@
 package sepm.dsa.gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sepm.dsa.dao.CurrencyAmount;
+import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 import sepm.dsa.util.CurrencyFormatUtil;
 
-import java.math.BigDecimal;
 import java.net.URL;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class TradeSellToPlayerController extends BaseControllerImpl {
@@ -32,13 +29,13 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
     @FXML
     private Label selectedOffer;
     @FXML
-    private ChoiceBox<Unit> selectedUnit;
+    private ComboBox<Unit> selectedUnit;
     @FXML
-    private ChoiceBox<Player> selectedPlayer;
+    private ComboBox<Player> selectedPlayer;
     @FXML
     private TextField selectedAmount;
     @FXML
-    private ChoiceBox<CurrencySet> selectedCurrency;
+    private ComboBox<CurrencySet> selectedCurrency;
     @FXML
     private TextField selectedDiscount;
 
@@ -147,7 +144,7 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
         refreshPriceView();
         if (offer.getProduct() != null) {
             log.info(selectedQuality() + ", " + selectedProduct() + " " + trader);
-            int pricePerUnit = traderService.calculatePricePerUnit(selectedQuality(), selectedProduct(), trader);
+            int pricePerUnit = traderService.calculatePricePerUnit(selectedQuality(), selectedProduct(), trader, false);
             int amount = 0;
             //##### get amount
             if (!selectedAmount.getText().isEmpty()) {
@@ -268,10 +265,49 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
         //PRICE STUFF ###########
         Integer discount = retrieveDiscount();
 
-        traderService.sellToPlayer(trader, playerToCreateDealFor, offer.getProduct(), offer.getQuality(), selectedUnit.getSelectionModel().getSelectedItem(), amount, currencyAmounts, discount);
+        Product product = offer.getProduct();
+        Unit unit = selectedUnit.getSelectionModel().getSelectedItem();
+        Double offerAmountDifference = unit.exchange((double) amount, product.getUnit());
+        boolean removeRemainingOfferAmount = false;
+        if (offer.getAmount() - offerAmountDifference < 0) {
+            // ask to buy all remaining
+            Unit productUnit = offer.getProduct().getUnit();
+            int newAmount = offer.getAmount().intValue();
+
+            if (newAmount == 0) {
+                Dialogs.create()
+                        .title("Händler hat nicht genug von dieser Ware?")
+                        .masthead(null)
+                        .message("Der Händler hat nicht die gewollte Menge dieser Ware.\n" +
+                                "Benutzen Sie ggf. eine feinere Einheit, um noch etwas vom Rest der Ware zu erhalten.")
+                        .showInformation();
+                return;
+            }
+            Action response = Dialogs.create()
+                    .title("Händler hat nicht genug von dieser Ware?")
+                    .masthead(null)
+                    .message("Der Händler hat nicht die gewollte Menge dieser Ware. Soll der Rest von " +
+                            newAmount + " " + productUnit.getName() + " trotzdem gekauft werden?\n\n" +
+                            "Hinweis: Der Preis wird nicht neu berechnet, bitte geben Sie ggf. einen entsprechenden Preis für die " +
+                            "reduzierte Menge ein.")
+                    .actions(Dialog.Actions.NO, Dialog.Actions.YES)
+                    .showConfirm();
+
+            if (response == Dialog.Actions.YES) {
+                amount = newAmount;
+                unit = productUnit;
+                removeRemainingOfferAmount = true;
+            } else {
+                return;
+            }
+        }
+
+        traderService.sellToPlayer(trader, playerToCreateDealFor, product, offer.getQuality(), unit, amount, currencyAmounts, discount, removeRemainingOfferAmount);
         saveCancelService.save();
 
-        saveCancelService.refresh(trader);
+        if(trader != null && (trader = traderService.get(trader.getId())) != null) {
+            saveCancelService.refresh(trader);
+        }
         saveCancelService.refresh(trader.getDeals());
 
         Stage stage = (Stage) selectedOffer.getScene().getWindow();
@@ -326,7 +362,7 @@ public class TradeSellToPlayerController extends BaseControllerImpl {
                 .title("neuer Preis nach Rabatt")
                 .masthead(null)
                 .message(reducePriceString)
-                .showWarning();
+                .showInformation();
     }
 
 
