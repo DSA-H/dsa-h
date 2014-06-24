@@ -66,6 +66,7 @@ public class PlayerListController extends BaseControllerImpl {
 	    stage.setTitle("Spieler bearbeiten");
 	    stage.setScene(new Scene(scene, 850, 414));
 	    stage.setResizable(false);
+        stage.setResizable(false);
 	    stage.show();
     }
 
@@ -82,6 +83,7 @@ public class PlayerListController extends BaseControllerImpl {
 	    stage.setTitle("Spieler bearbeiten");
 	    stage.setScene(new Scene(scene, 850, 414));
 	    stage.setResizable(false);
+        stage.setResizable(false);
 	    stage.show();
     }
 

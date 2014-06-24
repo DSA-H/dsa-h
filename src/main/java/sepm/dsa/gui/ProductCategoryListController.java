@@ -130,6 +130,7 @@ public class ProductCategoryListController extends BaseControllerImpl {
 
         stage.setTitle("Warenkategorie");
         stage.setScene(new Scene(scene, 440, 178));
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -145,6 +146,7 @@ public class ProductCategoryListController extends BaseControllerImpl {
 
         stage.setTitle("Warenkategorie");
         stage.setScene(new Scene(scene, 440, 178));
+        stage.setResizable(false);
         stage.show();
     }
 
