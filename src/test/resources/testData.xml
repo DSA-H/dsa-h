@@ -32,6 +32,7 @@
     <locations id="9" name="location9_LoConTest" REGION="3" xCoord="700" yCoord="700" sizeId="3" height="140"
                weatherId="1"/>
     <connections location1="4" location2="5" travelTime="4"/>
+    <connections location1="1" location2="5" travelTime="4"/>
     <connections location1="4" location2="6" travelTime="7"/>
     <connections location1="7" location2="4" travelTime="10"/>
     <!-- end of LocationConnections test data                     -->
