@@ -68,6 +68,7 @@ public class CurrencyListController extends BaseControllerImpl {
 
         stage.setTitle("Währungen");
         stage.setScene(new Scene(scene, 464, 279));
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -83,6 +84,7 @@ public class CurrencyListController extends BaseControllerImpl {
 
         stage.setTitle("Währungen");
         stage.setScene(new Scene(scene, 464, 279));
+        stage.setResizable(false);
         stage.show();
     }
 

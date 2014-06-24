@@ -126,6 +126,7 @@ public class RegionListController extends BaseControllerImpl {
 
         stage.setTitle("Gebiet-Details");
         stage.setScene(new Scene(root, 600, 438));
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -143,6 +144,7 @@ public class RegionListController extends BaseControllerImpl {
 
         stage.setTitle("Gebiet-Details");
         stage.setScene(new Scene(root, 600, 438));
+        stage.setResizable(false);
         stage.show();
     }
 

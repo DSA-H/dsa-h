@@ -442,7 +442,7 @@ public class EditTraderController extends BaseControllerImpl {
                             ((MovingTrader) selectedTrader).setLastMoved(date);
                         }
                         //Recalculate pricing
-                        traderService.reCalculatePriceForOffer(/*selectedTrader.getOffers(), */selectedTrader);
+                        traderService.reCalculatePriceForOffer(/*selectedTrader.getOffers(), */selectedTrader, false);
                     } else if(response2 == links.get(1)) {
                         selectedTrader.setName(name);
                         selectedTrader.setSize(size);
@@ -464,7 +464,7 @@ public class EditTraderController extends BaseControllerImpl {
                             ((MovingTrader) selectedTrader).setLastMoved(date);
                         }
                         //Recalculate pricing if new price is higher
-                        traderService.reCalculatePriceForOfferIfNewPriceIsHigher(/*selectedTrader.getOffers(), */selectedTrader);
+                        traderService.reCalculatePriceForOfferIfNewPriceIsHigher(/*selectedTrader.getOffers(), */selectedTrader, false);
                     }else {
                         return;
                     }

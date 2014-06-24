@@ -90,6 +90,7 @@ public class TraderCategoryListController extends BaseControllerImpl {
 
         stage.setTitle("Händlerkategorie");
         stage.setScene(new Scene(root, 600, 438));
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -107,6 +108,7 @@ public class TraderCategoryListController extends BaseControllerImpl {
 
         stage.setTitle("Händler Kategorie bearbeiten");
         stage.setScene(new Scene(root, 600, 438));
+        stage.setResizable(false);
         stage.show();
     }
 
