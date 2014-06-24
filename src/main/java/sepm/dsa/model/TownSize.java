@@ -2,10 +2,10 @@ package sepm.dsa.model;
 
 public enum TownSize {
 
-    MINI(0, "Mini"),
-    LITTLE(1, "klein"),
-    MEDIUM(2, "mittel"),
-    BIG(3, "hoch"),
+    MINI(0, "Winzig"),
+    LITTLE(1, "Klein"),
+    MEDIUM(2, "Mittel"),
+    BIG(3, "Groß"),
     METROPOL(4, "Metropole");
 
     private int value;

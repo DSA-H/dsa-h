@@ -172,13 +172,22 @@ public class TimeServiceImpl implements TimeService {
                 Location actLocation = movingTrader.getLocation();
 
                 // possible locations
-                List<Location> possibleLocations = null;
-                // distance filter
-                if(movingTrader.getPreferredDistance() == DistancePreferrence.GLOBAL) {
-                    possibleLocations = locationService.getAll();
-                }else if(movingTrader.getPreferredDistance() == DistancePreferrence.REGION) {
-                    possibleLocations = locationService.getAllByRegion(actLocation.getRegion().getId());
-                }
+                List<Location> possibleLocations = new ArrayList<>();
+	            for (LocationConnection lc : actLocation.getAllConnections()) {
+		            if (lc.getLocation1() == actLocation) {
+			            if (movingTrader.getPreferredDistance() == DistancePreferrence.GLOBAL) {
+				            possibleLocations.add(lc.getLocation2());
+			            } else if (actLocation.getRegion() == lc.getLocation2().getRegion()) {
+				            possibleLocations.add(lc.getLocation2());
+			            }
+		            } else {
+			            if (movingTrader.getPreferredDistance() == DistancePreferrence.GLOBAL) {
+				            possibleLocations.add(lc.getLocation1());
+			            } else if (actLocation.getRegion() == lc.getLocation1().getRegion()) {
+				            possibleLocations.add(lc.getLocation1());
+			            }
+		            }
+	            }
                 // TownSize filter
                 if (movingTrader.getPreferredTownSize() != null) {
                     List<Location> removeList = new ArrayList<>();
@@ -191,7 +200,7 @@ public class TimeServiceImpl implements TimeService {
                         }
                     }
                     possibleLocations.remove(removeList);
-                }
+	            }
 	            // not allowed to move to same location
 	            possibleLocations.remove(movingTrader.getLocation());
                 // no possible Locations -> not moving
