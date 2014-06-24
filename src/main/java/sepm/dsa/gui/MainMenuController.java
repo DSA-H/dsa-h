@@ -679,19 +679,22 @@ public class MainMenuController extends BaseControllerImpl {
 		}
 
 		File file = fileChooser.showOpenDialog(menuBar.getScene().getWindow());
-		if (file != null) {
-			try {
-				dataSetService.importDataSet(file);
-				Dialogs.create()
-					.title("Import erfolgreich")
-					.message("Import erfolgreich")
-					.showInformation();
-			} catch (DSARuntimeException e) {
-				Dialogs.create()
-					.title("Fehler")
-					.message("Fehler beim Import: " + e.getMessage())
-					.showError();
-			}
+
+		if (file == null) {
+			return;
+		}
+
+		try {
+			dataSetService.importDataSet(file);
+			Dialogs.create()
+				.title("Import erfolgreich")
+				.message("Import erfolgreich")
+				.showInformation();
+		} catch (DSARuntimeException e) {
+			Dialogs.create()
+				.title("Fehler")
+				.message("Fehler beim Import: " + e.getMessage())
+				.showError();
 		}
 	}
 
