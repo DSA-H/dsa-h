@@ -49,7 +49,6 @@ public class LocationConnection implements BaseModel, PathEdge {
     }
 
     public void setLocation1(Location location1) {
-        System.out.println("setLocation1(" + location1 + ")");
         this.pk.location1 = location1;
     }
 
@@ -58,7 +57,6 @@ public class LocationConnection implements BaseModel, PathEdge {
     }
 
     public void setLocation2(Location location2) {
-        System.out.println("setLocation2(" + location2 + ")");
         this.pk.location2 = location2;
     }
 
