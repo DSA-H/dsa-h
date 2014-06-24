@@ -308,7 +308,7 @@ public class TraderServiceImpl implements TraderService {
         long lookDaysBackwards = 365L;    // consider all deals between player and offer in the last year
         List<Deal> deals = dealService.getAllBetweenPlayerAndTraderLastXDays(player, trader, lookDaysBackwards);
 
-        Integer result = deals.size();  // TODO Johannes: more sophisticated decides about the discount value
+        Integer result = deals.size();  // TODO more sophisticated decides about the discount value
 
         log.trace("returning " + result);
         return result;

@@ -35,8 +35,6 @@ public class RegionServiceTest extends AbstractDatabaseTest {
 
     @Before
     public void setup() {
-
-        //TODO: Import directly into testDB
         addRegion = new Region();
         addRegion.setName("testRegionAdd");
         addRegion.setColor("000000");

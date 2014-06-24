@@ -54,7 +54,6 @@ public class TimeServiceTest extends AbstractDatabaseTest {
         timeService.setCurrentDate(dsaDate);
         dsaDate = timeService.getCurrentDate();
 
-        // TODO check this, sometimes failes
         Assert.assertEquals(17, dsaDate.getTimestamp());
     }
 

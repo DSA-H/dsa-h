@@ -49,7 +49,6 @@ public class LocationServiceImpl implements LocationService {
 
         traderService.getAllForLocation(location).forEach(traderService::remove);
 
-        // TODO add param 'boolean moveMovingTradersOutOfLocation' true -> move them, don't delete them, false -> delete them
         locationDao.remove(location);
     }
 
