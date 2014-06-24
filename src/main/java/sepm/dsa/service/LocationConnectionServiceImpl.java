@@ -168,7 +168,7 @@ public class LocationConnectionServiceImpl implements LocationConnectionService 
     public int suggestedTravelTimeForDistance(double distance) {
         log.debug("calling suggestedTravelTimeForDistance(" + distance + ")");
 
-        int result = (int) (distance / 10); // TODO find good value, @jotschi Reiseverbindungsdauer vorschlaege OK ??
+        int result = (int) (distance / 10);
         log.trace("returning " + result);
         return result;
     }

@@ -11,11 +11,9 @@ public interface TimeService {
      * Forward time at the given days. Changes offers of all traders (depentet on the timespan) and usage of taverns.
      * Moves movingTraders.
      *
-     * @param days
+     * @param days the amount of days to forward
      */
     void forwardTime(int days);
-
-    //TODO @Johannes hier mein versuch an JAVADOC -- aber teilweise ist mir nicht ganz klar was die Methoden tun
 
     /**
      * Used for progress notifications whilst forwardTime
@@ -40,8 +38,7 @@ public interface TimeService {
 
     /**
      * Used for progress notifications whilst forwardTime
-     * called if bad stuff happens to go back to clean state
-     * //TODO unklar
+     * called to reset load window after OK
      */
     public void resetProgress();
 }
