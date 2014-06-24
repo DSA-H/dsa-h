@@ -358,6 +358,7 @@
     <bean id="ProductCategoryListController" class="sepm.dsa.gui.ProductCategoryListController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="productCategoryService" ref="productCategoryService"/>
+        <property name="productService" ref="productService"/>
         <property name="saveCancelService" ref="saveCancelService"/>
     </bean>
 

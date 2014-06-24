@@ -16,6 +16,7 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.Product;
 import sepm.dsa.model.ProductCategory;
 import sepm.dsa.service.ProductCategoryService;
+import sepm.dsa.service.ProductService;
 import sepm.dsa.service.SaveCancelService;
 
 import java.util.HashSet;
@@ -28,6 +29,7 @@ public class ProductCategoryListController extends BaseControllerImpl {
     SpringFxmlLoader loader;
 
     private ProductCategoryService productCategoryService;
+    private ProductService productService;
     private SaveCancelService saveCancelService;
 
     private ProductCategory selectedProcutCategory;
@@ -75,14 +77,15 @@ public class ProductCategoryListController extends BaseControllerImpl {
 
     private void refreshGui() {
         log.debug("refreshGui");
-	Set<Product> data;
+    	Set<Product> data;
         if (selectedProcutCategory == null) {
-	    data = new HashSet<>(0);
+	        data = new HashSet<>(0);
         } else {
-	    data = selectedProcutCategory.getProducts();
+            data = new HashSet<>();
+            data.addAll(productService.getAllFromProductcategory(selectedProcutCategory));
             productView.getSelectionModel().selectFirst();
         }
-	productView.getItems().setAll(data);
+	    productView.getItems().setAll(data);
     }
 
     private void addTreeChildren(List<ProductCategory> productCategoryList, TreeItem root){
@@ -270,5 +273,9 @@ public class ProductCategoryListController extends BaseControllerImpl {
 
     public void setSaveCancelService(SaveCancelService saveCancelService) {
         this.saveCancelService = saveCancelService;
+    }
+
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
     }
 }
