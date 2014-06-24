@@ -194,7 +194,7 @@ public class TimeServiceImpl implements TimeService {
                     for(Location location : possibleLocations) {
 	                    // if not preferred town size, than its a 80% chance to remove the town from the possible goals
                         if(location.getSize() != movingTrader.getPreferredTownSize()) {
-                            if(Math.random() <= 0.8f) {
+                            if(Math.random() <= 0.5f) {
                                 removeList.add(location);
                             }
                         }
