@@ -20,6 +20,7 @@ import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.model.CurrencyAmount;
 import sepm.dsa.model.*;
 import sepm.dsa.service.CurrencySetService;
+import sepm.dsa.service.PriceComperator;
 import sepm.dsa.service.ProductService;
 import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.util.CurrencyFormatUtil;
@@ -62,6 +63,7 @@ public class ProductListController extends BaseControllerImpl {
 	    log.debug("initialize ProductListController");
         // init table
         productColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        costColumn.setComparator(new PriceComperator());
         costColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Product, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Product, String> r) {

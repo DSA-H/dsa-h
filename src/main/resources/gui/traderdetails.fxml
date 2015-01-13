@@ -19,7 +19,7 @@
             <columns>
                 <TableColumn fx:id="amountColumn" prefWidth="127.0" text="Menge" />
                 <TableColumn fx:id="productColumn" prefWidth="223.0" text="Ware" />
-                <TableColumn fx:id="localPriceColumn" prefWidth="100.0" text="Preis (lokal)" />
+                <TableColumn fx:id="localPriceColumn" prefWidth="100.0" sortable="false" text="Preis (lokal)" />
                 <TableColumn fx:id="standardPriceColumn" prefWidth="100.0" text="Preis (standard)" />
             </columns>
         </TableView>

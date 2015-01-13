@@ -25,6 +25,7 @@ import sepm.dsa.util.CurrencyFormatUtil;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -94,6 +95,14 @@ public class TraderDetailsController extends BaseControllerImpl {
 
         log.debug("initialize TraderDetailsController");
 
+        amountColumn.setComparator(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                int v1 = Integer.parseInt(o1.split(" ")[0]);
+                int v2 = Integer.parseInt(o2.split(" ")[0]);
+                return v1-v2;
+            }
+        });
         amountColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Offer, String> r) {
@@ -146,6 +155,7 @@ public class TraderDetailsController extends BaseControllerImpl {
                 }
             }
         });
+        standardPriceColumn.setComparator(new PriceComperator());
         standardPriceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Offer, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Offer, String> r) {
@@ -182,6 +192,7 @@ public class TraderDetailsController extends BaseControllerImpl {
             return new SimpleStringProperty(sb.toString());
         });
 
+        priceColumn.setComparator(new PriceComperator());
         priceColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Deal, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Deal, String> r) {
