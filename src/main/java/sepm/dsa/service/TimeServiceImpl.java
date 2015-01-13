@@ -137,7 +137,7 @@ public class TimeServiceImpl implements TimeService {
 				}
 			}
 			// add new generated offers
-			List<Offer> newOffers = traderService.calculateOffers(trader, (int) newOffersCount);
+			List<Offer> newOffers = traderService.calculateOffers(trader, newOffersCount);
 			for (Offer newOffer : newOffers) {
 				boolean containing = false;
 				// if offer already exist, change amount

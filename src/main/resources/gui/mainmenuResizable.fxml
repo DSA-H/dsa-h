@@ -7,19 +7,17 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sepm.dsa.gui.MainMenuController">
   <bottom>
-    <HBox alignment="CENTER_RIGHT" maxWidth="-1.0" prefHeight="37.0" prefWidth="1077.0" spacing="50.0">
-      <children><Label fx:id="weatherLabel" text="Label" visible="false" />
-        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="220.0" spacing="10.0">
+    <HBox alignment="CENTER_RIGHT" maxWidth="-1.0" prefHeight="37.0" prefWidth="1100.0" spacing="50.0">
+      <children>
+        <Label fx:id="weatherLabel" prefWidth="100.0" text="Label" visible="true" />
+        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="160.0" spacing="10.0">
           <children>
-            <Button mnemonicParsing="false" onAction="#onZoomOutPressed" text="-" />
+            <Button mnemonicParsing="false" onAction="#onZoomOutPressed" minWidth="30" text="-" />
             <Slider fx:id="zoomSlider" />
-            <Button minWidth="-1.0" mnemonicParsing="false" onAction="#onZoomInPressed" prefWidth="-1.0" text="+" />
+            <Button mnemonicParsing="false" onAction="#onZoomInPressed" minWidth="30" text="+" />
           </children>
-          <padding>
-            <Insets left="10.0" />
-          </padding>
         </HBox>
-        <HBox alignment="CENTER_RIGHT" maxWidth="600.0" prefHeight="37.0" prefWidth="600.0" spacing="10.0">
+        <HBox alignment="CENTER_RIGHT" maxWidth="700.0" prefHeight="37.0" prefWidth="700.0" spacing="10.0">
           <children>
             <Button mnemonicParsing="false" onAction="#onNextDayClicked" text="Nächster Tag" />
             <Button mnemonicParsing="false" onAction="#onForwardTimeClicked" text="Zeit vorwärts stellen" />
@@ -33,6 +31,9 @@
           </padding>
         </HBox>
       </children>
+      <padding>
+        <Insets left="10.0" />
+      </padding>
     </HBox>
   </bottom>
   <center>

@@ -241,6 +241,7 @@ public class MainMenuController extends BaseControllerImpl {
         updateMap();
 	    if (mode == WORLDMODE) {
 		    checkLocationFocus();
+			weatherLabel.setText(timeService.getCurrentDate().toString());
 	    } else {
 		    checkTraderFocus();
             weatherLabel.setText("Wetter: " + selectedLocation.getWeather().getName());
@@ -463,8 +464,8 @@ public class MainMenuController extends BaseControllerImpl {
 				pathCalcGrid.setVisible(false);
 				locationTable.setVisible(false);
 				traderList.setVisible(true);
-                weatherLabel.setVisible(true);
-                weatherLabel.setText("Wetter: " + selectedLocation.getWeather().getName());
+				// weatherLabel.setVisible(true);
+				weatherLabel.setText("Wetter: " + selectedLocation.getWeather().getName());
 				selectedObject = null;
 				deleteButton.setDisable(true);
 				editButton.setDisable(true);
@@ -483,7 +484,8 @@ public class MainMenuController extends BaseControllerImpl {
 				pathCalcGrid.setVisible(true);
 				locationTable.setVisible(true);
 				traderList.setVisible(false);
-                weatherLabel.setVisible(false);
+				// weatherLabel.setVisible(false);
+				weatherLabel.setText(timeService.getCurrentDate().toString());
 				chooseButton.setText("Ortsansicht");
 				createButton.setText("Ort platzieren");
 				editButton.setText("Bearbeiten");
@@ -492,15 +494,15 @@ public class MainMenuController extends BaseControllerImpl {
 			}
 		}
 
-        updateTables();
-        if (mode == LOCATIONMODE) {
-            traderList.getSelectionModel().select(0);
-            checkTraderFocus();
-        } else {
-            checkLocationFocus();
-        }
-        updateMap();
-        updateZoom();
+		updateTables();
+		if (mode == LOCATIONMODE) {
+			traderList.getSelectionModel().select(0);
+			checkTraderFocus();
+		} else {
+			checkLocationFocus();
+		}
+		updateMap();
+		updateZoom();
 	}
 
 
