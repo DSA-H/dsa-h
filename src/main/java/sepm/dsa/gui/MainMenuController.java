@@ -3,6 +3,9 @@ package sepm.dsa.gui;
 import com.sun.javafx.stage.StageHelper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -35,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSARuntimeException;
+import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.*;
 import sepm.dsa.service.*;
 import sepm.dsa.service.path.NoPathException;
@@ -57,6 +61,7 @@ public class MainMenuController extends BaseControllerImpl {
 	private LocationService locationService;
 	private TraderService traderService;
 	private TavernService tavernService;
+	private TimeService timeService;
 	private MapService mapService;
 	private SaveCancelService saveCancelService;
 	private LocationConnectionService locationConnectionService;
@@ -661,6 +666,53 @@ public class MainMenuController extends BaseControllerImpl {
 		stage.setScene(new Scene(scene, 462, 217));
 		stage.setResizable(false);
 		stage.show();
+	}
+
+	@FXML
+	private void onNextDayClicked() {
+		log.debug("onNextDayClicked - next day");
+
+		timeService.resetProgress();
+		Service<Void> service = new Service<Void>() {
+			@Override
+			protected Task<Void> createTask() {
+				return new Task<Void>() {
+					@Override
+					protected Void call() throws InterruptedException {
+						do {
+							updateProgress(timeService.getForwardProgress(), timeService.getForwardMaxProgress());
+							updateMessage(timeService.getForwardMessage());
+							Thread.sleep(100);
+						} while(timeService.getForwardProgress() != timeService.getForwardMaxProgress());
+						return null;
+					}
+				};
+			}
+		};
+
+		service.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent t) {
+				saveCancelService.save();
+			}
+		});
+
+		service.setOnFailed((t) -> {
+			saveCancelService.save();
+			throw new DSAValidationException("Fehler! Zeit vorwärtsstellen konnte nicht abgeschlossen werden!");
+		});
+
+		Dialogs.create()
+				.title("Fortschritt")
+				.masthead("Zeit vorwärts stellen ...")
+				.showWorkerProgress(service);
+		service.start();
+
+		new Thread() {
+			public void run() {
+				timeService.forwardTime(1);
+			}
+		}.start();
 	}
 
 	@FXML
@@ -1656,5 +1708,9 @@ public class MainMenuController extends BaseControllerImpl {
 
 	public void setDataSetService(DataSetServiceImpl dataSetService) {
 		this.dataSetService = dataSetService;
+	}
+
+	public void setTimeService(TimeService timeService) {
+		this.timeService = timeService;
 	}
 }

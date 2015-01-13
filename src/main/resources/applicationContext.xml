@@ -311,6 +311,7 @@
         <property name="locationConnectionService" ref="locationConnectionService"/>
         <property name="traderPdfService" ref="traderPdfService"/>
         <property name="dataSetService" ref="dataSetService"/>
+        <property name="timeService" ref="timeService"/>
     </bean>
 
     <bean id="RegionListController" class="sepm.dsa.gui.RegionListController" scope="prototype">

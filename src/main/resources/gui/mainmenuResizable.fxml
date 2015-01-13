@@ -21,6 +21,7 @@
         </HBox>
         <HBox alignment="CENTER_RIGHT" maxWidth="600.0" prefHeight="37.0" prefWidth="600.0" spacing="10.0">
           <children>
+            <Button mnemonicParsing="false" onAction="#onNextDayClicked" text="Nächster Tag" />
             <Button mnemonicParsing="false" onAction="#onForwardTimeClicked" text="Zeit vorwärts stellen" />
             <Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonPressed" text="Ort platzieren" />
             <Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#onEditButtonPressed" text="Bearbeiten" />
