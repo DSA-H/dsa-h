@@ -124,7 +124,7 @@ public class TimeServiceImpl implements TimeService {
 					}
 					if (deleteOffer != null) {
 						offerDao.remove(deleteOffer);
-						trader.getOffers().remove(deleteOffer);
+						//trader.getOffers().remove(deleteOffer);
 					}
 				}
 			}
@@ -153,7 +153,7 @@ public class TimeServiceImpl implements TimeService {
 				// if offer not exits, add it
 				if (!containing) {
 					offerDao.add(newOffer);
-					trader.getOffers().add(newOffer);
+				//	trader.getOffers().add(newOffer);
 				}
 			}
 		}
