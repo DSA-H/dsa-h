@@ -183,4 +183,19 @@ public class Product implements BaseModel {
     public String toString() {
         return name;
     }
+
+    public Product clone() {
+        Product clone = new Product();
+        clone.setAttribute(this.getAttribute());
+        clone.setCategories(new HashSet<>(this.getCategories()));
+        clone.setComment(this.getComment());
+        clone.setCost(this.getCost());
+        clone.setName(this.getName());
+        clone.setOccurence(this.getOccurence());
+        clone.setOffer(new HashSet<>());
+        clone.setQuality(this.getQuality());
+        clone.setRegions(new HashSet<>(this.getRegions()));
+        clone.setUnit(this.getUnit());
+        return clone;
+    }
 }

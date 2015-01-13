@@ -130,8 +130,12 @@ public class EditProductController extends BaseControllerImpl {
         categoryList.removeAll(categorieTable.getItems());
         regionList.removeAll(regionTable.getItems());
 
-        if (selectedProduct != null){
+        if (selectedProduct != null && selectedProduct.getId() != null){
             isNewProduct = false;
+            categoryList.removeAll(selectedProduct.getCategories());
+            regionList.removeAll(selectedProduct.getRegions());
+        }else if(selectedProduct != null && selectedProduct.getId() == null) {  // clone
+            isNewProduct = true;
             categoryList.removeAll(selectedProduct.getCategories());
             regionList.removeAll(selectedProduct.getRegions());
         }else {
@@ -330,8 +334,8 @@ public class EditProductController extends BaseControllerImpl {
             nameField.setText(selectedProduct.getName());
             refreshPriceView(selectedProduct.getCost());
             attributeBox.getSelectionModel().select(selectedProduct.getAttribute());
-	    regionTable.getItems().setAll(selectedProduct.getRegions());
-	    categorieTable.getItems().setAll(selectedProduct.getCategories());
+	        regionTable.getItems().setAll(selectedProduct.getRegions());
+	        categorieTable.getItems().setAll(selectedProduct.getCategories());
             commentField.setText(selectedProduct.getComment());
             qualityBox.setSelected(selectedProduct.getQuality());
             unitBox.getSelectionModel().select(selectedProduct.getUnit());

@@ -52,6 +52,8 @@ public class ProductListController extends BaseControllerImpl {
     @FXML
     private Button editButton;
     @FXML
+    private Button copyButton;
+    @FXML
     private TextField tf_ProductOrCategoryName;
     @FXML
     private TextField tf_RegionName;
@@ -157,6 +159,22 @@ public class ProductListController extends BaseControllerImpl {
     }
 
     @FXML
+    private void onCopyButtonPressed() {
+        log.debug("onWarenClicked - open Waren Window");
+
+        Stage stage = new Stage();
+        Parent scene = (Parent) loader.load("/gui/editproduct.fxml", stage);
+        EditProductController ctrl = loader.getController();
+        ctrl.setProduct(productTable.getSelectionModel().getSelectedItem().clone());
+        ctrl.reload();
+
+        stage.setTitle("Waren");
+        stage.setScene(new Scene(scene, 600, 530));
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    @FXML
     private void onDeleteButtonPressed() {
         log.debug("onDeleteButtonPressed - deleting selected Region");
         Product selectedProduct = (productTable.getSelectionModel().getSelectedItem());
@@ -195,9 +213,11 @@ public class ProductListController extends BaseControllerImpl {
         if (selectedProduct == null) {
             deleteButton.setDisable(true);
             editButton.setDisable(true);
+            copyButton.setDisable(true);
         } else {
             deleteButton.setDisable(false);
             editButton.setDisable(false);
+            copyButton.setDisable(false);
         }
     }
 
