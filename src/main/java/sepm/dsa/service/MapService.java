@@ -2,6 +2,7 @@ package sepm.dsa.service;
 
 import javafx.scene.paint.Color;
 import sepm.dsa.model.Location;
+import sepm.dsa.model.TownSize;
 
 import java.io.File;
 
@@ -193,4 +194,12 @@ public interface MapService {
      * @param size of text/ names e.g. location names
      */
     public void setTextSize(double size);
+
+    public void setShowBiggerThan(TownSize townSize);
+
+    public TownSize getShowBiggerThan();
+
+    public void setShowConnections(boolean show);
+
+    public boolean getShowConnections();
 }

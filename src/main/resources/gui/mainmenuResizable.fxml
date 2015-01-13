@@ -95,7 +95,6 @@
             <MenuItem fx:id="dateiImport" mnemonicParsing="false" onAction="#onImportClicked" text="Import" />
             <MenuItem fx:id="dateiExport" mnemonicParsing="false" onAction="#onExportClicked" text="Export" />
             <MenuItem mnemonicParsing="false" onAction="#onPrintTraderClicked" text="Händler drucken" />
-            <MenuItem mnemonicParsing="false" onAction="#onMapOptionsClicked" text="Kartenoptionen" />
             <MenuItem fx:id="dateiExit" mnemonicParsing="false" onAction="#onExitClicked" text="Beenden" />
           </items>
         </Menu>
@@ -122,7 +121,17 @@
             <MenuItem fx:id="berechneWährung" mnemonicParsing="false" onAction="#onCalculateCurrencyClicked" text="Währungen umrechnen" />
               <MenuItem fx:id="berechnePreis" mnemonicParsing="false" onAction="#onCalculateProductPrice" text="Preise berechnen" />
           </items>
-        </Menu>
+        </Menu><Menu mnemonicParsing="false" text="Karte">
+  <items><CheckMenuItem fx:id="showConnections" mnemonicParsing="false" onAction="#onCheckMenuItemClicked" selected="true" text="Zeige Verbindungen" /><Menu mnemonicParsing="false" text="Zeige Orte ab Größe">
+  <items><RadioMenuItem fx:id="townsFromSize0" mnemonicParsing="false" onAction="#onShowTownsFromSize0Clicked" selected="true" text="Winzig">
+<toggleGroup>
+<ToggleGroup fx:id="ShowFromSize" />
+</toggleGroup></RadioMenuItem><RadioMenuItem fx:id="townsFromSize1" mnemonicParsing="false" onAction="#onShowTownsFromSize1Clicked" text="Klein" toggleGroup="$ShowFromSize" /><RadioMenuItem fx:id="townsFromSize2" mnemonicParsing="false" onAction="#onShowTownsFromSize2Clicked" text="Mittel" toggleGroup="$ShowFromSize" /><RadioMenuItem fx:id="townsFromSize3" mnemonicParsing="false" onAction="#onShowTownsFromSize3Clicked" text="Groß" toggleGroup="$ShowFromSize" /><RadioMenuItem fx:id="townsFromSize4" mnemonicParsing="false" onAction="#onShowTownsFromSize4Clicked" text="Metropole" toggleGroup="$ShowFromSize" />
+  </items>
+</Menu>
+            <MenuItem mnemonicParsing="false" onAction="#onMapOptionsClicked" text="Kartenoptionen" />
+  </items>
+</Menu>
       </menus>
     </MenuBar>
   </top>

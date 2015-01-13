@@ -47,7 +47,7 @@
     </appender>
 
     <logger name="sepm.dsa" additivity="true">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
         <appender-ref ref="dsaFileAppender"/>
     </logger>
 

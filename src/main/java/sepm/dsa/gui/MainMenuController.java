@@ -118,6 +118,19 @@ public class MainMenuController extends BaseControllerImpl {
 	private MenuItem weltkarteImportieren;
 	@FXML
 	private MenuItem weltkarteExportieren;
+	@FXML
+	private CheckMenuItem showConnections;
+	@FXML
+	private RadioMenuItem townsFromSize0;
+	@FXML
+	private RadioMenuItem townsFromSize1;
+	@FXML
+	private RadioMenuItem townsFromSize2;
+	@FXML
+	private RadioMenuItem townsFromSize3;
+	@FXML
+	private RadioMenuItem townsFromSize4;
+
 
 	// lists, tables, maps
 	@FXML
@@ -233,6 +246,22 @@ public class MainMenuController extends BaseControllerImpl {
                 }
             }
         });
+
+
+		// init check boxes in map menu
+		showConnections.setSelected(mapService.getShowConnections());
+		int minTownSize = mapService.getShowBiggerThan().getValue();
+		if(minTownSize == 0) {
+			townsFromSize0.setSelected(true);
+		}else if(minTownSize == 1) {
+			townsFromSize1.setSelected(true);
+		}else if(minTownSize == 2) {
+			townsFromSize2.setSelected(true);
+		}else if(minTownSize == 3) {
+			townsFromSize3.setSelected(true);
+		}else if(minTownSize == 4) {
+			townsFromSize4.setSelected(true);
+		}
 	}
 
     @Override
@@ -1118,6 +1147,42 @@ public class MainMenuController extends BaseControllerImpl {
 		zoomSlider.adjustValue(newVal);
 	}
 
+	@FXML
+	private void onCheckMenuItemClicked() {
+		mapService.setShowConnections(showConnections.isSelected());
+		reload();
+	}
+
+	@FXML
+	private void onShowTownsFromSize0Clicked() {
+		mapService.setShowBiggerThan(TownSize.MINI);
+		reload();
+	}
+
+	@FXML
+	private void onShowTownsFromSize1Clicked() {
+		mapService.setShowBiggerThan(TownSize.LITTLE);
+		reload();
+	}
+
+	@FXML
+	private void onShowTownsFromSize2Clicked() {
+		mapService.setShowBiggerThan(TownSize.MEDIUM);
+		reload();
+	}
+
+	@FXML
+	private void onShowTownsFromSize3Clicked() {
+		mapService.setShowBiggerThan(TownSize.BIG);
+		reload();
+	}
+
+	@FXML
+	private void onShowTownsFromSize4Clicked() {
+		mapService.setShowBiggerThan(TownSize.METROPOL);
+		reload();
+	}
+
 	/**
 	 * updates the locationTable
 	 */
@@ -1189,6 +1254,8 @@ public class MainMenuController extends BaseControllerImpl {
 			resultLabel.setText("kein Ergebnis");
 
 			// add mouse-listener for highlighting
+			final int minSize = mapService.getShowBiggerThan().getValue();
+			final boolean showConnections = mapService.getShowConnections();
 			List<Location> locations = locationService.getAll();
 			mapCanvas.addEventHandler(MouseEvent.MOUSE_MOVED,
 					new EventHandler<MouseEvent>() {
@@ -1200,29 +1267,31 @@ public class MainMenuController extends BaseControllerImpl {
 
 							double iconSize = (double) mapService.getWorldIconSize();
 							for (Location l : locations) {
-								if (xPos > l.getxCoord() - (iconSize/2) && xPos < l.getxCoord() + (iconSize/2) &&
-										yPos > l.getyCoord() - (iconSize/2) && yPos < l.getyCoord() + (iconSize/2)) {
-									zoomGroup.getChildren().remove(highlight);
-									highlight = new Canvas((iconSize*1.5), (iconSize*1.5));
-									highlight.getGraphicsContext2D().setLineWidth((iconSize/5));
-									highlight.getGraphicsContext2D().setStroke(mapService.getHighlightColor());
-									highlight.getGraphicsContext2D().strokeRoundRect((iconSize/5), (iconSize/5), (iconSize*1.1), (iconSize*1.1), (iconSize*0.65), (iconSize*0.65));
-									highlight.setLayoutX(l.getxCoord() - (iconSize*0.75));
-									highlight.setLayoutY(l.getyCoord() - (iconSize*0.75));
+								if (l.getSize().getValue() >= minSize) {
+									if (xPos > l.getxCoord() - (iconSize / 2) && xPos < l.getxCoord() + (iconSize / 2) &&
+											yPos > l.getyCoord() - (iconSize / 2) && yPos < l.getyCoord() + (iconSize / 2)) {
+										zoomGroup.getChildren().remove(highlight);
+										highlight = new Canvas((iconSize * 1.5), (iconSize * 1.5));
+										highlight.getGraphicsContext2D().setLineWidth((iconSize / 5));
+										highlight.getGraphicsContext2D().setStroke(mapService.getHighlightColor());
+										highlight.getGraphicsContext2D().strokeRoundRect((iconSize / 5), (iconSize / 5), (iconSize * 1.1), (iconSize * 1.1), (iconSize * 0.65), (iconSize * 0.65));
+										highlight.setLayoutX(l.getxCoord() - (iconSize * 0.75));
+										highlight.setLayoutY(l.getyCoord() - (iconSize * 0.75));
 
-									highlight.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-										@Override
-										public void handle(MouseEvent event) {
-											locationTable.getSelectionModel().select(l);
-										}
-									});
+										highlight.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+											@Override
+											public void handle(MouseEvent event) {
+												locationTable.getSelectionModel().select(l);
+											}
+										});
 
-									zoomGroup.getChildren().add(highlight);
-									onLocation = true;
+										zoomGroup.getChildren().add(highlight);
+										onLocation = true;
+									}
 								}
 							}
 
-							if (!onLocation) {
+							if (!onLocation && showConnections) {
 								for (LocationConnection lc : connections) {     // seach all location-connections for hit
 									Location loc1 = lc.getLocation1();
 									Location loc2 = lc.getLocation2();
@@ -1333,11 +1402,11 @@ public class MainMenuController extends BaseControllerImpl {
 								if (e.getX() > t.getxPos() - iconSize && e.getX() < t.getxPos() + iconSize &&
 										e.getY() > t.getyPos() - iconSize && e.getY() < t.getyPos() + iconSize) {
 									zoomGroup.getChildren().remove(highlight);
-									highlight = new Canvas(iconSize*2, iconSize*2);
-									highlight.getGraphicsContext2D().setLineWidth(iconSize*0.6);
+									highlight = new Canvas(iconSize * 2, iconSize * 2);
+									highlight.getGraphicsContext2D().setLineWidth(iconSize * 0.6);
 									highlight.getGraphicsContext2D().setStroke(mapService.getHighlightColor());
-									highlight.getGraphicsContext2D().strokeLine((iconSize*0.4), (iconSize*0.4), (iconSize*1.6), (iconSize*1.6));
-									highlight.getGraphicsContext2D().strokeLine((iconSize*0.4), (iconSize*1.6), (iconSize*1.6), (iconSize*0.4));
+									highlight.getGraphicsContext2D().strokeLine((iconSize * 0.4), (iconSize * 0.4), (iconSize * 1.6), (iconSize * 1.6));
+									highlight.getGraphicsContext2D().strokeLine((iconSize * 0.4), (iconSize * 1.6), (iconSize * 1.6), (iconSize * 0.4));
 									highlight.setLayoutX(t.getxPos() - iconSize);
 									highlight.setLayoutY(t.getyPos() - iconSize);
 
@@ -1356,11 +1425,11 @@ public class MainMenuController extends BaseControllerImpl {
 								if (e.getX() > t.getxPos() - iconSize && e.getX() < t.getxPos() + iconSize &&
 										e.getY() > t.getyPos() - iconSize && e.getY() < t.getyPos() + iconSize) {
 									zoomGroup.getChildren().remove(highlight);
-									highlight = new Canvas(iconSize*2, iconSize*2);
-									highlight.getGraphicsContext2D().setLineWidth(iconSize*0.6);
+									highlight = new Canvas(iconSize * 2, iconSize * 2);
+									highlight.getGraphicsContext2D().setLineWidth(iconSize * 0.6);
 									highlight.getGraphicsContext2D().setStroke(mapService.getHighlightColor());
-									highlight.getGraphicsContext2D().strokeLine((iconSize*0.4), (iconSize*0.4), (iconSize*1.6), (iconSize*1.6));
-									highlight.getGraphicsContext2D().strokeLine((iconSize*0.4), (iconSize*1.6), (iconSize*1.6), (iconSize*0.4));
+									highlight.getGraphicsContext2D().strokeLine((iconSize * 0.4), (iconSize * 0.4), (iconSize * 1.6), (iconSize * 1.6));
+									highlight.getGraphicsContext2D().strokeLine((iconSize * 0.4), (iconSize * 1.6), (iconSize * 1.6), (iconSize * 0.4));
 									highlight.setLayoutX(t.getxPos() - iconSize);
 									highlight.setLayoutY(t.getyPos() - iconSize);
 
@@ -1376,7 +1445,7 @@ public class MainMenuController extends BaseControllerImpl {
 								}
 							}
 							if (!onStuff) {
-									zoomGroup.getChildren().remove(highlight);
+								zoomGroup.getChildren().remove(highlight);
 							}
 						}
 					}
@@ -1444,56 +1513,64 @@ public class MainMenuController extends BaseControllerImpl {
 		Location loc1, loc2;
 		List<Location> locations = locationService.getAll();
 		double iconSize = mapService.getWorldIconSize();
+		int minSize = mapService.getShowBiggerThan().getValue();
 		gc.setLineWidth(iconSize*0.15);
 		for (Location l : locations) {                  // draw locations
-			gc.setFill(new Color(
-					(double) Integer.valueOf(l.getRegion().getColor().substring(0, 2), 16) / 255,
-					(double) Integer.valueOf(l.getRegion().getColor().substring(2, 4), 16) / 255,
-					(double) Integer.valueOf(l.getRegion().getColor().substring(4, 6), 16) / 255,
-					1.0));
-			posX1 = l.getxCoord();
-			posY1 = l.getyCoord();
-			if (posX1 != 0 && posY1 != 0) {
-				gc.fillRoundRect(posX1 - (iconSize*0.5), posY1 - (iconSize*0.5), iconSize, iconSize, (iconSize*0.5), (iconSize*0.5));
-				gc.setStroke(mapService.getBorderColor());
-				gc.setLineWidth((iconSize*0.05));
-				gc.strokeRoundRect(posX1 - (iconSize*0.5), posY1 - (iconSize*0.5), iconSize, iconSize, (iconSize*0.5), (iconSize*0.5));
-				saveCancelService.refresh(l);
+			if(l.getSize().getValue() >= minSize) {
+				gc.setFill(new Color(
+						(double) Integer.valueOf(l.getRegion().getColor().substring(0, 2), 16) / 255,
+						(double) Integer.valueOf(l.getRegion().getColor().substring(2, 4), 16) / 255,
+						(double) Integer.valueOf(l.getRegion().getColor().substring(4, 6), 16) / 255,
+						1.0));
+				posX1 = l.getxCoord();
+				posY1 = l.getyCoord();
+				if (posX1 != 0 && posY1 != 0) {
+					gc.fillRoundRect(posX1 - (iconSize * 0.5), posY1 - (iconSize * 0.5), iconSize, iconSize, (iconSize * 0.5), (iconSize * 0.5));
+					gc.setStroke(mapService.getBorderColor());
+					gc.setLineWidth((iconSize * 0.05));
+					gc.strokeRoundRect(posX1 - (iconSize * 0.5), posY1 - (iconSize * 0.5), iconSize, iconSize, (iconSize * 0.5), (iconSize * 0.5));
+					saveCancelService.refresh(l);
+				}
 			}
 		}
-		connections = locationConnectionService.getAll();
-		for (LocationConnection lc : connections) {     // draw conections
-			loc1 = lc.getLocation1();
-			loc2 = lc.getLocation2();
-			posX1 = loc1.getxCoord();
-			posY1 = loc1.getyCoord();
-			posX2 = loc2.getxCoord();
-			posY2 = loc2.getyCoord();
-			posXm = posX1 + (posX2-posX1)/2;
-			posYm = posY1 + (posY2-posY1)/2;
 
-			gc.setLineWidth(iconSize*0.15);
-			gc.setStroke(new Color(
-					(double) Integer.valueOf(loc1.getRegion().getColor().substring(0, 2), 16) / 255,
-					(double) Integer.valueOf(loc1.getRegion().getColor().substring(2, 4), 16) / 255,
-					(double) Integer.valueOf(loc1.getRegion().getColor().substring(4, 6), 16) / 255,
-					1.0));
-			gc.strokeLine(posX1, posY1, posXm, posYm);
-			gc.setStroke(new Color(
-					(double) Integer.valueOf(loc2.getRegion().getColor().substring(0, 2), 16) / 255,
-					(double) Integer.valueOf(loc2.getRegion().getColor().substring(2, 4), 16) / 255,
-					(double) Integer.valueOf(loc2.getRegion().getColor().substring(4, 6), 16) / 255,
-					1.0));
-			gc.strokeLine(posX2, posY2, posXm, posYm);
+		if(mapService.getShowConnections()) {
+			connections = locationConnectionService.getAll();
+			for (LocationConnection lc : connections) {     // draw connections
+				loc1 = lc.getLocation1();
+				loc2 = lc.getLocation2();
+				posX1 = loc1.getxCoord();
+				posY1 = loc1.getyCoord();
+				posX2 = loc2.getxCoord();
+				posY2 = loc2.getyCoord();
+				posXm = posX1 + (posX2 - posX1) / 2;
+				posYm = posY1 + (posY2 - posY1) / 2;
+
+				gc.setLineWidth(iconSize * 0.15);
+				gc.setStroke(new Color(
+						(double) Integer.valueOf(loc1.getRegion().getColor().substring(0, 2), 16) / 255,
+						(double) Integer.valueOf(loc1.getRegion().getColor().substring(2, 4), 16) / 255,
+						(double) Integer.valueOf(loc1.getRegion().getColor().substring(4, 6), 16) / 255,
+						1.0));
+				gc.strokeLine(posX1, posY1, posXm, posYm);
+				gc.setStroke(new Color(
+						(double) Integer.valueOf(loc2.getRegion().getColor().substring(0, 2), 16) / 255,
+						(double) Integer.valueOf(loc2.getRegion().getColor().substring(2, 4), 16) / 255,
+						(double) Integer.valueOf(loc2.getRegion().getColor().substring(4, 6), 16) / 255,
+						1.0));
+				gc.strokeLine(posX2, posY2, posXm, posYm);
+			}
 		}
 
 		gc.setFill(mapService.getNameColor());
 		gc.setLineWidth(iconSize*mapService.getTextSize()*0.075);
 		gc.setFont(new Font(iconSize*mapService.getTextSize()));
 		for (Location l : locations) {              // write names next to locations
-			posX1 = l.getxCoord();
-			posY1 = l.getyCoord();
-			gc.fillText(l.getName(), posX1 + (iconSize*0.5), posY1 - (iconSize*0.5));
+			if(l.getSize().getValue() >= minSize) {
+				posX1 = l.getxCoord();
+				posY1 = l.getyCoord();
+				gc.fillText(l.getName(), posX1 + (iconSize * 0.5), posY1 - (iconSize * 0.5));
+			}
 		}
 	}
 

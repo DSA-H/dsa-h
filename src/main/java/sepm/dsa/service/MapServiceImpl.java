@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.model.Location;
+import sepm.dsa.model.TownSize;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -527,6 +528,48 @@ public class MapServiceImpl implements MapService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void setShowBiggerThan(TownSize townSize) {
+        try {
+            Properties properties = getProperties();
+            properties.put("showBiggerThan", "" + townSize.getValue());
+            OutputStream os = Files.newOutputStream(Paths.get("resources/properties"));
+            properties.store(os, "");
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public TownSize getShowBiggerThan(){
+        log.debug("calling getShowBiggerThan()");
+        TownSize townSize = TownSize.parse(Integer.parseInt(getProperties().getProperty("showBiggerThan", "0")));
+        log.trace("returning " + townSize);
+        return townSize;
+    }
+
+    @Override
+    public void setShowConnections(boolean show){
+        try {
+            Properties properties = getProperties();
+            properties.put("showConnections", "" + show);
+            OutputStream os = Files.newOutputStream(Paths.get("resources/properties"));
+            properties.store(os, "");
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean getShowConnections(){
+        log.debug("calling getShowConnections()");
+        boolean show = Boolean.parseBoolean(getProperties().getProperty("showConnections", "true"));
+        log.trace("returning " + show);
+        return show;
     }
 
     public void setLocationService(LocationService locationService) {
