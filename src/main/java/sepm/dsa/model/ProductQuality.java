@@ -34,13 +34,13 @@ public enum ProductQuality {
 	public float getQualityProbabilityValue() {
 		switch (value) {
 			case 0:
-				return 0.05f;
+				return 0.03f;
 			case 1:
-				return 0.3f;
+				return 0.12f;
 			case 2:
 				return 0.95f;
 			case 3:
-				return 0.995f;
+				return 0.99f;
 			case 4:
 				return 1f;
 			default:
