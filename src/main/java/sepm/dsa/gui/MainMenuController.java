@@ -749,6 +749,7 @@ public class MainMenuController extends BaseControllerImpl {
 				.title("Fehler")
 				.message("Fehler beim Import: " + e.getMessage())
 				.showError();
+			e.printStackTrace();
 		}
 	}
 

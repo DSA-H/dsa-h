@@ -57,7 +57,7 @@ lastNames MODE NORMAL START Friedenslied, Finkenfarn, Katzenzorn, Sternenlicht, 
 
 ////////// ANLEITUNG //////////
 
-Jede Kultur hat folgende Zeilen in dieser Reihenfolge:
+Jede Kultur hat volgende Zeilen in dieser Reihenfolge:
 
 culture ...
 maleFirstNames ...

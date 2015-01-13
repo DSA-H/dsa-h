@@ -23,7 +23,7 @@ public class Unit implements BaseModel {
     private String name;
 
     @NotBlank
-    @Size(max = 12)
+    @Size(max = 10)
     @Column(nullable = false, length = 10)
     private String shortName;
 
