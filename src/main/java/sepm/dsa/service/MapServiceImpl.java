@@ -35,12 +35,12 @@ public class MapServiceImpl implements MapService {
 
     private Properties getProperties() {
         try {
-            Properties properties = new Properties();
+            Properties properties = PropertiesService.getProperties();
             Path path = Paths.get("resources/properties");
             if (!Files.exists(path)) {
                 Files.createFile(path);
             }
-            InputStream is = Files.newInputStream(path);
+            InputStream is = Files.newInputStream(Paths.get("resources/properties"));
             properties.load(is);
             is.close();
 	        return properties;

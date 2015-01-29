@@ -29,18 +29,12 @@ public class TimeServiceImpl implements TimeService {
     private int forwardMaxProgress = 100;
     private String forwardMessage = "Lade ...";
 
-	private Properties properties = new Properties();;
-
 	@Override
 	public DSADate getCurrentDate() {
         log.debug("calling getCurrentDate()");
         try {
-			properties = new Properties();
-			Path path = Paths.get("resources/properties");
-			if (!Files.exists(path)) {
-				Files.createFile(path);
-			}
-			InputStream is = Files.newInputStream(path);
+	        Properties properties = PropertiesService.getProperties();
+			InputStream is = Files.newInputStream(Paths.get("resources/properties"));
 			properties.load(is);
 			long timestamp = Long.parseLong(properties.getProperty("time", "0"));
 			is.close();
@@ -56,6 +50,7 @@ public class TimeServiceImpl implements TimeService {
 	public void setCurrentDate(DSADate dsaDate) {
 		log.debug("calling setCurrentDate(" + dsaDate + ")");
 		try {
+			Properties properties = PropertiesService.getProperties();
 			properties.put("time", dsaDate.getTimestamp() + "");
 			OutputStream os = Files.newOutputStream(Paths.get("resources/properties"));
 			properties.store(os, "");
