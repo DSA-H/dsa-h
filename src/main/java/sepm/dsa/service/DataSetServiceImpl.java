@@ -31,6 +31,7 @@ public class DataSetServiceImpl implements DataSetService, ApplicationEventPubli
 	private DriverManagerDataSource dataSource;
 	private ApplicationEventPublisher applicationEventPublisher;
 	private MapService mapService;
+	private SaveCancelService saveCancelService;
 
     @Override
 	public void importDataSet(File file) throws DSARuntimeException {
@@ -38,6 +39,42 @@ public class DataSetServiceImpl implements DataSetService, ApplicationEventPubli
 			ZipFile zipFile = new ZipFile(file);
 			Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
+			// check first if dataset is complete
+			boolean hasDataset= false, hasProperties= false, hasNameFile= false, hasMaps= false, hasWorldMap = false;
+			while (entries.hasMoreElements()) {
+				ZipEntry zipEntry = entries.nextElement();
+				switch (zipEntry.getName()) {
+					case "dataset.xml":
+						hasDataset = true;
+						break;
+					case "resources/properties":
+						hasProperties = true;
+						break;
+					case "resources/nameFile.txt":
+						hasNameFile = true;
+						break;
+					case "maps/active/":
+						hasMaps = true;
+						break;
+				}
+				if(zipEntry.getName().startsWith("maps/active/worldMap")) {
+					hasWorldMap = true;
+				}
+			}
+			if(!hasDataset) {
+				throw new DSARuntimeException("Das gewählte Dataset ist ungültig. Datenbank fehlt. (dataset.xml)");
+			}else if(!hasProperties) {
+				throw new DSARuntimeException("Das gewählte Dataset ist ungültig. Properties fehlen. (resources/properties) ");
+			}else if(!hasNameFile) {
+				throw new DSARuntimeException("Das gewählte Dataset ist ungültig. Namens-Datei fehlt. (resources/nameFile.txt)");
+			}else if(!hasMaps) {
+				throw new DSARuntimeException("Das gewählte Dataset ist ungültig. Karten Ordner fehlt. (maps/active/)");
+			}else if(!hasWorldMap) {
+				throw new DSARuntimeException("Das gewählte Dataset ist ungültig. Keine Weltkarte gefunden.");
+			}
+
+			// load the dataset
+			entries = zipFile.entries();
 			while (entries.hasMoreElements()) {
 				ZipEntry zipEntry = entries.nextElement();
 				InputStream inputStream = zipFile.getInputStream(zipEntry);
@@ -63,12 +100,11 @@ public class DataSetServiceImpl implements DataSetService, ApplicationEventPubli
 						}
 				}
 			}
-
 			applicationEventPublisher.publishEvent(new ReloadEvent(this));
 		} catch (FileNotFoundException e) {
 			throw new DSARuntimeException("Die Datei konnte nicht gefunden werden.", e);
 		} catch (IOException | SQLException | DatabaseUnitException e) {
-			throw new DSARuntimeException("Importieren des Datensets fehlgeschlagen", e);
+			throw new DSARuntimeException("Importieren des Datensets fehlgeschlagen. Aktuelles Datenset möglicherweise beschädigt.", e);
 		}
 	}
 
@@ -161,6 +197,7 @@ public class DataSetServiceImpl implements DataSetService, ApplicationEventPubli
 	private void restoreDatabase(InputStream inputStream) throws IOException, DatabaseUnitException, SQLException {
 		IDataSet dataSet = new XmlDataSet(inputStream);
 		DatabaseOperation.CLEAN_INSERT.execute(getDatabaseConnection(), dataSet);
+		saveCancelService.closeSession();
 	}
 
 	private void addMapDirectory(ZipOutputStream zip) throws IOException {
@@ -194,5 +231,9 @@ public class DataSetServiceImpl implements DataSetService, ApplicationEventPubli
 
 	public void setMapService(MapService mapService) {
 		this.mapService = mapService;
+	}
+
+	public void setSaveCancelService(SaveCancelService saveCancelService) {
+		this.saveCancelService = saveCancelService;
 	}
 }
