@@ -1183,6 +1183,29 @@ public class MainMenuController extends BaseControllerImpl {
 		reload();
 	}
 
+	@FXML
+	private void onLinzenzClicked() {
+		Dialogs.create()
+				.title("Infos")
+				.masthead(null)
+				.message("Lizensiert nach den Fan und Kartenpaket Lizenzvereinbarungen von Ulisses:\n\nhttp://www.ulisses-spiele.de/sortiment/rollenspiele/das-schwarze-auge/informationen-zu-das-schwarze-auge/fan-und-kartenpaket/gebrauchsanleitung/")
+				.showInformation();
+	}
+
+	@FXML
+	private void onInfoClicked() {
+		Dialogs.create()
+				.title("Lizenz")
+				.masthead(null)
+				.message("Dieses Programm entstand im Rahmen einer Übung an der TU-Wien.\n" +
+						"\n" +
+						"Technik und Programmierung: Martin Prebio, Michael Höller, Florian Steinschorn, Georg Heiler, Johannes Wawerda, Christian Schlick\n" +
+						"\n" +
+						"Idee und Datenset: Laurids Brandl" +
+						"\n\nWebsite: dsa.bountin.net")
+				.showInformation();
+	}
+
 	/**
 	 * updates the locationTable
 	 */

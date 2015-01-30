@@ -131,6 +131,10 @@
 </Menu>
             <MenuItem mnemonicParsing="false" onAction="#onMapOptionsClicked" text="Kartenoptionen" />
   </items>
+</Menu><Menu mnemonicParsing="false" text="Info">
+  <items>
+    <MenuItem mnemonicParsing="false" onAction="#onInfoClicked" text="Info" /><MenuItem mnemonicParsing="false" onAction="#onLinzenzClicked" text="Lizenzvereinbarung" />
+  </items>
 </Menu>
       </menus>
     </MenuBar>
