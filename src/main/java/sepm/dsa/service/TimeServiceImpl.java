@@ -205,7 +205,7 @@ public class TimeServiceImpl implements TimeService {
 	            possibleLocations.remove(movingTrader.getLocation());
                 // no possible Locations -> not moving
                 if(possibleLocations.isEmpty()) {
-                    break;
+                    continue;
                 }
                 // take random one of the possible locations
                 int randomIndex = (int)(Math.random()*possibleLocations.size());
