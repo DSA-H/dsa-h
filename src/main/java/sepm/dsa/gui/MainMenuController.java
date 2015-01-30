@@ -36,6 +36,7 @@ import org.controlsfx.dialog.Dialog;
 import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sepm.dsa.application.Main;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSARuntimeException;
 import sepm.dsa.exceptions.DSAValidationException;
@@ -1202,7 +1203,8 @@ public class MainMenuController extends BaseControllerImpl {
 						"Technik und Programmierung: Martin Prebio, Michael Höller, Florian Steinschorn, Georg Heiler, Johannes Wawerda, Christian Schlick\n" +
 						"\n" +
 						"Idee und Datenset: Laurids Brandl" +
-						"\n\nWebsite: dsa.bountin.net")
+						"\n\nWebsite: dsa.bountin.net" +
+						"\n\nVersion "+ Main.version)
 				.showInformation();
 	}
 

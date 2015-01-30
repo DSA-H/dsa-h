@@ -23,6 +23,7 @@ import java.util.Locale;
 
 public class Main extends Application {
 
+    public static final String version = "1.0";
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
