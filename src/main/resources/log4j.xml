@@ -21,7 +21,7 @@
 
     <appender name="dsaFileAppender"
               class="org.apache.log4j.RollingFileAppender">
-        <param name="Threshold" value="DEBUG" />
+        <param name="Threshold" value="WARN" />
         <param name="File" value="log/dsa-h.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
@@ -30,7 +30,7 @@
 
     <appender name="hibernateFileAppender"
               class="org.apache.log4j.RollingFileAppender">
-        <param name="Threshold" value="INFO" />
+        <param name="Threshold" value="WARN" />
         <param name="File" value="log/hibernate.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
@@ -39,7 +39,7 @@
 
     <appender name="javafxFileAppender"
               class="org.apache.log4j.RollingFileAppender">
-        <param name="Threshold" value="INFO" />
+        <param name="Threshold" value="WARN" />
         <param name="File" value="log/javafx.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
@@ -47,22 +47,22 @@
     </appender>
 
     <logger name="sepm.dsa" additivity="true">
-        <level value="INFO"/>
+        <level value="WARN"/>
         <appender-ref ref="dsaFileAppender"/>
     </logger>
 
     <logger name="org.hibernate" additivity="true">
-        <level value="INFO"/>
+        <level value="WARN"/>
         <appender-ref ref="hibernateFileAppender"/>
     </logger>
 
     <logger name="javafx" additivity="true">
-        <level value="INFO"/>
+        <level value="WARN"/>
         <appender-ref ref="javafxFileAppender"/>
     </logger>
 
     <root>
-        <level value="INFO" />
+        <level value="WARN" />
         <appender-ref ref="applicationFileAppender" />
         <appender-ref ref="consoleAppender" />
     </root>
