@@ -504,6 +504,7 @@
     <bean id="editDate" class="sepm.dsa.gui.EditDateController" scope="prototype">
         <property name="loader" ref="loader"/>
         <property name="timeService" ref="timeService"/>
+        <property name="saveCancelService" ref="saveCancelService" />
     </bean>
     <bean id="forwardDate" class="sepm.dsa.gui.ForwardDateController" scope="prototype">
         <property name="loader" ref="loader"/>

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import sepm.dsa.application.SpringFxmlLoader;
 import sepm.dsa.exceptions.DSAValidationException;
 import sepm.dsa.model.DSADate;
+import sepm.dsa.service.SaveCancelService;
 import sepm.dsa.service.TimeService;
 
 import java.net.URL;
@@ -23,6 +24,7 @@ public class EditDateController extends BaseControllerImpl {
     private SpringFxmlLoader loader;
 
     private TimeService timeService;
+    private SaveCancelService saveCancelService;
 
     @FXML
     private TextField day;
@@ -85,6 +87,7 @@ public class EditDateController extends BaseControllerImpl {
                 .showConfirm();
         if (response == Dialog.Actions.YES) {
             timeService.setCurrentDate(newDate);
+            saveCancelService.save();
             Stage stage = (Stage) day.getScene().getWindow();
             stage.close();
         }
@@ -96,5 +99,9 @@ public class EditDateController extends BaseControllerImpl {
 
     public void setLoader(SpringFxmlLoader loader) {
         this.loader = loader;
+    }
+
+    public void setSaveCancelService(SaveCancelService saveCancelService) {
+        this.saveCancelService = saveCancelService;
     }
 }
