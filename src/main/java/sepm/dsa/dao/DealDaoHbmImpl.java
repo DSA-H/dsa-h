@@ -23,8 +23,12 @@ public class DealDaoHbmImpl extends BaseDaoHbmImpl<Deal>
     @Override
     public void remove(Deal model) {
         super.remove(model);
-        model.getTrader().getDeals().remove(model);
-        model.getPlayer().getDeals().remove(model);
+        if(model.getTrader() != null) {
+            model.getTrader().getDeals().remove(model);
+        }
+        if(model.getPlayer() != null) {
+            model.getPlayer().getDeals().remove(model);
+        }
     }
 
     @Override
