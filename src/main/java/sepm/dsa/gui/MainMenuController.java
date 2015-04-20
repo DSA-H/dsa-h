@@ -10,9 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.*;
+import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -24,7 +23,10 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -85,10 +87,15 @@ public class MainMenuController extends BaseControllerImpl {
 	private double vVal = 0.0; // to set vertical value of scrollPane
 	private double worldScrollH; // jump back to this when switching to WORLDMODE
 	private double worldScrollV; // jump back to this when switching to WORLDMODE
+	private double worldScale; // jump back to this when switching to WORLDMODE
 	private Boolean dontUpdateScroll = false; // to stop the scrollListener to undo it's own changes
-
 	private Group zoomGroup; // Group of canvases that can be scaled
 	private double scaleFactor = 1.0; // zoom factor
+
+	// draging
+	private double dragStartX, dragStartY;
+	private double scrollPosStartX, scrollPosStartY;
+	private boolean isDraging = false;
 
 	private List<LocationConnection> connections; // all LocationConnections
 
@@ -236,16 +243,16 @@ public class MainMenuController extends BaseControllerImpl {
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 if (!dontUpdateScroll) {
                     if (Math.abs(oldValue.doubleValue() - newValue.doubleValue()) > 0.1) {
-                        dontUpdateScroll = true;
-                        scrollPane.setVvalue(vVal);
-                        scrollPane.setHvalue(hVal);
-                        vVal = 0;
-                        hVal = 0;
-                    }
-                } else {
-                    dontUpdateScroll = false;
-                }
-            }
+						dontUpdateScroll = true;
+						scrollPane.setVvalue(vVal);
+						scrollPane.setHvalue(hVal);
+						vVal = 0;
+						hVal = 0;
+					} else {
+						dontUpdateScroll = false;
+					}
+				}
+			}
         });
 
 
@@ -490,6 +497,7 @@ public class MainMenuController extends BaseControllerImpl {
 			if (mode == WORLDMODE) {        //switch to LOCATIONMODE
 				worldScrollH = scrollPane.getHvalue();
 				worldScrollV = scrollPane.getVvalue();
+				worldScale = zoomSlider.getValue();
 				mode = LOCATIONMODE;
 				pathCalcGrid.setVisible(false);
 				locationTable.setVisible(false);
@@ -506,10 +514,6 @@ public class MainMenuController extends BaseControllerImpl {
 				stage.setTitle("DSA-Händlertool - " + selectedLocation.getName());
 				zoomSlider.adjustValue(1.0);
 			} else {                            // switch to WORLDMODE
-				dontUpdateScroll = true;
-				scrollPane.setHvalue(worldScrollH);
-				scrollPane.setVvalue(worldScrollV);
-				dontUpdateScroll = false;
 				mode = WORLDMODE;
 				pathCalcGrid.setVisible(true);
 				locationTable.setVisible(true);
@@ -532,6 +536,13 @@ public class MainMenuController extends BaseControllerImpl {
 			checkLocationFocus();
 		}
 		updateMap();
+		if (mode == WORLDMODE) {
+			dontUpdateScroll = true;
+			scrollPane.setHvalue(worldScrollH);
+			scrollPane.setVvalue(worldScrollV);
+			zoomSlider.setValue(worldScale);
+			dontUpdateScroll = false;
+		}
 		updateZoom();
 	}
 
@@ -1204,7 +1215,7 @@ public class MainMenuController extends BaseControllerImpl {
 						"\n" +
 						"Idee und Datenset: Laurids Brandl" +
 						"\n\nWebsite: dsa.bountin.net" +
-						"\n\nVersion "+ Main.version)
+						"\n\nVersion " + Main.version)
 				.showInformation();
 	}
 
@@ -1244,7 +1255,6 @@ public class MainMenuController extends BaseControllerImpl {
 	private void updateMap() {
 		log.debug("updateMap called");
 
-		// save current scroll position for restoring
 		hVal = scrollPane.getHvalue();
 		vVal = scrollPane.getVvalue();
 
@@ -1267,6 +1277,53 @@ public class MainMenuController extends BaseControllerImpl {
 			drawLocations(gc);
 			zoomGroup = new Group(mapCanvas, selectionCanvas, pathCanvas);
 			Group contentGroup = new Group(zoomGroup);
+
+			contentGroup.setCursor(Cursor.HAND);
+			contentGroup.setOnDragDetected(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					contentGroup.setCursor(Cursor.CLOSED_HAND);
+					dragStartX = event.getSceneX();
+					dragStartY = event.getSceneY();
+					scrollPosStartX = scrollPane.getHvalue();
+					scrollPosStartY = scrollPane.getVvalue();
+					isDraging = true;
+				}
+			});
+			contentGroup.setOnMouseDragged(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					if (isDraging) {
+						double xRelativ = dragStartX - event.getSceneX();
+						double yRelativ = dragStartY - event.getSceneY();
+						dontUpdateScroll = true;
+						double h = xRelativ / (mapCanvas.getWidth() * zoomGroup.getScaleX());
+						double v = yRelativ / (mapCanvas.getHeight() * zoomGroup.getScaleY());
+						//System.out.println("set: " + hVal + "/" +vVal);
+						scrollPane.setHvalue(h + scrollPosStartX);
+						scrollPane.setVvalue(v + scrollPosStartY);
+					}
+				}
+			});
+			contentGroup.setOnMouseReleased(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					contentGroup.setCursor(Cursor.HAND);
+					isDraging = false;
+				}
+			});
+			contentGroup.setOnScroll(new EventHandler<ScrollEvent>() {
+				@Override
+				public void handle(ScrollEvent event) {
+					if (event.getDeltaY() > 0) {
+						onZoomInPressed();
+					} else if (event.getDeltaY() < 0) {
+						onZoomOutPressed();
+					}
+					event.consume();
+				}
+			});
+
 			scrollPane.setContent(contentGroup);
 
 			// zoom to current value
@@ -1408,6 +1465,53 @@ public class MainMenuController extends BaseControllerImpl {
 			drawTraders(gc);
 			zoomGroup = new Group(mapCanvas, selectionCanvas);
 			Group contentGroup = new Group(zoomGroup);
+
+			contentGroup.setCursor(Cursor.HAND);
+			contentGroup.setOnDragDetected(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					contentGroup.setCursor(Cursor.CLOSED_HAND);
+					dragStartX = event.getSceneX();
+					dragStartY = event.getSceneY();
+					scrollPosStartX = scrollPane.getHvalue();
+					scrollPosStartY = scrollPane.getVvalue();
+					isDraging = true;
+				}
+			});
+			contentGroup.setOnMouseDragged(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					if (isDraging) {
+						double xRelativ = dragStartX - event.getSceneX();
+						double yRelativ = dragStartY - event.getSceneY();
+						dontUpdateScroll = true;
+						double h = xRelativ / (mapCanvas.getWidth() * zoomGroup.getScaleX());
+						double v = yRelativ / (mapCanvas.getHeight() * zoomGroup.getScaleY());
+						//System.out.println("set: " + hVal + "/" +vVal);
+						scrollPane.setHvalue(h + scrollPosStartX);
+						scrollPane.setVvalue(v + scrollPosStartY);
+					}
+				}
+			});
+			contentGroup.setOnMouseReleased(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					contentGroup.setCursor(Cursor.HAND);
+					isDraging = false;
+				}
+			});
+			contentGroup.setOnScroll(new EventHandler<ScrollEvent>() {
+				@Override
+				public void handle(ScrollEvent event) {
+					if (event.getDeltaY() > 0) {
+						onZoomInPressed();
+					} else if (event.getDeltaY() < 0) {
+						onZoomOutPressed();
+					}
+					event.consume();
+				}
+			});
+
 			scrollPane.setContent(contentGroup);
 
 			// zoom in to current value
