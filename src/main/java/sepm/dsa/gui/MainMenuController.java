@@ -526,7 +526,7 @@ public class MainMenuController extends BaseControllerImpl {
 				editButton.setText("Bearbeiten");
 				Stage stage = (Stage) editButton.getScene().getWindow();
 				stage.setTitle("DSA-Händlertool");
-				zoomSlider.adjustValue(worldScale);
+				//zoomSlider.adjustValue(worldScale);
 			}
 		}
 
@@ -1283,6 +1283,8 @@ public class MainMenuController extends BaseControllerImpl {
 			gc.drawImage(image, 0, 0);
 			drawLocations(gc);
 			zoomGroup = new Group(mapCanvas, selectionCanvas, pathCanvas);
+			zoomGroup.setScaleX(zoomVal);
+			zoomGroup.setScaleY(zoomVal);
 			Group contentGroup = new Group(zoomGroup);
 
 			contentGroup.setCursor(Cursor.HAND);
@@ -1389,8 +1391,8 @@ public class MainMenuController extends BaseControllerImpl {
 									double loc1y = loc1.getyCoord();
 									double loc2x = loc2.getxCoord();
 									double loc2y = loc2.getyCoord();
-									if ((xPos < loc1x + (iconSize/2) && xPos > loc2x - (iconSize/2)) || (xPos > loc1x - (iconSize/2) && xPos < loc2x + (iconSize/2))) {
-										if ((yPos < loc1y + (iconSize/2) && yPos > loc2y - (iconSize/2)) || (yPos > loc1y - (iconSize/2) && yPos < loc2y + (iconSize/2))) {
+									if ((xPos < loc1x + (iconSize / 2) && xPos > loc2x - (iconSize / 2)) || (xPos > loc1x - (iconSize / 2) && xPos < loc2x + (iconSize / 2))) {
+										if ((yPos < loc1y + (iconSize / 2) && yPos > loc2y - (iconSize / 2)) || (yPos > loc1y - (iconSize / 2) && yPos < loc2y + (iconSize / 2))) {
 											if (loc1x > loc2x) {
 												Location temp = loc1;
 												loc1 = loc2;
@@ -1403,24 +1405,24 @@ public class MainMenuController extends BaseControllerImpl {
 											double d = loc1y;
 											double k = ((double) (loc2y - loc1y)) / ((double) (loc2x - loc1x));
 											double x = xPos - loc1x;
-											if (yPos - (iconSize/2) < (int) (k * x + d) && yPos + (iconSize/2) > (int) (k * x + d)) {
+											if (yPos - (iconSize / 2) < (int) (k * x + d) && yPos + (iconSize / 2) > (int) (k * x + d)) {
 												zoomGroup.getChildren().remove(highlight);
 
-												double length = Math.sqrt(Math.pow(Math.abs(loc1x-loc2x),2) + Math.pow(Math.abs(loc1y-loc2y),2));
-												double degrees = Math.toDegrees( Math.atan( (loc2y-loc1y)/Math.abs(loc2x-loc1x) ) );
+												double length = Math.sqrt(Math.pow(Math.abs(loc1x - loc2x), 2) + Math.pow(Math.abs(loc1y - loc2y), 2));
+												double degrees = Math.toDegrees(Math.atan((loc2y - loc1y) / Math.abs(loc2x - loc1x)));
 												if (loc1x > loc2x) {
 													degrees *= -1;
 												}
-												highlight = new Canvas(length, (iconSize*0.6));
-												highlight.getGraphicsContext2D().setLineWidth((iconSize/5));
+												highlight = new Canvas(length, (iconSize * 0.6));
+												highlight.getGraphicsContext2D().setLineWidth((iconSize / 5));
 												highlight.getGraphicsContext2D().setStroke(mapService.getHighlightColor());
-												highlight.getGraphicsContext2D().strokeLine(0, (iconSize*0.3), length, (iconSize*0.3));
-												highlight.setLayoutX(loc1x + (loc2x-loc1x)/2 - length/2);
+												highlight.getGraphicsContext2D().strokeLine(0, (iconSize * 0.3), length, (iconSize * 0.3));
+												highlight.setLayoutX(loc1x + (loc2x - loc1x) / 2 - length / 2);
 												if (loc2y > loc1y) {
-													highlight.setLayoutY(loc1y + (loc2y-loc1y)/2 - (iconSize*0.3));
+													highlight.setLayoutY(loc1y + (loc2y - loc1y) / 2 - (iconSize * 0.3));
 
 												} else {
-													highlight.setLayoutY(loc2y + (loc1y-loc2y)/2 - (iconSize*0.3));
+													highlight.setLayoutY(loc2y + (loc1y - loc2y) / 2 - (iconSize * 0.3));
 												}
 
 												highlight.setRotate(degrees);
@@ -1457,7 +1459,7 @@ public class MainMenuController extends BaseControllerImpl {
 
 			scrollPane.setHvalue(hVal);
 			scrollPane.setVvalue(vVal);
-
+			zoomSlider.adjustValue(zoomVal);
 		} else {
 			// load map
 			File map = mapService.getLocationMap(selectedLocation);
@@ -1643,8 +1645,6 @@ public class MainMenuController extends BaseControllerImpl {
 
 			}
 		});
-
-		zoomSlider.adjustValue(zoomVal);
 	}
 
 	/**
