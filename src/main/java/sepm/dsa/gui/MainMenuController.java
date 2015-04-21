@@ -83,8 +83,9 @@ public class MainMenuController extends BaseControllerImpl {
 	private Boolean creationMode = false; // to distinguish between placing something (true), and selecting something (false) on the map
 	private Boolean nothingChanged = false; // to tell if a new path should be calculated, or the existing made invisible
 
-	private double hVal = 0.0; // to set horizontal value of scrollPane
-	private double vVal = 0.0; // to set vertical value of scrollPane
+	private double hVal = 0.0; // to set horizontal value of scrollPane after map update
+	private double vVal = 0.0; // to set vertical value of scrollPane after map update
+	private double zoomVal = 1.0; // to set zoom value after map update
 	private double worldScrollH; // jump back to this when switching to WORLDMODE
 	private double worldScrollV; // jump back to this when switching to WORLDMODE
 	private double worldScale; // jump back to this when switching to WORLDMODE
@@ -218,7 +219,7 @@ public class MainMenuController extends BaseControllerImpl {
         zoomSlider.setMax(2.69);
         zoomSlider.adjustValue(1.0);
 
-        // zoom-value listener: zooms the map acording to slider
+        // zoom-value listener: zooms the map according to slider
         zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -525,6 +526,7 @@ public class MainMenuController extends BaseControllerImpl {
 				editButton.setText("Bearbeiten");
 				Stage stage = (Stage) editButton.getScene().getWindow();
 				stage.setTitle("DSA-Händlertool");
+				zoomSlider.adjustValue(worldScale);
 			}
 		}
 
@@ -540,10 +542,12 @@ public class MainMenuController extends BaseControllerImpl {
 			dontUpdateScroll = true;
 			scrollPane.setHvalue(worldScrollH);
 			scrollPane.setVvalue(worldScrollV);
-			zoomSlider.setValue(worldScale);
+			updateZoom();
+			zoomSlider.adjustValue(worldScale);
 			dontUpdateScroll = false;
+		} else {
+			updateZoom();
 		}
-		updateZoom();
 	}
 
 
@@ -1243,10 +1247,12 @@ public class MainMenuController extends BaseControllerImpl {
 	 * updates the minimum zoom value to fit the map into the scrollPane
 	 */
 	private void updateZoom() {
+		double curzoom = zoomSlider.getValue();
 		double minScaleX = (scrollPane.getWidth() - 2) / mapCanvas.getWidth();
 		double minScaleY = (scrollPane.getHeight() - 2) / mapCanvas.getHeight();
 		zoomSlider.setMin(Math.min(minScaleX, minScaleY));
 		zoomSlider.setMax(2.69);
+		zoomSlider.setValue(curzoom);
 	}
 
 	/**
@@ -1257,6 +1263,7 @@ public class MainMenuController extends BaseControllerImpl {
 
 		hVal = scrollPane.getHvalue();
 		vVal = scrollPane.getVvalue();
+		zoomVal = zoomSlider.getValue();
 
 		if (mode == WORLDMODE) {
 			// load map
@@ -1327,8 +1334,9 @@ public class MainMenuController extends BaseControllerImpl {
 			scrollPane.setContent(contentGroup);
 
 			// zoom to current value
-			zoomGroup.setScaleX(scaleFactor);
-			zoomGroup.setScaleY(scaleFactor);
+			//zoomSlider.adjustValue(zoomVal);
+			//zoomGroup.setScaleX(zoomVal);
+			//zoomGroup.setScaleY(zoomVal);
 
 			// reset path calculation
 			nothingChanged = false;
@@ -1447,6 +1455,9 @@ public class MainMenuController extends BaseControllerImpl {
 					}
 			);
 
+			scrollPane.setHvalue(hVal);
+			scrollPane.setVvalue(vVal);
+
 		} else {
 			// load map
 			File map = mapService.getLocationMap(selectedLocation);
@@ -1515,8 +1526,9 @@ public class MainMenuController extends BaseControllerImpl {
 			scrollPane.setContent(contentGroup);
 
 			// zoom in to current value
-			zoomGroup.setScaleX(scaleFactor);
-			zoomGroup.setScaleY(scaleFactor);
+			//zoomSlider.adjustValue(zoomVal);
+			//zoomGroup.setScaleX(scaleFactor);
+			//zoomGroup.setScaleY(scaleFactor);
 
 			// add mouse listener for highlighting
 			List<Trader> traders = traderService.getAllForLocation(selectedLocation);
@@ -1631,6 +1643,8 @@ public class MainMenuController extends BaseControllerImpl {
 
 			}
 		});
+
+		zoomSlider.adjustValue(zoomVal);
 	}
 
 	/**
@@ -1830,8 +1844,9 @@ public class MainMenuController extends BaseControllerImpl {
 			}
 
 			zoomGroup.getChildren().add(selectionCanvas);
-			zoomGroup.setScaleX(scaleFactor);
-			zoomGroup.setScaleY(scaleFactor);
+			//zoomGroup.setScaleX(scaleFactor);
+			//zoomGroup.setScaleY(scaleFactor);
+			zoomSlider.adjustValue(scaleFactor);
 		}
 	}
 
